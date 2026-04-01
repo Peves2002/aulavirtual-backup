@@ -10,8 +10,10 @@ export interface Lesson {
     es_en_vivo?: boolean
     fecha_programada?: string | Date | null
     completada: boolean
+    segundosVistos?: number
     recursos?: any[]
 }
+
 
 export interface Module {
     id: string

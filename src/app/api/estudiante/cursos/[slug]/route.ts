@@ -124,8 +124,10 @@ export async function GET(request: Request, { params }: { params: { slug: string
             fecha_programada: (l as any).fecha_programada,
             enlace_reunion: (l as any).enlace_reunion,
             completada: l.progreso[0]?.esta_completado || false,
+            segundosVistos: l.progreso[0]?.segundos_vistos || 0,
             recursos: Array.isArray(l.recursos) ? l.recursos : []
           }))
+
       })),
       examenes: course.examenes
     }

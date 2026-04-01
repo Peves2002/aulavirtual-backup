@@ -14,7 +14,7 @@ export async function POST(request: Request) {
 
     if (!auth.authorized) return auth.error
 
-    const { leccionId, estaCompletado } = await request.json()
+    const { leccionId, estaCompletado, segundosVistos } = await request.json()
 
     if (!leccionId) {
       return ApiResponse.error(request, 'ID de lección es requerido', 400)
@@ -46,15 +46,20 @@ export async function POST(request: Request) {
       },
       update: {
         esta_completado: estaCompletado,
-        completado_en: estaCompletado ? new Date() : null
+        completado_en: estaCompletado ? new Date() : undefined,
+        segundos_vistos: segundosVistos ?? undefined,
+        ultimo_visto_en: new Date()
       },
       create: {
         usuario_id: auth.user.id,
         leccion_id: leccionId,
         esta_completado: estaCompletado,
-        completado_en: estaCompletado ? new Date() : null
+        completado_en: estaCompletado ? new Date() : null,
+        segundos_vistos: segundosVistos ?? 0,
+        ultimo_visto_en: new Date()
       }
     })
+
 
     // 3. Recalcular progreso del curso
     // Obtener todas las lecciones del curso

@@ -158,6 +158,18 @@ const CoursePlayerView = ({ course, initialLessonId }: CoursePlayerViewProps) =>
         }
     }
 
+    const handleProgressUpdate = async (seconds: number) => {
+        try {
+            await axios.post('/api/estudiante/progreso', {
+                leccionId: currentLesson?.id,
+                estaCompletado: currentLesson?.completada || false,
+                segundosVistos: seconds
+            })
+        } catch (error) {
+            console.error('Error al actualizar tiempo de video:', error)
+        }
+    }
+
     const handleVideoEnded = () => {
         if (currentLesson && !currentLesson.completada) {
             handleLessonComplete(currentLesson.id, true)
@@ -207,9 +219,16 @@ const CoursePlayerView = ({ course, initialLessonId }: CoursePlayerViewProps) =>
                             enlaceReunion={currentLesson.enlace_reunion}
                         />
                     ) : (
-                        <VideoPlayer url={currentLesson?.video_url || undefined} tipo="VIDEO" onEnded={handleVideoEnded} />
+                        <VideoPlayer 
+                            url={currentLesson?.video_url || undefined} 
+                            tipo="VIDEO" 
+                            onEnded={handleVideoEnded} 
+                            initialProgress={currentLesson?.segundosVistos || 0}
+                            onProgressUpdate={handleProgressUpdate}
+                        />
                     )}
                 </Grid>
+
 
                 {/* Tabs fijos debajo del video en móvil */}
                 <Grid item xs={12} sx={{ 

@@ -1,0 +1,202 @@
+.custom-video-player-container {
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  block-size: auto !important;
+  max-block-size: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #000;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+.player-wrapper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  /* Ocultar títulos y subtítulos de YouTube (Zoom agresivo) */
+  transform: scale(1.35) translateY(-8%);
+  transform-origin: top center;
+}
+
+.custom-thumbnail-overlay {
+  z-index: 70;
+  transition: all 0.3s ease;
+}
+
+.center-play-overlay {
+  z-index: 80;
+  pointer-events: none;
+}
+
+.video-click-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  cursor: pointer;
+}
+
+.player-controls-wrapper {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  z-index: 100;
+  transition: opacity 0.3s ease;
+}
+
+.progress-container {
+  block-size: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  cursor: pointer;
+  margin-block-end: 15px;
+  position: relative;
+  transition: block-size 0.2s ease;
+}
+
+.progress-container:hover {
+  block-size: 6px;
+}
+
+.progress-filled {
+  block-size: 100%;
+  background: #fff;
+  border-radius: 2px;
+  position: relative;
+}
+
+.progress-handle {
+  inline-size: 12px;
+  block-size: 12px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  inset-inline-end: -6px;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.progress-container:hover .progress-handle {
+  opacity: 1;
+}
+
+.controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.controls-left,
+.controls-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.control-button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.control-button:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.time-display {
+  color: #fff;
+  font-size: 13px;
+  font-family: monospace;
+}
+
+.volume-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  inline-size: 40px;
+  overflow: hidden;
+  transition: inline-size 0.3s ease;
+}
+
+.volume-wrapper:hover {
+  inline-size: 120px;
+}
+
+.volume-slider {
+  flex: 1;
+  block-size: 4px;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  inline-size: 10px;
+  block-size: 10px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.playback-speed-popover {
+  position: absolute;
+  inset-block-end: 100%;
+  inset-inline-end: 0;
+  background: rgba(20, 20, 20, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  padding: 8px;
+  margin-block-end: 10px;
+  min-inline-size: 100px;
+  border: 1px border-white/10;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.speed-option {
+  padding-block: 8px;
+  padding-inline: 12px;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+  text-align: center;
+}
+
+.speed-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.speed-active {
+  color: #3b82f6;
+  font-weight: bold;
+}
+
+.fullscreen {
+  inline-size: 100vw !important;
+  block-size: 100vh !important;
+  max-inline-size: none !important;
+  max-block-size: none !important;
+  border-radius: 0 !important;
+  aspect-ratio: auto !important;
+}
+
+.fullscreen .player-wrapper {
+  transform: none !important; /* Desactivar crop en pantalla completa si se desea */
+}
