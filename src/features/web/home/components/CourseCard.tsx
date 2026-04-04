@@ -44,6 +44,7 @@ interface CourseCardProps {
   }
   nivel?: string
   tipo_emision?: string
+  duracion?: string | null
   fecha_inicio?: string | Date | null
   creado_en?: string | Date
   es_comprado?: boolean
@@ -79,6 +80,7 @@ const CourseCard = ({
   categoria,
   nivel,
   tipo_emision,
+  duracion,
   fecha_inicio,
   creado_en,
   es_comprado,
@@ -106,6 +108,7 @@ const CourseCard = ({
   // Color para el tipo de emisión
   const getTipoColor = (t?: string) => {
     if (t === 'SINCRONO') return '#ef4444' // Rojo para Vivo
+    if (t === 'MIXTO') return '#f59e0b' // Naranja para Mixto
 
     return '#3b82f6' // Azul para otros
   }
@@ -150,7 +153,7 @@ const CourseCard = ({
         {/* Badges superiores */}
         <Box sx={{ position: 'absolute', top: 12, left: 12, zIndex: 2 }}>
           <Chip
-            label={tipo_emision === 'SINCRONO' ? 'Vivo' : 'Asíncrono'}
+            label={tipo_emision === 'SINCRONO' ? 'En Vivo' : tipo_emision === 'MIXTO' ? 'Mixto' : 'Asíncrono'}
             sx={{
               bgcolor: getTipoColor(tipo_emision),
               color: 'white',
@@ -287,7 +290,7 @@ const CourseCard = ({
             <Stack direction="row" spacing={1} alignItems="center">
               <i className="tabler-clock" style={{ fontSize: '1.2rem', color: '#10b981' }} />
               <Typography variant="body2" sx={{ color: '#1e293b', fontWeight: 600 }}>
-                4 Semanas
+                {duracion || '4 Semanas'}
               </Typography>
             </Stack>
           </Stack>

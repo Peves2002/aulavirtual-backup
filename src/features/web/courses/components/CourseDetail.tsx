@@ -59,6 +59,7 @@ interface CourseDetailProps {
     es_comprado?: boolean
     nivel: string
     tipo_emision: string
+    duracion?: string | null
     profesor: {
       id: string
       slug: string
@@ -293,9 +294,9 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                       }}
                     />
                   ) : (
-                    <Chip label={course.nivel === 'BASICO' ? 'Intermedio' : 'Avanzado'} size="small" sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 600 }} />
+                    <Chip label={course.nivel === 'BASICO' ? 'Básico' : course.nivel === 'INTERMEDIO' ? 'Intermedio' : 'Avanzado'} size="small" sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 600 }} />
                   )}
-                  <Chip label={course.tipo_emision === 'MIXTO' ? 'Mixto' : 'Sincrónico'} size="small" sx={{ bgcolor: 'secondary.main', color: 'white', fontWeight: 600 }} />
+                  <Chip label={course.tipo_emision === 'SINCRONO' ? 'En Vivo' : course.tipo_emision === 'MIXTO' ? 'Mixto' : 'Asíncrono'} size="small" sx={{ bgcolor: 'secondary.main', color: 'white', fontWeight: 600 }} />
                 </Stack>
 
                 <Typography variant="h2" component="h1" sx={{ fontWeight: 900, color: 'white', lineHeight: 1.1, fontSize: { xs: '2.5rem', md: '3.5rem' } }}>
@@ -357,7 +358,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                       </Avatar>
                       <Box>
                         <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 500 }} display="block">Duración</Typography>
-                        <Typography variant="body1" sx={{ fontWeight: 700, color: 'white', fontSize: '1.1rem' }}>4 Semanas</Typography>
+                        <Typography variant="body1" sx={{ fontWeight: 700, color: 'white', fontSize: '1.1rem' }}>{course.duracion || '4 Semanas'}</Typography>
                       </Box>
                     </Stack>
                   </Grid>

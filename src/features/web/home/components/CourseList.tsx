@@ -64,6 +64,7 @@ const CourseList = ({ courses, loading, error }: CourseListProps) => {
               nivel={course.nivel}
               tipo_emision={course.tipo_emision}
               es_comprado={course.es_comprado}
+              duracion={course.duracion}
               video_presentacion={course.video_presentacion}
             />
           </Grid>
