@@ -124,7 +124,7 @@ export default async function DiplomadosPage() {
         </Box>
       </Box>
 
-      <CourseCatalog courses={courses} categories={categories} />
+      <CourseCatalog courses={courses} categories={categories} type="diplomado" />
     </Box>
   )
 }

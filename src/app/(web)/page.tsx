@@ -13,6 +13,7 @@ import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSe
 import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
 import CompaniesSection from '@/features/web/home/components/CompaniesSection'
 import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
+import CategoriesCarousel from '@/features/web/home/components/CategoriesCarousel'
 
 export const metadata = {
   title: 'Aula Virtual - Aprende sin límites',
@@ -21,7 +22,7 @@ export const metadata = {
 
 async function getHomeData() {
   try {
-    const [coursesRaw, rutasRaw, teachersRaw] = await Promise.all([
+    const [coursesRaw, rutasRaw, teachersRaw, categoriasRaw] = await Promise.all([
       // Cursos
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO' },
@@ -62,6 +63,18 @@ async function getHomeData() {
         orderBy: { cursos_dictados: { _count: 'desc' } },
         take: 8,
       }),
+
+      // Categorías
+      prisma.categoria.findMany({
+        where: { esta_activo: true },
+        include: {
+          cursos: {
+            where: { estado: 'PUBLICADO' },
+            select: { tipo: true },
+          },
+        },
+        orderBy: { orden: 'asc' },
+      }),
     ])
 
     const courses = await Promise.all(
@@ -78,18 +91,33 @@ async function getHomeData() {
       cursos: r.cursos.map(c => ({ miniatura: c.curso.miniatura, titulo: c.curso.titulo })),
     }))
 
+    const categorias = categoriasRaw.map(c => {
+      const cursosCount = c.cursos.filter(cc => cc.tipo === 'CURSO').length
+      const diplomadosCount = c.cursos.filter(cc => cc.tipo === 'DIPLOMADO').length
+      
+      return {
+        id: c.id,
+        nombre: c.nombre,
+        slug: c.slug,
+        cursosCount,
+        diplomadosCount,
+        total: c.cursos.length
+      }
+    }).filter(c => c.total > 0)
+
     return {
       courses: JSON.parse(JSON.stringify(courses)),
       rutas: JSON.parse(JSON.stringify(rutas)),
       teachers: JSON.parse(JSON.stringify(teachersRaw)),
+      categorias: JSON.parse(JSON.stringify(categorias)),
     }
   } catch {
-    return { courses: [], rutas: [], teachers: [] }
+    return { courses: [], rutas: [], teachers: [], categorias: [] }
   }
 }
 
 export default async function HomePage() {
-  const { courses, rutas, teachers } = await getHomeData()
+  const { courses, rutas, teachers, categorias } = await getHomeData()
 
   return (
     <>
@@ -198,6 +226,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── 1.5 CATEGORÍAS ──────────────────────────── */}
+      {categorias.length > 0 && <CategoriesCarousel categorias={categorias} />}
 
       {/* ── 2. LOGO MARQUEE ─────────────────────────── */}
       <ClientLogosMarquee />

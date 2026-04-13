@@ -31,9 +31,10 @@ import { useCurso } from '../hooks/useCursos'
 interface CourseBuilderPageProps {
     cursoId: string
     profesores: { id: string; nombre: string; apellido: string }[]
+    basePath?: string
 }
 
-export function CourseBuilderPage({ cursoId, profesores }: CourseBuilderPageProps) {
+export function CourseBuilderPage({ cursoId, profesores, basePath }: CourseBuilderPageProps) {
     const { data: curso, isLoading, refetch } = useCurso(cursoId)
     const [activeTab, setActiveTab] = useState('1')
     const router = useRouter()
@@ -69,7 +70,7 @@ export function CourseBuilderPage({ cursoId, profesores }: CourseBuilderPageProp
                 </Box>
                 <Button
                     variant='outlined'
-                    onClick={() => router.push(session?.user?.rol === 'ADMIN' ? '/admin/cursos' : '/profesor/mis-cursos')}
+                    onClick={() => router.push(basePath || (session?.user?.rol === 'ADMIN' ? '/admin/cursos' : '/profesor/mis-cursos'))}
                     startIcon={<i className='tabler-arrow-left' />}
                 >
                     Volver a Cursos

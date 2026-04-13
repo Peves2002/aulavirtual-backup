@@ -33,7 +33,7 @@ import { useCursos } from '@/features/admin/cursos/hooks/useCursos'
 import TablePaginationComponent from '@/utils/components/others/TablePaginationComponent'
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 
-const ProfesorCursosPage = () => {
+const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' }) => {
     const { data: session } = useSession()
     const router = useRouter()
     const [globalFilter, setGlobalFilter] = useState('')
@@ -41,7 +41,8 @@ const ProfesorCursosPage = () => {
     // Usamos el hook de cursos pero filtrando por el ID del profesor actual
     const { data: cursosData, isLoading } = useCursos({
         profesor_id: session?.user?.id as string,
-        limit: '100' // Para el listado de profesor traemos todos (o paginamos si es necesario)
+        limit: '100', // Para el listado de profesor traemos todos (o paginamos si es necesario)
+        tipo
     })
 
     const columns = useMemo(() => {
@@ -49,7 +50,7 @@ const ProfesorCursosPage = () => {
 
         return [
             columnHelper.accessor('miniatura', {
-                header: 'Curso',
+                header: tipo === 'DIPLOMADO' ? 'Diplomado' : 'Curso',
                 cell: ({ row }) => (
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                         <CourseThumbnail
@@ -124,7 +125,7 @@ const ProfesorCursosPage = () => {
                         </Tooltip>
                         <Tooltip title='Gestionar contenido'>
                             <IconButton
-                                onClick={() => router.push(`/profesor/mis-cursos/${row.original.id}`)}
+                                onClick={() => router.push(`${tipo === 'DIPLOMADO' ? '/profesor/mis-diplomados' : '/profesor/mis-cursos'}/${row.original.id}`)}
                             >
                                 <i className='tabler-edit text-[22px] text-textSecondary' />
                             </IconButton>
@@ -148,12 +149,14 @@ const ProfesorCursosPage = () => {
         onGlobalFilterChange: setGlobalFilter
     })
 
+    const basePath = tipo === 'DIPLOMADO' ? '/profesor/mis-diplomados' : '/profesor/mis-cursos'
+
     return (
         <Box>
             <Box sx={{ mb: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
                     <Typography variant='h4' sx={{ mb: 1, fontWeight: 700 }}>
-                        Mis Cursos
+                        Mis {tipo === 'DIPLOMADO' ? 'Diplomados' : 'Cursos'}
                     </Typography>
                     <Typography variant='body2' color='text.secondary'>
                         Gestiona el contenido y revisa el progreso de tus estudiantes.
@@ -162,10 +165,10 @@ const ProfesorCursosPage = () => {
                 <Button
                     variant='contained'
                     startIcon={<i className='tabler-plus' />}
-                    onClick={() => router.push('/profesor/mis-cursos/nuevo')}
+                    onClick={() => router.push(`${basePath}/nuevo`)}
                     sx={{ borderRadius: '8px' }}
                 >
-                    Crear Nuevo Curso
+                    Crear Nuevo {tipo === 'DIPLOMADO' ? 'Diplomado' : 'Curso'}
                 </Button>
             </Box>
 
@@ -176,7 +179,7 @@ const ProfesorCursosPage = () => {
                             size='small'
                             value={globalFilter ?? ''}
                             onChange={e => setGlobalFilter(e.target.value)}
-                            placeholder='Buscar cursos...'
+                            placeholder={tipo === 'DIPLOMADO' ? 'Buscar diplomados...' : 'Buscar cursos...'}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position='start'>
@@ -204,13 +207,13 @@ const ProfesorCursosPage = () => {
                                 {isLoading ? (
                                     <tr>
                                         <td colSpan={columns.length} className='px-6 py-10 text-center'>
-                                            Cargando tus cursos...
+                                            Cargando tus {tipo === 'DIPLOMADO' ? 'diplomados' : 'cursos'}...
                                         </td>
                                     </tr>
                                 ) : table.getRowModel().rows.length === 0 ? (
                                     <tr>
                                         <td colSpan={columns.length} className='px-6 py-10 text-center'>
-                                            Aún no has creado ningún curso. ¡Comienza hoy mismo!
+                                            Aún no has creado ningún {tipo === 'DIPLOMADO' ? 'diplomado' : 'curso'}. ¡Comienza hoy mismo!
                                         </td>
                                     </tr>
                                 ) : (

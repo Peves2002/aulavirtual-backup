@@ -14,11 +14,16 @@ export async function GET(request: Request) {
     }
 
     const { user } = auth
+    const { searchParams } = new URL(request.url)
+    const tipo = searchParams.get('tipo') || 'CURSO'
 
     const inscriptions = await prisma.inscripcion.findMany({
       where: {
         usuario_id: user.id,
-        estado: 'ACTIVO'
+        estado: 'ACTIVO',
+        curso: {
+          tipo: tipo as any
+        }
       },
       include: {
         curso: {

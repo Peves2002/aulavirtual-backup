@@ -5,7 +5,7 @@ import { getAuthSession } from '@/utils/libs/auth-helpers'
 import MyCoursesList from '@/features/estudiante/mis-cursos/components/MyCoursesList'
 import { AxiosMisCursos } from '@/features/estudiante/mis-cursos/http/axiosMisCursos'
 
-export default async function MyCoursesPage() {
+export default async function MyDiplomadosPage() {
     const session = await getAuthSession()
 
     if (!session) {
@@ -21,9 +21,9 @@ export default async function MyCoursesPage() {
     let courses: any[] = []
 
     try {
-        courses = await axiosMisCursos.getAll()
+        courses = await axiosMisCursos.getAll('DIPLOMADO')
     } catch (error) {
-        console.error('Error fetching inscribed courses via API:', error)
+        console.error('Error fetching inscribed diplomados via API:', error)
     }
 
     return (
@@ -32,10 +32,10 @@ export default async function MyCoursesPage() {
                 <Stack spacing={{ xs: 3, md: 4 }}>
                     <Box>
                         <Typography variant="h4" sx={{ fontWeight: 900, mb: 1, color: 'text.primary' }}>
-                            Mis <span style={{ color: 'var(--mui-palette-primary-main)' }}>Cursos</span>
+                            Mis <span style={{ color: 'var(--mui-palette-primary-main)' }}>Diplomados</span>
                         </Typography>
                         <Typography variant="body1" color="text.secondary" sx={{ fontWeight: 500 }}>
-                            Gestiona tu aprendizaje y sigue tu progreso en cada curso.
+                            Gestiona tu aprendizaje y sigue tu progreso en cada diplomado.
                         </Typography>
                     </Box>
 

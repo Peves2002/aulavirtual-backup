@@ -56,9 +56,12 @@ export const CourseCreatePage = ({ profesores, tipo = 'CURSO', basePath }: Cours
 
   const esDiplomado = tipo === 'DIPLOMADO'
 
-  const getAdminBase = () => {
+  const getBasePath = () => {
     if (basePath) return basePath
-    return esDiplomado ? '/admin/diplomados' : '/admin/cursos'
+    if (session?.user?.rol === 'ADMIN') {
+      return esDiplomado ? '/admin/diplomados' : '/admin/cursos'
+    }
+    return esDiplomado ? '/profesor/mis-diplomados' : '/profesor/mis-cursos'
   }
 
   const initialValues: CrearCursoDto = {
@@ -85,12 +88,12 @@ export const CourseCreatePage = ({ profesores, tipo = 'CURSO', basePath }: Cours
 
       enqueueSnackbar(esDiplomado ? 'Diplomado creado exitosamente' : 'Curso creado exitosamente', { variant: 'success' })
 
-      const adminBase = session?.user?.rol === 'ADMIN' ? getAdminBase() : '/profesor/mis-cursos'
+      const basePathUrl = getBasePath()
 
       if (result?.curso?.id) {
         router.push(`/admin/cursos/${result.curso.id}`)
       } else {
-        router.push(adminBase)
+        router.push(basePathUrl)
       }
     } catch (error: any) {
       enqueueSnackbar(error?.message || `Error al crear ${esDiplomado ? 'diplomado' : 'curso'}`, { variant: 'error' })
@@ -112,7 +115,7 @@ export const CourseCreatePage = ({ profesores, tipo = 'CURSO', basePath }: Cours
         </Box>
         <Button
           variant='outlined'
-          onClick={() => router.push(session?.user?.rol === 'ADMIN' ? getAdminBase() : '/profesor/mis-cursos')}
+        onClick={() => router.push(getBasePath())}
           startIcon={<i className='tabler-arrow-left' />}
         >
           Cancelar y Volver

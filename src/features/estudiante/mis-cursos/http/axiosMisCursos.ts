@@ -22,9 +22,9 @@ export class AxiosMisCursos extends AxiosInternalHttpClient {
     })
   }
 
-  async getAll(): Promise<any[]> {
+  async getAll(tipo: string = 'CURSO'): Promise<any[]> {
     try {
-      const payload = await this.iGet<{ courses: any[] }>('')
+      const payload = await this.iGet<{ courses: any[] }>('', { params: { tipo } })
 
       return payload?.courses || []
     } catch (err: any) {

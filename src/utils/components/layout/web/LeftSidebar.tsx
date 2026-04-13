@@ -172,7 +172,10 @@ export default function LeftSidebar() {
                 {[
                   { label: 'Mi Perfil', icon: User, href: '/perfil' },
                   ...(user?.rol === 'ADMIN' ? [{ label: 'Panel de Administración', icon: LayoutDashboard, href: '/admin/dashboard' }] : []),
-                  ...(user?.rol === 'ESTUDIANTE' ? [{ label: 'Mis Cursos', icon: BookMarked, href: '/estudiante/mis-cursos' }] : []),
+                  ...(user?.rol === 'ESTUDIANTE' ? [
+                    { label: 'Mis Cursos', icon: BookMarked, href: '/estudiante/mis-cursos' },
+                    { label: 'Mis Diplomados', icon: Award, href: '/estudiante/mis-diplomados' }
+                  ] : []),
                 ].map(({ label, icon: Icon, href }) => (
                   <Link
                     key={href}

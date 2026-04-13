@@ -77,17 +77,22 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         renderExpandedMenuItemIcon={{ icon: <i className='tabler-circle text-xs' /> }}
         menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
       >
-        <MenuItem
-          href={rol === 'ADMIN' ? '/admin/dashboard' : (rol === 'PROFESOR' ? '/profesor/dashboard' : '/estudiante/dashboard')}
-          icon={<i className='tabler-smart-home' />}
-        >
-          Dashboard
-        </MenuItem>
+        {(rol === 'ADMIN' || rol === 'PROFESOR') && (
+          <MenuItem
+            href={rol === 'ADMIN' ? '/admin/dashboard' : '/profesor/dashboard'}
+            icon={<i className='tabler-smart-home' />}
+          >
+            Dashboard
+          </MenuItem>
+        )}
 
         {rol === 'ESTUDIANTE' && (
           <>
             <MenuItem href='/estudiante/mis-cursos' icon={<i className='tabler-book' />}>
               Mis Cursos
+            </MenuItem>
+            <MenuItem href='/estudiante/mis-diplomados' icon={<i className='tabler-award' />}>
+              Mis Diplomados
             </MenuItem>
             <MenuItem href='/estudiante/pedidos' icon={<i className='tabler-shopping-cart' />}>
               Mis Pedidos
@@ -105,14 +110,14 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
               Categorías
             </MenuItem>
             <MenuItem href='/admin/cursos' icon={<i className='tabler-book' />}>
-              Gestión Cursos
+              Cursos
             </MenuItem>
             <MenuItem href='/admin/diplomados' icon={<i className='tabler-award' />}>
               Diplomados
             </MenuItem>
-            <MenuItem href='/admin/rutas' icon={<i className='tabler-route' />}>
+            {/* <MenuItem href='/admin/rutas' icon={<i className='tabler-route' />}>
               Rutas Aprendizaje
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem href='/admin/pedidos' icon={<i className='tabler-shopping-cart' />}>
               Pedidos
             </MenuItem>
@@ -133,6 +138,9 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             <Divider sx={{ my: 2 }} />
             <MenuItem href='/profesor/mis-cursos' icon={<i className='tabler-book' />}>
               Mis Cursos
+            </MenuItem>
+            <MenuItem href='/profesor/mis-diplomados' icon={<i className='tabler-award' />}>
+              Mis Diplomados
             </MenuItem>
           </>
         )}
