@@ -103,7 +103,7 @@ async function getHomeData() {
         diplomadosCount,
         total: c.cursos.length
       }
-    }).filter(c => c.total > 0)
+    })
 
     return {
       courses: JSON.parse(JSON.stringify(courses)),

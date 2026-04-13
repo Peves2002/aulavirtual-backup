@@ -49,26 +49,32 @@ function useVisible() {
 }
 
 export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }) {
-  const [current, setCurrent] = useState(0)
-  const visible = useVisible()
+  const scrollRef = import('react').then(React => React.useRef<HTMLDivElement>(null))
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(true)
+
+  const checkScroll = (el: HTMLDivElement) => {
+    setCanScrollLeft(el.scrollLeft > 0)
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 5)
+  }
+
+  const scrollByAmount = (direction: 'left' | 'right') => {
+    const el = document.getElementById('professors-scroll-container')
+    if (el) {
+      const amount = el.clientWidth * 0.8
+      el.scrollBy({ left: direction === 'left' ? -amount : amount, behavior: 'smooth' })
+    }
+  }
+
   const total = teachers.length
-  const maxStart = Math.max(0, total - visible)
-
-  useEffect(() => {
-    setCurrent(c => Math.min(c, maxStart))
-  }, [maxStart])
-
-  const prev = () => setCurrent(c => Math.max(0, c - 1))
-  const next = () => setCurrent(c => Math.min(maxStart, c + 1))
-
-  const dots = Math.ceil(total / visible)
-  const activeDot = Math.floor(current / visible)
-
   if (total === 0) return null
 
+  // Si hay 3 o menos profesores, se centran en escritorio
+  const isFew = total <= 3
+
   return (
-    <section style={{ backgroundColor: '#f8fafc', padding: '5rem 1.5rem', borderTop: '1px solid hsl(214,20%,92%)' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+    <section style={{ backgroundColor: '#f8fafc', padding: '5rem 1.5rem', borderTop: '1px solid hsl(214,20%,92%)', overflow: 'hidden' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', position: 'relative' }}>
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
@@ -84,18 +90,33 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
         </div>
 
         {/* Carousel */}
-        <div style={{ position: 'relative', padding: '0 3rem' }}>
+        <div style={{ position: 'relative', padding: '0 0.5rem' }}>
           {/* Cards */}
           <div
+            id="professors-scroll-container"
+            onScroll={(e) => checkScroll(e.currentTarget)}
             style={{
-              display: 'grid',
-              gridTemplateColumns: `repeat(${Math.min(visible, total)}, 1fr)`,
+              display: 'flex',
               gap: '1.25rem',
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              justifyContent: isFew ? 'center' : 'flex-start',
+              paddingBottom: '2rem',
             }}
+            className="hidden-scroll pb-4"
           >
-            {teachers.slice(current, current + visible).map((teacher, i) => {
+            <style dangerouslySetInnerHTML={{__html: `
+              #professors-scroll-container::-webkit-scrollbar { display: none; }
+              @media (max-width: 768px) {
+                #professors-scroll-container { justify-content: flex-start !important; }
+              }
+            `}} />
+
+            {teachers.map((teacher, i) => {
               const initials = `${teacher.nombre[0]}${teacher.apellido[0]}`
-              const color = AVATAR_COLORS[(current + i) % AVATAR_COLORS.length]
+              const color = AVATAR_COLORS[i % AVATAR_COLORS.length]
 
               const href = teacherHref(teacher)
 
@@ -114,17 +135,18 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                     flexDirection: 'column',
                     textDecoration: 'none',
                     cursor: 'pointer',
+                    minWidth: 'clamp(260px, 80vw, 280px)',
+                    flexShrink: 0,
+                    scrollSnapAlign: 'start',
                   }}
                   onMouseEnter={e => {
                     const el = e.currentTarget as HTMLAnchorElement
-
                     el.style.transform = 'translateY(-6px)'
                     el.style.boxShadow = '0 12px 36px rgba(var(--web-primary-rgb, 37, 146, 127),0.13)'
                     el.style.borderColor = 'var(--web-primary, #25927F)'
                   }}
                   onMouseLeave={e => {
                     const el = e.currentTarget as HTMLAnchorElement
-
                     el.style.transform = 'translateY(0)'
                     el.style.boxShadow = '0 2px 12px rgba(0,0,0,0.05)'
                     el.style.borderColor = 'hsl(214,20%,91%)'
@@ -205,8 +227,7 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                         {teacher.cargo}
                       </p>
                     )}
-                    <Link
-                      href={href}
+                    <div
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -225,15 +246,13 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                         marginTop: 'auto',
                       }}
                       onMouseEnter={e => {
-                        const el = e.currentTarget as HTMLAnchorElement
-
+                        const el = e.currentTarget as HTMLDivElement
                         el.style.borderColor = 'var(--web-primary, #25927F)'
                         el.style.color = 'var(--web-primary, #25927F)'
                         el.style.backgroundColor = 'rgba(var(--web-primary-rgb, 37, 146, 127),0.05)'
                       }}
                       onMouseLeave={e => {
-                        const el = e.currentTarget as HTMLAnchorElement
-
+                        const el = e.currentTarget as HTMLDivElement
                         el.style.borderColor = '#d1d5db'
                         el.style.color = '#0A0A0A'
                         el.style.backgroundColor = 'transparent'
@@ -241,7 +260,7 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                     >
                       <ChevronDown size={14} />
                       Ver más
-                    </Link>
+                    </div>
                   </div>
                 </Link>
               )
@@ -249,81 +268,61 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
           </div>
 
           {/* Arrows */}
-          {total > visible && (
+          {!isFew && (
             <>
               <button
-                onClick={prev}
-                disabled={current === 0}
+                onClick={() => scrollByAmount('left')}
                 style={{
                   position: 'absolute',
-                  left: 0,
-                  top: '45%',
+                  left: -20,
+                  top: '40%',
                   transform: 'translateY(-50%)',
                   width: '40px',
                   height: '40px',
                   borderRadius: '50%',
                   backgroundColor: '#ffffff',
-                  border: `1.5px solid ${current === 0 ? '#e2e8f0' : 'var(--web-primary, #25927F)'}`,
-                  cursor: current === 0 ? 'not-allowed' : 'pointer',
+                  border: `1.5px solid ${!canScrollLeft ? '#e2e8f0' : 'var(--web-primary, #25927F)'}`,
+                  cursor: !canScrollLeft ? 'not-allowed' : 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
                   transition: 'all 0.2s',
-                  zIndex: 2,
+                  zIndex: 10,
+                  opacity: !canScrollLeft ? 0 : 1,
+                  pointerEvents: !canScrollLeft ? 'none' : 'auto'
                 }}
               >
-                <ChevronLeft size={18} color={current === 0 ? '#cbd5e1' : 'var(--web-primary, #25927F)'} />
+                <ChevronLeft size={18} color={!canScrollLeft ? '#cbd5e1' : 'var(--web-primary, #25927F)'} />
               </button>
               <button
-                onClick={next}
-                disabled={current >= maxStart}
+                onClick={() => scrollByAmount('right')}
                 style={{
                   position: 'absolute',
-                  right: 0,
-                  top: '45%',
+                  right: -20,
+                  top: '40%',
                   transform: 'translateY(-50%)',
                   width: '40px',
                   height: '40px',
                   borderRadius: '50%',
                   backgroundColor: '#ffffff',
-                  border: `1.5px solid ${current >= maxStart ? '#e2e8f0' : 'var(--web-primary, #25927F)'}`,
-                  cursor: current >= maxStart ? 'not-allowed' : 'pointer',
+                  border: `1.5px solid ${!canScrollRight ? '#e2e8f0' : 'var(--web-primary, #25927F)'}`,
+                  cursor: !canScrollRight ? 'not-allowed' : 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
                   transition: 'all 0.2s',
-                  zIndex: 2,
+                  zIndex: 10,
+                  opacity: !canScrollRight ? 0 : 1,
+                  pointerEvents: !canScrollRight ? 'none' : 'auto'
                 }}
               >
-                <ChevronRight size={18} color={current >= maxStart ? '#cbd5e1' : 'var(--web-primary, #25927F)'} />
+                <ChevronRight size={18} color={!canScrollRight ? '#cbd5e1' : 'var(--web-primary, #25927F)'} />
               </button>
             </>
           )}
         </div>
-
-        {/* Dots */}
-        {dots > 1 && (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginTop: '2rem' }}>
-            {Array.from({ length: dots }).map((_, di) => (
-              <button
-                key={di}
-                onClick={() => setCurrent(di * visible)}
-                style={{
-                  width: di === activeDot ? '28px' : '8px',
-                  height: '8px',
-                  borderRadius: '999px',
-                  backgroundColor: di === activeDot ? 'var(--web-primary, #25927F)' : '#cbd5e1',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: 0,
-                  transition: 'all 0.3s',
-                }}
-              />
-            ))}
-          </div>
-        )}
       </div>
     </section>
   )

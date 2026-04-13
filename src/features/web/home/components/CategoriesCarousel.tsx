@@ -274,6 +274,19 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
                           Ver {cat.diplomadosCount} {cat.diplomadosCount === 1 ? 'Diplomado' : 'Diplomados'}
                         </Link>
                       )}
+                      
+                      {cat.cursosCount === 0 && cat.diplomadosCount === 0 && (
+                        <span
+                          style={{
+                            display: 'flex', justifyContent: 'center', alignItems: 'center',
+                            fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 600,
+                            backgroundColor: 'rgba(0, 0, 0, 0.04)', color: 'rgba(0,0,0,0.4)',
+                            padding: '0.625rem 1rem', borderRadius: '12px',
+                          }}
+                        >
+                          Próximamente
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
