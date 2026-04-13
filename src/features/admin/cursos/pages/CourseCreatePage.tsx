@@ -58,10 +58,13 @@ export const CourseCreatePage = ({ profesores, tipo = 'CURSO', basePath }: Cours
 
   const getBasePath = () => {
     if (basePath) return basePath
+
     if (session?.user?.rol === 'ADMIN') {
       return esDiplomado ? '/admin/diplomados' : '/admin/cursos'
     }
-    return esDiplomado ? '/profesor/mis-diplomados' : '/profesor/mis-cursos'
+
+    
+return esDiplomado ? '/profesor/mis-diplomados' : '/profesor/mis-cursos'
   }
 
   const initialValues: CrearCursoDto = {

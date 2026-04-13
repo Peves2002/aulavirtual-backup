@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import Link from 'next/link'
 
@@ -42,31 +42,13 @@ function getStylesForId(id: string) {
   const positiveHash = Math.abs(hash)
   const Icon = ICONS[positiveHash % ICONS.length]
   const background = GRADIENTS[positiveHash % GRADIENTS.length]
-  
+
   return { Icon, background }
 }
 
-function useVisibleItems() {
-  const [visible, setVisible] = useState(4)
 
-  useEffect(() => {
-    const update = () => {
-      const w = window.innerWidth
-
-      setVisible(w < 500 ? 1 : w < 800 ? 2 : w < 1100 ? 3 : 4)
-    }
-
-    update()
-    window.addEventListener('resize', update)
-
-    return () => window.removeEventListener('resize', update)
-  }, [])
-
-  return visible
-}
 
 export default function CategoriesCarousel({ categorias }: { categorias: CategoryData[] }) {
-  const scrollRef = import('react').then(React => React.useRef<HTMLDivElement>(null))
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
 
@@ -78,8 +60,10 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
 
   const scrollByAmount = (direction: 'left' | 'right') => {
     const el = document.getElementById('categories-scroll-container')
+
     if (el) {
       const amount = el.clientWidth * 0.8
+
       el.scrollBy({ left: direction === 'left' ? -amount : amount, behavior: 'smooth' })
     }
   }
@@ -92,7 +76,7 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
   return (
     <section style={{ backgroundColor: '#ffffff', padding: '5rem 1.5rem', overflow: 'hidden' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', position: 'relative' }}>
-        
+
         {/* Encabezado */}
         <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <p style={{ ...eyebrow, display: 'block', textAlign: 'center' }}>
@@ -108,7 +92,7 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
 
         {/* Contenedor Carrusel Nativo */}
         <div style={{ position: 'relative', padding: '0 0.5rem' }}>
-          
+
           <div
             id="categories-scroll-container"
             onScroll={(e) => checkScroll(e.currentTarget)}
@@ -124,7 +108,8 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
             }}
             className="hidden-scroll pb-4" // Asumiendo que usamos alguna clase o el style de arriba
           >
-            <style dangerouslySetInnerHTML={{__html: `
+            <style dangerouslySetInnerHTML={{
+              __html: `
               #categories-scroll-container::-webkit-scrollbar { display: none; }
               @media (max-width: 768px) {
                 #categories-scroll-container { justify-content: flex-start !important; }
@@ -162,26 +147,32 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
                     }}
                     onMouseEnter={e => {
                       const el = e.currentTarget as HTMLDivElement
+
                       el.style.transform = 'translateY(-8px)'
                       el.style.boxShadow = '0 12px 30px rgba(0,0,0,0.08)'
                       el.style.borderColor = 'transparent'
-                      
+
                       const bgEl = el.querySelector('.bg-hover') as HTMLDivElement
+
                       if (bgEl) bgEl.style.opacity = '1'
-                      
+
                       const iconEl = el.querySelector('.icon-circle') as HTMLDivElement
+
                       if (iconEl) iconEl.style.transform = 'scale(1.1) rotate(5deg)'
                     }}
                     onMouseLeave={e => {
                       const el = e.currentTarget as HTMLDivElement
+
                       el.style.transform = 'translateY(0)'
                       el.style.boxShadow = '0 4px 20px rgba(0,0,0,0.03)'
                       el.style.borderColor = 'hsl(214, 20%, 92%)'
 
                       const bgEl = el.querySelector('.bg-hover') as HTMLDivElement
+
                       if (bgEl) bgEl.style.opacity = '0'
 
                       const iconEl = el.querySelector('.icon-circle') as HTMLDivElement
+
                       if (iconEl) iconEl.style.transform = 'scale(1) rotate(0deg)'
                     }}
                   >
@@ -252,13 +243,13 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
                             backgroundColor: 'rgba(37, 146, 127, 0.08)', color: 'var(--web-primary, #25927F)',
                             padding: '0.625rem 1rem', borderRadius: '12px', textDecoration: 'none', transition: 'all 0.2s', border: '1px solid transparent'
                           }}
-                          onMouseEnter={e => {e.currentTarget.style.backgroundColor = 'var(--web-primary, #25927F)'; e.currentTarget.style.color = '#fff'}}
-                          onMouseLeave={e => {e.currentTarget.style.backgroundColor = 'rgba(37, 146, 127, 0.08)'; e.currentTarget.style.color = 'var(--web-primary, #25927F)'}}
+                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--web-primary, #25927F)'; e.currentTarget.style.color = '#fff' }}
+                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(37, 146, 127, 0.08)'; e.currentTarget.style.color = 'var(--web-primary, #25927F)' }}
                         >
                           Ver {cat.cursosCount} {cat.cursosCount === 1 ? 'Curso' : 'Cursos'}
                         </Link>
                       )}
-                      
+
                       {cat.diplomadosCount > 0 && (
                         <Link
                           href={`/diplomados?categoria=${cat.slug}`}
@@ -268,13 +259,13 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
                             backgroundColor: 'rgba(2, 94, 68, 0.08)', color: 'var(--web-dark, #025E44)',
                             padding: '0.625rem 1rem', borderRadius: '12px', textDecoration: 'none', transition: 'all 0.2s', border: '1px solid transparent'
                           }}
-                          onMouseEnter={e => {e.currentTarget.style.backgroundColor = 'var(--web-dark, #025E44)'; e.currentTarget.style.color = '#fff'}}
-                          onMouseLeave={e => {e.currentTarget.style.backgroundColor = 'rgba(2, 94, 68, 0.08)'; e.currentTarget.style.color = 'var(--web-dark, #025E44)'}}
+                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--web-dark, #025E44)'; e.currentTarget.style.color = '#fff' }}
+                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(2, 94, 68, 0.08)'; e.currentTarget.style.color = 'var(--web-dark, #025E44)' }}
                         >
                           Ver {cat.diplomadosCount} {cat.diplomadosCount === 1 ? 'Diplomado' : 'Diplomados'}
                         </Link>
                       )}
-                      
+
                       {cat.cursosCount === 0 && cat.diplomadosCount === 0 && (
                         <span
                           style={{

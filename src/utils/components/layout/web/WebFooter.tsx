@@ -2,7 +2,7 @@ import React from 'react'
 
 import Link from 'next/link'
 
-import { Phone, Mail, MapPin, BookOpenCheck, Facebook, Youtube, Instagram } from 'lucide-react'
+import { Phone, Mail, MapPin, BookOpenCheck, Facebook, Instagram } from 'lucide-react'
 
 import HydratedDate from '@/utils/components/HydratedDate'
 import Logo from '@components/layout/shared/Logo'

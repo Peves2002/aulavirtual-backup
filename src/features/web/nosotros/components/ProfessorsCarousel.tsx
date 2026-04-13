@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import Link from 'next/link'
 import Image from 'next/image'
@@ -29,27 +29,9 @@ const AVATAR_COLORS = [
   '#1a73e8', '#d93025', '#e37400', '#6d4c41', '#4527a0', '#00838f',
 ]
 
-function useVisible() {
-  const [visible, setVisible] = useState(4)
 
-  useEffect(() => {
-    const update = () => {
-      const w = window.innerWidth
-
-      setVisible(w < 640 ? 1 : w < 900 ? 2 : w < 1200 ? 3 : 4)
-    }
-
-    update()
-    window.addEventListener('resize', update)
-
-    return () => window.removeEventListener('resize', update)
-  }, [])
-
-  return visible
-}
 
 export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }) {
-  const scrollRef = import('react').then(React => React.useRef<HTMLDivElement>(null))
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
 
@@ -60,13 +42,16 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
 
   const scrollByAmount = (direction: 'left' | 'right') => {
     const el = document.getElementById('professors-scroll-container')
+
     if (el) {
       const amount = el.clientWidth * 0.8
+
       el.scrollBy({ left: direction === 'left' ? -amount : amount, behavior: 'smooth' })
     }
   }
 
   const total = teachers.length
+
   if (total === 0) return null
 
   // Si hay 3 o menos profesores, se centran en escritorio
@@ -107,7 +92,8 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
             }}
             className="hidden-scroll pb-4"
           >
-            <style dangerouslySetInnerHTML={{__html: `
+            <style dangerouslySetInnerHTML={{
+              __html: `
               #professors-scroll-container::-webkit-scrollbar { display: none; }
               @media (max-width: 768px) {
                 #professors-scroll-container { justify-content: flex-start !important; }
@@ -141,12 +127,14 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                   }}
                   onMouseEnter={e => {
                     const el = e.currentTarget as HTMLAnchorElement
+
                     el.style.transform = 'translateY(-6px)'
                     el.style.boxShadow = '0 12px 36px rgba(var(--web-primary-rgb, 37, 146, 127),0.13)'
                     el.style.borderColor = 'var(--web-primary, #25927F)'
                   }}
                   onMouseLeave={e => {
                     const el = e.currentTarget as HTMLAnchorElement
+
                     el.style.transform = 'translateY(0)'
                     el.style.boxShadow = '0 2px 12px rgba(0,0,0,0.05)'
                     el.style.borderColor = 'hsl(214,20%,91%)'
@@ -247,12 +235,14 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                       }}
                       onMouseEnter={e => {
                         const el = e.currentTarget as HTMLDivElement
+
                         el.style.borderColor = 'var(--web-primary, #25927F)'
                         el.style.color = 'var(--web-primary, #25927F)'
                         el.style.backgroundColor = 'rgba(var(--web-primary-rgb, 37, 146, 127),0.05)'
                       }}
                       onMouseLeave={e => {
                         const el = e.currentTarget as HTMLDivElement
+
                         el.style.borderColor = '#d1d5db'
                         el.style.color = '#0A0A0A'
                         el.style.backgroundColor = 'transparent'

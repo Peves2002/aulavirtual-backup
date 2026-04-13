@@ -21,7 +21,7 @@ interface WebHeaderProps {
   platformSlogan?: string
 }
 
-export default function WebHeader({ initialCategories = [], platformName = 'Aula Virtual', platformSlogan = 'Aprende sin límites' }: WebHeaderProps) {
+export default function WebHeader({ initialCategories = [] }: WebHeaderProps) {
   void initialCategories
   const { data: session } = useSession()
 

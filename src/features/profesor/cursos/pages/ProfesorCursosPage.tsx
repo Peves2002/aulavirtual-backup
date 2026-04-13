@@ -134,7 +134,7 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' }
                 )
             })
         ]
-    }, [router])
+    }, [router, tipo])
 
     const table = useReactTable({
         data: cursosData?.cursos || [],

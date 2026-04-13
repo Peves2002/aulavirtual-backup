@@ -1,6 +1,9 @@
 import React from 'react'
+
 import { redirect } from 'next/navigation'
+
 import { Container, Typography, Box, Stack } from '@mui/material'
+
 import { getAuthSession } from '@/utils/libs/auth-helpers'
 import MyCoursesList from '@/features/estudiante/mis-cursos/components/MyCoursesList'
 import { AxiosMisCursos } from '@/features/estudiante/mis-cursos/http/axiosMisCursos'
