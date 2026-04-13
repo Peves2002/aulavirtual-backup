@@ -3,12 +3,12 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { Home, BookOpen, Users, Award, Map } from 'lucide-react'
+import { Home, BookOpen, Users, Award, GraduationCap } from 'lucide-react'
 
 const navItems = [
   { title: 'Inicio', url: '/', icon: Home },
   { title: 'Cursos', url: '/cursos', icon: BookOpen },
-  { title: 'Rutas', url: '/rutas', icon: Map },
+  { title: 'Diplomados', url: '/diplomados', icon: GraduationCap },
   { title: 'Nosotros', url: '/nosotros', icon: Users },
   { title: 'Certificado', url: '/verificar-certificado', icon: Award },
 ]

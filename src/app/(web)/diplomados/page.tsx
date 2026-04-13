@@ -1,25 +1,19 @@
-// Next Imports
 import React from 'react'
 
 import { Box } from '@mui/material'
 
-// Component Imports
 import CourseCatalog from '@/features/web/home/components/CourseCatalog'
-
-// Http Client
 import { AxiosWebCursos } from '@/features/web/cursos/http/axiosWebCursos'
 import { getAuthSession } from '@/utils/libs/auth-helpers'
 
-// Server Action / Data Fetching
 async function getData(token: string | null) {
   try {
     const axiosWebCursos = new AxiosWebCursos({
       getAuthToken: () => token
     })
 
-    const data = await axiosWebCursos.getCatalog('CURSO')
+    const data = await axiosWebCursos.getCatalog('DIPLOMADO')
 
-    // Serialización manual de Decimal a Number para evitar errores en Client Components
     if (data.courses) {
       data.courses = data.courses.map((c: any) => ({
         ...c,
@@ -30,18 +24,18 @@ async function getData(token: string | null) {
 
     return data
   } catch (error) {
-    console.error('Error fetching data in CursosPage via API:', error)
+    console.error('Error fetching diplomados:', error)
 
     return { courses: [], categories: [] }
   }
 }
 
 export const metadata = {
-  title: 'Catálogo de Cursos - Aula Virtual ARM',
-  description: 'Explora nuestra amplia variedad de cursos y comienza a aprender hoy mismo.'
+  title: 'Catálogo de Diplomados - Aula Virtual ARM',
+  description: 'Explora nuestra amplia variedad de diplomados y comienza a aprender hoy mismo.'
 }
 
-export default async function CursosPage() {
+export default async function DiplomadosPage() {
   const session = await getAuthSession()
   const token = session?.user?.accessToken ?? null
 
@@ -59,7 +53,6 @@ export default async function CursosPage() {
           overflow: 'hidden',
         }}
       >
-        {/* Decorative circles */}
         <Box sx={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.06)', pointerEvents: 'none' }} />
         <Box sx={{ position: 'absolute', bottom: -60, right: 80, width: 300, height: 300, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.03)', pointerEvents: 'none' }} />
 
@@ -75,7 +68,7 @@ export default async function CursosPage() {
             </Box>
             <Box component="span" sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem' }}>/</Box>
             <Box component="span" sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>
-              Cursos
+              Diplomados
             </Box>
           </Box>
 
@@ -91,19 +84,19 @@ export default async function CursosPage() {
             }}
             component="h1"
           >
-            Catálogo de Cursos
+            Catálogo de Diplomados
           </Box>
           <Box
             sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', color: 'rgba(255,255,255,0.7)', maxWidth: 520, lineHeight: 1.6 }}
             component="p"
           >
-            Explora nuestra selección de cursos y comienza a aprender hoy.
+            Explora nuestra selección de diplomados y comienza a aprender hoy.
           </Box>
 
           {/* Stats chips */}
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, mt: 3 }}>
             {[
-              { label: `${courses.length} cursos disponibles`, icon: '📚' },
+              { label: `${courses.length} diplomados disponibles`, icon: '🎓' },
               { label: `${categories.length} categorías`, icon: '🗂️' },
             ].map(chip => (
               <Box

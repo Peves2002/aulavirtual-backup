@@ -11,7 +11,9 @@ export const metadata: Metadata = {
   description: 'Configura un nuevo curso para el aula virtual'
 }
 
-export default async function Page() {
+export default async function Page({ searchParams }: { searchParams?: { tipo?: string } }) {
+  const tipo = searchParams?.tipo === 'DIPLOMADO' ? 'DIPLOMADO' : 'CURSO'
+  const basePath = tipo === 'DIPLOMADO' ? '/admin/diplomados' : '/admin/cursos'
   const session = await getAuthSession()
 
   if (!session) {
@@ -42,5 +44,5 @@ export default async function Page() {
     console.error('Error fetching profesores from DB:', error)
   }
 
-  return <CourseCreatePage profesores={profesores} />
+  return <CourseCreatePage profesores={profesores} tipo={tipo} basePath={basePath} />
 }

@@ -26,7 +26,7 @@ export async function GET(request: Request) {
 
     if (!validation.success) return validation.error
 
-    const { page, limit, buscar, estado, categoria_id, profesor_id } = validation.data
+    const { page, limit, buscar, estado, categoria_id, profesor_id, tipo } = validation.data
 
     const where: any = {}
 
@@ -45,6 +45,10 @@ export async function GET(request: Request) {
     // Si es PROFESOR, solo puede ver sus propios cursos
     if (user.rol === 'PROFESOR') {
       where.profesor_id = user.id
+    }
+
+    if (tipo) {
+      where.tipo = tipo
     }
 
     if (buscar) {

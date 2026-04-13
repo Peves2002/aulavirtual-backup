@@ -47,6 +47,7 @@ export interface Curso {
   tipo_emision: 'SINCRONO' | 'ASINCRONO' | 'MIXTO'
   nivel: 'BASICO' | 'INTERMEDIO' | 'AVANZADO'
   estado: 'BORRADOR' | 'PUBLICADO' | 'ARCHIVADO'
+  tipo: 'CURSO' | 'DIPLOMADO'
   es_gratis: boolean
   precio: number
   moneda: string

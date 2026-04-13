@@ -21,9 +21,10 @@ export class AxiosWebCursos extends AxiosInternalHttpClient {
     })
   }
 
-  async getCatalog(): Promise<{ courses: any[], categories: any[] }> {
+  async getCatalog(tipo?: 'CURSO' | 'DIPLOMADO'): Promise<{ courses: any[], categories: any[] }> {
     try {
-      const payload = await this.iGet<{ courses: any[], categories: any[] }>('/catalogo')
+      const qs = tipo ? `?tipo=${tipo}` : ''
+      const payload = await this.iGet<{ courses: any[], categories: any[] }>(`/catalogo${qs}`)
 
       return {
         courses: payload?.courses || [],

@@ -25,7 +25,8 @@ export const crearCursoSchema = z.object({
   video_presentacion: z.string().optional().nullable(),
   brochure: z.string().optional().nullable(),
   fecha_inicio: z.string().optional().nullable(),
-  nivel: z.enum(['BASICO', 'INTERMEDIO', 'AVANZADO']).default('BASICO')
+  nivel: z.enum(['BASICO', 'INTERMEDIO', 'AVANZADO']).default('BASICO'),
+  tipo: z.enum(['CURSO', 'DIPLOMADO']).default('CURSO')
 })
 
 export type CrearCursoDto = z.infer<typeof crearCursoSchema>
@@ -56,7 +57,8 @@ export const actualizarCursoSchema = z.object({
   objetivos: z.array(z.string()).optional(),
   metodologia: z.array(z.any()).optional(),
   beneficios: z.array(z.any()).optional(),
-  incluye: z.array(z.any()).optional()
+  incluye: z.array(z.any()).optional(),
+  tipo: z.enum(['CURSO', 'DIPLOMADO']).optional()
 })
 
 export type ActualizarCursoDto = z.infer<typeof actualizarCursoSchema>
@@ -79,7 +81,8 @@ export const listarCursosQuerySchema = z.object({
   buscar: z.string().optional(),
   estado: z.enum(['BORRADOR', 'PUBLICADO', 'ARCHIVADO', '']).optional(),
   categoria_id: z.string().uuid().optional(),
-  profesor_id: z.string().uuid().optional()
+  profesor_id: z.string().uuid().optional(),
+  tipo: z.enum(['CURSO', 'DIPLOMADO', '']).optional()
 })
 
 export type ListarCursosQuery = z.infer<typeof listarCursosQuerySchema>

@@ -64,9 +64,10 @@ const columnHelper = createColumnHelper<Curso>()
 
 interface CursosPageProps {
   initialDataCursos: Curso[]
+  tipo?: 'CURSO' | 'DIPLOMADO'
 }
 
-export function CursosPage({ initialDataCursos }: CursosPageProps) {
+export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
   const [cursoToDelete, setCursoToDelete] = useState<Curso | null>(null)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
 
@@ -84,7 +85,8 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
     page: (pagination.pageIndex + 1).toString(),
     limit: pagination.pageSize.toString(),
     buscar: globalFilter,
-    estado: estadoFilter === 'all' ? '' : estadoFilter
+    estado: estadoFilter === 'all' ? '' : estadoFilter,
+    tipo: tipo ?? ''
   })
 
   const cursos = useMemo(() => data?.cursos ?? (pagination.pageIndex === 0 ? initialDataCursos : []), [data, initialDataCursos, pagination.pageIndex])
@@ -287,7 +289,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
   return (
     <>
       <Card>
-        <CardHeader title='Gestión de Cursos' className='pbe-4' />
+        <CardHeader title={tipo === 'DIPLOMADO' ? 'Gestión de Diplomados' : 'Gestión de Cursos'} className='pbe-4' />
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -326,11 +328,11 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
             <Button
               variant='contained'
               startIcon={<i className='tabler-plus' />}
-              href='/admin/cursos/nuevo'
+              href={tipo === 'DIPLOMADO' ? '/admin/cursos/nuevo?tipo=DIPLOMADO' : '/admin/cursos/nuevo'}
               component='a'
               className='is-full sm:is-auto'
             >
-              Nuevo Curso
+              {tipo === 'DIPLOMADO' ? 'Nuevo Diplomado' : 'Nuevo Curso'}
             </Button>
           </div>
         </div>
@@ -373,7 +375,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
               <tbody>
                 <tr>
                   <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    No hay cursos disponibles
+                    {tipo === 'DIPLOMADO' ? 'No hay diplomados disponibles' : 'No hay cursos disponibles'}
                   </td>
                 </tr>
               </tbody>

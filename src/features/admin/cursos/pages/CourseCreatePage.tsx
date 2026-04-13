@@ -40,9 +40,11 @@ import { useCategorias } from '@/features/admin/categorias/hooks/useCategorias'
 
 interface CourseCreatePageProps {
   profesores: { id: string; nombre: string; apellido: string }[]
+  tipo?: 'CURSO' | 'DIPLOMADO'
+  basePath?: string
 }
 
-export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
+export const CourseCreatePage = ({ profesores, tipo = 'CURSO', basePath }: CourseCreatePageProps) => {
   const { data: session } = useSession()
   const { enqueueSnackbar } = useSnackbar()
   const router = useRouter()
@@ -51,6 +53,13 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
   const [activeTab, setActiveTab] = useState('1')
   const [openMedia, setOpenMedia] = useState(false)
   const [openBrochure, setOpenBrochure] = useState(false)
+
+  const esDiplomado = tipo === 'DIPLOMADO'
+
+  const getAdminBase = () => {
+    if (basePath) return basePath
+    return esDiplomado ? '/admin/diplomados' : '/admin/cursos'
+  }
 
   const initialValues: CrearCursoDto = {
     titulo: '',
@@ -66,29 +75,25 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
     miniatura: null,
     video_presentacion: null,
     brochure: null,
-    fecha_inicio: null
+    fecha_inicio: null,
+    tipo
   }
 
   const handleSubmit = async (values: CrearCursoDto, { setSubmitting }: FormikHelpers<CrearCursoDto>) => {
     try {
-      // The backend should handle null/undefined values for optional fields,
-      // so we can pass 'values' directly.
-      // If the backend expects fields to be absent rather than null,
-      // the deletion logic would be needed.
-      // For now, assuming direct pass is fine or backend handles nulls.
       const result = await createMutation.mutateAsync(values)
 
-      enqueueSnackbar('Curso creado exitosamente', { variant: 'success' })
+      enqueueSnackbar(esDiplomado ? 'Diplomado creado exitosamente' : 'Curso creado exitosamente', { variant: 'success' })
 
-      const redirectBase = session?.user?.rol === 'ADMIN' ? '/admin/cursos' : '/profesor/mis-cursos'
+      const adminBase = session?.user?.rol === 'ADMIN' ? getAdminBase() : '/profesor/mis-cursos'
 
       if (result?.curso?.id) {
-        router.push(`${redirectBase}/${result.curso.id}`)
+        router.push(`/admin/cursos/${result.curso.id}`)
       } else {
-        router.push(redirectBase)
+        router.push(adminBase)
       }
     } catch (error: any) {
-      enqueueSnackbar(error?.message || 'Error al crear curso', { variant: 'error' })
+      enqueueSnackbar(error?.message || `Error al crear ${esDiplomado ? 'diplomado' : 'curso'}`, { variant: 'error' })
     } finally {
       setSubmitting(false)
     }
@@ -99,7 +104,7 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
       <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Box>
           <Typography variant='h4' fontWeight={600}>
-            Nuevo Curso
+            {esDiplomado ? 'Nuevo Diplomado' : 'Nuevo Curso'}
           </Typography>
           <Typography variant='body2' color='text.secondary'>
             Configura los detalles de tu nuevo programa educativo
@@ -107,7 +112,7 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
         </Box>
         <Button
           variant='outlined'
-          onClick={() => router.push(session?.user?.rol === 'ADMIN' ? '/admin/cursos' : '/profesor/mis-cursos')}
+          onClick={() => router.push(session?.user?.rol === 'ADMIN' ? getAdminBase() : '/profesor/mis-cursos')}
           startIcon={<i className='tabler-arrow-left' />}
         >
           Cancelar y Volver
@@ -493,7 +498,7 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
                       disabled={isSubmitting || !values.titulo.trim() || !values.profesor_id}
                       startIcon={isSubmitting ? <CircularProgress size={20} color='inherit' /> : <i className='tabler-device-floppy' />}
                     >
-                      {isSubmitting ? 'Creando...' : 'Finalizar y Crear Curso'}
+                      {isSubmitting ? 'Creando...' : esDiplomado ? 'Finalizar y Crear Diplomado' : 'Finalizar y Crear Curso'}
                     </Button>
                   </Box>
                 </CardContent>
