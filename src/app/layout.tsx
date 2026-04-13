@@ -13,14 +13,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const configs = await getConfigs()
   const title = configs.TEMPLATE_NAME || 'Aula Virtual'
   const slogan = configs.TEMPLATE_SLOGAN || ''
-  const logo = configs.TEMPLATE_LOGO || '/favicon.ico'
-
   return {
     title: slogan ? `${title} - ${slogan}` : title,
     description: slogan,
-    icons: {
-      icon: logo
-    }
   }
 }
 
@@ -61,6 +56,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang='es' suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      </head>
       <body className='flex is-full min-bs-full flex-col' id="__next">
         <style dangerouslySetInnerHTML={{
           __html: `
