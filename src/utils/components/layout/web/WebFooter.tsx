@@ -24,27 +24,22 @@ const WhatsAppIcon = ({ size = 16 }: { size?: number }) => (
 const socialLinks = [
   {
     label: 'Facebook',
-    href: 'https://www.facebook.com/flyup.store',
+    href: 'https://facebook.com/grupoollarves',
     icon: <Facebook size={20} />,
   },
   {
     label: 'TikTok',
-    href: 'https://tiktok.com/@flyupsale',
+    href: 'https://tiktok.com/@grupoollarves',
     icon: <TikTokIcon size={20} />,
   },
   {
     label: 'Instagram',
-    href: 'https://www.instagram.com/devrocket.software/',
+    href: 'https://instagram.com/grupoollarves/',
     icon: <Instagram size={20} />,
   },
   {
-    label: 'Youtube',
-    href: 'https://www.youtube.com/@Fly-s9b',
-    icon: <Youtube size={20} />,
-  },
-  {
     label: 'WhatsApp',
-    href: 'https://wa.me/51959436827',
+    href: 'https://wa.me/51944270957',
     icon: <WhatsAppIcon size={20} />,
   },
 ]
@@ -70,15 +65,15 @@ const WebFooter = ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
             <ul className="space-y-3" style={{ opacity: 0.8 }}>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <Phone size={16} className="flex-shrink-0 mt-0.5" />
-                <span>+51 928 510 125</span>
+                <span>+51 944 270 957</span>
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <Mail size={16} className="flex-shrink-0 mt-0.5" />
-                <span>flyup.sale@gmail.com</span>
+                <span>grupoollarvesmercadotecnia@gmail.com</span>
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <MapPin size={16} className="flex-shrink-0 mt-0.5" />
-                <span>Lima, Miraflores</span>
+                <span>Octavio Muñoz Najar 128 - 2do Piso, Cercado, Arequipa</span>
               </li>
             </ul>
           </div>

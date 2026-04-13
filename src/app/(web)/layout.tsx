@@ -17,8 +17,8 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
     getConfigs()
   ])
 
-  const platformName = configs.TEMPLATE_NAME || 'Aula Virtual'
-  const platformSlogan = configs.TEMPLATE_SLOGAN || 'Aprende sin límites'
+  const platformName = configs.TEMPLATE_NAME || 'Grupo Ollarves'
+  const platformSlogan = configs.TEMPLATE_SLOGAN || 'Excelencia e innovación'
 
   return (
     <div className="web-layout min-h-screen bg-background flex flex-col">

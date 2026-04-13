@@ -136,9 +136,10 @@ export default function LibroReclamacionesForm() {
           Hoja de Reclamación Virtual
         </Typography>
         <Box sx={{ mt: 2, textAlign: 'left', bgcolor: 'white', p: 2, border: '1px solid #eee', borderRadius: 1 }}>
-          <Typography variant="caption" display="block"><strong>PROVEEDOR:</strong> NOMBRE DE TU EMPRESA</Typography>
-          <Typography variant="caption" display="block"><strong>RUC:</strong> 20600000000 </Typography>
-          <Typography variant="caption" display="block"><strong>DOMICILIO:</strong> [DIRECCIÓN]</Typography>
+          <Typography variant="overline" color="#02115C" fontWeight="bold">LIBRO DE RECLAMACIONES VIRTUAL</Typography>
+          <Typography variant="caption" display="block"><strong>Razón Social:</strong> GRUPO OLLARVES E.I.R.L.</Typography>
+          <Typography variant="caption" display="block"><strong>RUC:</strong> 20608467298 </Typography>
+          <Typography variant="caption" display="block"><strong>Dirección:</strong> Octavio Muñoz Najar 128 - 2do Piso, Cercado, Arequipa.</Typography>
         </Box>
       </Box>
 

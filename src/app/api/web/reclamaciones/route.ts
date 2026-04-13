@@ -84,8 +84,10 @@ export async function POST(request: Request) {
             <strong>Importante:</strong> Nuestro equipo dará respuesta a tu solicitud en un plazo no mayor a 15 días hábiles, conforme a lo establecido en la normativa vigente de protección y defensa del consumidor. Este correo electrónico es una constancia automática de recepción, por favor no respondas a este mensaje.
           </p>
         </div>
-        <div style="background-color: #f3f4f6; padding: 15px; text-align: center; border-radius: 0 0 6px 6px; font-size: 12px; color: #888;">
-          NOMBRE DE TU EMPRESA - RUC: 20600000000
+        <div class="footer" style="background-color: #f3f4f6; padding: 15px; text-align: center; border-radius: 0 0 6px 6px; font-size: 12px; color: #888;">
+          GRUPO OLLARVES E.I.R.L. - RUC: 20608467298<br>
+          Octavio Muñoz Najar 128 - 2do Piso, Cercado, Arequipa.<br>
+          Este correo es generado automáticamente, por favor no responder.
         </div>
       </div>
     `

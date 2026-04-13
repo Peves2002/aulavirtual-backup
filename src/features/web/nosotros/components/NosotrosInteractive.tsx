@@ -121,9 +121,7 @@ function MisionCard() {
           Nuestra Misión
         </h3>
         <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Brindar formación profesional de alta calidad, accesible y orientada al sector industrial,
-          impulsando el desarrollo de competencias que generan valor real en las organizaciones y en
-          la carrera de nuestros estudiantes.&quot;
+          &quot;Brindar asesoría integral y estratégica, proporcionando las herramientas metodológicas necesarias para garantizar la culminación exitosa de proyectos académicos bajo estándares internacionales.&quot;
         </p>
       </div>
     </div>
@@ -184,9 +182,7 @@ function VisionCard() {
           Nuestra Visión
         </h3>
         <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Ser la plataforma de referencia en formación profesional especializada en Latinoamérica,
-          reconocida por la excelencia de sus contenidos, la solidez de sus certificaciones y su
-          compromiso con la transformación del sector industrial.&quot;
+          &quot;Consolidarnos como la empresa líder en investigación académica a nivel de Sudamérica, liderando el mercado latinoamericano mediante la innovación y la excelencia en el desarrollo de tesis.&quot;
         </p>
       </div>
     </div>

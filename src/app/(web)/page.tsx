@@ -94,7 +94,7 @@ async function getHomeData() {
     const categorias = categoriasRaw.map(c => {
       const cursosCount = c.cursos.filter(cc => cc.tipo === 'CURSO').length
       const diplomadosCount = c.cursos.filter(cc => cc.tipo === 'DIPLOMADO').length
-      
+
       return {
         id: c.id,
         nombre: c.nombre,
@@ -231,7 +231,7 @@ export default async function HomePage() {
       {categorias.length > 0 && <CategoriesCarousel categorias={categorias} />}
 
       {/* ── 2. LOGO MARQUEE ─────────────────────────── */}
-      <ClientLogosMarquee />
+      {/* <ClientLogosMarquee /> */}
 
       {/* ── 3. CURSOS DESTACADOS ────────────────────── */}
       <section className="section-container">

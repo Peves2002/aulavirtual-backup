@@ -190,9 +190,7 @@ export default async function NosotrosPage() {
                     marginBottom: '2.5rem',
                   }}
                 >
-                  Somos una plataforma educativa especializada en la formación profesional de alto impacto.
-                  Ofrecemos cursos diseñados por expertos del sector, con certificaciones reconocidas
-                  que impulsan tu desarrollo profesional y el de tu equipo.
+                  Empresa con más de 10 años de experiencia en investigación, construcción y minería. En 2021 inició su expansión nacional abriendo sedes en las principales ciudades del Perú.
                 </p>
 
                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
