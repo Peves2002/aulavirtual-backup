@@ -31,9 +31,112 @@
   --ipg-black: #0A0A0A;
   --ipg-muted: #f1f5f4;
 
+  /* IPG Design System (Defaults) */
+  --primary: 170 60% 36%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 75 63% 62%;
+  --secondary-foreground: 0 0% 10%;
+  --muted: 210 15% 93%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 75 63% 62%;
+  --accent-foreground: 0 0% 10%;
+  --border: 214 20% 88%;
+  --input: 214 20% 88%;
+  --ring: 170 60% 36%;
+  --background: 0 0% 100%;
+  --foreground: 0 0% 4%;
+  --radius: 0.5rem;
+
   --navbar-height: 88px;
   --sidebar-width: 80px;
   --sidebar-width-expanded: 260px;
+}
+
+.elite-landing {
+  /* Elite BIM Vision System Override */
+  --primary: 207 40% 26%;          /* #27435b */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 330 2% 82%;         /* #d1cfd0 */
+  --secondary-foreground: 207 40% 26%;
+  --muted: 330 2% 82%;
+  --muted-foreground: 330 3% 30%;
+  --accent: 24 73% 55%;            /* #e07b39 */
+  --accent-foreground: 0 0% 100%;
+  --border: 330 2% 82%;
+  --input: 330 2% 82%;
+  --ring: 207 40% 26%;
+  --radius: 1rem;
+  --background: 0 0% 100%;
+  --foreground: 330 3% 16%;
+}
+
+@layer base {
+  .elite-landing {
+    @apply bg-background text-foreground antialiased selection:bg-primary selection:text-white;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .elite-landing h1, 
+  .elite-landing h2, 
+  .elite-landing h3, 
+  .elite-landing h4, 
+  .elite-landing .font-display {
+    font-family: 'Poppins', sans-serif;
+    @apply tracking-tighter;
+  }
+}
+
+@layer components {
+  .glass-modern {
+    @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-lg;
+  }
+
+  .glass-frost {
+    @apply bg-white/30 backdrop-blur-xl border border-white/20 shadow-xl;
+  }
+
+  .glass-dark {
+    @apply bg-slate-900/80 backdrop-blur-lg border border-slate-700/50 shadow-2xl;
+  }
+
+  .text-gradient-orange {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#e07b39] via-[#f0a060] to-[#e07b39];
+    background-size: 200% auto;
+    animation: textShimmer 3s linear infinite;
+  }
+
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-xl;
+  }
+
+  .hero-heading {
+    @apply text-4xl md:text-6xl lg:text-7xl font-black leading-[1.1] md:leading-[0.9] tracking-tighter;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+  }
+}
+
+@layer utilities {
+  .animate-reveal {
+    animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .glow-orange {
+    box-shadow: 0 0 30px rgba(224, 123, 57, 0.25);
+  }
+
+  .glow-orange-strong {
+    box-shadow: 0 0 50px rgba(224, 123, 57, 0.45);
+  }
+}
+
+@keyframes textShimmer {
+  to { background-position: 200% center; }
+}
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 *,
@@ -265,8 +368,4 @@ code {
   line-height: 1.7;
 }
 
-/* Ensure Poppins applies to web public pages */
-.web-layout,
-.web-layout * {
-  font-family: 'Poppins', sans-serif !important;
-}
+/* Removed global Poppins override to respect design system fonts */

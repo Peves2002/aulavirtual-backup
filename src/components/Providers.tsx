@@ -17,6 +17,8 @@ import { getDemoName, getMode, getSettingsFromCookie, getSystemMode } from '@cor
 import { CartProvider } from '@/features/web/cart/context/CartContext'
 import CartDrawer from '@/features/web/cart/components/CartDrawer'
 
+import { AuthModalProvider } from '@/contexts/AuthModalContext'
+
 type Props = ChildrenType & {
     direction?: Direction
     session: Session | null
@@ -48,10 +50,12 @@ export const Providers = (props: Props) => {
                     <VerticalNavProvider>
                         <SettingsProvider settingsCookie={settings} mode={mode} demoName={demoName}>
                             <ThemeProvider direction={direction} systemMode={systemMode}>
-                                <CartProvider>
-                                    {children}
-                                    <CartDrawer />
-                                </CartProvider>
+                                <AuthModalProvider>
+                                    <CartProvider>
+                                        {children}
+                                        <CartDrawer />
+                                    </CartProvider>
+                                </AuthModalProvider>
                             </ThemeProvider>
                         </SettingsProvider>
                     </VerticalNavProvider>
