@@ -93,7 +93,7 @@ export function HeroSection() {
   return (
     <section
       id="inicio"
-      className="relative min-h-[95vh] flex items-center justify-center overflow-hidden pt-20"
+      className="relative h-screen flex items-center justify-center overflow-hidden pt-20"
     >
       {/* Immersive Background */}
       <div className="absolute inset-0 bg-primary z-0">
@@ -102,10 +102,10 @@ export function HeroSection() {
           muted
           loop
           playsInline
+          suppressHydrationWarning
+          src={getAssetPath("home3d.mp4")}
           className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay"
-        >
-          <source src={getAssetPath("home3d.mp4")} type="video/mp4" />
-        </video>
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/60 to-primary" />
       </div>
 
@@ -116,13 +116,13 @@ export function HeroSection() {
         <Carousel
           setApi={setApi}
           className="w-full"
-          plugins={[AutoplayPlugin({ delay: 8000 })]}
+          plugins={[AutoplayPlugin({ delay: 5000 })]}
           opts={{ loop: true }}
         >
           <CarouselContent>
             {/* Slide 1: Primary Value Proposition */}
             <CarouselItem>
-              <div className="grid lg:grid-cols-2 gap-12 items-center py-12 md:py-24">
+              <div className="grid lg:grid-cols-2 gap-12 items-center py-8 md:py-12">
                 <motion.div
                   initial={{ opacity: 0, x: -50 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -138,7 +138,7 @@ export function HeroSection() {
                     Líderes en Implementación BIM
                   </motion.div>
 
-                  <h1 className="hero-heading text-white mb-6 md:mb-8 leading-[0.85] md:leading-[0.9]">
+                  <h1 className="hero-heading text-white mb-6 md:mb-8 leading-[1.1] md:leading-[1.15]">
                     Ingeniería de <br />
                     <span className="text-gradient-orange">Elite</span>
                     <span className="text-primary">.</span>
@@ -201,7 +201,7 @@ export function HeroSection() {
                     <img
                       src={getAssetPath("carrousel/carrousel.png")}
                       alt="Elite BIM Visualization"
-                      className="relative z-10 w-full max-w-lg drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:scale-105 transition-transform duration-700"
+                      className="relative z-10 w-full max-w-lg rounded-3xl drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:scale-105 transition-transform duration-700"
                     />
                   </div>
                 </motion.div>
@@ -210,7 +210,7 @@ export function HeroSection() {
 
             {/* Slide 2: Aula Virtual / Education */}
             <CarouselItem>
-              <div className="grid lg:grid-cols-2 gap-12 items-center py-12 md:py-24">
+              <div className="grid lg:grid-cols-2 gap-12 items-center py-8 md:py-12">
                 <div className="text-left">
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -235,7 +235,7 @@ export function HeroSection() {
                     </Link>
                   </div>
                 </div>
-                <div className="hidden lg:block relative h-[500px] w-full max-w-2xl mx-auto">
+                <div className="hidden lg:block relative h-[400px] w-full max-w-2xl mx-auto">
                   {/* Background Aura */}
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary/10 blur-[100px] rounded-full animate-pulse" />
 

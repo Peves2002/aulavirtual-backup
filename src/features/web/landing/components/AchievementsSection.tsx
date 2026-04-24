@@ -133,34 +133,34 @@ export function AchievementsSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-24 lg:mb-32 max-w-4xl"
+          className="mb-8 lg:mb-10 max-w-4xl"
         >
           <motion.span
-            className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-[0.5em] mb-10"
+            className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-[0.5em] mb-4"
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ delay: 0.2 }}
           >
             Trayectoria de Élite
           </motion.span>
-          <h2 className="font-display text-4xl md:text-8xl font-black text-primary mb-10 leading-[0.9] tracking-tighter">
+          <h2 className="font-display text-4xl md:text-6xl font-black text-primary mb-4 leading-[0.9] tracking-tighter">
             Impacto que <br />
             <span className="text-gradient-orange">Trasciende</span>
           </h2>
-          <p className="text-slate-500 text-xl font-medium leading-relaxed max-w-2xl">
+          <p className="text-slate-500 text-lg font-medium leading-relaxed max-w-2xl">
             Cada hito en nuestra historia es un testimonio de nuestra obsesión por la excelencia técnica y la innovación constante.
           </p>
         </motion.div>
 
         {/* Carousel & Controls */}
         <div className="relative">
-          <div className="flex items-center justify-between mb-12">
+          <div className="flex items-center justify-between mb-6">
             <div className="flex gap-4">
               <Button
                 variant="outline"
                 size="lg"
                 onClick={prev}
-                className="w-16 h-16 rounded-2xl glass-modern border-none shadow-xl hover:bg-primary hover:text-white transition-all duration-500"
+                className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-200 text-slate-700 hover:bg-slate-300 hover:text-slate-900 border-none shadow-md transition-all duration-300"
               >
                 <ChevronLeft className="w-6 h-6" />
               </Button>
@@ -168,7 +168,7 @@ export function AchievementsSection() {
                 variant="outline"
                 size="lg"
                 onClick={next}
-                className="w-16 h-16 rounded-2xl glass-modern border-none shadow-xl hover:bg-primary hover:text-white transition-all duration-500"
+                className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-200 text-slate-700 hover:bg-slate-300 hover:text-slate-900 border-none shadow-md transition-all duration-300"
               >
                 <ChevronRight className="w-6 h-6" />
               </Button>
@@ -197,7 +197,7 @@ export function AchievementsSection() {
                   key={index}
                   className="flex-shrink-0 w-full md:w-[calc(50%-20px)] lg:w-[calc(33.333%-27px)]"
                 >
-                  <div className="group h-[500px] md:h-[600px] glass-modern rounded-[3rem] bg-white border-none shadow-2xl relative overflow-hidden transition-all duration-700 hover:-translate-y-4">
+                  <div className="group h-[300px] md:h-[360px] glass-modern rounded-[2.5rem] bg-white border-none shadow-2xl relative overflow-hidden transition-all duration-700 hover:-translate-y-4">
                     {/* Immersive Media */}
                     <div className="absolute inset-0">
                       {achievement.type === "video" ? (
@@ -206,10 +206,10 @@ export function AchievementsSection() {
                           muted
                           loop
                           playsInline
+                          suppressHydrationWarning
+                          src={achievement.asset}
                           className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                        >
-                          <source src={achievement.asset} type="video/mp4" />
-                        </video>
+                        />
                       ) : (
                         <img
                           src={achievement.asset}

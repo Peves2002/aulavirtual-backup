@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Phone,
   Mail,
@@ -72,6 +72,27 @@ export function ContactSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [selectedService, setSelectedService] = useState("");
+
+  const serviceOptions = [
+    "Implementación BIM",
+    "Modelamiento BIM",
+    "Diseño de Viviendas",
+    "Transformación Digital",
+    "Capacitaciones BIM",
+    "Vistas 360°",
+    "Realidad Virtual (VR)",
+    "Realidad Aumentada (AR)",
+  ];
+
+  useEffect(() => {
+    const handleSelectService = (e: Event) => {
+      const customEvent = e as CustomEvent<string>;
+      setSelectedService(customEvent.detail);
+    };
+    window.addEventListener('selectService', handleSelectService);
+    return () => window.removeEventListener('selectService', handleSelectService);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,13 +101,13 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contacto" ref={ref} className="relative py-20 lg:py-32 overflow-hidden bg-secondary">
+    <section id="contacto" ref={ref} className="relative py-16 lg:py-24 overflow-hidden bg-secondary">
       {/* Immersive Background Decor */}
       <div className="absolute top-0 left-0 w-full h-full bg-primary/5 -skew-y-6 translate-y-1/2" />
       <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-primary/5 blur-[150px] rounded-full" />
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-24 items-start">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left - Contact Info & Strategy */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -96,21 +117,21 @@ export function ContactSection() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass-frost text-primary font-bold text-xs uppercase tracking-[0.4em] mb-10"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass-frost text-primary font-bold text-xs uppercase tracking-[0.4em] mb-4"
             >
               Conecta con Élite
             </motion.div>
 
-            <h2 className="font-display text-4xl md:text-7xl font-black text-primary mb-10 leading-[0.9] tracking-tighter">
+            <h2 className="font-display text-3xl md:text-5xl font-black text-primary mb-4 leading-[1] tracking-tighter">
               Ready for the <br />
               <span className="text-gradient-orange">Next Level?</span>
             </h2>
 
-            <p className="text-slate-500 max-w-xl text-xl font-medium leading-relaxed mb-16">
+            <p className="text-slate-500 max-w-xl text-lg font-medium leading-relaxed mb-8">
               Llevamos la precisión técnica a tu puerta. Nuestro equipo está listo para integrar metodologías de vanguardia en tu organización.
             </p>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               {contactInfo.map((info, idx) => (
                 <motion.a
                   key={info.label}
@@ -118,14 +139,14 @@ export function ContactSection() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.3 + idx * 0.1 }}
-                  className="group flex flex-col md:flex-row items-center gap-4 md:gap-6 p-6 md:p-8 glass-modern rounded-[2rem] md:rounded-[2.5rem] bg-white/70 hover:shadow-2xl transition-all duration-700 text-center md:text-left"
+                  className="group flex flex-col md:flex-row items-center gap-3 md:gap-5 p-4 md:p-6 glass-modern rounded-2xl md:rounded-3xl bg-white/70 hover:shadow-2xl transition-all duration-700 text-center md:text-left"
                 >
-                  <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center group-hover:bg-accent transition-colors duration-500 shadow-xl">
-                    <info.icon className="w-7 h-7 text-white" />
+                  <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center group-hover:bg-accent transition-colors duration-500 shadow-xl">
+                    <info.icon className="w-6 h-6 text-white" />
                   </div>
                   <div>
                     <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{info.label}</span>
-                    <span className="block text-xl font-black text-primary group-hover:text-accent transition-colors">{info.value}</span>
+                    <span className="block text-base font-black text-primary group-hover:text-accent transition-colors">{info.value}</span>
                   </div>
                 </motion.a>
               ))}
@@ -139,52 +160,66 @@ export function ContactSection() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative"
           >
-            <div className="bg-white p-8 md:p-12 lg:p-20 rounded-[2.5rem] md:rounded-[4rem] shadow-2xl relative z-10">
-              <h3 className="text-3xl font-black text-primary mb-4">Direct Inquiry</h3>
-              <p className="text-slate-500 font-bold mb-12">Cuéntanos sobre tu visión técnica.</p>
+            <div className="bg-white p-6 md:p-8 lg:p-10 rounded-[2rem] md:rounded-[3rem] shadow-2xl relative z-10">
+              <h3 className="text-xl font-black text-primary mb-2">Direct Inquiry</h3>
+              <p className="text-slate-500 font-bold text-sm mb-6">Cuéntanos sobre tu visión técnica.</p>
 
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div className="space-y-3">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid md:grid-cols-2 gap-5">
+                  <div className="space-y-2">
                     <label className="text-xs font-black text-primary uppercase tracking-widest">Nombre</label>
                     <Input
-                      className="h-16 rounded-2xl bg-secondary/30 border-none px-6 font-bold text-primary focus:shadow-inner-nm transition-all"
+                      className="h-12 rounded-xl bg-secondary/30 border-none px-5 font-bold text-sm text-primary focus:shadow-inner-nm transition-all"
                       placeholder="Tu nombre completo"
                     />
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <label className="text-xs font-black text-primary uppercase tracking-widest">Empresa</label>
                     <Input
-                      className="h-16 rounded-2xl bg-secondary/30 border-none px-6 font-bold text-primary focus:shadow-inner-nm transition-all"
+                      className="h-12 rounded-xl bg-secondary/30 border-none px-5 font-bold text-sm text-primary focus:shadow-inner-nm transition-all"
                       placeholder="Tu organización"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <label className="text-xs font-black text-primary uppercase tracking-widest">Email Corporativo</label>
                   <Input
-                    className="h-16 rounded-2xl bg-secondary/30 border-none px-6 font-bold text-primary focus:shadow-inner-nm transition-all"
+                    className="h-12 rounded-xl bg-secondary/30 border-none px-5 font-bold text-sm text-primary focus:shadow-inner-nm transition-all"
                     placeholder="email@empresa.com"
                   />
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-primary uppercase tracking-widest">Servicio de Interés</label>
+                  <select
+                    value={selectedService}
+                    onChange={(e) => setSelectedService(e.target.value)}
+                    className="w-full h-12 rounded-xl bg-secondary/30 border-none px-5 font-bold text-sm text-primary focus:shadow-inner-nm transition-all appearance-none cursor-pointer outline-none"
+                  >
+                    <option value="">Selecciona un servicio</option>
+                    {serviceOptions.map((s) => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-2">
                   <label className="text-xs font-black text-primary uppercase tracking-widest">Mensaje</label>
                   <Textarea
-                    className="min-h-[150px] rounded-3xl bg-secondary/30 border-none p-6 font-bold text-primary focus:shadow-inner-nm transition-all resize-none"
+                    className="min-h-[100px] rounded-2xl bg-secondary/30 border-none p-4 font-bold text-sm text-primary focus:shadow-inner-nm transition-all resize-none"
                     placeholder="Descríbenos brevemente el alcance de tu proyecto..."
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full py-10 rounded-[2rem] bg-primary hover:bg-orange-600 text-white font-black text-xl shadow-2xl glow-orange-strong group"
+                  className="w-full py-6 rounded-2xl bg-primary hover:bg-orange-600 text-white font-black text-base shadow-2xl glow-orange-strong group"
                 >
                   {isSubmitted ? (
                     <span className="flex items-center gap-3"><CheckCircle2 className="w-6 h-6" /> ¡ENVIADO!</span>
                   ) : (
-                    <span className="flex items-center gap-3">ENVIAR CONSULTA <Send className="w-5 h-5 group-hover:translate-x-2 group-hover:-translate-y-1 transition-transform" /></span>
+                    <span className="flex items-center gap-3">ENVIAR<Send className="w-5 h-5 group-hover:translate-x-2 group-hover:-translate-y-1 transition-transform" /></span>
                   )}
                 </Button>
               </form>

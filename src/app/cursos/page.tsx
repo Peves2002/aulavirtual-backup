@@ -79,7 +79,7 @@ export default async function CursosPage() {
       <Navbar />
       <Box
         sx={{
-          background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, #1a2e3d 100%)',
+          background: 'linear-gradient(135deg, var(--primary-main) 0%, #1a2e3d 100%)',
           pt: { xs: 20, md: 28 },
           pb: { xs: 12, md: 20 },
           px: { xs: 3, md: 6 },

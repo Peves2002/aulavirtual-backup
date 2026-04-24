@@ -243,17 +243,17 @@ export function AulaVirtualSection() {
                           </div>
                         </div>
 
-                          <div className="flex items-center justify-between border-t border-slate-100 pt-6">
-                            <div className="flex flex-col">
-                              <span className="text-xs font-bold text-slate-400 line-through">USD {course.oldPrice.toFixed(2)}</span>
-                              <span className="text-2xl font-black text-primary">USD {course.price.toFixed(2)}</span>
-                            </div>
-                            <Link href="/cursos">
-                              <Button className="bg-primary hover:bg-accent text-white font-black px-6 py-6 rounded-2xl group/buy">
-                                INSCRIBIRSE
-                              </Button>
-                            </Link>
+                        <div className="flex items-center justify-between border-t border-slate-100 pt-6">
+                          <div className="flex flex-col">
+                            <span className="text-xs font-bold text-slate-400 line-through">USD {course.oldPrice.toFixed(2)}</span>
+                            <span className="text-2xl font-black text-primary">USD {course.price.toFixed(2)}</span>
                           </div>
+                          <Link href="/cursos">
+                            <Button className="cursor-pointer bg-primary hover:bg-accent text-white font-black px-6 py-6 rounded-2xl group/buy">
+                              INSCRIBIRSE
+                            </Button>
+                          </Link>
+                        </div>
                       </div>
                     </motion.div>
                   </CarouselItem>

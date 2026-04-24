@@ -21,13 +21,13 @@ export default function LandingPage() {
       <Navbar />
       <main>
         <HeroSection />
-        <AboutSection />
         <ServicesSection />
         <PortfolioSection />
+        <VRExperienceSection />
+        <AulaVirtualSection />
+        <AboutSection />
         <AchievementsSection />
         <ClientFocusSection />
-        <AulaVirtualSection />
-        <VRExperienceSection />
         <CertificateSection />
         <GallerySection />
         <ContactSection />

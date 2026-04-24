@@ -15,6 +15,7 @@ import {
   ArrowUpRight,
   Sparkles,
 } from "lucide-react";
+import { Button } from "./ui/button";
 
 const services = [
   {
@@ -134,7 +135,7 @@ export function ServicesSection() {
               transition={{ duration: 0.8, delay: index * 0.1 }}
               className="group h-full"
             >
-              <div className="relative h-full glass-modern rounded-[2.5rem] p-8 transition-all duration-700 hover:-translate-y-4 hover:shadow-2xl hover:border-primary/20 bg-white/70">
+              <div className="relative h-full flex flex-col glass-modern rounded-[2.5rem] p-8 transition-all duration-700 hover:-translate-y-4 hover:shadow-2xl hover:border-primary/20 bg-white/70">
                 {/* Tactical Icon Container */}
                 <div className="w-20 h-20 rounded-3xl bg-primary flex items-center justify-center mb-8 relative overflow-hidden group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
                   <service.icon className="w-10 h-10 text-white relative z-10" />
@@ -151,7 +152,7 @@ export function ServicesSection() {
                 </p>
 
                 {/* Micro-Features */}
-                <div className="flex flex-wrap gap-2 mt-auto">
+                <div className="flex flex-wrap gap-2 mb-8">
                   {service.features.slice(0, 2).map((feat) => (
                     <span key={feat} className="text-[9px] font-black uppercase tracking-widest text-primary/40 group-hover:text-primary/60 transition-colors">
                       • {feat}
@@ -159,8 +160,21 @@ export function ServicesSection() {
                   ))}
                 </div>
 
+                {/* Cotizar Button */}
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const event = new CustomEvent('selectService', { detail: service.title });
+                    window.dispatchEvent(event);
+                    document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="w-full cursor-pointer mt-auto rounded-2xl bg-primary hover:bg-accent text-white font-black text-sm py-6 shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  Cotizar
+                </Button>
+
                 {/* Invisible Hover Depth */}
-                <div className="absolute inset-0 rounded-[2.5rem] border-2 border-primary/0 group-hover:border-primary/5 transition-all duration-700" />
+                <div className="absolute inset-0 rounded-[2.5rem] border-2 border-primary/0 group-hover:border-primary/5 transition-all duration-700 pointer-events-none" />
               </div>
             </motion.div>
           ))}

@@ -48,10 +48,10 @@ export function AboutSection() {
                 muted
                 loop
                 playsInline
+                suppressHydrationWarning
+                src={getAssetPath("home3d.mp4")}
                 className="w-full h-[600px] object-cover opacity-80"
-              >
-                <source src={getAssetPath("home3d.mp4")} type="video/mp4" />
-              </video>
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
               <div className="absolute bottom-12 left-12 right-12">
                 <p className="text-white text-2xl font-black italic leading-tight">

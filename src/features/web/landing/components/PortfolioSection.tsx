@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { ExternalLink, Maximize2, Filter, Layers, Box, Globe } from "lucide-react";
+import { ExternalLink, Maximize2, Filter, Layers, Box, Globe, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { getAssetPath } from "@/lib/assets";
 
@@ -110,6 +110,7 @@ const projects = [
 
 export function PortfolioSection() {
     const [activeCategory, setActiveCategory] = useState("all");
+    const [selectedMedia, setSelectedMedia] = useState<{url: string, type: string} | null>(null);
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -166,7 +167,7 @@ export function PortfolioSection() {
                 {/* Masonry Grid */}
                 <motion.div
                     layout
-                    className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8"
+                    className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6"
                 >
                     <AnimatePresence mode="popLayout">
                         {filteredProjects.map((project, idx) => (
@@ -179,7 +180,10 @@ export function PortfolioSection() {
                                 transition={{ duration: 0.6, delay: idx * 0.05 }}
                                 className="break-inside-avoid"
                             >
-                                <div className="group relative rounded-[2.5rem] overflow-hidden shadow-2xl bg-primary">
+                                <div 
+                                    className="group relative rounded-[2.5rem] overflow-hidden shadow-2xl bg-primary cursor-pointer"
+                                    onClick={() => setSelectedMedia({ url: project.image, type: project.type })}
+                                >
                                     {/* Media Container */}
                                     <div className="relative overflow-hidden">
                                         {project.type === "video" ? (
@@ -188,10 +192,10 @@ export function PortfolioSection() {
                                                 muted
                                                 loop
                                                 playsInline
+                                                suppressHydrationWarning
+                                                src={project.image}
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-60 group-hover:opacity-40"
-                                            >
-                                                <source src={project.image} type="video/mp4" />
-                                            </video>
+                                            />
                                         ) : (
                                             <img
                                                 src={project.image}
@@ -213,7 +217,10 @@ export function PortfolioSection() {
                                                     {project.description}
                                                 </p>
                                                 <div className="pt-4 flex gap-4 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">
-                                                    <Button className="rounded-2xl bg-white text-primary font-black hover:bg-accent hover:text-white transition-colors">
+                                                    <Button 
+                                                        className="rounded-2xl bg-white text-primary font-black hover:bg-accent hover:text-white transition-colors"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
                                                         Detalles
                                                     </Button>
                                                     <div className="w-12 h-12 rounded-2xl glass-frost flex items-center justify-center text-white hover:bg-white hover:text-primary transition-colors cursor-pointer">
@@ -232,6 +239,48 @@ export function PortfolioSection() {
                     </AnimatePresence>
                 </motion.div>
             </div>
+
+            {/* Modal para agrandar imagen/video */}
+            <AnimatePresence>
+                {selectedMedia && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+                        onClick={() => setSelectedMedia(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="relative max-w-5xl w-full max-h-[90vh] flex items-center justify-center"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button
+                                onClick={() => setSelectedMedia(null)}
+                                className="absolute -top-16 right-0 md:-right-16 md:-top-0 text-white/70 hover:text-white transition-colors z-50 bg-white/10 p-2 rounded-full"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                            {selectedMedia.type === "video" ? (
+                                <video
+                                    autoPlay
+                                    controls
+                                    className="max-w-full max-h-[85vh] rounded-[2rem] shadow-2xl"
+                                    src={selectedMedia.url}
+                                />
+                            ) : (
+                                <img
+                                    src={selectedMedia.url}
+                                    alt="Vista ampliada"
+                                    className="max-w-full max-h-[85vh] object-contain rounded-[2rem] shadow-2xl"
+                                />
+                            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 }

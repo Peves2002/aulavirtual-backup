@@ -3,16 +3,8 @@
 import type { MouseEvent } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { 
-  Box, 
-  Typography, 
-  Button, 
-  Stack, 
-  IconButton, 
-  Chip, 
-  Tooltip 
-} from '@mui/material'
-import { MessageCircle, Clock, Calendar, Users, ShoppingCart, Check, ArrowRight } from "lucide-react";
+import { Tooltip } from '@mui/material'
+import { Clock, Calendar, User, Star, ShoppingCart, Check, ArrowRight } from "lucide-react";
 import { useCart } from '../../cart/context/CartContext'
 import HydratedDate from '@/utils/components/HydratedDate'
 import UserAvatar from '@/utils/components/UserAvatar'
@@ -99,36 +91,47 @@ export default function CourseCard({
 
   return (
     <div className="elite-landing group h-full">
-      <div 
-        className="relative h-full flex flex-col bg-white rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer"
+      <div
+        className="h-full glass-modern rounded-[2.5rem] overflow-hidden bg-white/70 hover:-translate-y-4 hover:shadow-2xl transition-all duration-700 cursor-pointer flex flex-col"
         onClick={() => router.push(`/cursos/${slug}`)}
       >
-        {/* Thumbnail Wrapper */}
+        {/* Course Image */}
         <div className="relative aspect-[16/10] overflow-hidden">
           <CourseThumbnail
             src={miniatura}
             title={titulo}
             videoUrl={video_presentacion}
             aspectRatio="16/10"
-            sx={{ 
-                display: 'block', 
-                width: '100%', 
-                height: '100%',
-                '& img': { transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)' }
+            sx={{
+              display: 'block',
+              width: '100%',
+              height: '100%',
+              '& img': { transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)' }
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-          
-          {/* Badges on Image */}
-          <div className="absolute top-4 left-4 flex gap-2">
-            <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-white shadow-lg ${tipo_emision === 'SINCRONO' ? 'bg-red-500' : 'bg-primary'}`}>
-              {tipo_emision === 'SINCRONO' ? 'En Vivo' : 'Asíncrono'}
-            </span>
+          <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+
+          {/* Category Badge on Image */}
+          <div className="absolute top-6 left-6 flex gap-2">
+            {categoria && (
+              <div className="px-4 py-2 rounded-xl glass-frost border border-white/20">
+                <span className="text-[10px] font-black text-white uppercase tracking-widest">{categoria.nombre}</span>
+              </div>
+            )}
           </div>
 
+          {/* Emission type badge */}
+          {tipo_emision === 'SINCRONO' && (
+            <div className="absolute top-6 right-6">
+              <span className="px-3 py-1.5 rounded-xl bg-red-500 text-white text-[10px] font-black uppercase tracking-widest shadow-lg">
+                En Vivo
+              </span>
+            </div>
+          )}
+
           {es_comprado && (
-            <div className="absolute top-4 right-4">
-              <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-green-500 text-white text-[10px] font-black uppercase tracking-widest shadow-lg">
+            <div className="absolute top-6 right-6">
+              <span className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-green-500 text-white text-[10px] font-black uppercase tracking-widest shadow-lg">
                 <Check className="w-3 h-3" /> TU CURSO
               </span>
             </div>
@@ -136,78 +139,63 @@ export default function CourseCard({
         </div>
 
         {/* Content */}
-        <div className="flex-1 p-6 flex flex-col">
-          {/* Category */}
-          {categoria && (
-            <span className="text-primary font-black uppercase tracking-[0.2em] text-[10px] mb-3 opacity-60">
-              {categoria.nombre}
-            </span>
-          )}
+        <div className="p-8 flex-1 flex flex-col">
+          {/* Instructor */}
+          <div className="flex items-center gap-2 mb-4 text-xs font-black text-slate-400 uppercase tracking-widest">
+            <User className="w-4 h-4 text-[var(--primary-main)]" />
+            {profesor.nombre} {profesor.apellido}
+          </div>
 
           {/* Title */}
-          <h3 className="text-xl font-black text-primary leading-tight mb-4 line-clamp-2 min-h-[3rem] group-hover:text-accent transition-colors">
+          <h3 className="text-2xl font-black text-[var(--primary-main)] mb-0 line-clamp-3 h-16 group-hover:text-accent transition-colors leading-tight">
             {titulo}
           </h3>
 
-          {/* Instructor & Info */}
-          <div className="flex items-center gap-3 mb-6">
-            <UserAvatar
-              src={profesor.avatar}
-              name={profesor.nombre}
-              apellido={profesor.apellido}
-              size={32}
-              sx={{ border: '2px solid #f1f5f9' }}
-            />
-            <div className="flex flex-col">
-               <span className="text-xs font-bold text-slate-400">Instructor</span>
-               <span className="text-sm font-black text-primary">{profesor.nombre} {profesor.apellido}</span>
+          {/* Stats Row */}
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex items-center gap-4 text-xs font-bold text-slate-400">
+              {duracion && (
+                <div className="flex items-center gap-1">
+                  <Clock className="w-6 h-6 text-[var(--primary-main)]" />
+                  {duracion}
+                </div>
+              )}
+              {displayDate && (
+                <div className="flex items-center gap-1">
+                  <Calendar className="w-6 h-6 text-[var(--primary-main)]" />
+                  {displayDate}
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Stats Bar */}
-          <div className="grid grid-cols-2 gap-4 mb-8 pt-6 border-t border-slate-50">
-            {displayDate && (
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-accent" />
-                <span className="text-xs font-bold text-slate-500">{displayDate}</span>
-              </div>
-            )}
-            {duracion && (
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-accent" />
-                <span className="text-xs font-bold text-slate-500">{duracion}</span>
-              </div>
-            )}
-          </div>
-
-          {/* Footer Card */}
-          <div className="mt-auto flex items-center justify-between gap-4">
+          {/* Price + Action Footer */}
+          <div className="flex items-center justify-between border-t border-slate-100 pt-4 mt-auto">
             <div className="flex flex-col">
-               <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Inversión</span>
-               <span className="text-2xl font-black text-primary">
-                 {es_comprado ? 'Acceso Total' : (es_gratis ? 'Gratis' : `${moneda} ${precio}`)}
-               </span>
+              <span className="text-2xl font-black text-[var(--primary-main)]">
+                {es_comprado ? 'Acceso Total' : (es_gratis ? 'Gratis' : `${moneda} ${precio}`)}
+              </span>
             </div>
 
             <div className="flex gap-2">
-                {!es_comprado && (
-                    <Tooltip title={inCart ? 'Ya en carrito' : 'Añadir'}>
-                        <button 
-                            onClick={handleAddToCart}
-                            disabled={inCart}
-                            className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${inCart ? 'bg-green-50 text-green-500 border border-green-200' : 'bg-slate-50 text-primary border border-slate-100 hover:bg-primary hover:text-white'}`}
-                        >
-                            {inCart ? <Check className="w-5 h-5" /> : <ShoppingCart className="w-5 h-5" />}
-                        </button>
-                    </Tooltip>
-                )}
-                
-                <button 
-                    className={`h-12 px-6 rounded-2xl font-black text-xs uppercase tracking-widest transition-all duration-300 flex items-center gap-2 ${es_comprado ? 'bg-green-500 text-white shadow-lg' : 'bg-primary text-white hover:bg-accent shadow-xl shadow-primary/20'}`}
-                >
-                    {es_comprado ? 'Aprender' : 'Detalles'}
-                    <ArrowRight className="w-4 h-4" />
-                </button>
+              {!es_comprado && !es_gratis && (
+                <Tooltip title={inCart ? 'Ya en carrito' : 'Añadir al carrito'}>
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={inCart}
+                    className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${inCart ? 'bg-green-50 text-green-500 border border-green-200' : 'bg-slate-50 text-[var(--primary-main)] border border-slate-100 hover:bg-[var(--primary-main)] hover:text-white'}`}
+                  >
+                    {inCart ? <Check className="w-5 h-5" /> : <ShoppingCart className="w-5 h-5" />}
+                  </button>
+                </Tooltip>
+              )}
+
+              <button
+                className={`h-12 cursor-pointer px-6 rounded-2xl font-black text-xs uppercase tracking-widest transition-all duration-300 flex items-center gap-2 ${es_comprado ? 'bg-green-500 text-white shadow-lg' : 'bg-[var(--primary-main)] text-white hover:bg-accent shadow-xl shadow-[var(--primary-main)]/20'}`}
+              >
+                {es_comprado ? 'Aprender' : 'INSCRIBIRSE'}
+                <ArrowRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>

@@ -1,9 +1,9 @@
 'use client'
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
-import { Glasses, Smartphone, Eye, Sparkles } from "lucide-react";
+import { useRef, useState } from "react";
+import { Glasses, Smartphone, Eye, Sparkles, X } from "lucide-react";
 import { getAssetPath } from "@/lib/assets";
 
 const experiences = [
@@ -40,6 +40,7 @@ const experiences = [
 export function VRExperienceSection() {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-100px" });
+    const [selectedQR, setSelectedQR] = useState<{ qr: string; title: string } | null>(null);
 
     return (
         <section id="experiencias" ref={ref} className="relative py-20 lg:py-32 overflow-hidden bg-secondary">
@@ -82,7 +83,8 @@ export function VRExperienceSection() {
                             initial={{ opacity: 0, y: 50 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.8, delay: idx * 0.1 }}
-                            className="group relative h-[600px] rounded-[3rem] overflow-hidden shadow-2xl bg-primary"
+                            className="group relative h-[600px] rounded-[3rem] overflow-hidden shadow-2xl bg-primary cursor-pointer"
+                            onClick={() => setSelectedQR({ qr: exp.qr, title: exp.title })}
                         >
                             {/* Background Image */}
                             <img
@@ -93,8 +95,10 @@ export function VRExperienceSection() {
                             <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/20 to-transparent" />
 
                             {/* QR Overlay (Default State) */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center p-8 transition-all duration-500 group-hover:opacity-0">
-                                <div className="w-48 h-48 bg-white p-4 rounded-[2rem] shadow-2xl mb-6 relative overflow-hidden">
+                            <div 
+                                className="absolute inset-0 flex flex-col items-center justify-center p-8 transition-all duration-500 group-hover:opacity-0"
+                            >
+                                <div className="w-48 h-48 bg-white p-4 rounded-[2rem] shadow-2xl mb-6 relative overflow-hidden hover:scale-105 transition-transform duration-300">
                                     <img src={exp.qr} alt="QR Code" className="w-full h-full object-cover rounded-xl" />
                                     <div className="absolute inset-0 border-4 border-primary/10 rounded-[2rem]" />
                                 </div>
@@ -129,6 +133,47 @@ export function VRExperienceSection() {
                     ))}
                 </div>
             </div>
+
+            {/* Modal para QR ampliado */}
+            <AnimatePresence>
+                {selectedQR && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+                        onClick={() => setSelectedQR(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            className="relative flex flex-col items-center gap-6"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button
+                                onClick={() => setSelectedQR(null)}
+                                className="absolute -top-14 right-0 text-white/70 hover:text-white transition-colors bg-white/10 p-2 rounded-full"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                            <div className="bg-white p-6 rounded-[2rem] shadow-2xl">
+                                <img
+                                    src={selectedQR.qr}
+                                    alt={`QR - ${selectedQR.title}`}
+                                    className="w-72 h-72 md:w-96 md:h-96 object-cover rounded-xl"
+                                />
+                            </div>
+                            <p className="text-white text-xl font-black text-center">
+                                {selectedQR.title}
+                            </p>
+                            <p className="text-white/50 text-sm font-medium">
+                                Escanea el código QR con tu dispositivo
+                            </p>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 }

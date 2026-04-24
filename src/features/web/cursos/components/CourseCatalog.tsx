@@ -144,11 +144,17 @@ const CourseCatalog = ({ courses, categories }: CourseCatalogProps) => {
                     sx: {
                       borderRadius: '1.5rem',
                       fontWeight: 800,
+                      fontFamily: "'Poppins', sans-serif",
                       bgcolor: selectedCategory !== 'all' ? 'rgba(224, 123, 57, 0.05)' : '#f8fafc',
                       color: selectedCategory !== 'all' ? 'hsl(var(--accent))' : 'primary.main',
                       border: '1.5px solid',
                       borderColor: selectedCategory !== 'all' ? 'hsl(var(--accent))' : 'transparent',
                       '& fieldset': { border: 'none' },
+                    }
+                  }}
+                  SelectProps={{
+                    MenuProps: {
+                      sx: { '& .MuiMenuItem-root': { fontFamily: "'Poppins', sans-serif", fontWeight: 600 } }
                     }
                   }}
                   sx={{ minWidth: 180 }}
@@ -169,11 +175,17 @@ const CourseCatalog = ({ courses, categories }: CourseCatalogProps) => {
                     sx: {
                       borderRadius: '1.5rem',
                       fontWeight: 800,
+                      fontFamily: "'Poppins', sans-serif",
                       bgcolor: selectedLevel !== 'all' ? 'rgba(224, 123, 57, 0.05)' : '#f8fafc',
                       color: selectedLevel !== 'all' ? 'hsl(var(--accent))' : 'primary.main',
                       border: '1.5px solid',
                       borderColor: selectedLevel !== 'all' ? 'hsl(var(--accent))' : 'transparent',
                       '& fieldset': { border: 'none' },
+                    }
+                  }}
+                  SelectProps={{
+                    MenuProps: {
+                      sx: { '& .MuiMenuItem-root': { fontFamily: "'Poppins', sans-serif", fontWeight: 600 } }
                     }
                   }}
                   sx={{ minWidth: 150 }}
@@ -194,11 +206,17 @@ const CourseCatalog = ({ courses, categories }: CourseCatalogProps) => {
                     sx: {
                       borderRadius: '1.5rem',
                       fontWeight: 800,
+                      fontFamily: "'Poppins', sans-serif",
                       bgcolor: selectedModality !== 'all' ? 'rgba(224, 123, 57, 0.05)' : '#f8fafc',
                       color: selectedModality !== 'all' ? 'hsl(var(--accent))' : 'primary.main',
                       border: '1.5px solid',
                       borderColor: selectedModality !== 'all' ? 'hsl(var(--accent))' : 'transparent',
                       '& fieldset': { border: 'none' },
+                    }
+                  }}
+                  SelectProps={{
+                    MenuProps: {
+                      sx: { '& .MuiMenuItem-root': { fontFamily: "'Poppins', sans-serif", fontWeight: 600 } }
                     }
                   }}
                   sx={{ minWidth: 160 }}
@@ -221,9 +239,15 @@ const CourseCatalog = ({ courses, categories }: CourseCatalogProps) => {
                     sx: {
                       borderRadius: '1.5rem',
                       fontWeight: 800,
+                      fontFamily: "'Poppins', sans-serif",
                       bgcolor: '#f8fafc',
                       color: 'primary.main',
                       '& fieldset': { border: 'none' },
+                    }
+                  }}
+                  SelectProps={{
+                    MenuProps: {
+                      sx: { '& .MuiMenuItem-root': { fontFamily: "'Poppins', sans-serif", fontWeight: 600 } }
                     }
                   }}
                   sx={{ minWidth: 180 }}
