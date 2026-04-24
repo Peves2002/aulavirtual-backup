@@ -28,6 +28,11 @@ async function getCourseData(slug: string, token: string | null) {
     }
 }
 
+import { Navbar } from '@/features/web/landing/components/Navbar'
+import { Footer } from '@/features/web/landing/components/Footer'
+
+import { FloatingCartButton } from '@/features/web/cart/components/FloatingCartButton'
+
 export default async function CourseDetailPage({ params }: { params: { slug: string } }) {
     const session = await getAuthSession()
     const token = session?.user?.accessToken ?? null
@@ -39,9 +44,14 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
     }
 
     return (
-        <Box sx={{ flexGrow: 1, bgcolor: 'background.default' }}>
-            <CourseDetail course={course} />
-        </Box>
+        <div className="min-h-screen bg-background elite-landing">
+            <Navbar />
+            <Box sx={{ flexGrow: 1, bgcolor: 'background.default', pt: 20 }}>
+                <CourseDetail course={course} />
+            </Box>
+            <Footer />
+            <FloatingCartButton />
+        </div>
     )
 }
 
