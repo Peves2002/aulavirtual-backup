@@ -106,15 +106,15 @@ const CourseCatalog = ({ courses, categories }: CourseCatalogProps) => {
                   placeholder="Buscar programa o especialidad..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full h-20 px-8 pl-16 rounded-3xl bg-white border border-slate-100 shadow-2xl shadow-primary/5 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all font-bold text-lg text-primary placeholder:text-slate-300"
+                  className="w-full h-20 px-8 pl-16 rounded-3xl bg-white border border-slate-100 shadow-2xl focus:outline-none transition-all font-bold text-lg text-[var(--primary-main)] placeholder:text-slate-300"
                 />
-                <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-primary/30" />
+                <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-[var(--primary-main)] opacity-30" />
                 {searchTerm && (
                   <button 
                     onClick={() => setSearchTerm('')}
                     className="absolute right-6 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center hover:bg-slate-100 transition-colors"
                   >
-                    <X className="w-4 h-4 text-primary" />
+                    <X className="w-4 h-4 text-[var(--primary-main)]" />
                   </button>
                 )}
               </div>
