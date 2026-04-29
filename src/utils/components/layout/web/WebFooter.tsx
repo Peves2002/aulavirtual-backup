@@ -70,11 +70,11 @@ const WebFooter = ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
             <ul className="space-y-3" style={{ opacity: 0.8 }}>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <Phone size={16} className="flex-shrink-0 mt-0.5" />
-                <span>+51 928 510 125</span>
+                <span>+51 906 741 327</span>
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <Mail size={16} className="flex-shrink-0 mt-0.5" />
-                <span>flyup.sale@gmail.com</span>
+                <span>informes@crececoncepav.com</span>
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <MapPin size={16} className="flex-shrink-0 mt-0.5" />
@@ -120,6 +120,8 @@ const WebFooter = ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
               {[
                 { label: 'Nosotros', href: '/nosotros' },
+                { label: 'Preguntas Frecuentes', href: '/preguntas-frecuentes' },
+                { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
                 { label: 'Términos y condiciones', href: '/terminos-y-condiciones' },
                 { label: 'Libro de reclamaciones', href: '/libro-de-reclamaciones', icon: <BookOpenCheck size={13} /> },
                 { label: 'Política de Devoluciones', href: '/politica-de-cambios-y-devoluciones' },

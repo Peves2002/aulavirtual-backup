@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 
-const WHATSAPP_NUMBER = '51959436827'
-const PHONE_NUMBER = '+51959436827'
+const WHATSAPP_NUMBER = '51906741327'
+const PHONE_NUMBER = '+51906741327'
 
 const WhatsAppIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26">

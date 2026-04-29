@@ -74,7 +74,11 @@ const PaymentForm = ({ courses, appliedCouponCode, finalTotal }: PaymentFormProp
   const [formData, setFormData] = useState({
     nombres: '',
     apellidos: '',
-    correo: ''
+    correo: '',
+    dni: '',
+    ruc: '',
+    razonSocial: '',
+    needsInvoice: false
   })
 
   const subtotal = courses.reduce((acc, c) => acc + Number(c.precio), 0)
@@ -86,11 +90,12 @@ const PaymentForm = ({ courses, appliedCouponCode, finalTotal }: PaymentFormProp
     if (session?.user) {
       const user = session.user as any
 
-      setFormData({
+      setFormData(prev => ({
+        ...prev,
         nombres: user.nombre || user.name || '',
         apellidos: user.apellido || '',
         correo: user.email || ''
-      })
+      }))
     }
   }, [session])
 
@@ -339,13 +344,14 @@ const PaymentForm = ({ courses, appliedCouponCode, finalTotal }: PaymentFormProp
               { label: 'Nombres', key: 'nombres', sm: 6 },
               { label: 'Apellidos', key: 'apellidos', sm: 6 },
               { label: 'Correo Electrónico', key: 'correo', sm: 12 },
+              { label: 'DNI / Documento de Identidad', key: 'dni', sm: 12 },
             ].map(({ label, key, sm }) => (
               <Grid item xs={12} sm={sm} key={key}>
                 <TextField
                   fullWidth label={label}
-                  value={formData[key as keyof typeof formData]}
+                  value={(formData as any)[key]}
                   onChange={e => setFormData(p => ({ ...p, [key]: e.target.value }))}
-                  variant="outlined" disabled={!isGuest}
+                  variant="outlined" disabled={key !== 'dni' && !isGuest}
                   sx={{
                     '& .MuiInputLabel-root': { fontFamily: FONT },
                     '& .MuiOutlinedInput-root': { fontFamily: FONT, borderRadius: '12px' },
@@ -357,6 +363,46 @@ const PaymentForm = ({ courses, appliedCouponCode, finalTotal }: PaymentFormProp
               </Grid>
             ))}
           </Grid>
+        </Box>
+
+        <Box>
+          <FormControlLabel 
+            control={
+              <Checkbox 
+                checked={formData.needsInvoice} 
+                onChange={e => setFormData(p => ({ ...p, needsInvoice: e.target.checked }))} 
+                sx={{ color: 'var(--web-primary, #25927F)', '&.Mui-checked': { color: 'var(--web-primary, #25927F)' } }} 
+              />
+            } 
+            label={<Typography sx={{ fontFamily: FONT, fontSize: '0.9375rem', fontWeight: 600 }}>Solicitar Factura (RUC)</Typography>} 
+          />
+
+          {formData.needsInvoice && (
+            <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth label="RUC"
+                  value={formData.ruc}
+                  onChange={e => setFormData(p => ({ ...p, ruc: e.target.value }))}
+                  variant="outlined"
+                  sx={{
+                    '& .MuiOutlinedInput-root': { fontFamily: FONT, borderRadius: '12px' },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth label="Razón Social"
+                  value={formData.razonSocial}
+                  onChange={e => setFormData(p => ({ ...p, razonSocial: e.target.value }))}
+                  variant="outlined"
+                  sx={{
+                    '& .MuiOutlinedInput-root': { fontFamily: FONT, borderRadius: '12px' },
+                  }}
+                />
+              </Grid>
+            </Grid>
+          )}
         </Box>
 
         <Box>

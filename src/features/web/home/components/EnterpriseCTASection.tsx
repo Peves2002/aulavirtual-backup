@@ -17,7 +17,7 @@ const WhatsAppIcon = ({ size = 20 }: { size?: number }) => (
 import ScrollReveal from './ScrollReveal'
 import { sectionH2, sectionDesc, cardTitle, cardBody, smallText } from './typography'
 
-const WHATSAPP_NUMBER = '51928510125'
+const WHATSAPP_NUMBER = '51906741327'
 const WHATSAPP_MSG = encodeURIComponent('Hola, me gustaría agendar una reunión para explorar sus planes corporativos.')
 
 const bullets = [

@@ -1,68 +1,39 @@
 import Link from 'next/link'
 
-import { ArrowRight, CheckCircle, Map } from 'lucide-react'
+import { ArrowRight, MessageCircle, BookOpen } from 'lucide-react'
 
 import prisma from '@/utils/libs/prisma'
-import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
-import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
-import RutasSection from '@/features/web/home/components/RutasSection'
-import ScrollReveal from '@/features/web/home/components/ScrollReveal'
-import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
 import HeroVisual from '@/features/web/home/components/HeroVisual'
-import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
-import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
-import CompaniesSection from '@/features/web/home/components/CompaniesSection'
-import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
+import ScrollReveal from '@/features/web/home/components/ScrollReveal'
+import ProblemSection from '@/features/web/home/components/ProblemSection'
+import SolutionSection from '@/features/web/home/components/SolutionSection'
+import DiferencialSection from '@/features/web/home/components/DiferencialSection'
+import ResultsSection from '@/features/web/home/components/ResultsSection'
+import TargetAudienceSection from '@/features/web/home/components/TargetAudienceSection'
+import WorkModelsSection from '@/features/web/home/components/WorkModelsSection'
+import ServicesSection from '@/features/web/home/components/ServicesSection'
+import WhyUsSection from '@/features/web/home/components/WhyUsSection'
+import NewsletterSection from '@/features/web/home/components/NewsletterSection'
+import FinalCTASection from '@/features/web/home/components/FinalCTASection'
+import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
 
 export const metadata = {
-  title: 'Aula Virtual - Aprende sin límites',
-  description: 'Plataforma de aprendizaje online con cursos especializados, rutas de aprendizaje y certificados.',
+  title: 'CEPAV - Capacitación Especializada para el Sector Turismo',
+  description: 'Potenciamos tu equipo de turismo con capacitación especializada, herramientas de ventas y atención al cliente.',
 }
 
 async function getHomeData() {
   try {
-    const [coursesRaw, rutasRaw, teachersRaw] = await Promise.all([
-      // Cursos
-      prisma.curso.findMany({
-        where: { estado: 'PUBLICADO' },
-        include: {
-          profesor: { select: { nombre: true, apellido: true, avatar: true } },
-          categoria: { select: { id: true, nombre: true } },
-          _count: { select: { modulos: true, inscripciones: true } },
-        },
-        orderBy: { creado_en: 'desc' },
-        take: 6,
-      }),
-
-      // Rutas
-      prisma.rutaAprendizaje.findMany({
-        where: { esta_activo: true },
-        include: {
-          cursos: {
-            take: 4,
-            include: { curso: { select: { miniatura: true, titulo: true } } },
-          },
-        },
-        take: 3,
-      }),
-
-      // Profesores
-      prisma.usuario.findMany({
-        where: { rol: 'PROFESOR' },
-        select: {
-          id: true,
-          nombre: true,
-          apellido: true,
-          slug: true,
-          avatar: true,
-          cargo: true,
-          biografia: true,
-          _count: { select: { cursos_dictados: true } },
-        },
-        orderBy: { cursos_dictados: { _count: 'desc' } },
-        take: 8,
-      }),
-    ])
+    const coursesRaw = await prisma.curso.findMany({
+      where: { estado: 'PUBLICADO' },
+      include: {
+        profesor: { select: { nombre: true, apellido: true, avatar: true } },
+        categoria: { select: { id: true, nombre: true } },
+        _count: { select: { modulos: true, inscripciones: true } },
+      },
+      orderBy: { creado_en: 'desc' },
+      take: 6,
+    })
 
     const courses = await Promise.all(
       coursesRaw.map(async course => {
@@ -72,27 +43,21 @@ async function getHomeData() {
       })
     )
 
-    const rutas = rutasRaw.map(r => ({
-      ...r,
-      total_cursos: r.cursos.length,
-      cursos: r.cursos.map(c => ({ miniatura: c.curso.miniatura, titulo: c.curso.titulo })),
-    }))
-
     return {
       courses: JSON.parse(JSON.stringify(courses)),
-      rutas: JSON.parse(JSON.stringify(rutas)),
-      teachers: JSON.parse(JSON.stringify(teachersRaw)),
     }
   } catch {
-    return { courses: [], rutas: [], teachers: [] }
+    return { courses: [] }
   }
 }
 
 export default async function HomePage() {
-  const { courses, rutas, teachers } = await getHomeData()
+  const { courses } = await getHomeData()
+  const WHATSAPP_NUMBER = '51906741327'
+  const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola, me gustaría solicitar información sobre capacitaciones para mi empresa.')}`
 
   return (
-    <>
+    <div className="is-home">
       {/* ── 1. HERO ─────────────────────────────────── */}
       <section
         style={{
@@ -125,7 +90,7 @@ export default async function HomePage() {
               >
                 <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--web-light, #BDD962)' }} />
                 <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>
-                  Plataforma educativa online
+                  Capacitación Corporativa
                 </span>
               </div>
 
@@ -141,8 +106,8 @@ export default async function HomePage() {
                   marginBottom: '1.25rem',
                 }}
               >
-                Aprende sin límites,<br />
-                <span style={{ color: 'var(--web-light, #BDD962)' }}>crece sin fronteras</span>
+                Potencia tu equipo,<br />
+                <span style={{ color: 'var(--web-light, #BDD962)' }}>escala tus ventas</span>
               </h1>
 
               {/* Descripción */}
@@ -156,34 +121,36 @@ export default async function HomePage() {
                   marginBottom: '2.5rem',
                 }}
               >
-                Accede a cursos especializados, rutas de aprendizaje y certificaciones
-                diseñadas para impulsar tu carrera profesional.
+                Capacitación especializada para agencias de viajes y empresas del sector turismo. 
+                Construimos equipos profesionales, eficientes y orientados a resultados.
               </p>
 
               {/* Botones */}
               <div className="flex flex-wrap gap-4" style={{ marginBottom: '2.5rem' }}>
-                <Link
-                  href="/cursos"
+                <a
+                  href="#servicios"
                   className="inline-flex items-center gap-2 no-underline rounded-xl font-semibold transition-all duration-300 hover:scale-105"
                   style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', color: '#ffffff', fontSize: '0.9375rem', padding: '0.875rem 1.75rem', boxShadow: '0 4px 20px rgba(var(--web-primary-rgb, 37, 146, 127),0.45)' }}
                 >
-                  Ver Cursos <ArrowRight size={18} />
-                </Link>
-                <Link
-                  href="/nosotros"
+                  Nuestros Servicios <ArrowRight size={18} />
+                </a>
+                <a
+                  href={waLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 no-underline rounded-xl font-semibold transition-all duration-200"
                   style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'rgba(255,255,255,0.08)', color: '#ffffff', fontSize: '0.9375rem', padding: '0.875rem 1.75rem', border: '1.5px solid rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)' }}
                 >
-                  Saber más
-                </Link>
+                  <MessageCircle size={18} /> Contactar ahora
+                </a>
               </div>
 
               {/* Mini stats */}
               <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
                 {[
-                  { value: '+1,200', label: 'Estudiantes' },
-                  { value: '+80', label: 'Cursos' },
-                  { value: '98%', label: 'Satisfacción' },
+                  { value: '+50', label: 'Empresas' },
+                  { value: '+1,500', label: 'Colaboradores' },
+                  { value: '100%', label: 'Resultados' },
                 ].map(stat => (
                   <div key={stat.label}>
                     <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.375rem', fontWeight: 800, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>{stat.value}</div>
@@ -199,23 +166,49 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── 2. LOGO MARQUEE ─────────────────────────── */}
-      <ClientLogosMarquee />
+      {/* ── 2. PROBLEMA ─────────────────────────── */}
+      <ProblemSection />
 
-      {/* ── 3. CURSOS DESTACADOS ────────────────────── */}
+      {/* ── 3. SOLUCIÓN ─────────────────────────── */}
+      <SolutionSection />
+
+      {/* ── 4. DIFERENCIAL ──────────────────────── */}
+      <DiferencialSection />
+
+      {/* ── 5. RESULTADOS ───────────────────────── */}
+      <ResultsSection />
+
+      {/* ── 6. PÚBLICO OBJETIVO ─────────────────── */}
+      <TargetAudienceSection />
+
+      {/* ── 7. MODELOS DE TRABAJO ───────────────── */}
+      <WorkModelsSection />
+
+      {/* ── 8. SERVICIOS ────────────────────────── */}
+      <div id="servicios">
+        <ServicesSection />
+      </div>
+
+      {/* ── 8.5 CURSOS DESTACADOS (Programas de Capacitación) ── */}
       <section className="section-container">
         <ScrollReveal>
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="section-title">Cursos destacados</h2>
-              <p className="section-subtitle">Descubre nuestros cursos más recientes</p>
+              <div
+                className="inline-flex items-center gap-2 mb-3"
+                style={{ color: 'var(--web-primary, #25927F)', fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}
+              >
+                <BookOpen size={14} /> Formación especializada
+              </div>
+              <h2 className="section-title" style={{ marginBottom: '0.25rem' }}>Nuestros Programas</h2>
+              <p className="section-subtitle">Capacitaciones diseñadas para los desafíos actuales del sector.</p>
             </div>
             <Link
               href="/cursos"
               className="no-underline hidden sm:inline-flex items-center gap-2 text-sm font-semibold"
               style={{ fontFamily: 'Poppins, sans-serif', color: 'var(--web-primary, #25927F)' }}
             >
-              Ver todos <ArrowRight size={16} />
+              Ver catálogo completo <ArrowRight size={16} />
             </Link>
           </div>
         </ScrollReveal>
@@ -227,94 +220,20 @@ export default async function HomePage() {
               className="no-underline inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm"
               style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', color: '#ffffff' }}
             >
-              Ver todos los cursos <ArrowRight size={16} />
+              Ver todos los programas <ArrowRight size={16} />
             </Link>
           </div>
         </ScrollReveal>
       </section>
 
-      {/* ── 4. CARACTERÍSTICAS DE CLASES ────────────── */}
-      <ClassFeaturesSection />
+      {/* ── 9. POR QUÉ NOSOTROS ─────────────────── */}
+      <WhyUsSection />
 
-      {/* ── 5. RUTAS DE APRENDIZAJE ─────────────────── */}
-      {rutas.length > 0 && (
-        <section style={{ backgroundColor: 'hsl(210, 15%, 97%)', borderTop: '1px solid hsl(214, 20%, 92%)' }}>
-          <div className="section-container">
-            <ScrollReveal>
-              <div className="flex items-end justify-between mb-2">
-                <div>
-                  <div
-                    className="inline-flex items-center gap-2 mb-3"
-                    style={{ color: 'var(--web-primary, #25927F)', fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}
-                  >
-                    <Map size={14} /> Especialízate
-                  </div>
-                  <h2 className="section-title" style={{ marginBottom: '0.25rem' }}>Rutas de Aprendizaje</h2>
-                  <p className="section-subtitle">Colecciones curadas para llevarte de principiante a experto.</p>
-                </div>
-                <Link
-                  href="/rutas"
-                  className="no-underline hidden sm:inline-flex items-center gap-2 text-sm font-semibold"
-                  style={{ fontFamily: 'Poppins, sans-serif', color: 'var(--web-primary, #25927F)' }}
-                >
-                  Ver todas <ArrowRight size={16} />
-                </Link>
-              </div>
-            </ScrollReveal>
-            <ScrollReveal delay={0.1}>
-              <RutasSection rutas={rutas} embedded />
-            </ScrollReveal>
-          </div>
-        </section>
-      )}
+      {/* ── 10. NEWSLETTER ──────────────────────── */}
+      <NewsletterSection />
 
-      {/* ── 6. PROFESORES ───────────────────────────── */}
-      <ProfessorsCarousel teachers={teachers} />
-
-      {/* ── 7. EMPRESAS (B2B informativo) ───────────── */}
-      <CompaniesSection />
-
-      {/* ── 8. CTA AGENDAR REUNIÓN ──────────────────── */}
-      <EnterpriseCTASection />
-
-      {/* ── 9. VERIFICAR CERTIFICADO ────────────────── */}
-      <SearchCertificateSection />
-
-      {/* ── 10. CTA INSCRIPCIÓN ─────────────────────── */}
-      <section className="bg-white py-16 text-center" style={{ borderTop: '1px solid hsl(214, 20%, 88%)' }}>
-        <div className="max-w-3xl mx-auto px-4">
-          <ScrollReveal>
-            <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6"
-              style={{ backgroundColor: 'rgba(var(--web-primary-rgb, 37, 146, 127),0.08)', color: 'var(--web-dark, #025E44)' }}
-            >
-              <CheckCircle size={16} />
-              <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', fontWeight: 600 }}>
-                Únete a miles de estudiantes
-              </span>
-            </div>
-            <h2
-              className="mb-4"
-              style={{ fontFamily: 'Poppins, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', fontWeight: 700, color: '#0A0A0A', letterSpacing: '-0.02em' }}
-            >
-              ¿Listo para transformar tu carrera?
-            </h2>
-            <p
-              className="mb-8 max-w-xl mx-auto"
-              style={{ fontFamily: 'Poppins, sans-serif', color: 'hsl(215, 16%, 47%)', lineHeight: 1.7 }}
-            >
-              Inscríbete hoy y comienza a aprender con los mejores profesionales del sector.
-            </p>
-            <Link
-              href="/cursos"
-              className="no-underline inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-white transition-all duration-300 hover:scale-105"
-              style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', boxShadow: '0 6px 20px rgba(var(--web-primary-rgb, 37, 146, 127),0.35)' }}
-            >
-              Inscribirse ahora <ArrowRight size={18} />
-            </Link>
-          </ScrollReveal>
-        </div>
-      </section>
-    </>
+      {/* ── 11. CTA FINAL ───────────────────────── */}
+      <FinalCTASection />
+    </div>
   )
 }

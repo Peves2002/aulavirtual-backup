@@ -26,7 +26,7 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
     <div className="web-layout min-h-screen bg-background flex flex-col">
       <WebHeader initialCategories={categories} platformName={platformName} platformSlogan={platformSlogan} />
       <div className="flex flex-1" style={{ paddingTop: 'var(--navbar-height)' }}>
-        {/* Sidebar: visible solo en sm+ */}
+        {/* Sidebar: visible solo en sm+ y NO en la home */}
         <div className="hidden sm:block">
           <LeftSidebar />
         </div>
@@ -34,8 +34,16 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
           className="flex-1 flex flex-col min-w-0"
           style={{ paddingLeft: 'var(--sidebar-width)' }}
         >
-          {/* padding-left del sidebar solo en sm+ */}
-          <style>{`@media (max-width: 639px) { main { padding-left: 0 !important; padding-bottom: 64px; } }`}</style>
+          {/* Ocultar sidebar y padding en la home */}
+          <style>{`
+            @media (min-width: 640px) {
+              :has(> .is-home) .hidden.sm\\:block { display: none !important; }
+              :has(> .is-home) main { padding-left: 0 !important; }
+            }
+            @media (max-width: 639px) { 
+              main { padding-left: 0 !important; padding-bottom: 64px; } 
+            }
+          `}</style>
           <div className="flex-1">
             {children}
           </div>
