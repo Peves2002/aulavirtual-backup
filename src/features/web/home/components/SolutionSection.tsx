@@ -1,6 +1,7 @@
 'use client'
 
 import { CheckCircle2 } from 'lucide-react'
+
 import ScrollReveal from './ScrollReveal'
 import { eyebrow, sectionH2, sectionDesc, cardBody } from './typography'
 

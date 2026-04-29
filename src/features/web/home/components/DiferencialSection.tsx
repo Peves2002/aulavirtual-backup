@@ -1,6 +1,7 @@
 'use client'
 
 import { Star, ShieldCheck, UserCheck, Briefcase, Users, MessageSquare } from 'lucide-react'
+
 import ScrollReveal from './ScrollReveal'
 import { eyebrow, sectionH2, cardTitle, cardBody } from './typography'
 

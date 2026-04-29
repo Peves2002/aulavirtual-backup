@@ -1,9 +1,11 @@
 'use client'
 
-import { Users, Settings, GraduationCap, Search, BarChart, Check } from 'lucide-react'
-import ScrollReveal from './ScrollReveal'
-import { eyebrow, sectionH2, sectionDesc, cardTitle, cardBody } from './typography'
 import Link from 'next/link'
+
+import { Users, Settings, GraduationCap, Search, BarChart, Check } from 'lucide-react'
+
+import ScrollReveal from './ScrollReveal'
+import { eyebrow, sectionH2, cardTitle, cardBody } from './typography'
 
 const services = [
   {

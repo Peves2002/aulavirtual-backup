@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { Home, BookOpen, Users, Award, Map } from 'lucide-react'
+import { Home, BookOpen, Users, Award } from 'lucide-react'
 
 const navItems = [
   { title: 'Inicio', url: '/', icon: Home },

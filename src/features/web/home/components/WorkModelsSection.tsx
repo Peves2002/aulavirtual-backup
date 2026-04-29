@@ -1,6 +1,7 @@
 'use client'
 
 import { Lightbulb } from 'lucide-react'
+
 import ScrollReveal from './ScrollReveal'
 import { eyebrow, sectionH2, sectionDesc, cardBody } from './typography'
 

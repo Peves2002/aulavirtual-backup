@@ -1,7 +1,6 @@
 // Next Imports
 import React from 'react'
 
-import { Box } from '@mui/material'
 
 // Component Imports
 import CursosClient from './CursosClient'

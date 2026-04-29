@@ -9,7 +9,7 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { signOut, useSession } from 'next-auth/react'
 
-import { Home, BookOpen, Users, Award, Map, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, Briefcase } from 'lucide-react'
+import { Home, BookOpen, Users, Award, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, Briefcase } from 'lucide-react'
 
 const navItems = [
   { title: 'Inicio', url: '/', icon: Home },

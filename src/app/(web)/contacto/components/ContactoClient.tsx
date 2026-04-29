@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-import { Phone, Mail, MapPin, Facebook, Youtube, Send, Building, User } from 'lucide-react'
+import { Phone, Mail, MapPin, Facebook, Youtube, Send } from 'lucide-react'
 import { Box, TextField, Button, Grid, Typography, Stack, Paper, Divider } from '@mui/material'
+
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 
 const FONT = 'Poppins, sans-serif'

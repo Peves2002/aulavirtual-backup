@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+
 import { 
   Box, 
   Button, 
@@ -15,7 +16,8 @@ import {
   Divider,
   Alert
 } from '@mui/material'
-import { X, Upload, Send, Briefcase, Building2, User, Phone, Mail, MapPin, DollarSign, Clock, FileText, CheckCircle } from 'lucide-react'
+
+import { X, Send, Briefcase, Building2, FileText, CheckCircle } from 'lucide-react'
 
 export default function StaffRequestModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [formData, setFormData] = useState({
@@ -33,10 +35,12 @@ export default function StaffRequestModal({ open, onClose }: { open: boolean; on
     funciones: '',
     requisitos: ''
   })
+
   const [submitted, setSubmitted] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
+
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
@@ -61,6 +65,7 @@ export default function StaffRequestModal({ open, onClose }: { open: boolean; on
       `- Requisitos: ${formData.requisitos}`
 
     const whatsappUrl = `https://wa.me/51906741327?text=${message}`
+
     window.open(whatsappUrl, '_blank')
     setSubmitted(true)
   }

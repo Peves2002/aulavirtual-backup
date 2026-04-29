@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import { Send } from 'lucide-react'
 
 export default function EnterpriseContactForm() {
@@ -9,11 +10,14 @@ export default function EnterpriseContactForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+
     // Simular envío
     setTimeout(() => {
       alert('¡Mensaje enviado con éxito! Nos pondremos en contacto contigo en breve.')
       setLoading(false)
+
       const form = e.target as HTMLFormElement
+
       form.reset()
     }, 1500)
   }

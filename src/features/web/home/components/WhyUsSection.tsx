@@ -1,6 +1,7 @@
 'use client'
 
 import { GraduationCap, Zap, Briefcase, Users, MessageCircle, BookOpen, Globe, LayoutGrid, Sparkles } from 'lucide-react'
+
 import ScrollReveal from './ScrollReveal'
 import { eyebrow, sectionH2, cardTitle, cardBody } from './typography'
 

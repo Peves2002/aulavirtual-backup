@@ -1,6 +1,7 @@
 'use client'
 
 import { Building2, Store, Map, Hotel, Truck, Rocket } from 'lucide-react'
+
 import ScrollReveal from './ScrollReveal'
 import { eyebrow, sectionH2, cardTitle } from './typography'
 

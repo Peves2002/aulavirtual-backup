@@ -1,6 +1,7 @@
 import { Box, Container, Typography, Stack, Grid, Paper, Divider, Button } from '@mui/material'
-import { Briefcase, Mail, MessageCircle, Facebook, Award, ShieldAlert, ArrowRight, UserPlus } from 'lucide-react'
-import ScrollReveal from '@/features/web/home/components/ScrollReveal'
+
+import { Mail, MessageCircle, Facebook, Award, ShieldAlert, ArrowRight, UserPlus } from 'lucide-react'
+
 import JobOffersSection from '@/features/web/bolsa/components/JobOffersSection'
 
 export const metadata = {

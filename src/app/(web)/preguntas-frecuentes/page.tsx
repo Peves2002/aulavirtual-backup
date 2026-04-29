@@ -1,8 +1,11 @@
 'use client'
 
 import React, { useState } from 'react'
+
 import { Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails, Stack, TextField, InputAdornment } from '@mui/material'
-import { ChevronDown, Search, BookOpen, UserCheck, Award, CreditCard, Briefcase, Users, RefreshCcw, Monitor, Building2, GraduationCap } from 'lucide-react'
+
+import { ChevronDown, Search, BookOpen, Award, CreditCard, Briefcase, Users, RefreshCcw, Monitor, Building2, GraduationCap } from 'lucide-react'
+
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 
 const FONT = 'Poppins, sans-serif'

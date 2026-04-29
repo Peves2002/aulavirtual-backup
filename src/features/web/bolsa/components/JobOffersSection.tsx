@@ -1,8 +1,11 @@
 'use client'
 
 import React, { useState } from 'react'
+
 import { Box, Typography, Button, Stack, Grid, Paper, Avatar, Collapse, Divider } from '@mui/material'
-import { MapPin, Briefcase, Users, DollarSign, ListChecks, Info, ChevronDown, ChevronUp, Mail, MessageCircle } from 'lucide-react'
+
+import { MapPin, Briefcase, Users, DollarSign, ListChecks, Info, ChevronDown, ChevronUp } from 'lucide-react'
+
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 
 interface JobOffer {

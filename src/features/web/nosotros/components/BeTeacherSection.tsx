@@ -1,6 +1,7 @@
 'use client'
 
-import { CheckCircle2, Star, Briefcase, GraduationCap, Video, Users, TrendingUp, Mic, ArrowRight } from 'lucide-react'
+import { CheckCircle2, Star, Briefcase, Video, Users, TrendingUp, Mic, ArrowRight } from 'lucide-react'
+
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import { eyebrow, sectionH2, sectionDesc, cardTitle, cardBody } from '@/features/web/home/components/typography'
 

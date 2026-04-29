@@ -1,8 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Box, Container, Typography, Grid, TextField, Button, Checkbox, FormControlLabel, FormGroup, Collapse, IconButton, Paper, Stack } from '@mui/material'
-import { ChevronDown, ChevronUp, Send, Mail, BellRing } from 'lucide-react'
+
+import { Box, Container, Typography, Grid, TextField, Button, Checkbox, FormControlLabel, FormGroup, Collapse, Paper, Stack } from '@mui/material'
+
+import { ChevronDown, ChevronUp, Send, BellRing } from 'lucide-react'
+
 import ScrollReveal from './ScrollReveal'
 
 const FONT = 'Poppins, sans-serif'
@@ -17,13 +20,16 @@ const topics = [
 
 export default function NewsletterSection() {
   const [showTopics, setShowTopics] = useState(false)
+
   const [formData, setFormData] = useState({
     nombres: '',
     apellidos: '',
+
     correo: '',
     telefono: '',
     selectedTopics: [] as string[]
   })
+
   const [isSubscribed, setIsSubscribed] = useState(false)
 
   const handleTopicChange = (topic: string) => {
@@ -37,6 +43,7 @@ export default function NewsletterSection() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+
     // Aquí iría la lógica de suscripción
     setIsSubscribed(true)
   }

@@ -1,8 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Box, Grid, Typography, Button, Rating, Card, CardMedia, Modal, IconButton, Stack, Divider, Chip } from '@mui/material'
-import { ShoppingCart, Eye, X, BookOpen, Calendar, FileText, User, Star } from 'lucide-react'
+
+import { Box, Grid, Typography, Button, Rating, Modal, IconButton, Stack, Divider } from '@mui/material'
+
+import { ShoppingCart, Eye, X, BookOpen, Calendar, FileText } from 'lucide-react'
+
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 
 import libro from '@/utils/assets/ebok/libro.webp'
@@ -131,6 +134,7 @@ export default function EbookCatalog() {
                       e.stopPropagation();
                       const WHATSAPP_NUMBER = '51906741327';
                       const message = `Hola, me interesa comprar el ebook: ${ebook.titulo}`;
+
                       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
                     }}
                     sx={{
@@ -209,6 +213,7 @@ export default function EbookCatalog() {
                     onClick={() => {
                       const WHATSAPP_NUMBER = '51906741327';
                       const message = `Hola, me interesa comprar el ebook: ${selectedEbook.titulo}`;
+
                       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
                     }}
                     sx={{ 

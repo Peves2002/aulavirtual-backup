@@ -1,8 +1,10 @@
 'use client'
  
 import React, { useState } from 'react'
+ 
 import Link from 'next/link'
 import Image from 'next/image'
+ 
 import { ArrowRight, CheckCircle2, Target, Eye, Users, Lightbulb, Heart, ShieldCheck, Globe, Zap, Handshake, Briefcase } from 'lucide-react'
 import { Button } from '@mui/material'
  
