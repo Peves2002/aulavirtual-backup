@@ -14,7 +14,6 @@ import { Home, BookOpen, Users, Award, Map, Building2, LogIn, UserPlus, User, La
 const navItems = [
   { title: 'Inicio', url: '/', icon: Home },
   { title: 'Cursos', url: '/cursos', icon: BookOpen },
-  { title: 'Rutas', url: '/rutas', icon: Map },
   { title: 'Empresas', url: '/empresas', icon: Building2 },
   { title: 'Bolsa de Trabajo', url: '/bolsa-de-trabajo', icon: Briefcase },
   { title: 'Nosotros', url: '/nosotros', icon: Users },

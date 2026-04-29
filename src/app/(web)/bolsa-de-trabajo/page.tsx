@@ -95,7 +95,7 @@ export default function BolsaTrabajoPage() {
                         { 
                           icon: Facebook, 
                           title: '4. Comunidad de Facebook', 
-                          desc: 'Accede a ofertas, ebooks y contenido de valor en nuestro grupo oficial.',
+                          desc: 'Accede a ofertas y contenido de valor en nuestro grupo oficial.',
                           action: { label: 'Ir al Grupo de Facebook', href: facebookGroup, color: '#1877F2' }
                         }
                       ].map((step, i) => (

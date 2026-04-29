@@ -94,7 +94,6 @@ const WebFooter = ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
               {[
                 { label: 'Cursos', href: '/cursos' },
-                { label: 'Rutas', href: '/rutas' },
               ].map(link => (
                 <li key={link.label}>
                   <Link

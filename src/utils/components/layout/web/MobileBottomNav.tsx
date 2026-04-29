@@ -8,7 +8,6 @@ import { Home, BookOpen, Users, Award, Map } from 'lucide-react'
 const navItems = [
   { title: 'Inicio', url: '/', icon: Home },
   { title: 'Cursos', url: '/cursos', icon: BookOpen },
-  { title: 'Rutas', url: '/rutas', icon: Map },
   { title: 'Nosotros', url: '/nosotros', icon: Users },
   { title: 'Certificado', url: '/verificar-certificado', icon: Award },
 ]

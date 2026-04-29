@@ -77,8 +77,8 @@ const faqCategories = [
     icon: Users,
     questions: [
       { q: '¿Al estudiar en CEPAV paso a formar parte de una comunidad?', a: 'Si, desde tu primer curso formas parte de una comunidad de profesionales y agentes de viaje que buscan mejorar constantemente.' },
-      { q: '¿Qué beneficios adicionales obtengo como estudiante?', a: 'Accedes a descuentos, networking, bolsas de trabajo, ebooks y asesoría profesional.' },
-      { q: '¿Tengo acceso a biblioteca digital o recursos exclusivos?', a: 'Si, los alumnos que llevan especializaciones y más de 4 cursos acceden a nuestra biblioteca digital de más de 3000 ebooks.' }
+      { q: '¿Qué beneficios adicionales obtengo como estudiante?', a: 'Accedes a descuentos, networking, bolsas de trabajo y asesoría profesional.' },
+      { q: '¿Tengo acceso a biblioteca digital o recursos exclusivos?', a: 'Si, los alumnos que llevan especializaciones y más de 4 cursos acceden a nuestra biblioteca digital con recursos exclusivos.' }
     ]
   },
   {

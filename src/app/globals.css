@@ -18,18 +18,22 @@
   --drawer-z-index: var(--mui-zIndex-drawer);
   --backdrop-color: rgb(var(--mui-mainColorChannels-light) / 0.5);
 
-  /* IPG Design System */
-  --color-1: 170 60% 36%;   /* Primary Teal #25927F */
-  --color-2: 75 63% 62%;    /* Lime Green #BDD962 */
-  --color-3: 167 96% 19%;   /* Deep Teal #025E44 */
-  --color-4: 152 50% 46%;   /* Sage Green #3AB079 */
-  --color-5: 0 0% 4%;       /* Almost Black #0A0A0A */
+  /* IPG Design System - Teal & Lima Palette */
+  --web-primary: #25927F;     /* Middle Teal */
+  --web-light: #BDD962;       /* Lime Green */
+  --web-dark: #025E44;        /* Deep Teal */
+  --web-dark-deep: #012d22;   /* Darker Teal */
+  --web-dark-mid: #0f4438;    /* Mid-Dark Teal */
+  
+  --web-primary-rgb: 37, 146, 127;
+  --web-light-rgb: 189, 217, 98;
+  --web-dark-rgb: 2, 94, 68;
 
-  --ipg-primary: var(--web-primary, #25927F);
-  --ipg-primary-dark: var(--web-dark, #025E44);
-  --ipg-primary-light: var(--web-light, #BDD962);
+  --ipg-primary: var(--web-primary);
+  --ipg-primary-dark: var(--web-dark);
+  --ipg-primary-light: var(--web-light);
   --ipg-black: #0A0A0A;
-  --ipg-muted: #f1f5f4;
+  --ipg-muted: #f8faf9;
 
   --navbar-height: 88px;
   --sidebar-width: 80px;
@@ -192,13 +196,13 @@ code {
   font-family: 'Poppins', sans-serif;
   font-size: 1.75rem;
   font-weight: 800;
-  color: #0A0A0A;
+  color: var(--web-primary, #25927F);
   letter-spacing: -0.02em;
   line-height: 1.2;
   margin-bottom: 0.75rem;
 }
 @media (min-width: 768px) {
-  .t-section-h2 { font-size: 2rem; }
+  .t-section-h2 { font-size: 2.25rem; }
 }
 .t-section-h2-dark { color: #ffffff; }
 
@@ -248,13 +252,13 @@ code {
   font-family: 'Poppins', sans-serif;
   font-size: 1.75rem;
   font-weight: 800;
-  color: #0A0A0A;
+  color: var(--web-primary, #25927F);
   margin-bottom: 0.5rem;
   letter-spacing: -0.02em;
   line-height: 1.2;
 }
 @media (min-width: 768px) {
-  .section-title { font-size: 2rem; }
+  .section-title { font-size: 2.25rem; }
 }
 
 .section-subtitle {
