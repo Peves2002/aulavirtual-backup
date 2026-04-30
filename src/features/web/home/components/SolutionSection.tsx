@@ -32,19 +32,23 @@ export default function SolutionSection() {
                 position: 'relative',
                 borderRadius: '24px',
                 overflow: 'hidden',
-                aspectRatio: '4/3',
-                backgroundColor: '#ffffff',
+                aspectRatio: '16/9',
+                backgroundImage: 'url(/assets/imgs/soluciones.jpg)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 boxShadow: '0 20px 40px rgba(0,0,0,0.05)',
-                border: '1.5px solid #e2e8f0',
+                border: '1.5px solid rgba(255,255,255,0.1)',
               }}
             >
-              <div style={{ textAlign: 'center', padding: '2.5rem' }}>
-                <div style={{ fontSize: '4.5rem', marginBottom: '1.5rem' }}>🚀</div>
-                <div style={{ ...sectionH2, fontSize: '1.5rem', color: 'var(--web-primary, #25927F)' }}>Resultados Tangibles</div>
-                <p style={{ ...sectionDesc, color: '#64748b', fontSize: '0.9375rem' }}>
+              {/* Overlay para legibilidad */}
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.2), rgba(0,0,0,0.7))' }}></div>
+
+              <div style={{ position: 'relative', textAlign: 'center', padding: '2.5rem', zIndex: 1 }}>
+                <div style={{ ...sectionH2, fontSize: '1.5rem', color: 'var(--web-light, #BDD962)', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>Resultados Tangibles</div>
+                <p style={{ ...sectionDesc, color: '#ffffff', fontSize: '1.0625rem', fontWeight: 600, textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
                   Transformamos el potencial de tus colaboradores en crecimiento para tu empresa.
                 </p>
               </div>

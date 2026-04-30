@@ -87,14 +87,14 @@ export default function NewsletterSection() {
             <Grid container spacing={6} alignItems="center">
               <Grid item xs={12} lg={5}>
                 <Stack spacing={3}>
-                  <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.5, px: 2, py: 1, bgcolor: 'rgba(255,255,255,0.1)', borderRadius: '999px', width: 'fit-content' }}>
-                    <BellRing size={18} color="var(--web-light, #BDD962)" />
-                    <Typography sx={{ fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.05em' }}>SUSCRÍBETE</Typography>
+                  <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.5, px: 2, py: 1, bgcolor: 'rgba(255,255,255,0.15)', borderRadius: '999px', width: 'fit-content' }}>
+                    <BellRing size={18} color="#ffffff" />
+                    <Typography sx={{ fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.05em', color: '#ffffff' }}>SUSCRÍBETE</Typography>
                   </Box>
-                  <Typography variant="h3" sx={{ fontFamily: FONT, fontWeight: 900, lineHeight: 1.1, fontSize: { xs: '2rem', md: '2.75rem' } }}>
-                    Sé el primero en saber nuestras <span style={{ color: 'var(--web-light, #BDD962)' }}>novedades</span>
+                  <Typography variant="h3" sx={{ fontFamily: FONT, fontWeight: 900, lineHeight: 1.1, fontSize: { xs: '2rem', md: '2.75rem' }, color: '#ffffff' }}>
+                    Sé el primero en saber nuestras <span style={{ color: '#ffffff' }}>novedades</span>
                   </Typography>
-                  <Typography sx={{ fontFamily: FONT, fontSize: '1.0625rem', opacity: 0.8, lineHeight: 1.6 }}>
+                  <Typography sx={{ fontFamily: FONT, fontSize: '1.0625rem', opacity: 1, lineHeight: 1.6, color: '#ffffff' }}>
                     Déjanos tus datos y recibe semanalmente información privilegiada e inspiradora que te será muy útil en tu vida profesional y que aportará muchísimo para tu Agencia de viajes.
                   </Typography>
                 </Stack>
@@ -130,13 +130,14 @@ export default function NewsletterSection() {
                           alignItems: 'center',
                           justifyContent: 'space-between',
                           transition: 'all 0.2s',
+                          color: '#ffffff',
                           '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' }
                         }}
                       >
-                        <Typography sx={{ fontFamily: FONT, fontSize: '0.9375rem', fontWeight: 600 }}>
+                        <Typography sx={{ fontFamily: FONT, fontSize: '0.9375rem', fontWeight: 600, color: '#ffffff' }}>
                           Temas de interés {formData.selectedTopics.length > 0 && `(${formData.selectedTopics.length})`}
                         </Typography>
-                        {showTopics ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                        {showTopics ? <ChevronUp size={20} color="#ffffff" /> : <ChevronDown size={20} color="#ffffff" />}
                       </Box>
                       
                       <Collapse in={showTopics}>
@@ -155,7 +156,7 @@ export default function NewsletterSection() {
                                     }} 
                                   />
                                 }
-                                label={<Typography sx={{ fontFamily: FONT, fontSize: '0.875rem' }}>{topic}</Typography>}
+                                label={<Typography sx={{ fontFamily: FONT, fontSize: '0.875rem', color: '#ffffff' }}>{topic}</Typography>}
                               />
                             ))}
                           </FormGroup>
@@ -207,7 +208,7 @@ function NewsletterField({ label, type = 'text', value, onChange }: { label: str
       value={value}
       onChange={e => onChange(e.target.value)}
       sx={{
-        '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.5)', fontFamily: FONT },
+        '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.85)', fontFamily: FONT },
         '& .MuiOutlinedInput-root': { 
           color: '#ffffff',
           fontFamily: FONT,

@@ -67,20 +67,24 @@ export default function ProblemSection() {
                 position: 'relative',
                 borderRadius: '24px',
                 overflow: 'hidden',
-                aspectRatio: '4/3',
-                backgroundColor: 'hsl(167, 30%, 96%)',
+                aspectRatio: '16/9',
+                backgroundImage: 'url(/assets/imgs/problemas.jpg)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                border: '1.5px solid hsl(167, 30%, 89%)',
+                border: '1.5px solid rgba(255,255,255,0.1)',
               }}
             >
-              <div style={{ textAlign: 'center', padding: '2.5rem' }}>
-                <div style={{ fontSize: '4.5rem', marginBottom: '1.5rem', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.1))' }}>😟</div>
-                <p style={{ ...sectionDesc, color: '#475569', fontWeight: 500 }}>
+              {/* Overlay para legibilidad */}
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7))' }}></div>
+              
+              <div style={{ position: 'relative', textAlign: 'center', padding: '2.5rem', zIndex: 1 }}>
+                <p style={{ ...sectionDesc, color: '#ffffff', fontWeight: 600, textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
                   No permitas que la falta de capacitación detenga el crecimiento de tu negocio turístico.
                 </p>
-                <div style={{ marginTop: '1.5rem', height: '4px', width: '60px', backgroundColor: 'var(--web-primary, #25927F)', margin: '1.5rem auto 0', borderRadius: '2px' }}></div>
+                <div style={{ marginTop: '1.5rem', height: '4px', width: '60px', backgroundColor: 'var(--web-light, #BDD962)', margin: '1.5rem auto 0', borderRadius: '2px' }}></div>
               </div>
             </div>
           </ScrollReveal>

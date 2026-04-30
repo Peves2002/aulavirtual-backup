@@ -21,7 +21,8 @@ export default function BolsaTrabajoPage() {
       <Box
         sx={{
           background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 100%)',
-          py: { xs: 6, md: 10 },
+          pt: { xs: 10, md: 14 },
+          pb: { xs: 14, md: 20 },
           px: { xs: 3, md: 6 },
           textAlign: 'center',
           position: 'relative',
@@ -43,14 +44,14 @@ export default function BolsaTrabajoPage() {
             Bolsa de Trabajo
           </Typography>
           <Typography
-            sx={{ fontFamily: FONT, fontSize: '1.125rem', color: 'rgba(255,255,255,0.8)', maxWidth: 700, mx: 'auto', lineHeight: 1.6 }}
+            sx={{ fontFamily: FONT, fontSize: '1.125rem', color: 'rgba(255,255,255,0.9)', maxWidth: 700, mx: 'auto', lineHeight: 1.6 }}
           >
             Conectamos el talento de nuestros estudiantes con las mejores agencias de viaje del Perú.
           </Typography>
         </Container>
       </Box>
 
-      <Container maxWidth="lg" sx={{ mt: -6, position: 'relative', zIndex: 2 }}>
+      <Container maxWidth="lg" sx={{ mt: 4, position: 'relative', zIndex: 2 }}>
         <Grid container spacing={4}>
           {/* Main Info & Offers */}
           <Grid item xs={12} lg={8}>
@@ -138,14 +139,14 @@ export default function BolsaTrabajoPage() {
           <Grid item xs={12} lg={4}>
             <Stack spacing={4}>
               {/* Futurismo Hiring */}
-              <Paper elevation={0} sx={{ p: 4, borderRadius: '24px', bgcolor: 'var(--web-dark, #025E44)', color: '#fff' }}>
+              <Paper elevation={0} sx={{ p: 4, borderRadius: '24px', bgcolor: 'var(--web-dark, #025E44)', color: '#ffffff' }}>
                 <Box sx={{ width: 48, height: 48, borderRadius: '12px', bgcolor: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                   <UserPlus size={24} color="var(--web-light, #BDD962)" />
                 </Box>
-                <Typography variant="h6" sx={{ fontFamily: FONT, fontWeight: 800, mb: 1.5 }}>
+                <Typography variant="h6" sx={{ fontFamily: FONT, fontWeight: 800, mb: 1.5, color: '#ffffff' }}>
                   Ingreso Directo a Futurismo
                 </Typography>
-                <Typography sx={{ fontFamily: FONT, fontSize: '0.875rem', opacity: 0.9, lineHeight: 1.6, mb: 2 }}>
+                <Typography sx={{ fontFamily: FONT, fontSize: '0.875rem', opacity: 1, lineHeight: 1.6, mb: 2, color: '#ffffff' }}>
                   Los estudiantes con participación sobresaliente pueden ingresar directamente a trabajar en Futurismo como ejecutivos de ventas. 
                 </Typography>
                 <Typography sx={{ fontFamily: FONT, fontSize: '0.875rem', fontWeight: 600, color: 'var(--web-light, #BDD962)' }}>
