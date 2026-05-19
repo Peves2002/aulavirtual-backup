@@ -7,11 +7,11 @@ import { motion } from "framer-motion";
 
 export default function HeroSlider() {
   const content = {
-    tag: "Confiabilidad Industrial",
-    title: ["Transformamos", "mantenimiento", "en", "confiabilidad"],
-    subtitle: "Soluciones de ingeniería de clase mundial para maximizar la disponibilidad y el rendimiento de sus activos industriales.",
-    cta: "Solicita Asesoría Gratuita",
-    href: "/contacto",
+    tag: "Control Gubernamental y Gestión Pública",
+    title: ["Nosotros", "te enseñamos,", "tú", "prósperas"],
+    subtitle: "Preparación especializada para concursos CGR y SUNAT. Cursos virtuales, simulacros y certificaciones reconocidas en Control Gubernamental, Contratación Estatal y Aptitud Académica.",
+    cta: "Explora Nuestros Cursos",
+    href: "/cursos",
   };
 
   return (
@@ -84,10 +84,10 @@ export default function HeroSlider() {
                       <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                     <Link
-                      href="/proyectos"
+                      href="/rutas"
                       className="inline-flex items-center justify-center px-8 py-4 border-2 border-slate-200 text-slate-900 font-sans font-bold uppercase tracking-wider hover:bg-slate-50 transition-all duration-300 text-sm min-w-[220px]"
                     >
-                      Explorar Soluciones
+                      Ver Rutas de Aprendizaje
                     </Link>
                   </motion.div>
                 </motion.div>
@@ -115,14 +115,14 @@ export default function HeroSlider() {
                   />
                   {/* Gradient to darken/tint the video slightly */}
                   <div className="absolute inset-0 bg-gradient-to-br from-[#02115C]/30 via-white/40 to-[#E2231A]/30 backdrop-blur-[2px] z-10 pointer-events-none mix-blend-overlay" />
-                  
+
                   {/* Original Text content centered over the video */}
                   <div className="relative z-20 text-center p-12">
                     <div className="text-7xl font-display font-black text-[#02115C] uppercase tracking-tighter leading-none mb-4 shadow-sm mix-blend-multiply drop-shadow-lg">
-                      ARM
+                      MA
                     </div>
                     <div className="text-xs text-[#02115C] font-black uppercase tracking-[0.4em] drop-shadow-md">
-                      Asset Reliability Management
+                      Master Academy
                     </div>
                   </div>
                 </div>

@@ -16,8 +16,8 @@ import CompaniesSection from '@/features/web/home/components/CompaniesSection'
 import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
 
 export const metadata = {
-  title: 'Aula Virtual - Aprende sin límites',
-  description: 'Plataforma de aprendizaje online con cursos especializados, rutas de aprendizaje y certificados.',
+  title: 'Master Academy - Preparación en Control Gubernamental',
+  description: 'Cursos virtuales especializados en Control Gubernamental, Gestión Pública, preparación CGR y SUNAT con simulacros y certificaciones verificables.',
 }
 
 async function getHomeData() {

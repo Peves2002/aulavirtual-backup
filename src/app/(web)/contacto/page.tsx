@@ -4,8 +4,8 @@ import { eyebrow, sectionDesc } from '@/features/web/home/components/typography'
 import { ContactList, ContactActions } from './components/ContactoClient'
 
 export const metadata = {
-  title: 'Contacto - ARM',
-  description: 'Ponte en contacto con nosotros',
+  title: 'Contacto - Master Academy',
+  description: 'Ponte en contacto con Master Academy para consultas sobre cursos, planes corporativos o seguimiento de certificaciones.',
 }
 
 export default function ContactoPage() {

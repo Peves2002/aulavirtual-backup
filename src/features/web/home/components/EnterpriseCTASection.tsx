@@ -19,18 +19,18 @@ import { useConfig } from '@/contexts/ConfigContext'
 import ScrollReveal from './ScrollReveal'
 import { sectionH2, sectionDesc, cardTitle, cardBody, smallText } from './typography'
 
-const WHATSAPP_MSG = encodeURIComponent('Hola, me gustaría agendar una reunión para explorar sus planes corporativos.')
+const WHATSAPP_MSG = encodeURIComponent('Hola, quiero agendar una reunión con Master Academy para explorar planes de capacitación en Control Gubernamental para mi institución.')
 
 const bullets = [
-  { icon: Zap, text: 'Planes desde 5 hasta 100+ colaboradores' },
-  { icon: Shield, text: 'Facturación a nombre de empresa con RUC' },
-  { icon: HeadphonesIcon, text: 'Soporte dedicado 24 / 7' },
+  { icon: Zap, text: 'Planes especializados en Control Gubernamental y Gestión Pública' },
+  { icon: Shield, text: 'Facturación a nombre de institución con RUC' },
+  { icon: HeadphonesIcon, text: 'Asesoría especializada en concursos públicos' },
 ]
 
 export default function EnterpriseCTASection() {
   const configs = useConfig()
-  const waNumber = configs.WHATSAPP_NUMERO_EMPRESAS || configs.WHATSAPP_NUMERO || '51928510125'
-  const waLink = `https://wa.me/${waNumber}?text=${WHATSAPP_MSG}`
+  const waNumber = configs.WHATSAPP_NUMERO_EMPRESAS || configs.WHATSAPP_NUMERO || '51973241285'
+  const waLink = `https://wa.me/${waNumber}?text=${WHATSAPP_MSG}`;
 
   return (
     <section
@@ -93,15 +93,15 @@ export default function EnterpriseCTASection() {
               >
                 <Calendar size={14} color="var(--web-dark, #025E44)" />
                 <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', fontWeight: 700, color: 'var(--web-dark, #025E44)', letterSpacing: '0.08em', textTransform: 'uppercase' as const }}>
-                  Para empresas
+                  Para Instituciones Públicas
                 </span>
               </div>
 
               <h2 style={{ ...sectionH2, marginBottom: '1rem' }}>
-                ¿Capacitas equipos<br />en tu empresa?
+                Implementa programas de<br />capacitación especializada
               </h2>
               <p style={{ ...sectionDesc, color: 'rgba(10,10,10,0.6)', marginBottom: '2rem', maxWidth: '440px' }}>
-                Agenda una reunión gratuita con nuestro equipo y descubre cómo podemos diseñar un plan de formación a medida para tus colaboradores.
+                Contáctanos para diseñar un programa de formación personalizado en Control Gubernamental, Gestión Pública y preparación para concursos especializados.
               </p>
 
               {/* Bullets */}
@@ -158,10 +158,10 @@ export default function EnterpriseCTASection() {
                   <Calendar size={36} color="var(--web-dark, #025E44)" />
                 </div>
                 <h3 style={{ ...cardTitle, fontSize: '1.125rem', marginBottom: '0.5rem' }}>
-                  Reunión sin costo
+                  Consultoría personalizada
                 </h3>
                 <p style={cardBody}>
-                  30 minutos para entender tus necesidades y presentarte nuestra propuesta de valor.
+                  Descubre cómo Master Academy puede capacitar a tu equipo en Control Gubernamental.
                 </p>
               </div>
 
@@ -202,7 +202,7 @@ export default function EnterpriseCTASection() {
                 }}
               >
                 <Calendar size={18} />
-                Agendar reunión gratuita
+                Solicitar asesoría
               </a>
 
               {/* Botón secundario WhatsApp */}

@@ -8,8 +8,8 @@ import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCar
 import { MisionVisionSection, ValoresSection } from '@/features/web/nosotros/components/NosotrosInteractive'
 
 export const metadata = {
-  title: 'Nosotros - Aula Virtual',
-  description: 'Conoce quiénes somos, nuestra misión, visión y los valores que guían nuestra plataforma educativa.',
+  title: 'Nosotros - Master Academy',
+  description: 'Conoce quiénes somos, nuestra misión, visión y los valores que guían Master Academy en la formación especializada en Control Gubernamental y Gestión Pública.',
 }
 
 async function getTeachers() {
@@ -175,9 +175,8 @@ export default async function NosotrosPage() {
                     marginBottom: '1.25rem',
                   }}
                 >
-                  Somos calidad y{' '}
-                  <span style={{ color: 'var(--web-light, #BDD962)' }}>responsabilidad</span>{' '}
-                  a tu servicio
+                  Lideramos la formación en{' '}
+                  <span style={{ color: 'var(--web-light, #BDD962)' }}>Control Gubernamental</span>
                 </h1>
 
                 <p
@@ -190,9 +189,10 @@ export default async function NosotrosPage() {
                     marginBottom: '2.5rem',
                   }}
                 >
-                  Somos una plataforma educativa especializada en la formación profesional de alto impacto.
-                  Ofrecemos cursos diseñados por expertos del sector, con certificaciones reconocidas
-                  que impulsan tu desarrollo profesional y el de tu equipo.
+                  Un grupo de profesionales apasionados decidió transformar la forma en que se preparan
+                  los candidatos para concursos públicos. Lo que comenzó como una iniciativa interna,
+                  se convirtió en Master Academy, la academia virtual líder en especialización de Control
+                  Gubernamental, Gestión Pública y Aptitud Académica.
                 </p>
 
                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>

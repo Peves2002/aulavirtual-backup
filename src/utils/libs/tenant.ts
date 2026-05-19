@@ -12,18 +12,18 @@ export const getTenantConfig = () => {
   // Se puede expandir para obtener configuraciones específicas (colores, logo, id del tenant en DB)
   const tenantConfigs: Record<string, any> = {
     'localhost:3000': {
-      id: 'default-tenant',
-      name: 'Aula Virtual Demo',
+      id: 'master-academy-tenant',
+      name: 'Master Academy',
       domain: 'localhost:3000',
-      color_primario: '#2e7d32', // Verde original
-      color_secundario: '#0284c7',
+      color_primario: '#025E44',
+      color_secundario: '#BDD962',
     },
-    'aulavirtual.pro': {
-      id: 'pro-tenant',
-      name: 'Aula Virtual Pro',
-      domain: 'aulavirtual.pro',
-      color_primario: '#c2410c', // Naranja para distinguir
-      color_secundario: '#1e293b',
+    'mastergrupodeestudio.com': {
+      id: 'master-academy-prod',
+      name: 'Master Academy',
+      domain: 'mastergrupodeestudio.com',
+      color_primario: '#025E44',
+      color_secundario: '#BDD962',
     }
   }
 

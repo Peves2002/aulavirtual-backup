@@ -111,9 +111,15 @@ function MisionCard() {
             backdropFilter: 'blur(8px)',
             border: '2px solid rgba(255,255,255,0.2)',
             position: 'relative', zIndex: 1,
+            overflow: 'hidden',
           }}
         >
-          <span style={{ fontSize: '2.5rem' }}>🎯</span>
+          <img
+            src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80"
+            alt="Equipo colaborando en capacitación"
+            loading="lazy"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
         </div>
       </div>
       <div style={{ padding: '1.75rem 2rem 2rem' }}>
@@ -121,9 +127,7 @@ function MisionCard() {
           Nuestra Misión
         </h3>
         <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Brindar formación profesional de alta calidad, accesible y orientada al sector industrial,
-          impulsando el desarrollo de competencias que generan valor real en las organizaciones y en
-          la carrera de nuestros estudiantes.&quot;
+          &quot;Ser la academia virtual líder en preparación para concursos de la CGR y referente nacional en cursos de especialización sobre Control Gubernamental, reconocida por sus resultados, innovación educativa y excelencia académica en la formación de profesionales del sector público.&quot;
         </p>
       </div>
     </div>
@@ -174,9 +178,15 @@ function VisionCard() {
             backdropFilter: 'blur(8px)',
             border: '2px solid rgba(var(--web-light-rgb, 189, 217, 98),0.25)',
             position: 'relative', zIndex: 1,
+            overflow: 'hidden',
           }}
         >
-          <span style={{ fontSize: '2.5rem' }}>🔭</span>
+          <img
+            src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=80"
+            alt="Visión estratégica hacia el futuro"
+            loading="lazy"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
         </div>
       </div>
       <div style={{ padding: '1.75rem 2rem 2rem' }}>
@@ -184,9 +194,7 @@ function VisionCard() {
           Nuestra Visión
         </h3>
         <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Ser la plataforma de referencia en formación profesional especializada en Latinoamérica,
-          reconocida por la excelencia de sus contenidos, la solidez de sus certificaciones y su
-          compromiso con la transformación del sector industrial.&quot;
+          &quot;Brindar una preparación especializada y de alta calidad para concursos públicos y programas de especialización en Control Gubernamental y gestión pública, mediante una enseñanza práctica, actualizada y estratégica que contribuya al desarrollo profesional y al logro de los objetivos de nuestros participantes.&quot;
         </p>
       </div>
     </div>

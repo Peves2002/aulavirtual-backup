@@ -14,9 +14,9 @@ export function ContactList() {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>
       {[
-        { icon: MapPin, title: 'Ubicación', info: 'Arequipa, Perú' },
+        { icon: MapPin, title: 'Ubicación', info: 'Lima, Perú' },
         { icon: Phone, title: 'WhatsApp', info: `+${waNumber}`, href: `https://wa.me/${waNumber}` },
-        { icon: Mail, title: 'Email', info: 'arm.confiabilidad@gmail.com', href: 'mailto:arm.confiabilidad@gmail.com' },
+        { icon: Mail, title: 'Email', info: 'Informes@mastergrupodeestudio.com', href: 'mailto:Informes@mastergrupodeestudio.com' },
       ].map((item, i) => (
         <ScrollReveal key={i} delay={i * 0.1}>
           <div

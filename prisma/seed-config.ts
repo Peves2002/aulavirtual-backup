@@ -9,12 +9,12 @@ async function main() {
   const configs = [
     {
       clave: 'TEMPLATE_NAME',
-      valor: process.env.NEXT_PUBLIC_TEMPLATE_NAME || 'Aula Virtual',
+      valor: process.env.NEXT_PUBLIC_TEMPLATE_NAME || 'Master Academy',
       descripcion: 'Nombre de la plataforma'
     },
     {
       clave: 'TEMPLATE_SLOGAN',
-      valor: process.env.NEXT_PUBLIC_TEMPLATE_SLOGAN || 'Aprende con nosotros',
+      valor: process.env.NEXT_PUBLIC_TEMPLATE_SLOGAN || 'Nosotros te enseñamos, tú prósperas',
       descripcion: 'Slogan de la plataforma'
     },
     {
@@ -41,6 +41,21 @@ async function main() {
       clave: 'PRIMARY_COLOR_DARK',
       valor: process.env.NEXT_PUBLIC_PRIMARY_COLOR_DARK || '#9196F2',
       descripcion: 'Color primario oscuro'
+    },
+    {
+      clave: 'WHATSAPP_NUMERO',
+      valor: process.env.NEXT_PUBLIC_WHATSAPP_NUMERO || '51973241285',
+      descripcion: 'Número de WhatsApp de la plataforma'
+    },
+    {
+      clave: 'WHATSAPP_NUMERO_EMPRESAS',
+      valor: process.env.NEXT_PUBLIC_WHATSAPP_NUMERO_EMPRESAS || '51973241285',
+      descripcion: 'Número de WhatsApp para consultas empresariales'
+    },
+    {
+      clave: 'CORREO_CONTACTO',
+      valor: process.env.NEXT_PUBLIC_CORREO_CONTACTO || 'Informes@mastergrupodeestudio.com',
+      descripcion: 'Correo de contacto de la plataforma'
     },
     {
       clave: 'PAYPAL_CLIENT_ID',

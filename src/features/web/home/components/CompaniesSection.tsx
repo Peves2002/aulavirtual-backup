@@ -21,24 +21,24 @@ import { useConfig } from '@/contexts/ConfigContext'
 import ScrollReveal from './ScrollReveal'
 import { eyebrow, sectionH2, sectionDesc, cardTitle, cardBody, smallText } from './typography'
 
-const WHATSAPP_MSG = encodeURIComponent('Hola, me interesa conocer las opciones corporativas para capacitar a mi equipo.')
+const WHATSAPP_MSG = encodeURIComponent('Hola, quiero conocer los planes especiales de Master Academy para capacitar a mi equipo en Control Gubernamental y Gestión Pública.')
 
 const stats = [
-  { icon: Building2, value: 'Empresas', label: 'Descuentos por volumen' },
-  { icon: Users, value: 'Equipos', label: 'Crecimiento profesional' },
-  { icon: TrendingUp, value: 'Reportes', label: 'Seguimiento de avance' },
+  { icon: Building2, value: 'Instituciones', label: 'Instituciones públicas entrenadas' },
+  { icon: Users, value: 'Profesionales', label: 'Profesionales en Control Gubernamental' },
+  { icon: TrendingUp, value: 'Aprobación', label: 'Tasa de éxito en concursos' },
 ]
 
 const benefits = [
-  'Descuentos especiales por volumen de inscripciones',
-  'Accesos personalizados para cada colaborador',
-  'Asesoría personalizada para elegir la ruta de aprendizaje ideal',
-  'Certificados válidos que respaldan las habilidades de tu equipo',
+  'Descuentos especiales para instituciones públicas',
+  'Planes personalizados según necesidades de capacitación',
+  'Certificados válidos reconocidos por organismo públicos',
+  'Plataforma especializada en Control Gubernamental y Gestión Pública',
 ]
 
 export default function CompaniesSection() {
   const configs = useConfig()
-  const waNumber = configs.WHATSAPP_NUMERO_EMPRESAS || configs.WHATSAPP_NUMERO || '51928510125'
+  const waNumber = configs.WHATSAPP_NUMERO_EMPRESAS || configs.WHATSAPP_NUMERO || '51973241285'
   const waLink = `https://wa.me/${waNumber}?text=${WHATSAPP_MSG}`
 
   return (
@@ -56,13 +56,13 @@ export default function CompaniesSection() {
           {/* ── Izquierda ── */}
           <ScrollReveal direction="left">
             <div>
-              <p style={eyebrow}>Soluciones corporativas</p>
+              <p style={eyebrow}>Para Instituciones Públicas</p>
               <h2 style={sectionH2}>
-                Capacita a tu equipo<br />
-                <span style={{ color: 'var(--web-primary, #25927F)' }}>sin complicaciones</span>
+                Capacita a tus colaboradores<br />
+                <span style={{ color: 'var(--web-primary, #25927F)' }}>en Control Gubernamental</span>
               </h2>
               <p style={{ ...sectionDesc, marginBottom: '2rem' }}>
-                Ofrecemos planes especiales para empresas que quieren mantener a sus colaboradores actualizados y certificados en las últimas tendencias del sector.
+                Master Academy ofrece programas especiales diseñados para instituciones públicas que buscan desarrollar competencias en Control Gubernamental, Gestión Pública y preparación para concursos especializados.
               </p>
 
               {/* Beneficios */}
@@ -185,13 +185,13 @@ export default function CompaniesSection() {
                   gap: '1rem',
                 }}
               >
-                <span style={{ fontSize: '2rem' }}>🏆</span>
+                <span style={{ fontSize: '2rem' }}>�</span>
                 <div>
                   <div style={{ ...cardTitle, color: '#ffffff', marginBottom: '0.25rem' }}>
-                    Certificados con validez empresarial
+                    Especialización garantizada
                   </div>
                   <div style={{ ...smallText, color: 'rgba(255,255,255,0.65)' }}>
-                    Reconocidos por las principales empresas del sector
+                    Contenido diseñado por expertos en Control Gubernamental
                   </div>
                 </div>
               </div>
