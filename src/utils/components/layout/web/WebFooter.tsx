@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 
-import { Phone, Mail, MapPin, Facebook, Youtube, Instagram } from 'lucide-react'
+import { Phone, Mail, MapPin, Facebook, Youtube, Instagram, Linkedin } from 'lucide-react'
 
 import { getConfigs } from '@/utils/libs/config'
 import HydratedDate from '@/utils/components/HydratedDate'
@@ -24,10 +24,9 @@ const WhatsAppIcon = ({ size = 16 }: { size?: number }) => (
 )
 
 const staticSocialLinks = [
-  { label: 'Facebook', href: 'https://www.facebook.com/flyup.store', icon: <Facebook size={20} /> },
-  { label: 'TikTok', href: 'https://tiktok.com/@flyupsale', icon: <TikTokIcon size={20} /> },
-  { label: 'Instagram', href: 'https://www.instagram.com/devrocket.software/', icon: <Instagram size={20} /> },
-  { label: 'Youtube', href: 'https://www.youtube.com/@Fly-s9b', icon: <Youtube size={20} /> },
+  { label: 'Facebook', href: 'https://web.facebook.com/p/Elite-Engineering-100048414673399/?_rdc=1&_rdr#', icon: <Facebook size={20} /> },
+  { label: 'Instagram', href: 'https://www.instagram.com/igenierosdeelite?igsh=YmUwN2cyY24zdWhv', icon: <Instagram size={20} /> },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/103097936/admin/page-posts/published/', icon: <Linkedin size={20} /> },
 ]
 
 interface WebFooterProps {
@@ -60,15 +59,15 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
             <ul className="space-y-3" style={{ opacity: 0.8 }}>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <Phone size={16} className="flex-shrink-0 mt-0.5" />
-                <span>+51 928 510 125</span>
+                <span>+51 942 015 745</span>
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <Mail size={16} className="flex-shrink-0 mt-0.5" />
-                <span>flyup.sale@gmail.com</span>
+                <span>gerencia@ingenierodeelite.com</span>
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <MapPin size={16} className="flex-shrink-0 mt-0.5" />
-                <span>Lima, Miraflores</span>
+                <span>Cajamarca, Perú</span>
               </li>
             </ul>
           </div>
@@ -111,6 +110,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
               {[
                 { label: 'Nosotros', href: '/nosotros' },
                 { label: 'Términos y condiciones', href: '/terminos-y-condiciones' },
+                { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
                 { label: 'Política de Devoluciones', href: '/politica-de-cambios-y-devoluciones' },
               ].map(link => (
                 <li key={link.label}>

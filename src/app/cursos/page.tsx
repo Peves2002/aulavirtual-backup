@@ -62,8 +62,8 @@ async function getData(userId: string | null) {
 }
 
 export const metadata = {
-  title: 'Catálogo de Cursos - Elite BIM Vision',
-  description: 'Domina las herramientas y metodologías BIM de vanguardia con nuestros cursos certificados.'
+  title: 'Catálogo de Cursos | Elite Engineering',
+  description: 'Especialízate con nuestros cursos y programas certificados de ingeniería y gestión técnica.'
 }
 
 import { FloatingCartButton } from '@/features/web/cart/components/FloatingCartButton'
@@ -79,7 +79,7 @@ export default async function CursosPage() {
       <Navbar />
       <Box
         sx={{
-          background: 'linear-gradient(135deg, var(--primary-main) 0%, #1a2e3d 100%)',
+          background: 'linear-gradient(135deg, #27435b 0%, #1a2e3d 100%)',
           pt: { xs: 20, md: 28 },
           pb: { xs: 12, md: 20 },
           px: { xs: 3, md: 6 },

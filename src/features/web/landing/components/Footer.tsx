@@ -27,7 +27,7 @@ const footerLinks = {
 const socialLinks = [
   {
     name: "Facebook",
-    href: "https://web.facebook.com/p/Elite-Engineering-100048414673399/",
+    href: "https://web.facebook.com/p/Elite-Engineering-100048414673399/?_rdc=1&_rdr#",
     icon: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
         <path d="M9.198 21.5h4v-8.01h3.604l.396-3.98h-4V7.5a1 1 0 0 1 1-1h3v-4h-3a5 5 0 0 0-5 5v2.01h-2l-.396 3.98h2.396v8.01Z" />
@@ -36,7 +36,7 @@ const socialLinks = [
   },
   {
     name: "LinkedIn",
-    href: "https://www.linkedin.com/company/103097936/",
+    href: "https://www.linkedin.com/company/103097936/admin/page-posts/published/",
     icon: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
         <path d="M6.94 5a2 2 0 1 1-4-.002 2 2 0 0 1 4 .002ZM7 8.48H3V21h4V8.48Zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-4 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.72-2.91l.04-1.68Z" />
@@ -45,7 +45,7 @@ const socialLinks = [
   },
   {
     name: "Instagram",
-    href: "https://www.instagram.com/igenierosdeelite",
+    href: "https://www.instagram.com/igenierosdeelite?igsh=YmUwN2cyY24zdWhv",
     icon: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 2c2.717 0 3.056.01 4.122.06 1.065.05 1.79.217 2.428.465.66.254 1.216.598 1.772 1.153a4.908 4.908 0 0 1 1.153 1.772c.247.637.415 1.363.465 2.428.047 1.066.06 1.405.06 4.122 0 2.717-.01 3.056-.06 4.122-.05 1.065-.218 1.79-.465 2.428a4.883 4.883 0 0 1-1.153 1.772 4.915 4.915 0 0 1-1.772 1.153c-.637.247-1.363.415-2.428.465-1.066.047-1.405.06-4.122.06-2.717 0-3.056-.01-4.122-.06-1.065-.05-1.79-.218-2.428-.465a4.89 4.89 0 0 1-1.772-1.153 4.904 4.904 0 0 1-1.153-1.772c-.248-.637-.415-1.363-.465-2.428C2.013 15.056 2 14.717 2 12c0-2.717.01-3.056.06-4.122.05-1.066.217-1.79.465-2.428a4.88 4.88 0 0 1 1.153-1.772A4.897 4.897 0 0 1 5.45 2.525c.638-.248 1.362-.415 2.428-.465C8.944 2.013 9.283 2 12 2Zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm6.5-.25a1.25 1.25 0 0 0-2.5 0 1.25 1.25 0 0 0 2.5 0ZM12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6Z" />
@@ -139,18 +139,49 @@ export function Footer() {
           <div>
             <h4 className="text-white font-black uppercase tracking-[0.2em] text-xs mb-8">Legal</h4>
             <ul className="space-y-4 text-slate-400 text-sm font-bold">
-              <li><a href="#" className="hover:text-primary transition-colors">Términos de Servicio</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Privacidad BIM</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Cookies</a></li>
+              <li><a href="/terminos-y-condiciones" className="hover:text-primary transition-colors">Términos y Condiciones</a></li>
+              <li><a href="/politica-de-privacidad" className="hover:text-primary transition-colors">Política de Privacidad</a></li>
+              <li><a href="/politica-de-cambios-y-devoluciones" className="hover:text-primary transition-colors">Política de Devoluciones</a></li>
             </ul>
+            <div className="mt-8">
+              <a
+                href="/libro-de-reclamaciones"
+                className="inline-block transition-opacity hover:opacity-80"
+              >
+                <img
+                  src="/images/libro-reclamaciones.jpg"
+                  alt="Libro de Reclamaciones"
+                  className="h-auto w-auto max-w-[140px] rounded-lg border border-slate-800"
+                  style={{ objectFit: 'contain' }}
+                />
+              </a>
+            </div>
           </div>
         </div>
 
         {/* Bottom Metadata */}
         <div className="pt-16 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-8">
-          <p className="text-slate-500 text-xs font-black uppercase tracking-widest">
-            © {new Date().getFullYear()} Elite Engineering E.I.R.L. <span className="mx-2 text-white/10">|</span> Made for Excellence
-          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+            <p className="text-slate-500 text-xs font-black uppercase tracking-widest">
+              © {new Date().getFullYear()} Elite Engineering E.I.R.L. <span className="mx-2 text-white/10">|</span> Made for Excellence
+            </p>
+            <span className="hidden sm:inline text-slate-700">|</span>
+            <p className="text-slate-500 text-xs font-bold flex items-center gap-2">
+              Desarrollado por
+              <a
+                href="https://flyup.pe"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:opacity-80 transition-opacity inline-flex items-center align-middle"
+              >
+                <img
+                  src="/images/logo.svg"
+                  alt="Fly Logo"
+                  className="h-5 w-auto object-contain"
+                />
+              </a>
+            </p>
+          </div>
 
           <div className="flex items-center gap-12">
             <div className="flex items-center gap-3 text-slate-500">
