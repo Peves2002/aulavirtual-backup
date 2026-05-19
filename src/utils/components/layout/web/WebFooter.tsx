@@ -1,11 +1,13 @@
 import React from 'react'
 
 import Link from 'next/link'
+import Image from 'next/image'
 
-import { Phone, Mail, MapPin, BookOpenCheck, Facebook, Youtube, Instagram } from 'lucide-react'
 
+import { Phone, Mail, MapPin, Facebook, Youtube, Instagram } from 'lucide-react'
+
+import { getConfigs } from '@/utils/libs/config'
 import HydratedDate from '@/utils/components/HydratedDate'
-import Logo from '@components/layout/shared/Logo'
 
 // Simple TikTok SVG icon (not in lucide-react)
 const TikTokIcon = ({ size = 16 }: { size?: number }) => (
@@ -21,39 +23,27 @@ const WhatsAppIcon = ({ size = 16 }: { size?: number }) => (
   </svg>
 )
 
-const socialLinks = [
-  {
-    label: 'Facebook',
-    href: 'https://www.facebook.com/flyup.store',
-    icon: <Facebook size={20} />,
-  },
-  {
-    label: 'TikTok',
-    href: 'https://tiktok.com/@flyupsale',
-    icon: <TikTokIcon size={20} />,
-  },
-  {
-    label: 'Instagram',
-    href: 'https://www.instagram.com/devrocket.software/',
-    icon: <Instagram size={20} />,
-  },
-  {
-    label: 'Youtube',
-    href: 'https://www.youtube.com/@Fly-s9b',
-    icon: <Youtube size={20} />,
-  },
-  {
-    label: 'WhatsApp',
-    href: 'https://wa.me/51959436827',
-    icon: <WhatsAppIcon size={20} />,
-  },
+const staticSocialLinks = [
+  { label: 'Facebook', href: 'https://www.facebook.com/flyup.store', icon: <Facebook size={20} /> },
+  { label: 'TikTok', href: 'https://tiktok.com/@flyupsale', icon: <TikTokIcon size={20} /> },
+  { label: 'Instagram', href: 'https://www.instagram.com/devrocket.software/', icon: <Instagram size={20} /> },
+  { label: 'Youtube', href: 'https://www.youtube.com/@Fly-s9b', icon: <Youtube size={20} /> },
 ]
 
 interface WebFooterProps {
   platformName?: string
+  rutasHabilitado?: boolean
 }
 
-const WebFooter = ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
+const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true }: WebFooterProps) => {
+  const configs = await getConfigs()
+  const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
+
+  const socialLinks = [
+    ...staticSocialLinks,
+    { label: 'WhatsApp', href: `https://wa.me/${waNumber}`, icon: <WhatsAppIcon size={20} /> },
+  ]
+
   return (
     <footer style={{ backgroundColor: '#0A0A0A', color: '#ffffff' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12">
@@ -92,10 +82,10 @@ const WebFooter = ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
               Formación
             </h4>
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
-              {[
+              {([
                 { label: 'Cursos', href: '/cursos' },
-                { label: 'Rutas', href: '/rutas' },
-              ].map(link => (
+                ...(rutasHabilitado ? [{ label: 'Rutas', href: '/rutas' }] : []),
+              ] as { label: string; href: string }[]).map(link => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
@@ -121,7 +111,6 @@ const WebFooter = ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
               {[
                 { label: 'Nosotros', href: '/nosotros' },
                 { label: 'Términos y condiciones', href: '/terminos-y-condiciones' },
-                { label: 'Libro de reclamaciones', href: '/libro-de-reclamaciones', icon: <BookOpenCheck size={13} /> },
                 { label: 'Política de Devoluciones', href: '/politica-de-cambios-y-devoluciones' },
               ].map(link => (
                 <li key={link.label}>
@@ -130,12 +119,26 @@ const WebFooter = ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
                     className="no-underline transition-opacity hover:opacity-100 inline-flex items-center gap-1.5"
                     style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)' }}
                   >
-                    {link.icon ?? null}
                     {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
+            <div className="mt-6">
+              <Link
+                href="/libro-de-reclamaciones"
+                className="inline-block transition-opacity hover:opacity-80"
+              >
+                <Image
+                  src="/images/libro-reclamaciones.jpg"
+                  alt="Libro de Reclamaciones"
+                  width={160}
+                  height={75}
+                  className="h-auto w-auto max-w-[160px] rounded-lg"
+                  style={{ objectFit: 'contain' }}
+                />
+              </Link>
+            </div>
           </div>
 
           {/* Síguenos */}
@@ -188,7 +191,6 @@ const WebFooter = ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
       <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <Logo />
             <p
               style={{
                 fontFamily: 'Poppins, sans-serif',
@@ -200,15 +202,21 @@ const WebFooter = ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
             </p>
           </div>
           <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>
-            Desarrollado por{' '}
+            Desarrollado con ❤️ por
             <Link
               href="https://flyup.pe"
               target="_blank"
               rel="noopener noreferrer"
-              className="no-underline hover:opacity-80"
+              className="no-underline hover:opacity-80 inline-flex items-center align-middle"
               style={{ color: 'var(--web-light, #BDD962)', fontWeight: 600 }}
             >
-              Fly
+              <Image
+                src="/images/logo.svg"
+                alt="Fly Logo"
+                width={80}
+                height={25}
+                style={{ objectFit: 'contain' }}
+              />
             </Link>
           </p>
         </div>

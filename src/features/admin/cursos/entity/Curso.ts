@@ -62,15 +62,19 @@ export interface Curso {
   id: string
   titulo: string
   slug: string
+  codigo: string | null
   descripcion: string | null
   miniatura: string | null
   video_presentacion: string | null
   fecha_inicio: string | Date | null
+  fecha_fin: string | Date | null
   duracion: string | null
   tipo_emision: 'SINCRONO' | 'ASINCRONO' | 'MIXTO'
   nivel: 'BASICO' | 'INTERMEDIO' | 'AVANZADO'
   estado: 'BORRADOR' | 'PUBLICADO' | 'ARCHIVADO'
   es_gratis: boolean
+  es_privado: boolean
+  precio_certificado: number | null
   precio: number
   moneda: string
   creado_en: string
@@ -89,5 +93,7 @@ export interface Curso {
     modulos: number
     lecciones: number
     inscripciones: number
+    valoraciones: number
   }
+  promedio_valoracion: number
 }

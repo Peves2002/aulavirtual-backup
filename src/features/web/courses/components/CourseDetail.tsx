@@ -31,18 +31,15 @@ import {
   CircularProgress
 } from '@mui/material'
 
-import { useSession } from 'next-auth/react'
-
 import { ChevronRight, CheckCircle, XCircle, Download, Play } from 'lucide-react'
+
+import { useSession } from 'next-auth/react'
 
 import VideoPlayer from '@/features/estudiante/player/components/VideoPlayer'
 import UserAvatar from '@/utils/components/UserAvatar'
 import HydratedDate from '@/utils/components/HydratedDate'
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 import { useAuthModal } from '@/contexts/AuthModalContext'
-
-// ─── Typography tokens ────────────────────────────────────────────────────────
-const FONT = 'Poppins, sans-serif'
 
 interface Leccion {
   id: string
@@ -92,6 +89,8 @@ interface CourseDetailProps {
   }
 }
 
+const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif"
+
 const CourseDetail = ({ course }: CourseDetailProps) => {
   const [previewLesson, setPreviewLesson] = useState<any>(null)
   const [enrolling, setEnrolling] = useState(false)
@@ -128,6 +127,16 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
     } finally {
       setEnrolling(false)
     }
+  }
+
+  const handleEnroll = () => {
+    if (!session) {
+      openLogin()
+
+      return
+    }
+
+    router.push(`/checkout/${course.slug}`)
   }
 
   // Helper para obtener el ID de video y la URL de embebido
@@ -192,7 +201,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
   ]
 
   return (
-    <Box sx={{ pb: 10, bgcolor: '#f8fafc', fontFamily: FONT }}>
+    <Box sx={{ pb: 10, bgcolor: '#f8fafc' }}>
 
       {/* ─── HERO ──────────────────────────────────────────────────────────── */}
       <Box sx={{
@@ -375,8 +384,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                     color="primary"
                     fullWidth
                     size="large"
-                    component={Link}
-                    href={`/checkout/${course.slug}`}
+                    onClick={handleEnroll}
                     sx={{ py: 2, borderRadius: '16px', fontWeight: 700, fontSize: '1.2rem', boxShadow: 'var(--mui-palette-primary-darkOpacity)', textTransform: 'none' }}
                   >
                     Matricúlate
@@ -606,8 +614,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                       color="primary"
                       fullWidth
                       size="large"
-                      component={Link}
-                      href={`/checkout/${course.slug}`}
+                      onClick={handleEnroll}
                       sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700, boxShadow: 'var(--mui-palette-primary-darkOpacity)', textTransform: 'none' }}
                     >
                       Matricúlate

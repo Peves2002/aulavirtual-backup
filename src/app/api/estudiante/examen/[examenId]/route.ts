@@ -37,9 +37,8 @@ export async function GET(
               select: {
                 id: true,
                 texto: true,
-                orden: true
-
-                // NO incluir es_correcta
+                orden: true,
+                es_correcta: true // Lo necesitamos para el resultado anterior, pero no lo expondremos
               }
             }
           }
@@ -55,6 +54,27 @@ export async function GET(
       console.log(`[EXAMEN DEBUG] Examen ${examenId} no está publicado`)
 
       return ApiResponse.error(request, 'Este examen no está disponible', 403)
+    }
+
+    const ahora = new Date()
+    const fechaFin = (examen as any).fecha_fin as Date | null
+    const examenExpirado = !!(fechaFin && ahora > fechaFin)
+
+    if ((examen as any).fecha_inicio && ahora < (examen as any).fecha_inicio) {
+      const fechaStr = (examen as any).fecha_inicio.toLocaleString('es-PE', { dateStyle: 'short', timeStyle: 'short' })
+
+      return ApiResponse.error(request, `Este examen estará disponible desde el ${fechaStr}`, 403)
+    }
+
+    if (examenExpirado) {
+      // Allow viewing results if the student already attempted the exam
+      const tieneIntentos = await prisma.intentoExamen.count({
+        where: { usuario_id: auth.user.id, examen_id: examenId, enviado_en: { not: null } }
+      })
+
+      if (!tieneIntentos) {
+        return ApiResponse.error(request, 'El período de evaluación ha finalizado', 403)
+      }
     }
 
     // 2. Verificar inscripción
@@ -102,7 +122,7 @@ export async function GET(
       }
     })
 
-    const intentosRestantes = examen.intentos_maximos - intentosRealizados
+    const intentosRestantes = examenExpirado ? 0 : examen.intentos_maximos - intentosRealizados
 
     // 5. Verificar si ya aprobó
     const intentoAprobado = await prisma.intentoExamen.findFirst({
@@ -113,12 +133,51 @@ export async function GET(
       }
     })
 
+    const ultimoIntento = await prisma.intentoExamen.findFirst({
+      where: {
+        usuario_id: auth.user.id,
+        examen_id: examenId,
+        enviado_en: { not: null }
+      },
+      include: {
+        respuestas: true
+      },
+      orderBy: { enviado_en: 'desc' }
+    })
+
+    const yaAprobado = !!intentoAprobado
+
+    let resultadoAnterior = null
+
+    if (ultimoIntento && (yaAprobado || intentosRestantes <= 0 || examenExpirado)) {
+      resultadoAnterior = {
+        intentoId: ultimoIntento.id,
+        puntaje: ultimoIntento.puntaje,
+        aprobado: ultimoIntento.esta_aprobado,
+        puntajeAprobacion: examen.puntaje_aprobacion,
+        respuestasCorrectas: ultimoIntento.respuestas.filter((r: any) => r.es_correcta).length,
+        totalPreguntas: examen.preguntas.length,
+        intentosRestantes,
+        detallesRespuestas: ultimoIntento.respuestas.map((r: any) => {
+          const preg = examen.preguntas.find(p => p.id === r.pregunta_id)
+          const correcta = preg?.opciones.find(o => o.es_correcta)
+          
+          return {
+            preguntaId: r.pregunta_id,
+            opcionSeleccionadaId: r.opcion_seleccionada_id,
+            opcionCorrectaId: correcta?.id,
+            esCorrecta: r.es_correcta
+          }
+        })
+      }
+    }
+
     return ApiResponse.success(request, {
       examen: {
         id: examen.id,
         titulo: examen.titulo,
         descripcion: examen.descripcion,
-        limite_tiempo: examen.limite_tiempo,
+        fecha_fin: (examen as any).fecha_fin ?? null,
         puntaje_aprobacion: examen.puntaje_aprobacion,
         mezclar_preguntas: examen.mezclar_preguntas,
         preguntas: examen.preguntas.map(p => ({
@@ -126,13 +185,18 @@ export async function GET(
           texto: p.texto,
           tipo: p.tipo,
           puntos: p.puntos,
-          opciones: p.opciones
+          opciones: p.opciones.map(o => ({
+            id: o.id,
+            texto: o.texto,
+            orden: o.orden
+          }))
         }))
       },
       cursoTitulo: examen.curso.titulo,
       intentosRestantes,
-      yaAprobado: !!intentoAprobado,
-      puntajeAprobado: intentoAprobado?.puntaje || null
+      yaAprobado,
+      puntajeAprobado: intentoAprobado?.puntaje || null,
+      resultadoAnterior
     })
   } catch (error) {
     return handleApiError(error, request)

@@ -76,7 +76,9 @@ export async function GET(request: Request, { params }: { params: { slug: string
             modulo_id: true,
             puntaje_aprobacion: true,
             intentos_maximos: true,
-            esta_publicado: true
+            esta_publicado: true,
+            fecha_inicio: true,
+            fecha_fin: true
           }
         }
       }
@@ -89,8 +91,10 @@ export async function GET(request: Request, { params }: { params: { slug: string
     const isAdmin = user.rol === 'ADMIN'
     const isCourseProfessor = user.rol === 'PROFESOR' && course.profesor_id === user.id
 
+    let inscription = null
+
     if (!isAdmin && !isCourseProfessor) {
-      const inscription = await prisma.inscripcion.findUnique({
+      inscription = await prisma.inscripcion.findUnique({
         where: {
           usuario_id_curso_id: {
             usuario_id: user.id,
@@ -113,9 +117,46 @@ export async function GET(request: Request, { params }: { params: { slug: string
       }
     }
 
+    // Obtener intentos del usuario para todos los exámenes del curso (una sola query)
+    const intentosUsuario = await prisma.intentoExamen.findMany({
+      where: {
+        usuario_id: user.id,
+        examen: { curso_id: course.id },
+        enviado_en: { not: null }
+      },
+      select: { examen_id: true, esta_aprobado: true, puntaje: true }
+    })
+
+    const intentosPorExamen: Record<string, { intentos_realizados: number; ya_aprobado: boolean; mejor_puntaje: number | null }> = {}
+
+    intentosUsuario.forEach(intento => {
+      if (!intentosPorExamen[intento.examen_id]) {
+        intentosPorExamen[intento.examen_id] = { intentos_realizados: 0, ya_aprobado: false, mejor_puntaje: null }
+      }
+
+      intentosPorExamen[intento.examen_id].intentos_realizados += 1
+
+      if (intento.esta_aprobado) {
+        intentosPorExamen[intento.examen_id].ya_aprobado = true
+      }
+
+      if (intento.puntaje != null) {
+        const actual = intentosPorExamen[intento.examen_id].mejor_puntaje ?? -Infinity
+
+        if (intento.puntaje > actual) {
+          intentosPorExamen[intento.examen_id].mejor_puntaje = intento.puntaje
+        }
+      }
+    })
+
     const formattedCourse = {
       id: course.id,
+      slug: course.slug,
       titulo: course.titulo,
+      descripcion: (course as any).descripcion || null,
+      que_aprenderas: (course as any).que_aprenderas || null,
+      a_quien_va_dirigido: (course as any).a_quien_va_dirigido || null,
+      miniatura: (course as any).miniatura || null,
       modulos: course.modulos.map(m => ({
         id: m.id,
         titulo: m.titulo,
@@ -135,7 +176,16 @@ export async function GET(request: Request, { params }: { params: { slug: string
             recursos: Array.isArray(l.recursos) ? l.recursos : []
           }))
       })),
-      examenes: course.examenes
+      examenes: course.examenes.map(ex => ({
+        ...ex,
+        intentos_realizados: intentosPorExamen[ex.id]?.intentos_realizados ?? 0,
+        ya_aprobado: intentosPorExamen[ex.id]?.ya_aprobado ?? false,
+        mejor_puntaje: intentosPorExamen[ex.id]?.mejor_puntaje ?? null
+      })),
+      inscripcion: inscription ? {
+        estado_nota: inscription.estado_nota,
+        nota_final: inscription.nota_final
+      } : null
     }
 
     return ApiResponse.success(request, { course: formattedCourse })

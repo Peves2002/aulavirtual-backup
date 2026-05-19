@@ -69,6 +69,7 @@ interface CursosPageProps {
 export function CursosPage({ initialDataCursos }: CursosPageProps) {
   const [cursoToDelete, setCursoToDelete] = useState<Curso | null>(null)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openStudentsModal, setOpenStudentsModal] = useState(false)
 
   const [rowSelection, setRowSelection] = useState({})
   const [globalFilter, setGlobalFilter] = useState('')
@@ -93,6 +94,11 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
   const handleDeleteClick = (curso: Curso) => {
     setCursoToDelete(curso)
     setOpenDeleteModal(true)
+  }
+
+  const handleViewStudentsClick = (curso: Curso) => {
+    setCursoToDelete(curso) // Reutilizamos el estado para no crear otro
+    setOpenStudentsModal(true)
   }
 
   const columns = useMemo<ColumnDef<Curso, any>[]>(
@@ -209,6 +215,26 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
         )
       }),
       columnHelper.display({
+        id: 'valoracion',
+        header: 'Valoración',
+        cell: ({ row }) => {
+          const promedio = row.original.promedio_valoracion
+          const total = row.original._count.valoraciones
+
+          return (
+            <Box sx={{ display: 'flex', flexDirection: 'column', minWidth: 100 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant='body2' fontWeight={600}>{promedio.toFixed(1)}</Typography>
+                <i className='tabler-star-filled text-warning text-sm' />
+              </Box>
+              <Typography variant='caption' color='text.secondary'>
+                {total} {total === 1 ? 'reseña' : 'reseñas'}
+              </Typography>
+            </Box>
+          )
+        }
+      }),
+      columnHelper.display({
         id: 'contenido',
         header: 'Contenido',
         cell: ({ row }) => {
@@ -227,6 +253,11 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
         header: () => <div className='w-full text-right'>Acciones</div>,
         cell: ({ row }) => (
           <div className='flex items-center justify-end w-full gap-1'>
+            <Tooltip title='Ver Alumnos Inscritos'>
+              <IconButton onClick={() => handleViewStudentsClick(row.original)}>
+                <i className='tabler-users text-[22px] text-textSecondary' />
+              </IconButton>
+            </Tooltip>
             <Tooltip title='Ver en Reproductor (Moderación)'>
               <IconButton
                 href={`/estudiante/aprender/${row.original.slug}`}
@@ -411,6 +442,13 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
           isOpen: openDeleteModal,
           closeHandler: () => {
             setOpenDeleteModal(false)
+            setCursoToDelete(null)
+          }
+        }}
+        viewStudents={{
+          isOpen: openStudentsModal,
+          closeHandler: () => {
+            setOpenStudentsModal(false)
             setCursoToDelete(null)
           }
         }}

@@ -30,16 +30,36 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
     const estadoMutation = useCambiarEstadoCurso()
 
     const [esGratis, setEsGratis] = useState(curso.es_gratis)
+    const [esPrivado, setEsPrivado] = useState(curso.es_privado ?? false)
     const [precio, setPrecio] = useState(curso.precio)
     const [moneda, setMoneda] = useState(curso.moneda)
+    const [precioCertificado, setPrecioCertificado] = useState<number | ''>(curso.precio_certificado ?? '')
 
     const handleSavePrice = async () => {
         try {
             await editMutation.mutateAsync({
                 id: curso.id,
-                data: { es_gratis: esGratis, precio: esGratis ? 0 : precio, moneda }
+                data: {
+                    es_gratis: esGratis,
+                    precio: esGratis ? 0 : precio,
+                    moneda,
+                    precio_certificado: esGratis
+                        ? (precioCertificado === '' ? null : Number(precioCertificado))
+                        : null
+                }
             })
             enqueueSnackbar('Configuración actualizada', { variant: 'success' })
+            onSuccess()
+        } catch (error: any) {
+            enqueueSnackbar(error?.message || 'Error', { variant: 'error' })
+        }
+    }
+
+    const handleSavePrivado = async (valor: boolean) => {
+        try {
+            await editMutation.mutateAsync({ id: curso.id, data: { es_privado: valor } })
+            setEsPrivado(valor)
+            enqueueSnackbar(valor ? 'Curso marcado como privado' : 'Curso marcado como público', { variant: 'success' })
             onSuccess()
         } catch (error: any) {
             enqueueSnackbar(error?.message || 'Error', { variant: 'error' })
@@ -69,11 +89,25 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
                                 setEsGratis(e.target.checked)
 
                                 if (e.target.checked) setPrecio(0)
+                                else setPrecioCertificado('')
                             }}
                         />
                     }
                     label='Este curso es gratis'
                 />
+                {esGratis && (
+                    <Box sx={{ mt: 2 }}>
+                        <CustomTextField
+                            type='number'
+                            label='Precio del certificado'
+                            value={precioCertificado}
+                            onChange={e => setPrecioCertificado(e.target.value === '' ? '' : Number(e.target.value))}
+                            sx={{ width: 260 }}
+                            inputProps={{ min: 0, step: 0.01 }}
+                            helperText='Déjalo vacío si el certificado también es gratuito'
+                        />
+                    </Box>
+                )}
                 {!esGratis && (
                     <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
                         <CustomTextField
@@ -105,6 +139,26 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
                         Guardar Precio
                     </Button>
                 </Box>
+            </Grid>
+
+            <Grid item xs={12}><Divider /></Grid>
+
+            {/* Visibilidad */}
+            <Grid item xs={12}>
+                <Typography variant='h6' sx={{ mb: 1 }}>Visibilidad</Typography>
+                <Typography variant='body2' color='text.secondary' sx={{ mb: 2 }}>
+                    Un curso privado no aparece en el catálogo público. Solo el administrador puede asignarlo manualmente a un pedido.
+                </Typography>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={esPrivado}
+                            onChange={e => handleSavePrivado(e.target.checked)}
+                            disabled={editMutation.isPending}
+                        />
+                    }
+                    label={esPrivado ? 'Curso privado (no visible en catálogo)' : 'Curso público (visible en catálogo)'}
+                />
             </Grid>
 
             <Grid item xs={12}><Divider /></Grid>

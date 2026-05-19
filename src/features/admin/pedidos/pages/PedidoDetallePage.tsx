@@ -5,12 +5,13 @@ import { useParams, useRouter } from 'next/navigation'
 import {
   Card, CardHeader, CardContent, Grid, Typography,
   Chip, Divider, Button, Avatar, Table, TableBody,
-  TableCell, TableContainer, TableHead, TableRow, Paper, Box
+  TableCell, TableContainer, TableHead, TableRow, Paper, Box, Stack
 } from '@mui/material'
 
 import HydratedDate from '@/utils/components/HydratedDate'
 import { usePedido } from '../hooks/usePedidos'
 import type { ThemeColor } from '@/@core/types'
+import type { Pedido } from '../entity/Pedido'
 
 type StatusType = { [key: string]: ThemeColor }
 
@@ -26,13 +27,12 @@ export function PedidoDetallePage() {
   const params = useParams()
   const router = useRouter()
   const { id } = params
-
   const { data, isLoading, isError } = usePedido(id as string)
 
   if (isLoading) return <Card><CardContent>Cargando información del pedido...</CardContent></Card>
   if (isError || !data?.data) return <Card><CardContent>Error al cargar el pedido o no existe.</CardContent></Card>
 
-  const pedido = data.data as any
+  const pedido = data.data as Pedido
 
   return (
     <Card>
@@ -81,6 +81,14 @@ export function PedidoDetallePage() {
                   className='font-medium'
                 />
               </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body2" color="text.secondary">Tipo de Comprobante</Typography>
+                <Typography variant="body1" className="capitalize">{pedido.tipo_comprobante || '-'}</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body2" color="text.secondary">Número de Documento</Typography>
+                <Typography variant="body1">{pedido.numero_comprobante || '-'}</Typography>
+              </Grid>
             </Grid>
           </Grid>
 
@@ -113,6 +121,42 @@ export function PedidoDetallePage() {
               </Box>
             )}
           </Grid>
+
+          {/* Voucher y acción de completar */}
+          {(pedido.comprobante_url || pedido.metodo_pago_manual) && (
+            <Grid item xs={12}>
+              <Divider sx={{ mb: 3 }} />
+              <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems='flex-start'>
+                {pedido.comprobante_url && (
+                  <Box>
+                    <Typography variant='h6' gutterBottom>Comprobante de Pago</Typography>
+                    <Box
+                      component='img'
+                      src={pedido.comprobante_url}
+                      alt='Comprobante'
+                      sx={{ maxWidth: 280, maxHeight: 320, borderRadius: 2, border: '1px solid', borderColor: 'divider', cursor: 'pointer' }}
+                      onClick={() => window.open(pedido.comprobante_url!, '_blank')}
+                    />
+                    {pedido.comprobante_subido_en && (
+                      <Typography variant='caption' color='text.secondary' display='block' sx={{ mt: 0.5 }}>
+                        Subido: <HydratedDate date={pedido.comprobante_subido_en} format='locale' />
+                      </Typography>
+                    )}
+                  </Box>
+                )}
+
+                <Box flex={1}>
+                  {pedido.metodo_pago_manual && (
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant='h6' gutterBottom>Método Seleccionado</Typography>
+                      <Typography variant='body2'><b>{pedido.metodo_pago_manual.nombre}</b></Typography>
+                      <Typography variant='body2' color='text.secondary'>{pedido.metodo_pago_manual.numero_cuenta} · {pedido.metodo_pago_manual.nombre_cuenta}</Typography>
+                    </Box>
+                  )}
+                </Box>
+              </Stack>
+            </Grid>
+          )}
 
           {/* Tabla de cursos comprados */}
           <Grid item xs={12}>
