@@ -9,7 +9,6 @@ import Logo from '@components/layout/shared/Logo'
 import UserDropdown from '@components/layout/shared/UserDropdown'
 import CartIcon from '@/features/web/cart/components/CartIcon'
 import { useAuthModal } from '@/contexts/AuthModalContext'
-import { useConfig } from '@/contexts/ConfigContext'
 
 export interface Category {
   id: string
@@ -29,8 +28,6 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
   void platformSlogan
   const { data: session } = useSession()
   const { openLogin, openRegister } = useAuthModal()
-  const configs = useConfig()
-  const primaryColor = configs.COLOR_PRIMARIO || '#02115C'
 
   return (
     <header
