@@ -1,10 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Menu, X, ArrowRight } from "lucide-react";
+
 import Link from "next/link";
-import { Logo } from "./Logo";
+
+import { Menu, X, ArrowRight } from "lucide-react";
+
 import { useSession } from "next-auth/react";
+
+import { Logo } from "./Logo";
+
+
 import UserDropdown from "@/utils/components/layout/shared/UserDropdown";
 import CartIcon from "@/features/web/cart/components/CartIcon";
 import { useAuthModal } from "@/contexts/AuthModalContext";
@@ -23,13 +29,16 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
   const { openLogin, openRegister } = useAuthModal();
+
   useReveal();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
+
     onScroll();
     window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    
+return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import { z } from "zod";
 import { toast } from "sonner";
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Music2 } from "lucide-react";
@@ -61,16 +62,21 @@ export function Contact() {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const r = schema.safeParse(form);
+
     if (!r.success) {
       const fieldErrors: typeof errors = {};
+
       r.error.issues.forEach((i) => {
         const k = i.path[0] as keyof FormState;
+
         fieldErrors[k] = i.message;
       });
       setErrors(fieldErrors);
       toast.error("Revisa los campos del formulario");
-      return;
+      
+return;
     }
+
     setErrors({});
     toast.success("¡Mensaje enviado! Te contactamos pronto 🌿");
     setForm(initial);
@@ -79,6 +85,7 @@ export function Contact() {
   const onFocus = (e: React.FocusEvent<HTMLElement>) => {
     (e.target as HTMLElement).style.borderColor = "#5A9020";
   };
+
   const onBlur = (e: React.FocusEvent<HTMLElement>) => {
     (e.target as HTMLElement).style.borderColor = "#C8E890";
   };

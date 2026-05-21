@@ -1,29 +1,31 @@
+"use client";
+
 import { useState } from "react";
+
 import { Image } from "lucide-react";
 
-// Vite glob import to dynamically load all webp images
-const courseModules = import.meta.glob<{ default: string }>("../../assets/CursodeGestionrestaurantes/*.webp", { eager: true });
-const photoModules = import.meta.glob<{ default: string }>("../../assets/FOTOGRAFiASDECLASES/*.webp", { eager: true });
-const presencialModules = import.meta.glob<{ default: string }>("../../assets/CLASESPRESENCIALES/*.webp", { eager: true });
+const courseModules = ["/assets/CursodeGestionrestaurantes/image.webp","/assets/CursodeGestionrestaurantes/image2.webp","/assets/CursodeGestionrestaurantes/image3.webp","/assets/CursodeGestionrestaurantes/image4.webp","/assets/CursodeGestionrestaurantes/image5.webp","/assets/CursodeGestionrestaurantes/image6.webp"];
+const photoModules = ["/assets/FOTOGRAFiASDECLASES/arrozconpato.webp","/assets/FOTOGRAFiASDECLASES/broster.webp","/assets/FOTOGRAFiASDECLASES/carne.webp","/assets/FOTOGRAFiASDECLASES/carnes2.webp","/assets/FOTOGRAFiASDECLASES/ceviche.webp","/assets/FOTOGRAFiASDECLASES/coctel.webp","/assets/FOTOGRAFiASDECLASES/Coctelrojo.webp","/assets/FOTOGRAFiASDECLASES/Hamburguesa.webp","/assets/FOTOGRAFiASDECLASES/hamburguesa1.webp","/assets/FOTOGRAFiASDECLASES/hamburguesa2.webp","/assets/FOTOGRAFiASDECLASES/higo.webp","/assets/FOTOGRAFiASDECLASES/parrillas.webp","/assets/FOTOGRAFiASDECLASES/plato.webp","/assets/FOTOGRAFiASDECLASES/platosalacarta.webp","/assets/FOTOGRAFiASDECLASES/platosalacarta1.webp","/assets/FOTOGRAFiASDECLASES/pollo.webp","/assets/FOTOGRAFiASDECLASES/polloalabrasa.webp","/assets/FOTOGRAFiASDECLASES/pollobroaster.webp","/assets/FOTOGRAFiASDECLASES/pyedemanzana.webp","/assets/FOTOGRAFiASDECLASES/Sandwich.webp","/assets/FOTOGRAFiASDECLASES/sopa.webp","/assets/FOTOGRAFiASDECLASES/tacutacu.webp","/assets/FOTOGRAFiASDECLASES/tallarin.webp","/assets/FOTOGRAFiASDECLASES/tomahawk.webp","/assets/FOTOGRAFiASDECLASES/tortas.webp"];
+const presencialModules = ["/assets/CLASESPRESENCIALES/image.webp","/assets/CLASESPRESENCIALES/image2.webp","/assets/CLASESPRESENCIALES/image3.webp","/assets/CLASESPRESENCIALES/image4.webp","/assets/CLASESPRESENCIALES/image5.webp","/assets/CLASESPRESENCIALES/image6.webp","/assets/CLASESPRESENCIALES/image7.webp","/assets/CLASESPRESENCIALES/image8.webp","/assets/CLASESPRESENCIALES/image9.webp"];
 
 const categories = [
   {
     id: "presenciales",
     title: "Clases Presenciales",
     desc: "Aprende 100% práctico en nuestras modernas instalaciones.",
-    images: Object.values(presencialModules).map((m) => m.default),
+    images: presencialModules,
   },
   {
     id: "platos",
     title: "Nuestros Platos & Clases",
     desc: "Conoce los resultados que lograrás con nuestras recetas exactas.",
-    images: Object.values(photoModules).map((m) => m.default),
+    images: photoModules,
   },
   {
     id: "gestion",
     title: "Gestión de Restaurantes",
     desc: "Estrategia, costos y administración para tu negocio.",
-    images: Object.values(courseModules).map((m) => m.default),
+    images: courseModules,
   },
 ];
 
@@ -40,6 +42,7 @@ export function Galeria() {
         <div className="flex flex-wrap justify-center gap-4 mb-16 reveal">
           {categories.map((c) => {
             const isActive = activeTab === c.id;
+
             return (
               <button
                 key={c.id}

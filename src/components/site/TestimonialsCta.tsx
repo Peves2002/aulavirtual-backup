@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+
 import { Star } from "lucide-react";
+
 const testimonialImg = "/assets/CLASESPRESENCIALES/image6.webp";
 
 export function TestimonialsCta() {
@@ -35,7 +37,7 @@ export function TestimonialsCta() {
             {/* Floating Badge */}
             <div className="absolute bottom-8 left-8 right-8 p-6 rounded-2xl border border-white/10 backdrop-blur-md bg-white/5">
               <p className="text-white font-display text-xl italic mb-1">
-                "Mi meta era independizarme y lo logré"
+                &quot;Mi meta era independizarme y lo logré&quot;
               </p>
               <p className="text-[#A8E060] text-sm font-semibold tracking-wider">
                 CASO REAL #142
@@ -53,7 +55,7 @@ export function TestimonialsCta() {
           </div>
           
           <blockquote className="font-display italic text-2xl lg:text-3xl leading-tight text-white mb-8 border-l-4 border-[#A8E060] pl-6">
-            "Gracias a Incuba Cocina pude costear mis recetas correctamente. Hoy tengo mi propio delivery de makis y es un éxito total en mi distrito."
+            &quot;Gracias a Incuba Cocina pude costear mis recetas correctamente. Hoy tengo mi propio delivery de makis y es un éxito total en mi distrito.&quot;
           </blockquote>
 
           <div className="flex items-center gap-4 mb-12">

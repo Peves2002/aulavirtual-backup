@@ -1,11 +1,15 @@
+"use client";
 import Link from "next/link";
-// TODO: fix other imports from @tanstack/react-router:  , useParams, redirect 
+
+
+import { useParams } from "next/navigation"; 
+import { CheckCircle, Clock, Award, Phone, ArrowLeft } from "lucide-react";
+
 import { courses } from "@/data/courses";
-import { CheckCircle, Clock, Award, Phone, CalendarDays, ArrowLeft } from "lucide-react";
 import { FinalCta } from "./FinalCta";
 
 export function CourseDetail() {
-  const { id } = useParams({ strict: false });
+  const { id } = useParams();
   const course = courses.find((c) => c.id === id);
 
   if (!course) {

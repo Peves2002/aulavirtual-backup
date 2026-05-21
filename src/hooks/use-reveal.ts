@@ -1,5 +1,6 @@
 "use client";
 import { useEffect } from "react";
+
 import { usePathname } from "next/navigation";
 
 export function useReveal() {
@@ -11,6 +12,7 @@ export function useReveal() {
     // Very short delay to ensure DOM is ready
     const timeout = setTimeout(() => {
       const els = document.querySelectorAll<HTMLElement>(".reveal:not(.in-view)");
+
       if (els.length === 0) return;
 
       io = new IntersectionObserver(

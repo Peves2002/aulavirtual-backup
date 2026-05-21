@@ -2,6 +2,8 @@ import React from 'react'
 
 import { unstable_cache } from 'next/cache'
 
+import { Toaster } from 'sonner'
+
 import { AuthModalProvider } from '@/contexts/AuthModalContext'
 import { getConfigs } from '@/utils/libs/config'
 import prisma from '@/utils/libs/prisma'
@@ -9,7 +11,6 @@ import prisma from '@/utils/libs/prisma'
 import { Navbar } from '@/components/site/Navbar'
 import { Footer } from '@/components/site/Footer'
 import { WhatsAppFab } from '@/components/site/WhatsAppFab'
-import { Toaster } from 'sonner'
 
 const getCategorias = unstable_cache(
   () =>
@@ -23,7 +24,7 @@ const getCategorias = unstable_cache(
 )
 
 const WebLayout = async ({ children }: { children: React.ReactNode }) => {
-  const [categories, configs] = await Promise.all([getCategorias(), getConfigs()])
+  await Promise.all([getCategorias(), getConfigs()])
 
   return (
     <AuthModalProvider>

@@ -1,14 +1,17 @@
 "use client";
 import { useState } from "react";
+
+import Link from "next/link";
+
 import { Clock, Users, ArrowRight } from "lucide-react";
 
 
 
-import Link from "next/link";
 
 
 export function Catalog({ courses = [], categories = [] }: { courses?: any[], categories?: any[] }) {
   const [active, setActive] = useState("Todos");
+
   const filtered =
     active === "Todos" ? courses : courses.filter((c) => c.category === active);
 
@@ -37,7 +40,9 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
         <div className="mt-10 flex gap-3 overflow-x-auto pb-2 lg:justify-center scrollbar-none">
           {categories.map((c) => {
             const isActive = c === active;
-            return (
+
+            
+return (
               <button
                 key={c}
                 onClick={() => setActive(c)}

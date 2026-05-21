@@ -1,5 +1,6 @@
 // Next Imports
 import React from 'react'
+
 import { PageHero } from '@/components/site/PageHero'
 import { Catalog } from '@/components/site/Catalog'
 
@@ -33,6 +34,7 @@ async function getData(token: string | null) {
     
     // Categorías como strings (para los tabs)
     const uniqueCategories = ["Todos"]
+
     if (data.categories) {
       data.categories.forEach((cat: any) => {
         uniqueCategories.push(cat.nombre)
@@ -42,7 +44,8 @@ async function getData(token: string | null) {
     return { courses: data.courses || [], categories: uniqueCategories }
   } catch (error) {
     console.error('Error fetching data in CursosPage via API:', error)
-    return { courses: [], categories: ["Todos"] }
+    
+return { courses: [], categories: ["Todos"] }
   }
 }
 

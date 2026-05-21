@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   ChefHat,
   Coins,
@@ -9,7 +11,6 @@ import {
   Users,
   ArrowRight,
 } from "lucide-react";
-import Link from "next/link";
 
 const items = [
   {

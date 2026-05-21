@@ -1,8 +1,10 @@
 "use client";
 
 const logoImg = "/assets/LogoIncuba.png";
-import { Facebook, Instagram, Music2, MapPin, Phone, Mail, ChevronRight } from "lucide-react";
+
 import Link from "next/link";
+
+import { Facebook, Instagram, Music2, MapPin, Phone, Mail, ChevronRight } from "lucide-react";
 
 const nosotros = [
   { label: "Inicio", href: "/" },

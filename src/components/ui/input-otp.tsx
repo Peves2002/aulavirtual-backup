@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import { OTPInput, OTPInputContext } from "input-otp";
 import { Minus } from "lucide-react";
 
@@ -18,6 +19,7 @@ const InputOTP = React.forwardRef<
     {...props}
   />
 ));
+
 InputOTP.displayName = "InputOTP";
 
 const InputOTPGroup = React.forwardRef<
@@ -26,6 +28,7 @@ const InputOTPGroup = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div ref={ref} className={cn("flex items-center", className)} {...props} />
 ));
+
 InputOTPGroup.displayName = "InputOTPGroup";
 
 const InputOTPSlot = React.forwardRef<
@@ -54,6 +57,7 @@ const InputOTPSlot = React.forwardRef<
     </div>
   );
 });
+
 InputOTPSlot.displayName = "InputOTPSlot";
 
 const InputOTPSeparator = React.forwardRef<
@@ -64,6 +68,7 @@ const InputOTPSeparator = React.forwardRef<
     <Minus />
   </div>
 ));
+
 InputOTPSeparator.displayName = "InputOTPSeparator";
 
 export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator };

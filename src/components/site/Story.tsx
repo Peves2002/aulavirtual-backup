@@ -35,8 +35,8 @@ export function Story() {
                 className="font-display italic"
                 style={{ color: "#2D5010", fontSize: "20px", lineHeight: 1.4 }}
               >
-                "¿Por qué tantas personas saben cocinar bien, pero no logran
-                vivir de ello?"
+                &quot;¿Por qué tantas personas saben cocinar bien, pero no logran
+                vivir de ello?&quot;
               </p>
             </div>
           </div>

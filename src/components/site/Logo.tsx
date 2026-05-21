@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 const logoImg = "/assets/LogoIncuba.png";
 
 export function Logo() {

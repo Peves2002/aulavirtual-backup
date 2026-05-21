@@ -1,9 +1,12 @@
 "use client";
 
-import { Calendar, Check, Flame, PlayCircle, ArrowRightCircle } from "lucide-react";
-import Link from "next/link";
-import useEmblaCarousel from "embla-carousel-react";
 import { useEffect } from "react";
+
+import Link from "next/link";
+
+import { Check, ArrowRightCircle, Flame } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
+
 
 const mobileImages = [
   "/assets/mobil/1.png",
@@ -18,7 +21,9 @@ export function Hero() {
       const autoplay = setInterval(() => {
         emblaApi.scrollNext();
       }, 3500);
-      return () => clearInterval(autoplay);
+
+      
+return () => clearInterval(autoplay);
     }
   }, [emblaApi]);
 
