@@ -276,3 +276,82 @@ code {
 .swal2-popup * {
   font-family: var(--font-plus-jakarta-sans, 'Plus Jakarta Sans'), sans-serif !important;
 }
+/* Incuba Styles */
+:root {
+  --radius: 0.75rem;
+  --background: #FFFFFF;
+  --foreground: #1A3A0A;
+  --card: #FFFFFF;
+  --card-foreground: #1A3A0A;
+  --popover: #FFFFFF;
+  --popover-foreground: #1A3A0A;
+  --primary: #A8E060;
+  --primary-foreground: #1A3A0A;
+  --secondary: #EAF7D0;
+  --secondary-foreground: #2D5010;
+  --muted: #F7FBF0;
+  --muted-foreground: #7AAA40;
+  --accent: #EAF7D0;
+  --accent-foreground: #2D5010;
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: #FFFFFF;
+  --border: #C8E890;
+  --input: #C8E890;
+  --ring: #A8E060;
+
+  --surface-alt: #F7FBF0;
+  --surface-soft: #EAF7D0;
+  --lime: #A8E060;
+  --lime-medium: #5A9020;
+  --green-dark: #2D5010;
+  --green-deep: #1A3A0A;
+  --text-secondary: #4A7018;
+  --text-muted-2: #7AAA40;
+  --border-soft: #C8E890;
+  --border-medium: #8EC840;
+
+  --font-display: "Playfair Display", serif;
+  --font-sans: "DM Sans", sans-serif;
+}
+
+.font-display { font-family: var(--font-display); }
+.font-sans { font-family: var(--font-sans); }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { 
+  animation: fade-up 0.5s cubic-bezier(0.21, 1.02, 0.73, 1) both; 
+  will-change: transform, opacity;
+}
+
+@keyframes move-stripes {
+  0% { background-position: 0 0; }
+  100% { background-position: 100% 100%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+.animate-float { animation: float 6s ease-in-out infinite; }
+
+.story-link {
+  position: relative; display: inline-block;
+}
+.story-link::after {
+  content: ""; position: absolute; left: 0; bottom: -2px;
+  width: 100%; height: 2px; background: var(--lime);
+  transform: scaleX(0); transform-origin: right;
+  transition: transform 0.3s ease;
+}
+.story-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+.reveal { 
+  opacity: 0; 
+  transform: translateY(12px); 
+  transition: opacity 0.5s cubic-bezier(0.21, 1.02, 0.73, 1), transform 0.5s cubic-bezier(0.21, 1.02, 0.73, 1); 
+  will-change: opacity, transform;
+}
+.reveal.in-view { opacity: 1; transform: none; }
