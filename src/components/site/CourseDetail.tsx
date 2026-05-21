@@ -1,11 +1,12 @@
 "use client";
 import Link from "next/link";
 
+import { useParams } from "next/navigation";
 
-import { useParams } from "next/navigation"; 
 import { CheckCircle, Clock, Award, Phone, ArrowLeft } from "lucide-react";
 
 import { courses } from "@/data/courses";
+
 import { FinalCta } from "./FinalCta";
 
 export function CourseDetail() {
