@@ -4,17 +4,19 @@ interface PageHeroProps {
   title: React.ReactNode;
   subtitle: string;
   imageSrc: string;
+  imagePosition?: string;
 }
 
-export function PageHero({ title, subtitle, imageSrc }: PageHeroProps) {
+export function PageHero({ title, subtitle, imageSrc, imagePosition = "center" }: PageHeroProps) {
   return (
-    <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
+    <div className="relative -mt-[5rem] pt-[9rem] pb-20 lg:pt-[11rem] lg:pb-28 overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img
           src={imageSrc}
           alt="Hero Background"
           className="w-full h-full object-cover"
+          style={{ objectPosition: imagePosition }}
         />
         {/* Dark overlay for contrast */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0A1A04]/80 to-[#0A1A04]/60" />

@@ -16,37 +16,43 @@ const items = [
   {
     Icon: ChefHat,
     title: "1. Cursos Especializados Cortos",
-    desc: "¿Quieres empezar a vender, pero no sabes por dónde comenzar? Aprende paso a paso recetas rentables y técnicas profesionales en cursos intensivos diseñados para que puedas emprender, vender y recuperar tu inversión rápidamente.",
+    subtitle: "¿Quieres empezar a vender, pero no sabes por dónde comenzar?",
+    desc: "Aprende paso a paso recetas rentables y técnicas profesionales en cursos intensivos diseñados para que puedas emprender, vender y recuperar tu inversión rápidamente.",
     to: "/cursos",
   },
   {
     Icon: Coins,
     title: "2. Formación en Emprendimiento",
-    desc: "¿Sabes cocinar, pero no sabes cómo convertirlo en negocio? No solo aprenderás a cocinar. También descubrirás cómo costear correctamente, diferenciar tu negocio y atraer clientes usando redes sociales y estrategias reales de venta.",
+    subtitle: "¿Sabes cocinar, pero no sabes cómo convertirlo en negocio?",
+    desc: "No solo aprenderás a cocinar. También descubrirás cómo costear correctamente, diferenciar tu negocio y atraer clientes usando redes sociales y estrategias reales de venta.",
     to: "/cursos",
   },
   {
     Icon: BookOpen,
     title: "3. Recetarios Profesionales",
-    desc: "¿Tus recetas no siempre te salen igual o pierdes dinero en insumos? Accede a fichas técnicas detalladas con medidas exactas, procesos claros y recetas probadas para lograr productos consistentes, profesionales y listos para vender.",
+    subtitle: "¿Tus recetas no siempre te salen igual o pierdes dinero en insumos?",
+    desc: "Accede a fichas técnicas detalladas con medidas exactas, procesos claros y recetas probadas para lograr productos consistentes, profesionales y listos para vender.",
     to: "/cursos",
   },
   {
     Icon: Monitor,
     title: "4. Clases Grabadas 24/7",
-    desc: "¿Tienes poco tiempo o necesitas repetir las clases para aprender mejor? Accede a grabaciones y tutoriales prácticos para avanzar a tu ritmo y reforzar cada técnica cuando lo necesites.",
+    subtitle: "¿Tienes poco tiempo o necesitas repetir las clases para aprender mejor?",
+    desc: "Accede a grabaciones y tutoriales prácticos para avanzar a tu ritmo y reforzar cada técnica cuando lo necesites.",
     to: "/cursos",
   },
   {
     Icon: Users,
     title: "5. Comunidad y Acompañamiento",
-    desc: "¿Te preocupa sentirte solo después de terminar el curso? Forma parte de una comunidad privada con soporte, seguimiento y networking para seguir creciendo junto a otros emprendedores.",
+    subtitle: "¿Te preocupa sentirte solo después de terminar el curso?",
+    desc: "Forma parte de una comunidad privada con soporte, seguimiento y networking para seguir creciendo junto a otros emprendedores.",
     to: "/cursos",
   },
   {
     Icon: BarChart3,
     title: "6. Consultoría Gastronómica",
-    desc: "¿Sientes que tu negocio vende, pero no genera ganancias? Te ayudamos de forma personalizada a detectar errores, optimizar procesos y mejorar costos para hacer tu emprendimiento más rentable.",
+    subtitle: "¿Sientes que tu negocio vende, pero no genera ganancias?",
+    desc: "Te ayudamos de forma personalizada a detectar errores, optimizar procesos y mejorar costos para hacer tu emprendimiento más rentable.",
     to: "/contacto",
   },
 ];
@@ -87,10 +93,10 @@ export function Services() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {items.map(({ Icon, title, desc, to }, i) => (
+          {items.map(({ Icon, title, subtitle, desc, to }, i) => (
             <article
               key={title}
-              className="reveal group relative bg-white rounded-[32px] p-8 lg:p-10 transition-all duration-500 border border-[#C8E890]/40 hover:border-[#A8E060]"
+              className="reveal group relative bg-white flex flex-col h-full rounded-[32px] p-8 lg:p-10 transition-all duration-500 border border-[#C8E890]/40 hover:border-[#A8E060]"
               style={{
                 boxShadow: "0 4px 20px rgba(45,80,16,0.02)",
                 transitionDelay: `${i * 50}ms`,
@@ -121,14 +127,21 @@ export function Services() {
                 {title}
               </h3>
               
+              <h4
+                className="font-bold mt-3"
+                style={{ color: "#5A9020", fontSize: "16px", lineHeight: 1.4 }}
+              >
+                {subtitle}
+              </h4>
+              
               <p
-                className="mt-4"
+                className="mt-3"
                 style={{ color: "#4A7018", fontSize: "15px", lineHeight: 1.6 }}
               >
                 {desc}
               </p>
               
-              <div className="mt-8 pt-6 border-t border-[#F7FBF0]">
+              <div className="mt-auto pt-6 border-t border-[#F7FBF0]">
                 <Link href={to}
                   className="inline-flex items-center gap-2 font-bold group/link"
                   style={{ color: "#5A9020", fontSize: "14px" }}
@@ -149,4 +162,3 @@ export function Services() {
     </section>
   );
 }
-

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 
 import { Button } from '@mui/material'
 import { useSession } from 'next-auth/react'
@@ -32,9 +33,21 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
   const configs = useConfig()
   const primaryColor = configs.COLOR_PRIMARIO || '#02115C'
 
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
     <header
-      className="fixed top-0 left-0 right-0 bg-white border-b border-border shadow-sm z-50 flex items-center justify-between px-6 md:px-10"
+      className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 transition-all duration-300 ${
+        isScrolled ? 'bg-white border-b border-border shadow-sm' : 'bg-transparent'
+      }`}
       style={{ height: 'var(--navbar-height)' }}
     >
       {/* Logo */}

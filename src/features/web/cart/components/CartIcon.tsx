@@ -5,7 +5,11 @@ import { IconButton, Badge, Tooltip } from '@mui/material'
 
 import { useCart } from '../context/CartContext'
 
-const CartIcon = () => {
+interface CartIconProps {
+  white?: boolean;
+}
+
+const CartIcon = ({ white = false }: CartIconProps) => {
     const { itemCount, setIsCartDrawerOpen } = useCart()
 
     return (
@@ -14,9 +18,9 @@ const CartIcon = () => {
                 color="inherit"
                 onClick={() => setIsCartDrawerOpen(true)}
                 sx={{
-                    bgcolor: 'primary.50',
-                    color: 'primary.main',
-                    '&:hover': { bgcolor: 'primary.100' },
+                    bgcolor: white ? 'rgba(255,255,255,0.1)' : 'primary.50',
+                    color: white ? '#FFFFFF' : 'primary.main',
+                    '&:hover': { bgcolor: white ? 'rgba(255,255,255,0.2)' : 'primary.100' },
                     borderRadius: '10px',
                     width: 44,
                     height: 44

@@ -1,16 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import Link from "next/link";
-
 import { Menu, X, ArrowRight } from "lucide-react";
-
 import { useSession } from "next-auth/react";
-
 import { Logo } from "./Logo";
-
-
 import UserDropdown from "@/utils/components/layout/shared/UserDropdown";
 import CartIcon from "@/features/web/cart/components/CartIcon";
 import { useAuthModal } from "@/contexts/AuthModalContext";
@@ -20,7 +14,7 @@ const links = [
   { href: "/", label: "Inicio" },
   { href: "/cursos", label: "Cursos" },
   { href: "/nosotros", label: "Nosotros" },
-  { href: "/galeria", label: "Galería" },
+  { href: "/recetas", label: "Recetas" },
   { href: "/contacto", label: "Contacto" },
 ];
 
@@ -38,32 +32,32 @@ export function Navbar() {
     onScroll();
     window.addEventListener("scroll", onScroll);
     
-return () => window.removeEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <>
       <header
-        className="fixed top-0 inset-x-0 z-50 transition-all duration-500 ease-in-out"
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ease-in-out ${scrolled ? 'backdrop-blur-md' : ''}`}
         style={{
-          background: "#F7FBF0",
-          borderBottom: scrolled ? "1px solid rgba(168, 224, 96, 0.2)" : "1px solid transparent",
+          background: scrolled ? "rgba(10, 15, 20, 0.8)" : "transparent",
+          borderBottom: scrolled ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid transparent",
           paddingTop: scrolled ? "0.75rem" : "1rem",
           paddingBottom: scrolled ? "0.75rem" : "1rem",
-          boxShadow: scrolled ? "0 10px 30px rgba(10, 26, 4, 0.05)" : "none"
+          boxShadow: scrolled ? "0 4px 20px rgba(0, 0, 0, 0.5)" : "none"
         }}
       >
         <nav className="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between">
-          <Logo />
+          <Logo white={true} />
           
           <ul className="hidden lg:flex items-center gap-8 list-none m-0 p-0">
             {links.map((l) => (
               <li key={l.href}>
                 <Link href={l.href}
                   className="relative font-bold text-[14px] uppercase tracking-wide transition-colors duration-300 group"
-                  style={{ color: "#2D5010" }}
+                  style={{ color: "#FFFFFF" }}
                 >
-                  <span className="group-hover:text-[#5A9020] transition-colors duration-300">
+                  <span className="group-hover:text-[#A8E060] transition-colors duration-300">
                     {l.label}
                   </span>
                   <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-[2px] rounded-full bg-[#A8E060] transition-all duration-300 group-hover:w-full" />
@@ -73,14 +67,14 @@ return () => window.removeEventListener("scroll", onScroll);
           </ul>
 
           <div className="hidden lg:flex items-center gap-4">
-            <CartIcon />
+            <CartIcon white={true} />
             {session ? (
               <UserDropdown />
             ) : (
               <>
                 <button
                   onClick={() => openLogin()}
-                  className="font-bold text-[14px] text-[#1A3A0A] hover:text-[#5A9020] transition-colors"
+                  className="font-bold text-[14px] text-white hover:text-[#A8E060] transition-colors"
                 >
                   Iniciar Sesión
                 </button>
@@ -104,8 +98,8 @@ return () => window.removeEventListener("scroll", onScroll);
             className="lg:hidden p-3 rounded-2xl transition-colors"
             onClick={() => setOpen(true)}
             style={{ 
-              background: scrolled ? "#F7FBF0" : "rgba(255,255,255,0.8)",
-              color: "#1A3A0A" 
+              background: scrolled ? "transparent" : "rgba(255,255,255,0.1)",
+              color: "#FFFFFF" 
             }}
           >
             <Menu size={24} />
@@ -166,5 +160,3 @@ return () => window.removeEventListener("scroll", onScroll);
     </>
   );
 }
-
-
