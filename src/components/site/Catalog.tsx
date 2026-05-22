@@ -17,6 +17,7 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
 
     if (search.trim()) {
       const q = search.toLowerCase();
+
       result = result.filter(c => 
         (c.title || "").toLowerCase().includes(q) || 
         (c.desc || "").toLowerCase().includes(q)
