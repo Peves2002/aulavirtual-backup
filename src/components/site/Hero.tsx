@@ -212,7 +212,7 @@ export function Hero() {
               ))}
             </ul>
 
-            <a href="https://wa.me/51943570195" target="_blank" rel="noopener noreferrer"
+            <a href="https://wa.me/51953822677" target="_blank" rel="noopener noreferrer"
                className="flex items-center justify-center w-full font-bold text-[16px] rounded-full py-4 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
                style={{ background: "#5A9020", color: "#FFFFFF" }}>
               Adquirir Suscripción

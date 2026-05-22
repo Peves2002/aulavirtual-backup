@@ -21,6 +21,7 @@ async function getData(token: string | null) {
     if (data.courses) {
       data.courses = data.courses.map((c: any) => ({
         id: c.id,
+        slug: c.slug,
         title: c.titulo,
         image: c.miniatura,
         desc: c.resumen || c.descripcion || '',

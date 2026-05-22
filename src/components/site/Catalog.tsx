@@ -147,7 +147,7 @@ return (
                     S/. {c.price}
                   </span>
                 </div>
-                <Link href={`/cursos/${c.id}`}
+                <Link href={`/cursos/${c.slug}`}
                   className="mt-4 w-full flex items-center justify-center rounded-full py-3 font-semibold text-[14px] transition-colors"
                   style={{
                     border: "1.5px solid #2D5010",

@@ -88,7 +88,7 @@ export function Navbar() {
               <>
                 <button
                   onClick={() => openLogin()}
-                  className={`font-bold text-[14px] hover:text-[#5A9020] transition-colors ${isWhiteTheme ? 'text-white' : 'text-[#1A3A0A]'}`}
+                  className={`bg-transparent border-none font-bold text-[14px] hover:text-[#5A9020] transition-colors ${isWhiteTheme ? 'text-white' : 'text-[#1A3A0A]'}`}
                 >
                   Iniciar Sesión
                 </button>
