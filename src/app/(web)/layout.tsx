@@ -28,7 +28,17 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthModalProvider>
-      <div className="min-h-screen flex flex-col font-sans bg-background text-foreground">
+      <div 
+        className="min-h-screen flex flex-col font-sans text-foreground"
+        style={{ 
+          backgroundColor: '#FAFCF7', // Very subtle green tint to the white
+          backgroundImage: `
+            linear-gradient(to right, rgba(168, 224, 96, 0.15) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(168, 224, 96, 0.15) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px'
+        }}
+      >
         <Navbar />
         <main className="flex-1" style={{ paddingTop: '5rem' }}>
           {children}

@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import React, { useMemo } from "react";
+
 import Image from "next/image";
 
 const rawImages = [
@@ -56,7 +57,7 @@ export function Recetas() {
   }, []);
 
   return (
-    <section className="py-20" style={{ background: "#FFFFFF" }}>
+    <section className="py-20 bg-transparent">
       {/* Full width container but header centered */}
       <div className="w-full">
         

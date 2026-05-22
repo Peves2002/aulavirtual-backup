@@ -1,6 +1,7 @@
 import { Hero } from '@/components/site/Hero'
 import { Services } from '@/components/site/Services'
 import { TestimonialsCta } from '@/components/site/TestimonialsCta'
+import { Recetas } from '@/components/site/Recetas'
 
 export const metadata = {
   title: 'Incuba Cocina - Escuela de Cocina y Emprendimiento',
@@ -9,10 +10,11 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <div style={{ background: '#FFFFFF' }}>
+    <div className="bg-transparent">
       <Hero />
       <Services />
       <TestimonialsCta />
+      <Recetas />
     </div>
   )
 }

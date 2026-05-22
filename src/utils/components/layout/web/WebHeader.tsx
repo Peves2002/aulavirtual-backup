@@ -1,7 +1,8 @@
 'use client'
 
+import React, { useState, useEffect } from 'react'
+
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
 
 import { Button } from '@mui/material'
 import { useSession } from 'next-auth/react'
@@ -39,7 +40,9 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
     }
+
     window.addEventListener('scroll', handleScroll)
+
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 

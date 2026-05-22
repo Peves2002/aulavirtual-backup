@@ -1,20 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+
 import Link from "next/link";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { usePathname } from "next/navigation";
+
 import { useSession } from "next-auth/react";
-import { Logo } from "./Logo";
-import UserDropdown from "@/utils/components/layout/shared/UserDropdown";
-import CartIcon from "@/features/web/cart/components/CartIcon";
+import { ArrowRight, Menu, X } from "lucide-react";
+
 import { useAuthModal } from "@/contexts/AuthModalContext";
+import CartIcon from "@/features/web/cart/components/CartIcon";
 import { useReveal } from "@/hooks/use-reveal";
+import UserDropdown from "@/utils/components/layout/shared/UserDropdown";
+
+import { Logo } from "./Logo";
 
 const links = [
   { href: "/", label: "Inicio" },
   { href: "/cursos", label: "Cursos" },
   { href: "/nosotros", label: "Nosotros" },
-  { href: "/recetas", label: "Recetas" },
   { href: "/contacto", label: "Contacto" },
 ];
 
@@ -23,6 +27,12 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
   const { openLogin, openRegister } = useAuthModal();
+  const pathname = usePathname();
+
+  const isHome = pathname === "/";
+  const showBackground = scrolled;
+  const showElements = !isHome || scrolled;
+  const isWhiteTheme = !isHome || scrolled;
 
   useReveal();
 
@@ -38,24 +48,28 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ease-in-out ${scrolled ? 'backdrop-blur-md' : ''}`}
-        style={{
-          background: scrolled ? "rgba(10, 15, 20, 0.8)" : "transparent",
-          borderBottom: scrolled ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid transparent",
-          paddingTop: scrolled ? "0.75rem" : "1rem",
-          paddingBottom: scrolled ? "0.75rem" : "1rem",
-          boxShadow: scrolled ? "0 4px 20px rgba(0, 0, 0, 0.5)" : "none"
-        }}
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ease-in-out ${
+          showBackground 
+            ? 'bg-[#0A1A04]/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.3)] border-b border-white/5 py-3' 
+            : 'bg-transparent shadow-none border-b border-transparent py-3 lg:py-4'
+        }`}
       >
         <nav className="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between">
-          <Logo white={true} />
+          {/* Logo Desktop */}
+          <div className="hidden lg:block">
+            <Logo white={isWhiteTheme} />
+          </div>
           
-          <ul className="hidden lg:flex items-center gap-8 list-none m-0 p-0">
+          {/* Logo Mobile */}
+          <div className="block lg:hidden">
+            <Logo white={true} />
+          </div>
+          <ul className={`hidden lg:flex items-center gap-8 list-none m-0 p-0 transition-all duration-300 ${showElements ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
             {links.map((l) => (
               <li key={l.href}>
                 <Link href={l.href}
                   className="relative font-bold text-[14px] uppercase tracking-wide transition-colors duration-300 group"
-                  style={{ color: "#FFFFFF" }}
+                  style={{ color: isWhiteTheme ? "rgba(255,255,255,0.9)" : "#1A3A0A" }}
                 >
                   <span className="group-hover:text-[#A8E060] transition-colors duration-300">
                     {l.label}
@@ -66,15 +80,15 @@ export function Navbar() {
             ))}
           </ul>
 
-          <div className="hidden lg:flex items-center gap-4">
-            <CartIcon white={true} />
+          <div className={`hidden lg:flex items-center gap-4 transition-all duration-300 ${showElements ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
+            <CartIcon white={isWhiteTheme} />
             {session ? (
               <UserDropdown />
             ) : (
               <>
                 <button
                   onClick={() => openLogin()}
-                  className="font-bold text-[14px] text-white hover:text-[#A8E060] transition-colors"
+                  className={`font-bold text-[14px] hover:text-[#5A9020] transition-colors ${isWhiteTheme ? 'text-white' : 'text-[#1A3A0A]'}`}
                 >
                   Iniciar Sesión
                 </button>
@@ -82,12 +96,13 @@ export function Navbar() {
                   onClick={() => openRegister()}
                   className="inline-flex items-center gap-2 font-bold text-[14px] rounded-full px-8 py-3 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                   style={{ 
-                    background: "linear-gradient(135deg, #1A3A0A 0%, #2D5010 100%)", 
-                    color: "#FFFFFF" 
+                    background: isWhiteTheme ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #A8E060 0%, #5A9020 100%)", 
+                    color: isWhiteTheme ? "#FFFFFF" : "#1A3A0A",
+                    border: isWhiteTheme ? "1px solid rgba(255,255,255,0.2)" : "none"
                   }}
                 >
                   Registrarse
-                  <ArrowRight size={16} className="text-[#A8E060]" />
+                  <ArrowRight size={16} className={isWhiteTheme ? "text-[#A8E060]" : "text-[#1A3A0A]"} />
                 </button>
               </>
             )}
@@ -95,12 +110,8 @@ export function Navbar() {
 
           <button
             aria-label="Menu"
-            className="lg:hidden p-3 rounded-2xl transition-colors"
+            className="lg:hidden p-3 rounded-2xl transition-all duration-300 bg-white/10 text-white hover:bg-white/20"
             onClick={() => setOpen(true)}
-            style={{ 
-              background: scrolled ? "transparent" : "rgba(255,255,255,0.1)",
-              color: "#FFFFFF" 
-            }}
           >
             <Menu size={24} />
           </button>

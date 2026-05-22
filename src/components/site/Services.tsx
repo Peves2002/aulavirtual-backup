@@ -2,90 +2,81 @@
 
 import Link from "next/link";
 
-import {
-  ChefHat,
-  Coins,
-  BookOpen,
-  Monitor,
-  BarChart3,
-  Users,
-  ArrowRight,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const items = [
   {
-    Icon: ChefHat,
-    title: "1. Cursos Especializados Cortos",
+    title: "Cursos Especializados Cortos",
     subtitle: "¿Quieres empezar a vender, pero no sabes por dónde comenzar?",
     desc: "Aprende paso a paso recetas rentables y técnicas profesionales en cursos intensivos diseñados para que puedas emprender, vender y recuperar tu inversión rápidamente.",
     to: "/cursos",
+    image: "/assets/recetas/platos-a-la-carta.webp"
   },
   {
-    Icon: Coins,
-    title: "2. Formación en Emprendimiento",
+    title: "Formación en Emprendimiento",
     subtitle: "¿Sabes cocinar, pero no sabes cómo convertirlo en negocio?",
     desc: "No solo aprenderás a cocinar. También descubrirás cómo costear correctamente, diferenciar tu negocio y atraer clientes usando redes sociales y estrategias reales de venta.",
     to: "/cursos",
+    image: "/assets/recetas/hamburguesa.webp"
   },
   {
-    Icon: BookOpen,
-    title: "3. Recetarios Profesionales",
+    title: "Recetarios Profesionales",
     subtitle: "¿Tus recetas no siempre te salen igual o pierdes dinero en insumos?",
     desc: "Accede a fichas técnicas detalladas con medidas exactas, procesos claros y recetas probadas para lograr productos consistentes, profesionales y listos para vender.",
     to: "/cursos",
+    image: "/assets/recetas/reposteria.webp"
   },
   {
-    Icon: Monitor,
-    title: "4. Clases Grabadas 24/7",
+    title: "Clases Grabadas 24/7",
     subtitle: "¿Tienes poco tiempo o necesitas repetir las clases para aprender mejor?",
     desc: "Accede a grabaciones y tutoriales prácticos para avanzar a tu ritmo y reforzar cada técnica cuando lo necesites.",
     to: "/cursos",
+    image: "/assets/recetas/pollo-a-la-brasa.webp"
   },
   {
-    Icon: Users,
-    title: "5. Comunidad y Acompañamiento",
+    title: "Comunidad y Acompañamiento",
     subtitle: "¿Te preocupa sentirte solo después de terminar el curso?",
     desc: "Forma parte de una comunidad privada con soporte, seguimiento y networking para seguir creciendo junto a otros emprendedores.",
     to: "/cursos",
+    image: "/assets/recetas/broster.webp"
   },
   {
-    Icon: BarChart3,
-    title: "6. Consultoría Gastronómica",
+    title: "Consultoría Gastronómica",
     subtitle: "¿Sientes que tu negocio vende, pero no genera ganancias?",
     desc: "Te ayudamos de forma personalizada a detectar errores, optimizar procesos y mejorar costos para hacer tu emprendimiento más rentable.",
     to: "/contacto",
+    image: "/assets/recetas/ceviche.webp"
   },
 ];
 
 export function Services() {
   return (
-    <section id="cursos" className="py-24 relative overflow-hidden" style={{ background: "#FFFFFF" }}>
+    <section id="cursos" className="py-24 relative overflow-hidden bg-black lg:bg-transparent">
       {/* Decorative background elements */}
-      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#F7FBF0] blur-[120px] -z-10 opacity-60" />
-      <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#EAF7D0] blur-[100px] -z-10 opacity-40" />
+      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#5A9020] lg:bg-[#F7FBF0] blur-[150px] lg:blur-[120px] -z-10 opacity-20 lg:opacity-60" />
+      <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#A8E060] lg:bg-[#EAF7D0] blur-[120px] lg:blur-[100px] -z-10 opacity-10 lg:opacity-40" />
       
       <div className="max-w-7xl mx-auto px-5 lg:px-8">
         <div className="max-w-3xl mb-16 reveal">
-          <div className="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-[#EAF7D0] border border-[#A8E060]/30">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#5A9020]" />
+          <div className="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-white/5 lg:bg-[#EAF7D0] border border-white/10 lg:border-[#A8E060]/30">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#A8E060] lg:bg-[#5A9020]" />
             <p
-              className="text-[11px] font-bold uppercase tracking-[2px]"
-              style={{ color: "#2D5010" }}
+              className="text-[11px] font-bold uppercase tracking-[2px] text-[#A8E060] lg:text-[#2D5010]"
             >
               Nuestros Servicios
             </p>
           </div>
           <h2
-            className="font-display font-bold"
-            style={{ color: "#1A3A0A", fontSize: "clamp(32px, 5vw, 52px)", lineHeight: 1.1 }}
+            className="font-display font-bold text-white lg:text-[#1A3A0A]"
+            style={{ fontSize: "clamp(32px, 5vw, 52px)", lineHeight: 1.1 }}
           >
             Todo lo que necesitas para
             <br />
-            <span style={{ color: "#5A9020" }}>emprender desde la cocina</span>
+            <span className="text-[#A8E060] lg:text-[#5A9020]">emprender desde la cocina</span>
           </h2>
           <p
-            className="mt-6 max-w-2xl"
-            style={{ color: "#4A7018", fontSize: "18px", lineHeight: 1.7 }}
+            className="mt-6 max-w-2xl text-[#95B573] lg:text-[#4A7018]"
+            style={{ fontSize: "18px", lineHeight: 1.7 }}
           >
             6 pilares estratégicos diseñados para que aprendas rápido, apliques de inmediato
             y generes ingresos reales con tu talento.
@@ -93,67 +84,48 @@ export function Services() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {items.map(({ Icon, title, subtitle, desc, to }, i) => (
+          {items.map(({ title, subtitle, desc, to, image }, i) => (
             <article
               key={title}
-              className="reveal group relative bg-white flex flex-col h-full rounded-[32px] p-8 lg:p-10 transition-all duration-500 border border-[#C8E890]/40 hover:border-[#A8E060]"
+              className="reveal group relative overflow-hidden rounded-[32px] h-[360px] lg:h-[420px] transition-all duration-500 shadow-md hover:shadow-2xl"
               style={{
-                boxShadow: "0 4px 20px rgba(45,80,16,0.02)",
                 transitionDelay: `${i * 50}ms`,
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = "0 20px 40px rgba(168, 224, 96, 0.12)";
-                e.currentTarget.style.transform = "translateY(-8px)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = "0 4px 20px rgba(45,80,16,0.02)";
-                e.currentTarget.style.transform = "none";
-              }}
             >
-              <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
-                style={{ 
-                  background: "linear-gradient(135deg, #F7FBF0 0%, #EAF7D0 100%)",
-                  boxShadow: "inset 0 0 0 1px rgba(168, 224, 96, 0.2)"
-                }}
-              >
-                <Icon size={30} color="#2D5010" strokeWidth={1.5} />
-              </div>
+              {/* Background Image */}
+              <div 
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                style={{ backgroundImage: `url(${image})` }}
+              />
               
-              <h3
-                className="font-display font-bold mt-8"
-                style={{ color: "#1A3A0A", fontSize: "22px", letterSpacing: "-0.01em" }}
-              >
-                {title}
-              </h3>
-              
-              <h4
-                className="font-bold mt-3"
-                style={{ color: "#5A9020", fontSize: "16px", lineHeight: 1.4 }}
-              >
-                {subtitle}
-              </h4>
-              
-              <p
-                className="mt-3"
-                style={{ color: "#4A7018", fontSize: "15px", lineHeight: 1.6 }}
-              >
-                {desc}
-              </p>
-              
-              <div className="mt-auto pt-6 border-t border-[#F7FBF0]">
-                <Link href={to}
-                  className="inline-flex items-center gap-2 font-bold group/link"
-                  style={{ color: "#5A9020", fontSize: "14px" }}
-                >
-                  <span className="relative">
-                    Saber más
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#A8E060] transition-all duration-300 group-hover/link:w-full" />
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-[#F7FBF0] flex items-center justify-center transition-all duration-300 group-hover/link:bg-[#A8E060] group-hover/link:text-white">
-                    <ArrowRight size={14} className="transition-transform duration-300 group-hover/link:translate-x-0.5" />
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A1A04] via-[#0A1A04]/40 to-transparent transition-colors duration-500 group-hover:from-[#0A1A04]/90 group-hover:via-[#0A1A04]/80 group-hover:to-[#0A1A04]/60" />
+
+              {/* Content Container */}
+              <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                {/* Title is always visible */}
+                <h3 className="font-display font-bold text-white text-[24px] leading-tight mb-2 transform transition-transform duration-500 group-hover:-translate-y-2">
+                  {title}
+                </h3>
+                
+                {/* Expandable Content using max-height */}
+                <div className="max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:max-h-[250px] group-hover:opacity-100 group-hover:mt-2">
+                  <div className="flex flex-col gap-3 pb-2 transform translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
+                    <h4 className="font-bold text-[#A8E060] text-[15px] leading-snug">
+                      {subtitle}
+                    </h4>
+                    <p className="text-white/80 text-[14px] leading-relaxed">
+                      {desc}
+                    </p>
+                    
+                    <Link href={to} className="inline-flex items-center gap-2 font-bold text-[#A8E060] text-[14px] mt-2 group/link w-fit">
+                      Saber más
+                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center transition-colors duration-300 group-hover/link:bg-[#A8E060] group-hover/link:text-[#0A1A04]">
+                        <ArrowRight size={14} />
+                      </div>
+                    </Link>
                   </div>
-                </Link>
+                </div>
               </div>
             </article>
           ))}
