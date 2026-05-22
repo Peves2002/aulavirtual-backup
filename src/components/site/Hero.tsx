@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 
 import Link from "next/link";
 
-import { ArrowRight, Play, X, ChefHat, Coins, BookOpen, Users } from "lucide-react";
+import { ArrowRight, Play, X, ChefHat, Coins, BookOpen, Users, CheckCircle2, MessageCircle } from "lucide-react";
 
 const mobileImages = ["/assets/mobil/1.png", "/assets/mobil/2.png"];
 
@@ -65,7 +65,7 @@ export function Hero() {
             
             <button 
               onClick={() => setShowVideo(true)}
-              className="relative inline-flex items-center gap-2 font-bold text-[13px] uppercase tracking-wider rounded-full px-5 py-2.5 transition-all duration-300 bg-[#0A1A04]/60 backdrop-blur-md border border-[#A8E060]/50 hover:bg-[#0A1A04]/80 text-white shadow-[0_0_15px_rgba(168,224,96,0.2)]"
+              className="cursor-pointer relative inline-flex items-center gap-2 font-bold text-[13px] uppercase tracking-wider rounded-full px-5 py-2.5 transition-all duration-300 bg-[#0A1A04]/60 backdrop-blur-md border border-[#A8E060]/50 hover:bg-[#0A1A04]/80 text-white shadow-[0_0_15px_rgba(168,224,96,0.2)]"
             >
               <Play size={16} className="text-[#A8E060]" fill="currentColor" />
               <span>Ver más</span>
@@ -90,7 +90,7 @@ export function Hero() {
             <div className="flex flex-col sm:flex-row items-center gap-4">
               <button 
                 onClick={() => setShowSubscription(true)}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 font-bold text-[14px] rounded-full px-8 py-4 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
+                className="cursor-pointer w-full sm:w-auto inline-flex items-center justify-center gap-2 font-bold text-[14px] rounded-full px-8 py-4 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
                 style={{ 
                   background: "linear-gradient(135deg, #5A9020 0%, #3A6010 100%)", 
                   color: "#FFFFFF" 
@@ -174,49 +174,67 @@ export function Hero() {
 
       {/* Subscription Modal */}
       {showSubscription && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowSubscription(false)} />
-          <div className="relative bg-white rounded-3xl w-full max-w-lg p-8 shadow-2xl animate-fade-up">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+          <div className="absolute inset-0 bg-[#0A1A04]/80 backdrop-blur-md" onClick={() => setShowSubscription(false)} />
+          <div className="relative w-full max-w-md lg:max-w-lg bg-white rounded-[32px] shadow-2xl animate-fade-up">
             <button 
               onClick={() => setShowSubscription(false)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors z-20"
             >
               <X size={20} />
             </button>
             
-            <h2 className="font-display font-bold text-3xl text-[#1A3A0A] mb-2">Suscripción Premium</h2>
-            <p className="text-gray-600 mb-6">Accede a todo nuestro contenido exclusivo.</p>
-            
-            <div className="bg-[#F7FBF0] border border-[#A8E060] rounded-2xl p-6 mb-6 text-center">
-              <div className="text-sm font-bold text-[#5A9020] uppercase tracking-wider mb-2">Pago Único</div>
-              <div className="flex items-start justify-center gap-1">
-                <span className="text-2xl font-bold text-[#1A3A0A] mt-1">S/</span>
-                <span className="text-6xl font-display font-bold text-[#1A3A0A]">99</span>
+            <div className="p-6 sm:p-8">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EAF7D0] text-[#2D5010] text-[11px] font-bold uppercase tracking-widest mb-4">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#5A9020] animate-pulse"></span>
+                Acceso Total
               </div>
-            </div>
 
-            <ul className="space-y-4 mb-8">
-              {[
-                "Acceso de por vida a los cursos",
-                "Certificado de participación",
-                "Recetarios descargables paso a paso",
-                "Asesoría y soporte directo",
-                "Actualizaciones gratuitas"
-              ].map((item, i) => (
-                <li key={i} className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-[#EAF7D0] flex items-center justify-center flex-shrink-0">
-                    <ArrowRight size={14} className="text-[#5A9020]" />
+              <h2 className="font-display font-bold text-2xl sm:text-3xl text-[#1A3A0A] mb-3 leading-tight">
+                Impulsa tu <br className="hidden sm:block" />
+                <span className="text-[#5A9020]">Negocio Gastronómico</span>
+              </h2>
+              <p className="text-gray-600 text-[14px] sm:text-[15px] mb-5 leading-relaxed">
+                Obtén las herramientas, recetas y asesoría necesarias para que tu emprendimiento sea un éxito.
+              </p>
+              
+              {/* Pricing Box */}
+              <div className="bg-[#F7FBF0] border border-[#A8E060]/40 rounded-[24px] p-5 sm:p-6 mb-6 text-center shadow-sm">
+                <div className="text-[11px] font-bold text-[#5A9020] uppercase tracking-[0.2em] mb-1">Suscripción Mensual</div>
+                <div className="flex items-start justify-center gap-1">
+                  <span className="text-xl font-bold text-[#1A3A0A] mt-1.5">S/</span>
+                  <span className="text-5xl font-display font-black text-[#1A3A0A] tracking-tight">99</span>
+                  <span className="text-sm font-bold text-gray-500 mt-auto mb-2">/mes</span>
+                </div>
+                <div className="mt-2 text-[12px] text-gray-500 font-medium">Cancela cuando quieras, sin contratos</div>
+              </div>
+
+              {/* Features */}
+              <div className="space-y-3 mb-6">
+                {[
+                  "Acceso ilimitado a todos los cursos",
+                  "Certificado de participación",
+                  "Recetarios descargables paso a paso",
+                  "Asesoría y soporte directo",
+                  "Actualizaciones gratuitas"
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="mt-0.5 w-5 h-5 rounded-full bg-[#EAF7D0] flex items-center justify-center flex-shrink-0 shadow-sm">
+                      <CheckCircle2 size={12} className="text-[#5A9020]" />
+                    </div>
+                    <span className="text-[#1A3A0A] font-medium text-[14px]">{item}</span>
                   </div>
-                  <span className="text-[#1A3A0A] font-medium">{item}</span>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </div>
 
-            <a href="https://wa.me/51943570195" target="_blank" rel="noopener noreferrer"
-               className="flex items-center justify-center w-full font-bold text-[16px] rounded-full py-4 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
-               style={{ background: "#5A9020", color: "#FFFFFF" }}>
-              Adquirir Suscripción
-            </a>
+              <a href="https://wa.me/51953822677" target="_blank" rel="noopener noreferrer"
+                 className="flex items-center justify-center w-full font-bold text-[15px] rounded-full py-3.5 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 bg-[#5A9020] text-white hover:bg-[#4A7018]"
+              >
+                <MessageCircle size={18} className="mr-2" />
+                Adquirir por WhatsApp
+              </a>
+              <p className="text-center text-[11px] text-gray-400 mt-3 font-medium">Atención inmediata y personalizada</p>
+            </div>
           </div>
         </div>
       )}
