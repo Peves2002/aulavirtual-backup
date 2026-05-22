@@ -302,6 +302,16 @@ export async function POST(request: Request) {
 
       const expirationDate = Math.floor(Date.now() / 1000) + 24 * 60 * 60 // 24 horas
 
+      const culqiAmountInCents = Math.round(Number(total) * 100)
+
+      if (culqiAmountInCents < 600) {
+        return ApiResponse.error(
+          request,
+          'El monto mínimo para pagar con Culqi es S/ 6.00. Por favor usa otro método de pago.',
+          400
+        )
+      }
+
       const culqiOrderResponse = await fetch('https://api.culqi.com/v2/orders', {
         method: 'POST',
         headers: {
@@ -309,7 +319,7 @@ export async function POST(request: Request) {
           Authorization: `Bearer ${privateKey}`
         },
         body: JSON.stringify({
-          amount: Math.round(Number(total) * 100),
+          amount: culqiAmountInCents,
           currency_code: moneda,
           description: `Pedido #${pedido.numero_pedido} - Aula Virtual`,
           order_number: `ORD-${pedido.numero_pedido}-${Date.now()}`,

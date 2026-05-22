@@ -42,7 +42,7 @@ export function CourseDetail() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-5 lg:px-8">
           <div className="max-w-2xl reveal">
-            <Link href="/cursos" 
+            <Link href="/cursos"
               className="inline-flex items-center gap-2 text-[#C8E890] hover:text-white transition-colors mb-6 text-[14px] font-semibold"
             >
               <ArrowLeft size={16} /> Volver a cursos
@@ -61,7 +61,7 @@ export function CourseDetail() {
             <p className="text-lg lg:text-xl text-[#E8F5D0] drop-shadow-md mb-8 leading-relaxed">
               {course.desc}
             </p>
-            
+
             <div className="flex flex-wrap items-center gap-6 text-[#A8E060]">
               <div className="flex items-center gap-2">
                 <Clock size={20} />
@@ -80,7 +80,7 @@ export function CourseDetail() {
       <div className="max-w-7xl mx-auto px-5 lg:px-8 mt-12 grid lg:grid-cols-3 gap-12">
         {/* Main Details */}
         <div className="lg:col-span-2 space-y-12">
-          
+
           <div className="reveal">
             <h2 className="font-display text-3xl font-bold text-[#1A3A0A] mb-4">Acerca de este curso</h2>
             <p className="text-[#4A7018] text-lg leading-relaxed">
@@ -91,7 +91,7 @@ export function CourseDetail() {
           <div className="reveal">
             <h3 className="font-display text-2xl font-bold text-[#1A3A0A] mb-6">¿Qué vas a lograr?</h3>
             <div className="grid sm:grid-cols-2 gap-4">
-              {course.benefits?.map((b, i) => (
+              {course.benefits?.map((b: string, i: number) => (
                 <div key={i} className="flex items-start gap-3 p-4 bg-white rounded-xl border border-[#C8E890] shadow-sm">
                   <CheckCircle className="text-[#5A9020] shrink-0 mt-0.5" size={20} />
                   <span className="text-[#2D5010] font-medium">{b}</span>
@@ -103,7 +103,7 @@ export function CourseDetail() {
           <div className="reveal">
             <h3 className="font-display text-2xl font-bold text-[#1A3A0A] mb-6">Módulos de aprendizaje</h3>
             <div className="space-y-4">
-              {course.modules?.map((m, i) => (
+              {course.modules?.map((m: string, i: number) => (
                 <div key={i} className="flex items-center gap-4 p-5 bg-white rounded-xl border-l-4 border-l-[#A8E060] shadow-sm">
                   <div className="bg-[#F7FBF0] text-[#5A9020] w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shrink-0">
                     {i + 1}
@@ -124,7 +124,7 @@ export function CourseDetail() {
               <span className="text-[#7AAA40] line-through text-lg">S/. {course.oldPrice}</span>
               <span className="text-4xl font-display font-bold text-[#2D5010]">S/. {course.price}</span>
             </div>
-            
+
             <ul className="space-y-4 mb-8 text-[#4A7018] text-sm">
               <li className="flex items-center gap-3">
                 <CheckCircle size={16} className="text-[#A8E060]" />
@@ -154,14 +154,14 @@ export function CourseDetail() {
               <Phone size={20} />
               Quiero Matricularme
             </a>
-            
+
             <p className="text-center text-xs text-[#7AAA40] mt-4 font-medium">
               Cupos limitados. ¡Asegura tu lugar hoy!
             </p>
           </div>
         </div>
       </div>
-      
+
       <div className="mt-20">
         <FinalCta />
       </div>

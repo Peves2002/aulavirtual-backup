@@ -197,11 +197,10 @@ export function Hero() {
 
             <ul className="space-y-4 mb-8">
               {[
-                "Acceso de por vida a los cursos",
-                "Certificado de participación",
-                "Recetarios descargables paso a paso",
-                "Asesoría y soporte directo",
-                "Actualizaciones gratuitas"
+                "Acceso al curso mensualmente",
+                "Clases en vivo",
+                "Clases grabadas",
+                "Materiales descargables"
               ].map((item, i) => (
                 <li key={i} className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-[#EAF7D0] flex items-center justify-center flex-shrink-0">
