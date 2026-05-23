@@ -27,8 +27,8 @@ async function getData(token: string | null) {
         desc: c.resumen || c.descripcion || '',
         price: c.precio ? Number(c.precio) : 0,
         oldPrice: c.precio_oferta ? Number(c.precio_oferta) : null,
-        duration: c.nivel || 'Intensivo',
-        level: c.nivel || 'Básico',
+        duration: c.duracion || 'Intensivo',
+        level: c.nivel === 'BASICO' ? 'Básico' : c.nivel === 'INTERMEDIO' ? 'Intermedio' : c.nivel === 'AVANZADO' ? 'Avanzado' : 'Básico',
         category: c.categoria?.nombre || 'General'
       }))
     }

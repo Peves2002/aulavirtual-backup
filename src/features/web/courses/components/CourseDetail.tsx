@@ -208,7 +208,8 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
       <Box sx={{
         position: 'relative',
         background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
-        pt: { xs: 4, md: 6 },
+        mt: '-5rem',
+        pt: { xs: 'calc(5rem + 32px)', md: 'calc(5rem + 48px)' },
         pb: { xs: 8, md: 14 },
         minHeight: { md: '600px' },
         display: 'flex',

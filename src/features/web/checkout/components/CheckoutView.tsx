@@ -43,7 +43,9 @@ const CheckoutView = ({ courses }: CheckoutViewProps) => {
             {/* Mini hero */}
             <Box sx={{
                 background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
-                py: { xs: 4, md: 5 },
+                mt: '-5rem',
+                pt: { xs: 'calc(5rem + 32px)', md: 'calc(5rem + 40px)' },
+                pb: { xs: 4, md: 5 },
                 px: { xs: 3, md: 8, lg: 12 },
                 position: 'relative',
                 overflow: 'hidden',

@@ -24,12 +24,16 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
       );
     }
 
-    if (activeCategory !== "Todos") {
-      result = result.filter(c => c.category === activeCategory);
+    if (activeCategory && activeCategory !== "Todos") {
+      result = result.filter(c => 
+        c.category && c.category.toLowerCase().trim() === activeCategory.toLowerCase().trim()
+      );
     }
 
-    if (activeLevel !== "Todos") {
-      result = result.filter(c => c.level === activeLevel);
+    if (activeLevel && activeLevel !== "Todos") {
+      result = result.filter(c => 
+        c.level && c.level.toLowerCase().trim() === activeLevel.toLowerCase().trim()
+      );
     }
 
     if (sortBy === "precio-asc") {
