@@ -20,7 +20,7 @@ interface Course {
   tipo_emision?: string
   profesor: { nombre: string; apellido: string; avatar?: string }
   categoria?: { nombre: string }
-  _count?: { lecciones: number; inscripciones: number }
+  _count?: { inscripciones: number }
 }
 
 interface Props {

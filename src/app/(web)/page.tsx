@@ -39,7 +39,7 @@ export default async function HomePage() {
           select: { nombre: true }
         },
         _count: {
-          select: { lecciones: true, inscripciones: true }
+          select: { inscripciones: true }
         }
       }
     });
