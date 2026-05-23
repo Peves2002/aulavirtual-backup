@@ -57,6 +57,14 @@ export async function POST(request: Request) {
     const amountInCents = Math.round(Number(pedido.total) * 100)
     const currency = pedido.moneda || 'PEN'
 
+    if (amountInCents < 600) {
+      return ApiResponse.error(
+        request,
+        'El monto mínimo para pagar con Culqi es S/ 6.00. Por favor usa otro método de pago.',
+        400
+      )
+    }
+
     // 3. Crear el cargo en la API de Culqi v2
     const culqiResponse = await fetch('https://api.culqi.com/v2/charges', {
       method: 'POST',

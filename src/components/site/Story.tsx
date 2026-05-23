@@ -19,7 +19,7 @@ export function Story() {
               aria-label="Equipo de Incuba Cocina enseñando"
               style={{
                 backgroundImage:
-                  "url('https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=1000&q=80')",
+                  "url('/assets/CLASESPRESENCIALES/image.webp')",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}

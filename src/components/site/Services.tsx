@@ -10,42 +10,42 @@ const items = [
     subtitle: "¿Quieres empezar a vender, pero no sabes por dónde comenzar?",
     desc: "Aprende paso a paso recetas rentables y técnicas profesionales en cursos intensivos diseñados para que puedas emprender, vender y recuperar tu inversión rápidamente.",
     to: "/cursos",
-    image: "/assets/CLASESPRESENCIALES/image.webp"
+    image: "/assets/recetas/platos-a-la-carta.webp"
   },
   {
     title: "Formación en Emprendimiento",
     subtitle: "¿Sabes cocinar, pero no sabes cómo convertirlo en negocio?",
     desc: "No solo aprenderás a cocinar. También descubrirás cómo costear correctamente, diferenciar tu negocio y atraer clientes usando redes sociales y estrategias reales de venta.",
     to: "/cursos",
-    image: "/assets/CLASESPRESENCIALES/image2.webp"
+    image: "/assets/recetas/hamburguesa.webp"
   },
   {
     title: "Recetarios Profesionales",
     subtitle: "¿Tus recetas no siempre te salen igual o pierdes dinero en insumos?",
     desc: "Accede a fichas técnicas detalladas con medidas exactas, procesos claros y recetas probadas para lograr productos consistentes, profesionales y listos para vender.",
     to: "/cursos",
-    image: "/assets/CLASESPRESENCIALES/image3.webp"
+    image: "/assets/recetas/reposteria.webp"
   },
   {
     title: "Clases Grabadas 24/7",
     subtitle: "¿Tienes poco tiempo o necesitas repetir las clases para aprender mejor?",
     desc: "Accede a grabaciones y tutoriales prácticos para avanzar a tu ritmo y reforzar cada técnica cuando lo necesites.",
     to: "/cursos",
-    image: "/assets/CLASESPRESENCIALES/image4.webp"
+    image: "/assets/recetas/pollo-a-la-brasa.webp"
   },
   {
     title: "Comunidad y Acompañamiento",
     subtitle: "¿Te preocupa sentirte solo después de terminar el curso?",
     desc: "Forma parte de una comunidad privada con soporte, seguimiento y networking para seguir creciendo junto a otros emprendedores.",
     to: "/cursos",
-    image: "/assets/CLASESPRESENCIALES/image5.webp"
+    image: "/assets/recetas/broster.webp"
   },
   {
     title: "Consultoría Gastronómica",
     subtitle: "¿Sientes que tu negocio vende, pero no genera ganancias?",
     desc: "Te ayudamos de forma personalizada a detectar errores, optimizar procesos y mejorar costos para hacer tu emprendimiento más rentable.",
     to: "/contacto",
-    image: "/assets/CLASESPRESENCIALES/image6.webp"
+    image: "/assets/recetas/ceviche.webp"
   },
 ];
 
@@ -57,7 +57,7 @@ export function Services() {
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#A8E060] lg:bg-[#EAF7D0] blur-[120px] lg:blur-[100px] -z-10 opacity-10 lg:opacity-40" />
       
       <div className="max-w-7xl mx-auto px-5 lg:px-8">
-        <div className="text-center mx-auto max-w-3xl mb-16 reveal">
+        <div className="max-w-3xl mb-16 reveal">
           <div className="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-white/5 lg:bg-[#EAF7D0] border border-white/10 lg:border-[#A8E060]/30">
             <span className="w-1.5 h-1.5 rounded-full bg-[#A8E060] lg:bg-[#5A9020]" />
             <p
@@ -75,7 +75,7 @@ export function Services() {
             <span className="text-[#A8E060] lg:text-[#5A9020]">emprender desde la cocina</span>
           </h2>
           <p
-            className="mx-auto mt-6 max-w-2xl text-[#95B573] lg:text-[#4A7018]"
+            className="mt-6 max-w-2xl text-[#95B573] lg:text-[#4A7018]"
             style={{ fontSize: "18px", lineHeight: 1.7 }}
           >
             6 pilares estratégicos diseñados para que aprendas rápido, apliques de inmediato
@@ -118,9 +118,11 @@ export function Services() {
                       {desc}
                     </p>
                     
-                    <Link href={to} className="cursor-pointer inline-flex items-center justify-center gap-2 font-bold text-white bg-[#5A9020] hover:bg-[#A8E060] hover:text-[#0A1A04] text-[13px] uppercase tracking-wider px-6 py-2.5 rounded-full mt-2 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 w-full group/link">
+                    <Link href={to} className="inline-flex items-center gap-2 font-bold text-[#A8E060] text-[14px] mt-2 group/link w-fit">
                       Saber más
-                      <ArrowRight size={16} className="transition-transform duration-300 group-hover/link:translate-x-1" />
+                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center transition-colors duration-300 group-hover/link:bg-[#A8E060] group-hover/link:text-[#0A1A04]">
+                        <ArrowRight size={14} />
+                      </div>
                     </Link>
                   </div>
                 </div>

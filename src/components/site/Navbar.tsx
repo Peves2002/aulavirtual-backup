@@ -18,7 +18,6 @@ import { Logo } from "./Logo";
 const links = [
   { href: "/", label: "Inicio" },
   { href: "/cursos", label: "Cursos" },
-  { href: "/plan", label: "Plan" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ];
@@ -89,18 +88,7 @@ export function Navbar() {
               <>
                 <button
                   onClick={() => openLogin()}
-                  className="font-bold text-[14px] rounded-full px-6 py-2.5 transition-all duration-300 border-2"
-                  style={{
-                    borderColor: isWhiteTheme ? "rgba(255,255,255,0.4)" : "#5A9020",
-                    color: isWhiteTheme ? "#FFFFFF" : "#5A9020",
-                    background: "transparent"
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = isWhiteTheme ? "rgba(255,255,255,0.1)" : "rgba(90,144,32,0.05)"
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "transparent"
-                  }}
+                  className={`bg-transparent border-none font-bold text-[14px] hover:text-[#5A9020] transition-colors ${isWhiteTheme ? 'text-white' : 'text-[#1A3A0A]'}`}
                 >
                   Iniciar Sesión
                 </button>

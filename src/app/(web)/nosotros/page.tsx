@@ -11,7 +11,7 @@ export const metadata = {
 export default function NosotrosPage() {
   return (
     <div className="bg-white min-h-screen">
-      <PageHero 
+      <PageHero
         title={<>Sobre <span className="text-[#A8E060]">Nosotros</span></>}
         subtitle="Nacimos para transformar el talento en ingresos reales."
         imageSrc="/assets/CursodeGestionrestaurantes/image3.webp"

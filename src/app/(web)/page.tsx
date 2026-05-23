@@ -1,12 +1,7 @@
-import Link from 'next/link'
-
 import { Hero } from '@/components/site/Hero'
 import { Services } from '@/components/site/Services'
 import { TestimonialsCta } from '@/components/site/TestimonialsCta'
 import { Recetas } from '@/components/site/Recetas'
-import { SubscriptionSection } from '@/components/site/SubscriptionSection'
-import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
-
 import prisma from '@/utils/libs/prisma'
 
 export const metadata = {
@@ -66,44 +61,10 @@ export default async function HomePage() {
     console.error('Error fetching latest courses via Prisma:', error);
     mappedCourses = [];
   }
-
   return (
     <div className="bg-transparent">
       <Hero />
       <Services />
-      
-      {/* Latest Courses Section */}
-      <section className="py-24 relative" style={{ backgroundColor: "#F7FBF0", backgroundImage: "radial-gradient(#d9f99d 1px, transparent 1px)", backgroundSize: "24px 24px" }}>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#F7FBF0]/90 pointer-events-none"></div>
-        <div className="absolute top-20 right-0 w-64 h-64 bg-[#A8E060] rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
-        <div className="absolute bottom-20 left-0 w-64 h-64 bg-[#5A9020] rounded-full blur-[100px] opacity-10 pointer-events-none"></div>
-        
-        <div className="relative max-w-7xl mx-auto px-5 lg:px-8">
-          <div className="text-center mx-auto max-w-3xl mb-16 reveal">
-            <h2 className="font-display font-bold text-3xl lg:text-5xl text-[#1A3A0A] mb-4">
-              Nuestros <span className="text-[#5A9020]">Últimos Cursos</span>
-            </h2>
-            <p className="text-[#4A7018] text-lg">
-              Aprende las mejores técnicas y recetas rentables paso a paso.
-            </p>
-          </div>
-          
-          <HomeCoursesSection courses={mappedCourses} />
-          
-          <div className="mt-12 text-center">
-            <Link 
-              href="/cursos"
-              className="inline-flex items-center gap-2 font-bold text-[15px] rounded-full px-8 py-4 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1"
-              style={{ border: "2px solid #5A9020", color: "#5A9020" }}
-            >
-              VER TODOS LOS CURSOS
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <SubscriptionSection />
-      
       <TestimonialsCta />
       <Recetas />
     </div>
