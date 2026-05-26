@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 
-import { Phone, Mail, MapPin, Facebook, Youtube, Instagram } from 'lucide-react'
+import { Phone, Mail, MapPin, Facebook, Youtube } from 'lucide-react'
 
 import { getConfigs } from '@/utils/libs/config'
 import HydratedDate from '@/utils/components/HydratedDate'
@@ -24,10 +24,9 @@ const WhatsAppIcon = ({ size = 16 }: { size?: number }) => (
 )
 
 const staticSocialLinks = [
-  { label: 'Facebook', href: 'https://www.facebook.com/flyup.store', icon: <Facebook size={20} /> },
-  { label: 'TikTok', href: 'https://tiktok.com/@flyupsale', icon: <TikTokIcon size={20} /> },
-  { label: 'Instagram', href: 'https://www.instagram.com/devrocket.software/', icon: <Instagram size={20} /> },
-  { label: 'Youtube', href: 'https://www.youtube.com/@Fly-s9b', icon: <Youtube size={20} /> },
+  { label: 'Facebook', href: 'https://www.facebook.com/crececoncepav', icon: <Facebook size={20} /> },
+  { label: 'TikTok', href: 'https://www.tiktok.com/@crececoncepav', icon: <TikTokIcon size={20} /> },
+  { label: 'Youtube', href: 'https://www.youtube.com/@CrececonCEPAV-yr9ck', icon: <Youtube size={20} /> },
 ]
 
 interface WebFooterProps {
@@ -37,7 +36,7 @@ interface WebFooterProps {
 
 const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true }: WebFooterProps) => {
   const configs = await getConfigs()
-  const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
+  const waNumber = configs.WHATSAPP_NUMERO || '51906741327'
 
   const socialLinks = [
     ...staticSocialLinks,

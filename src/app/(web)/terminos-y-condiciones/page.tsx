@@ -20,7 +20,7 @@ export default function TerminosYCondicionesPage() {
         <Box sx={{ '& h4': { color: 'var(--web-dark, #025E44)', fontWeight: 800, mt: 5, mb: 2 }, '& p': { mb: 2, lineHeight: 1.8 } }}>
 
           <Typography paragraph>
-            Bienvenido a <strong>NOMBRE DE TU EMPRESA</strong> (&quot;Nosotros&quot;, &quot;ARM&quot;).
+            Bienvenido a <strong>INVERSIONES PERUANAS JPG EIRL</strong> (&quot;Nosotros&quot;, &quot;CEPAV&quot;).
             Al acceder a nuestro sitio web y utilizar nuestros servicios de Aula Virtual e Ingeniería,
             usted (&quot;el Usuario&quot;) acepta estar sujeto a los presentes Términos y Condiciones.
             Le sugerimos leer esta página cuidadosamente antes de proceder con cualquier compra o inscripción.
@@ -53,7 +53,7 @@ export default function TerminosYCondicionesPage() {
           <Typography variant="h4">4. Propiedad Intelectual e Industrial</Typography>
           <Typography paragraph>
             Todo el material expuesto en la plataforma web (textos, gráficos, videos, diagramas y recursos)
-            pertenece originariamente a NOMBRE DE TU EMPRESA o a sus instructores afiliados.
+            pertenece originariamente a INVERSIONES PERUANAS JPG EIRL o a sus instructores afiliados.
             Queda estrictamente prohibida su copia, distribución sin autorización comercial y cualquier modalidad de piratería.
             Cualquier violación directa implicará el bloqueo irrevocable de la cuenta y potenciales acciones civiles correspondientes.
           </Typography>
@@ -75,7 +75,7 @@ export default function TerminosYCondicionesPage() {
 
           <Typography variant="h4">7. Contacto y Libro de Reclamaciones</Typography>
           <Typography paragraph>
-            Para consultas de soporte, envíe sus requerimientos a <strong>arm.confiabilidad@gmail.com</strong>.
+            Para consultas de soporte, envíe sus requerimientos a <strong>informes@crececoncepav.com</strong>.
             De acuerdo a la legislación vigente de protección al consumidor peruano, mantenemos un{' '}
             <a href="/libro-de-reclamaciones" style={{ color: 'var(--web-dark, #025E44)', textDecoration: 'underline' }}>Libro de Reclamaciones a disposición pública</a>{' '}
             en nuestra plataforma web.

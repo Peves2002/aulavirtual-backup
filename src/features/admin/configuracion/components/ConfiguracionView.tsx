@@ -130,8 +130,8 @@ function CertificadosSettings({ config, onInputChange }: { config: any; onInputC
           {PLANTILLAS_CERTIFICADO.map((p) => {
             const isSelected = plantillaActiva === p.id
 
-            
-return (
+
+            return (
               <Box
                 key={p.id}
                 onClick={() => onInputChange('CERTIFICADO_PLANTILLA', p.id)}
@@ -1019,7 +1019,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
                   label='Número de WhatsApp'
                   value={config.PAGO_MANUAL_WHATSAPP_NUMERO || ''}
                   onChange={(e) => handleInputChange('PAGO_MANUAL_WHATSAPP_NUMERO', e.target.value)}
-                  helperText='Sin + ni espacios. Ej: 51959436827'
+                  helperText='Sin + ni espacios. Ej: 51906741327'
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>

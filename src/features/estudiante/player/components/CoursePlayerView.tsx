@@ -35,7 +35,7 @@ interface CoursePlayerViewProps {
 
 const CoursePlayerView = ({ course, initialLessonId }: CoursePlayerViewProps) => {
     const configs = useConfig()
-    const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
+    const waNumber = configs.WHATSAPP_NUMERO || '51906741327'
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('lg'))
     const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
@@ -216,14 +216,14 @@ const CoursePlayerView = ({ course, initialLessonId }: CoursePlayerViewProps) =>
             return (
                 <Grid item xs={12} key="certificate-section">
                     <CertificateSection
-                                        cursoId={storeCourse.id}
-                                        completarAutomatico={(course as any).completar_automatico ?? false}
-                                        onAllLessonsCompleted={() => {
-                                            const allLessons = storeCourse.modulos?.flatMap((m: any) => m.lecciones) ?? []
+                        cursoId={storeCourse.id}
+                        completarAutomatico={(course as any).completar_automatico ?? false}
+                        onAllLessonsCompleted={() => {
+                            const allLessons = storeCourse.modulos?.flatMap((m: any) => m.lecciones) ?? []
 
-                                            allLessons.forEach((l: any) => updateLessonProgress(l.id, true, 100))
-                                        }}
-                                    />
+                            allLessons.forEach((l: any) => updateLessonProgress(l.id, true, 100))
+                        }}
+                    />
                 </Grid>
             )
         }
@@ -729,14 +729,14 @@ const CoursePlayerView = ({ course, initialLessonId }: CoursePlayerViewProps) =>
                     {/* Certificación */}
                     {activeTab === 3 && storeCourse && (
                         <CertificateSection
-                                        cursoId={storeCourse.id}
-                                        completarAutomatico={(course as any).completar_automatico ?? false}
-                                        onAllLessonsCompleted={() => {
-                                            const allLessons = storeCourse.modulos?.flatMap((m: any) => m.lecciones) ?? []
+                            cursoId={storeCourse.id}
+                            completarAutomatico={(course as any).completar_automatico ?? false}
+                            onAllLessonsCompleted={() => {
+                                const allLessons = storeCourse.modulos?.flatMap((m: any) => m.lecciones) ?? []
 
-                                            allLessons.forEach((l: any) => updateLessonProgress(l.id, true, 100))
-                                        }}
-                                    />
+                                allLessons.forEach((l: any) => updateLessonProgress(l.id, true, 100))
+                            }}
+                        />
                     )}
 
                     {/* Comentarios */}
