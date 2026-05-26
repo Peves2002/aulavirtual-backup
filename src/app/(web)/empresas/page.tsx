@@ -12,7 +12,11 @@ export const metadata = {
   description: 'Descubre nuestros planes corporativos y capacita a tu equipo con los mejores profesionales del sector.',
 }
 
-export default function EmpresasPage() {
+export default async function EmpresasPage() {
+  const habilitado = await getConfig('WEB_EMPRESAS_HABILITADO', 'true')
+
+  if (habilitado !== 'true') notFound()
+
   return (
     <>
       {/* ── 1. HERO EMPRESAS ─────────────────────── */}

@@ -42,7 +42,6 @@ export const dynamic = 'force-dynamic'
 export default async function VerificarCertificadoPage({ params }: Props) {
   const { codigo } = params
 
-  // 1. Buscar el certificado en la DB
   const [certificado, configs] = await Promise.all([
     prisma.certificado.findUnique({
       where: { codigo_verificacion: codigo },
@@ -65,12 +64,10 @@ export default async function VerificarCertificadoPage({ params }: Props) {
     getConfigs()
   ])
 
-  // Configuración de branding
   const primaryColor = configs.PRIMARY_COLOR_MAIN
   const templateName = configs.TEMPLATE_NAME
   const logoUrl = configs.TEMPLATE_LOGO
 
-  // Caso: No encontrado
   if (!certificado) {
     return (
       <Container maxWidth="sm" sx={{ py: 12 }}>
@@ -115,9 +112,10 @@ export default async function VerificarCertificadoPage({ params }: Props) {
 
   const snapshot = certificado.datos as any
 
-  const nombreCompleto = snapshot?.usuario
-    ? `${snapshot.usuario.nombre} ${snapshot.usuario.apellido}`
-    : `${certificado.usuario.nombre} ${certificado.usuario.apellido}`
+  const nombreCompleto =
+    (snapshot?.usuario?.nombre && snapshot?.usuario?.apellido)
+      ? `${snapshot.usuario.nombre} ${snapshot.usuario.apellido}`
+      : `${certificado.usuario.nombre} ${certificado.usuario.apellido}`
 
   const cursoTitulo = snapshot?.curso?.titulo || certificado.curso.titulo
   const fechaEmisionVal = snapshot?.fechas?.emision || certificado.emitido_en
@@ -127,7 +125,6 @@ export default async function VerificarCertificadoPage({ params }: Props) {
     month: 'long',
     year: 'numeric'
   })
-
 
   return (
     <Container maxWidth="md" sx={{ py: 8 }}>
@@ -268,7 +265,7 @@ export default async function VerificarCertificadoPage({ params }: Props) {
 
           <Box sx={{ mt: 4, textAlign: 'center', maxWidth: 600 }}>
             <Typography variant="body2" color="text.secondary" fontStyle="italic">
-              Este certificado es auténtico y ha sido emitido de forma digital por <strong>{templateName}</strong>.
+              Este certificado es auténtico y ha sido emitido de forma digital.
               La integridad de este documento puede ser confirmada en este portal oficial de verificación.
             </Typography>
           </Box>

@@ -14,6 +14,8 @@ const WhatsAppIcon = ({ size = 20 }: { size?: number }) => (
   </svg>
 )
 
+import { useConfig } from '@/contexts/ConfigContext'
+
 import ScrollReveal from './ScrollReveal'
 import { sectionH2, sectionDesc, cardTitle, cardBody, smallText } from './typography'
 
@@ -27,7 +29,9 @@ const bullets = [
 ]
 
 export default function EnterpriseCTASection() {
-  const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MSG}`
+  const configs = useConfig()
+  const waNumber = configs.WHATSAPP_NUMERO_EMPRESAS || configs.WHATSAPP_NUMERO || '51928510125'
+  const waLink = `https://wa.me/${waNumber}?text=${WHATSAPP_MSG}`
 
   return (
     <section

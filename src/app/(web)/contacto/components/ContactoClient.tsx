@@ -4,6 +4,7 @@ import { Phone, Mail, MapPin, Facebook, Youtube, Send } from 'lucide-react'
 import { Box, TextField, Button, Grid, Typography, Stack, Paper, Divider } from '@mui/material'
 
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
+import { useConfig } from '@/contexts/ConfigContext'
 
 const FONT = 'Poppins, sans-serif'
 

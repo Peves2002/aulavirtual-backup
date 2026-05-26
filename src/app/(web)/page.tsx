@@ -24,16 +24,49 @@ export const metadata = {
 
 async function getHomeData() {
   try {
-    const coursesRaw = await prisma.curso.findMany({
-      where: { estado: 'PUBLICADO' },
-      include: {
-        profesor: { select: { nombre: true, apellido: true, avatar: true } },
-        categoria: { select: { id: true, nombre: true } },
-        _count: { select: { modulos: true, inscripciones: true } },
-      },
-      orderBy: { creado_en: 'desc' },
-      take: 6,
-    })
+    const [coursesRaw, rutasRaw, teachersRaw, configs] = await Promise.all([
+      // Cursos
+      prisma.curso.findMany({
+        where: { estado: 'PUBLICADO' },
+        include: {
+          profesor: { select: { nombre: true, apellido: true, avatar: true } },
+          categoria: { select: { id: true, nombre: true } },
+          _count: { select: { modulos: true, inscripciones: true } },
+        },
+        orderBy: { creado_en: 'desc' },
+        take: 6,
+      }),
+
+      // Rutas
+      prisma.rutaAprendizaje.findMany({
+        where: { esta_activo: true },
+        include: {
+          cursos: {
+            take: 4,
+            include: { curso: { select: { miniatura: true, titulo: true } } },
+          },
+        },
+        take: 3,
+      }),
+
+      // Profesores
+      prisma.usuario.findMany({
+        where: { rol: 'PROFESOR' },
+        select: {
+          id: true,
+          nombre: true,
+          apellido: true,
+          slug: true,
+          avatar: true,
+          cargo: true,
+          biografia: true,
+          _count: { select: { cursos_dictados: true } },
+        },
+        orderBy: { cursos_dictados: { _count: 'desc' } },
+        take: 8,
+      }),
+      getConfigs(),
+    ])
 
     const courses = await Promise.all(
       coursesRaw.map(async course => {
@@ -43,16 +76,30 @@ async function getHomeData() {
       })
     )
 
+    const heroTitle = configs.HOME_HERO_TITLE || 'Aprende sin límites,\ncrece sin fronteras'
+    const heroDescription = configs.HOME_HERO_DESCRIPTION || 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.'
+    let logos: { label: string; url: string }[] = []
+
+    try { logos = configs.HOME_LOGOS ? JSON.parse(configs.HOME_LOGOS) : [] } catch { logos = [] }
+
     return {
       courses: JSON.parse(JSON.stringify(courses)),
+      heroTitle,
+      heroDescription,
+      logos,
     }
   } catch {
-    return { courses: [] }
+    return {
+      courses: [],
+      heroTitle: 'Aprende sin límites,\ncrece sin fronteras',
+      heroDescription: 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.',
+      logos: [],
+    }
   }
 }
 
 export default async function HomePage() {
-  const { courses } = await getHomeData()
+  const { courses, heroTitle, heroDescription, logos } = await getHomeData()
   const WHATSAPP_NUMBER = '51906741327'
   const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola, me gustaría solicitar información sobre capacitaciones para mi empresa.')}`
 
@@ -121,8 +168,7 @@ export default async function HomePage() {
                   marginBottom: '2.5rem',
                 }}
               >
-                Capacitación especializada para agencias de viajes y empresas del sector turismo. 
-                Construimos equipos profesionales, eficientes y orientados a resultados.
+                {heroDescription}
               </p>
 
               {/* Botones */}
@@ -166,14 +212,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── 2. PROBLEMA ─────────────────────────── */}
-      <ProblemSection />
-
-      {/* ── 3. SOLUCIÓN ─────────────────────────── */}
-      <SolutionSection />
-
-      {/* ── 4. DIFERENCIAL ──────────────────────── */}
-      <DiferencialSection />
+      {/* ── 2. LOGO MARQUEE ─────────────────────────── */}
+      <ClientLogosMarquee logos={logos} />
 
       {/* ── 5. RESULTADOS ───────────────────────── */}
       <ResultsSection />
