@@ -6,11 +6,11 @@ import { usePathname } from 'next/navigation'
 import { Home, BookOpen, Users, Award, Map } from 'lucide-react'
 
 const ALL_NAV_ITEMS = [
-  { title: 'Inicio', url: '/', icon: Home, key: 'inicio' },
-  { title: 'Cursos', url: '/cursos', icon: BookOpen, key: 'cursos' },
-  { title: 'Rutas', url: '/rutas', icon: Map, key: 'rutas' },
-  { title: 'Nosotros', url: '/nosotros', icon: Users, key: 'nosotros' },
-  { title: 'Certificado', url: '/verificar-certificado', icon: Award, key: 'certificado' },
+  { title: 'Inicio', url: '/plataforma', icon: Home, key: 'inicio' },
+  { title: 'Cursos', url: '/plataforma/cursos', icon: BookOpen, key: 'cursos' },
+  { title: 'Rutas', url: '/plataforma/rutas', icon: Map, key: 'rutas' },
+  { title: 'Nosotros', url: '/plataforma/nosotros', icon: Users, key: 'nosotros' },
+  { title: 'Certificado', url: '/plataforma/verificar-certificado', icon: Award, key: 'certificado' },
 ]
 
 export default function MobileBottomNav({

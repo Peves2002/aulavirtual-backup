@@ -108,7 +108,7 @@ export default function ClientLogosMarquee({ logos: logosFromProps }: Props) {
             display: 'flex',
             gap: '1.25rem',
             width: 'max-content',
-            animation: 'marqueeScroll 40s linear infinite',
+            animation: 'marqueeScroll 400s linear infinite',
           }}
         >
           {track.map((logo, i) => (
