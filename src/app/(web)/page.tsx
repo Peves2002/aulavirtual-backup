@@ -5,9 +5,6 @@ import { ArrowRight, MessageCircle, BookOpen } from 'lucide-react'
 import prisma from '@/utils/libs/prisma'
 import HeroVisual from '@/features/web/home/components/HeroVisual'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
-import ProblemSection from '@/features/web/home/components/ProblemSection'
-import SolutionSection from '@/features/web/home/components/SolutionSection'
-import DiferencialSection from '@/features/web/home/components/DiferencialSection'
 import ResultsSection from '@/features/web/home/components/ResultsSection'
 import TargetAudienceSection from '@/features/web/home/components/TargetAudienceSection'
 import WorkModelsSection from '@/features/web/home/components/WorkModelsSection'
@@ -16,6 +13,8 @@ import WhyUsSection from '@/features/web/home/components/WhyUsSection'
 import NewsletterSection from '@/features/web/home/components/NewsletterSection'
 import FinalCTASection from '@/features/web/home/components/FinalCTASection'
 import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
+import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
+import { getConfigs } from '@/utils/libs/config'
 
 export const metadata = {
   title: 'CEPAV - Capacitación Especializada para el Sector Turismo',
@@ -24,7 +23,7 @@ export const metadata = {
 
 async function getHomeData() {
   try {
-    const [coursesRaw, rutasRaw, teachersRaw, configs] = await Promise.all([
+    const [coursesRaw, , , configs] = await Promise.all([
       // Cursos
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO' },
@@ -99,7 +98,7 @@ async function getHomeData() {
 }
 
 export default async function HomePage() {
-  const { courses, heroTitle, heroDescription, logos } = await getHomeData()
+  const { courses, heroDescription, logos } = await getHomeData()
   const WHATSAPP_NUMBER = '51906741327'
   const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola, me gustaría solicitar información sobre capacitaciones para mi empresa.')}`
 

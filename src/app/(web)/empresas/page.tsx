@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation'
+
 import ProblemSection from '@/features/web/home/components/ProblemSection'
 import SolutionSection from '@/features/web/home/components/SolutionSection'
 import ServicesSection from '@/features/web/home/components/ServicesSection'
@@ -6,6 +8,7 @@ import ResultsSection from '@/features/web/home/components/ResultsSection'
 import TargetAudienceSection from '@/features/web/home/components/TargetAudienceSection'
 import DiferencialSection from '@/features/web/home/components/DiferencialSection'
 import FinalCTASection from '@/features/web/home/components/FinalCTASection'
+import { getConfig } from '@/utils/libs/config'
 
 export const metadata = {
   title: 'Soluciones Corporativas - Aula Virtual',
