@@ -19,7 +19,7 @@ const toSentenceCase = (str: string) => {
 
 export default function NosotrosPage() {
   const clientesDir = path.join(process.cwd(), 'public', 'images', 'clientes')
-  let logos = []
+  let logos: { label: string; url: string }[] = []
   if (fs.existsSync(clientesDir)) {
     const files = fs.readdirSync(clientesDir)
     logos = files
@@ -33,10 +33,7 @@ export default function NosotrosPage() {
   return (
     <div className="flex flex-col gap-20 py-10">
       <div className="px-6 max-w-7xl mx-auto">
-        <div className="text-center mb-20 mt-10">
-          <div className="inline-block px-4 py-2 bg-[var(--web-primary)]/10 text-[var(--web-primary)] rounded-full font-semibold text-sm mb-6">
-            #TheHazmatCompany
-          </div>
+        <div className="text-center mb-20 mt-24">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 text-[var(--web-dark)]" style={{ fontFamily: 'Poppins, sans-serif' }}>
             Sobre Nosotros
           </h1>

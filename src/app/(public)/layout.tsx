@@ -1,32 +1,16 @@
 import React from 'react'
 import Link from 'next/link'
-import { Facebook, Instagram, Linkedin, MapPin, Phone, Mail, ArrowRight } from 'lucide-react'
+import { Facebook, Instagram, Linkedin, MapPin, Phone, Mail, ShieldCheck } from 'lucide-react'
 import Logo from '@components/layout/shared/Logo'
+import { AuthModalProvider } from '@/contexts/AuthModalContext'
+import PublicHeader from './PublicHeader'
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
+    <AuthModalProvider>
     <div className="min-h-screen bg-white flex flex-col">
-      <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm z-50 flex items-center justify-between px-6 md:px-10 h-20 transition-all">
-        <Link href="/" className="flex items-center gap-3 no-underline">
-          <Logo />
-        </Link>
-        <nav className="hidden md:flex gap-8 items-center">
-          <Link href="/" className="text-gray-600 hover:text-[var(--web-primary)] font-medium no-underline transition-colors text-sm">Inicio</Link>
-          <Link href="/nosotros" className="text-gray-600 hover:text-[var(--web-primary)] font-medium no-underline transition-colors text-sm">Nosotros</Link>
-          <Link href="/servicios" className="text-gray-600 hover:text-[var(--web-primary)] font-medium no-underline transition-colors text-sm">Servicios</Link>
-          <Link href="/cursos" className="text-gray-600 hover:text-[var(--web-primary)] font-medium no-underline transition-colors text-sm">Cursos</Link>
-          <Link href="/contacto" className="text-gray-600 hover:text-[var(--web-primary)] font-medium no-underline transition-colors text-sm">Contacto</Link>
-        </nav>
-        <div className="flex gap-4 items-center">
-          <Link href="/login" className="text-gray-700 hover:text-[var(--web-primary)] font-semibold no-underline text-sm transition-colors">
-            Iniciar Sesión
-          </Link>
-          <Link href="/register" className="bg-gradient-to-r from-[var(--web-primary)] to-[#1f7d6d] text-white font-semibold py-2.5 px-6 rounded-full hover:shadow-[0_4px_14px_rgba(37,146,127,0.4)] hover:-translate-y-0.5 transition-all text-sm no-underline">
-            Registrarse
-          </Link>
-        </div>
-      </header>
-      <main className="flex-1 mt-16">
+      <PublicHeader />
+      <main className="flex-1">
         {children}
       </main>
       <footer className="bg-[#0f172a] pt-20 pb-8 text-gray-400 relative overflow-hidden" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -87,25 +71,19 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             </ul>
           </div>
           
-          {/* Newsletter Column */}
+          {/* Validar Certificado Column */}
           <div className="md:col-span-3 lg:col-span-3">
-            <h4 className="text-white font-semibold mb-6 text-sm tracking-wider uppercase">Suscríbete</h4>
-            <p className="text-sm mb-4 leading-relaxed">
-              Recibe las últimas noticias y actualizaciones sobre nuestros cursos y servicios.
+            <h4 className="text-white font-semibold mb-6 text-sm tracking-wider uppercase">Certificados</h4>
+            <p className="text-sm mb-6 leading-relaxed">
+              Verifica la autenticidad de un certificado emitido por IFSEC Group escaneando el código QR o ingresando el código.
             </p>
-            <div className="relative flex flex-col gap-2">
-              <input 
-                type="email" 
-                placeholder="Tu correo electrónico" 
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--web-primary)] focus:bg-white/10 transition-all placeholder:text-gray-500"
-              />
-              <button 
-                type="button" 
-                className="w-full bg-[var(--web-primary)] text-white font-semibold py-3 px-4 rounded-xl flex justify-center items-center gap-2 hover:bg-[#1f7d6d] transition-colors mt-2"
-              >
-                Suscribirse <ArrowRight size={16} />
-              </button>
-            </div>
+            <Link
+              href="/verificar-certificado"
+              className="inline-flex items-center gap-2 bg-[var(--web-primary)] text-white font-semibold py-3 px-6 rounded-xl hover:bg-[#1f7d6d] transition-colors no-underline"
+            >
+              <ShieldCheck size={18} />
+              Validar Certificado
+            </Link>
           </div>
           
         </div>
@@ -120,5 +98,6 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         </div>
       </footer>
     </div>
+    </AuthModalProvider>
   )
 }

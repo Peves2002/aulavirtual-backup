@@ -7,11 +7,8 @@ export const metadata = {
 
 export default function ContactoPage() {
   return (
-    <div className="min-h-screen py-20 px-6 max-w-7xl mx-auto">
+    <div className="min-h-screen py-20 px-6 max-w-7xl mx-auto pt-28">
       <div className="text-center mb-16">
-        <div className="inline-block px-4 py-2 bg-[var(--web-primary)]/10 text-[var(--web-primary)] rounded-full font-semibold text-sm mb-6">
-          Siempre al Servicio
-        </div>
         <h1 className="text-4xl md:text-5xl font-bold mb-6 text-[var(--web-dark)]" style={{ fontFamily: 'Poppins, sans-serif' }}>
           Contáctanos
         </h1>

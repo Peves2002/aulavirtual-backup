@@ -42,8 +42,6 @@ export default function ClientLogosMarquee({ logos: logosFromProps }: Props) {
     <section
       style={{
         backgroundColor: '#f8fafc',
-        borderTop: '1px solid hsl(214,20%,91%)',
-        borderBottom: '1px solid hsl(214,20%,91%)',
         padding: '3rem 0',
         overflow: 'hidden',
       }}
@@ -136,16 +134,12 @@ function DynamicLogoCard({ label, url }: { label: string; url: string }) {
     if (!ref.current) return
     ref.current.style.filter = 'grayscale(0) opacity(1)'
     ref.current.style.transform = 'scale(1.05)'
-    ref.current.style.borderColor = 'var(--web-primary, #25927F)'
-    ref.current.style.boxShadow = '0 6px 24px rgba(37,146,127,0.2)'
   }
 
   const handleLeave = () => {
     if (!ref.current) return
-    ref.current.style.filter = 'grayscale(1) opacity(0.55)'
+    ref.current.style.filter = 'grayscale(1) opacity(0.5)'
     ref.current.style.transform = 'scale(1)'
-    ref.current.style.borderColor = 'hsl(214,20%,90%)'
-    ref.current.style.boxShadow = 'none'
   }
 
   return (
@@ -155,18 +149,15 @@ function DynamicLogoCard({ label, url }: { label: string; url: string }) {
       onMouseLeave={handleLeave}
       style={{
         flexShrink: 0,
-        width: '200px',
-        height: '80px',
-        padding: '0.5rem 0.5rem',
+        width: '160px',
+        height: '70px',
+        padding: '0.5rem 1rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: '16px',
-        border: '1.5px solid hsl(214,20%,90%)',
-        backgroundColor: '#ffffff',
         cursor: 'default',
-        filter: 'grayscale(1) opacity(0.55)',
-        transition: 'filter 0.3s ease, transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
+        filter: 'grayscale(1) opacity(0.5)',
+        transition: 'filter 0.3s ease, transform 0.3s ease',
         userSelect: 'none',
       }}
     >
@@ -186,28 +177,12 @@ function LogoCard({ label, initials, color, light }: HardcodedLogo) {
     if (!ref.current) return
     ref.current.style.filter = 'grayscale(0) opacity(1)'
     ref.current.style.transform = 'scale(1.05)'
-    ref.current.style.borderColor = color
-    ref.current.style.boxShadow = `0 6px 24px ${color}22`
-    const badge = ref.current.querySelector('.logo-badge') as HTMLElement | null
-
-    if (badge) {
-      badge.style.backgroundColor = light
-      badge.style.color = color
-    }
   }
 
   const handleLeave = () => {
     if (!ref.current) return
-    ref.current.style.filter = 'grayscale(1) opacity(0.55)'
+    ref.current.style.filter = 'grayscale(1) opacity(0.5)'
     ref.current.style.transform = 'scale(1)'
-    ref.current.style.borderColor = 'hsl(214,20%,90%)'
-    ref.current.style.boxShadow = 'none'
-    const badge = ref.current.querySelector('.logo-badge') as HTMLElement | null
-
-    if (badge) {
-      badge.style.backgroundColor = '#f1f5f9'
-      badge.style.color = '#64748b'
-    }
   }
 
   return (
@@ -220,38 +195,14 @@ function LogoCard({ label, initials, color, light }: HardcodedLogo) {
         display: 'flex',
         alignItems: 'center',
         gap: '0.875rem',
-        padding: '0.875rem 1.5rem',
-        borderRadius: '16px',
-        border: '1.5px solid hsl(214,20%,90%)',
-        backgroundColor: '#ffffff',
+        padding: '0.5rem 1.5rem',
         cursor: 'default',
-        filter: 'grayscale(1) opacity(0.55)',
-        transition: 'filter 0.3s ease, transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
+        filter: 'grayscale(1) opacity(0.5)',
+        transition: 'filter 0.3s ease, transform 0.3s ease',
         userSelect: 'none',
-        minWidth: '180px',
+        minWidth: '160px',
       }}
     >
-      <div
-        className="logo-badge"
-        style={{
-          width: '46px',
-          height: '46px',
-          borderRadius: '12px',
-          backgroundColor: '#f1f5f9',
-          color: '#64748b',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-          fontFamily: 'Poppins, sans-serif',
-          fontSize: '0.8125rem',
-          fontWeight: 800,
-          letterSpacing: '0.04em',
-          transition: 'background-color 0.3s, color 0.3s',
-        }}
-      >
-        {initials}
-      </div>
       <span
         style={{
           fontFamily: 'Poppins, sans-serif',
