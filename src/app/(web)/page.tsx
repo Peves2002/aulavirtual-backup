@@ -10,7 +10,6 @@ import TargetAudienceSection from '@/features/web/home/components/TargetAudience
 import WorkModelsSection from '@/features/web/home/components/WorkModelsSection'
 import ServicesSection from '@/features/web/home/components/ServicesSection'
 import WhyUsSection from '@/features/web/home/components/WhyUsSection'
-import NewsletterSection from '@/features/web/home/components/NewsletterSection'
 import FinalCTASection from '@/features/web/home/components/FinalCTASection'
 import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
