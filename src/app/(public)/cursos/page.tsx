@@ -40,22 +40,11 @@ export default async function CursosPage() {
             <p className="text-lg md:text-xl text-gray-400 max-w-xl font-light leading-relaxed mb-10">
               Desarrolla competencias reales y prepara a tu equipo para operaciones seguras con nuestros programas especializados bajo normativas internacionales.
             </p>
-            <div className="relative max-w-md">
-              <input
-                type="text"
-                placeholder="¿Qué deseas aprender hoy?"
-                className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-6 pr-12 text-white focus:outline-none focus:border-[var(--web-primary)] focus:bg-white/10 transition-all placeholder:text-gray-500 backdrop-blur-sm shadow-xl"
-                disabled
-              />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-[var(--web-primary)] rounded-full flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-              </div>
-            </div>
           </div>
 
           <div className="lg:col-span-5 hidden lg:block">
             <div className="relative w-full aspect-square bg-gradient-to-tr from-white/5 to-white/10 rounded-[3rem] border border-white/10 backdrop-blur-sm p-6 flex flex-col justify-end shadow-2xl">
-              <div className="absolute inset-0 bg-[url('/images/servicios/entrenamientos-vivenciales/armado-de-andamios/whatsapp-image-2025-05-19-at-2.32.02-pm.jpeg')] bg-cover bg-center opacity-40 rounded-[3rem] mix-blend-overlay"></div>
+              <div className="absolute inset-0 bg-[url('/images/servicios/entrenamientos-vivenciales/lucha-contra-incendios/whatsapp-image-2025-05-25-at-3.26.04-pm-1.jpeg')] bg-cover bg-center opacity-40 rounded-[3rem] mix-blend-overlay"></div>
               <div className="relative z-10 bg-black/40 backdrop-blur-md p-6 rounded-3xl border border-white/10">
                 <div className="text-[var(--web-light)] text-xs font-bold uppercase tracking-wider mb-2">Estadísticas</div>
                 <div className="flex justify-between items-end">
