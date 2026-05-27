@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/features/web/landing/components/ui/button";
 import { useCart } from "@/features/web/cart/context/CartContext";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const navLinks = [
   { name: "Inicio", href: "/" },
@@ -33,6 +34,7 @@ export function Navbar() {
   const { itemCount, setIsCartDrawerOpen } = useCart();
   const [isScrolled, setIsScrolled] = useState(pathname !== "/");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { openLogin, openRegister } = useAuthModal();
 
   useEffect(() => {
     setIsScrolled(window.scrollY > 50 || pathname !== "/");
@@ -122,16 +124,16 @@ export function Navbar() {
               </Link>
             ) : (
               <div className="flex items-center gap-3">
-                <Link href="/login" className="cursor-pointer">
+                <button onClick={() => openLogin()} className="cursor-pointer">
                   <span className={`text-sm font-bold transition-all ${isScrolled ? 'text-primary hover:text-accent' : 'text-white hover:text-white/70'}`}>
                     Iniciar Sesión
                   </span>
-                </Link>
-                <Link href="/register">
+                </button>
+                <button onClick={() => openRegister()}>
                   <Button className="bg-primary hover:bg-orange-600 text-white font-black px-6 py-5 rounded-2xl shadow-xl shadow-primary/20 transition-all hover:scale-105 cursor-pointer">
                     Registrarse
                   </Button>
-                </Link>
+                </button>
               </div>
             )}
           </div>
@@ -195,16 +197,16 @@ export function Navbar() {
                   </Link>
                 ) : (
                   <>
-                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                    <button onClick={() => { setIsMobileMenuOpen(false); openLogin(); }} className="w-full">
                       <Button variant="outline" className="w-full border-2 border-white/20 text-white font-black py-8 text-xl rounded-2xl hover:bg-white hover:text-primary">
                         <LogIn className="w-6 h-6 mr-3" /> Iniciar Sesión
                       </Button>
-                    </Link>
-                    <Link href="/register" onClick={() => setIsMobileMenuOpen(false)}>
+                    </button>
+                    <button onClick={() => { setIsMobileMenuOpen(false); openRegister(); }} className="w-full">
                       <Button className="w-full bg-primary text-white font-black py-8 text-xl rounded-2xl glow-orange">
                         <UserPlus className="w-6 h-6 mr-3" /> Registrarse
                       </Button>
-                    </Link>
+                    </button>
                   </>
                 )}
               </div>

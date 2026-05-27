@@ -81,7 +81,7 @@ export function GallerySection() {
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
     return (
-        <section id="galeria" ref={ref} className="relative py-20 lg:py-32 overflow-hidden bg-white">
+        <section id="galeria" ref={ref} className="relative py-10 lg:py-14 overflow-hidden bg-white">
             {/* Background Decor */}
             <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 blur-[150px] rounded-full translate-x-1/3 -translate-y-1/3" />
 
@@ -91,23 +91,22 @@ export function GallerySection() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.8 }}
-                    className="text-center mb-24"
+                    className="text-center mb-8"
                 >
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                        className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass-frost text-primary font-bold text-xs uppercase tracking-[0.4em] mb-8"
+                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-frost text-primary font-bold text-xs uppercase tracking-[0.4em] mb-3"
                     >
-                        <Camera className="w-4 h-4" />
+                        <Camera className="w-3 h-3" />
                         Galería de Excelencia
                     </motion.div>
 
-                    <h2 className="font-display text-3xl md:text-5xl font-black text-primary mb-10 leading-[1.1] md:leading-[0.9] tracking-tighter">
-                        Nuestra <br />
-                        <span className="text-gradient-orange">Evidencia Técnica</span>
+                    <h2 className="font-display text-2xl md:text-4xl font-black text-primary mb-3 leading-tight tracking-tighter">
+                        Nuestra <span className="text-gradient-orange">Evidencia Técnica</span>
                     </h2>
 
-                    <p className="text-slate-500 max-w-2xl mx-auto text-xl font-medium leading-relaxed">
+                    <p className="text-slate-500 max-w-2xl mx-auto text-base font-medium leading-relaxed">
                         Una inmersión visual en los procesos y resultados que definen el estándar de Elite Engineering.
                     </p>
                 </motion.div>
@@ -123,7 +122,7 @@ export function GallerySection() {
                             className="break-inside-avoid"
                         >
                             <div
-                                className="group relative rounded-[2rem] overflow-hidden cursor-pointer bg-primary shadow-xl"
+                                className="group relative rounded-2xl overflow-hidden cursor-pointer bg-primary shadow-xl"
                                 onClick={() => setSelectedImage(image)}
                             >
                                 <img
@@ -134,11 +133,11 @@ export function GallerySection() {
                                 />
 
                                 {/* Overlay Content */}
-                                <div className="absolute inset-0 p-8 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-                                    <span className="text-white/60 text-[10px] font-black uppercase tracking-widest mb-2">
+                                <div className="absolute inset-0 p-5 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                                    <span className="text-white/60 text-[10px] font-black uppercase tracking-widest mb-1">
                                         {image.category}
                                     </span>
-                                    <h3 className="text-xl font-black text-white leading-tight mb-4">
+                                    <h3 className="text-base font-black text-white leading-tight mb-3">
                                         {image.title}
                                     </h3>
                                     <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/20">

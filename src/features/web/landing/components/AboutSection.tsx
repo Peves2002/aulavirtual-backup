@@ -27,7 +27,7 @@ export function AboutSection() {
     <section
       id="nosotros"
       ref={ref}
-      className="relative py-20 lg:py-32 overflow-hidden bg-white"
+      className="relative py-10 lg:py-14 overflow-hidden bg-white"
     >
       {/* Structural Decor */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-slate-50/50 -skew-x-12 translate-x-1/4" />
@@ -42,7 +42,7 @@ export function AboutSection() {
             transition={{ duration: 1 }}
             className="relative"
           >
-            <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl bg-primary">
+            <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl bg-primary">
               <video
                 autoPlay
                 muted
@@ -50,11 +50,11 @@ export function AboutSection() {
                 playsInline
                 suppressHydrationWarning
                 src={getAssetPath("home3d.mp4")}
-                className="w-full h-[600px] object-cover opacity-80"
+                className="w-full h-[450px] object-cover opacity-80"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
-              <div className="absolute bottom-12 left-12 right-12">
-                <p className="text-white text-2xl font-black italic leading-tight">
+              <div className="absolute bottom-6 left-6 right-6">
+                <p className="text-white text-base font-black italic leading-tight">
                   "La ingeniería no es solo construir; es rediseñar el futuro con precisión."
                 </p>
               </div>
@@ -64,7 +64,7 @@ export function AboutSection() {
               initial={{ y: 20, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
               transition={{ delay: 0.5 }}
-              className="absolute -bottom-6 -right-4 md:-bottom-10 md:-right-10 glass-modern p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] shadow-2xl z-20"
+              className="absolute -bottom-4 -right-3 md:-bottom-6 md:-right-6 glass-modern p-4 md:p-6 rounded-xl md:rounded-2xl shadow-2xl z-20"
             >
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center">
@@ -87,17 +87,16 @@ export function AboutSection() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass-frost text-primary font-bold text-xs uppercase tracking-[0.4em] mb-10"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-frost text-primary font-bold text-xs uppercase tracking-[0.4em] mb-3"
             >
               Historia y Compromiso
             </motion.div>
 
-            <h2 className="font-display text-4xl md:text-6xl font-black text-primary mb-10 leading-[1.1] md:leading-[0.9] tracking-tighter">
-              Pasión por la <br />
-              <span className="text-gradient-orange">Excelencia Real</span>
+            <h2 className="font-display text-2xl md:text-4xl font-black text-primary mb-4 leading-tight tracking-tighter">
+              Pasión por la <span className="text-gradient-orange">Excelencia Real</span>
             </h2>
 
-            <div className="space-y-8 text-slate-500 text-xl font-medium leading-relaxed">
+            <div className="space-y-4 text-slate-500 text-sm md:text-base font-medium leading-relaxed">
               <p>
                 Desde 2023, <span className="text-primary font-black underline decoration-primary/30">Elite Engineering</span> ha sido el aliado estratégico para proyectos que exigen resultados impecables.
               </p>
@@ -107,11 +106,11 @@ export function AboutSection() {
             </div>
 
             {/* Mission/Vision Mini-Grid */}
-            <div className="grid sm:grid-cols-2 gap-6 mt-16">
+            <div className="grid sm:grid-cols-2 gap-4 mt-8">
               {values.map((val) => (
-                <div key={val.title} className="p-8 glass-modern rounded-3xl hover:-translate-y-2 transition-transform duration-500 bg-slate-50/50">
-                  <val.icon className="w-8 h-8 text-primary mb-4" />
-                  <h4 className="text-xl font-black text-primary mb-2">{val.title}</h4>
+                <div key={val.title} className="p-5 glass-modern rounded-2xl hover:-translate-y-1 transition-transform duration-500 bg-slate-50/50">
+                  <val.icon className="w-6 h-6 text-primary mb-3" />
+                  <h4 className="text-base font-black text-primary mb-1">{val.title}</h4>
                   <p className="text-sm text-slate-500 leading-relaxed font-medium">{val.text}</p>
                 </div>
               ))}
@@ -120,8 +119,8 @@ export function AboutSection() {
         </div>
 
         {/* Timeline Overhaul */}
-        <div className="mt-20 lg:mt-32 pt-16 lg:pt-24 border-t border-slate-100">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="mt-10 pt-8 border-t border-slate-100">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {timelineEvents.map((event, idx) => (
               <motion.div
                 key={event.year}
@@ -130,10 +129,10 @@ export function AboutSection() {
                 transition={{ delay: 0.2 + idx * 0.1 }}
                 className="flex flex-col items-center md:items-start text-center md:text-left"
               >
-                <span className="text-6xl font-black text-primary mb-4 transition-all duration-500 group-hover:scale-110 group-hover:glow-orange-sm">
+                <span className="text-4xl font-black text-primary mb-2">
                   {event.year}
                 </span>
-                <h5 className="text-lg font-black text-primary mb-2 uppercase tracking-wide">{event.title}</h5>
+                <h5 className="text-sm font-black text-primary mb-1 uppercase tracking-wide">{event.title}</h5>
                 <p className="text-sm text-slate-400 font-bold">{event.description}</p>
               </motion.div>
             ))}

@@ -22,9 +22,9 @@ export default function LandingPage() {
       <main>
         <HeroSection />
         <ServicesSection />
+        <AulaVirtualSection />
         <PortfolioSection />
         <VRExperienceSection />
-        <AulaVirtualSection />
         <AboutSection />
         <AchievementsSection />
         <ClientFocusSection />

@@ -122,7 +122,7 @@ export function AchievementsSection() {
   const prev = () => setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
 
   return (
-    <section id="logros" ref={ref} className="relative py-20 lg:py-32 overflow-hidden bg-white">
+    <section id="logros" ref={ref} className="relative py-10 lg:py-14 overflow-hidden bg-white">
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
@@ -133,21 +133,20 @@ export function AchievementsSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-8 lg:mb-10 max-w-4xl"
+          className="mb-6 max-w-4xl"
         >
           <motion.span
-            className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-[0.5em] mb-4"
+            className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-[0.5em] mb-3"
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ delay: 0.2 }}
           >
             Trayectoria de Élite
           </motion.span>
-          <h2 className="font-display text-4xl md:text-6xl font-black text-primary mb-4 leading-[0.9] tracking-tighter">
-            Impacto que <br />
-            <span className="text-gradient-orange">Trasciende</span>
+          <h2 className="font-display text-2xl md:text-4xl font-black text-primary mb-3 leading-tight tracking-tighter">
+            Impacto que <span className="text-gradient-orange">Trasciende</span>
           </h2>
-          <p className="text-slate-500 text-lg font-medium leading-relaxed max-w-2xl">
+          <p className="text-slate-500 text-base font-medium leading-relaxed max-w-2xl">
             Cada hito en nuestra historia es un testimonio de nuestra obsesión por la excelencia técnica y la innovación constante.
           </p>
         </motion.div>
@@ -160,7 +159,7 @@ export function AchievementsSection() {
                 variant="outline"
                 size="lg"
                 onClick={prev}
-                className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-200 text-slate-700 hover:bg-slate-300 hover:text-slate-900 border-none shadow-md transition-all duration-300"
+                className="w-10 h-10 rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 hover:text-slate-900 border-none shadow-md transition-all duration-300"
               >
                 <ChevronLeft className="w-6 h-6" />
               </Button>
@@ -168,7 +167,7 @@ export function AchievementsSection() {
                 variant="outline"
                 size="lg"
                 onClick={next}
-                className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-200 text-slate-700 hover:bg-slate-300 hover:text-slate-900 border-none shadow-md transition-all duration-300"
+                className="w-10 h-10 rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 hover:text-slate-900 border-none shadow-md transition-all duration-300"
               >
                 <ChevronRight className="w-6 h-6" />
               </Button>
@@ -197,7 +196,7 @@ export function AchievementsSection() {
                   key={index}
                   className="flex-shrink-0 w-full md:w-[calc(50%-20px)] lg:w-[calc(33.333%-27px)]"
                 >
-                  <div className="group h-[300px] md:h-[360px] glass-modern rounded-[2.5rem] bg-white border-none shadow-2xl relative overflow-hidden transition-all duration-700 hover:-translate-y-4">
+                  <div className="group h-[240px] md:h-[280px] glass-modern rounded-2xl bg-white border-none shadow-2xl relative overflow-hidden transition-all duration-700 hover:-translate-y-2">
                     {/* Immersive Media */}
                     <div className="absolute inset-0">
                       {achievement.type === "video" ? (
@@ -221,11 +220,11 @@ export function AchievementsSection() {
                     </div>
 
                     {/* Elite Metadata */}
-                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
-                      <span className="inline-flex w-fit px-4 py-1.5 rounded-full bg-primary text-white text-[10px] font-black uppercase tracking-[0.2em] mb-6 shadow-lg">
+                    <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                      <span className="inline-flex w-fit px-3 py-1 rounded-full bg-primary text-white text-[9px] font-black uppercase tracking-[0.2em] mb-3 shadow-lg">
                         {achievement.category}
                       </span>
-                      <h3 className="text-2xl md:text-3xl font-black text-white mb-6 leading-tight group-hover:text-accent transition-colors">
+                      <h3 className="text-base md:text-lg font-black text-white mb-0 leading-tight group-hover:text-accent transition-colors">
                         {achievement.title}
                       </h3>
                       <p className="text-slate-300 font-medium leading-relaxed opacity-0 group-hover:opacity-100 translate-y-8 group-hover:translate-y-0 transition-all duration-500">
@@ -233,8 +232,8 @@ export function AchievementsSection() {
                       </p>
                     </div>
 
-                    <div className="absolute top-10 right-10 w-16 h-16 rounded-[1.5rem] bg-white/10 backdrop-blur-2xl border border-white/20 flex items-center justify-center text-white shadow-2xl">
-                      <achievement.icon className="w-8 h-8" />
+                    <div className="absolute top-4 right-4 w-10 h-10 rounded-xl bg-white/10 backdrop-blur-2xl border border-white/20 flex items-center justify-center text-white shadow-2xl">
+                      <achievement.icon className="w-5 h-5" />
                     </div>
                   </div>
                 </motion.div>
@@ -244,16 +243,16 @@ export function AchievementsSection() {
         </div>
 
         {/* High Precision Stats Bar */}
-        <div className="mt-32 pt-20 border-t border-slate-100">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 text-left">
+        <div className="mt-10 pt-8 border-t border-slate-100">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-left">
             {[
               { value: "11+", label: "Hitos Destacados" },
               { value: "05+", label: "Instituciones de Élite" },
               { value: "07+", label: "Empresas Privadas" },
               { value: "100%", label: "Trazabilidad" },
             ].map((stat, idx) => (
-              <div key={idx} className="flex flex-col gap-2">
-                <span className="text-4xl md:text-5xl lg:text-7xl font-black text-gradient-orange">{stat.value}</span>
+              <div key={idx} className="flex flex-col gap-1">
+                <span className="text-3xl md:text-4xl font-black text-gradient-orange">{stat.value}</span>
                 <span className="text-[10px] uppercase tracking-[0.4em] font-black text-slate-400">{stat.label}</span>
               </div>
             ))}

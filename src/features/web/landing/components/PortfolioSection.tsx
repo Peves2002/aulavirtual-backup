@@ -119,7 +119,7 @@ export function PortfolioSection() {
     );
 
     return (
-        <section id="portafolio" ref={ref} className="relative py-20 lg:py-32 overflow-hidden bg-secondary/20">
+        <section id="portafolio" ref={ref} className="relative py-10 lg:py-14 overflow-hidden bg-secondary/20">
             {/* Background elements */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[150px] rounded-full" />
 
@@ -128,37 +128,37 @@ export function PortfolioSection() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.8 }}
-                    className="text-center mb-24"
+                    className="text-center mb-8"
                 >
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                        className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass-frost text-primary font-bold text-xs uppercase tracking-[0.4em] mb-8"
+                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-frost text-primary font-bold text-xs uppercase tracking-[0.4em] mb-3"
                     >
                         Nuestra Trayectoria
                     </motion.div>
 
-                    <h2 className="font-display text-3xl md:text-5xl font-black text-primary mb-8 tracking-tighter">
+                    <h2 className="font-display text-2xl md:text-4xl font-black text-primary mb-3 tracking-tighter">
                         Ingeniería en <span className="text-gradient-orange">Acción</span>
                     </h2>
 
-                    <p className="text-slate-500 max-w-2xl mx-auto text-xl font-medium leading-relaxed">
+                    <p className="text-slate-500 max-w-2xl mx-auto text-base font-medium leading-relaxed">
                         Un vistazo a los desafíos que hemos superado y las visiones que hemos materializado a lo largo del país.
                     </p>
                 </motion.div>
 
                 {/* Modern Filter Tabs */}
-                <div className="flex flex-wrap justify-center gap-4 mb-24">
+                <div className="flex flex-wrap justify-center gap-3 mb-8">
                     {categories.map((category) => (
                         <button
                             key={category.id}
                             onClick={() => setActiveCategory(category.id)}
-                            className={`px-8 py-3 rounded-2xl font-black text-sm uppercase tracking-widest transition-all duration-500 flex items-center gap-3 ${activeCategory === category.id
+                            className={`px-5 py-2 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-500 flex items-center gap-2 ${activeCategory === category.id
                                 ? "bg-primary text-white shadow-2xl scale-105"
                                 : "bg-white/50 text-slate-400 hover:text-primary border border-slate-100"
                                 }`}
                         >
-                            <category.icon className={`w-4 h-4 ${activeCategory === category.id ? 'text-primary' : ''}`} />
+                            <category.icon className={`w-3 h-3 ${activeCategory === category.id ? 'text-primary' : ''}`} />
                             {category.label}
                         </button>
                     ))}
@@ -180,8 +180,8 @@ export function PortfolioSection() {
                                 transition={{ duration: 0.6, delay: idx * 0.05 }}
                                 className="break-inside-avoid"
                             >
-                                <div 
-                                    className="group relative rounded-[2.5rem] overflow-hidden shadow-2xl bg-primary cursor-pointer"
+                                <div
+                                    className="group relative rounded-2xl overflow-hidden shadow-2xl bg-primary cursor-pointer"
                                     onClick={() => setSelectedMedia({ url: project.image, type: project.type })}
                                 >
                                     {/* Media Container */}
@@ -205,33 +205,33 @@ export function PortfolioSection() {
                                         )}
 
                                         {/* Floating Content Overlay */}
-                                        <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-end translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
-                                            <div className="space-y-4">
+                                        <div className="absolute inset-0 p-5 flex flex-col justify-end translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                                            <div className="space-y-2">
                                                 <span className="text-primary font-black uppercase tracking-[0.3em] text-[10px] bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
                                                     {categories.find(c => c.id === project.category)?.label}
                                                 </span>
-                                                <h3 className="text-2xl md:text-3xl font-black text-white leading-tight">
+                                                <h3 className="text-base md:text-lg font-black text-white leading-tight">
                                                     {project.title}
                                                 </h3>
                                                 <p className="text-white/60 text-sm font-medium line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                                     {project.description}
                                                 </p>
-                                                <div className="pt-4 flex gap-4 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">
-                                                    <Button 
-                                                        className="rounded-2xl bg-white text-primary font-black hover:bg-accent hover:text-white transition-colors"
+                                                <div className="pt-2 flex gap-3 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+                                                    <Button
+                                                        className="rounded-xl bg-white text-primary font-black text-xs py-2 px-4 hover:bg-accent hover:text-white transition-colors"
                                                         onClick={(e) => e.stopPropagation()}
                                                     >
                                                         Detalles
                                                     </Button>
-                                                    <div className="w-12 h-12 rounded-2xl glass-frost flex items-center justify-center text-white hover:bg-white hover:text-primary transition-colors cursor-pointer">
-                                                        <Maximize2 className="w-5 h-5" />
+                                                    <div className="w-8 h-8 rounded-xl glass-frost flex items-center justify-center text-white hover:bg-white hover:text-primary transition-colors cursor-pointer">
+                                                        <Maximize2 className="w-4 h-4" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
                                         {/* Hover Glow */}
-                                        <div className="absolute inset-0 border-4 border-primary/0 group-hover:border-primary/20 rounded-[2.5rem] transition-all duration-500" />
+                                        <div className="absolute inset-0 border-4 border-primary/0 group-hover:border-primary/20 rounded-2xl transition-all duration-500" />
                                     </div>
                                 </div>
                             </motion.div>

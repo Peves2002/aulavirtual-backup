@@ -1,26 +1,23 @@
 'use client'
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, MessageCircle, ChevronDown, Building2, Sparkles, GraduationCap, BookOpen, Clock, Users, Play } from "lucide-react";
+import { ArrowRight, ChevronDown, Building2, GraduationCap, Shield, TrendingUp } from "lucide-react";
 import { Button } from "./ui/button";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { getAssetPath } from "@/lib/assets";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
   type CarouselApi,
 } from "./ui/carousel";
 import AutoplayPlugin from "embla-carousel-autoplay";
 
-// Floating particles component
 function FloatingParticles() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {[...Array(30)].map((_, i) => (
+      {[...Array(20)].map((_, i) => (
         <motion.div
           key={i}
           className="absolute w-1 h-1 bg-primary rounded-full"
@@ -29,10 +26,9 @@ function FloatingParticles() {
             top: `${Math.random() * 100}%`,
           }}
           animate={{
-            y: [0, -100, 0],
-            x: [0, Math.random() * 50 - 25, 0],
-            opacity: [0, 0.8, 0],
-            scale: [0, 1.5, 0],
+            y: [0, -80, 0],
+            opacity: [0, 0.6, 0],
+            scale: [0, 1.2, 0],
           }}
           transition={{
             duration: 6 + Math.random() * 4,
@@ -46,56 +42,29 @@ function FloatingParticles() {
   );
 }
 
-// 3D Grid background
-function GridBackground() {
-  return (
-    <div className="absolute inset-0 overflow-hidden opacity-10">
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, hsl(4 82% 56% / 0.1) 1px, transparent 1px),
-            linear-gradient(to bottom, hsl(4 82% 56% / 0.1) 1px, transparent 1px)
-          `,
-          backgroundSize: "60px 60px",
-          transform: "perspective(500px) rotateX(60deg)",
-          transformOrigin: "center top",
-        }}
-      />
-    </div>
-  );
-}
+const courseImages = [
+  { src: getAssetPath("carrousel/carrousel_2.png"), label: "Modelamiento BIM" },
+  { src: getAssetPath("carrousel/carrousel_3.png"), label: "Capacitaciones" },
+  { src: getAssetPath("carrousel/carrousel_4.png"), label: "Infraestructura" },
+  { src: getAssetPath("carrousel/carrousel.png"), label: "Visualización 3D" },
+];
 
 export function HeroSection() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     if (!api) return;
     setCurrent(api.selectedScrollSnap());
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
-    });
+    api.on("select", () => setCurrent(api.selectedScrollSnap()));
   }, [api]);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth - 0.5) * 20,
-        y: (e.clientY / window.innerHeight - 0.5) * 20,
-      });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
 
   return (
     <section
       id="inicio"
       className="relative h-screen flex items-center justify-center overflow-hidden pt-20"
     >
-      {/* Immersive Background */}
+      {/* Background */}
       <div className="absolute inset-0 bg-primary z-0">
         <video
           autoPlay
@@ -106,12 +75,11 @@ export function HeroSection() {
           src={getAssetPath("home3d.mp4")}
           className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/60 to-primary" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/50 to-primary" />
       </div>
 
       <FloatingParticles />
 
-      {/* Hero Content Wrapper */}
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <Carousel
           setApi={setApi}
@@ -120,56 +88,54 @@ export function HeroSection() {
           opts={{ loop: true }}
         >
           <CarouselContent>
-            {/* Slide 1: Primary Value Proposition */}
+
+            {/* ── Slide 1: Ingeniería de Elite ── */}
             <CarouselItem>
-              <div className="grid lg:grid-cols-2 gap-12 items-center py-8 md:py-12">
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center py-8">
+                {/* Left: copy */}
                 <motion.div
-                  initial={{ opacity: 0, x: -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8 }}
                   className="text-left"
                 >
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-frost text-white font-bold text-xs uppercase tracking-[0.4em] mb-8"
+                    transition={{ delay: 0.2 }}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-frost text-white font-bold text-xs uppercase tracking-[0.4em] mb-6"
                   >
                     <Building2 className="w-4 h-4 text-primary" />
                     Líderes en Implementación BIM
                   </motion.div>
 
-                  <h1 className="hero-heading text-white mb-6 md:mb-8 leading-[1.1] md:leading-[1.15]">
+                  <h1 className="hero-heading text-white mb-6 leading-[1.1]">
                     Ingeniería de <br />
                     <span className="text-gradient-orange">Elite</span>
                     <span className="text-primary">.</span>
                   </h1>
 
-                  <p className="text-xl md:text-2xl text-slate-200/90 mb-12 max-w-xl leading-relaxed font-light">
-                    Transformamos la construcción con <span className="text-white font-bold">precisión extrema</span> y <span className="text-white font-bold">tecnología BIM</span> de vanguardia.
+                  <p className="text-lg md:text-xl text-slate-200/90 mb-10 max-w-lg leading-relaxed font-light">
+                    Transformamos la construcción con{" "}
+                    <span className="text-white font-bold">precisión extrema</span> y{" "}
+                    <span className="text-white font-bold">tecnología BIM</span> de vanguardia.
                   </p>
 
-                  <div className="flex flex-col sm:flex-row items-center gap-6">
+                  <div className="flex flex-col sm:flex-row items-center gap-4">
                     <a href="https://wa.me/51955833613" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                      <Button
-                        size="lg"
-                        className="w-full sm:w-auto bg-primary hover:bg-orange-600 text-white font-black px-10 py-8 text-xl rounded-2xl glow-orange-strong hover:scale-105 transition-all duration-300 group"
-                      >
+                      <Button className="w-full sm:w-auto bg-primary hover:bg-orange-600 text-white font-black px-8 py-6 text-base rounded-2xl glow-orange-strong hover:scale-105 transition-all group">
                         ¡Conversemos!
-                        <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </a>
                     <a href="#servicios" className="w-full sm:w-auto">
-                      <Button
-                        size="lg"
-                        className="w-full sm:w-auto glass-modern hover:bg-white/20 text-white font-bold px-10 py-8 text-xl rounded-2xl transition-all duration-300"
-                      >
+                      <Button className="w-full sm:w-auto glass-modern hover:bg-white/20 text-white font-bold px-8 py-6 text-base rounded-2xl transition-all">
                         Ver Servicios
                       </Button>
                     </a>
                   </div>
 
-                  {/* High Impact Stats */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mt-16 pt-12 border-t border-white/10">
+                  <div className="grid grid-cols-4 gap-6 mt-10 pt-8 border-t border-white/10">
                     {[
                       { value: "50+", label: "Proyectos" },
                       { value: "50+", label: "Cursos" },
@@ -178,156 +144,163 @@ export function HeroSection() {
                     ].map((stat, idx) => (
                       <motion.div
                         key={stat.label}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 + idx * 0.1 }}
                         className="flex flex-col"
                       >
-                        <span className="text-3xl md:text-4xl font-black text-gradient-orange">{stat.value}</span>
-                        <span className="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold">{stat.label}</span>
+                        <span className="text-2xl md:text-3xl font-black text-gradient-orange">{stat.value}</span>
+                        <span className="text-[9px] uppercase tracking-[0.2em] text-slate-400 font-bold">{stat.label}</span>
                       </motion.div>
                     ))}
                   </div>
                 </motion.div>
 
+                {/* Right: impactful visual */}
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1 }}
-                  className="hidden lg:flex justify-center lg:-mt-48"
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.9, delay: 0.1 }}
+                  className="hidden lg:block relative"
                 >
-                  <div className="relative group">
-                    <div className="absolute -inset-20 bg-primary/20 blur-[120px] rounded-full group-hover:bg-primary/30 transition-all duration-700" />
+                  {/* Glow aura */}
+                  <div className="absolute inset-0 scale-110 bg-primary/20 blur-[80px] rounded-full pointer-events-none" />
+
+                  {/* Main image card */}
+                  <div className="relative rounded-3xl overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.6)] border border-white/10">
                     <img
                       src={getAssetPath("carrousel/carrousel.png")}
                       alt="Elite BIM Visualization"
-                      className="relative z-10 w-full max-w-lg rounded-3xl drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:scale-105 transition-transform duration-700"
+                      className="w-full h-auto object-cover"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-transparent" />
                   </div>
+
+                  {/* Floating badge — top right */}
+                  <motion.div
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute -top-5 -right-5 glass-modern bg-white/10 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-2xl border border-white/20"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center">
+                        <Shield className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <span className="block text-[9px] font-black uppercase tracking-widest text-white/60">Estándar</span>
+                        <span className="block text-sm font-black text-white">ISO 19650</span>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Floating stat — bottom left */}
+                  <motion.div
+                    animate={{ y: [0, 8, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                    className="absolute -bottom-5 -left-5 glass-modern bg-white/10 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-2xl border border-white/20"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center">
+                        <TrendingUp className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <span className="block text-[9px] font-black uppercase tracking-widest text-white/60">Proyectos</span>
+                        <span className="block text-sm font-black text-gradient-orange">50+ Completados</span>
+                      </div>
+                    </div>
+                  </motion.div>
                 </motion.div>
               </div>
             </CarouselItem>
 
-            {/* Slide 2: Aula Virtual / Education */}
+            {/* ── Slide 2: Aula Virtual ── */}
             <CarouselItem>
-              <div className="grid lg:grid-cols-2 gap-12 items-center py-8 md:py-12">
-                <div className="text-left">
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center py-8">
+                {/* Left: copy */}
+                <motion.div
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="text-left"
+                >
                   <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-frost text-white font-bold text-xs uppercase tracking-[0.4em] mb-8"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-frost text-white font-bold text-xs uppercase tracking-[0.4em] mb-6"
                   >
                     <GraduationCap className="w-4 h-4 text-primary" />
                     Elite Academy
                   </motion.div>
-                  <h2 className="hero-heading text-white mb-8">
+
+                  <h2 className="hero-heading text-white mb-6 leading-[1.1]">
                     Aula <br />
                     <span className="text-gradient-orange">Virtual</span>
                   </h2>
-                  <p className="text-xl md:text-2xl text-slate-200/90 mb-12 max-w-xl leading-relaxed">
+
+                  <p className="text-lg md:text-xl text-slate-200/90 mb-10 max-w-lg leading-relaxed">
                     Capacitación élite para profesionales que buscan liderar el cambio tecnológico en la ingeniería.
                   </p>
-                  <div className="flex gap-6">
+
+                  <div className="flex gap-4">
                     <Link href="/cursos">
-                      <Button className="bg-primary hover:bg-orange-600 text-white font-black px-10 py-8 text-xl rounded-2xl glow-orange-strong shadow-xl">
+                      <Button className="bg-primary hover:bg-orange-600 text-white font-black px-8 py-6 text-base rounded-2xl glow-orange-strong shadow-xl hover:scale-105 transition-all">
                         Explorar Cursos
+                        <ArrowRight className="ml-2 w-5 h-5" />
                       </Button>
                     </Link>
                   </div>
-                </div>
-                <div className="hidden lg:block relative h-[400px] w-full max-w-2xl mx-auto">
-                  {/* Background Aura */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary/10 blur-[100px] rounded-full animate-pulse" />
+                </motion.div>
 
-                  {/* Main Image (carrousel_2.png) */}
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1 }}
-                    className="relative z-10 w-[70%] mx-auto"
-                  >
-                    <img
-                      src={getAssetPath("carrousel/carrousel_2.png")}
-                      alt="Academy Platform"
-                      className="w-full drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-[2rem] border border-white/10"
-                    />
-                  </motion.div>
+                {/* Right: 2×2 image grid */}
+                <motion.div
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.9, delay: 0.1 }}
+                  className="hidden lg:grid grid-cols-2 gap-3 relative"
+                >
+                  {/* Glow */}
+                  <div className="absolute inset-0 scale-110 bg-primary/15 blur-[70px] rounded-full pointer-events-none" />
 
-                  {/* Upper-Left (carrousel_3.png) */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -30, y: -30 }}
-                    whileInView={{ opacity: 1, x: 0, y: 0 }}
-                    animate={{ y: [0, -15, 0] }}
-                    transition={{
-                      opacity: { duration: 1, delay: 0.3 },
-                      x: { duration: 1, delay: 0.3 },
-                      y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
-                    }}
-                    className="absolute -top-16 -left-12 w-[40%] z-20"
-                  >
-                    <img
-                      src={getAssetPath("carrousel/carrousel_3.png")}
-                      alt="BIM Course"
-                      className="w-full drop-shadow-[0_15px_30px_rgba(0,0,0,0.4)] rounded-2xl border border-white/20 glass-modern p-1"
-                    />
-                  </motion.div>
-
-                  {/* Middle-Right (carrousel_4.png) */}
-                  <motion.div
-                    initial={{ opacity: 0, x: 30, y: 10 }}
-                    whileInView={{ opacity: 1, x: 0, y: 0 }}
-                    animate={{ y: [0, 15, 0] }}
-                    transition={{
-                      opacity: { duration: 1, delay: 0.5 },
-                      x: { duration: 1, delay: 0.5 },
-                      y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }
-                    }}
-                    className="absolute top-1/4 -right-4 w-[45%] z-20"
-                  >
-                    <img
-                      src={getAssetPath("carrousel/carrousel_4.png")}
-                      alt="Infrastructure"
-                      className="w-full drop-shadow-[0_15px_30px_rgba(0,0,0,0.4)] rounded-2xl border border-white/20 glass-modern p-1"
-                    />
-                  </motion.div>
-
-                  {/* Bottom-Left (carrousel.png) */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -20, y: 30 }}
-                    whileInView={{ opacity: 1, x: 0, y: 0 }}
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{
-                      opacity: { duration: 1, delay: 0.7 },
-                      x: { duration: 1, delay: 0.7 },
-                      y: { duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
-                    }}
-                    className="absolute bottom-32 left-4 w-[35%] z-20"
-                  >
-                    <img
-                      src={getAssetPath("carrousel/carrousel.png")}
-                      alt="Visualization"
-                      className="w-full drop-shadow-[0_15px_30px_rgba(0,0,0,0.4)] rounded-2xl border border-white/20 glass-modern p-1"
-                    />
-                  </motion.div>
-                </div>
+                  {courseImages.map((item, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
+                      className="relative rounded-2xl overflow-hidden aspect-video shadow-2xl border border-white/10 group"
+                    >
+                      <img
+                        src={item.src}
+                        alt={item.label}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/10 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-3">
+                        <span className="text-white font-black text-[10px] uppercase tracking-widest">{item.label}</span>
+                      </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
               </div>
             </CarouselItem>
+
           </CarouselContent>
 
+          {/* Slide indicators */}
           <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-3 z-30">
             {[0, 1].map((idx) => (
               <button
                 key={idx}
                 onClick={() => api?.scrollTo(idx)}
-                className={`w-12 h-1.5 rounded-full transition-all duration-500 ${current === idx ? "bg-primary" : "bg-white/20 hover:bg-white/40"
-                  }`}
+                className={`h-1.5 rounded-full transition-all duration-500 ${current === idx ? "w-12 bg-primary" : "w-4 bg-white/20 hover:bg-white/40"}`}
               />
             ))}
           </div>
         </Carousel>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll indicator */}
       <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}

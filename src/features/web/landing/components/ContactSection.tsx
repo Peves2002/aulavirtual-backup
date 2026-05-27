@@ -101,7 +101,7 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contacto" ref={ref} className="relative py-16 lg:py-24 overflow-hidden bg-secondary">
+    <section id="contacto" ref={ref} className="relative py-10 lg:py-14 overflow-hidden bg-secondary">
       {/* Immersive Background Decor */}
       <div className="absolute top-0 left-0 w-full h-full bg-primary/5 -skew-y-6 translate-y-1/2" />
       <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-primary/5 blur-[150px] rounded-full" />
@@ -117,17 +117,16 @@ export function ContactSection() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass-frost text-primary font-bold text-xs uppercase tracking-[0.4em] mb-4"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-frost text-primary font-bold text-xs uppercase tracking-[0.4em] mb-3"
             >
               Conecta con Élite
             </motion.div>
 
-            <h2 className="font-display text-3xl md:text-5xl font-black text-primary mb-4 leading-[1] tracking-tighter">
-              Ready for the <br />
-              <span className="text-gradient-orange">Next Level?</span>
+            <h2 className="font-display text-2xl md:text-4xl font-black text-primary mb-3 leading-tight tracking-tighter">
+              Ready for the <span className="text-gradient-orange">Next Level?</span>
             </h2>
 
-            <p className="text-slate-500 max-w-xl text-lg font-medium leading-relaxed mb-8">
+            <p className="text-slate-500 max-w-xl text-base font-medium leading-relaxed mb-6">
               Llevamos la precisión técnica a tu puerta. Nuestro equipo está listo para integrar metodologías de vanguardia en tu organización.
             </p>
 
@@ -139,9 +138,9 @@ export function ContactSection() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.3 + idx * 0.1 }}
-                  className="group flex flex-col md:flex-row items-center gap-3 md:gap-5 p-4 md:p-6 glass-modern rounded-2xl md:rounded-3xl bg-white/70 hover:shadow-2xl transition-all duration-700 text-center md:text-left"
+                  className="group flex flex-col md:flex-row items-center gap-3 p-4 glass-modern rounded-xl bg-white/70 hover:shadow-xl transition-all duration-700 text-center md:text-left"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center group-hover:bg-accent transition-colors duration-500 shadow-xl">
+                  <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center group-hover:bg-accent transition-colors duration-500 shadow-xl shrink-0">
                     <info.icon className="w-6 h-6 text-white" />
                   </div>
                   <div>
@@ -160,7 +159,7 @@ export function ContactSection() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative"
           >
-            <div className="bg-white p-6 md:p-8 lg:p-10 rounded-[2rem] md:rounded-[3rem] shadow-2xl relative z-10">
+            <div className="bg-white p-6 rounded-2xl shadow-2xl relative z-10">
               <h3 className="text-xl font-black text-primary mb-2">Direct Inquiry</h3>
               <p className="text-slate-500 font-bold text-sm mb-6">Cuéntanos sobre tu visión técnica.</p>
 
@@ -214,7 +213,7 @@ export function ContactSection() {
 
                 <Button
                   type="submit"
-                  className="w-full py-6 rounded-2xl bg-primary hover:bg-orange-600 text-white font-black text-base shadow-2xl glow-orange-strong group"
+                  className="w-full py-4 rounded-xl bg-primary hover:bg-orange-600 text-white font-black text-sm shadow-2xl glow-orange-strong group"
                 >
                   {isSubmitted ? (
                     <span className="flex items-center gap-3"><CheckCircle2 className="w-6 h-6" /> ¡ENVIADO!</span>
