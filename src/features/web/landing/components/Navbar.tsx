@@ -117,7 +117,7 @@ export function Navbar() {
             {/* Auth Buttons */}
             {session ? (
               <Link href="/dashboard">
-                <Button className="bg-primary hover:bg-orange-600 text-white font-black px-6 py-5 rounded-2xl glow-orange transition-all hover:scale-105 cursor-pointer">
+                <Button className="bg-accent hover:bg-orange-600 text-white font-black px-6 py-5 rounded-2xl glow-orange transition-all hover:scale-105 cursor-pointer">
                   <User className="w-4 h-4 mr-2" />
                   MI AULA
                 </Button>
@@ -130,7 +130,7 @@ export function Navbar() {
                   </span>
                 </button>
                 <button onClick={() => openRegister()}>
-                  <Button className="bg-primary hover:bg-orange-600 text-white font-black px-6 py-5 rounded-2xl shadow-xl shadow-primary/20 transition-all hover:scale-105 cursor-pointer">
+                  <Button className="bg-accent hover:bg-orange-600 text-white font-black px-6 py-5 rounded-2xl shadow-xl shadow-accent/20 transition-all hover:scale-105 cursor-pointer">
                     Registrarse
                   </Button>
                 </button>
