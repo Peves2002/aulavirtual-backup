@@ -21,7 +21,7 @@ export default function PoliticaCambiosYDevolucionesPage() {
 
           <Typography paragraph>
             La presente política regula las condiciones de reembolso y cambios aplicables a los
-            servicios educativos ofrecidos por <strong>INVERSIONES PERUANAS JPG EIRL</strong>,
+            servicios educativos ofrecidos por <strong> CORPORACIÓN EDUCATIVA EN TURISMO S.A.C. (CEPAV)</strong>,
             con RUC <strong>20611331194</strong> — a través de su Aula Virtual. Al adquirir cualquier curso,
             el usuario declara haber leído y aceptado los términos aquí descritos.
           </Typography>
@@ -90,7 +90,7 @@ export default function PoliticaCambiosYDevolucionesPage() {
             entre <strong>15 y 30 días hábiles</strong>.
           </Typography>
           <Typography paragraph>
-            INVERSIONES PERUANAS JPG EIRL se reserva el derecho de descontar las comisiones operativas
+            CORPORACIÓN EDUCATIVA EN TURISMO S.A.C. (CEPAV) se reserva el derecho de descontar las comisiones operativas
             cobradas por la pasarela de pago que no sean reembolsables por la misma.
           </Typography>
 

@@ -19,33 +19,33 @@ export default function DiferencialSection() {
     <section style={{ backgroundColor: 'hsl(167, 30%, 96%)', padding: '5rem 1rem' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '4.5rem' }}>
-          <p style={eyebrow}>SECCIÓN: DIFERENCIAL CEPAV</p>
+          <p style={eyebrow}>DIFERENCIAL CEPAV</p>
           <h2 style={sectionH2}>¿Por qué elegir CEPAV para capacitar a tu equipo?</h2>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem' }}>
           {differentials.map((d, i) => (
             <ScrollReveal key={i} direction="up" delay={i * 0.1}>
-              <div 
-                style={{ 
-                  display: 'flex', 
-                  gap: '1.5rem', 
-                  backgroundColor: '#ffffff', 
-                  padding: '2rem', 
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '1.5rem',
+                  backgroundColor: '#ffffff',
+                  padding: '2rem',
                   borderRadius: '24px',
                   border: '1px solid hsl(167, 30%, 89%)',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
                   height: '100%'
                 }}
               >
-                <div 
-                  style={{ 
-                    width: '52px', 
-                    height: '52px', 
-                    borderRadius: '14px', 
-                    backgroundColor: 'rgba(37, 146, 127, 0.1)', 
-                    display: 'flex', 
-                    alignItems: 'center', 
+                <div
+                  style={{
+                    width: '52px',
+                    height: '52px',
+                    borderRadius: '14px',
+                    backgroundColor: 'rgba(37, 146, 127, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
                     justifyContent: 'center',
                     flexShrink: 0
                   }}

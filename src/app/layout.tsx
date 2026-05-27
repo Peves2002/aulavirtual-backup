@@ -14,13 +14,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const configs = await getConfigs()
   const title = configs.TEMPLATE_NAME || 'Aula Virtual'
   const slogan = configs.TEMPLATE_SLOGAN || ''
-  const logo = configs.TEMPLATE_LOGO || '/favicon.ico'
 
   return {
     title: slogan ? `${title} - ${slogan}` : title,
     description: slogan,
     icons: {
-      icon: logo
+      icon: '/favicon.ico',
     }
   }
 }

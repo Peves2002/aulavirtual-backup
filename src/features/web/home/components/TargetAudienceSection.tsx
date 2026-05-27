@@ -19,18 +19,18 @@ export default function TargetAudienceSection() {
     <section style={{ backgroundColor: '#ffffff', padding: '5rem 1rem' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <p style={eyebrow}>SECCIÓN: ¿PARA QUIÉN ES?</p>
+          <p style={eyebrow}>¿PARA QUIÉN ES?</p>
           <h2 style={sectionH2}>Trabajamos con empresas del sector turismo como:</h2>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '2rem' }}>
           {audiences.map((a, i) => (
             <ScrollReveal key={i} direction="up" delay={i * 0.1}>
-              <div 
-                style={{ 
-                  textAlign: 'center', 
-                  padding: '2rem 1.5rem', 
-                  borderRadius: '20px', 
+              <div
+                style={{
+                  textAlign: 'center',
+                  padding: '2rem 1.5rem',
+                  borderRadius: '20px',
                   backgroundColor: '#f8fafc',
                   border: '1.5px solid transparent',
                   transition: 'all 0.3s ease'
@@ -46,14 +46,14 @@ export default function TargetAudienceSection() {
                   e.currentTarget.style.boxShadow = 'none'
                 }}
               >
-                <div 
-                  style={{ 
-                    width: '72px', 
-                    height: '72px', 
-                    borderRadius: '18px', 
-                    backgroundColor: 'rgba(37, 146, 127, 0.08)', 
-                    display: 'flex', 
-                    alignItems: 'center', 
+                <div
+                  style={{
+                    width: '72px',
+                    height: '72px',
+                    borderRadius: '18px',
+                    backgroundColor: 'rgba(37, 146, 127, 0.08)',
+                    display: 'flex',
+                    alignItems: 'center',
                     justifyContent: 'center',
                     margin: '0 auto 1.25rem'
                   }}

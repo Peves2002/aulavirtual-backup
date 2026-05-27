@@ -41,11 +41,11 @@ export default function PoliticaPrivacidadPage() {
       </Box>
 
       <Container maxWidth="md" sx={{ mt: -5, position: 'relative', zIndex: 2 }}>
-        <Paper 
-          elevation={0} 
-          sx={{ 
-            p: { xs: 4, md: 8 }, 
-            borderRadius: '32px', 
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 4, md: 8 },
+            borderRadius: '32px',
             boxShadow: '0 20px 50px rgba(0,0,0,0.05)',
             border: '1px solid #e2e8f0'
           }}
@@ -56,7 +56,7 @@ export default function PoliticaPrivacidadPage() {
                 1. IDENTIDAD DEL TITULAR
               </Typography>
               <Typography sx={{ fontFamily: FONT, color: '#475569', lineHeight: 1.8 }}>
-                CORPORACIÓN EDUCATIVA EN TURISMO S.A.C. (CEPAV), identificada con RUC N.º [COMPLETAR], con domicilio en Cooperativa Magdalena MZ B LT 23, distrito de Los Olivos, provincia y departamento de Lima, Perú, es titular del sitio web www.crececoncepav.com (en adelante, el “Portal”).
+                CORPORACIÓN EDUCATIVA EN TURISMO S.A.C. (CEPAV), identificada con RUC N.º 20611331194, con domicilio en Cooperativa Magdalena MZ B LT 23, distrito de Los Olivos, provincia y departamento de Lima, Perú, es titular del sitio web www.crececoncepav.com (en adelante, el “Portal”).
               </Typography>
               <Typography sx={{ fontFamily: FONT, color: '#475569', lineHeight: 1.8, mt: 1 }}>
                 CEPAV es una plataforma de educación online especializada en la formación de agentes de viaje y profesionales del sector turismo.
@@ -95,7 +95,7 @@ export default function PoliticaPrivacidadPage() {
                 <li>Fecha de nacimiento</li>
                 <li>País y ciudad de residencia</li>
               </Box>
-              
+
               <Typography sx={{ fontFamily: FONT, fontWeight: 700, color: '#1e293b', mt: 2, mb: 1 }}>Datos académicos y de uso:</Typography>
               <Box component="ul" sx={{ pl: 3, color: '#475569', fontFamily: FONT, lineHeight: 1.8 }}>
                 <li>Cursos adquiridos</li>
@@ -139,7 +139,7 @@ export default function PoliticaPrivacidadPage() {
                 <li>Brindar soporte académico y técnico</li>
                 <li>Gestionar reclamos y consultas</li>
               </Box>
-              
+
               <Typography sx={{ fontFamily: FONT, fontWeight: 700, color: '#1e293b', mt: 2, mb: 1 }}>Finalidades adicionales (previo consentimiento):</Typography>
               <Box component="ul" sx={{ pl: 3, color: '#475569', fontFamily: FONT, lineHeight: 1.8 }}>
                 <li>Enviar información promocional, ofertas y nuevos cursos</li>

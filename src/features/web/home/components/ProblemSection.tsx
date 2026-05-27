@@ -27,7 +27,7 @@ export default function ProblemSection() {
         >
           <ScrollReveal direction="left">
             <div>
-              <p style={eyebrow}>SECCIÓN: PROBLEMA</p>
+              <p style={eyebrow}>PROBLEMA</p>
               <h2 style={sectionH2}>
                 Sabemos los desafíos que <br />
                 <span style={{ color: 'var(--web-primary, #25927F)' }}>enfrenta tu empresa</span>
@@ -39,14 +39,14 @@ export default function ProblemSection() {
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {problems.map((p, i) => (
                   <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.875rem' }}>
-                    <div 
-                      style={{ 
-                        width: '24px', 
-                        height: '24px', 
-                        borderRadius: '50%', 
-                        backgroundColor: 'rgba(239, 68, 68, 0.1)', 
-                        display: 'flex', 
-                        alignItems: 'center', 
+                    <div
+                      style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        display: 'flex',
+                        alignItems: 'center',
                         justifyContent: 'center',
                         flexShrink: 0,
                         marginTop: '2px'
@@ -62,8 +62,8 @@ export default function ProblemSection() {
           </ScrollReveal>
 
           <ScrollReveal direction="right" delay={0.2}>
-            <div 
-              style={{ 
+            <div
+              style={{
                 position: 'relative',
                 borderRadius: '24px',
                 overflow: 'hidden',
@@ -79,7 +79,7 @@ export default function ProblemSection() {
             >
               {/* Overlay para legibilidad */}
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7))' }}></div>
-              
+
               <div style={{ position: 'relative', textAlign: 'center', padding: '2.5rem', zIndex: 1 }}>
                 <p style={{ ...sectionDesc, color: '#ffffff', fontWeight: 600, textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
                   No permitas que la falta de capacitación detenga el crecimiento de tu negocio turístico.

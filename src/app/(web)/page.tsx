@@ -173,11 +173,11 @@ export default async function HomePage() {
               {/* Botones */}
               <div className="flex flex-wrap gap-4" style={{ marginBottom: '2.5rem' }}>
                 <a
-                  href="#servicios"
+                  href="/cursos"
                   className="inline-flex items-center gap-2 no-underline rounded-xl font-semibold transition-all duration-300 hover:scale-105"
                   style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', color: '#ffffff', fontSize: '0.9375rem', padding: '0.875rem 1.75rem', boxShadow: '0 4px 20px rgba(var(--web-primary-rgb, 37, 146, 127),0.45)' }}
                 >
-                  Nuestros Servicios <ArrowRight size={18} />
+                  Ver cursos <ArrowRight size={18} />
                 </a>
                 <a
                   href={waLink}
@@ -269,7 +269,7 @@ export default async function HomePage() {
       <WhyUsSection />
 
       {/* ── 10. NEWSLETTER ──────────────────────── */}
-      <NewsletterSection />
+      {/* <NewsletterSection /> */}
 
       {/* ── 11. CTA FINAL ───────────────────────── */}
       <FinalCTASection />

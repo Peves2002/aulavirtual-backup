@@ -19,12 +19,12 @@ export default function ResultsSection() {
     <section style={{ backgroundColor: 'var(--web-dark, #025E44)', padding: '5rem 1rem', color: '#ffffff', position: 'relative', overflow: 'hidden' }}>
       {/* Background decoration */}
       <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '300px', height: '300px', borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.03)', pointerEvents: 'none' }} />
-      
+
       <div style={{ maxWidth: '1280px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', alignItems: 'center' }}>
           <ScrollReveal direction="left">
             <div>
-              <p style={{ ...eyebrow, color: 'var(--web-light, #BDD962)' }}>SECCIÓN: RESULTADOS</p>
+              <p style={{ ...eyebrow, color: 'var(--web-light, #BDD962)' }}>RESULTADOS</p>
               <h2 style={{ ...sectionH2, color: '#ffffff', marginBottom: '1rem' }}>¿Qué logrará tu empresa con CEPAV?</h2>
               <p style={{ ...sectionDesc, color: 'rgba(255,255,255,0.7)', marginBottom: '2.5rem' }}>
                 Después de capacitar a tu equipo con nosotros, podrás:
@@ -42,24 +42,24 @@ export default function ResultsSection() {
           </ScrollReveal>
 
           <ScrollReveal direction="right" delay={0.2}>
-            <div 
-              style={{ 
-                backgroundColor: 'rgba(255,255,255,0.05)', 
-                borderRadius: '24px', 
-                padding: '3.5rem 2.5rem', 
+            <div
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.05)',
+                borderRadius: '24px',
+                padding: '3.5rem 2.5rem',
                 textAlign: 'center',
                 border: '1px solid rgba(255,255,255,0.1)',
                 backdropFilter: 'blur(10px)'
               }}
             >
-              <div 
-                style={{ 
-                  width: '80px', 
-                  height: '80px', 
-                  borderRadius: '20px', 
-                  backgroundColor: 'rgba(189, 217, 98, 0.15)', 
-                  display: 'flex', 
-                  alignItems: 'center', 
+              <div
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '20px',
+                  backgroundColor: 'rgba(189, 217, 98, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 1.5rem'
                 }}

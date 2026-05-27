@@ -27,8 +27,8 @@ export default function SolutionSection() {
         >
           {/* Imagen / Visual a la izquierda para variar el layout */}
           <ScrollReveal direction="left">
-            <div 
-              style={{ 
+            <div
+              style={{
                 position: 'relative',
                 borderRadius: '24px',
                 overflow: 'hidden',
@@ -57,7 +57,7 @@ export default function SolutionSection() {
 
           <ScrollReveal direction="right" delay={0.2}>
             <div>
-              <p style={eyebrow}>SECCIÓN: SOLUCIÓN</p>
+              <p style={eyebrow}>SOLUCIÓN</p>
               <h2 style={sectionH2}>
                 En CEPAV formamos equipos que <br />
                 <span style={{ color: 'var(--web-primary, #25927F)' }}>venden, fidelizan y crecen</span>
@@ -69,14 +69,14 @@ export default function SolutionSection() {
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {solutions.map((s, i) => (
                   <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.875rem' }}>
-                    <div 
-                      style={{ 
-                        width: '24px', 
-                        height: '24px', 
-                        borderRadius: '50%', 
-                        backgroundColor: 'rgba(37, 146, 127, 0.1)', 
-                        display: 'flex', 
-                        alignItems: 'center', 
+                    <div
+                      style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        backgroundColor: 'rgba(37, 146, 127, 0.1)',
+                        display: 'flex',
+                        alignItems: 'center',
                         justifyContent: 'center',
                         flexShrink: 0,
                         marginTop: '2px'

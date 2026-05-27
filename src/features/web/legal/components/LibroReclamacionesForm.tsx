@@ -137,7 +137,7 @@ export default function LibroReclamacionesForm() {
           esta institución cuenta con un Libro de Reclamaciones Virtual a su disposición.
         </Typography>
         <Box sx={{ mt: 2, textAlign: 'left', bgcolor: 'white', p: 2, border: '1px solid #eee', borderRadius: 1 }}>
-          <Typography variant="caption" display="block"><strong>PROVEEDOR:</strong> INVERSIONES PERUANAS JPG EIRL</Typography>
+          <Typography variant="caption" display="block"><strong>PROVEEDOR:</strong>  CORPORACIÓN EDUCATIVA EN TURISMO S.A.C. (CEPAV)</Typography>
           <Typography variant="caption" display="block"><strong>RUC:</strong> 20611331194</Typography>
           <Typography variant="caption" display="block"><strong>CORREO:</strong> informes@crececoncepav.com</Typography>
         </Box>
