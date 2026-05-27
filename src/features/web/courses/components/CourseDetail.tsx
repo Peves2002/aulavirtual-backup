@@ -206,7 +206,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
       {/* ─── HERO ──────────────────────────────────────────────────────────── */}
       <Box sx={{
         position: 'relative',
-        background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
+        background: 'linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 45%, #111111 100%)',
         pt: { xs: 4, md: 6 },
         pb: { xs: 8, md: 14 },
         minHeight: { md: '600px' },
@@ -219,7 +219,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
         <Box sx={{
           position: 'absolute', inset: 0,
           backgroundImage: course.miniatura ? `url(${course.miniatura})` : 'none',
-          backgroundColor: 'var(--web-dark-deep, #012d22)',
+          backgroundColor: '#0A0A0A',
           backgroundSize: 'cover', backgroundPosition: 'center',
           filter: 'blur(60px)', opacity: 0.25, transform: 'scale(1.2)', zIndex: 0,
         }} />
@@ -254,7 +254,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                 <ChevronRight size={12} color="rgba(255,255,255,0.3)" />
               </Box>
             ))}
-            <span style={{ fontFamily: FONT, fontSize: '0.8125rem', fontWeight: 700, color: 'var(--web-light, #BDD962)' }}>
+            <span style={{ fontFamily: FONT, fontSize: '0.8125rem', fontWeight: 700, color: 'var(--web-light, #F0D060)' }}>
               {course.titulo}
             </span>
           </Box>
@@ -271,7 +271,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                 )}
                 {course.es_gratis && (
                   <Box sx={{ position: 'absolute', top: 16, right: 16 }}>
-                    <Chip label="GRATUITO" sx={{ fontFamily: FONT, fontWeight: 800, fontSize: '0.7rem', bgcolor: 'var(--web-light, #BDD962)', color: '#0A0A0A' }} />
+                    <Chip label="GRATUITO" sx={{ fontFamily: FONT, fontWeight: 800, fontSize: '0.7rem', bgcolor: 'var(--web-light, #F0D060)', color: '#0A0A0A' }} />
                   </Box>
                 )}
               </Box>
@@ -286,11 +286,11 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                     <Chip
                       icon={<i className="tabler-circle-check-filled" style={{ fontSize: '1rem', color: '#0A0A0A' }} />}
                       label="Tu Curso"
-                      sx={{ fontFamily: FONT, fontWeight: 800, fontSize: '0.75rem', bgcolor: 'var(--web-light, #BDD962)', color: '#0A0A0A', borderRadius: '8px' }}
+                      sx={{ fontFamily: FONT, fontWeight: 800, fontSize: '0.75rem', bgcolor: 'var(--web-light, #F0D060)', color: '#0A0A0A', borderRadius: '8px' }}
                     />
                   ) : (
                     <Chip label={course.nivel === 'BASICO' ? 'Básico' : course.nivel === 'INTERMEDIO' ? 'Intermedio' : 'Avanzado'}
-                      sx={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.75rem', bgcolor: 'rgba(var(--web-light-rgb, 189,217,98),0.15)', color: 'var(--web-light, #BDD962)', borderRadius: '8px', border: '1px solid rgba(var(--web-light-rgb,189,217,98),0.3)' }} />
+                      sx={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.75rem', bgcolor: 'rgba(var(--web-light-rgb, 240, 208, 96),0.15)', color: 'var(--web-light, #F0D060)', borderRadius: '8px', border: '1px solid rgba(var(--web-light-rgb, 240, 208, 96),0.3)' }} />
                   )}
                   <Chip label={course.tipo_emision === 'SINCRONO' ? 'Sincrónico' : course.tipo_emision === 'MIXTO' ? 'Mixto' : 'Grabado'}
                     sx={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.75rem', bgcolor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.85)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.15)' }} />
@@ -306,15 +306,15 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                   <Grid item xs={12} sm={6}>
                     <Stack direction="row" spacing={1.5} alignItems="center">
                       <UserAvatar src={course.profesor.avatar} name={course.profesor.nombre} apellido={course.profesor.apellido} size={44}
-                        sx={{ border: '2px solid rgba(var(--web-light-rgb, 189,217,98),0.4)', bgcolor: 'rgba(255,255,255,0.08)' }} />
+                        sx={{ border: '2px solid rgba(var(--web-light-rgb, 240, 208, 96),0.4)', bgcolor: 'rgba(255,255,255,0.08)' }} />
                       <Box>
                         <Typography sx={{ fontFamily: FONT, fontSize: '0.75rem', color: 'rgba(255,255,255,0.55)', fontWeight: 500 }}>Docente</Typography>
                         {course.profesor.slug ? (
-                          <Link href={`/docentes/${course.profesor.slug}`} style={{ fontFamily: FONT, fontWeight: 800, fontSize: '0.9375rem', color: 'var(--web-light, #BDD962)', textDecoration: 'none' }}>
+                          <Link href={`/docentes/${course.profesor.slug}`} style={{ fontFamily: FONT, fontWeight: 800, fontSize: '0.9375rem', color: 'var(--web-light, #F0D060)', textDecoration: 'none' }}>
                             {course.profesor.nombre} {course.profesor.apellido}
                           </Link>
                         ) : (
-                          <span style={{ fontFamily: FONT, fontWeight: 800, fontSize: '0.9375rem', color: 'var(--web-light, #BDD962)' }}>
+                          <span style={{ fontFamily: FONT, fontWeight: 800, fontSize: '0.9375rem', color: 'var(--web-light, #F0D060)' }}>
                             {course.profesor.nombre} {course.profesor.apellido}
                           </span>
                         )}
@@ -344,7 +344,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
 
                 {/* Precio */}
                 <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
-                  <Typography sx={{ fontFamily: FONT, fontWeight: 900, fontSize: { xs: '2.5rem', md: '3rem' }, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>
+                  <Typography sx={{ fontFamily: FONT, fontWeight: 900, fontSize: { xs: '2.5rem', md: '3rem' }, color: 'var(--web-light, #F0D060)', lineHeight: 1 }}>
                     {course.es_comprado ? 'Adquirido' : course.es_gratis ? 'Gratis' : `${course.moneda} ${course.precio}`}
                   </Typography>
                   {!course.es_gratis && !course.es_comprado && (
@@ -405,7 +405,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                   transition: 'background-color 0.2s',
                   '&:hover': { bgcolor: 'rgba(255,255,255,0.09)' },
                 }}>
-                  <Box sx={{ width: 44, height: 44, borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'rgba(var(--web-light-rgb,189,217,98),0.12)', color: 'var(--web-light, #BDD962)', mx: 'auto', mb: 1.5 }}>
+                  <Box sx={{ width: 44, height: 44, borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'rgba(var(--web-light-rgb, 240, 208, 96),0.12)', color: 'var(--web-light, #F0D060)', mx: 'auto', mb: 1.5 }}>
                     <i className={item.icon?.startsWith('tabler-') ? item.icon : `tabler-${item.icon}`} style={{ fontSize: '1.375rem' }} />
                   </Box>
                   <Typography sx={{ fontFamily: FONT, fontWeight: 800, fontSize: { xs: '0.8rem', md: '0.9rem' }, color: '#fff', lineHeight: 1.3, mb: 0.5 }}>{item.title}</Typography>
@@ -447,7 +447,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                   {(course.metodologia?.length ? course.metodologia : defaultMetodologia).map((m, i) => (
                     <Grid item xs={12} md={4} key={i}>
                       <Box sx={{ p: 3, bgcolor: '#f8fafc', borderRadius: '16px', border: '1px solid #f1f5f9', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 1.5 }}>
-                        <Avatar sx={{ bgcolor: 'rgba(var(--web-primary-rgb,37,146,127),0.1)', color: 'var(--web-primary, #25927F)', width: 60, height: 60 }}>
+                        <Avatar sx={{ bgcolor: 'rgba(var(--web-primary-rgb, 212, 175, 55),0.1)', color: 'var(--web-primary, #D4AF37)', width: 60, height: 60 }}>
                           <i className={m.icon?.startsWith('tabler-') ? m.icon : `tabler-${m.icon}`} style={{ fontSize: '2rem' }} />
                         </Avatar>
                         <Typography sx={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.9375rem', lineHeight: 1.3 }}>{m.title}</Typography>
@@ -465,7 +465,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                   {(course.objetivos?.length ? course.objetivos : defaultObjetivos).map((text, i) => (
                     <Stack key={i} direction="row" spacing={1.5} alignItems="flex-start">
                       <Box sx={{ mt: '2px', flexShrink: 0 }}>
-                        <CheckCircle size={20} color="var(--web-primary, #25927F)" />
+                        <CheckCircle size={20} color="var(--web-primary, #D4AF37)" />
                       </Box>
                       <Typography sx={{ fontFamily: FONT, fontSize: '0.9375rem', color: '#334155', lineHeight: 1.6 }}>{text}</Typography>
                     </Stack>
@@ -488,8 +488,8 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                       startIcon={<Download size={16} />}
                       sx={{
                         fontFamily: FONT, fontWeight: 700, fontSize: '0.8125rem', borderRadius: '10px',
-                        textTransform: 'none', borderColor: 'var(--web-primary, #25927F)', color: 'var(--web-primary, #25927F)',
-                        '&:hover': { borderColor: 'var(--web-dark, #025E44)', bgcolor: 'rgba(var(--web-primary-rgb,37,146,127),0.05)' },
+                        textTransform: 'none', borderColor: 'var(--web-primary, #D4AF37)', color: 'var(--web-primary, #D4AF37)',
+                        '&:hover': { borderColor: 'var(--web-dark, #1A1A1A)', bgcolor: 'rgba(var(--web-primary-rgb, 212, 175, 55),0.05)' },
                       }}
                     >
                       Descargar Brochure
@@ -503,9 +503,9 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                       .filter(m => m.lecciones.some(l => (l as any).estado !== 'BORRADOR'))
                       .map((modulo, idx) => (
                         <Accordion key={modulo.id} defaultExpanded={idx === 0} sx={{ borderRadius: '14px !important', boxShadow: 'none', border: '1px solid #e2e8f0', bgcolor: 'white', '&:before': { display: 'none' } }}>
-                          <AccordionSummary expandIcon={<i className="tabler-chevron-down" style={{ color: 'var(--web-primary, #25927F)' }} />} sx={{ px: 3, py: 1 }}>
+                          <AccordionSummary expandIcon={<i className="tabler-chevron-down" style={{ color: 'var(--web-primary, #D4AF37)' }} />} sx={{ px: 3, py: 1 }}>
                             <Stack direction="row" spacing={2} alignItems="center">
-                              <Box sx={{ width: 32, height: 32, borderRadius: '8px', bgcolor: 'rgba(var(--web-primary-rgb,37,146,127),0.1)', color: 'var(--web-primary, #25927F)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT, fontWeight: 800, fontSize: '0.8125rem' }}>
+                              <Box sx={{ width: 32, height: 32, borderRadius: '8px', bgcolor: 'rgba(var(--web-primary-rgb, 212, 175, 55),0.1)', color: 'var(--web-primary, #D4AF37)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT, fontWeight: 800, fontSize: '0.8125rem' }}>
                                 {idx + 1}
                               </Box>
                               <Typography sx={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.9375rem' }}>{modulo.titulo}</Typography>
@@ -519,18 +519,18 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                                   <Fragment key={leccion.id}>
                                     <Divider />
                                     <ListItem
-                                      sx={{ py: 1.5, px: 3, cursor: (leccion as any).es_vista_previa ? 'pointer' : 'default', '&:hover': (leccion as any).es_vista_previa ? { bgcolor: 'rgba(var(--web-primary-rgb,37,146,127),0.04)' } : {} }}
+                                      sx={{ py: 1.5, px: 3, cursor: (leccion as any).es_vista_previa ? 'pointer' : 'default', '&:hover': (leccion as any).es_vista_previa ? { bgcolor: 'rgba(var(--web-primary-rgb, 212, 175, 55),0.04)' } : {} }}
                                       onClick={() => { if ((leccion as any).es_vista_previa) setPreviewLesson(leccion) }}
                                     >
                                       <ListItemIcon sx={{ minWidth: 36 }}>
-                                        <Play size={16} color={(leccion as any).es_vista_previa ? 'var(--web-primary, #25927F)' : '#cbd5e1'} />
+                                        <Play size={16} color={(leccion as any).es_vista_previa ? 'var(--web-primary, #D4AF37)' : '#cbd5e1'} />
                                       </ListItemIcon>
                                       <ListItemText
                                         primary={
                                           <Stack direction="row" spacing={1} alignItems="center">
                                             <Typography sx={{ fontFamily: FONT, fontWeight: 600, fontSize: '0.875rem' }}>{leccion.titulo}</Typography>
                                             {(leccion as any).es_vista_previa && (
-                                              <Chip size="small" label="Vista previa" sx={{ fontFamily: FONT, height: 20, fontSize: '0.625rem', fontWeight: 700, bgcolor: 'rgba(var(--web-primary-rgb,37,146,127),0.1)', color: 'var(--web-primary, #25927F)' }} />
+                                              <Chip size="small" label="Vista previa" sx={{ fontFamily: FONT, height: 20, fontSize: '0.625rem', fontWeight: 700, bgcolor: 'rgba(var(--web-primary-rgb, 212, 175, 55),0.1)', color: 'var(--web-primary, #D4AF37)' }} />
                                             )}
                                           </Stack>
                                         }
@@ -560,11 +560,11 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
             <Box sx={{ position: { md: 'sticky' }, top: 100 }}>
               <Paper sx={{ borderRadius: '20px', overflow: 'hidden', boxShadow: '0 8px 30px rgba(0,0,0,0.08)', border: '1px solid #f1f5f9' }}>
                 {/* Header */}
-                <Box sx={{ background: 'linear-gradient(135deg, var(--web-dark, #025E44), var(--web-primary, #25927F))', p: 3, textAlign: 'center' }}>
+                <Box sx={{ background: 'linear-gradient(135deg, var(--web-dark, #1A1A1A), var(--web-primary, #D4AF37))', p: 3, textAlign: 'center' }}>
                   <Typography sx={{ fontFamily: FONT, fontWeight: 800, fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)', letterSpacing: '0.1em', textTransform: 'uppercase', mb: 0.5 }}>
                     Programa {course.es_gratis ? 'Gratuito' : 'Premium'}
                   </Typography>
-                  <Typography sx={{ fontFamily: FONT, fontWeight: 900, fontSize: '2rem', color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>
+                  <Typography sx={{ fontFamily: FONT, fontWeight: 900, fontSize: '2rem', color: 'var(--web-light, #F0D060)', lineHeight: 1 }}>
                     {course.es_comprado ? 'Adquirido' : course.es_gratis ? 'Gratis' : `${course.moneda} ${course.precio}`}
                   </Typography>
                 </Box>
@@ -575,7 +575,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                     {(course.incluye?.length ? course.incluye : defaultIncluye).map((item, i) => (
                       <Stack key={i} direction="row" spacing={1.25} alignItems="center">
                         {item.active
-                          ? <CheckCircle size={18} color="var(--web-primary, #25927F)" />
+                          ? <CheckCircle size={18} color="var(--web-primary, #D4AF37)" />
                           : <XCircle size={18} color="#cbd5e1" />}
                         <Typography sx={{ fontFamily: FONT, fontSize: '0.875rem', color: item.active ? '#1e293b' : '#94a3b8', fontWeight: item.active ? 600 : 400 }}>
                           {item.text}

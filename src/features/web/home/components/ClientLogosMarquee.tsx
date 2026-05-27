@@ -42,8 +42,6 @@ export default function ClientLogosMarquee({ logos: logosFromProps }: Props) {
     <section
       style={{
         backgroundColor: '#f8fafc',
-        borderTop: '1px solid hsl(214,20%,91%)',
-        borderBottom: '1px solid hsl(214,20%,91%)',
         padding: '3rem 0',
         overflow: 'hidden',
       }}
@@ -57,11 +55,11 @@ export default function ClientLogosMarquee({ logos: logosFromProps }: Props) {
             fontWeight: 700,
             letterSpacing: '0.15em',
             textTransform: 'uppercase',
-            color: 'var(--web-primary, #25927F)',
+            color: 'var(--web-primary, #D4AF37)',
             marginBottom: '0.75rem',
           }}
         >
-          Empresas que confían en nosotros
+          Instituciones y organismos aliados
         </p>
         <h2
           style={{
@@ -73,8 +71,8 @@ export default function ClientLogosMarquee({ logos: logosFromProps }: Props) {
             lineHeight: 1.2,
           }}
         >
-          Capacita a tu equipo,{' '}
-          <span style={{ color: 'var(--web-primary, #25927F)' }}>sin complicaciones</span>
+          Formación respaldada por{' '}
+          <span style={{ color: 'var(--web-primary, #D4AF37)' }}>especialistas del Estado</span>
         </h2>
       </div>
 
@@ -136,8 +134,8 @@ function DynamicLogoCard({ label, url }: { label: string; url: string }) {
     if (!ref.current) return
     ref.current.style.filter = 'grayscale(0) opacity(1)'
     ref.current.style.transform = 'scale(1.05)'
-    ref.current.style.borderColor = 'var(--web-primary, #25927F)'
-    ref.current.style.boxShadow = '0 6px 24px rgba(37,146,127,0.2)'
+    ref.current.style.borderColor = 'var(--web-primary, #D4AF37)'
+    ref.current.style.boxShadow = '0 6px 24px rgba(212,175,55,0.2)'
   }
 
   const handleLeave = () => {

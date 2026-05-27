@@ -72,7 +72,7 @@ export default function LeftSidebar({
       style={{
         top: 'var(--navbar-height)',
         width: expanded ? 'var(--sidebar-width-expanded)' : 'var(--sidebar-width)',
-        backgroundColor: 'var(--web-dark, #025E44)',
+        backgroundColor: 'var(--web-dark, #1A1A1A)',
         borderRight: '1px solid rgba(255,255,255,0.1)',
         zIndex: 40,
       }}
@@ -89,7 +89,7 @@ export default function LeftSidebar({
             className="no-underline flex items-center w-full px-4 transition-colors duration-200 relative"
             style={{
               height: '56px',
-              color: active ? 'var(--web-light, #BDD962)' : '#ffffff',
+              color: active ? 'var(--web-light, #F0D060)' : '#ffffff',
               fontWeight: active ? 700 : 500,
               backgroundColor: active ? 'rgba(255,255,255,0.05)' : 'transparent',
             }}
@@ -104,7 +104,7 @@ export default function LeftSidebar({
             {active && (
               <div
                 className="absolute left-0 rounded-r-full"
-                style={{ width: '4px', height: '32px', backgroundColor: 'var(--web-light, #BDD962)' }}
+                style={{ width: '4px', height: '32px', backgroundColor: 'var(--web-light, #F0D060)' }}
               />
             )}
 
@@ -114,7 +114,7 @@ export default function LeftSidebar({
               style={{
                 minWidth: '48px',
                 height: '48px',
-                backgroundColor: active ? 'var(--web-light, #BDD962)' : 'transparent',
+                backgroundColor: active ? 'var(--web-light, #F0D060)' : 'transparent',
                 color: active ? '#0A0A0A' : 'inherit',
                 boxShadow: active ? '0 4px 12px rgba(0,0,0,0.2)' : 'none',
               }}
@@ -161,7 +161,7 @@ export default function LeftSidebar({
             }}>
               {/* Header */}
               <div style={{ padding: '14px 16px', borderBottom: '1px solid hsl(214,20%,93%)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ flexShrink: 0, width: '38px', height: '38px', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'var(--web-primary, #25927F)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ flexShrink: 0, width: '38px', height: '38px', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'var(--web-primary, #D4AF37)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {user?.avatar ? (
                     <Image src={user.avatar} alt="avatar" width={38} height={38} style={{ objectFit: 'cover' }} />
                   ) : (
@@ -193,7 +193,7 @@ export default function LeftSidebar({
                     onClick={() => setUserMenuOpen(false)}
                     className="no-underline flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors"
                     style={{ color: '#374151', fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 600 }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(var(--web-primary-rgb,37,146,127),0.07)' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(var(--web-primary-rgb,212, 175, 55),0.07)' }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent' }}
                   >
                     <Icon size={16} />
@@ -230,7 +230,7 @@ export default function LeftSidebar({
             onMouseLeave={e => { if (!userMenuOpen) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.05)' }}
           >
             {/* Avatar */}
-            <div style={{ flexShrink: 0, width: '36px', height: '36px', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'var(--web-primary, #25927F)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid rgba(255,255,255,0.2)' }}>
+            <div style={{ flexShrink: 0, width: '36px', height: '36px', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'var(--web-primary, #D4AF37)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid rgba(255,255,255,0.2)' }}>
               {user?.avatar ? (
                 <Image src={user.avatar} alt="avatar" width={36} height={36} style={{ objectFit: 'cover' }} />
               ) : (
@@ -278,9 +278,9 @@ export default function LeftSidebar({
             <Link
               href="/registrarse"
               className="no-underline flex items-center w-full rounded-xl px-3 transition-all"
-              style={{ height: '44px', gap: '12px', backgroundColor: 'var(--web-light, #BDD962)', border: '1px solid transparent' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--web-primary, #25927F)' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--web-light, #BDD962)' }}
+              style={{ height: '44px', gap: '12px', backgroundColor: 'var(--web-light, #F0D060)', border: '1px solid transparent' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--web-primary, #D4AF37)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--web-light, #F0D060)' }}
             >
               <div style={{ flexShrink: 0, minWidth: '30px', display: 'flex', justifyContent: 'center' }}>
                 <UserPlus size={18} color="#0A0A0A" />

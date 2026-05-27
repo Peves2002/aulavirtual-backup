@@ -1084,7 +1084,7 @@ const PaymentForm = ({ courses, appliedCouponCode, finalTotal }: PaymentFormProp
                     {confirmedOrder.cursos.map((curso, i) => (
                       <Stack key={i} direction='row' alignItems='flex-start' spacing={1.25}>
                         <Box sx={{ width: 28, height: 28, borderRadius: 1.5, bgcolor: 'success.lighterOpacity', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <i className='tabler-book' style={{ fontSize: 15, color: '#25927F' }} />
+                          <i className='tabler-book' style={{ fontSize: 15, color: '#D4AF37' }} />
                         </Box>
                         <Typography variant='body2' fontWeight={600} lineHeight={1.45} sx={{ pt: 0.4 }}>{curso}</Typography>
                       </Stack>
@@ -1104,7 +1104,7 @@ const PaymentForm = ({ courses, appliedCouponCode, finalTotal }: PaymentFormProp
               {voucherPreview && (
                 <Box sx={{ mb: 2.5 }}>
                   <Stack direction='row' alignItems='center' spacing={1} sx={{ mb: 1.25 }}>
-                    <i className='tabler-photo-check' style={{ fontSize: 16, color: '#25927F' }} />
+                    <i className='tabler-photo-check' style={{ fontSize: 16, color: '#D4AF37' }} />
                     <Typography variant='subtitle2' fontWeight={700}>Comprobante subido</Typography>
                     <Chip label='✓ Recibido' size='small' color='success' variant='tonal' sx={{ ml: 'auto', fontWeight: 700, fontSize: '0.7rem' }} />
                   </Stack>

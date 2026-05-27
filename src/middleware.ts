@@ -99,6 +99,8 @@ export default withAuth(
           path.startsWith('/assets') ||
           path.startsWith('/empresas') ||
           path.startsWith('/politica-de-devoluciones') ||
+          path.startsWith('/archivos') ||
+          path.startsWith('/simulacros') ||
           path === '/'
         ) {
           return true
@@ -121,6 +123,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public folder
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.svg|.*\\.mp4|.*\\.webm|.*\\.gif).*)'
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.svg|.*\\.mp4|.*\\.webm|.*\\.gif|.*\\.pdf).*)'
   ]
 }

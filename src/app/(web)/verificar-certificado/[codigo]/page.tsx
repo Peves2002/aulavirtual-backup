@@ -68,8 +68,43 @@ export default async function VerificarCertificadoPage({ params }: Props) {
   const templateName = configs.TEMPLATE_NAME
   const logoUrl = configs.TEMPLATE_LOGO
 
+  const headerSection = (
+    <section
+      style={{
+        backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.50) 100%), url("/images/cursos.jpg")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        minHeight: '360px',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 3rem',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      <div style={{ maxWidth: '1280px', margin: '0 auto', width: '100%', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+          <a href="/" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.55)', textDecoration: 'none' }}>Inicio</a>
+          <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem' }}>/</span>
+          <a href="/verificar-certificado" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.55)', textDecoration: 'none' }}>Verificar Certificado</a>
+          <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem' }}>/</span>
+          <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #F0D060)', fontWeight: 600 }}>Resultado</span>
+        </div>
+        <h1 style={{ fontFamily: 'Montserrat, sans-serif', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1.15, marginBottom: '0.75rem' }}>
+          Resultado de{' '}
+          <span style={{ color: 'var(--web-light, #F0D060)' }}>Verificación</span>
+        </h1>
+        <p style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '1rem', color: 'rgba(255,255,255,0.72)', maxWidth: '520px', lineHeight: 1.7 }}>
+          Código: <strong style={{ color: 'var(--web-light, #F0D060)', letterSpacing: '0.05em' }}>{codigo}</strong>
+        </p>
+      </div>
+    </section>
+  )
+
   if (!certificado) {
     return (
+      <div style={{ backgroundColor: '#ffffff', minHeight: '100vh' }}>
+        {headerSection}
       <Container maxWidth="sm" sx={{ py: 12 }}>
         <Paper
           elevation={4}
@@ -107,6 +142,7 @@ export default async function VerificarCertificadoPage({ params }: Props) {
           </Button>
         </Paper>
       </Container>
+      </div>
     )
   }
 
@@ -127,6 +163,8 @@ export default async function VerificarCertificadoPage({ params }: Props) {
   })
 
   return (
+    <div style={{ backgroundColor: '#ffffff', minHeight: '100vh' }}>
+      {headerSection}
     <Container maxWidth="md" sx={{ py: 8 }}>
       <Box sx={{ textAlign: 'center', mb: 6 }}>
         {logoUrl && (
@@ -144,7 +182,7 @@ export default async function VerificarCertificadoPage({ params }: Props) {
           borderRadius: 6,
           position: 'relative',
           overflow: 'hidden',
-          background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+          background: '#ffffff',
           border: '1px solid',
           borderColor: 'divider'
         }}
@@ -232,10 +270,10 @@ export default async function VerificarCertificadoPage({ params }: Props) {
               <Box
                 sx={{
                   p: 3,
-                  bgcolor: 'rgba(var(--web-primary-rgb, 37, 146, 127), 0.05)',
+                  bgcolor: 'rgba(var(--web-primary-rgb, 212, 175, 55), 0.05)',
                   borderRadius: 4,
                   border: '1px solid',
-                  borderColor: 'rgba(var(--web-primary-rgb, 37, 146, 127), 0.15)',
+                  borderColor: 'rgba(var(--web-primary-rgb, 212, 175, 55), 0.15)',
                   height: '100%'
                 }}
               >
@@ -290,5 +328,6 @@ export default async function VerificarCertificadoPage({ params }: Props) {
         </Stack>
       </Paper>
     </Container>
+    </div>
   )
 }

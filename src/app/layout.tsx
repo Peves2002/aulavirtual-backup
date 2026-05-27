@@ -53,10 +53,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const primaryLight = configs.PRIMARY_COLOR_LIGHT || '#242CBF'
   const primaryDark = configs.PRIMARY_COLOR_DARK || '#9196F2'
 
-  // Colores web (con fallback al design system teal)
-  const webPrimary  = configs.PRIMARY_COLOR_MAIN  || '#25927F'
-  const webLight    = configs.PRIMARY_COLOR_LIGHT || '#BDD962'
-  const webDark     = configs.PRIMARY_COLOR_DARK  || '#025E44'
+  // Colores web — hardcodeados independientemente del panel admin
+  const webPrimary  = '#D4AF37'
+  const webLight    = '#F0D060'
+  const webDark     = '#1A1A1A'
   const webDarkDeep = darkenHex(webDark, 0.45)  // muy oscuro → reemplaza #012d22
   const webDarkMid  = darkenHex(webDark, 0.72)  // oscuro medio → reemplaza #0f4438
 

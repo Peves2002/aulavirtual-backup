@@ -38,7 +38,7 @@ async function getData(token: string | null) {
 
 export const metadata = {
   title: `${process.env.NEXT_PUBLIC_APP_NAME} | Cursos`,
-  description: 'Explora nuestra amplia variedad de cursos y comienza a aprender hoy mismo.'
+  description: 'Cursos especializados para profesionales del sector público. Fortalece tus competencias y aprueba tus pruebas de aptitud académica con Master Academy.'
 }
 
 export default async function CursosPage() {
@@ -52,32 +52,35 @@ export default async function CursosPage() {
       {/* Banner */}
       <Box
         sx={{
-          backgroundImage: 'linear-gradient(to bottom, rgba(0,0,0,0.68) 0%, rgba(0,0,0,0.50) 100%), url("https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=2000&q=80")',
+          backgroundImage: 'linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.52) 100%), url("/images/cursos.jpg")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
-          py: { xs: 6, md: 9 },
-          px: { xs: 3, md: 6 },
+          minHeight: 360,
+          display: 'flex',
+          alignItems: 'center',
+          px: { xs: 2, md: 6 },
+          py: 0,
           position: 'relative',
           overflow: 'hidden',
         }}
       >
         {/* Decorative circles */}
-        <Box sx={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.06)', pointerEvents: 'none' }} />
+        <Box sx={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', backgroundColor: 'rgba(var(--web-light-rgb, 240, 208, 96),0.06)', pointerEvents: 'none' }} />
         <Box sx={{ position: 'absolute', bottom: -60, right: 80, width: 300, height: 300, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.03)', pointerEvents: 'none' }} />
 
-        <Box sx={{ maxWidth: 1280, mx: 'auto', position: 'relative', zIndex: 1 }}>
+        <Box sx={{ maxWidth: 1280, mx: 'auto', width: '100%', position: 'relative', zIndex: 1, textAlign: 'left' }}>
           {/* Breadcrumb */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
             <Box
               component="a"
               href="/"
-              sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.55)', textDecoration: 'none', '&:hover': { color: 'var(--web-light, #BDD962)' }, transition: 'color 0.2s' }}
+              sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.55)', textDecoration: 'none', '&:hover': { color: 'var(--web-light, #F0D060)' }, transition: 'color 0.2s' }}
             >
               Inicio
             </Box>
             <Box component="span" sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem' }}>/</Box>
-            <Box component="span" sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>
+            <Box component="span" sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #F0D060)', fontWeight: 600 }}>
               Cursos
             </Box>
           </Box>
@@ -94,21 +97,21 @@ export default async function CursosPage() {
             }}
             component="h1"
           >
-            Catálogo de <span style={{ color: 'var(--web-light, #BDD962)' }}>Especializaciones Legales</span>
+            Cursos para <span style={{ color: 'var(--web-light, #F0D060)' }}>Profesionales del Sector Público</span>
           </Box>
           <Box
             sx={{ fontFamily: 'Montserrat, sans-serif', fontSize: '1rem', color: 'rgba(255,255,255,0.75)', maxWidth: 580, lineHeight: 1.7 }}
             component="p"
           >
-            Accede a cursos impartidos por abogados y juristas en ejercicio. Formación especializada en derecho corporativo, compliance, contratos y más.
+            Fortalece tus competencias y capacidades para aprobar tus pruebas de aptitud académica y acceder a nuevos puestos de trabajo. Recupera los conocimientos que necesitas para avanzar con éxito en tu carrera profesional.
           </Box>
 
           {/* Stats chips */}
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, mt: 3 }}>
             {[
-              { label: `${courses.length} cursos disponibles`, icon: '⚖️' },
-              { label: `${categories.length} áreas del derecho`, icon: '📜' },
-              { label: 'Impartido por abogados en ejercicio', icon: '🏫' },
+              { label: `${courses.length} cursos disponibles`, icon: '🏛️' },
+              { label: `${categories.length} áreas de especialización`, icon: '📋' },
+              { label: 'Formación orientada a resultados', icon: '🎓' },
             ].map(chip => (
               <Box
                 key={chip.label}

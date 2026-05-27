@@ -9,34 +9,34 @@ const valores = [
   {
     icon: ShieldCheck,
     title: 'Integridad',
-    desc: 'Actuamos con transparencia, honestidad y rigor jurídico en cada asesoría, decisición y relación con nuestros clientes.',
+    desc: 'Actuamos con transparencia y honestidad, los mismos principios que enseñamos en el control gubernamental y la ética del servidor público.',
   },
   {
     icon: Lightbulb,
     title: 'Excelencia',
-    desc: 'Buscamos los más altos estándares en formación legal, actualizando nuestros contenidos con la normativa y jurisprudencia vigente.',
+    desc: 'Buscamos los más altos estándares en cada curso, actualizando nuestros contenidos con la normativa y directivas vigentes del sector público.',
   },
   {
     icon: Users,
     title: 'Compromiso',
-    desc: 'Nos dedicamos plenamente a cada profesional y empresa, acompañándolos en su desarrollo legal y corporativo.',
+    desc: 'Nos dedicamos plenamente a cada estudiante, acompañándolos desde su preparación hasta que logran su plaza o fortalecen su desempeño como funcionario.',
   },
   {
     icon: TrendingUp,
     title: 'Innovación',
-    desc: 'Aplicamos metodologías modernas al derecho para hacer la formación jurídica más accesible, práctica y efectiva.',
+    desc: 'Aplicamos metodologías modernas y casos prácticos reales para hacer la formación en gestión pública más accesible y efectiva.',
   },
   {
     icon: Heart,
     title: 'Confianza',
-    desc: 'Construimos relaciones sólidas basadas en el respeto, la confidencialidad y la responsabilidad profesional.',
+    desc: 'Construimos relaciones sólidas con nuestros estudiantes basadas en el respeto, la dedicación y resultados comprobados en concursos públicos.',
   },
 ]
 
 /* ── Misión / Visión ────────────────────────────────────── */
 export function MisionVisionSection() {
   return (
-    <section style={{ backgroundColor: '#f8fafc', padding: '5rem 1.5rem' }}>
+    <section style={{ backgroundColor: '#ffffff', padding: '5rem 1.5rem' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         <ScrollReveal>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
@@ -50,15 +50,16 @@ export function MisionVisionSection() {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: '2rem',
+            alignItems: 'stretch',
           }}
         >
           {/* Misión */}
-          <ScrollReveal direction="left" delay={0.05}>
+          <ScrollReveal direction="left" delay={0.05} className="h-full">
             <MisionCard />
           </ScrollReveal>
 
           {/* Visión */}
-          <ScrollReveal direction="right" delay={0.1}>
+          <ScrollReveal direction="right" delay={0.1} className="h-full">
             <VisionCard />
           </ScrollReveal>
         </div>
@@ -77,12 +78,14 @@ function MisionCard() {
         boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
         border: '1.5px solid hsl(214,20%,91%)',
         transition: 'transform 0.3s, box-shadow 0.3s',
+        height: '100%',
+        boxSizing: 'border-box',
       }}
       onMouseEnter={e => {
         const el = e.currentTarget as HTMLDivElement
 
         el.style.transform = 'translateY(-6px)'
-        el.style.boxShadow = '0 16px 40px rgba(var(--web-primary-rgb, 37, 146, 127),0.14)'
+        el.style.boxShadow = '0 16px 40px rgba(var(--web-primary-rgb, 212, 175, 55),0.14)'
       }}
       onMouseLeave={e => {
         const el = e.currentTarget as HTMLDivElement
@@ -114,17 +117,15 @@ function MisionCard() {
             position: 'relative', zIndex: 1,
           }}
         >
-          <span style={{ fontSize: '2.5rem' }}>⚖️</span>
+          <span style={{ fontSize: '2.5rem' }}>🏛️</span>
         </div>
       </div>
       <div style={{ padding: '1.75rem 2rem 2rem' }}>
-        <h3 style={{ ...cardTitle, fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--web-dark, #025E44)' }}>
+        <h3 style={{ ...cardTitle, fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--web-dark, #1A1A1A)' }}>
           Nuestra Misión
         </h3>
         <p style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Brindar formación jurídica y corporativa de alta calidad, dictada por abogados en ejercicio,
-          que impulse el desarrollo profesional de nuestros estudiantes y la solidez legal de las
-          organizaciones que atendemos.&quot;
+          &quot;Ser líderes en la formación de profesionales del sector público, brindando herramientas y recursos para aprobar exámenes de ascenso y fomentando la mejora continua y el desarrollo de habilidades para el desempeño efectivo en su trabajo. Nos esforzamos por ser una academia innovadora, que se adapta a los cambios en el entorno laboral y las necesidades de nuestros estudiantes, para brindar una formación integral que les permita crecer y alcanzar sus metas profesionales a largo plazo.&quot;
         </p>
       </div>
     </div>
@@ -141,12 +142,14 @@ function VisionCard() {
         boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
         border: '1.5px solid hsl(214,20%,91%)',
         transition: 'transform 0.3s, box-shadow 0.3s',
+        height: '100%',
+        boxSizing: 'border-box',
       }}
       onMouseEnter={e => {
         const el = e.currentTarget as HTMLDivElement
 
         el.style.transform = 'translateY(-6px)'
-        el.style.boxShadow = '0 16px 40px rgba(var(--web-light-rgb, 189, 217, 98),0.18)'
+        el.style.boxShadow = '0 16px 40px rgba(var(--web-light-rgb, 240, 208, 96),0.18)'
       }}
       onMouseLeave={e => {
         const el = e.currentTarget as HTMLDivElement
@@ -171,10 +174,10 @@ function VisionCard() {
         <div
           style={{
             width: '80px', height: '80px', borderRadius: '24px',
-            backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.12)',
+            backgroundColor: 'rgba(var(--web-light-rgb, 240, 208, 96),0.12)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             backdropFilter: 'blur(8px)',
-            border: '2px solid rgba(var(--web-light-rgb, 189, 217, 98),0.25)',
+            border: '2px solid rgba(var(--web-light-rgb, 240, 208, 96),0.25)',
             position: 'relative', zIndex: 1,
           }}
         >
@@ -182,13 +185,11 @@ function VisionCard() {
         </div>
       </div>
       <div style={{ padding: '1.75rem 2rem 2rem' }}>
-        <h3 style={{ ...cardTitle, fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--web-dark, #025E44)' }}>
+        <h3 style={{ ...cardTitle, fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--web-dark, #1A1A1A)' }}>
           Nuestra Visión
         </h3>
         <p style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Ser la firma legal y academia de referencia en Latinoamérica, reconocida por la excelencia
-          de su equipo jurídico, la solidez de sus certificaciones y su compromiso con la transformación
-          del ejercicio del derecho corporativo.&quot;
+          &quot;Brindar herramientas y recursos de calidad a profesionales, con el fin de ayudarles a aprobar sus exámenes de ascenso y alcanzar sus metas profesionales. Nos comprometemos a proporcionar una educación de excelencia y una experiencia de aprendizaje adecuada para cada estudiante.&quot;
         </p>
       </div>
     </div>
@@ -198,7 +199,7 @@ function VisionCard() {
 /* ── Valores ─────────────────────────────────────────────── */
 export function ValoresSection() {
   return (
-    <section style={{ backgroundColor: '#ffffff', padding: '5rem 1.5rem', borderTop: '1px solid hsl(214,20%,92%)' }}>
+    <section style={{ backgroundColor: '#ffffff', padding: '5rem 1.5rem' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         <ScrollReveal>
           <div style={{ textAlign: 'center', maxWidth: '560px', margin: '0 auto 3.5rem' }}>
@@ -215,10 +216,11 @@ export function ValoresSection() {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
             gap: '1.5rem',
+            alignItems: 'stretch',
           }}
         >
           {valores.map((v, i) => (
-            <ScrollReveal key={i} delay={i * 0.06}>
+            <ScrollReveal key={i} delay={i * 0.06} className="h-full">
               <ValorCard v={v} />
             </ScrollReveal>
           ))}
@@ -232,20 +234,22 @@ function ValorCard({ v }: { v: typeof valores[number] }) {
   return (
     <div
       style={{
-        backgroundColor: '#f8fafc',
+        backgroundColor: '#f5f5f5',
         borderRadius: '20px',
         padding: '2rem 1.5rem',
-        border: '1.5px solid hsl(214,20%,92%)',
+        border: '1.5px solid #e5e5e5',
         textAlign: 'center',
         cursor: 'default',
+        height: '100%',
+        boxSizing: 'border-box',
         transition: 'transform 0.3s, box-shadow 0.3s, border-color 0.3s, background-color 0.3s',
       }}
       onMouseEnter={e => {
         const el = e.currentTarget as HTMLDivElement
 
         el.style.transform = 'translateY(-6px)'
-        el.style.boxShadow = '0 12px 36px rgba(var(--web-primary-rgb, 37, 146, 127),0.12)'
-        el.style.borderColor = 'var(--web-primary, #25927F)'
+        el.style.boxShadow = '0 12px 36px rgba(var(--web-primary-rgb, 212, 175, 55),0.12)'
+        el.style.borderColor = 'var(--web-primary, #D4AF37)'
         el.style.backgroundColor = '#ffffff'
       }}
       onMouseLeave={e => {
@@ -253,20 +257,20 @@ function ValorCard({ v }: { v: typeof valores[number] }) {
 
         el.style.transform = 'translateY(0)'
         el.style.boxShadow = 'none'
-        el.style.borderColor = 'hsl(214,20%,92%)'
-        el.style.backgroundColor = '#f8fafc'
+        el.style.borderColor = '#e5e5e5'
+        el.style.backgroundColor = '#f5f5f5'
       }}
     >
       <div
         style={{
           width: '60px', height: '60px', borderRadius: '18px',
-          backgroundColor: 'rgba(var(--web-primary-rgb, 37, 146, 127),0.1)',
+          backgroundColor: 'rgba(var(--web-primary-rgb, 212, 175, 55),0.1)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           margin: '0 auto 1.25rem',
-          border: '1.5px solid rgba(var(--web-primary-rgb, 37, 146, 127),0.2)',
+          border: '1.5px solid rgba(var(--web-primary-rgb, 212, 175, 55),0.2)',
         }}
       >
-        <v.icon size={28} color="var(--web-primary, #25927F)" />
+        <v.icon size={28} color="var(--web-primary, #D4AF37)" />
       </div>
       <h3 style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '1rem', fontWeight: 700, color: '#0A0A0A', marginBottom: '0.625rem' }}>
         {v.title}

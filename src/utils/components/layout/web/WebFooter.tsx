@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 
-import { Phone, Mail, MapPin, Facebook, Youtube, Instagram } from 'lucide-react'
+import { Phone, Mail, MapPin, Facebook, Instagram } from 'lucide-react'
 
 import { getConfigs } from '@/utils/libs/config'
 import HydratedDate from '@/utils/components/HydratedDate'
@@ -24,10 +24,9 @@ const WhatsAppIcon = ({ size = 16 }: { size?: number }) => (
 )
 
 const staticSocialLinks = [
-  { label: 'Facebook', href: 'https://www.facebook.com/flyup.store', icon: <Facebook size={20} /> },
-  { label: 'TikTok', href: 'https://tiktok.com/@flyupsale', icon: <TikTokIcon size={20} /> },
-  { label: 'Instagram', href: 'https://www.instagram.com/devrocket.software/', icon: <Instagram size={20} /> },
-  { label: 'Youtube', href: 'https://www.youtube.com/@Fly-s9b', icon: <Youtube size={20} /> },
+  { label: 'Facebook', href: 'https://www.facebook.com/Grupo.Master.Academy', icon: <Facebook size={20} /> },
+  { label: 'TikTok', href: 'https://tiktok.com/@grupo.master.academy', icon: <TikTokIcon size={20} /> },
+  { label: 'Instagram', href: 'https://www.instagram.com/grupo.master.academy/', icon: <Instagram size={20} /> },
 ]
 
 interface WebFooterProps {
@@ -64,7 +63,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <Mail size={16} className="flex-shrink-0 mt-0.5" />
-                <span>flyup.sale@gmail.com</span>
+                <span>Informes@mastergrupodeestudio.com</span>
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <MapPin size={16} className="flex-shrink-0 mt-0.5" />
@@ -84,6 +83,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
               {([
                 { label: 'Cursos', href: '/cursos' },
+                { label: 'Simulacros', href: '/simulacros' },
                 ...(rutasHabilitado ? [{ label: 'Rutas', href: '/rutas' }] : []),
               ] as { label: string; href: string }[]).map(link => (
                 <li key={link.label}>
@@ -176,7 +176,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
                 fontWeight: 600,
                 fontSize: '0.875rem',
                 color: '#ffffff',
-                backgroundColor: 'var(--web-dark, #025E44)',
+                backgroundColor: 'var(--web-primary, #D4AF37)',
                 borderRadius: '9999px',
                 padding: '0.5rem 1.25rem',
               }}
@@ -208,7 +208,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
               target="_blank"
               rel="noopener noreferrer"
               className="no-underline hover:opacity-80 inline-flex items-center align-middle"
-              style={{ color: 'var(--web-light, #BDD962)', fontWeight: 600 }}
+              style={{ color: 'var(--web-light, #F0D060)', fontWeight: 600 }}
             >
               <Image
                 src="/images/logo.svg"

@@ -1,28 +1,25 @@
 import Link from 'next/link'
 
-import { ArrowRight, CheckCircle, Map } from 'lucide-react'
+import { ArrowRight, CheckCircle } from 'lucide-react'
 
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
 import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
 import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
-import RutasSection from '@/features/web/home/components/RutasSection'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
 import HeroCarousel from '@/features/web/home/components/HeroCarousel'
 import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
 import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
-import CompaniesSection from '@/features/web/home/components/CompaniesSection'
-import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
 
 export const metadata = {
-  title: 'Aula Virtual - Aprende sin límites',
-  description: 'Plataforma de aprendizaje online con cursos especializados, rutas de aprendizaje y certificados.',
+  title: 'Master Academy - Formación Profesional para el Sector Público',
+  description: 'Master Academy: fortalece tus competencias y capacidades para aprobar pruebas de aptitud académica y acceder a nuevos puestos de trabajo en el sector público.',
 }
 
 async function getHomeData() {
   try {
-    const [coursesRaw, rutasRaw, teachersRaw, configs] = await Promise.all([
+    const [coursesRaw, teachersRaw, configs] = await Promise.all([
       // Cursos
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO' },
@@ -33,18 +30,6 @@ async function getHomeData() {
         },
         orderBy: { creado_en: 'desc' },
         take: 6,
-      }),
-
-      // Rutas
-      prisma.rutaAprendizaje.findMany({
-        where: { esta_activo: true },
-        include: {
-          cursos: {
-            take: 4,
-            include: { curso: { select: { miniatura: true, titulo: true } } },
-          },
-        },
-        take: 3,
       }),
 
       // Profesores
@@ -74,21 +59,14 @@ async function getHomeData() {
       })
     )
 
-    const rutas = rutasRaw.map(r => ({
-      ...r,
-      total_cursos: r.cursos.length,
-      cursos: r.cursos.map(c => ({ miniatura: c.curso.miniatura, titulo: c.curso.titulo })),
-    }))
-
-    const heroTitle = configs.HOME_HERO_TITLE || 'Aprende sin límites,\ncrece sin fronteras'
-    const heroDescription = configs.HOME_HERO_DESCRIPTION || 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.'
+    const heroTitle = configs.HOME_HERO_TITLE || 'Formación de élite\npara el servicio público'
+    const heroDescription = configs.HOME_HERO_DESCRIPTION || 'Fortalece tus competencias y capacidades para aprobar pruebas de aptitud académica y acceder a nuevos puestos de trabajo. Recupera los conocimientos que necesitas para avanzar en el camino del éxito laboral.'
     let logos: { label: string; url: string }[] = []
 
     try { logos = configs.HOME_LOGOS ? JSON.parse(configs.HOME_LOGOS) : [] } catch { logos = [] }
 
     return {
       courses: JSON.parse(JSON.stringify(courses)),
-      rutas: JSON.parse(JSON.stringify(rutas)),
       teachers: JSON.parse(JSON.stringify(teachersRaw)),
       heroTitle,
       heroDescription,
@@ -96,16 +74,16 @@ async function getHomeData() {
     }
   } catch {
     return {
-      courses: [], rutas: [], teachers: [],
-      heroTitle: 'Aprende sin límites,\ncrece sin fronteras',
-      heroDescription: 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.',
+      courses: [], teachers: [],
+      heroTitle: 'Formación de élite\npara el servicio público',
+      heroDescription: 'Fortalece tus competencias y capacidades para aprobar pruebas de aptitud académica y acceder a nuevos puestos de trabajo. Recupera los conocimientos que necesitas para avanzar en el camino del éxito laboral.',
       logos: [],
     }
   }
 }
 
 export default async function HomePage() {
-  const { courses, rutas, teachers, heroTitle, heroDescription, logos } = await getHomeData()
+  const { courses, teachers, heroTitle, heroDescription, logos } = await getHomeData()
 
   return (
     <>
@@ -121,12 +99,12 @@ export default async function HomePage() {
           <div className="flex items-end justify-between mb-8">
             <div>
               <h2 className="section-title">Cursos destacados</h2>
-              <p className="section-subtitle">Especializaciones y cursos de actualización legal</p>
+              <p className="section-subtitle">Control gubernamental, contratación estatal y concursos públicos</p>
             </div>
             <Link
               href="/cursos"
               className="no-underline hidden sm:inline-flex items-center gap-2 text-sm font-semibold"
-              style={{ fontFamily: 'Montserrat, sans-serif', color: 'var(--web-primary, #25927F)' }}
+              style={{ fontFamily: 'Montserrat, sans-serif', color: 'var(--web-primary, #D4AF37)' }}
             >
               Ver todos <ArrowRight size={16} />
             </Link>
@@ -138,7 +116,7 @@ export default async function HomePage() {
             <Link
               href="/cursos"
               className="no-underline inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm"
-              style={{ fontFamily: 'Montserrat, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', color: '#ffffff' }}
+              style={{ fontFamily: 'Montserrat, sans-serif', backgroundColor: 'var(--web-primary, #D4AF37)', color: '#ffffff' }}
             >
               Ver todos los cursos <ArrowRight size={16} />
             </Link>
@@ -149,46 +127,8 @@ export default async function HomePage() {
       {/* ── 4. CARACTERÍSTICAS DE CLASES ────────────── */}
       <ClassFeaturesSection />
 
-      {/* ── 5. RUTAS DE APRENDIZAJE ─────────────────── */}
-      {rutas.length > 0 && (
-        <section style={{ backgroundColor: 'hsl(210, 15%, 97%)', borderTop: '1px solid hsl(214, 20%, 92%)' }}>
-          <div className="section-container">
-            <ScrollReveal>
-              <div className="flex items-end justify-between mb-2">
-                <div>
-                  <div
-                    className="inline-flex items-center gap-2 mb-3"
-                    style={{ color: 'var(--web-primary, #25927F)', fontFamily: 'Montserrat, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}
-                  >
-                    <Map size={14} /> Especialízate
-                  </div>
-                  <h2 className="section-title" style={{ marginBottom: '0.25rem' }}>Rutas de Aprendizaje</h2>
-                  <p className="section-subtitle">Programas integrales para dominar diferentes ramas del derecho y compliance.</p>
-                </div>
-                <Link
-                  href="/rutas"
-                  className="no-underline hidden sm:inline-flex items-center gap-2 text-sm font-semibold"
-                  style={{ fontFamily: 'Montserrat, sans-serif', color: 'var(--web-primary, #25927F)' }}
-                >
-                  Ver todas <ArrowRight size={16} />
-                </Link>
-              </div>
-            </ScrollReveal>
-            <ScrollReveal delay={0.1}>
-              <RutasSection rutas={rutas} embedded />
-            </ScrollReveal>
-          </div>
-        </section>
-      )}
-
-      {/* ── 6. PROFESORES ───────────────────────────── */}
+      {/* ── 5. ESPECIALISTAS ────────────────────────── */}
       <ProfessorsCarousel teachers={teachers} />
-
-      {/* ── 7. EMPRESAS (B2B informativo) ───────────── */}
-      <CompaniesSection />
-
-      {/* ── 8. CTA AGENDAR REUNIÓN ──────────────────── */}
-      <EnterpriseCTASection />
 
       {/* ── 9. VERIFICAR CERTIFICADO ────────────────── */}
       <SearchCertificateSection />
@@ -201,36 +141,35 @@ export default async function HomePage() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
-          borderTop: '1px solid hsl(214, 20%, 88%)' 
         }}
       >
         <div className="max-w-3xl mx-auto px-4">
           <ScrollReveal>
             <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6"
-              style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', color: 'var(--web-light, #BDD962)', border: '1px solid rgba(255,255,255,0.2)' }}
+              style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', color: 'var(--web-light, #F0D060)', border: '1px solid rgba(255,255,255,0.2)' }}
             >
               <CheckCircle size={16} />
               <span style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.75rem', fontWeight: 600 }}>
-                Únete a miles de profesionales
+                Aprende con los mejores especialistas del Estado
               </span>
             </div>
             <h2
               className="mb-4"
               style={{ fontFamily: 'Montserrat, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', fontWeight: 700, color: '#ffffff', letterSpacing: '-0.02em' }}
             >
-              ¿Listo para transformar tu carrera?
+              ¿Listo para destacar en el sector público?
             </h2>
             <p
               className="mb-8 max-w-xl mx-auto"
               style={{ fontFamily: 'Montserrat, sans-serif', color: 'rgba(255,255,255,0.8)', lineHeight: 1.7 }}
             >
-              Inscríbete hoy y comienza a aprender con los mejores expertos y consultores legales del sector.
+              Inscríbete hoy y prepárate para concursos públicos, entrevistas técnicas y el ejercicio eficiente del control gubernamental con nuestros especialistas en actividad.
             </p>
             <Link
               href="/cursos"
               className="no-underline inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-white transition-all duration-300 hover:scale-105"
-              style={{ fontFamily: 'Montserrat, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', boxShadow: '0 6px 20px rgba(var(--web-primary-rgb, 37, 146, 127),0.35)' }}
+              style={{ fontFamily: 'Montserrat, sans-serif', backgroundColor: 'var(--web-primary, #D4AF37)', boxShadow: '0 6px 20px rgba(var(--web-primary-rgb, 212, 175, 55),0.35)' }}
             >
               Inscribirse ahora <ArrowRight size={18} />
             </Link>

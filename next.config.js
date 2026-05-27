@@ -4,7 +4,7 @@
 const securityHeaders = [
   {
     key: 'X-Frame-Options',
-    value: 'DENY' // Previene Clickjacking
+    value: 'SAMEORIGIN' // Previene Clickjacking externo; permite embeber contenido propio
   },
   {
     key: 'X-Content-Type-Options',
@@ -36,7 +36,7 @@ const securityHeaders = [
       "img-src 'self' data: blob: https: *", // 🖼️ FLEXIBLE: Permite imágenes de cualquier sitio seguro
       "connect-src 'self' https://*.izipay.pe https://*.paypal.com https://api-m.paypal.com https://api-m.sandbox.paypal.com https://*.culqi.com",
       "frame-src 'self' https: *", // 📺 FLEXIBLE: Permite videos/iframes de cualquier sitio seguro (YouTube, Vimeo, Wistia, etc.)
-      "object-src 'none'",
+      "object-src 'self'",
       "base-uri 'self'"
     ].join('; ')
   }
@@ -50,7 +50,7 @@ const nextConfig = {
       {
         source: '/(.*)',
         headers: securityHeaders
-      }
+      },
     ]
   },
   images: {

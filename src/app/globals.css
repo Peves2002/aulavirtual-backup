@@ -19,15 +19,15 @@
   --backdrop-color: rgb(var(--mui-mainColorChannels-light) / 0.5);
 
   /* IPG Design System */
-  --color-1: 170 60% 36%;   /* Primary Teal #25927F */
-  --color-2: 75 63% 62%;    /* Lime Green #BDD962 */
-  --color-3: 167 96% 19%;   /* Deep Teal #025E44 */
-  --color-4: 152 50% 46%;   /* Sage Green #3AB079 */
+  --color-1: 43 61% 52%;    /* Gold #D4AF37 */
+  --color-2: 47 86% 65%;    /* Gold Light #F0D060 */
+  --color-3: 0 0% 10%;      /* Near Black #1A1A1A */
+  --color-4: 0 0% 4%;       /* Almost Black #0A0A0A */
   --color-5: 0 0% 4%;       /* Almost Black #0A0A0A */
 
-  --ipg-primary: var(--web-primary, #25927F);
-  --ipg-primary-dark: var(--web-dark, #025E44);
-  --ipg-primary-light: var(--web-light, #BDD962);
+  --ipg-primary: var(--web-primary, #D4AF37);
+  --ipg-primary-dark: var(--web-dark, #1A1A1A);
+  --ipg-primary-light: var(--web-light, #F0D060);
   --ipg-black: #0A0A0A;
   --ipg-muted: #f1f5f4;
 
@@ -181,11 +181,11 @@ code {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--web-primary, #25927F);
+  color: var(--web-primary, #D4AF37);
   display: block;
   margin-bottom: 0.75rem;
 }
-.t-eyebrow-dark { color: var(--web-light, #BDD962); }
+.t-eyebrow-dark { color: var(--web-light, #F0D060); }
 
 /* H2 de sección */
 .t-section-h2 {

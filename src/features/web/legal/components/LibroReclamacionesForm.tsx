@@ -82,7 +82,7 @@ export default function LibroReclamacionesForm() {
         icon: 'success',
         title: '¡Reclamo Registrado!',
         text: `Tu código de seguimiento es: ${result.result.codigo}. Hemos enviado una copia de respaldo a tu correo electrónico.`,
-        confirmButtonColor: 'var(--web-primary, #25927F)'
+        confirmButtonColor: 'var(--web-primary, #D4AF37)'
       })
       reset()
     } catch (error: any) {
@@ -99,8 +99,8 @@ export default function LibroReclamacionesForm() {
   if (successCode) {
     return (
       <Card elevation={0} sx={{ border: '1px solid #e0e0e0', borderRadius: 2, textAlign: 'center', p: 4, my: 6 }}>
-        <BookOpenCheck size={64} color="var(--web-primary, #25927F)" style={{ margin: '0 auto 20px' }} />
-        <Typography variant="h4" gutterBottom fontWeight="800" color="var(--web-primary, #25927F)">
+        <BookOpenCheck size={64} color="var(--web-primary, #D4AF37)" style={{ margin: '0 auto 20px' }} />
+        <Typography variant="h4" gutterBottom fontWeight="800" color="var(--web-primary, #D4AF37)">
           Solicitud Enviada Exitosamente
         </Typography>
         <Typography variant="body1" color="text.secondary" mb={3}>
@@ -129,7 +129,7 @@ export default function LibroReclamacionesForm() {
   return (
     <Card elevation={0} sx={{ border: '1px solid #e0e0e0', borderRadius: 2, mb: 6 }}>
       <Box sx={{ bgcolor: '#f8f9fa', p: 3, borderBottom: '1px solid #e0e0e0', textAlign: 'center' }}>
-        <Typography variant="h5" fontWeight="900" color="var(--web-primary, #25927F)" mb={1}>
+        <Typography variant="h5" fontWeight="900" color="var(--web-primary, #D4AF37)" mb={1}>
           LIBRO DE RECLAMACIONES
         </Typography>
         <Typography variant="body1" color="text.secondary" maxWidth="800px" mx="auto">
@@ -147,7 +147,7 @@ export default function LibroReclamacionesForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
 
           {/* SECCIÓN 1 */}
-          <Typography variant="subtitle2" fontWeight="700" color="var(--web-primary, #25927F)" sx={{ bgcolor: '#f0f4f8', p: 1, mb: 3 }}>
+          <Typography variant="subtitle2" fontWeight="700" color="var(--web-primary, #D4AF37)" sx={{ bgcolor: '#f0f4f8', p: 1, mb: 3 }}>
             1. IDENTIFICACIÓN DEL CONSUMIDOR RECLAMANTE
           </Typography>
 
@@ -229,7 +229,7 @@ export default function LibroReclamacionesForm() {
           </Grid>
 
           {/* SECCIÓN 2 */}
-          <Typography variant="subtitle2" fontWeight="700" color="var(--web-primary, #25927F)" sx={{ bgcolor: '#f0f4f8', p: 1, mt: 5, mb: 3 }}>
+          <Typography variant="subtitle2" fontWeight="700" color="var(--web-primary, #D4AF37)" sx={{ bgcolor: '#f0f4f8', p: 1, mt: 5, mb: 3 }}>
             2. IDENTIFICACIÓN DEL BIEN CONTRATADO
           </Typography>
 
@@ -295,7 +295,7 @@ export default function LibroReclamacionesForm() {
           </Grid>
 
           {/* SECCIÓN 3 */}
-          <Typography variant="subtitle2" fontWeight="700" color="var(--web-primary, #25927F)" sx={{ bgcolor: '#f0f4f8', p: 1, mt: 5, mb: 3 }}>
+          <Typography variant="subtitle2" fontWeight="700" color="var(--web-primary, #D4AF37)" sx={{ bgcolor: '#f0f4f8', p: 1, mt: 5, mb: 3 }}>
             3. DETALLE DE LA RECLAMACIÓN Y PEDIDO DEL CONSUMIDOR
           </Typography>
 
@@ -357,13 +357,13 @@ export default function LibroReclamacionesForm() {
             size="large"
             disabled={isSubmitting}
             sx={{
-              bgcolor: 'var(--web-primary, #25927F)',
+              bgcolor: 'var(--web-primary, #D4AF37)',
               color: 'white',
               py: 1.5,
               px: 4,
               borderRadius: 2,
               fontWeight: 'bold',
-              '&:hover': { bgcolor: 'var(--web-dark, #025E44)' }
+              '&:hover': { bgcolor: 'var(--web-dark, #1A1A1A)' }
             }}
             fullWidth
           >

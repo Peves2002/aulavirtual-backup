@@ -9,7 +9,7 @@ import { Search, Award, ShieldCheck } from 'lucide-react'
 import ScrollReveal from './ScrollReveal'
 import { sectionH2Dark, sectionDescDark, smallText } from './typography'
 
-export default function SearchCertificateSection() {
+export default function SearchCertificateSection({ light = false }: { light?: boolean }) {
   const router = useRouter()
   const [codigo, setCodigo] = useState('')
   const [error, setError] = useState('')
@@ -34,17 +34,20 @@ export default function SearchCertificateSection() {
     router.push(`/verificar-certificado/${encodeURIComponent(trimmedCodigo)}`)
   }
 
+  const isDark = !light
+
   return (
-    <section style={{ backgroundColor: 'var(--web-dark, #025E44)', padding: '5rem 1rem' }}>
+    <section style={{ backgroundColor: light ? '#ffffff' : '#0A0A0A', padding: '5rem 1rem' }}>
       <div style={{ maxWidth: '56rem', margin: '0 auto' }}>
         <ScrollReveal>
           <div
             className="rounded-3xl relative overflow-hidden"
             style={{
-              backgroundColor: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              backgroundColor: light ? '#ffffff' : 'rgba(255,255,255,0.05)',
+              border: `1px solid ${light ? '#e5e7eb' : 'rgba(255,255,255,0.1)'}`,
               padding: '3rem 2rem',
-              backdropFilter: 'blur(10px)',
+              backdropFilter: isDark ? 'blur(10px)' : 'none',
+              boxShadow: light ? '0 4px 32px rgba(0,0,0,0.08)' : 'none',
             }}
           >
             {/* Decorative background icon */}
@@ -52,21 +55,21 @@ export default function SearchCertificateSection() {
               className="absolute top-0 right-0 pointer-events-none"
               style={{ opacity: 0.04, padding: '2rem' }}
             >
-              <Award style={{ width: '16rem', height: '16rem', color: 'var(--web-light, #BDD962)', marginTop: '-3rem', marginRight: '-3rem' }} />
+              <Award style={{ width: '16rem', height: '16rem', color: 'var(--web-primary, #D4AF37)', marginTop: '-3rem', marginRight: '-3rem' }} />
             </div>
 
             {/* Header */}
             <div className="relative z-10 text-center mb-10">
               <div
                 className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6"
-                style={{ backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.15)', border: '1px solid rgba(var(--web-light-rgb, 189, 217, 98),0.2)' }}
+                style={{ backgroundColor: 'rgba(var(--web-primary-rgb, 212, 175, 55),0.12)', border: '1px solid rgba(var(--web-primary-rgb, 212, 175, 55),0.2)' }}
               >
-                <ShieldCheck style={{ width: '2rem', height: '2rem', color: 'var(--web-light, #BDD962)' }} />
+                <ShieldCheck style={{ width: '2rem', height: '2rem', color: 'var(--web-primary, #D4AF37)' }} />
               </div>
-              <h2 className="mb-4" style={sectionH2Dark}>
+              <h2 className="mb-4" style={{ fontFamily: 'Montserrat, sans-serif', fontSize: 'clamp(1.75rem, 3vw, 2rem)', fontWeight: 800, color: light ? '#0A0A0A' : '#ffffff', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: '0.75rem' }}>
                 Verificar Certificado
               </h2>
-              <p style={{ ...sectionDescDark, maxWidth: '36rem', margin: '0 auto' }}>
+              <p style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '1rem', fontWeight: 400, color: light ? '#64748b' : 'rgba(255,255,255,0.55)', lineHeight: 1.7, maxWidth: '36rem', margin: '0 auto' }}>
                 Ingresa el código único ubicado en la parte inferior de tu certificado
                 para comprobar su validez y autenticidad.
               </p>
@@ -77,7 +80,7 @@ export default function SearchCertificateSection() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="relative flex-1">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Search style={{ width: '1.25rem', height: '1.25rem', color: 'rgba(255,255,255,0.4)' }} />
+                    <Search style={{ width: '1.25rem', height: '1.25rem', color: light ? '#94a3b8' : 'rgba(255,255,255,0.4)' }} />
                   </div>
                   <input
                     type="text"
@@ -95,17 +98,17 @@ export default function SearchCertificateSection() {
                       paddingRight: '1rem',
                       paddingTop: '1rem',
                       paddingBottom: '1rem',
-                      backgroundColor: 'rgba(255,255,255,0.08)',
-                      border: '1.5px solid rgba(255,255,255,0.15)',
+                      backgroundColor: light ? '#f8fafc' : 'rgba(255,255,255,0.08)',
+                      border: `1.5px solid ${light ? '#e2e8f0' : 'rgba(255,255,255,0.15)'}`,
                       borderRadius: '0.75rem',
-                      color: '#ffffff',
+                      color: light ? '#0A0A0A' : '#ffffff',
                       fontSize: '1rem',
                       letterSpacing: '0.05em',
                       outline: 'none',
                       transition: 'border-color 0.2s',
                     }}
-                    onFocus={e => { e.currentTarget.style.borderColor = 'var(--web-light, #BDD962)' }}
-                    onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'var(--web-primary, #D4AF37)' }}
+                    onBlur={e => { e.currentTarget.style.borderColor = light ? '#e2e8f0' : 'rgba(255,255,255,0.15)' }}
                   />
                 </div>
                 <button
@@ -116,17 +119,17 @@ export default function SearchCertificateSection() {
                     fontFamily: 'Poppins, sans-serif',
                     padding: '1rem 2rem',
                     borderRadius: '0.75rem',
-                    backgroundColor: 'var(--web-light, #BDD962)',
-                    color: '#0A0A0A',
+                    backgroundColor: 'var(--web-primary, #D4AF37)',
+                    color: '#ffffff',
                     fontWeight: 700,
                     fontSize: '0.9375rem',
                     border: 'none',
                     cursor: 'pointer',
-                    boxShadow: '0 4px 15px rgba(var(--web-light-rgb, 189, 217, 98),0.3)',
+                    boxShadow: '0 4px 15px rgba(var(--web-primary-rgb, 212, 175, 55),0.3)',
                     opacity: !codigo.trim() ? 0.5 : 1,
                   }}
-                  onMouseEnter={e => { if (codigo.trim()) (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#cce670' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--web-light, #BDD962)' }}
+                  onMouseEnter={e => { if (codigo.trim()) (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#b8960c' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--web-primary, #D4AF37)' }}
                 >
                   <Search size={18} />
                   Buscar
@@ -136,7 +139,7 @@ export default function SearchCertificateSection() {
               {error && (
                 <p
                   className="mt-3 text-center text-sm"
-                  style={{ fontFamily: 'Poppins, sans-serif', color: 'var(--web-light, #BDD962)' }}
+                  style={{ fontFamily: 'Poppins, sans-serif', color: 'var(--web-primary, #D4AF37)' }}
                 >
                   {error}
                 </p>
@@ -144,7 +147,7 @@ export default function SearchCertificateSection() {
 
               <p
                 className="mt-5 text-center text-sm"
-                style={{ ...smallText, color: 'rgba(255,255,255,0.4)', textAlign: 'center' }}
+                style={{ ...smallText, color: light ? '#94a3b8' : 'rgba(255,255,255,0.4)', textAlign: 'center' }}
               >
                 Nuestro sistema garantiza la autenticidad de todos los certificados emitidos.
               </p>

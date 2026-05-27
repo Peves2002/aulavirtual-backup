@@ -81,7 +81,7 @@ const CouponInput = ({ cursoIds, onApplied }: CouponInputProps) => {
                 fontSize: '0.875rem',
               },
               '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                borderColor: 'var(--web-primary, #25927F)',
+                borderColor: 'var(--web-primary, #D4AF37)',
               },
             }}
             InputProps={{
@@ -103,9 +103,9 @@ const CouponInput = ({ cursoIds, onApplied }: CouponInputProps) => {
               fontWeight: 700,
               textTransform: 'none',
               minWidth: '90px',
-              backgroundColor: 'var(--web-primary, #25927F)',
-              '&:hover': { backgroundColor: 'var(--web-dark, #025E44)' },
-              '&:disabled': { backgroundColor: 'rgba(var(--web-primary-rgb, 37, 146, 127), 0.35)', color: 'rgba(255,255,255,0.7)' },
+              backgroundColor: 'var(--web-primary, #D4AF37)',
+              '&:hover': { backgroundColor: 'var(--web-dark, #1A1A1A)' },
+              '&:disabled': { backgroundColor: 'rgba(var(--web-primary-rgb, 212, 175, 55), 0.35)', color: 'rgba(255,255,255,0.7)' },
             }}
           >
             {loading ? <CircularProgress size={20} color="inherit" /> : 'Aplicar'}

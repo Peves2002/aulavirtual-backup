@@ -17,28 +17,28 @@ import { eyebrowDark, sectionH2Dark, sectionDescDark, cardTitle, cardBody } from
 const features = [
   {
     icon: Video,
-    title: 'Clases en vivo con expertos legales',
-    desc: 'Sesiones sincrónicas con abogados y consultores en ejercicio, más acceso a grabaciones permanentes.',
+    title: 'Clases en vivo con especialistas activos',
+    desc: 'Sesiones sincrónicas con auditores, funcionarios y expertos en control gubernamental en ejercicio, más grabaciones permanentes.',
   },
   {
     icon: Download,
-    title: 'Plantillas y documentos legales',
-    desc: 'Contratos, escritos judiciales, modelos normativos y recursos descargables para tu práctica profesional.',
+    title: 'Material especializado descargable',
+    desc: 'Normativa vigente, casos prácticos, guías de concursos públicos y recursos actualizados para tu preparación.',
   },
   {
     icon: ClipboardList,
-    title: 'Evaluaciones y seguimiento',
-    desc: 'Exámenes por módulo con retroalimentación inmediata y panel de progreso detallado para certificarte.',
+    title: 'Simulacros y evaluaciones',
+    desc: 'Exámenes tipo concurso público con retroalimentación inmediata y panel de progreso para medir tu avance.',
   },
   {
     icon: MessageSquare,
-    title: 'Comunidad de juristas',
-    desc: 'Foro activo donde abogados, fiscales y asesores comparten casos, criterios y oportunidades de networking.',
+    title: 'Comunidad de servidores públicos',
+    desc: 'Foro activo donde postulantes, funcionarios y especialistas comparten experiencias, casos y oportunidades.',
   },
   {
     icon: Award,
-    title: 'Certificado con validez profesional',
-    desc: 'Al finalizar recibes un certificado con código QR verificable, reconocido en el ámbito empresarial y legal.',
+    title: 'Certificado verificable con QR',
+    desc: 'Al finalizar recibes un certificado con código QR verificable, respaldado por especialistas de trayectoria comprobada.',
   },
 ]
 
@@ -55,7 +55,7 @@ function PhoneMockup() {
           width: '280px',
           height: '280px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(var(--web-primary-rgb, 37, 146, 127),0.35) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(var(--web-primary-rgb, 212, 175, 55),0.35) 0%, transparent 70%)',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
@@ -111,14 +111,14 @@ function PhoneMockup() {
             <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
               <div style={{ width: '14px', height: '6px', border: '1px solid rgba(255,255,255,0.5)', borderRadius: '2px', position: 'relative' }}>
                 <div style={{ position: 'absolute', right: '-3px', top: '50%', transform: 'translateY(-50%)', width: '2px', height: '4px', backgroundColor: 'rgba(255,255,255,0.5)', borderRadius: '1px' }} />
-                <div style={{ width: '9px', height: '4px', backgroundColor: 'var(--web-primary, #25927F)', borderRadius: '1px', margin: '0px 0.5px' }} />
+                <div style={{ width: '9px', height: '4px', backgroundColor: 'var(--web-primary, #D4AF37)', borderRadius: '1px', margin: '0px 0.5px' }} />
               </div>
             </div>
           </div>
 
           {/* Header de la clase */}
           <div style={{ padding: '4px 14px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.625rem', color: 'rgba(255,255,255,0.5)', fontWeight: 500 }}>Asesoría Jurídica Corporativa</span>
+            <span style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.625rem', color: 'rgba(255,255,255,0.5)', fontWeight: 500 }}>Control Gubernamental — Contraloría</span>
             {/* Live badge */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: 'rgba(239,68,68,0.2)', border: '1px solid rgba(239,68,68,0.4)', borderRadius: '999px', padding: '2px 7px' }}>
               <div style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#ef4444', animation: 'pulse 1.5s infinite' }} />
@@ -132,7 +132,7 @@ function PhoneMockup() {
               margin: '0 10px',
               borderRadius: '14px',
               overflow: 'hidden',
-              background: 'linear-gradient(135deg, var(--web-dark, #025E44) 0%, var(--web-primary, #25927F) 100%)',
+              background: 'linear-gradient(135deg, var(--web-dark, #1A1A1A) 0%, var(--web-primary, #D4AF37) 100%)',
               height: '130px',
               position: 'relative',
               display: 'flex',
@@ -145,13 +145,13 @@ function PhoneMockup() {
               <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.15)', border: '2px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <span style={{ fontSize: '1.125rem' }}>⚖️</span>
               </div>
-              <span style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.5625rem', color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>Dr. Carlos Mendoza</span>
+              <span style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.5625rem', color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>Mg. Roberto Quispe</span>
             </div>
 
             {/* Controles video */}
             <div style={{ position: 'absolute', bottom: '8px', left: '10px', right: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ height: '2px', flex: 1, backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: '999px', overflow: 'hidden', marginRight: '8px' }}>
-                <div style={{ width: '45%', height: '100%', backgroundColor: 'var(--web-light, #BDD962)', borderRadius: '999px' }} />
+                <div style={{ width: '45%', height: '100%', backgroundColor: 'var(--web-light, #F0D060)', borderRadius: '999px' }} />
               </div>
               <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.5rem', color: 'rgba(255,255,255,0.5)' }}>24:38</span>
             </div>
@@ -161,7 +161,7 @@ function PhoneMockup() {
           <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               {/* Mini avatares */}
-              {['var(--web-primary, #25927F)', 'var(--web-light, #BDD962)', 'var(--web-dark, #025E44)'].map((c, i) => (
+              {['var(--web-primary, #D4AF37)', 'var(--web-light, #F0D060)', 'var(--web-dark, #1A1A1A)'].map((c, i) => (
                 <div key={i} style={{ width: '20px', height: '20px', borderRadius: '50%', backgroundColor: c, border: '1.5px solid #0f172a', marginLeft: i > 0 ? '-8px' : 0, zIndex: 3 - i }} />
               ))}
               <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.5625rem', color: 'rgba(255,255,255,0.5)', marginLeft: '4px' }}>
@@ -180,8 +180,8 @@ function PhoneMockup() {
           {/* Chat */}
           <div style={{ flex: 1, padding: '0 10px', display: 'flex', flexDirection: 'column', gap: '6px', overflow: 'hidden' }}>
             {[
-              { name: 'Ana G.', msg: '¿Pueden repetir el último punto?', color: 'var(--web-primary, #25927F)' },
-              { name: 'Carlos R.', msg: 'Excelente explicación 👏', color: 'var(--web-light, #BDD962)' },
+              { name: 'Ana G.', msg: '¿Pueden repetir el último punto?', color: 'var(--web-primary, #D4AF37)' },
+              { name: 'Carlos R.', msg: 'Excelente explicación 👏', color: 'var(--web-light, #F0D060)' },
               { name: 'Luis M.', msg: '¿El material estará disponible?', color: '#3AB079' },
             ].map((chat, i) => (
               <div key={i} style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
@@ -201,7 +201,7 @@ function PhoneMockup() {
             <div style={{ flex: 1, backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: '10px', padding: '6px 10px', border: '1px solid rgba(255,255,255,0.08)' }}>
               <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.5rem', color: 'rgba(255,255,255,0.25)' }}>Escribe un mensaje…</span>
             </div>
-            <div style={{ width: '26px', height: '26px', borderRadius: '10px', backgroundColor: 'var(--web-primary, #25927F)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6875rem' }}>
+            <div style={{ width: '26px', height: '26px', borderRadius: '10px', backgroundColor: 'var(--web-primary, #D4AF37)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6875rem' }}>
               ➤
             </div>
           </div>
@@ -224,7 +224,7 @@ function PhoneMockup() {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div style={{ width: '32px', height: '32px', borderRadius: '10px', backgroundColor: 'rgba(var(--web-primary-rgb, 37, 146, 127),0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}>
+          <div style={{ width: '32px', height: '32px', borderRadius: '10px', backgroundColor: 'rgba(var(--web-primary-rgb, 212, 175, 55),0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}>
             🎓
           </div>
           <div>
@@ -250,7 +250,7 @@ function PhoneMockup() {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div style={{ width: '32px', height: '32px', borderRadius: '10px', backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}>
+          <div style={{ width: '32px', height: '32px', borderRadius: '10px', backgroundColor: 'rgba(var(--web-light-rgb, 240, 208, 96),0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}>
             ⭐
           </div>
           <div>
@@ -289,11 +289,11 @@ export default function ClassFeaturesSection() {
               <div style={{ marginBottom: '2.5rem' }}>
                 <p style={eyebrowDark}>Experiencia de aprendizaje</p>
                 <h2 style={sectionH2Dark}>
-                  Formación jurídica<br />
-                  <span style={{ color: 'var(--web-primary, #25927F)' }}>de alto impacto</span>
+                  Formación especializada<br />
+                  <span style={{ color: 'var(--web-primary, #D4AF37)' }}>para el sector público</span>
                 </h2>
                 <p style={sectionDescDark}>
-                  Una plataforma diseñada para abogados, asesores y gestores que necesitan actualización legal continua, respaldada por expertos en ejercicio.
+                  Una plataforma diseñada para postulantes y servidores del Estado que buscan dominar el control gubernamental, la contratación estatal y el derecho administrativo con los mejores especialistas en actividad.
                 </p>
               </div>
             </ScrollReveal>
@@ -330,7 +330,7 @@ function FeatureRow({ feature }: { feature: typeof features[number] }) {
         gap: '1rem',
         padding: '1rem',
         borderRadius: '12px',
-        borderLeft: hovered ? '3px solid var(--web-light, #BDD962)' : '3px solid transparent',
+        borderLeft: hovered ? '3px solid var(--web-light, #F0D060)' : '3px solid transparent',
         backgroundColor: hovered ? 'rgba(255,255,255,0.04)' : 'transparent',
         transition: 'all 0.25s ease',
         cursor: 'default',
@@ -341,7 +341,7 @@ function FeatureRow({ feature }: { feature: typeof features[number] }) {
           width: '40px',
           height: '40px',
           borderRadius: '10px',
-          backgroundColor: hovered ? 'rgba(var(--web-primary-rgb, 37, 146, 127),0.25)' : 'rgba(var(--web-primary-rgb, 37, 146, 127),0.12)',
+          backgroundColor: hovered ? 'rgba(var(--web-primary-rgb, 212, 175, 55),0.25)' : 'rgba(var(--web-primary-rgb, 212, 175, 55),0.12)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -349,7 +349,7 @@ function FeatureRow({ feature }: { feature: typeof features[number] }) {
           transition: 'background-color 0.25s',
         }}
       >
-        <feature.icon size={20} color={hovered ? 'var(--web-light, #BDD962)' : 'var(--web-primary, #25927F)'} strokeWidth={2} />
+        <feature.icon size={20} color={hovered ? 'var(--web-light, #F0D060)' : 'var(--web-primary, #D4AF37)'} strokeWidth={2} />
       </div>
       <div>
         <div style={{ ...cardTitle, color: hovered ? '#ffffff' : 'rgba(255,255,255,0.85)', transition: 'color 0.25s' }}>
@@ -361,7 +361,7 @@ function FeatureRow({ feature }: { feature: typeof features[number] }) {
       </div>
       <CheckCircle
         size={16}
-        style={{ marginLeft: 'auto', flexShrink: 0, color: 'var(--web-primary, #25927F)', opacity: hovered ? 1 : 0, transition: 'opacity 0.25s', marginTop: '2px' }}
+        style={{ marginLeft: 'auto', flexShrink: 0, color: 'var(--web-primary, #D4AF37)', opacity: hovered ? 1 : 0, transition: 'opacity 0.25s', marginTop: '2px' }}
       />
     </div>
   )

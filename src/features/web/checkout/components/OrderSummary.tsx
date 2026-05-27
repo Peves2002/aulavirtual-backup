@@ -48,7 +48,7 @@ const OrderSummary = ({ courses, appliedCoupon, onCouponApplied }: OrderSummaryP
             }}
         >
             <Typography sx={{ fontFamily: FONT, fontWeight: 800, fontSize: '1.25rem', color: '#0A0A0A', mb: 3 }}>
-                Resumen del <span style={{ color: 'var(--web-primary, #25927F)' }}>Pedido</span>
+                Resumen del <span style={{ color: 'var(--web-primary, #D4AF37)' }}>Pedido</span>
             </Typography>
 
             <Stack spacing={3}>
@@ -110,17 +110,17 @@ const OrderSummary = ({ courses, appliedCoupon, onCouponApplied }: OrderSummaryP
 
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Typography sx={{ fontFamily: FONT, fontWeight: 800, fontSize: '1rem', color: '#0A0A0A' }}>Total</Typography>
-                    <Typography sx={{ fontFamily: FONT, fontWeight: 800, fontSize: '1.375rem', color: 'var(--web-primary, #25927F)' }}>
+                    <Typography sx={{ fontFamily: FONT, fontWeight: 800, fontSize: '1.375rem', color: 'var(--web-primary, #D4AF37)' }}>
                         {moneda} {total.toFixed(2)}
                     </Typography>
                 </Stack>
 
-                <Box sx={{ p: 2, backgroundColor: 'rgba(var(--web-primary-rgb, 37, 146, 127), 0.07)', borderRadius: '16px', border: '1px solid rgba(var(--web-primary-rgb, 37, 146, 127), 0.2)' }}>
+                <Box sx={{ p: 2, backgroundColor: 'rgba(var(--web-primary-rgb, 212, 175, 55), 0.07)', borderRadius: '16px', border: '1px solid rgba(var(--web-primary-rgb, 212, 175, 55), 0.2)' }}>
                     <Stack direction="row" spacing={1.5} alignItems="center">
-                        <Box sx={{ flexShrink: 0, width: 32, height: 32, borderRadius: '50%', backgroundColor: 'var(--web-primary, #25927F)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Box sx={{ flexShrink: 0, width: 32, height: 32, borderRadius: '50%', backgroundColor: 'var(--web-primary, #D4AF37)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <ShieldCheck size={16} color="#ffffff" />
                         </Box>
-                        <Typography sx={{ fontFamily: FONT, fontSize: '0.75rem', fontWeight: 600, color: 'var(--web-dark, #025E44)', lineHeight: 1.35 }}>
+                        <Typography sx={{ fontFamily: FONT, fontSize: '0.75rem', fontWeight: 600, color: 'var(--web-dark, #1A1A1A)', lineHeight: 1.35 }}>
                             Compra 100% segura. Acceso inmediato tras confirmar el pago.
                         </Typography>
                     </Stack>
