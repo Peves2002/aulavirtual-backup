@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import {
   ArrowRight, Award, BookOpen, CheckCircle2,
-  GraduationCap, HeartPulse, Hammer, Scale, Sparkles, Users,
+  Clock, GraduationCap, HeartPulse, Hammer, Scale, Sparkles, Users,
 } from 'lucide-react'
 
 import prisma from '@/utils/libs/prisma'
@@ -27,22 +27,35 @@ const pillars = [
 
 async function getHomeData() {
   try {
-    const configs = await getConfigs()
+    const [coursesRaw, configs] = await Promise.all([
+      prisma.curso.findMany({
+        where: { estado: 'PUBLICADO' },
+        include: {
+          categoria: { select: { nombre: true, slug: true } },
+          _count: { select: { modulos: true } },
+        },
+        orderBy: { creado_en: 'desc' },
+        take: 6,
+      }),
+      getConfigs(),
+    ])
+
     const heroImg = configs.HOME_HERO_IMAGE || '/images/pagina/banner.png'
     const waNumber = configs.WHATSAPP_NUMERO || ''
     const waLink = waNumber ? `https://wa.me/${waNumber}` : '#'
 
-    return { heroImg, waLink }
+    return { heroImg, waLink, courses: JSON.parse(JSON.stringify(coursesRaw)) }
   } catch {
     return {
-      heroImg: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1536&q=80',
+      heroImg: '/images/pagina/banner.png',
       waLink: '#',
+      courses: [],
     }
   }
 }
 
 export default async function HomePage() {
-  const { heroImg, waLink } = await getHomeData()
+  const { heroImg, waLink, courses } = await getHomeData()
 
   return (
     <>
@@ -187,42 +200,93 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* AREAS */}
+      {/* CURSOS DESTACADOS */}
       <section className="py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid items-end gap-6 md:grid-cols-2">
-            <div>
+          <div className="grid items-start gap-14 lg:grid-cols-5">
+
+            {/* Izquierda: texto */}
+            <div className="lg:col-span-2 lg:sticky lg:top-28">
               <span className="text-xs font-bold uppercase tracking-[0.2em] text-brand-teal">
-                Áreas de formación
+                Cursos destacados
               </span>
               <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight text-balance text-foreground sm:text-5xl">
-                Programas para cada vocación profesional
+                Empieza a aprender hoy
               </h2>
+              <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
+                Accede a programas diseñados por expertos del sector. Aprende a tu
+                ritmo, obtén certificación y transforma tu carrera profesional
+                desde cualquier lugar del Perú.
+              </p>
+              <ul className="mt-8 space-y-3">
+                {[
+                  'Contenido actualizado y riguroso',
+                  'Certificados con validez profesional',
+                  'Soporte y acompañamiento personalizado',
+                  'Acceso de por vida al material',
+                ].map(t => (
+                  <li key={t} className="flex items-center gap-3 text-sm text-foreground/80">
+                    <CheckCircle2 className="h-5 w-5 shrink-0 text-brand-teal" />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/cursos"
+                className="mt-10 inline-flex items-center gap-2 rounded-full bg-orange-gradient px-7 py-3.5 text-sm font-bold text-white shadow-soft transition-base hover:shadow-glow no-underline"
+              >
+                Ver todos los cursos <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
-            <p className="text-lg text-muted-foreground md:text-right">
-              Diplomados y especializaciones diseñados con docentes expertos del
-              Perú y la región.
-            </p>
-          </div>
 
-          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { icon: GraduationCap, title: 'Educación',  desc: 'Innovación pedagógica, evaluación por competencias y gestión escolar.',      bg: 'bg-teal-gradient' },
-              { icon: Scale,         title: 'Derecho',    desc: 'Penal, civil, laboral y administrativo con casuística actualizada.',          bg: 'bg-orange-gradient' },
-              { icon: Hammer,        title: 'Ingeniería', desc: 'Gestión de proyectos, seguridad y especialidades técnicas.',                  bg: 'bg-hero-gradient' },
-              { icon: HeartPulse,    title: 'Salud',      desc: 'Atención clínica, gestión hospitalaria y especialidades médicas.',            bg: 'bg-teal-gradient' },
-            ].map(({ icon: Icon, title, desc, bg }) => (
-              <article key={title} className="group relative overflow-hidden rounded-3xl border border-border bg-card p-7 hover-lift">
-                <div className={`flex h-14 w-14 items-center justify-center rounded-2xl text-white shadow-soft ${bg}`}>
-                  <Icon className="h-7 w-7" />
+            {/* Derecha: cursos */}
+            <div className="lg:col-span-3">
+              {courses.length > 0 ? (
+                <div className="grid gap-5 sm:grid-cols-2">
+                  {courses.map((c: any) => (
+                    <article key={c.id} className="group hover-lift relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card">
+                      <div className="relative flex h-28 items-end justify-between p-5 text-white bg-hero-gradient">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
+                          <GraduationCap className="h-5 w-5" />
+                        </div>
+                        {c.categoria && (
+                          <span className="rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest backdrop-blur">
+                            {c.categoria.nombre}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-1 flex-col p-5">
+                        <h3 className="font-display text-base font-bold leading-snug text-foreground">
+                          {c.titulo}
+                        </h3>
+                        {c.descripcion && (
+                          <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-2">
+                            {c.descripcion}
+                          </p>
+                        )}
+                        <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+                            <Clock className="h-3.5 w-3.5" />
+                            {c._count?.modulos || 0} módulos
+                          </span>
+                          <Link href={`/cursos/${c.slug}`} className="inline-flex items-center gap-1 text-sm font-bold text-brand-navy transition-base group-hover:text-brand-orange no-underline">
+                            Ver curso <ArrowRight className="h-3.5 w-3.5" />
+                          </Link>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
                 </div>
-                <h3 className="mt-5 font-display text-2xl font-bold text-foreground">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{desc}</p>
-                <Link href="/cursos" className="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-brand-orange story-link no-underline">
-                  Ver programas
-                </Link>
-              </article>
-            ))}
+              ) : (
+                <div className="flex h-64 items-center justify-center rounded-3xl border border-border bg-secondary">
+                  <div className="text-center">
+                    <GraduationCap className="mx-auto h-12 w-12 mb-3 text-foreground/20" />
+                    <p className="text-muted-foreground">Próximamente habrá cursos disponibles.</p>
+                  </div>
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
       </section>
