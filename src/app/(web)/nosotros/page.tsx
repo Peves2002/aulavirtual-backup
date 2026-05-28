@@ -1,299 +1,169 @@
-import Link from 'next/link'
-
-import { ArrowRight } from 'lucide-react'
-
-import prisma from '@/utils/libs/prisma'
-import ScrollReveal from '@/features/web/home/components/ScrollReveal'
-import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
-import { MisionVisionSection, ValoresSection } from '@/features/web/nosotros/components/NosotrosInteractive'
+import { Compass, Target, Heart, Award, Sparkles } from 'lucide-react'
 
 export const metadata = {
-  title: 'Nosotros - Aula Virtual',
-  description: 'Conoce quiénes somos, nuestra misión, visión y los valores que guían nuestra plataforma educativa.',
+  title: 'Nosotros — Aula Virtual',
+  description: 'Conoce la visión y misión: formación profesional online de alto nivel.',
 }
 
-async function getTeachers() {
-  try {
-    return await prisma.usuario.findMany({
-      where: { rol: 'PROFESOR' },
-      select: {
-        id: true,
-        nombre: true,
-        apellido: true,
-        slug: true,
-        avatar: true,
-        cargo: true,
-        biografia: true,
-        _count: { select: { cursos_dictados: true } },
-      },
-      orderBy: { cursos_dictados: { _count: 'desc' } },
-      take: 12,
-    })
-  } catch {
-    return []
-  }
-}
-
-export default async function NosotrosPage() {
-  const teachers = await getTeachers()
+export default function NosotrosPage() {
+  const aboutImg = '/images/pagina/presenta.png'
 
   return (
     <>
-      {/* ── 1. HERO SOBRE NOSOTROS ─────────────────────── */}
-      <section
-        style={{
-          background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
-          padding: '6rem 1.5rem 5rem',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Grid pattern */}
-        <div
-          aria-hidden
-          style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
-        />
-        {/* Glow */}
-        <div aria-hidden style={{ position: 'absolute', top: '-20%', right: '-10%', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(var(--web-primary-rgb, 37, 146, 127),0.22) 0%, transparent 65%)', pointerEvents: 'none' }} />
-
-        <div style={{ maxWidth: '1280px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '3.5rem',
-              alignItems: 'center',
-            }}
-          >
-            {/* Left: stats visual */}
-            <ScrollReveal direction="left">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-
-                {/* Card principal */}
-                <div
-                  style={{
-                    borderRadius: '20px',
-                    background: 'rgba(255,255,255,0.07)',
-                    border: '1.5px solid rgba(255,255,255,0.12)',
-                    backdropFilter: 'blur(16px)',
-                    padding: '1.5rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '1rem',
-                  }}
-                >
-                  <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'linear-gradient(135deg,var(--web-dark, #025E44),var(--web-primary, #25927F))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '1.75rem' }}>
-                    🎓
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.6875rem', color: 'rgba(255,255,255,0.4)', fontWeight: 500, marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Plataforma educativa</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', fontWeight: 800, color: '#ffffff', lineHeight: 1.2 }}>Formación profesional</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>especializada y certificada</div>
-                  </div>
-                </div>
-
-                {/* Stats 2×2 */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  {[
-                    { emoji: '👩‍🎓', value: '+1,200', label: 'Estudiantes formados' },
-                    { emoji: '📚', value: '+80', label: 'Cursos disponibles' },
-                    { emoji: '👨‍🏫', value: '+30', label: 'Docentes expertos' },
-                    { emoji: '🏆', value: '98%', label: 'Tasa de satisfacción' },
-                  ].map((s, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        borderRadius: '16px',
-                        background: 'rgba(255,255,255,0.06)',
-                        border: '1.5px solid rgba(255,255,255,0.09)',
-                        backdropFilter: 'blur(12px)',
-                        padding: '1.125rem 1.25rem',
-                      }}
-                    >
-                      <span style={{ fontSize: '1.375rem' }}>{s.emoji}</span>
-                      <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.375rem', fontWeight: 800, color: 'var(--web-light, #BDD962)', lineHeight: 1, marginTop: '0.5rem' }}>{s.value}</div>
-                      <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '3px', lineHeight: 1.3 }}>{s.label}</div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Certificado badge */}
-                <div
-                  style={{
-                    borderRadius: '16px',
-                    background: 'linear-gradient(135deg, rgba(var(--web-light-rgb, 189, 217, 98),0.12) 0%, rgba(var(--web-primary-rgb, 37, 146, 127),0.12) 100%)',
-                    border: '1.5px solid rgba(var(--web-light-rgb, 189, 217, 98),0.25)',
-                    padding: '1rem 1.25rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.875rem',
-                  }}
-                >
-                  <div style={{ fontSize: '1.75rem', flexShrink: 0 }}>📜</div>
-                  <div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', fontWeight: 700, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>Certificados con validez empresarial</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '4px' }}>Reconocidos por las principales empresas del sector</div>
-                  </div>
-                </div>
-
-              </div>
-            </ScrollReveal>
-
-            {/* Right: text */}
-            <ScrollReveal direction="right" delay={0.1}>
-              <div>
-                <div
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.12)',
-                    border: '1px solid rgba(var(--web-light-rgb, 189, 217, 98),0.25)',
-                    borderRadius: '999px',
-                    padding: '0.375rem 1rem',
-                    marginBottom: '1.5rem',
-                  }}
-                >
-                  <div style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: 'var(--web-light, #BDD962)', boxShadow: '0 0 6px var(--web-light, #BDD962)' }} />
-                  <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>
-                    Sobre nosotros
-                  </span>
-                </div>
-
-                <h1
-                  style={{
-                    fontFamily: 'Poppins, sans-serif',
-                    fontSize: 'clamp(1.875rem, 4vw, 2.75rem)',
-                    fontWeight: 800,
-                    color: '#ffffff',
-                    letterSpacing: '-0.025em',
-                    lineHeight: 1.15,
-                    marginBottom: '1.25rem',
-                  }}
-                >
-                  Somos calidad y{' '}
-                  <span style={{ color: 'var(--web-light, #BDD962)' }}>responsabilidad</span>{' '}
-                  a tu servicio
-                </h1>
-
-                <p
-                  style={{
-                    fontFamily: 'Poppins, sans-serif',
-                    fontSize: '1rem',
-                    color: 'rgba(255,255,255,0.65)',
-                    lineHeight: 1.75,
-                    maxWidth: '480px',
-                    marginBottom: '2.5rem',
-                  }}
-                >
-                  Somos una plataforma educativa especializada en la formación profesional de alto impacto.
-                  Ofrecemos cursos diseñados por expertos del sector, con certificaciones reconocidas
-                  que impulsan tu desarrollo profesional y el de tu equipo.
-                </p>
-
-                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                  <Link
-                    href="/cursos"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                      padding: '0.875rem 1.75rem',
-                      borderRadius: '12px',
-                      backgroundColor: 'var(--web-light, #BDD962)',
-                      color: '#0A0A0A',
-                      fontFamily: 'Poppins, sans-serif',
-                      fontWeight: 700,
-                      fontSize: '0.9375rem',
-                      textDecoration: 'none',
-                      boxShadow: '0 4px 20px rgba(var(--web-light-rgb, 189, 217, 98),0.35)',
-                    }}
-                  >
-                    Ver cursos <ArrowRight size={18} />
-                  </Link>
-                  <Link
-                    href="/contacto"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                      padding: '0.875rem 1.75rem',
-                      borderRadius: '12px',
-                      backgroundColor: 'rgba(255,255,255,0.08)',
-                      color: '#ffffff',
-                      fontFamily: 'Poppins, sans-serif',
-                      fontWeight: 600,
-                      fontSize: '0.9375rem',
-                      textDecoration: 'none',
-                      border: '1.5px solid rgba(255,255,255,0.18)',
-                      backdropFilter: 'blur(8px)',
-                    }}
-                  >
-                    Trabaja con nosotros
-                  </Link>
-                </div>
-              </div>
-            </ScrollReveal>
+      {/* HERO */}
+      <section className="relative overflow-hidden bg-edu-pattern py-24 text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl animate-fade-up">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
+              <Sparkles className="h-3.5 w-3.5 text-brand-orange" />
+              Sobre nosotros
+            </span>
+            <h1 className="mt-6 font-display text-5xl font-extrabold leading-[0.95] text-balance sm:text-6xl lg:text-7xl">
+              Formamos a quienes están
+              <br />
+              <span className="text-brand-orange">decididos</span> a ir más lejos.
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg text-white/80">
+              Desde nuestra sede para todo el Perú: una institución comprometida
+              con el crecimiento real de los profesionales que mueven al país.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* ── 2. BANNER ISO ─────────────────────────────── */}
-      {/* <section
-        style={{
-          backgroundColor: '#0A0A0A',
-          padding: '2.5rem 1.5rem',
-          borderTop: '1px solid rgba(var(--web-primary-rgb, 37, 146, 127),0.2)',
-          borderBottom: '1px solid rgba(var(--web-primary-rgb, 37, 146, 127),0.2)',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1280px',
-            margin: '0 auto',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '1.25rem',
-            textAlign: 'center',
-          }}
-        >
-          <div
-            style={{
-              width: '52px', height: '52px', borderRadius: '14px',
-              backgroundColor: 'rgba(var(--web-primary-rgb, 37, 146, 127),0.15)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              border: '1.5px solid rgba(var(--web-primary-rgb, 37, 146, 127),0.3)', flexShrink: 0,
-            }}
-          >
-            <Award size={28} color="var(--web-primary, #25927F)" />
+      {/* COLOR STRIPE */}
+      <div className="grid h-3 grid-cols-4">
+        <div className="bg-brand-teal" />
+        <div className="bg-brand-navy" />
+        <div className="bg-brand-lime" />
+        <div className="bg-brand-orange" />
+      </div>
+
+      {/* INTRO IMAGE + TEXT */}
+      <section className="py-24">
+        <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+          <div className="relative">
+            <div className="overflow-hidden rounded-[2.5rem] shadow-soft">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={aboutImg}
+                alt="Profesionales aprendiendo online"
+                className="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div className="absolute -bottom-6 -right-6 hidden rounded-3xl bg-orange-gradient p-6 text-white shadow-glow lg:block">
+              <div className="font-display text-4xl font-extrabold leading-none">10+</div>
+              <div className="mt-2 text-xs font-semibold uppercase tracking-wider">Áreas profesionales</div>
+            </div>
           </div>
           <div>
-            <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: 'clamp(1rem, 2vw, 1.25rem)', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.01em' }}>
-              Calidad certificada:{' '}
-              <span style={{ color: 'var(--web-light, #BDD962)' }}>ISO 9001:2015</span> e{' '}
-              <span style={{ color: 'var(--web-light, #BDD962)' }}>ISO 21001:2018</span>
-            </div>
-            <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>
-              Comprometidos con los más altos estándares de calidad educativa y de gestión
-            </div>
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-brand-orange">
+              Quiénes somos
+            </span>
+            <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight text-balance text-foreground sm:text-5xl">
+              Una institución que cree en el poder del conocimiento profundo
+            </h2>
+            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+              Nacemos para acompañar a docentes, abogados,
+              ingenieros, profesionales de la salud y de diversas áreas en su
+              proceso continuo de actualización y crecimiento.
+            </p>
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+              Nuestra propuesta combina rigor académico, atención cercana y una
+              modalidad online flexible que respeta el tiempo de quienes ya están
+              ejerciendo su profesión.
+            </p>
           </div>
         </div>
-      </section> */}
+      </section>
 
-      {/* ── 3. MISIÓN / VISIÓN (client component) ─────── */}
-      <MisionVisionSection />
+      {/* VISION / MISION */}
+      <section className="bg-secondary py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <article className="group relative overflow-hidden rounded-[2rem] bg-hero-gradient p-10 text-white shadow-soft transition-base hover:shadow-glow">
+              <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-brand-teal/30 blur-3xl" />
+              <div className="relative">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur">
+                  <Compass className="h-7 w-7 text-brand-teal" />
+                </div>
+                <h3 className="mt-6 font-display text-3xl font-extrabold">Visión</h3>
+                <p className="mt-5 leading-relaxed text-white/85">
+                  Ser la institución líder en el Perú en formación y desarrollo
+                  profesional online, reconocida por impulsar la excelencia, el
+                  crecimiento y la superación de docentes, abogados, ingenieros,
+                  profesionales de la salud y de diversas áreas profesionales, a
+                  través de diplomados, especializaciones y programas de
+                  actualización orientados al profundo conocimiento, formando
+                  líderes preparados para transformar su futuro, generar impacto
+                  en la sociedad y contribuir al desarrollo del país.
+                </p>
+              </div>
+            </article>
 
-      {/* ── 4. VALORES (client component) ─────────────── */}
-      <ValoresSection />
+            <article className="group relative overflow-hidden rounded-[2rem] border border-border bg-card p-10 shadow-soft transition-base hover:shadow-glow">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-gradient text-white">
+                <Target className="h-7 w-7" />
+              </div>
+              <h3 className="mt-6 font-display text-3xl font-extrabold text-foreground">Misión</h3>
+              <p className="mt-5 leading-relaxed text-muted-foreground">
+                Brindar formación y actualización profesional online de alto
+                nivel, mediante diplomados, especializaciones y programas
+                académicos orientados al profundo conocimiento, contribuyendo al
+                crecimiento y desarrollo de docentes, abogados, ingenieros,
+                profesionales de la salud y de diversas áreas profesionales,
+                caracterizándonos por una atención cercana, responsable y
+                comprometida en resolver cada consulta, orientación o
+                requerimiento de nuestros estudiantes, con el propósito de
+                superar sus expectativas y acompañarlos en su desarrollo
+                profesional.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
 
-      {/* ── 5. PROFESORES ─────────────────────────────── */}
-      <ProfessorsCarousel teachers={JSON.parse(JSON.stringify(teachers))} />
+      {/* VALUES */}
+      <section className="py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-brand-teal">
+              Nuestros valores
+            </span>
+            <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight text-balance text-foreground sm:text-5xl">
+              Lo que nos mueve cada día
+            </h2>
+          </div>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {[
+              { icon: Award,    title: 'Excelencia', text: 'Estándares altos en cada programa, contenido y experiencia formativa.' },
+              { icon: Heart,    title: 'Compromiso', text: 'Atención cercana, responsable y comprometida con cada estudiante.' },
+              { icon: Sparkles, title: 'Superación',  text: 'Acompañamos el crecimiento profesional con propósito real.' },
+            ].map(({ icon: Icon, title, text }) => (
+              <div key={title} className="hover-lift rounded-3xl border border-border bg-card p-8">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-hero-gradient text-white shadow-soft">
+                  <Icon className="h-7 w-7" />
+                </div>
+                <h3 className="mt-6 font-display text-2xl font-bold text-foreground">{title}</h3>
+                <p className="mt-3 text-muted-foreground">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* BIG SLOGAN */}
+      <section className="bg-hero-gradient py-24 text-white">
+        <div className="mx-auto max-w-5xl px-4 text-center sm:px-6">
+          <h2 className="font-display text-5xl font-extrabold leading-[0.95] text-balance sm:text-6xl">
+            Detrás de cada título hay
+            <br />
+            una <span className="text-brand-orange">historia que vale</span> formar.
+          </h2>
+        </div>
+      </section>
     </>
   )
 }

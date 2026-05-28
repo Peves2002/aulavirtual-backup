@@ -3,34 +3,19 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { Home, BookOpen, Users, Award, Map } from 'lucide-react'
+import { Home, BookOpen, Phone } from 'lucide-react'
 
-const ALL_NAV_ITEMS = [
-  { title: 'Inicio', url: '/', icon: Home, key: 'inicio' },
-  { title: 'Cursos', url: '/cursos', icon: BookOpen, key: 'cursos' },
-  { title: 'Rutas', url: '/rutas', icon: Map, key: 'rutas' },
-  { title: 'Nosotros', url: '/nosotros', icon: Users, key: 'nosotros' },
-  { title: 'Certificado', url: '/verificar-certificado', icon: Award, key: 'certificado' },
+const NAV_ITEMS = [
+  { title: 'Inicio', url: '/', icon: Home },
+  { title: 'Cursos', url: '/cursos', icon: BookOpen },
+  { title: 'Contacto', url: '/contacto', icon: Phone },
 ]
 
-export default function MobileBottomNav({
-  rutasHabilitado = true,
-}: {
-  rutasHabilitado?: boolean
-}) {
+export default function MobileBottomNav({ rutasHabilitado = true }: { rutasHabilitado?: boolean }) {
+  void rutasHabilitado
   const pathname = usePathname()
 
-  const navItems = ALL_NAV_ITEMS.filter(item => {
-    if (item.key === 'rutas' && !rutasHabilitado) return false
-
-    return true
-  })
-
-  const isActive = (url: string) => {
-    if (url === '/') return pathname === '/'
-
-    return pathname.startsWith(url)
-  }
+  const isActive = (url: string) => url === '/' ? pathname === '/' : pathname.startsWith(url)
 
   return (
     <nav
@@ -42,7 +27,7 @@ export default function MobileBottomNav({
         boxShadow: '0 -4px 20px rgba(0,0,0,0.08)',
       }}
     >
-      {navItems.map(item => {
+      {NAV_ITEMS.map(item => {
         const active = isActive(item.url)
 
         return (
@@ -62,14 +47,7 @@ export default function MobileBottomNav({
             >
               <item.icon size={active ? 22 : 20} strokeWidth={active ? 2.5 : 1.8} />
             </div>
-            <span
-              style={{
-                fontFamily: 'Poppins, sans-serif',
-                fontSize: '0.625rem',
-                fontWeight: active ? 700 : 500,
-                lineHeight: 1,
-              }}
-            >
+            <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.625rem', fontWeight: active ? 700 : 500, lineHeight: 1 }}>
               {item.title}
             </span>
           </Link>

@@ -285,9 +285,12 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
       <DialogContent sx={{ overflowX: 'hidden', overflowY: 'auto' }}>
         <Box sx={{ textAlign: 'center', mb: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-            <Box sx={{ transform: 'scale(1.5)', transformOrigin: 'center', display: 'inline-block' }}>
-              <Logo />
-            </Box>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/pagina/logo.png"
+              alt="Logo"
+              style={{ height: '52px', width: 'auto', objectFit: 'contain', maxWidth: '180px' }}
+            />
           </Box>
           <Typography variant="h5" sx={{ mt: 3, fontWeight: 800 }}>
             {mode === 'login' ? 'Iniciar Sesión' : mode === 'register' ? 'Crear Cuenta' : '¿Olvidaste tu contraseña?'}

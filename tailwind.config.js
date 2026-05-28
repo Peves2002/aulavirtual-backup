@@ -15,17 +15,20 @@ module.exports = {
           dark: '#025E44',
           light: '#BDD962',
         },
-        secondary: {
-          DEFAULT: '#BDD962',
-          foreground: '#0A0A0A',
-        },
-        muted: {
-          DEFAULT: 'hsl(210, 15%, 93%)',
-          foreground: 'hsl(215, 16%, 47%)',
-        },
-        border: 'hsl(214, 20%, 88%)',
-        foreground: '#0A0A0A',
-        background: 'hsl(0, 0%, 100%)',
+        /* Coplimita semantic tokens (web pages) */
+        secondary: { DEFAULT: '#f3f4f8', foreground: '#1e3558' },
+        muted:     { DEFAULT: '#f3f4f8', foreground: '#6b7280' },
+        card:      { DEFAULT: '#ffffff', foreground: '#1e3558' },
+        border:    'hsl(214, 20%, 88%)',
+        foreground: '#1e3558',
+        background: '#ffffff',
+        /* Coplimita brand palette (from oklch originals) */
+        'brand-navy':      '#1e3558',
+        'brand-navy-deep': '#141e3d',
+        'brand-teal':      '#42b8c9',
+        'brand-orange':    '#f47a22',
+        'brand-lime':      '#89cc18',
+        /* Legacy dashboard colors */
         'color-1': 'hsl(170, 60%, 36%)',
         'color-2': 'hsl(75, 63%, 62%)',
         'color-3': 'hsl(167, 96%, 19%)',
@@ -39,9 +42,9 @@ module.exports = {
         },
       },
       fontFamily: {
-        display: ['Poppins', 'sans-serif'],
-        sans: ['Poppins', 'sans-serif'],
-        body: ['Poppins', 'sans-serif'],
+        display: ['Poppins', 'system-ui', 'sans-serif'],
+        sans:    ['Inter', 'system-ui', 'sans-serif'],
+        body:    ['Inter', 'system-ui', 'sans-serif'],
       },
     }
   }

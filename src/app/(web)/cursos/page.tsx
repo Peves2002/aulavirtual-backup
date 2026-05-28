@@ -1,137 +1,71 @@
-// Next Imports
-import React from 'react'
+import { Sparkles } from 'lucide-react'
 
-import { Box } from '@mui/material'
-
-// Component Imports
+import { getAuthSession } from '@/utils/libs/auth-helpers'
+import { AxiosWebCursos } from '@/features/web/cursos/http/axiosWebCursos'
 import CourseCatalog from '@/features/web/home/components/CourseCatalog'
 
-// Http Client
-import { AxiosWebCursos } from '@/features/web/cursos/http/axiosWebCursos'
-import { getAuthSession } from '@/utils/libs/auth-helpers'
+export const metadata = {
+  title: 'Cursos y Diplomados — Aula Virtual',
+  description: 'Diplomados y especializaciones online en educación, derecho, ingeniería y salud.',
+}
 
-// Server Action / Data Fetching
 async function getData(token: string | null) {
   try {
-    const axiosWebCursos = new AxiosWebCursos({
-      getAuthToken: () => token
-    })
-
+    const axiosWebCursos = new AxiosWebCursos({ getAuthToken: () => token })
     const data = await axiosWebCursos.getCatalog()
 
-    // Serialización manual de Decimal a Number para evitar errores en Client Components
     if (data.courses) {
       data.courses = data.courses.map((c: any) => ({
         ...c,
         precio: c.precio ? Number(c.precio) : 0,
-        precio_oferta: c.precio_oferta ? Number(c.precio_oferta) : null
+        precio_oferta: c.precio_oferta ? Number(c.precio_oferta) : null,
       }))
     }
 
     return data
-  } catch (error) {
-    console.error('Error fetching data in CursosPage via API:', error)
-
+  } catch {
     return { courses: [], categories: [] }
   }
 }
 
-export const metadata = {
-  title: `${process.env.NEXT_PUBLIC_APP_NAME} | Cursos`,
-  description: 'Explora nuestra amplia variedad de cursos y comienza a aprender hoy mismo.'
-}
-
 export default async function CursosPage() {
   const session = await getAuthSession()
-  const token = session?.user?.accessToken ?? null
-
+  const token = (session?.user as any)?.accessToken ?? null
   const { courses, categories } = await getData(token)
 
   return (
-    <Box sx={{ flexGrow: 1, bgcolor: 'background.default' }}>
-      {/* Banner */}
-      <Box
-        sx={{
-          background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 100%)',
-          py: { xs: 5, md: 7 },
-          px: { xs: 3, md: 6 },
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Decorative circles */}
-        <Box sx={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.06)', pointerEvents: 'none' }} />
-        <Box sx={{ position: 'absolute', bottom: -60, right: 80, width: 300, height: 300, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.03)', pointerEvents: 'none' }} />
+    <>
+      {/* HERO */}
+      <section className="relative overflow-hidden bg-edu-pattern py-24 text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl animate-fade-up">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
+              <Sparkles className="h-3.5 w-3.5 text-brand-orange" />
+              Programas académicos
+            </span>
+            <h1 className="mt-6 font-display text-5xl font-extrabold leading-[0.95] text-balance sm:text-6xl lg:text-7xl">
+              Aprende lo que te
+              <br />
+              <span className="text-brand-orange">pone</span> donde quieres estar.
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg text-white/80">
+              Diplomados, especializaciones y programas de actualización online,
+              diseñados para profesionales que no se conforman.
+            </p>
+          </div>
+        </div>
+      </section>
 
-        <Box sx={{ maxWidth: 1280, mx: 'auto', position: 'relative', zIndex: 1 }}>
-          {/* Breadcrumb */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-            <Box
-              component="a"
-              href="/"
-              sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.55)', textDecoration: 'none', '&:hover': { color: 'var(--web-light, #BDD962)' }, transition: 'color 0.2s' }}
-            >
-              Inicio
-            </Box>
-            <Box component="span" sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem' }}>/</Box>
-            <Box component="span" sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>
-              Cursos
-            </Box>
-          </Box>
+      {/* COLOR STRIPE */}
+      <div className="grid h-3 grid-cols-4">
+        <div className="bg-brand-teal" />
+        <div className="bg-brand-navy" />
+        <div className="bg-brand-lime" />
+        <div className="bg-brand-orange" />
+      </div>
 
-          <Box
-            sx={{
-              fontFamily: 'Poppins, sans-serif',
-              fontSize: { xs: '1.75rem', md: '2.25rem' },
-              fontWeight: 800,
-              color: '#ffffff',
-              letterSpacing: '-0.02em',
-              mb: 1,
-              lineHeight: 1.2,
-            }}
-            component="h1"
-          >
-            Catálogo de Cursos
-          </Box>
-          <Box
-            sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', color: 'rgba(255,255,255,0.7)', maxWidth: 520, lineHeight: 1.6 }}
-            component="p"
-          >
-            Explora nuestra selección de cursos y comienza a aprender hoy.
-          </Box>
-
-          {/* Stats chips */}
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, mt: 3 }}>
-            {[
-              { label: `${courses.length} cursos disponibles`, icon: '📚' },
-              { label: `${categories.length} categorías`, icon: '🗂️' },
-            ].map(chip => (
-              <Box
-                key={chip.label}
-                sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 0.75,
-                  px: 2,
-                  py: 0.75,
-                  borderRadius: '999px',
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  fontFamily: 'Poppins, sans-serif',
-                  fontSize: '0.8125rem',
-                  color: '#ffffff',
-                  fontWeight: 500,
-                }}
-              >
-                <span>{chip.icon}</span>
-                {chip.label}
-              </Box>
-            ))}
-          </Box>
-        </Box>
-      </Box>
-
+      {/* CATÁLOGO CON FILTROS */}
       <CourseCatalog courses={courses} categories={categories} />
-    </Box>
+    </>
   )
 }

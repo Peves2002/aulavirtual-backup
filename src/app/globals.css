@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -31,7 +31,8 @@
   --ipg-black: #0A0A0A;
   --ipg-muted: #f1f5f4;
 
-  --navbar-height: 88px;
+  --web-bg: #ffffff;
+  --navbar-height: 80px;
   --sidebar-width: 80px;
   --sidebar-width-expanded: 260px;
 }
@@ -265,11 +266,135 @@ code {
   line-height: 1.7;
 }
 
-/* Apply Plus Jakarta Sans to web public pages */
-.web-layout,
-.web-layout * {
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
+/* Web public pages — Inter body, Poppins headings (matches Coplimita design) */
+.web-layout {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #1a1a2e;
+  background-color: #ffffff;
 }
+.web-layout h1,
+.web-layout h2,
+.web-layout h3,
+.web-layout h4 {
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Certificado page — light background override */
+.cert-section-light section {
+  background-color: #ffffff !important;
+}
+.cert-section-light .rounded-3xl {
+  background-color: #f3f4f8 !important;
+  border-color: hsl(214,20%,88%) !important;
+}
+.cert-section-light h2 {
+  color: #1e3558 !important;
+}
+.cert-section-light p {
+  color: #6b7280 !important;
+}
+.cert-section-light input {
+  background-color: #ffffff !important;
+  border-color: hsl(214,20%,88%) !important;
+  color: #1e3558 !important;
+}
+.cert-section-light input::placeholder {
+  color: #9ca3af !important;
+}
+.cert-section-light svg {
+  color: #6b7280 !important;
+}
+
+.footer-link {
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.footer-link:hover {
+  color: #ffffff;
+}
+
+/* ── Coplimita design system ─────────────────────────── */
+:root {
+  --brand-navy:      #1e3558;
+  --brand-navy-deep: #141e3d;
+  --brand-teal:      #42b8c9;
+  --brand-orange:    #f47a22;
+  --brand-lime:      #89cc18;
+  --gradient-hero:   linear-gradient(135deg, #141e3d 0%, #1e3558 60%, #2a3d6a 100%);
+  --gradient-teal:   linear-gradient(135deg, #42b8c9, #2a9fb3);
+  --gradient-orange: linear-gradient(135deg, #f47a22, #e05f0c);
+  --shadow-soft:     0 10px 30px -10px rgba(30,53,88,0.25);
+  --shadow-glow:     0 20px 60px -20px rgba(244,122,34,0.5);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --pattern-edu: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180' fill='none' stroke='white' stroke-width='1.4' opacity='0.08'><circle cx='30' cy='30' r='12'/><path d='M60 20 l20 0 l0 16 l-20 0 z'/><path d='M100 28 l16 -8 l16 8 l-16 8 z'/><circle cx='150' cy='30' r='10'/><path d='M20 70 l20 -8 l20 8 l-20 8 z M40 78 l0 8'/><circle cx='140' cy='75' r='12'/><path d='M138 75 l4 4 l8 -10'/><path d='M20 120 l30 0 M35 110 l0 20'/><circle cx='90' cy='125' r='14'/><path d='M82 125 l16 0 M90 117 l0 16'/><path d='M140 115 l20 10 l-20 10 z'/><path d='M30 160 l24 0 l0 -12 l-24 0 z M42 148 l0 -8'/><circle cx='90' cy='160' r='10'/><path d='M140 150 l16 0 l0 20 l-16 0 z M148 150 l0 20'/></svg>");
+}
+
+/* Tailwind-style semantic classes for web pages */
+.web-layout .bg-secondary  { background-color: #f3f4f8; }
+.web-layout .bg-card       { background-color: #ffffff; }
+.web-layout .text-foreground     { color: #1e3558; }
+.web-layout .text-muted-foreground { color: #6b7280; }
+.web-layout .border-border { border-color: hsl(214,20%,88%); }
+.web-layout .text-balance  { text-wrap: balance; }
+
+.bg-hero-gradient  { background: var(--gradient-hero); }
+.bg-teal-gradient  { background: var(--gradient-teal); }
+.bg-orange-gradient { background: var(--gradient-orange); }
+.bg-edu-pattern {
+  background-color: var(--brand-navy-deep);
+  background-image: var(--pattern-edu);
+}
+.shadow-soft  { box-shadow: var(--shadow-soft); }
+.shadow-glow  { box-shadow: var(--shadow-glow); }
+.transition-base { transition: all var(--transition-base); }
+.text-balance { text-wrap: balance; }
+
+.hover-lift {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-soft);
+}
+
+.story-link { position: relative; }
+.story-link::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -4px;
+  width: 100%; height: 2px;
+  background: var(--brand-orange);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 300ms ease;
+}
+.story-link:hover::after,
+.story-link[data-active="true"]::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+.animate-float { animation: float-slow 6s ease-in-out infinite; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fade-up 0.7s ease-out both; }
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee-scroll 30s linear infinite; }
 
 /* SweetAlert2 — match system typography */
 .swal2-popup,
