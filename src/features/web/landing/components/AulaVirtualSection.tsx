@@ -3,7 +3,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Search, X, RefreshCw } from "lucide-react";
+import { Box, TextField, MenuItem, IconButton, Divider } from "@mui/material";
 import { Button } from "./ui/button";
 import {
   Carousel,
@@ -37,16 +38,39 @@ type Course = {
   fecha_inicio?: string | null
   creado_en?: string
   es_comprado?: boolean
-  categoria?: { nombre: string }
+  categoria?: { nombre: string; slug?: string }
   profesor: { id?: string; slug?: string; nombre: string; apellido: string; avatar?: string }
+  descripcion?: string
 }
 
 export function AulaVirtualSection() {
-  const [activeCategory, setActiveCategory] = useState("__all__");
   const [api, setApi] = useState<CarouselApi>();
   const [courses, setCourses] = useState<Course[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedLevel, setSelectedLevel] = useState('all')
+  const [selectedPrice, setSelectedPrice] = useState('all')
+  const [selectedModality, setSelectedModality] = useState('all')
+  const [sortBy, setSortBy] = useState('recent')
+
+  const clearFilters = () => {
+    setSearchTerm('')
+    setSelectedCategory('all')
+    setSelectedLevel('all')
+    setSelectedPrice('all')
+    setSelectedModality('all')
+    setSortBy('recent')
+  }
+
+  const hasFilters = searchTerm !== '' ||
+    selectedCategory !== 'all' ||
+    selectedLevel !== 'all' ||
+    selectedPrice !== 'all' ||
+    selectedModality !== 'all' ||
+    sortBy !== 'recent'
 
   useEffect(() => {
     fetch('/api/web/catalogo')
@@ -56,14 +80,28 @@ export function AulaVirtualSection() {
         setCourses(payload?.courses ?? []);
         setCategories(payload?.categories ?? []);
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
   }, []);
 
-  const filteredCourses = (activeCategory === "__all__"
-    ? courses
-    : courses.filter(c => c.categoria?.nombre === activeCategory)
-  ).slice(0, 6);
+  const filteredCourses = courses.filter(course => {
+    const matchesSearch = course.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (course.descripcion && course.descripcion.toLowerCase().includes(searchTerm.toLowerCase()))
+    const matchesCategory = selectedCategory === 'all' || course.categoria?.slug === selectedCategory
+    const matchesLevel = selectedLevel === 'all' || course.nivel === selectedLevel
+    const matchesPrice = selectedPrice === 'all' ||
+      (selectedPrice === 'free' ? course.es_gratis : !course.es_gratis)
+    const matchesModality = selectedModality === 'all' || course.tipo_emision === selectedModality
+
+    return matchesSearch && matchesCategory && matchesLevel && matchesPrice && matchesModality
+  }).sort((a, b) => {
+    if (sortBy === 'recent') {
+      return new Date(b.creado_en || 0).getTime() - new Date(a.creado_en || 0).getTime()
+    } else if (sortBy === 'alphabetical') {
+      return a.titulo.localeCompare(b.titulo)
+    }
+    return 0
+  });
 
   return (
     <section id="aula-virtual" className="relative py-12 lg:py-16 bg-slate-50 overflow-hidden">
@@ -113,32 +151,182 @@ export function AulaVirtualSection() {
           </div>
         </div>
 
-        {/* Categories Bar */}
-        {categories.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            <button
-              onClick={() => setActiveCategory("__all__")}
-              className={`px-5 py-2 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-500 ${activeCategory === "__all__"
-                ? "bg-primary text-white shadow-xl scale-105"
-                : "bg-white text-slate-400 hover:text-primary border border-slate-100"
-                }`}
-            >
-              Todas las categorías
-            </button>
-            {categories.map((cat) => (
+        {/* Search & Filters Controls */}
+        <div className="flex flex-col gap-4 items-center mb-8">
+          {/* Search Bar Elite */}
+          <div className="w-full max-w-3xl relative">
+            <input
+              type="text"
+              placeholder="Buscar programa o especialidad..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full h-16 px-8 pl-16 rounded-3xl bg-white border border-slate-100 shadow-xl focus:outline-none transition-all font-bold text-lg text-[var(--primary-main)] placeholder:text-slate-300"
+            />
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-[var(--primary-main)] opacity-30" />
+            {searchTerm && (
               <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.nombre)}
-                className={`px-5 py-2 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-500 ${activeCategory === cat.nombre
-                  ? "bg-primary text-white shadow-xl scale-105"
-                  : "bg-white text-slate-400 hover:text-primary border border-slate-100"
-                  }`}
+                onClick={() => setSearchTerm('')}
+                className="absolute right-6 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center hover:bg-slate-100 transition-colors"
               >
-                {cat.nombre}
+                <X className="w-4 h-4 text-[var(--primary-main)]" />
               </button>
-            ))}
+            )}
           </div>
-        )}
+
+          {/* Advanced Filter Bar */}
+          <Box sx={{
+            width: '100%',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 2,
+            justifyContent: 'center',
+            alignItems: 'center',
+            py: 2,
+            px: 4,
+            bgcolor: 'white',
+            borderRadius: '3rem',
+            border: '1px solid #f1f5f9',
+            boxShadow: '0 10px 30px rgba(39, 67, 91, 0.03)'
+          }}>
+            {/* Categoría */}
+            <TextField
+              select
+              size="small"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              InputProps={{
+                sx: {
+                  borderRadius: '1.5rem',
+                  fontWeight: 800,
+                  fontFamily: "'Poppins', sans-serif",
+                  bgcolor: selectedCategory !== 'all' ? 'rgba(224, 123, 57, 0.05)' : '#f8fafc',
+                  color: selectedCategory !== 'all' ? 'hsl(var(--accent))' : 'primary.main',
+                  border: '1.5px solid',
+                  borderColor: selectedCategory !== 'all' ? 'hsl(var(--accent))' : 'transparent',
+                  '& fieldset': { border: 'none' },
+                }
+              }}
+              SelectProps={{
+                MenuProps: {
+                  sx: { '& .MuiMenuItem-root': { fontFamily: "'Poppins', sans-serif", fontWeight: 600 } }
+                }
+              }}
+              sx={{ minWidth: 180 }}
+            >
+              <MenuItem value="all">Especialidades</MenuItem>
+              {categories.map((cat) => (
+                <MenuItem key={cat.id} value={cat.slug}>{cat.nombre}</MenuItem>
+              ))}
+            </TextField>
+
+            {/* Nivel */}
+            <TextField
+              select
+              size="small"
+              value={selectedLevel}
+              onChange={(e) => setSelectedLevel(e.target.value)}
+              InputProps={{
+                sx: {
+                  borderRadius: '1.5rem',
+                  fontWeight: 800,
+                  fontFamily: "'Poppins', sans-serif",
+                  bgcolor: selectedLevel !== 'all' ? 'rgba(224, 123, 57, 0.05)' : '#f8fafc',
+                  color: selectedLevel !== 'all' ? 'hsl(var(--accent))' : 'primary.main',
+                  border: '1.5px solid',
+                  borderColor: selectedLevel !== 'all' ? 'hsl(var(--accent))' : 'transparent',
+                  '& fieldset': { border: 'none' },
+                }
+              }}
+              SelectProps={{
+                MenuProps: {
+                  sx: { '& .MuiMenuItem-root': { fontFamily: "'Poppins', sans-serif", fontWeight: 600 } }
+                }
+              }}
+              sx={{ minWidth: 150 }}
+            >
+              <MenuItem value="all">Nivel</MenuItem>
+              <MenuItem value="BASICO">Básico</MenuItem>
+              <MenuItem value="INTERMEDIO">Intermedio</MenuItem>
+              <MenuItem value="AVANZADO">Avanzado</MenuItem>
+            </TextField>
+
+            {/* Modalidad */}
+            <TextField
+              select
+              size="small"
+              value={selectedModality}
+              onChange={(e) => setSelectedModality(e.target.value)}
+              InputProps={{
+                sx: {
+                  borderRadius: '1.5rem',
+                  fontWeight: 800,
+                  fontFamily: "'Poppins', sans-serif",
+                  bgcolor: selectedModality !== 'all' ? 'rgba(224, 123, 57, 0.05)' : '#f8fafc',
+                  color: selectedModality !== 'all' ? 'hsl(var(--accent))' : 'primary.main',
+                  border: '1.5px solid',
+                  borderColor: selectedModality !== 'all' ? 'hsl(var(--accent))' : 'transparent',
+                  '& fieldset': { border: 'none' },
+                }
+              }}
+              SelectProps={{
+                MenuProps: {
+                  sx: { '& .MuiMenuItem-root': { fontFamily: "'Poppins', sans-serif", fontWeight: 600 } }
+                }
+              }}
+              sx={{ minWidth: 160 }}
+            >
+              <MenuItem value="all">Modalidad</MenuItem>
+              <MenuItem value="ASINCRONO">Asíncrono</MenuItem>
+              <MenuItem value="SINCRONO">En Vivo</MenuItem>
+              <MenuItem value="MIXTO">Mixto</MenuItem>
+            </TextField>
+
+            <Divider orientation="vertical" flexItem sx={{ mx: 2, my: 1 }} />
+
+            {/* Ordenamiento */}
+            <TextField
+              select
+              size="small"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              InputProps={{
+                sx: {
+                  borderRadius: '1.5rem',
+                  fontWeight: 800,
+                  fontFamily: "'Poppins', sans-serif",
+                  bgcolor: '#f8fafc',
+                  color: 'primary.main',
+                  '& fieldset': { border: 'none' },
+                }
+              }}
+              SelectProps={{
+                MenuProps: {
+                  sx: { '& .MuiMenuItem-root': { fontFamily: "'Poppins', sans-serif", fontWeight: 600 } }
+                }
+              }}
+              sx={{ minWidth: 180 }}
+            >
+              <MenuItem value="recent">Recientes primero</MenuItem>
+              <MenuItem value="alphabetical">A - Z</MenuItem>
+            </TextField>
+
+            {hasFilters && (
+              <IconButton
+                onClick={clearFilters}
+                sx={{
+                  bgcolor: 'rgba(224, 123, 57, 0.1)',
+                  color: 'hsl(var(--accent))',
+                  '&:hover': { bgcolor: 'rgba(224, 123, 57, 0.2)' },
+                  width: 48,
+                  height: 48,
+                  borderRadius: '1rem'
+                }}
+              >
+                <RefreshCw className="w-5 h-5" />
+              </IconButton>
+            )}
+          </Box>
+        </div>
 
         {/* Course Carousel */}
         {loading ? (
@@ -189,7 +377,7 @@ export function AulaVirtualSection() {
         )}
 
         {/* Notify Me / Upcoming Form */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           className="mt-12 glass-dark p-8 md:p-12 rounded-[2rem] relative overflow-hidden text-center text-white"
@@ -213,7 +401,7 @@ export function AulaVirtualSection() {
               </Button>
             </form>
           </div>
-        </motion.div>
+        </motion.div> */}
       </div>
 
       {/* Social Media - Bottom Right Overlay */}

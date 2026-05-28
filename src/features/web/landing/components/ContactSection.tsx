@@ -94,10 +94,27 @@ export function ContactSection() {
     return () => window.removeEventListener('selectService', handleSelectService);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const nombre = formData.get('nombre') as string;
+    const empresa = formData.get('empresa') as string;
+    const email = formData.get('email') as string;
+    const servicio = selectedService;
+    const mensaje = formData.get('mensaje') as string;
+
+    const waMessage = `Hola Elite Engineering, deseo hacer una consulta:
+*Nombre:* ${nombre}
+${empresa ? `*Empresa:* ${empresa}\n` : ''}${email ? `*Email:* ${email}\n` : ''}${servicio ? `*Servicio de Interés:* ${servicio}\n` : ''}
+*Mensaje:*
+${mensaje}`;
+
+    const waUrl = `https://wa.me/51955833613?text=${encodeURIComponent(waMessage)}`;
+    window.open(waUrl, '_blank');
+
     setIsSubmitted(true);
     setTimeout(() => setIsSubmitted(false), 3000);
+    (e.target as HTMLFormElement).reset();
   };
 
   return (
@@ -123,7 +140,7 @@ export function ContactSection() {
             </motion.div>
 
             <h2 className="font-display text-2xl md:text-4xl font-black text-primary mb-3 leading-tight tracking-tighter">
-              Ready for the <span className="text-gradient-orange">Next Level?</span>
+              ¿Listo para el <span className="text-gradient-orange">Siguiente Nivel?</span>
             </h2>
 
             <p className="text-slate-500 max-w-xl text-base font-medium leading-relaxed mb-6">
@@ -160,7 +177,7 @@ export function ContactSection() {
             className="relative"
           >
             <div className="bg-white p-6 rounded-2xl shadow-2xl relative z-10">
-              <h3 className="text-xl font-black text-primary mb-2">Direct Inquiry</h3>
+              <h3 className="text-xl font-black text-primary mb-2">Consulta Directa</h3>
               <p className="text-slate-500 font-bold text-sm mb-6">Cuéntanos sobre tu visión técnica.</p>
 
               <form onSubmit={handleSubmit} className="space-y-5">
@@ -168,6 +185,8 @@ export function ContactSection() {
                   <div className="space-y-2">
                     <label className="text-xs font-black text-primary uppercase tracking-widest">Nombre</label>
                     <Input
+                      name="nombre"
+                      required
                       className="h-12 rounded-xl bg-secondary/30 border-none px-5 font-bold text-sm text-primary focus:shadow-inner-nm transition-all"
                       placeholder="Tu nombre completo"
                     />
@@ -175,6 +194,7 @@ export function ContactSection() {
                   <div className="space-y-2">
                     <label className="text-xs font-black text-primary uppercase tracking-widest">Empresa</label>
                     <Input
+                      name="empresa"
                       className="h-12 rounded-xl bg-secondary/30 border-none px-5 font-bold text-sm text-primary focus:shadow-inner-nm transition-all"
                       placeholder="Tu organización"
                     />
@@ -184,6 +204,8 @@ export function ContactSection() {
                 <div className="space-y-2">
                   <label className="text-xs font-black text-primary uppercase tracking-widest">Email Corporativo</label>
                   <Input
+                    name="email"
+                    type="email"
                     className="h-12 rounded-xl bg-secondary/30 border-none px-5 font-bold text-sm text-primary focus:shadow-inner-nm transition-all"
                     placeholder="email@empresa.com"
                   />
@@ -206,6 +228,7 @@ export function ContactSection() {
                 <div className="space-y-2">
                   <label className="text-xs font-black text-primary uppercase tracking-widest">Mensaje</label>
                   <Textarea
+                    name="mensaje"
                     className="min-h-[100px] rounded-2xl bg-secondary/30 border-none p-4 font-bold text-sm text-primary focus:shadow-inner-nm transition-all resize-none"
                     placeholder="Descríbenos brevemente el alcance de tu proyecto..."
                   />

@@ -60,10 +60,11 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative bg-primary pt-20 md:pt-32 pb-16 overflow-hidden">
+    <footer className="relative bg-[#020617] pt-24 md:pt-32 pb-10 overflow-hidden border-t border-slate-800/50">
       {/* Decorative background lines */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary to-transparent opacity-20" />
-      <div className="absolute -bottom-48 -right-48 w-[600px] h-[600px] bg-primary/10 blur-[150px] rounded-full" />
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-orange-500/20 to-transparent" />
+      <div className="absolute top-0 -left-48 w-[500px] h-[500px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute -bottom-48 -right-48 w-[600px] h-[600px] bg-orange-500/10 blur-[150px] rounded-full pointer-events-none" />
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-20 mb-32">
@@ -71,20 +72,14 @@ export function Footer() {
           <div className="lg:col-span-2">
             <motion.a
               href="#inicio"
-              className="flex items-center gap-4 mb-10 group"
+              className="flex items-center mb-10 group"
               whileHover={{ scale: 1.02 }}
             >
-              <div className="w-16 h-16 rounded-[1.5rem] bg-gradient-to-br from-primary to-orange-400 flex items-center justify-center shadow-2xl group-hover:glow-orange transition-all duration-500">
-                <Building2 className="w-8 h-8 text-white" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-display text-2xl font-black text-white tracking-tight">
-                  ELITE <span className="text-gradient-orange">ENGINEERING</span>
-                </span>
-                <span className="text-[10px] text-slate-400 tracking-[0.4em] uppercase font-black">
-                  Consultora y Capacitadora
-                </span>
-              </div>
+              <img 
+                src="/images/logo-elite.png" 
+                alt="Elite Engineering" 
+                className="h-24 w-auto drop-shadow-xl group-hover:drop-shadow-2xl transition-all duration-500" 
+              />
             </motion.a>
             <p className="text-slate-400 text-lg font-medium leading-relaxed max-w-sm mb-12">
               Transformando el horizonte de la construcción con precisión técnica y mentalidad de élite.
@@ -98,8 +93,8 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-14 h-14 rounded-2xl glass-frost flex items-center justify-center text-white hover:bg-primary transition-all duration-500"
-                  whileHover={{ y: -5 }}
+                  className="w-12 h-12 rounded-full bg-slate-800/50 border border-slate-700/50 flex items-center justify-center text-slate-400 hover:text-white hover:bg-orange-500 hover:border-orange-500 transition-all duration-300 shadow-lg"
+                  whileHover={{ y: -4, scale: 1.05 }}
                 >
                   {social.icon}
                 </motion.a>
@@ -109,12 +104,12 @@ export function Footer() {
 
           {/* Link Groups */}
           <div>
-            <h4 className="text-white font-black uppercase tracking-[0.2em] text-xs mb-8">Servicios</h4>
-            <ul className="space-y-4">
+            <h4 className="text-white font-black uppercase tracking-[0.15em] text-xs mb-6">Servicios</h4>
+            <ul className="space-y-3 list-none p-0">
               {footerLinks.servicios.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-slate-400 hover:text-primary transition-colors flex items-center gap-2 group text-sm font-bold">
-                    <span className="w-0 h-px bg-primary group-hover:w-4 transition-all" />
+                  <a href={link.href} className="text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-3 group text-sm font-medium hover:translate-x-2">
+                    <span className="w-1 h-1 rounded-full bg-slate-700 group-hover:bg-orange-500 transition-colors" />
                     {link.name}
                   </a>
                 </li>
@@ -123,12 +118,12 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-black uppercase tracking-[0.2em] text-xs mb-8">Compañía</h4>
-            <ul className="space-y-4">
+            <h4 className="text-white font-black uppercase tracking-[0.15em] text-xs mb-6">Compañía</h4>
+            <ul className="space-y-3 list-none p-0">
               {footerLinks.empresa.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-slate-400 hover:text-primary transition-colors flex items-center gap-2 group text-sm font-bold">
-                    <span className="w-0 h-px bg-primary group-hover:w-4 transition-all" />
+                  <a href={link.href} className="text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-3 group text-sm font-medium hover:translate-x-2">
+                    <span className="w-1 h-1 rounded-full bg-slate-700 group-hover:bg-orange-500 transition-colors" />
                     {link.name}
                   </a>
                 </li>
@@ -137,11 +132,11 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-black uppercase tracking-[0.2em] text-xs mb-8">Legal</h4>
-            <ul className="space-y-4 text-slate-400 text-sm font-bold">
-              <li><a href="/terminos-y-condiciones" className="hover:text-primary transition-colors">Términos y Condiciones</a></li>
-              <li><a href="/politica-de-privacidad" className="hover:text-primary transition-colors">Política de Privacidad</a></li>
-              <li><a href="/politica-de-cambios-y-devoluciones" className="hover:text-primary transition-colors">Política de Devoluciones</a></li>
+            <h4 className="text-white font-black uppercase tracking-[0.15em] text-xs mb-6">Legal</h4>
+            <ul className="space-y-3 list-none p-0">
+              <li><a href="/terminos-y-condiciones" className="text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-3 group text-sm font-medium hover:translate-x-2"><span className="w-1 h-1 rounded-full bg-slate-700 group-hover:bg-orange-500 transition-colors" />Términos y Condiciones</a></li>
+              <li><a href="/politica-de-privacidad" className="text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-3 group text-sm font-medium hover:translate-x-2"><span className="w-1 h-1 rounded-full bg-slate-700 group-hover:bg-orange-500 transition-colors" />Política de Privacidad</a></li>
+              <li><a href="/politica-de-cambios-y-devoluciones" className="text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-3 group text-sm font-medium hover:translate-x-2"><span className="w-1 h-1 rounded-full bg-slate-700 group-hover:bg-orange-500 transition-colors" />Política de Devoluciones</a></li>
             </ul>
             <div className="mt-8">
               <a
@@ -160,13 +155,13 @@ export function Footer() {
         </div>
 
         {/* Bottom Metadata */}
-        <div className="pt-16 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="pt-10 mt-16 border-t border-slate-800/60 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-            <p className="text-slate-500 text-xs font-black uppercase tracking-widest">
-              © {new Date().getFullYear()} Elite Engineering E.I.R.L. <span className="mx-2 text-white/10">|</span> Made for Excellence
+            <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">
+              © {new Date().getFullYear()} Elite Engineering E.I.R.L. <span className="mx-2 text-white/5">|</span> Made for Excellence
             </p>
-            <span className="hidden sm:inline text-slate-700">|</span>
-            <p className="text-slate-500 text-xs font-bold flex items-center gap-2">
+            <span className="hidden sm:inline text-slate-800">|</span>
+            <p className="text-slate-500 text-xs font-medium flex items-center gap-2">
               Desarrollado por
               <a
                 href="https://flyup.pe"
@@ -177,23 +172,23 @@ export function Footer() {
                 <img
                   src="/images/logo.svg"
                   alt="Fly Logo"
-                  className="h-5 w-auto object-contain"
+                  className="h-4 w-auto object-contain opacity-50 hover:opacity-100 transition-opacity"
                 />
               </a>
             </p>
           </div>
 
-          <div className="flex items-center gap-12">
-            <div className="flex items-center gap-3 text-slate-500">
-              <MapPin className="w-4 h-4 text-primary" />
-              <span className="text-[10px] font-black uppercase tracking-widest">Cajamarca, Perú</span>
+          <div className="flex items-center gap-8">
+            <div className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors cursor-default">
+              <MapPin className="w-3.5 h-3.5 text-orange-500" />
+              <span className="text-[10px] font-bold uppercase tracking-widest">Cajamarca, Perú</span>
             </div>
             <motion.button
               onClick={scrollToTop}
-              className="w-16 h-16 rounded-2xl glass-frost flex items-center justify-center text-white hover:bg-primary transition-all shadow-xl group"
-              whileHover={{ y: -10 }}
+              className="w-12 h-12 rounded-xl bg-slate-800/50 border border-slate-700/50 flex items-center justify-center text-slate-400 hover:text-white hover:bg-orange-500 hover:border-orange-500 transition-all shadow-lg group"
+              whileHover={{ y: -4 }}
             >
-              <ArrowUp className="w-6 h-6 group-hover:-translate-y-1 transition-transform" />
+              <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
             </motion.button>
           </div>
         </div>

@@ -20,8 +20,8 @@ export default function TerminosYCondicionesPage() {
         <Box sx={{ '& h4': { color: 'var(--web-dark, #025E44)', fontWeight: 800, mt: 5, mb: 2 }, '& p': { mb: 2, lineHeight: 1.8 } }}>
 
           <Typography paragraph>
-            Bienvenido a <strong>ELITE ENGINEERING E.I.R.L.</strong> (&quot;Nosotros&quot;, &quot;Elite Engineering&quot;).
-            Al acceder a nuestro sitio web y utilizar nuestros servicios de Aula Virtual, capacitaciones e ingeniería,
+            Bienvenido a <strong>ELITE ENGINEERING E.I.R.L.</strong> con RUC 20610569006, domiciliado en Mza. a Cas. la Retama, JIRON EL INCA 537 (&quot;Nosotros&quot;, &quot;Elite Engineering&quot;).
+            Al acceder a nuestro sitio web y utilizar nuestros servicios de implementación BIM, consultoría, diseño de viviendas y nuestra Aula Virtual,
             usted (&quot;el Usuario&quot;) acepta estar sujeto a los presentes Términos y Condiciones.
             Le sugerimos leer esta página cuidadosamente antes de proceder con cualquier compra o inscripción.
           </Typography>
@@ -30,8 +30,8 @@ export default function TerminosYCondicionesPage() {
 
           <Typography variant="h4">1. Generalidades de los Servicios</Typography>
           <Typography paragraph>
-            Elite Engineering brinda servicios de capacitación, consultoría técnica y soluciones de ingeniería.
-            Nuestra Aula Virtual contiene cursos y certificaciones dirigidos a profesionales y técnicos.
+            Elite Engineering brinda servicios especializados de implementación BIM, modelamiento BIM, diseño de viviendas, transformación digital, vistas 360°, realidad virtual y realidad aumentada.
+            Asimismo, nuestra Aula Virtual contiene cursos y certificaciones dirigidos a profesionales y técnicos.
             Al adquirir un curso, está comprando una licencia de acceso individual e intransferible.
           </Typography>
 

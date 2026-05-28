@@ -90,9 +90,9 @@ export default function CourseCard({
   const displayDate = getDisplayDate()
 
   return (
-    <div className="elite-landing group h-full">
+    <div className="elite-landing group h-full pt-4">
       <div
-        className="h-full glass-modern rounded-[2.5rem] overflow-hidden bg-white/70 hover:-translate-y-4 hover:shadow-2xl transition-all duration-700 cursor-pointer flex flex-col"
+        className="h-full glass-modern rounded-[2rem] overflow-hidden bg-white/70 hover:-translate-y-3 hover:shadow-2xl transition-all duration-700 cursor-pointer flex flex-col"
         onClick={() => router.push(`/cursos/${slug}`)}
       >
         {/* Course Image */}
@@ -139,7 +139,7 @@ export default function CourseCard({
         </div>
 
         {/* Content */}
-        <div className="p-8 flex-1 flex flex-col">
+        <div className="p-6 flex-1 flex flex-col">
           {/* Instructor */}
           <div className="flex items-center gap-2 mb-4 text-xs font-black text-slate-400 uppercase tracking-widest">
             <User className="w-4 h-4 text-[var(--primary-main)]" />
@@ -147,7 +147,7 @@ export default function CourseCard({
           </div>
 
           {/* Title */}
-          <h3 className="text-2xl font-black text-[var(--primary-main)] mb-0 line-clamp-3 h-16 group-hover:text-accent transition-colors leading-tight">
+          <h3 className="text-xl font-black text-[var(--primary-main)] mb-0 line-clamp-3 h-14 group-hover:text-accent transition-colors leading-tight">
             {titulo}
           </h3>
 
@@ -172,7 +172,7 @@ export default function CourseCard({
           {/* Price + Action Footer */}
           <div className="flex items-center justify-between border-t border-slate-100 pt-4 mt-auto">
             <div className="flex flex-col">
-              <span className="text-2xl font-black text-[var(--primary-main)]">
+              <span className="text-xl font-black text-[var(--primary-main)]">
                 {es_comprado ? 'Acceso Total' : (es_gratis ? 'Gratis' : `${moneda} ${precio}`)}
               </span>
             </div>

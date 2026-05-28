@@ -74,7 +74,7 @@ export function HeroSection() {
             className="absolute inset-0 w-full h-full object-cover object-right lg:object-center"
           />
         ))}
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-black/60" />
       </div>
 
       <FloatingParticles />
@@ -121,15 +121,15 @@ export function HeroSection() {
                   </p>
 
                   <div className="flex flex-col sm:flex-row items-center gap-4">
-                    <a href="https://wa.me/51955833613" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                      <Button className="w-full sm:w-auto bg-accent hover:bg-orange-600 text-white font-black px-8 py-6 text-base rounded-2xl glow-orange-strong hover:scale-105 transition-all group">
-                        ¡Conversemos!
+                    <a href="#servicios" className="w-full sm:w-auto inline-block">
+                      <Button className="w-full sm:w-auto cursor-pointer bg-accent hover:bg-orange-600 text-white font-black px-8 py-6 text-base rounded-2xl glow-orange-strong hover:scale-105 transition-all group">
+                        Ver Servicios
                         <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </a>
-                    <a href="#servicios" className="w-full sm:w-auto">
-                      <Button className="w-full sm:w-auto border border-white/30 bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-6 text-base rounded-2xl backdrop-blur-sm transition-all">
-                        Ver Servicios
+                    <a href="#contacto" className="w-full sm:w-auto inline-block">
+                      <Button className="w-full sm:w-auto cursor-pointer border border-white/30 bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-6 text-base rounded-2xl backdrop-blur-sm transition-all">
+                        Contáctanos
                       </Button>
                     </a>
                   </div>
@@ -239,17 +239,17 @@ export function HeroSection() {
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-4">
-                    <Link href="/cursos">
-                      <Button className="w-full sm:w-auto bg-accent hover:bg-orange-600 text-white font-black px-8 py-6 text-base rounded-2xl glow-orange-strong hover:scale-105 transition-all group">
+                    <Link href="/cursos" className="w-full sm:w-auto inline-block">
+                      <Button className="w-full sm:w-auto cursor-pointer bg-accent hover:bg-orange-600 text-white font-black px-8 py-6 text-base rounded-2xl glow-orange-strong hover:scale-105 transition-all group">
                         Explorar Cursos
                         <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </Link>
-                    <Link href="/cursos">
-                      <Button className="w-full sm:w-auto border border-white/30 bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-6 text-base rounded-2xl backdrop-blur-sm transition-all">
-                        Ver Catálogo
+                    <a href="#contacto" className="w-full sm:w-auto inline-block">
+                      <Button className="w-full sm:w-auto cursor-pointer border border-white/30 bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-6 text-base rounded-2xl backdrop-blur-sm transition-all">
+                        Contáctanos
                       </Button>
-                    </Link>
+                    </a>
                   </div>
                 </motion.div>
 

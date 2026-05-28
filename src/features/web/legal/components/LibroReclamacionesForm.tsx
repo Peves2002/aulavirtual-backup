@@ -139,7 +139,7 @@ export default function LibroReclamacionesForm() {
         <Box sx={{ mt: 2, textAlign: 'left', bgcolor: 'white', p: 2, border: '1px solid #eee', borderRadius: 1 }}>
           <Typography variant="caption" display="block"><strong>PROVEEDOR:</strong> ELITE ENGINEERING E.I.R.L.</Typography>
           <Typography variant="caption" display="block"><strong>RUC:</strong> 20610569006</Typography>
-          <Typography variant="caption" display="block"><strong>DOMICILIO:</strong> Cajamarca, Perú</Typography>
+          <Typography variant="caption" display="block"><strong>DOMICILIO:</strong> Mza. a Cas. la Retama, JIRON EL INCA 537</Typography>
         </Box>
       </Box>
 

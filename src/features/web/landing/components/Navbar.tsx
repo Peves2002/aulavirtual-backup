@@ -61,21 +61,14 @@ export function Navbar() {
           {/* Elite Logo */}
           <motion.a
             href="/"
-            className="flex items-center gap-4 group cursor-pointer"
+            className="flex items-center group cursor-pointer"
             whileHover={{ scale: 1.02 }}
           >
-            <div className="relative w-12 h-12 rounded-2xl bg-primary group-hover:bg-accent flex items-center justify-center overflow-hidden shadow-2xl transition-all duration-500">
-              <Building2 className="w-6 h-6 text-white animate-reveal" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent" />
-            </div>
-            <div className="flex flex-col">
-              <span className={`font-black tracking-tighter text-xl transition-colors duration-500 ${isScrolled ? 'text-primary' : 'text-white'}`}>
-                ELITE<span className="text-primary group-hover:text-accent">.</span>
-              </span>
-              <span className={`text-[9px] font-bold tracking-[0.3em] uppercase transition-colors duration-500 ${isScrolled ? 'text-slate-500 opacity-60' : 'text-white opacity-80'}`}>
-                Engineering
-              </span>
-            </div>
+            <img
+              src="/images/logo-elite.png"
+              alt="Elite Engineering"
+              className="h-12 w-auto transition-all duration-500 drop-shadow-lg"
+            />
           </motion.a>
 
           {/* Nav Links - Desktop */}

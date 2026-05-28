@@ -27,8 +27,8 @@ export default function LandingPage() {
         <VRExperienceSection />
         <AboutSection />
         <AchievementsSection />
-        <ClientFocusSection />
-        <CertificateSection />
+        {/* <ClientFocusSection /> */}
+        {/* <CertificateSection /> */}
         <GallerySection />
         <ContactSection />
       </main>

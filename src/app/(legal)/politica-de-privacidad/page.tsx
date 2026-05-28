@@ -21,7 +21,7 @@ export default function PoliticaPrivacidadPage() {
         <Box sx={{ '& h4': { color: 'var(--web-dark, #025E44)', fontWeight: 800, mt: 5, mb: 2 }, '& p': { mb: 2, lineHeight: 1.8 } }}>
 
           <Typography paragraph>
-            En <strong>ELITE ENGINEERING E.I.R.L.</strong>, nos tomamos muy en serio la privacidad y protección de sus datos personales. En cumplimiento de la <strong>Ley N° 29733 - Ley de Protección de Datos Personales</strong> de la República del Perú y su Reglamento, le informamos detalladamente sobre el uso y tratamiento que le damos a la información que recopilamos a través de nuestra Aula Virtual y sitio web.
+            En <strong>ELITE ENGINEERING E.I.R.L.</strong> (RUC: 20610569006), con domicilio en Mza. a Cas. la Retama, JIRON EL INCA 537, nos tomamos muy en serio la privacidad y protección de sus datos personales. En cumplimiento de la <strong>Ley N° 29733 - Ley de Protección de Datos Personales</strong> de la República del Perú y su Reglamento, le informamos detalladamente sobre el uso y tratamiento que le damos a la información que recopilamos a través de nuestros servicios de implementación BIM, consultoría de ingeniería, diseño de viviendas y nuestra Aula Virtual.
           </Typography>
 
           <Divider sx={{ my: 4 }} />

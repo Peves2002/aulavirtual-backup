@@ -21,8 +21,8 @@ export default function PoliticaCambiosYDevolucionesPage() {
 
           <Typography paragraph>
             La presente política regula las condiciones de reembolso y cambios aplicables a los
-            servicios educativos ofrecidos por <strong>ELITE ENGINEERING E.I.R.L.</strong>,
-            con RUC <strong>20610569006</strong>, con domicilio en Cajamarca, Perú — a través de su Aula Virtual. Al adquirir cualquier curso,
+            servicios educativos, de implementación BIM, consultoría técnica y diseño de viviendas ofrecidos por <strong>ELITE ENGINEERING E.I.R.L.</strong>,
+            con RUC <strong>20610569006</strong>, con domicilio en Mza. a Cas. la Retama, JIRON EL INCA 537. Al adquirir cualquier curso o contratar nuestros servicios,
             el usuario declara haber leído y aceptado los términos aquí descritos.
           </Typography>
 
