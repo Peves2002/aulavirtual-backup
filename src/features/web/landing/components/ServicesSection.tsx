@@ -1,8 +1,9 @@
 'use client'
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef } from "react"
+
+import { motion, useInView } from "framer-motion"
+
 import {
   Building2,
   Layers,
@@ -14,8 +15,9 @@ import {
   Smartphone,
   ArrowUpRight,
   Sparkles,
-} from "lucide-react";
-import { Button } from "./ui/button";
+} from "lucide-react"
+
+import { Button } from "./ui/button"
 
 const services = [
   {
@@ -171,6 +173,7 @@ export function ServicesSection() {
                       e.stopPropagation();
                       const message = `Hola Elite Engineering, estoy interesado en su servicio de ${service.title}`;
                       const waUrl = `https://wa.me/51955833613?text=${encodeURIComponent(message)}`;
+
                       window.open(waUrl, '_blank');
                     }}
                     className="w-full cursor-pointer mt-auto rounded-xl bg-primary hover:bg-accent text-white font-black text-xs py-4 shadow-lg hover:shadow-xl transition-all duration-300"

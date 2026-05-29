@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
-import { ExternalLink, Maximize2, Filter, Layers, Box, Globe, X } from "lucide-react";
-import { Button } from "./ui/button";
-import { getAssetPath } from "@/lib/assets";
+import { useState, useRef } from "react"
+
+import { motion, AnimatePresence, useInView } from "framer-motion"
+
+import { Maximize2, Filter, Layers, Box, Globe, X } from "lucide-react"
+
+import { getAssetPath } from "@/lib/assets"
+
+import { Button } from "./ui/button"
 
 const categories = [
     { id: "all", label: "Todos", icon: Filter },

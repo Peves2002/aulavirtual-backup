@@ -1,10 +1,12 @@
 'use client'
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { Glasses, Smartphone, Eye, Sparkles, X } from "lucide-react";
-import { getAssetPath } from "@/lib/assets";
+import { useRef, useState } from "react"
+
+import { motion, AnimatePresence, useInView } from "framer-motion"
+
+import { Glasses, Smartphone, Eye, X } from "lucide-react"
+
+import { getAssetPath } from "@/lib/assets"
 
 const experiences = [
     {

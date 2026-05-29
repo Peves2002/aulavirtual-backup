@@ -1,8 +1,9 @@
 'use client'
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef } from "react"
+
+import { motion, useInView } from "framer-motion"
+
 import {
   Building2,
   Users,
@@ -10,10 +11,10 @@ import {
   TrendingUp,
   CheckCircle2,
   ArrowRight,
-  Star,
   Quote,
-} from "lucide-react";
-import { Button } from "./ui/button";
+} from "lucide-react"
+
+import { Button } from "./ui/button"
 
 const clientProfiles = [
   {
@@ -156,7 +157,7 @@ export function ClientFocusSection() {
             >
               <Quote className="absolute top-4 right-4 w-10 h-10 text-primary/5" />
               <p className="text-base md:text-lg font-bold text-primary italic mb-5 leading-[1.4]">
-                "Elite Engineering no solo entrega modelos; entrega <span className="text-primary">certeza técnica</span>."
+                &quot;Elite Engineering no solo entrega modelos; entrega <span className="text-primary">certeza técnica</span>.&quot;
               </p>
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-2xl">

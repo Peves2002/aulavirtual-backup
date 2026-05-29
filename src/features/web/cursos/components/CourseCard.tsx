@@ -1,13 +1,14 @@
 'use client'
 
 import type { MouseEvent } from 'react'
-import Link from 'next/link'
+
 import { useRouter } from 'next/navigation'
+
 import { Tooltip } from '@mui/material'
-import { Clock, Calendar, User, Star, ShoppingCart, Check, ArrowRight } from "lucide-react";
+import { Clock, Calendar, User, ShoppingCart, Check, ArrowRight } from "lucide-react"
+
 import { useCart } from '../../cart/context/CartContext'
 import HydratedDate from '@/utils/components/HydratedDate'
-import UserAvatar from '@/utils/components/UserAvatar'
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 
 interface CourseCardProps {
@@ -48,7 +49,6 @@ export default function CourseCard({
   es_gratis,
   profesor,
   categoria,
-  nivel,
   tipo_emision,
   fecha_inicio,
   creado_en,
@@ -65,19 +65,15 @@ export default function CourseCard({
     addToCart({ id, titulo, slug, miniatura, precio, moneda })
   }
 
-  const getNivelLabel = (n?: string) => {
-    if (n === 'BASICO') return 'Básico'
-    if (n === 'INTERMEDIO') return 'Intermedio'
-    if (n === 'AVANZADO') return 'Avanzado'
-    return n || 'General'
-  }
-
   const getDisplayDate = () => {
     const dateToUse = (tipo_emision === 'SINCRONO' || tipo_emision === 'MIXTO')
       ? fecha_inicio
       : creado_en
+
     if (!dateToUse) return null
+
     const date = new Date(dateToUse)
+
     return (
       <HydratedDate
         date={date}

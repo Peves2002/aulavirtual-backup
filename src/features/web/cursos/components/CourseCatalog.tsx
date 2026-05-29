@@ -1,24 +1,24 @@
 'use client'
 
 import { useState, useMemo, useEffect } from 'react'
+
 import { useSearchParams } from 'next/navigation'
+
 import {
   Box,
   Container,
-  Typography,
   Stack,
   TextField,
-  InputAdornment,
-  Chip,
   Fade,
   MenuItem,
   IconButton,
-  Tooltip,
   Divider,
   Badge,
   Fab
 } from '@mui/material'
-import { Search, X, Filter, ShoppingCart, RefreshCw, ChevronDown } from "lucide-react";
+
+import { Search, X, ShoppingCart, RefreshCw } from "lucide-react"
+
 import CourseList from './CourseList'
 import { useCart } from '../../cart/context/CartContext'
 
@@ -46,6 +46,7 @@ const CourseCatalog = ({ courses, categories }: CourseCatalogProps) => {
 
   useEffect(() => {
     const catId = searchParams.get('categoria')
+
     if (catId) {
       setSelectedCategory(catId)
     } else {
@@ -57,10 +58,13 @@ const CourseCatalog = ({ courses, categories }: CourseCatalogProps) => {
     const filtered = courses.filter(course => {
       const matchesSearch = course.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (course.descripcion && course.descripcion.toLowerCase().includes(searchTerm.toLowerCase()))
+
       const matchesCategory = selectedCategory === 'all' || course.categoria?.slug === selectedCategory
       const matchesLevel = selectedLevel === 'all' || course.nivel === selectedLevel
+
       const matchesPrice = selectedPrice === 'all' ||
         (selectedPrice === 'free' ? course.es_gratis : !course.es_gratis)
+
       const matchesModality = selectedModality === 'all' || course.tipo_emision === selectedModality
 
       return matchesSearch && matchesCategory && matchesLevel && matchesPrice && matchesModality
@@ -72,6 +76,7 @@ const CourseCatalog = ({ courses, categories }: CourseCatalogProps) => {
       } else if (sortBy === 'alphabetical') {
         return a.titulo.localeCompare(b.titulo)
       }
+
       return 0
     })
   }, [courses, searchTerm, selectedCategory, selectedLevel, selectedPrice, selectedModality, sortBy])

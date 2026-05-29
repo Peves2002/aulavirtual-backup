@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from "framer-motion";
-import { ArrowUp, Building2, Mail, Phone, MapPin } from "lucide-react";
+import { ArrowUp, MapPin } from "lucide-react";
 
 const footerLinks = {
   servicios: [

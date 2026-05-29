@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useRef } from "react";
+import { useState, useRef } from "react"
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useInView } from "framer-motion";
-import { X, Maximize2, Camera, Sparkles } from "lucide-react";
-import { getAssetPath } from "@/lib/assets";
+import { motion, AnimatePresence, useInView } from "framer-motion"
+
+import { X, Maximize2, Camera } from "lucide-react"
+
+import { getAssetPath } from "@/lib/assets"
 
 const galleryImages = [
     {

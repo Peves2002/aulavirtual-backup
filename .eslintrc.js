@@ -1,4 +1,5 @@
 module.exports = {
+  ignorePatterns: ['src/features/web/landing/components/ui/**/*'],
   extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended', 'plugin:import/recommended', 'prettier'],
   rules: {
     'import/named': 'off',

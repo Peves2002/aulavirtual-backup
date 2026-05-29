@@ -1,6 +1,7 @@
 'use client'
 
 import { Grid, Typography, Box, CircularProgress, Alert } from '@mui/material'
+
 import CourseCard from './CourseCard'
 
 interface CourseListProps {

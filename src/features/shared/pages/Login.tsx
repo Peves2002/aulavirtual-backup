@@ -124,22 +124,18 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
       })
 
       // Verificar si hubo error
-      if (result?.error) {
-        console.error('❌ Error en login:', result.error)
+      if (result?.error || !result?.ok) {
+        console.error('❌ Error en login:', result?.error)
 
-        if (result.error === 'CredentialsSignin') {
+        if (result?.error === 'CredentialsSignin') {
           setError('Correo o contraseña incorrectos')
-        } else if (result.error.includes('desactivada')) {
+        } else if (result?.error?.includes('desactivada')) {
           setError('Tu cuenta ha sido desactivada. Contacta al administrador.')
+        } else if (result?.error?.includes('conexión') || result?.error?.includes('Error')) {
+          setError('Error de conexión con el servidor. Intenta nuevamente.')
         } else {
           setError('Error al iniciar sesión. Intenta nuevamente.')
         }
-      }
-
-      // Verificar que el login fue exitoso
-      if (!result?.ok) {
-        console.error('❌ Login no exitoso, result.ok =', result?.ok)
-        setError('Error al iniciar sesión. Intenta nuevamente.')
 
         return
       }

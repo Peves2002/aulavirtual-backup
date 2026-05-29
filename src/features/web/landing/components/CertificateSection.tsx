@@ -1,9 +1,12 @@
 'use client'
 
-import { motion } from "framer-motion";
-import { Award, CheckCircle, ShieldCheck, Zap } from "lucide-react";
-import { Button } from "./ui/button";
-import { getAssetPath } from "@/lib/assets";
+import { motion } from "framer-motion"
+
+import { CheckCircle, ShieldCheck, Zap } from "lucide-react"
+
+import { getAssetPath } from "@/lib/assets"
+
+import { Button } from "./ui/button"
 
 export function CertificateSection() {
     return (

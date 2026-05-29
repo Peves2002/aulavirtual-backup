@@ -1,19 +1,24 @@
 'use client'
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { ArrowRight, Search, X, RefreshCw } from "lucide-react";
-import { Box, TextField, MenuItem, IconButton, Divider } from "@mui/material";
-import { Button } from "./ui/button";
+import { useState, useEffect } from "react"
+
+import Link from "next/link"
+
+import { motion, AnimatePresence } from "framer-motion"
+
+import { ArrowRight, Search, X, RefreshCw } from "lucide-react"
+
+import { Box, TextField, MenuItem, IconButton, Divider } from "@mui/material"
+
+import { getAssetPath } from "@/lib/assets"
+import CourseCard from "@/features/web/cursos/components/CourseCard"
+
+import { Button } from "./ui/button"
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  type CarouselApi,
-} from "./ui/carousel";
-import { getAssetPath } from "@/lib/assets";
-import CourseCard from "@/features/web/cursos/components/CourseCard";
+} from "./ui/carousel"
 
 const socialMedia = [
   { icon: getAssetPath("iconos/facebook.svg"), link: "#", name: "Facebook", color: "bg-[#1877F2]", shadow: "shadow-[#1877F2]/20" },
@@ -44,7 +49,6 @@ type Course = {
 }
 
 export function AulaVirtualSection() {
-  const [api, setApi] = useState<CarouselApi>();
   const [courses, setCourses] = useState<Course[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -77,6 +81,7 @@ export function AulaVirtualSection() {
       .then(r => r.json())
       .then(data => {
         const payload = data?.result ?? data;
+
         setCourses(payload?.courses ?? []);
         setCategories(payload?.categories ?? []);
       })
@@ -87,10 +92,13 @@ export function AulaVirtualSection() {
   const filteredCourses = courses.filter(course => {
     const matchesSearch = course.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (course.descripcion && course.descripcion.toLowerCase().includes(searchTerm.toLowerCase()))
+
     const matchesCategory = selectedCategory === 'all' || course.categoria?.slug === selectedCategory
     const matchesLevel = selectedLevel === 'all' || course.nivel === selectedLevel
+
     const matchesPrice = selectedPrice === 'all' ||
       (selectedPrice === 'free' ? course.es_gratis : !course.es_gratis)
+
     const matchesModality = selectedModality === 'all' || course.tipo_emision === selectedModality
 
     return matchesSearch && matchesCategory && matchesLevel && matchesPrice && matchesModality
@@ -100,6 +108,7 @@ export function AulaVirtualSection() {
     } else if (sortBy === 'alphabetical') {
       return a.titulo.localeCompare(b.titulo)
     }
+
     return 0
   });
 
@@ -337,7 +346,7 @@ export function AulaVirtualSection() {
           <p className="text-center text-slate-400 font-bold py-16">No hay cursos disponibles en esta categoría.</p>
         ) : (
           <div className="relative">
-            <Carousel setApi={setApi} opts={{ align: "start", loop: false }} className="w-full">
+            <Carousel opts={{ align: "start", loop: false }} className="w-full">
               <CarouselContent className="-ml-8">
                 <AnimatePresence mode="popLayout">
                   {filteredCourses.map((course, idx) => (

@@ -42,7 +42,7 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
 
           // Verificar si está activo
           if (!usuario.esta_activo) {
-            throw new Error('Tu cuenta ha sido desactivada')
+            throw new Error('Tu cuenta ha sido desactivada. Contacta al administrador.')
           }
 
           // Verificar contraseña
@@ -67,9 +67,14 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
             esta_activo: usuario.esta_activo
           } as User
         } catch (error) {
-          console.error('Error en authorize:', error)
+          // Re-lanzar errores de autenticación (cuenta desactivada, etc.)
+          if (error instanceof Error && !error.message.includes('prisma') && !error.message.includes('database')) {
+            throw error
+          }
 
-          return null
+          console.error('Error en authorize (BD):', error)
+
+          throw new Error('Error de conexión. Intenta nuevamente en unos momentos.')
         }
       }
     })

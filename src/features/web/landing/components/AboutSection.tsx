@@ -1,10 +1,12 @@
 'use client'
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
-import { getAssetPath } from "@/lib/assets";
-import { Target, Eye, History, Rocket, CheckCircle2 } from "lucide-react";
+import { useRef } from "react"
+
+import { motion, useInView } from "framer-motion"
+
+import { Target, Eye, Rocket } from "lucide-react"
+
+import { getAssetPath } from "@/lib/assets"
 
 const timelineEvents = [
   { year: "2023", title: "Fundación", description: "Nace Elite Engineering con visión de excelencia" },
@@ -55,7 +57,7 @@ export function AboutSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
               <div className="absolute bottom-6 left-6 right-6">
                 <p className="text-white text-base font-black italic leading-tight">
-                  "La ingeniería no es solo construir; es rediseñar el futuro con precisión."
+                  &quot;La ingeniería no es solo construir; es rediseñar el futuro con precisión.&quot;
                 </p>
               </div>
             </div>

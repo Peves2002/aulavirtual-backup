@@ -1,8 +1,10 @@
 'use client'
 
-import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart } from "lucide-react";
-import { useCart } from "../context/CartContext";
+import { motion, AnimatePresence } from "framer-motion"
+
+import { ShoppingCart } from "lucide-react"
+
+import { useCart } from "../context/CartContext"
 
 export function FloatingCartButton() {
   const { itemCount, setIsCartDrawerOpen } = useCart();

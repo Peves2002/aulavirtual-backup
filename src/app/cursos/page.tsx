@@ -1,11 +1,13 @@
 // Next Imports
 import React from 'react'
+
 import { Box } from '@mui/material'
 
 // Component Imports
 import CourseCatalog from '@/features/web/cursos/components/CourseCatalog'
 import { Navbar } from '@/features/web/landing/components/Navbar'
 import { Footer } from '@/features/web/landing/components/Footer'
+import { FloatingCartButton } from '@/features/web/cart/components/FloatingCartButton'
 
 // Libs
 import prisma from '@/utils/libs/prisma'
@@ -57,6 +59,7 @@ async function getData(userId: string | null) {
     return { courses: serializedCourses, categories }
   } catch (error) {
     console.error('Error fetching data for CursosPage:', error)
+
     return { courses: [], categories: [] }
   }
 }
@@ -65,8 +68,6 @@ export const metadata = {
   title: 'Catálogo de Cursos | Elite Engineering',
   description: 'Especialízate con nuestros cursos y programas certificados de ingeniería y gestión técnica.'
 }
-
-import { FloatingCartButton } from '@/features/web/cart/components/FloatingCartButton'
 
 export default async function CursosPage() {
   const session = await getAuthSession()

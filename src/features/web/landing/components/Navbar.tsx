@@ -1,24 +1,27 @@
 'use client'
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Menu, 
-  X, 
-  MessageCircle, 
-  Building2, 
-  ArrowRight, 
-  ShoppingCart, 
-  User, 
+import { useState, useEffect } from "react"
+
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+
+import { useSession } from "next-auth/react"
+
+import { motion, AnimatePresence } from "framer-motion"
+
+import {
+  Menu,
+  X,
+  ArrowRight,
+  ShoppingCart,
+  User,
   LogIn,
   UserPlus
-} from "lucide-react";
-import { Button } from "@/features/web/landing/components/ui/button";
-import { useCart } from "@/features/web/cart/context/CartContext";
-import { useAuthModal } from "@/contexts/AuthModalContext";
+} from "lucide-react"
+
+import { Button } from "@/features/web/landing/components/ui/button"
+import { useCart } from "@/features/web/cart/context/CartContext"
+import { useAuthModal } from "@/contexts/AuthModalContext"
 
 const navLinks = [
   { name: "Inicio", href: "/" },
@@ -42,7 +45,9 @@ export function Navbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50 || pathname !== "/");
     };
+
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname]);
 
@@ -80,6 +85,7 @@ export function Navbar() {
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
                 </>
               );
+
               const className = `text-sm font-bold tracking-wide transition-all duration-500 relative group cursor-pointer ${isScrolled ? 'text-foreground hover:text-primary' : 'text-white/90 hover:text-white'}`;
 
               return (
@@ -117,16 +123,18 @@ export function Navbar() {
               </Link>
             ) : (
               <div className="flex items-center gap-3">
-                <button onClick={() => openLogin()} className="cursor-pointer">
-                  <span className={`text-sm font-bold transition-all ${isScrolled ? 'text-primary hover:text-accent' : 'text-white hover:text-white/70'}`}>
-                    Iniciar Sesión
-                  </span>
-                </button>
-                <button onClick={() => openRegister()}>
-                  <Button className="bg-accent hover:bg-orange-600 text-white font-black px-6 py-5 rounded-2xl shadow-xl shadow-accent/20 transition-all hover:scale-105 cursor-pointer">
-                    Registrarse
-                  </Button>
-                </button>
+                <span
+                  onClick={() => openLogin()}
+                  className={`text-sm font-bold transition-all cursor-pointer ${isScrolled ? 'text-primary hover:text-accent' : 'text-white hover:text-white/70'}`}
+                >
+                  Iniciar Sesión
+                </span>
+                <Button
+                  onClick={() => openRegister()}
+                  className="bg-accent hover:bg-orange-600 text-white font-black px-6 py-5 rounded-2xl shadow-xl shadow-accent/20 transition-all hover:scale-105 cursor-pointer"
+                >
+                  Registrarse
+                </Button>
               </div>
             )}
           </div>
@@ -156,7 +164,7 @@ export function Navbar() {
               animate={{ y: 0, opacity: 1 }}
               className="flex flex-col gap-6"
             >
-              {navLinks.map((link, i) => (
+              {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}

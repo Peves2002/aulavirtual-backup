@@ -1,17 +1,22 @@
 'use client'
 
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { ArrowRight, ChevronDown, Building2, GraduationCap, Shield, TrendingUp, BookOpen, Users } from "lucide-react";
-import { Button } from "./ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
+
+import Link from "next/link"
+
+import { motion } from "framer-motion"
+
+import { ArrowRight, ChevronDown, Building2, GraduationCap, Shield, TrendingUp, BookOpen, Users } from "lucide-react"
+
+import AutoplayPlugin from "embla-carousel-autoplay"
+
+import { Button } from "./ui/button"
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   type CarouselApi,
-} from "./ui/carousel";
-import AutoplayPlugin from "embla-carousel-autoplay";
+} from "./ui/carousel"
 
 function FloatingParticles() {
   return (

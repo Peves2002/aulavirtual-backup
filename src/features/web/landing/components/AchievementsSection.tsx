@@ -1,8 +1,9 @@
 'use client'
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState } from "react"
+
+import { motion, useInView } from "framer-motion"
+
 import {
   GraduationCap,
   Glasses,
@@ -14,10 +15,10 @@ import {
   Sparkles,
   ChevronLeft,
   ChevronRight,
-  Trophy,
-} from "lucide-react";
-import { Button } from "./ui/button";
-import { getAssetPath } from "@/lib/assets";
+} from "lucide-react"
+
+import { Button } from "./ui/button"
+import { getAssetPath } from "@/lib/assets"
 
 const achievements = [
   {
