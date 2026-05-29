@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Figtree:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -265,10 +265,155 @@ code {
   line-height: 1.7;
 }
 
-/* Apply Plus Jakarta Sans to web public pages */
-.web-layout,
+/* ── ATD Academy Design System ───────────────────────── */
+
+/* Web layout: CSS variables scoped to .web-layout */
+.web-layout {
+  /* ATD Dark Premium */
+  --background: 240 20% 4%;
+  --foreground: 210 40% 98%;
+
+  --card: 240 25% 8%;
+  --card-foreground: 210 40% 98%;
+
+  --popover: 240 25% 7%;
+  --popover-foreground: 210 40% 98%;
+
+  --primary: 343 84% 52%;
+  --primary-foreground: 0 0% 100%;
+  --primary-glow: 343 90% 65%;
+
+  --secondary: 199 89% 60%;
+  --secondary-foreground: 240 25% 6%;
+
+  --muted: 240 18% 14%;
+  --muted-foreground: 220 15% 65%;
+
+  --accent: 199 89% 60%;
+  --accent-foreground: 240 25% 6%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 240 18% 16%;
+  --input: 240 18% 14%;
+  --ring: 343 84% 52%;
+
+  --radius: 0.875rem;
+
+  --gradient-primary: linear-gradient(135deg, hsl(343 84% 52%), hsl(343 90% 65%));
+  --gradient-accent: linear-gradient(135deg, hsl(199 89% 60%), hsl(220 90% 65%));
+  --gradient-hero: linear-gradient(135deg, hsl(343 84% 52% / 0.15), hsl(199 89% 60% / 0.15));
+  --gradient-radial: radial-gradient(ellipse at top, hsl(343 84% 52% / 0.18), transparent 60%);
+  --gradient-mesh: radial-gradient(at 20% 20%, hsl(343 84% 52% / 0.18) 0px, transparent 50%),
+                   radial-gradient(at 80% 30%, hsl(199 89% 60% / 0.15) 0px, transparent 50%),
+                   radial-gradient(at 60% 90%, hsl(280 70% 55% / 0.12) 0px, transparent 50%);
+
+  --shadow-glow: 0 0 60px hsl(343 84% 52% / 0.35);
+  --shadow-glow-accent: 0 0 60px hsl(199 89% 60% / 0.3);
+  --shadow-elegant: 0 20px 60px -20px hsl(343 84% 52% / 0.4);
+  --shadow-card: 0 8px 32px hsl(240 20% 0% / 0.6);
+
+  --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --sidebar-background: 240 25% 6%;
+  --sidebar-foreground: 220 15% 75%;
+  --sidebar-primary: 343 84% 52%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 240 20% 12%;
+  --sidebar-accent-foreground: 210 40% 98%;
+  --sidebar-border: 240 18% 14%;
+  --sidebar-ring: 343 84% 52%;
+}
+
 .web-layout * {
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  border-color: hsl(var(--border));
+}
+
+/* Images fill their container (Vite handled this automatically, Next.js needs it explicit) */
+.web-layout img {
+  max-width: 100%;
+  height: auto;
+}
+
+.web-layout {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: 'Figtree', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "cv11";
+}
+
+.web-layout h1,
+.web-layout h2,
+.web-layout h3,
+.web-layout h4,
+.web-layout h5,
+.web-layout h6 {
+  font-family: 'Outfit', system-ui, sans-serif;
+  letter-spacing: -0.025em;
+}
+
+/* Use #__next prefix to match Tailwind's important selector specificity */
+#__next .web-layout .text-gradient-primary,
+#__next .text-gradient-primary {
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+  background-image: var(--gradient-primary) !important;
+}
+#__next .web-layout .text-gradient-accent,
+#__next .text-gradient-accent {
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+  background-image: var(--gradient-accent) !important;
+}
+#__next .web-layout .bg-mesh { background-image: var(--gradient-mesh) !important; }
+#__next .web-layout .bg-radial-primary { background-image: var(--gradient-radial) !important; }
+#__next .web-layout .glow-primary { box-shadow: var(--shadow-glow) !important; }
+#__next .web-layout .glow-accent  { box-shadow: var(--shadow-glow-accent) !important; }
+
+#__next .web-layout .glass {
+  background: hsl(var(--card) / 0.4) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+}
+#__next .web-layout .glass-strong {
+  background: hsl(var(--card) / 0.7) !important;
+  backdrop-filter: blur(32px) !important;
+  -webkit-backdrop-filter: blur(32px) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+}
+.web-layout .marquee {
+  animation: marquee 40s linear infinite;
+}
+.web-layout .animate-fade-up {
+  animation: fade-up 0.6s ease-out forwards;
+}
+.web-layout .animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* SweetAlert2 — match system typography */
