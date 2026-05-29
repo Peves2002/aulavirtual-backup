@@ -41,7 +41,7 @@ export function Navbar() {
 
   useEffect(() => {
     setIsScrolled(window.scrollY > 50 || pathname !== "/");
-    
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50 || pathname !== "/");
     };
@@ -72,7 +72,7 @@ export function Navbar() {
             <img
               src="/images/logo-elite.png"
               alt="Elite Engineering"
-              className="h-12 w-auto transition-all duration-500 drop-shadow-lg"
+              className="h-16 w-auto transition-all duration-500 drop-shadow-lg"
             />
           </motion.a>
 
@@ -101,9 +101,8 @@ export function Navbar() {
             {/* Cart Button */}
             <button
               onClick={() => setIsCartDrawerOpen(true)}
-              className={`relative p-3 rounded-2xl transition-all duration-500 group cursor-pointer ${
-                isScrolled ? 'bg-slate-100 text-primary hover:bg-accent hover:text-white' : 'bg-white/10 text-white hover:bg-accent hover:text-white'
-              }`}
+              className={`relative p-3 rounded-2xl transition-all duration-500 group cursor-pointer ${isScrolled ? 'bg-slate-100 text-primary hover:bg-accent hover:text-white' : 'bg-white/10 text-white hover:bg-accent hover:text-white'
+                }`}
             >
               <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform" />
               {itemCount > 0 && (
@@ -177,7 +176,7 @@ export function Navbar() {
               ))}
 
               <div className="mt-8 pt-8 border-t border-white/10 flex flex-col gap-4">
-                <button 
+                <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     setIsCartDrawerOpen(true);

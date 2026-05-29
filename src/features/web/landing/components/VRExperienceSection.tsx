@@ -10,32 +10,32 @@ import { getAssetPath } from "@/lib/assets"
 
 const experiences = [
     {
-        title: "Inmersión Educativa",
-        description: "Visualiza proyectos educativos en 360° con precisión milimétrica.",
-        bg: getAssetPath("galeria/MODELAMIENTOCOLEGIOSUNIVERSIDADES.jpeg"),
-        qr: getAssetPath("qr/qr1.jpeg"),
-        category: "Realidad Virtual"
+        title: "Supervisión en Campo",
+        description: "Supervisión en campo de la funcionalidad y preinstalación de sistemas.",
+        bg: getAssetPath("codigo-qr/supervision-campo/imagen.jpeg"),
+        qr: getAssetPath("codigo-qr/supervision-campo/qr.jpeg"),
+        category: "Preinstalación"
     },
     {
-        title: "Gemelos Digitales",
-        description: "Supervisa el avance de obra real mediante gemelos digitales interactivos.",
-        bg: getAssetPath("galeria/ImplementaciongemelosdigitalesBIMobrareal.jpeg"),
-        qr: getAssetPath("qr/qr2.jpeg"),
-        category: "Realidad Aumentada"
+        title: "Instalaciones Eléctricas 360°",
+        description: "Supervisión de instalaciones eléctricas con vistas 360°.",
+        bg: getAssetPath("codigo-qr/supervision-instalaciones/imagen.jpeg"),
+        qr: getAssetPath("codigo-qr/supervision-instalaciones/qr.jpeg"),
+        category: "Vistas 360°"
     },
     {
-        title: "Diseño Moderno",
-        description: "Recorre espacios diseñados bajo estándares BIM de alta eficiencia.",
-        bg: getAssetPath("galeria/modernointegrajuegocirculacionconfort.jpeg"),
-        qr: getAssetPath("qr/qr3.jpeg"),
-        category: "360° View"
+        title: "Estado Estructural",
+        description: "Supervisión del cumplimiento del estado estructural conforme al diseño del proyecto.",
+        bg: getAssetPath("codigo-qr/supervision-estructural/imagen.jpeg"),
+        qr: getAssetPath("codigo-qr/supervision-estructural/qr.jpeg"),
+        category: "Diseño BIM"
     },
     {
-        title: "Supervisión Técnica",
-        description: "Validación de sistemas pre-instalación mediante visualización avanzada.",
-        bg: getAssetPath("galeria/Supervisioncampopreinstalacionsistemas.jpeg"),
-        qr: getAssetPath("qr/qr4.jpeg"),
-        category: "VR Proyectada"
+        title: "Verificación de Acabados",
+        description: "Verificación de acabados en el gemelo digital.",
+        bg: getAssetPath("codigo-qr/verificacion-acabados/imagen.jpeg"),
+        qr: getAssetPath("codigo-qr/verificacion-acabados/qr.jpeg"),
+        category: "Gemelo Digital"
     }
 ];
 
@@ -91,9 +91,9 @@ export function VRExperienceSection() {
                             <img
                                 src={exp.bg}
                                 alt={exp.title}
-                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-40"
+                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-70"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/20 to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-primary/10" />
 
                             {/* QR Overlay (Default State) */}
                             <div
