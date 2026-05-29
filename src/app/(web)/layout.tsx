@@ -13,7 +13,7 @@ import MobileBottomNav from '@/utils/components/layout/web/MobileBottomNav'
 const getCategorias = unstable_cache(
   () =>
     prisma.categoria.findMany({
-      where: { esta_activo: true },
+      where: { esta_activo: true, categoria_padre_id: null },
       select: { id: true, nombre: true, slug: true },
       orderBy: { orden: 'asc' }
     }),
@@ -36,7 +36,7 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
         <div className="flex flex-1" style={{ paddingTop: 'var(--navbar-height)' }}>
           {/* Sidebar: visible solo en sm+ */}
           <div className="hidden sm:block">
-            <LeftSidebar rutasHabilitado={rutasHabilitado} empresasHabilitado={empresasHabilitado} />
+            <LeftSidebar rutasHabilitado={rutasHabilitado} empresasHabilitado={empresasHabilitado} categories={categories} />
           </div>
           <main
             className="flex-1 flex flex-col min-w-0"
@@ -51,7 +51,7 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
           </main>
         </div>
         {/* Bottom nav: visible solo en mobile */}
-        <MobileBottomNav rutasHabilitado={rutasHabilitado} />
+        <MobileBottomNav rutasHabilitado={rutasHabilitado} categories={categories} />
       </div>
     </AuthModalProvider>
   )

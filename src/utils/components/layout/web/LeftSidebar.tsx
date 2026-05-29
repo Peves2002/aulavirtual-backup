@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, type RefObject } from 'react'
 
 import Link from 'next/link'
 import Image from 'next/image'
@@ -10,6 +10,12 @@ import { usePathname, useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
 
 import { Home, BookOpen, Users, Award, GraduationCap, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, Route } from 'lucide-react'
+
+export interface NavCategory {
+  id: string
+  nombre: string
+  slug: string
+}
 
 const ALL_NAV_ITEMS = [
   { key: 'inicio', title: 'Inicio', url: '/', icon: Home },
@@ -24,17 +30,23 @@ const ALL_NAV_ITEMS = [
 export default function LeftSidebar({
   rutasHabilitado = true,
   empresasHabilitado = true,
+  categories = [],
 }: {
   rutasHabilitado?: boolean
   empresasHabilitado?: boolean
+  categories?: NavCategory[]
 }) {
   const pathname = usePathname()
   const router = useRouter()
   const [expanded, setExpanded] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [menuPos, setMenuPos] = useState({ bottom: 0, left: 0 })
+  const [openPanel, setOpenPanel] = useState<'cursos' | 'diplomados' | null>(null)
+  const [categMenuPos, setCategMenuPos] = useState({ top: 0, left: 0 })
   const { data: session } = useSession()
   const userButtonRef = useRef<HTMLButtonElement>(null)
+  const cursosButtonRef = useRef<HTMLButtonElement>(null)
+  const diplomadosButtonRef = useRef<HTMLButtonElement>(null)
 
   const navItems = ALL_NAV_ITEMS.filter(item => {
     if (item.key === 'rutas' && !rutasHabilitado) return false
@@ -53,6 +65,22 @@ export default function LeftSidebar({
     setUserMenuOpen(o => !o)
   }
 
+  const handleNavWithCategories = (key: 'cursos' | 'diplomados', fallbackUrl: string, ref: RefObject<HTMLButtonElement | null>) => {
+    if (categories.length === 0) {
+      router.push(fallbackUrl)
+
+      return
+    }
+
+    if (ref.current) {
+      const rect = ref.current.getBoundingClientRect()
+
+      setCategMenuPos({ top: rect.top, left: rect.right })
+    }
+
+    setOpenPanel(p => p === key ? null : key)
+  }
+
   const handleLogout = async () => {
     setUserMenuOpen(false)
     await signOut({ redirect: false })
@@ -67,6 +95,47 @@ export default function LeftSidebar({
     return pathname.startsWith(url)
   }
 
+  const navItemStyle = (active: boolean, extraOpen = false) => ({
+    height: '56px',
+    color: active ? 'var(--web-light, #BDD962)' : '#ffffff',
+    fontWeight: active ? 700 : 500,
+    backgroundColor: active || extraOpen ? 'rgba(255,255,255,0.05)' : 'transparent',
+  })
+
+  const NavItemInterior = ({ item, active }: { item: typeof ALL_NAV_ITEMS[0]; active: boolean }) => (
+    <>
+      {active && (
+        <div
+          className="absolute left-0 rounded-r-full"
+          style={{ width: '4px', height: '32px', backgroundColor: 'var(--web-light, #BDD962)' }}
+        />
+      )}
+      <div
+        className="flex items-center justify-center rounded-xl transition-all flex-shrink-0"
+        style={{
+          minWidth: '48px',
+          height: '48px',
+          backgroundColor: active ? 'var(--web-light, #BDD962)' : 'transparent',
+          color: active ? '#0A0A0A' : 'inherit',
+          boxShadow: active ? '0 4px 12px rgba(0,0,0,0.2)' : 'none',
+        }}
+      >
+        <item.icon style={{ width: '22px', height: '22px' }} />
+      </div>
+      <span
+        className="ml-3 text-sm whitespace-nowrap overflow-hidden transition-all duration-300"
+        style={{
+          fontFamily: 'Poppins, sans-serif',
+          opacity: expanded ? 1 : 0,
+          maxWidth: expanded ? '180px' : '0px',
+          transition: 'opacity 0.2s, max-width 0.3s',
+        }}
+      >
+        {item.title}
+      </span>
+    </>
+  )
+
   return (
     <aside
       className="fixed left-0 bottom-0 flex flex-col items-start py-6 gap-1 overflow-hidden shadow-xl transition-all duration-300 ease-in-out"
@@ -78,22 +147,80 @@ export default function LeftSidebar({
         zIndex: 40,
       }}
       onMouseEnter={() => setExpanded(true)}
-      onMouseLeave={() => setExpanded(false)}
+      onMouseLeave={() => { setExpanded(false); setOpenPanel(null) }}
     >
+      {/* Categories flyout panel */}
+      {openPanel && (
+        <>
+          <div style={{ position: 'fixed', inset: 0, zIndex: 49 }} onClick={() => setOpenPanel(null)} />
+          <div
+            style={{
+              position: 'fixed',
+              top: categMenuPos.top,
+              left: categMenuPos.left,
+              width: '180px',
+              backgroundColor: 'var(--web-dark, #025E44)',
+              borderRadius: '0 12px 12px 0',
+              boxShadow: '4px 0 16px rgba(0,0,0,0.25)',
+              zIndex: 50,
+              overflow: 'hidden',
+            }}
+          >
+            <div style={{ padding: '6px' }}>
+              {categories.map(cat => (
+                <Link
+                  key={cat.id}
+                  href={`/${openPanel}?categoria=${cat.slug}`}
+                  onClick={() => setOpenPanel(null)}
+                  className="no-underline flex items-center w-full px-4 transition-colors"
+                  style={{ height: '44px', color: '#ffffff', fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 500 }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.08)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent' }}
+                >
+                  {cat.nombre}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
       {navItems.map(item => {
         const active = isActive(item.url)
+
+        if (item.key === 'cursos' || item.key === 'diplomados') {
+          const ref = item.key === 'cursos' ? cursosButtonRef : diplomadosButtonRef
+          const isOpen = openPanel === item.key
+
+          return (
+            <button
+              key={item.key}
+              ref={ref}
+              onClick={() => handleNavWithCategories(item.key as 'cursos' | 'diplomados', item.url, ref)}
+              className="flex items-center w-full px-4 transition-colors duration-200 relative"
+              style={{
+                border: 'none',
+                cursor: 'pointer',
+                ...navItemStyle(active, isOpen),
+              }}
+              onMouseEnter={e => {
+                if (!active) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.05)'
+              }}
+              onMouseLeave={e => {
+                if (!active && !isOpen) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'
+              }}
+            >
+              <NavItemInterior item={item} active={active} />
+            </button>
+          )
+        }
 
         return (
           <Link
             key={item.title}
             href={item.url}
             className="no-underline flex items-center w-full px-4 transition-colors duration-200 relative"
-            style={{
-              height: '56px',
-              color: active ? 'var(--web-light, #BDD962)' : '#ffffff',
-              fontWeight: active ? 700 : 500,
-              backgroundColor: active ? 'rgba(255,255,255,0.05)' : 'transparent',
-            }}
+            style={navItemStyle(active)}
             onMouseEnter={e => {
               if (!active) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.05)'
             }}
@@ -101,40 +228,7 @@ export default function LeftSidebar({
               if (!active) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'
             }}
           >
-            {/* Active indicator bar */}
-            {active && (
-              <div
-                className="absolute left-0 rounded-r-full"
-                style={{ width: '4px', height: '32px', backgroundColor: 'var(--web-light, #BDD962)' }}
-              />
-            )}
-
-            {/* Icon container */}
-            <div
-              className="flex items-center justify-center rounded-xl transition-all flex-shrink-0"
-              style={{
-                minWidth: '48px',
-                height: '48px',
-                backgroundColor: active ? 'var(--web-light, #BDD962)' : 'transparent',
-                color: active ? '#0A0A0A' : 'inherit',
-                boxShadow: active ? '0 4px 12px rgba(0,0,0,0.2)' : 'none',
-              }}
-            >
-              <item.icon style={{ width: '22px', height: '22px' }} />
-            </div>
-
-            {/* Label — visible when expanded */}
-            <span
-              className="ml-3 text-sm whitespace-nowrap overflow-hidden transition-all duration-300"
-              style={{
-                fontFamily: 'Poppins, sans-serif',
-                opacity: expanded ? 1 : 0,
-                maxWidth: expanded ? '180px' : '0px',
-                transition: 'opacity 0.2s, max-width 0.3s',
-              }}
-            >
-              {item.title}
-            </span>
+            <NavItemInterior item={item} active={active} />
           </Link>
         )
       })}

@@ -2,9 +2,8 @@ import Link from 'next/link'
 
 import { ArrowRight } from 'lucide-react'
 
-import prisma from '@/utils/libs/prisma'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
-import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
+import CrecimientoSection from '@/features/web/nosotros/components/CrecimientoSection'
 import { MisionVisionSection, ValoresSection } from '@/features/web/nosotros/components/NosotrosInteractive'
 
 export const metadata = {
@@ -12,38 +11,18 @@ export const metadata = {
   description: 'Conoce quiénes somos, nuestra misión, visión y los valores que guían nuestra plataforma educativa.',
 }
 
-async function getTeachers() {
-  try {
-    return await prisma.usuario.findMany({
-      where: { rol: 'PROFESOR' },
-      select: {
-        id: true,
-        nombre: true,
-        apellido: true,
-        slug: true,
-        avatar: true,
-        cargo: true,
-        biografia: true,
-        _count: { select: { cursos_dictados: true } },
-      },
-      orderBy: { cursos_dictados: { _count: 'desc' } },
-      take: 12,
-    })
-  } catch {
-    return []
-  }
-}
 
 export default async function NosotrosPage() {
-  const teachers = await getTeachers()
-
   return (
     <>
       {/* ── 1. HERO SOBRE NOSOTROS ─────────────────────── */}
       <section
         style={{
           background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
-          padding: '6rem 1.5rem 5rem',
+          height: 'calc(100vh - var(--navbar-height))',
+          padding: '1.5rem',
+          display: 'flex',
+          alignItems: 'center',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -60,18 +39,18 @@ export default async function NosotrosPage() {
         {/* Glow */}
         <div aria-hidden style={{ position: 'absolute', top: '-20%', right: '-10%', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(var(--web-primary-rgb, 37, 146, 127),0.22) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
-        <div style={{ maxWidth: '1280px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: '1280px', width: '100%', margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '3.5rem',
-              alignItems: 'center',
+              gap: '3rem',
+              alignItems: 'stretch',
             }}
           >
             {/* Left: stats visual */}
             <ScrollReveal direction="left">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem', height: 'calc(100vh - var(--navbar-height) - 3rem)' }}>
 
                 {/* Card principal */}
                 <div
@@ -96,29 +75,25 @@ export default async function NosotrosPage() {
                   </div>
                 </div>
 
-                {/* Stats 2×2 */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  {[
-                    { emoji: '👩‍🎓', value: '+1,200', label: 'Estudiantes formados' },
-                    { emoji: '📚', value: '+80', label: 'Cursos disponibles' },
-                    { emoji: '👨‍🏫', value: '+30', label: 'Docentes expertos' },
-                    { emoji: '🏆', value: '98%', label: 'Tasa de satisfacción' },
-                  ].map((s, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        borderRadius: '16px',
-                        background: 'rgba(255,255,255,0.06)',
-                        border: '1.5px solid rgba(255,255,255,0.09)',
-                        backdropFilter: 'blur(12px)',
-                        padding: '1.125rem 1.25rem',
-                      }}
-                    >
-                      <span style={{ fontSize: '1.375rem' }}>{s.emoji}</span>
-                      <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.375rem', fontWeight: 800, color: 'var(--web-light, #BDD962)', lineHeight: 1, marginTop: '0.5rem' }}>{s.value}</div>
-                      <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '3px', lineHeight: 1.3 }}>{s.label}</div>
-                    </div>
-                  ))}
+                {/* Video en lugar de las 4 stats */}
+                <div
+                  style={{
+                    borderRadius: '16px',
+                    overflow: 'hidden',
+                    border: '1.5px solid rgba(255,255,255,0.12)',
+                    boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
+                    flex: 1,
+                    minHeight: 0,
+                  }}
+                >
+                  <video
+                    src="/images/videoportada.mp4"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
                 </div>
 
                 {/* Certificado badge */}
@@ -135,8 +110,8 @@ export default async function NosotrosPage() {
                 >
                   <div style={{ fontSize: '1.75rem', flexShrink: 0 }}>📜</div>
                   <div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', fontWeight: 700, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>Certificados con validez empresarial</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '4px' }}>Reconocidos por las principales empresas del sector</div>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', fontWeight: 700, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>Certificados válidos para el sector privado y público</div>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '4px' }}>Reconocidos por las principales entidades del país</div>
                   </div>
                 </div>
 
@@ -290,8 +265,8 @@ export default async function NosotrosPage() {
       {/* ── 4. VALORES (client component) ─────────────── */}
       <ValoresSection />
 
-      {/* ── 5. PROFESORES ─────────────────────────────── */}
-      <ProfessorsCarousel teachers={JSON.parse(JSON.stringify(teachers))} />
+      {/* ── 5. CRECIMIENTO ────────────────────────────── */}
+      <CrecimientoSection />
     </>
   )
 }
