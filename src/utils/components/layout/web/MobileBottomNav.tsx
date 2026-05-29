@@ -3,14 +3,15 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { Home, BookOpen, Users, Award, GraduationCap } from 'lucide-react'
+import { Home, BookOpen, Users, Award, GraduationCap, Route } from 'lucide-react'
 
-const navItems = [
-  { title: 'Inicio', url: '/', icon: Home },
-  { title: 'Cursos', url: '/cursos', icon: BookOpen },
-  { title: 'Diplomados', url: '/diplomados', icon: GraduationCap },
-  { title: 'Nosotros', url: '/nosotros', icon: Users },
-  { title: 'Certificado', url: '/verificar-certificado', icon: Award },
+const ALL_NAV_ITEMS = [
+  { key: 'inicio', title: 'Inicio', url: '/', icon: Home },
+  { key: 'cursos', title: 'Cursos', url: '/cursos', icon: BookOpen },
+  { key: 'diplomados', title: 'Diplomados', url: '/diplomados', icon: GraduationCap },
+  { key: 'rutas', title: 'Rutas', url: '/rutas', icon: Route },
+  { key: 'nosotros', title: 'Nosotros', url: '/nosotros', icon: Users },
+  { key: 'certificado', title: 'Certificado', url: '/verificar-certificado', icon: Award },
 ]
 
 export default function MobileBottomNav({

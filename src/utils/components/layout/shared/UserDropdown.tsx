@@ -135,22 +135,22 @@ const UserDropdown = () => {
                   {data?.user?.rol === 'ESTUDIANTE' && (
                     <>
                       <div>
-                      <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/estudiante/mis-cursos')}>
+                        <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/estudiante/mis-cursos')}>
                           <i className='tabler-book text-[22px]' />
                           <Typography color='text.primary'>Mis Cursos</Typography>
                         </MenuItem>
-                      <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/estudiante/mis-diplomados')}>
-                        <i className='tabler-award text-[22px]' />
-                        <Typography color='text.primary'>Mis Diplomados</Typography>
-                      </MenuItem>
+                        <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/estudiante/mis-diplomados')}>
+                          <i className='tabler-award text-[22px]' />
+                          <Typography color='text.primary'>Mis Diplomados</Typography>
+                        </MenuItem>
+                        <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/cursos')}>
+                          <i className='tabler-search text-[20px]' />
+                          <Typography color='text.primary'>Explorar Cursos</Typography>
+                        </MenuItem>
+                      </div>
                     </>
-                      <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/cursos')}>
-                        <i className='tabler-search text-[20px]' />
-                        <Typography color='text.primary'>Explorar Cursos</Typography>
-                      </MenuItem>
-                    </div>
                   )}
-                  {/* <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
+                      {/* <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
                     <i className='tabler-settings text-[22px]' />
                     <Typography color='text.primary'>Settings</Typography>
                   </MenuItem>
@@ -162,20 +162,20 @@ const UserDropdown = () => {
                     <i className='tabler-help-circle text-[22px]' />
                     <Typography color='text.primary'>FAQ</Typography>
                   </MenuItem> */}
-                  <div className='flex items-center plb-2 pli-3'>
-                    <Button
-                      fullWidth
-                      variant='contained'
-                      color='error'
-                      size='small'
-                      endIcon={<i className='tabler-logout' />}
-                      onClick={handleUserLogout}
-                      sx={{ '& .MuiButton-endIcon': { marginInlineStart: 1.5 } }}
-                    >
-                      Cerrar Sesión
-                    </Button>
-                  </div>
-                </MenuList>
+                      <div className='flex items-center plb-2 pli-3'>
+                        <Button
+                          fullWidth
+                          variant='contained'
+                          color='error'
+                          size='small'
+                          endIcon={<i className='tabler-logout' />}
+                          onClick={handleUserLogout}
+                          sx={{ '& .MuiButton-endIcon': { marginInlineStart: 1.5 } }}
+                        >
+                          Cerrar Sesión
+                        </Button>
+                      </div>
+                    </MenuList>
               </ClickAwayListener>
             </Paper>
           </Fade>

@@ -9,15 +9,16 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { signOut, useSession } from 'next-auth/react'
 
-import { Home, BookOpen, Users, Award, GraduationCap, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut } from 'lucide-react'
+import { Home, BookOpen, Users, Award, GraduationCap, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, Route } from 'lucide-react'
 
-const navItems = [
-  { title: 'Inicio', url: '/', icon: Home },
-  { title: 'Cursos', url: '/cursos', icon: BookOpen },
-  { title: 'Diplomados', url: '/diplomados', icon: GraduationCap },
-  { title: 'Empresas', url: '/empresas', icon: Building2 },
-  { title: 'Nosotros', url: '/nosotros', icon: Users },
-  { title: 'Certificado', url: '/verificar-certificado', icon: Award },
+const ALL_NAV_ITEMS = [
+  { key: 'inicio', title: 'Inicio', url: '/', icon: Home },
+  { key: 'cursos', title: 'Cursos', url: '/cursos', icon: BookOpen },
+  { key: 'diplomados', title: 'Diplomados', url: '/diplomados', icon: GraduationCap },
+  { key: 'rutas', title: 'Rutas', url: '/rutas', icon: Route },
+  { key: 'empresas', title: 'Empresas', url: '/empresas', icon: Building2 },
+  { key: 'nosotros', title: 'Nosotros', url: '/nosotros', icon: Users },
+  { key: 'certificado', title: 'Certificado', url: '/verificar-certificado', icon: Award },
 ]
 
 export default function LeftSidebar({

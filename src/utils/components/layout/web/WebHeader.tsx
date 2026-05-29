@@ -23,7 +23,7 @@ interface WebHeaderProps {
   platformSlogan?: string
 }
 
-export default function WebHeader({ initialCategories = [] }: WebHeaderProps) {
+export default function WebHeader({ initialCategories = [], platformName, platformSlogan }: WebHeaderProps) {
   void initialCategories
   void platformName
   void platformSlogan

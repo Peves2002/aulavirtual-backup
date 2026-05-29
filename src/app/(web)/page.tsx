@@ -23,7 +23,7 @@ export const metadata = {
 
 async function getHomeData() {
   try {
-    const [coursesRaw, rutasRaw, teachersRaw, categoriasRaw] = await Promise.all([
+    const [coursesRaw, rutasRaw, teachersRaw, categoriasRaw, configs] = await Promise.all([
       // Cursos
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO' },
@@ -76,6 +76,9 @@ async function getHomeData() {
         },
         orderBy: { orden: 'asc' },
       }),
+
+      // Configs
+      getConfigs(),
     ])
 
     const courses = await Promise.all(
@@ -111,14 +114,20 @@ async function getHomeData() {
       rutas: JSON.parse(JSON.stringify(rutas)),
       teachers: JSON.parse(JSON.stringify(teachersRaw)),
       categorias: JSON.parse(JSON.stringify(categorias)),
+      heroTitle: configs['hero_title'] ?? 'Aprende sin límites\ncon los mejores',
+      heroDescription: configs['hero_description'] ?? 'Accede a cursos especializados, rutas de aprendizaje y certificados reconocidos. Aprende a tu ritmo con profesionales del sector.',
     }
   } catch {
-    return { courses: [], rutas: [], teachers: [], categorias: [] }
+    return {
+      courses: [], rutas: [], teachers: [], categorias: [],
+      heroTitle: 'Aprende sin límites\ncon los mejores',
+      heroDescription: 'Accede a cursos especializados, rutas de aprendizaje y certificados reconocidos. Aprende a tu ritmo con profesionales del sector.',
+    }
   }
 }
 
 export default async function HomePage() {
-  const { courses, rutas, teachers, categorias } = await getHomeData()
+  const { courses, rutas, teachers, categorias, heroTitle, heroDescription } = await getHomeData()
 
   return (
     <>

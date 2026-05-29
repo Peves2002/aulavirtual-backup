@@ -23,7 +23,7 @@ const WhatsAppIcon = ({ size = 16 }: { size?: number }) => (
   </svg>
 )
 
-const socialLinks = [
+const staticSocialLinks = [
   {
     label: 'Facebook',
     href: 'https://facebook.com/grupoollarves',
@@ -38,11 +38,6 @@ const socialLinks = [
     label: 'Instagram',
     href: 'https://instagram.com/grupoollarves/',
     icon: <Instagram size={20} />,
-  },
-  {
-    label: 'WhatsApp',
-    href: 'https://wa.me/51944270957',
-    icon: <WhatsAppIcon size={20} />,
   },
 ]
 
