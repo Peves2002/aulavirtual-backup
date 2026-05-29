@@ -4,6 +4,7 @@ import prisma from '@/utils/libs/prisma'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { requireAdmin } from '@/utils/libs/auth-helpers'
 import { handleApiError } from '@/utils/libs/validation'
+import { sanitizeDatetimeInput } from '@/utils/functions/sanitizeDatetime'
 
 /**
  * GET /api/cupones/[id]
@@ -15,7 +16,14 @@ export async function GET(request: Request, { params }: { params: { id: string }
     if (!auth.authorized) return auth.error
 
     const cupon = await prisma.cupon.findUnique({
-      where: { id: params.id }
+      where: { id: params.id },
+      include: {
+        cursos: {
+          include: {
+            curso: { select: { id: true, titulo: true } }
+          }
+        }
+      }
     })
 
     if (!cupon) {
@@ -55,13 +63,34 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       data.codigo = data.codigo.toUpperCase()
     }
 
+    const { cursoIds, ...camposBase } = data
+
+    if (cursoIds !== undefined) {
+      await prisma.cuponCurso.deleteMany({ where: { cupon_id: params.id } })
+      
+      if (Array.isArray(cursoIds) && cursoIds.length > 0) {
+        await prisma.cuponCurso.createMany({
+          data: cursoIds.map((id: string) => ({ cupon_id: params.id, curso_id: id }))
+        })
+      }
+    }
+
+    const fechaExpiracion = sanitizeDatetimeInput(camposBase.fecha_expiracion)
+
     const cuponActualizado = await prisma.cupon.update({
       where: { id: params.id },
       data: {
-        ...data,
-        valor: data.valor ? Number(data.valor) : undefined,
-        limite_uso: data.limite_uso !== undefined ? (data.limite_uso ? Number(data.limite_uso) : null) : undefined,
-        fecha_expiracion: data.fecha_expiracion ? new Date(data.fecha_expiracion) : undefined
+        ...camposBase,
+        valor: camposBase.valor ? Number(camposBase.valor) : undefined,
+        limite_uso: camposBase.limite_uso !== undefined ? (camposBase.limite_uso ? Number(camposBase.limite_uso) : null) : undefined,
+        fecha_expiracion: fechaExpiracion ? new Date(fechaExpiracion) : undefined
+      },
+      include: {
+        cursos: {
+          include: {
+            curso: { select: { id: true, titulo: true } }
+          }
+        }
       }
     })
 

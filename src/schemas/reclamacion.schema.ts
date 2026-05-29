@@ -1,20 +1,37 @@
 import { z } from 'zod'
+import { EstadoReclamacion, TipoDocumentoReclamo, TipoBien, TipoReclamacion } from '@prisma/client'
+
+export const listarReclamacionesQuerySchema = z.object({
+  page: z.coerce.number().int().positive().default(1),
+  limit: z.coerce.number().int().positive().max(100).default(10),
+  estado: z.string().default('TODOS'),
+  buscar: z.string().trim().optional()
+})
+
+export type ListarReclamacionesQuery = z.infer<typeof listarReclamacionesQuerySchema>
+
+export const updateReclamacionSchema = z.object({
+  estado: z.nativeEnum(EstadoReclamacion),
+  respuesta_proveedor: z.string().min(1, 'La respuesta es requerida').trim()
+})
+
+export type UpdateReclamacionDto = z.infer<typeof updateReclamacionSchema>
 
 export const ReclamacionSchema = z.object({
-  tipo_documento: z.enum(['DNI', 'CE', 'PASAPORTE', 'OTRO']),
-  numero_documento: z.string().min(8, 'Documento inválido').max(15, 'Documento muy largo'),
-  nombre: z.string().min(3, 'El nombre/razón social es muy corto'),
-  domicilio: z.string().min(5, 'El domicilio es obligatorio'),
-  telefono: z.string().min(6, 'Número de teléfono inválido'),
-  email: z.string().email('Correo electrónico no válido'),
-  nombre_apoderado: z.string().optional(),
-  bien_contratado_tipo: z.enum(['PRODUCTO', 'SERVICIO']),
-  moneda: z.enum(['PEN', 'USD']),
-  monto_reclamado: z.string().or(z.number()),
-  descripcion_bien: z.string().min(5, 'Describe brevemente el bien o servicio contratado'),
-  tipo_reclamacion: z.enum(['RECLAMO', 'QUEJA']),
-  detalle: z.string().min(10, 'El detalle debe ser más explicativo'),
-  pedido: z.string().min(10, 'Debes detallar qué solicitas')
+  tipo_documento: z.nativeEnum(TipoDocumentoReclamo),
+  numero_documento: z.string().min(1, 'El número de documento es requerido'),
+  nombre: z.string().min(1, 'El nombre es requerido'),
+  domicilio: z.string().min(1, 'El domicilio es requerido'),
+  telefono: z.string().min(1, 'El teléfono es requerido'),
+  email: z.string().email('Email inválido'),
+  nombre_apoderado: z.string().optional().nullable(),
+  bien_contratado_tipo: z.nativeEnum(TipoBien),
+  moneda: z.string().min(1),
+  monto_reclamado: z.number().min(0, 'El monto debe ser mayor o igual a 0'),
+  descripcion_bien: z.string().min(1, 'La descripción del bien es requerida'),
+  tipo_reclamacion: z.nativeEnum(TipoReclamacion),
+  detalle: z.string().min(1, 'El detalle es requerido'),
+  pedido: z.string().min(1, 'El pedido es requerido'),
 })
 
 export type ReclamacionInput = z.infer<typeof ReclamacionSchema>

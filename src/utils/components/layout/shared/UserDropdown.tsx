@@ -69,7 +69,8 @@ const UserDropdown = () => {
   const handleUserLogout = async () => {
     await signOut({ redirect: false })
 
-    router.push('/login')
+    router.push('/')
+    router.refresh()
   }
 
   return (
@@ -133,15 +134,21 @@ const UserDropdown = () => {
                   )}
                   {data?.user?.rol === 'ESTUDIANTE' && (
                     <>
+                      <div>
                       <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/estudiante/mis-cursos')}>
-                        <i className='tabler-book text-[22px]' />
-                        <Typography color='text.primary'>Mis Cursos</Typography>
-                      </MenuItem>
+                          <i className='tabler-book text-[22px]' />
+                          <Typography color='text.primary'>Mis Cursos</Typography>
+                        </MenuItem>
                       <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/estudiante/mis-diplomados')}>
                         <i className='tabler-award text-[22px]' />
                         <Typography color='text.primary'>Mis Diplomados</Typography>
                       </MenuItem>
                     </>
+                      <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/cursos')}>
+                        <i className='tabler-search text-[20px]' />
+                        <Typography color='text.primary'>Explorar Cursos</Typography>
+                      </MenuItem>
+                    </div>
                   )}
                   {/* <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
                     <i className='tabler-settings text-[22px]' />

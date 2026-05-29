@@ -4,6 +4,7 @@ import prisma from '@/utils/libs/prisma'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { requireAdmin } from '@/utils/libs/auth-helpers'
 import { handleApiError } from '@/utils/libs/validation'
+import { sanitizeDatetimeInput } from '@/utils/functions/sanitizeDatetime'
 
 /**
  * GET /api/cupones
@@ -35,7 +36,14 @@ export async function GET(request: Request) {
         where,
         skip,
         take: limit,
-        orderBy: { creado_en: 'desc' }
+        orderBy: { creado_en: 'desc' },
+        include: {
+          cursos: {
+            include: {
+              curso: { select: { id: true, titulo: true } }
+            }
+          }
+        }
       }),
       prisma.cupon.count({ where })
     ])
@@ -79,14 +87,28 @@ export async function POST(request: Request) {
       return ApiResponse.error(request, 'Ya existe un cupón con ese código', 400)
     }
 
+    const cursoIds: string[] = Array.isArray(data.cursoIds) ? data.cursoIds : []
+
+    const fechaExpiracion = sanitizeDatetimeInput(data.fecha_expiracion)
+
     const nuevoCupon = await prisma.cupon.create({
       data: {
         codigo: data.codigo.toUpperCase(),
         valor: data.valor,
         tipo: data.tipo,
         limite_uso: data.limite_uso ? Number(data.limite_uso) : null,
-        fecha_expiracion: data.fecha_expiracion ? new Date(data.fecha_expiracion) : null,
-        esta_activo: data.esta_activo !== undefined ? data.esta_activo : true
+        fecha_expiracion: fechaExpiracion ? new Date(fechaExpiracion) : null,
+        esta_activo: data.esta_activo !== undefined ? data.esta_activo : true,
+        cursos: cursoIds.length > 0
+          ? { create: cursoIds.map((id: string) => ({ curso_id: id })) }
+          : undefined
+      },
+      include: {
+        cursos: {
+          include: {
+            curso: { select: { id: true, titulo: true } }
+          }
+        }
       }
     })
 

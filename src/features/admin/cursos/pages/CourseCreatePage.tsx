@@ -33,6 +33,7 @@ import { useSnackbar } from 'notistack'
 import CustomTextField from '@core/components/mui/TextField'
 
 import { crearCursoSchema, type CrearCursoDto } from '@/schemas/curso.schema'
+import { sanitizeDatetimeInput } from '@/utils/functions/sanitizeDatetime'
 import MediaLibrary from '../components/MediaLibrary'
 
 import { useCreateCurso } from '../hooks/useCursos'
@@ -49,7 +50,8 @@ export const CourseCreatePage = ({ profesores, tipo = 'CURSO', basePath }: Cours
   const { enqueueSnackbar } = useSnackbar()
   const router = useRouter()
   const createMutation = useCreateCurso()
-  const { data: categorias = [] } = useCategorias()
+  const { data: categoriasRes } = useCategorias()
+  const categorias = categoriasRes?.categorias || []
   const [activeTab, setActiveTab] = useState('1')
   const [openMedia, setOpenMedia] = useState(false)
   const [openBrochure, setOpenBrochure] = useState(false)
@@ -75,6 +77,7 @@ return esDiplomado ? '/profesor/mis-diplomados' : '/profesor/mis-cursos'
     tipo_emision: 'ASINCRONO',
     es_gratis: false,
     precio: 0,
+    precio_falso: 0,
     moneda: 'PEN',
     nivel: 'BASICO',
     duracion: '',
@@ -82,7 +85,8 @@ return esDiplomado ? '/profesor/mis-diplomados' : '/profesor/mis-cursos'
     video_presentacion: null,
     brochure: null,
     fecha_inicio: null,
-    tipo
+    tipo,
+    vigencia_meses: null
   }
 
   const handleSubmit = async (values: CrearCursoDto, { setSubmitting }: FormikHelpers<CrearCursoDto>) => {
@@ -288,7 +292,11 @@ return esDiplomado ? '/profesor/mis-diplomados' : '/profesor/mis-cursos'
                               checked={values.es_gratis}
                               onChange={e => {
                                 setFieldValue('es_gratis', e.target.checked)
-                                if (e.target.checked) setFieldValue('precio', 0)
+
+                                if (e.target.checked) {
+                                  setFieldValue('precio', 0)
+                                  setFieldValue('precio_falso', 0)
+                                }
                               }}
                             />
                           }
@@ -301,6 +309,14 @@ return esDiplomado ? '/profesor/mis-diplomados' : '/profesor/mis-cursos'
                               label='Precio'
                               name='precio'
                               value={values.precio}
+                              onChange={handleChange}
+                              sx={{ width: 200 }}
+                            />
+                            <CustomTextField
+                              type='number'
+                              label='Precio Falso (Opcional)'
+                              name='precio_falso'
+                              value={values.precio_falso}
                               onChange={handleChange}
                               sx={{ width: 200 }}
                             />
@@ -337,6 +353,21 @@ return esDiplomado ? '/profesor/mis-diplomados' : '/profesor/mis-cursos'
                               </InputAdornment>
                             )
                           }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <CustomTextField
+                          type='number'
+                          fullWidth
+                          label='Vigencia (meses)'
+                          name='vigencia_meses'
+                          placeholder='Dejar vacío para sin caducidad'
+                          value={values.vigencia_meses ?? ''}
+                          onChange={handleChange}
+                          disabled={isSubmitting}
+                          InputProps={{ inputProps: { min: 1 } }}
+                          helperText='Si indicas un número, los alumnos tendrán acceso por esa cantidad de meses desde su inscripción.'
                         />
                       </Grid>
                     </Grid>

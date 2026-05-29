@@ -3,6 +3,8 @@
 import { useMemo, useState } from 'react'
 
 import {
+  Avatar,
+  Box,
   Button,
   Card,
   CardHeader,
@@ -10,39 +12,36 @@ import {
   IconButton,
   MenuItem,
   TablePagination,
-  Typography,
-  Box,
-  Avatar,
-  Tooltip
+  Tooltip,
+  Typography
 } from '@mui/material'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
+
 import type { ColumnDef } from '@tanstack/react-table'
+
 import classnames from 'classnames'
 
-import tableStyles from '@core/styles/table.module.css'
-
-import CustomTextField from '@/@core/components/mui/TextField'
-import type { ThemeColor } from '@/@core/types'
-
-import { DebouncedInput } from '@/utils/components/others/DebouncedInput'
-import { fuzzyFilter } from '@/utils/components/others/FuzzyFilter'
-import TablePaginationComponent from '@/utils/components/others/TablePaginationComponent'
-
-import type { Curso } from '../entity/Curso'
-import { useCursos } from '../hooks/useCursos'
-import { CursosActions } from '../components/CursosActions'
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
+import type { Curso } from '../entity/Curso'
+import { CursosActions } from '../components/CursosActions'
+import CustomTextField from '@/@core/components/mui/TextField'
+import { DebouncedInput } from '@/utils/components/others/DebouncedInput'
+import TablePaginationComponent from '@/utils/components/others/TablePaginationComponent'
+import type { ThemeColor } from '@/@core/types'
+import { fuzzyFilter } from '@/utils/components/others/FuzzyFilter'
+import tableStyles from '@core/styles/table.module.css'
+import { useCursos } from '../hooks/useCursos'
 
 type EstadoColorMap = {
   [key: string]: ThemeColor
@@ -70,6 +69,7 @@ interface CursosPageProps {
 export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
   const [cursoToDelete, setCursoToDelete] = useState<Curso | null>(null)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openStudentsModal, setOpenStudentsModal] = useState(false)
 
   const [rowSelection, setRowSelection] = useState({})
   const [globalFilter, setGlobalFilter] = useState('')
@@ -97,6 +97,11 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
     setOpenDeleteModal(true)
   }
 
+  const handleViewStudentsClick = (curso: Curso) => {
+    setCursoToDelete(curso) // Reutilizamos el estado para no crear otro
+    setOpenStudentsModal(true)
+  }
+
   const columns = useMemo<ColumnDef<Curso, any>[]>(
     () => [
       columnHelper.display({
@@ -112,12 +117,12 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
         header: 'Curso',
         cell: ({ row }) => (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, maxWidth: 300 }}>
-              <CourseThumbnail
-                src={row.original.miniatura}
-                title={row.original.titulo}
-                variant='simple'
-                sx={{ width: 44, height: 32, flexShrink: 0, borderRadius: '8px' }}
-              />
+            <CourseThumbnail
+              src={row.original.miniatura}
+              title={row.original.titulo}
+              variant='simple'
+              sx={{ width: 44, height: 32, flexShrink: 0, borderRadius: '8px' }}
+            />
             <Box sx={{ minWidth: 0 }}>
               <Typography
                 variant='body2'
@@ -211,6 +216,26 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
         )
       }),
       columnHelper.display({
+        id: 'valoracion',
+        header: 'Valoración',
+        cell: ({ row }) => {
+          const promedio = row.original.promedio_valoracion
+          const total = row.original._count.valoraciones
+
+          return (
+            <Box sx={{ display: 'flex', flexDirection: 'column', minWidth: 100 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant='body2' fontWeight={600}>{promedio.toFixed(1)}</Typography>
+                <i className='tabler-star-filled text-warning text-sm' />
+              </Box>
+              <Typography variant='caption' color='text.secondary'>
+                {total} {total === 1 ? 'reseña' : 'reseñas'}
+              </Typography>
+            </Box>
+          )
+        }
+      }),
+      columnHelper.display({
         id: 'contenido',
         header: 'Contenido',
         cell: ({ row }) => {
@@ -229,6 +254,11 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
         header: () => <div className='w-full text-right'>Acciones</div>,
         cell: ({ row }) => (
           <div className='flex items-center justify-end w-full gap-1'>
+            <Tooltip title='Ver Alumnos Inscritos'>
+              <IconButton onClick={() => handleViewStudentsClick(row.original)}>
+                <i className='tabler-users text-[22px] text-textSecondary' />
+              </IconButton>
+            </Tooltip>
             <Tooltip title='Ver en Reproductor (Moderación)'>
               <IconButton
                 href={`/estudiante/aprender/${row.original.slug}`}
@@ -413,6 +443,13 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
           isOpen: openDeleteModal,
           closeHandler: () => {
             setOpenDeleteModal(false)
+            setCursoToDelete(null)
+          }
+        }}
+        viewStudents={{
+          isOpen: openStudentsModal,
+          closeHandler: () => {
+            setOpenStudentsModal(false)
             setCursoToDelete(null)
           }
         }}

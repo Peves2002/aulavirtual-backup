@@ -3,6 +3,8 @@ import prisma from '@/utils/libs/prisma'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { requireAuth } from '@/utils/libs/auth-helpers'
 import { handleApiError } from '@/utils/libs/validation'
+import { sendMail } from '@/utils/libs/mailer'
+import { getOrderConfirmationTemplate } from '@/utils/libs/email-templates'
 
 /**
  * POST /api/checkout
@@ -14,7 +16,14 @@ export async function POST(request: Request) {
 
     if (!auth.authorized) return auth.error
 
-    const { cursoIds, codigoCupon, gateway = 'IZIPAY' } = await request.json()
+    const {
+      cursoIds,
+      codigoCupon,
+      gateway = 'IZIPAY',
+      metodoPagoManualId,
+      tipoComprobante,
+      numeroComprobante
+    } = await request.json()
 
     if (!cursoIds || !Array.isArray(cursoIds) || cursoIds.length === 0) {
       return ApiResponse.error(request, 'Se requiere al menos un ID de curso', 400)
@@ -59,7 +68,8 @@ export async function POST(request: Request) {
     // 3.1. Validar cupón si se proporciona
     if (codigoCupon) {
       const cupon = await prisma.cupon.findUnique({
-        where: { codigo: codigoCupon.toUpperCase(), esta_activo: true }
+        where: { codigo: codigoCupon.toUpperCase(), esta_activo: true },
+        include: { cursos: { select: { curso_id: true } } }
       })
 
       if (cupon) {
@@ -75,7 +85,15 @@ export async function POST(request: Request) {
         const expirado = fechaExpiracion && fechaExpiracion < ahora
         const limiteAlcanzado = cupon.limite_uso !== null && cupon.usos_actuales >= cupon.limite_uso
 
-        if (!expirado && !limiteAlcanzado) {
+        // Verificar restricción por cursos
+        const cursosPermitidos = cupon.cursos.map(c => c.curso_id)
+        const tieneRestriccion = cursosPermitidos.length > 0
+        
+        const cubreTodasLosCursos = tieneRestriccion
+          ? cursoIds.every((id: string) => cursosPermitidos.includes(id))
+          : true
+
+        if (!expirado && !limiteAlcanzado && cubreTodasLosCursos) {
           cuponId = cupon.id
 
           if (cupon.tipo === 'PORCENTAJE') {
@@ -100,6 +118,9 @@ export async function POST(request: Request) {
         total,
         moneda,
         estado: 'PENDIENTE',
+        tipo_comprobante: tipoComprobante,
+        numero_comprobante: numeroComprobante,
+        ...(gateway === 'MANUAL' && metodoPagoManualId ? { metodo_pago_manual_id: metodoPagoManualId } : {}),
         detalles: {
           create: cursos.map(c => {
             const precioCurso = Number(c.precio)
@@ -118,10 +139,59 @@ export async function POST(request: Request) {
             }
           })
         }
-      }
+      },
+      include: { detalles: { include: { curso: { select: { titulo: true, precio: true } } } } }
     })
+    
+    // 📧 Enviar correo de confirmación de pedido
+    try {
+      const configs = await getConfigs()
+      const platformName = configs.TEMPLATE_NAME || 'Aula Virtual'
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || ''
+      
+      const emailHtml = getOrderConfirmationTemplate({
+        platformName,
+        customerName: auth.user.nombre || auth.user.name || 'Estudiante',
+        orderNumber: pedido.numero_pedido,
+        date: new Date().toLocaleDateString('es-PE'),
+        total: Number(pedido.total),
+        moneda: pedido.moneda,
+        metodoPago: gateway === 'MANUAL' ? 'Transferencia Manual' : gateway,
+        cursos: pedido.detalles.map(d => ({
+          titulo: d.curso.titulo,
+          precio: Number(d.total) // Usamos el total del detalle que ya tiene el descuento aplicado
+        })),
+        appUrl
+      })
 
-    // 4. Generar transactionId y dateTimeTransaction para Izipay
+      if (auth.user.email) {
+        await sendMail({
+          to: auth.user.email,
+          subject: `Confirmación de Pedido #${pedido.numero_pedido} - ${platformName}`,
+          html: emailHtml
+        })
+      }
+    } catch (mailError) {
+      console.error('[Checkout-Mail] Error al enviar correo de confirmación:', mailError)
+    }
+
+    // 5. Si el gateway es MANUAL, retornar datos para el mensaje de WhatsApp
+    if (gateway === 'MANUAL') {
+      return ApiResponse.success(
+        request,
+        {
+          message: 'Pedido creado. Sube tu comprobante de pago.',
+          pedidoId: pedido.id,
+          numeroPedido: pedido.numero_pedido,
+          total: pedido.total,
+          moneda: pedido.moneda,
+          cursos: pedido.detalles.map(d => d.curso.titulo)
+        },
+        201
+      )
+    }
+
+    // 6. Generar transactionId y dateTimeTransaction para Izipay
     const transactionId = String(Date.now()) // Al menos 13 chars (timestamp)
 
     // orderNumber debe tener entre 5-15 caracteres
@@ -274,6 +344,70 @@ export async function POST(request: Request) {
           publicKey: configs.CULQI_PUBLIC_KEY,
           rsaId: configs.CULQI_RSA_ID,
           rsaPublicKey: configs.CULQI_RSA_PUBLIC_KEY
+        },
+        201
+      )
+    }
+
+    // Crear preferencia de Mercado Pago
+    if (gateway === 'MERCADOPAGO') {
+      const configs = await getConfigs()
+      const accessToken = configs.MP_ACCESS_TOKEN
+
+      if (!accessToken) {
+        return ApiResponse.error(request, 'La pasarela Mercado Pago no está configurada', 500)
+      }
+
+      const appUrl = new URL(request.url).origin
+
+      const preference = {
+        external_reference: pedido.id,
+        items: pedido.detalles.map((d: any) => ({
+          id: d.curso_id,
+          title: d.curso.titulo,
+          quantity: 1,
+          unit_price: Number(d.total),
+          currency_id: moneda
+        })),
+        back_urls: {
+          success: `${appUrl}/checkout/mercadopago/success?pedidoId=${pedido.id}`,
+          failure: `${appUrl}/checkout/mercadopago/failure?pedidoId=${pedido.id}`,
+          pending: `${appUrl}/checkout/mercadopago/pending?pedidoId=${pedido.id}`
+        },
+        auto_return: 'approved',
+        notification_url: `${appUrl}/api/mercadopago/webhook`
+      }
+
+      const mpResponse = await fetch('https://api.mercadopago.com/checkout/preferences', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`
+        },
+        body: JSON.stringify(preference)
+      })
+
+      if (!mpResponse.ok) {
+        console.error('[MP_CHECKOUT] Error:', await mpResponse.text())
+
+        return ApiResponse.error(request, 'Error al crear la preferencia de Mercado Pago', 500)
+      }
+
+      const mpData = await mpResponse.json()
+
+      await prisma.pedido.update({
+        where: { id: pedido.id },
+        data: { token_pago: mpData.id, metodo_pago: 'MERCADOPAGO' }
+      })
+
+      return ApiResponse.success(
+        request,
+        {
+          message: 'Preferencia de Mercado Pago creada',
+          pedidoId: pedido.id,
+          mpInitPoint: mpData.init_point,
+          mpSandboxInitPoint: mpData.sandbox_init_point,
+          preferenceId: mpData.id
         },
         201
       )

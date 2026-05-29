@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowRight, CheckCircle, Map } from 'lucide-react'
 
 import prisma from '@/utils/libs/prisma'
+import { getConfigs } from '@/utils/libs/config'
 import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
 import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
 import RutasSection from '@/features/web/home/components/RutasSection'
@@ -169,8 +170,13 @@ export default async function HomePage() {
                   marginBottom: '1.25rem',
                 }}
               >
-                Aprende sin límites,<br />
-                <span style={{ color: 'var(--web-light, #BDD962)' }}>crece sin fronteras</span>
+                {heroTitle.split('\n')[0]}
+                {heroTitle.split('\n')[1] && (
+                  <>
+                    <br />
+                    <span style={{ color: 'var(--web-light, #BDD962)' }}>{heroTitle.split('\n')[1]}</span>
+                  </>
+                )}
               </h1>
 
               {/* Descripción */}
@@ -184,8 +190,7 @@ export default async function HomePage() {
                   marginBottom: '2.5rem',
                 }}
               >
-                Accede a cursos especializados, rutas de aprendizaje y certificaciones
-                diseñadas para impulsar tu carrera profesional.
+                {heroDescription}
               </p>
 
               {/* Botones */}

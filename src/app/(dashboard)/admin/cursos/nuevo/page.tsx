@@ -35,7 +35,7 @@ export default async function Page({ searchParams }: { searchParams?: { tipo?: s
       axiosUsuario.searchAll({ rol: 'ADMIN', esta_activo: 'true' })
     ])
 
-    profesores = [...profesoresRes, ...adminsRes].map(p => ({
+    profesores = [...profesoresRes.usuarios, ...adminsRes.usuarios].map(p => ({
       id: p.id,
       nombre: p.nombre,
       apellido: p.apellido

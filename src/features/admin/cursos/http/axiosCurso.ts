@@ -176,6 +176,16 @@ export class AxiosCurso extends AxiosInternalHttpClient {
     }
   }
 
+  async reorderExamenesModulo(cursoId: string, moduloId: string, items: { id: string; orden: number }[]): Promise<any> {
+    try {
+      const payload = await this.iPatch(`/${cursoId}/modulos/${moduloId}/examenes/reordenar`, { items })
+
+      return payload
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
   async getComentarios(cursoId: string): Promise<{ comentarios: any[] }> {
     try {
       const payload = await this.iGet<{ comentarios: any[] }>(`/${cursoId}/comentarios`)
@@ -186,7 +196,99 @@ export class AxiosCurso extends AxiosInternalHttpClient {
     }
   }
 
-  // ===================== EXÁMENES =====================
+  async getValoraciones(cursoId: string): Promise<{ promedio: number; total: number; valoraciones: any[] }> {
+    try {
+      const payload = await this.iGet<{ promedio: number; total: number; valoraciones: any[] }>(`/${cursoId}/valoraciones`)
+
+      return payload
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
+  // ===================== EXÁMENES (plural) =====================
+
+  async getExamenes(cursoId: string): Promise<{ examenes: any[] }> {
+    try {
+      const payload = await this.iGet<{ examenes: any[] }>(`/${cursoId}/examenes`)
+
+      return payload
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
+  async getExamenById(cursoId: string, examenId: string): Promise<{ examen: any }> {
+    try {
+      const payload = await this.iGet<{ examen: any }>(`/${cursoId}/examenes/${examenId}`)
+
+      return payload
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
+  async createExamen(cursoId: string, data: any): Promise<{ examen: any }> {
+    try {
+      const payload = await this.iPost<{ examen: any }>(`/${cursoId}/examenes`, data)
+
+      return payload
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
+  async updateExamen(cursoId: string, examenId: string, data: any): Promise<{ examen: any }> {
+    try {
+      const payload = await this.iPatch<{ examen: any }>(`/${cursoId}/examenes/${examenId}`, data)
+
+      return payload
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
+  async deleteExamen(cursoId: string, examenId: string): Promise<{ message: string }> {
+    try {
+      const payload = await this.iDelete<{ message: string }>(`/${cursoId}/examenes/${examenId}`)
+
+      return payload
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
+  async createPreguntaExamen(cursoId: string, examenId: string, data: any): Promise<{ pregunta: any }> {
+    try {
+      const payload = await this.iPost<{ pregunta: any }>(`/${cursoId}/examenes/${examenId}/preguntas`, data)
+
+      return payload
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
+  async updatePreguntaExamen(cursoId: string, examenId: string, preguntaId: string, data: any): Promise<{ pregunta: any }> {
+    try {
+      const payload = await this.iPatch<{ pregunta: any }>(`/${cursoId}/examenes/${examenId}/preguntas/${preguntaId}`, data)
+
+      return payload
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
+  async deletePreguntaExamen(cursoId: string, examenId: string, preguntaId: string): Promise<{ message: string }> {
+    try {
+      const payload = await this.iDelete<{ message: string }>(`/${cursoId}/examenes/${examenId}/preguntas/${preguntaId}`)
+
+      return payload
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
+  // ===================== EXÁMENES (legacy singular) =====================
 
   async getExamen(cursoId: string): Promise<{ examen: any | null }> {
     try {

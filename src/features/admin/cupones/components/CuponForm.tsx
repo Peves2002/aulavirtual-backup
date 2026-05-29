@@ -11,21 +11,28 @@ import {
   Grid,
   MenuItem,
   Switch,
-  FormControlLabel
+  FormControlLabel,
+  Autocomplete,
+  Chip,
+  TextField,
+  Typography
 } from '@mui/material'
 
 import { toast } from 'react-toastify'
 
 import CustomTextField from '@/@core/components/mui/TextField'
+import { sanitizeDatetimeInput, toLocalDateInputValue } from '@/utils/functions/sanitizeDatetime'
 import { useCuponMutation } from '../hooks/useCupones'
+import type { Cupon, CursoOpcion } from '../entity/Cupon'
 
 interface CuponFormProps {
   open: boolean
   handleClose: () => void
-  cuponToEdit?: any
+  cuponToEdit?: Cupon | null
+  cursosDisponibles?: CursoOpcion[]
 }
 
-const CuponForm = ({ open, handleClose, cuponToEdit }: CuponFormProps) => {
+const CuponForm = ({ open, handleClose, cuponToEdit, cursosDisponibles = [] }: CuponFormProps) => {
   const { createCupon, updateCupon } = useCuponMutation()
 
   const [formData, setFormData] = useState({
@@ -37,6 +44,8 @@ const CuponForm = ({ open, handleClose, cuponToEdit }: CuponFormProps) => {
     esta_activo: true
   })
 
+  const [cursosSeleccionados, setCursosSeleccionados] = useState<CursoOpcion[]>([])
+
   useEffect(() => {
     if (cuponToEdit) {
       setFormData({
@@ -44,9 +53,16 @@ const CuponForm = ({ open, handleClose, cuponToEdit }: CuponFormProps) => {
         valor: cuponToEdit.valor.toString(),
         tipo: cuponToEdit.tipo,
         limite_uso: cuponToEdit.limite_uso?.toString() || '',
-        fecha_expiracion: cuponToEdit.fecha_expiracion ? new Date(cuponToEdit.fecha_expiracion).toISOString().split('T')[0] : '',
+        fecha_expiracion: cuponToEdit.fecha_expiracion ? toLocalDateInputValue(cuponToEdit.fecha_expiracion) : '',
         esta_activo: cuponToEdit.esta_activo
       })
+
+      // Restaurar cursos asignados al editar
+      if (Array.isArray(cuponToEdit.cursos)) {
+        setCursosSeleccionados(cuponToEdit.cursos.map(c => c.curso))
+      } else {
+        setCursosSeleccionados([])
+      }
     } else {
       setFormData({
         codigo: '',
@@ -56,6 +72,7 @@ const CuponForm = ({ open, handleClose, cuponToEdit }: CuponFormProps) => {
         fecha_expiracion: '',
         esta_activo: true
       })
+      setCursosSeleccionados([])
     }
   }, [cuponToEdit, open])
 
@@ -66,7 +83,8 @@ const CuponForm = ({ open, handleClose, cuponToEdit }: CuponFormProps) => {
       ...formData,
       valor: Number(formData.valor),
       limite_uso: formData.limite_uso ? Number(formData.limite_uso) : null,
-      fecha_expiracion: formData.fecha_expiracion || null
+      fecha_expiracion: sanitizeDatetimeInput(formData.fecha_expiracion),
+      cursoIds: cursosSeleccionados.map(c => c.id)
     }
 
     try {
@@ -143,6 +161,40 @@ const CuponForm = ({ open, handleClose, cuponToEdit }: CuponFormProps) => {
                 value={formData.fecha_expiracion}
                 onChange={e => setFormData({ ...formData, fecha_expiracion: e.target.value })}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <Autocomplete
+                multiple
+                options={cursosDisponibles}
+                getOptionLabel={option => option.estado ? `${option.titulo} (${option.estado})` : option.titulo}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                value={cursosSeleccionados}
+                onChange={(_, newValue) => setCursosSeleccionados(newValue)}
+
+                renderTags={(value, getTagProps) =>
+                  value.map((option, index) => (
+                    <Chip
+                      label={option.titulo}
+                      size='small'
+                      {...getTagProps({ index })}
+                      key={option.id}
+                    />
+                  ))
+                }
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    label='Cursos Permitidos (Opcional)'
+                    placeholder={cursosSeleccionados.length === 0 ? 'Aplica a todos los cursos' : ''}
+                  />
+                )}
+                noOptionsText='No hay cursos publicados'
+              />
+              {cursosSeleccionados.length === 0 && (
+                <Typography variant='caption' color='text.secondary' sx={{ mt: 0.5, display: 'block' }}>
+                  Sin restricción: el cupón se aplicará a cualquier curso
+                </Typography>
+              )}
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel

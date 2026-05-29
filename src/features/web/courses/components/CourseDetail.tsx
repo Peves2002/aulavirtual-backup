@@ -4,39 +4,42 @@ import { Fragment, useState } from 'react'
 
 import Link from 'next/link'
 
+import { useRouter } from 'next/navigation'
+
 import {
-  Container,
-  Grid,
-  Typography,
-  Box,
-  Stack,
-  Chip,
-  Avatar,
-  Button,
   Accordion,
-  AccordionSummary,
   AccordionDetails,
+  AccordionSummary,
+  Avatar,
+  Box,
+  Button,
+  Chip,
+  CircularProgress,
+  Container,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Grid,
+  IconButton,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Divider,
   Paper,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton
+  Stack,
+  Typography
 } from '@mui/material'
+import { CheckCircle, ChevronRight, Download, Play, XCircle } from 'lucide-react'
 
-import { ChevronRight, CheckCircle, XCircle, Download, Play } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 
-import VideoPlayer from '@/features/estudiante/player/components/VideoPlayer'
-import UserAvatar from '@/utils/components/UserAvatar'
-import HydratedDate from '@/utils/components/HydratedDate'
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
+import HydratedDate from '@/utils/components/HydratedDate'
+import UserAvatar from '@/utils/components/UserAvatar'
+import VideoPlayer from '@/features/estudiante/player/components/VideoPlayer'
+import { useAuthModal } from '@/contexts/AuthModalContext'
 
-// ─── Typography tokens ────────────────────────────────────────────────────────
-const FONT = 'Poppins, sans-serif'
 
 interface Leccion {
   id: string
@@ -58,6 +61,7 @@ interface CourseDetailProps {
     descripcion?: string
     miniatura?: string
     precio: number
+    precio_falso: number
     moneda: string
     es_gratis: boolean
     es_comprado?: boolean
@@ -74,6 +78,7 @@ interface CourseDetailProps {
     }
     categoria?: { nombre: string }
     video_presentacion?: string | null
+    duracion?: string | null
     fecha_inicio?: string | Date | null
     creado_en?: string | Date
     modulos: Modulo[]
@@ -85,9 +90,57 @@ interface CourseDetailProps {
   }
 }
 
+const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif"
+
 const CourseDetail = ({ course }: CourseDetailProps) => {
   const [previewLesson, setPreviewLesson] = useState<any>(null)
+  const [enrolling, setEnrolling] = useState(false)
+  const { data: session } = useSession()
+  const router = useRouter()
+  const { openLogin } = useAuthModal()
 
+  const handleFreeEnroll = async () => {
+    if (!session) {
+      openLogin()
+
+      return
+    }
+
+    setEnrolling(true)
+
+    try {
+      const res = await fetch('/api/estudiante/enroll', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cursoId: course.id })
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        router.push(`/estudiante/aprender/${course.slug}`)
+      } else {
+        // Si ya está inscrito, igualmente redirigir
+        if (res.status === 400 && data.message?.includes('Ya estás inscrito')) {
+          router.push(`/estudiante/aprender/${course.slug}`)
+        }
+      }
+    } finally {
+      setEnrolling(false)
+    }
+  }
+
+  const handleEnroll = () => {
+    if (!session) {
+      openLogin()
+
+      return
+    }
+
+    router.push(`/checkout/${course.slug}`)
+  }
+
+  // Helper para obtener el ID de video y la URL de embebido
   const getEmbedUrl = (url?: string | null) => {
     if (!url) return null
     const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/|watch\?v=|watch\?.+&v=))([\w-]{11})/)
@@ -118,16 +171,16 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
   const { label: dateLabel, value: dateValue } = getDisplayDate()
 
   const defaultBeneficios = [
-    { title: 'Clase en vivo',             desc: 'Clases 100% en vivo por Zoom.',              icon: 'tabler-video' },
-    { title: 'Seguimiento personalizado', desc: 'Apoyo y soporte de la coordinadora.',         icon: 'tabler-headset' },
-    { title: 'Plataforma virtual',        desc: 'Acceso 24/7 durante el programa.',            icon: 'tabler-device-laptop' },
-    { title: 'Certificado Opcional',      desc: 'Solicítalo al finalizar el curso.',           icon: 'tabler-certificate' },
+    { title: 'Clase en vivo', desc: 'Clases 100% en vivo por Zoom.', icon: 'tabler-video' },
+    { title: 'Seguimiento personalizado', desc: 'Apoyo y soporte de la coordinadora.', icon: 'tabler-headset' },
+    { title: 'Plataforma virtual', desc: 'Acceso 24/7 durante el programa.', icon: 'tabler-device-laptop' },
+    { title: 'Certificado Opcional', desc: 'Solicítalo al finalizar el curso.', icon: 'tabler-certificate' },
   ]
 
   const defaultMetodologia = [
-    { title: 'Presentación de clase',              icon: 'tabler-presentation' },
-    { title: 'Material de clases y adicionales',   icon: 'tabler-folder' },
-    { title: 'Resolución de casos reales',         icon: 'tabler-messages' },
+    { title: 'Presentación de clase', icon: 'tabler-presentation' },
+    { title: 'Material de clases y adicionales', icon: 'tabler-folder' },
+    { title: 'Resolución de casos reales', icon: 'tabler-messages' },
   ]
 
   const defaultObjetivos = [
@@ -137,19 +190,19 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
   ]
 
   const defaultIncluye = [
-    { text: 'Clases en vivo',                        active: true },
-    { text: 'Clases grabadas',                        active: true },
-    { text: 'Comunidad del curso',                    active: true },
-    { text: 'Materiales y adicionales',               active: true },
-    { text: 'Seguimiento académico',                  active: true },
-    { text: 'Evaluación programada',                  active: true },
-    { text: 'Evaluación en cualquier momento',        active: false },
-    { text: 'Recuperación de evaluación',             active: false },
-    { text: 'Certificado por Ecoambiental o CIP',     active: false },
+    { text: 'Clases en vivo', active: true },
+    { text: 'Clases grabadas', active: true },
+    { text: 'Comunidad del curso', active: true },
+    { text: 'Materiales y adicionales', active: true },
+    { text: 'Seguimiento académico', active: true },
+    { text: 'Evaluación programada', active: true },
+    { text: 'Evaluación en cualquier momento', active: false },
+    { text: 'Recuperación de evaluación', active: false },
+    { text: 'Certificado por Ecoambiental o CIP', active: false },
   ]
 
   return (
-    <Box sx={{ pb: 10, bgcolor: '#f8fafc', fontFamily: FONT }}>
+    <Box sx={{ pb: 10, bgcolor: '#f8fafc' }}>
 
       {/* ─── HERO ──────────────────────────────────────────────────────────── */}
       <Box sx={{
@@ -275,12 +328,19 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                       <Typography sx={{ fontFamily: FONT, fontSize: '0.9rem', color: '#fff', fontWeight: 700, mt: 0.25 }}>{dateValue}</Typography>
                     </Box>
                   </Grid>
-                  <Grid item xs={6} sm={3}>
-                    <Box sx={{ bgcolor: 'rgba(255,255,255,0.06)', borderRadius: '12px', p: 1.5, border: '1px solid rgba(255,255,255,0.08)' }}>
-                      <Typography sx={{ fontFamily: FONT, fontSize: '0.6875rem', color: 'rgba(255,255,255,0.5)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Duración</Typography>
-                      <Typography sx={{ fontFamily: FONT, fontSize: '0.9rem', color: '#fff', fontWeight: 700, mt: 0.25 }}>4 Semanas</Typography>
-                    </Box>
-                  </Grid>
+                  {course.duracion && (
+                    <Grid item xs={6}>
+                      <Stack direction="row" spacing={1.5} alignItems="center">
+                        <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.1)', color: 'white', width: 44, height: 44 }}>
+                          <i className="tabler-clock" style={{ fontSize: '1.4rem' }} />
+                        </Avatar>
+                        <Box>
+                          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 500 }} display="block">Duración</Typography>
+                          <Typography variant="body1" sx={{ fontWeight: 700, color: 'white', fontSize: '1.1rem' }}>{course.duracion}</Typography>
+                        </Box>
+                      </Stack>
+                    </Grid>
+                  )}
                 </Grid>
 
                 {/* Precio */}
@@ -290,28 +350,50 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                   </Typography>
                   {!course.es_gratis && !course.es_comprado && (
                     <Typography sx={{ fontFamily: FONT, fontSize: '1rem', color: 'rgba(255,255,255,0.35)', textDecoration: 'line-through' }}>
-                      {course.moneda} {(course.precio * 1.5).toFixed(2)}
+                      {course.moneda}{' '}
+                      {Number(course.precio_falso) !== 0
+                        ? Number(course.precio_falso)
+                        : (course.precio * 1.5).toFixed(2)}
                     </Typography>
                   )}
                 </Box>
 
-                {/* CTA */}
-                <Button
-                  variant="contained"
-                  fullWidth
-                  size="large"
-                  component={Link}
-                  href={course.es_comprado ? `/estudiante/aprender/${course.slug}` : `/checkout/${course.slug}`}
-                  sx={{
-                    fontFamily: FONT, fontWeight: 800, fontSize: '1rem', py: 1.75,
-                    borderRadius: '14px', textTransform: 'none', letterSpacing: 0,
-                    bgcolor: 'var(--web-light, #BDD962)', color: '#0A0A0A',
-                    boxShadow: '0 8px 24px rgba(var(--web-light-rgb,189,217,98),0.35)',
-                    '&:hover': { bgcolor: 'var(--web-primary, #25927F)', color: '#fff', boxShadow: '0 8px 24px rgba(var(--web-primary-rgb,37,146,127),0.4)' },
-                  }}
-                >
-                  {course.es_comprado ? '▶ Seguir aprendiendo' : 'Matricúlate ahora →'}
-                </Button>
+                {course.es_comprado ? (
+                  <Button
+                    variant="contained"
+                    color="success"
+                    fullWidth
+                    size="large"
+                    component={Link}
+                    href={`/estudiante/aprender/${course.slug}`}
+                    sx={{ py: 2, borderRadius: '16px', fontWeight: 700, fontSize: '1.2rem', boxShadow: '0 4px 14px rgba(16, 185, 129, 0.4)', textTransform: 'none' }}
+                  >
+                    Seguir aprendiendo
+                  </Button>
+                ) : course.es_gratis ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    size="large"
+                    onClick={handleFreeEnroll}
+                    disabled={enrolling}
+                    sx={{ py: 2, borderRadius: '16px', fontWeight: 700, fontSize: '1.2rem', textTransform: 'none' }}
+                  >
+                    {enrolling ? <CircularProgress size={24} color="inherit" /> : 'Inscribirme gratis'}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    size="large"
+                    onClick={handleEnroll}
+                    sx={{ py: 2, borderRadius: '16px', fontWeight: 700, fontSize: '1.2rem', boxShadow: 'var(--mui-palette-primary-darkOpacity)', textTransform: 'none' }}
+                  >
+                    Matricúlate
+                  </Button>
+                )}
               </Stack>
             </Grid>
           </Grid>
@@ -506,21 +588,42 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                     ))}
                   </Stack>
 
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    size="large"
-                    component={Link}
-                    href={course.es_comprado ? `/estudiante/aprender/${course.slug}` : `/checkout/${course.slug}`}
-                    sx={{
-                      fontFamily: FONT, fontWeight: 800, fontSize: '0.9375rem', py: 1.5,
-                      borderRadius: '12px', textTransform: 'none',
-                      bgcolor: 'var(--web-primary, #25927F)', color: '#fff',
-                      '&:hover': { bgcolor: 'var(--web-dark, #025E44)' },
-                    }}
-                  >
-                    {course.es_comprado ? 'Seguir aprendiendo' : 'Matricúlate'}
-                  </Button>
+                  {course.es_comprado ? (
+                    <Button
+                      variant="contained"
+                      color="success"
+                      fullWidth
+                      size="large"
+                      component={Link}
+                      href={`/estudiante/aprender/${course.slug}`}
+                      sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700, boxShadow: '0 4px 14px rgba(16, 185, 129, 0.4)', textTransform: 'none' }}
+                    >
+                      Seguir aprendiendo
+                    </Button>
+                  ) : course.es_gratis ? (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      size="large"
+                      onClick={handleFreeEnroll}
+                      disabled={enrolling}
+                      sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700, textTransform: 'none' }}
+                    >
+                      {enrolling ? <CircularProgress size={22} color="inherit" /> : 'Inscribirme gratis'}
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      size="large"
+                      onClick={handleEnroll}
+                      sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700, boxShadow: 'var(--mui-palette-primary-darkOpacity)', textTransform: 'none' }}
+                    >
+                      Matricúlate
+                    </Button>
+                  )}
                 </Box>
               </Paper>
             </Box>
@@ -529,11 +632,18 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
         </Grid>
       </Container>
 
-      {/* ─── DIALOG VISTA PREVIA ───────────────────────────────────────────── */}
-      <Dialog open={Boolean(previewLesson)} onClose={() => setPreviewLesson(null)} maxWidth="md" fullWidth
-        PaperProps={{ sx: { borderRadius: 3, overflow: 'hidden' } }}>
-        <DialogTitle sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography sx={{ fontFamily: FONT, fontWeight: 700, fontSize: '1rem' }}>
+      {/* Dialog para la Vista Previa */}
+      <Dialog
+        open={Boolean(previewLesson)}
+        onClose={() => setPreviewLesson(null)}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: { borderRadius: 3, bgcolor: 'background.paper', overflow: 'hidden' }
+        }}
+      >
+        <DialogTitle sx={{ m: 0, p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant="h6" fontWeight={700}>
             Vista Previa: {previewLesson?.titulo}
           </Typography>
           <IconButton onClick={() => setPreviewLesson(null)} size="small">

@@ -25,6 +25,7 @@ import { TabConfiguracion } from '../components/CourseBuilder/TabConfiguracion'
 import { TabDetallesPremium } from '../components/CourseBuilder/TabDetallesPremium'
 import { TabComentarios } from '../components/CourseBuilder/TabComentarios'
 import { TabEvaluacion } from '../components/CourseBuilder/TabEvaluacion'
+import { TabValoraciones } from '../components/CourseBuilder/TabValoraciones'
 
 import { useCurso } from '../hooks/useCursos'
 
@@ -84,9 +85,10 @@ export function CourseBuilderPage({ cursoId, profesores, basePath }: CourseBuild
                         <Tab icon={<i className='tabler-info-circle' />} iconPosition='start' label='Información' value='1' />
                         <Tab icon={<i className='tabler-list-tree' />} iconPosition='start' label='Contenido' value='2' />
                         <Tab icon={<i className='tabler-star' />} iconPosition='start' label='Detalles Premium' value='4' />
-                        <Tab icon={<i className='tabler-clipboard-check' />} iconPosition='start' label='Evaluación' value='6' />
+                        {/* <Tab icon={<i className='tabler-clipboard-check' />} iconPosition='start' label='Evaluación' value='6' /> */}
                         <Tab icon={<i className='tabler-settings' />} iconPosition='start' label='Configuración' value='3' />
                         <Tab icon={<i className='tabler-message' />} iconPosition='start' label='Comentarios' value='5' />
+                        <Tab icon={<i className='tabler-star-filled' />} iconPosition='start' label='Valoraciones' value='7' />
                     </TabList>
 
                     <TabPanel value='1' sx={{ p: 5 }}>
@@ -111,6 +113,10 @@ export function CourseBuilderPage({ cursoId, profesores, basePath }: CourseBuild
 
                     <TabPanel value='6' sx={{ p: 5 }}>
                         <TabEvaluacion cursoId={curso.id} />
+                    </TabPanel>
+
+                    <TabPanel value='7' sx={{ p: 5 }}>
+                        <TabValoraciones cursoId={curso.id} />
                     </TabPanel>
                 </Card>
             </TabContext>

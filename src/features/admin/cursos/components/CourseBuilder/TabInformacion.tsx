@@ -16,6 +16,7 @@ import { useSnackbar } from 'notistack'
 
 import CustomTextField from '@core/components/mui/TextField'
 import MediaLibrary from '../MediaLibrary'
+import { sanitizeDatetimeInput, toLocalDateInputValue } from '@/utils/functions/sanitizeDatetime'
 
 import type { Curso } from '../../entity/Curso'
 import { useEditCurso } from '../../hooks/useCursos'
@@ -31,7 +32,8 @@ interface TabInformacionProps {
 export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionProps) {
   const { enqueueSnackbar } = useSnackbar()
   const editMutation = useEditCurso()
-  const { data: categorias = [] } = useCategorias()
+  const { data: categoriasRes } = useCategorias()
+  const categorias = categoriasRes?.categorias || []
 
   const [openMedia, setOpenMedia] = useState(false)
   const [openBrochure, setOpenBrochure] = useState(false)
@@ -43,10 +45,12 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
     profesor_id: curso.profesor_id,
     tipo_emision: curso.tipo_emision,
     duracion: curso.duracion || '',
+    codigo: curso.codigo || '',
     miniatura: curso.miniatura || '',
     video_presentacion: curso.video_presentacion || '',
     brochure: curso.brochure || '',
-    fecha_inicio: curso.fecha_inicio ? new Date(curso.fecha_inicio).toISOString().split('T')[0] : '',
+    fecha_inicio: curso.fecha_inicio ? toLocalDateInputValue(curso.fecha_inicio) : '',
+    fecha_fin: curso.fecha_fin ? toLocalDateInputValue(curso.fecha_fin) : '',
     nivel: curso.nivel || 'BASICO'
   })
 
@@ -65,10 +69,12 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
           profesor_id: form.profesor_id,
           tipo_emision: form.tipo_emision as 'SINCRONO' | 'ASINCRONO' | 'MIXTO',
           duracion: form.duracion || null,
+          codigo: form.codigo?.trim().toUpperCase() || null,
           miniatura: form.miniatura || null,
           video_presentacion: form.video_presentacion || null,
           brochure: form.brochure || null,
-          fecha_inicio: form.fecha_inicio ? new Date(form.fecha_inicio).toISOString() : null,
+          fecha_inicio: form.fecha_inicio ? sanitizeDatetimeInput(form.fecha_inicio) : null,
+          fecha_fin: form.fecha_fin ? sanitizeDatetimeInput(form.fecha_fin) : null,
           nivel: form.nivel as 'BASICO' | 'INTERMEDIO' | 'AVANZADO'
         }
       })
@@ -177,20 +183,36 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
         </Box>
       </Grid>
       {(form.tipo_emision === 'SINCRONO' || form.tipo_emision === 'MIXTO') && (
-        <Grid item xs={12} sm={6}>
-          <CustomTextField
-            fullWidth
-            type='date'
-            label='Fecha de Inicio'
-            name='fecha_inicio'
-            value={form.fecha_inicio}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-            InputProps={{
-              startAdornment: <InputAdornment position='start'><i className='tabler-calendar text-xl text-textSecondary' /></InputAdornment>
-            }}
-          />
-        </Grid>
+        <>
+          <Grid item xs={12} sm={6}>
+            <CustomTextField
+              fullWidth
+              type='date'
+              label='Fecha de Inicio'
+              name='fecha_inicio'
+              value={form.fecha_inicio}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                startAdornment: <InputAdornment position='start'><i className='tabler-calendar text-xl text-textSecondary' /></InputAdornment>
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomTextField
+              fullWidth
+              type='date'
+              label='Fecha de Fin'
+              name='fecha_fin'
+              value={form.fecha_fin}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                startAdornment: <InputAdornment position='start'><i className='tabler-calendar-event text-xl text-textSecondary' /></InputAdornment>
+              }}
+            />
+          </Grid>
+        </>
       )}
       <Grid item xs={12} sm={6}>
         <CustomTextField
@@ -202,6 +224,21 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
           onChange={handleChange}
           InputProps={{
             startAdornment: <InputAdornment position='start'><i className='tabler-clock text-xl text-textSecondary' /></InputAdornment>
+          }}
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <CustomTextField
+          fullWidth
+          label='Código del Curso'
+          name='codigo'
+          placeholder='Ej: MKTG01'
+          value={form.codigo}
+          onChange={handleChange}
+          inputProps={{ maxLength: 20 }}
+          helperText='Se usa en el código del certificado. Máx. 20 caracteres.'
+          InputProps={{
+            startAdornment: <InputAdornment position='start'><i className='tabler-certificate text-xl text-textSecondary' /></InputAdornment>
           }}
         />
       </Grid>

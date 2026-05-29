@@ -8,6 +8,8 @@ import { useSession } from 'next-auth/react'
 import Logo from '@components/layout/shared/Logo'
 import UserDropdown from '@components/layout/shared/UserDropdown'
 import CartIcon from '@/features/web/cart/components/CartIcon'
+import { useAuthModal } from '@/contexts/AuthModalContext'
+import { useConfig } from '@/contexts/ConfigContext'
 
 export interface Category {
   id: string
@@ -23,7 +25,12 @@ interface WebHeaderProps {
 
 export default function WebHeader({ initialCategories = [] }: WebHeaderProps) {
   void initialCategories
+  void platformName
+  void platformSlogan
   const { data: session } = useSession()
+  const { openLogin, openRegister } = useAuthModal()
+  const configs = useConfig()
+  const primaryColor = configs.COLOR_PRIMARIO || '#02115C'
 
   return (
     <header
@@ -32,36 +39,7 @@ export default function WebHeader({ initialCategories = [] }: WebHeaderProps) {
     >
       {/* Logo */}
       <Link href="/" className="flex items-center gap-3 group no-underline">
-        <div className="flex items-center gap-4">
-          <Logo />
-          {/* <div className="hidden sm:flex flex-col">
-            <span
-              style={{
-                fontFamily: 'Poppins, sans-serif',
-                fontWeight: 700,
-                fontSize: '1.125rem',
-                color: '#0A0A0A',
-                letterSpacing: '-0.02em',
-                lineHeight: 1,
-              }}
-            >
-              {platformName}
-            </span>
-            <span
-              style={{
-                fontFamily: 'Poppins, sans-serif',
-                fontSize: '0.625rem',
-                color: 'var(--web-dark, #025E44)',
-                fontWeight: 600,
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                marginTop: '2px',
-              }}
-            >
-              {platformSlogan}
-            </span>
-          </div> */}
-        </div>
+        <Logo />
       </Link>
 
       {/* Auth Buttons */}
@@ -72,36 +50,24 @@ export default function WebHeader({ initialCategories = [] }: WebHeaderProps) {
         ) : (
           <>
             <Button
-              component={Link}
-              href="/login"
-              variant="text"
-              sx={{
-                fontFamily: 'Poppins, sans-serif',
-                fontWeight: 600,
-                fontSize: '0.875rem',
-                color: '#0A0A0A',
-                textTransform: 'none',
-                '&:hover': { backgroundColor: 'hsl(75, 63%, 62%, 0.2)' },
-              }}
+              onClick={() => openLogin()}
+              size="small"
+              sx={{ fontWeight: 700, fontSize: '0.7rem', color: '#02115C', fontFamily: 'Inter, sans-serif' }}
             >
-              Iniciar sesión
+              Iniciar Sesión
             </Button>
             <Button
-              component={Link}
-              href="/register"
+              onClick={() => openRegister()}
               variant="contained"
+              size="small"
               sx={{
-                fontFamily: 'Poppins, sans-serif',
+                fontFamily: 'Inter, sans-serif',
                 fontWeight: 700,
-                fontSize: '0.9375rem',
-                px: 4,
-                py: 1.5,
-                borderRadius: '12px',
-                backgroundColor: 'var(--web-primary, #25927F)',
-                textTransform: 'none',
-                boxShadow: '0 4px 12px rgba(var(--web-primary-rgb, 37, 146, 127),0.3)',
-                borderBottom: '4px solid rgba(var(--web-dark-rgb, 2, 94, 68),0.3)',
-                '&:hover': { backgroundColor: '#1e7a6a' },
+                fontSize: '0.7rem',
+                borderRadius: '8px',
+                backgroundColor: primaryColor,
+                display: { xs: 'none', sm: 'inline-flex' },
+                '&:hover': { backgroundColor: primaryColor, opacity: 0.85 },
               }}
             >
               Registrarse

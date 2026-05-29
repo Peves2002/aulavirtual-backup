@@ -20,7 +20,13 @@ const navItems = [
   { title: 'Certificado', url: '/verificar-certificado', icon: Award },
 ]
 
-export default function LeftSidebar() {
+export default function LeftSidebar({
+  rutasHabilitado = true,
+  empresasHabilitado = true,
+}: {
+  rutasHabilitado?: boolean
+  empresasHabilitado?: boolean
+}) {
   const pathname = usePathname()
   const router = useRouter()
   const [expanded, setExpanded] = useState(false)
@@ -28,6 +34,13 @@ export default function LeftSidebar() {
   const [menuPos, setMenuPos] = useState({ bottom: 0, left: 0 })
   const { data: session } = useSession()
   const userButtonRef = useRef<HTMLButtonElement>(null)
+
+  const navItems = ALL_NAV_ITEMS.filter(item => {
+    if (item.key === 'rutas' && !rutasHabilitado) return false
+    if (item.key === 'empresas' && !empresasHabilitado) return false
+
+    return true
+  })
 
   const handleUserClick = () => {
     if (userButtonRef.current) {

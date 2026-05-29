@@ -5,6 +5,7 @@ import { actualizarCursoSchema } from '@/schemas/curso.schema'
 import { validateRequest, handleApiError } from '@/utils/libs/validation'
 import { requireProfesorOrAdmin, requireAuth } from '@/utils/libs/auth-helpers'
 import { ApiResponse } from '@/utils/libs/apiResponse'
+import { sanitizeDatetimeInput } from '@/utils/functions/sanitizeDatetime'
 
 /**
  * Genera un slug a partir de un texto
@@ -64,6 +65,23 @@ const cursoInclude = {
           es_en_vivo: true,
           fecha_programada: true,
           enlace_reunion: true
+        }
+      },
+      examenes: {
+        orderBy: { orden: 'asc' as const },
+        select: {
+          id: true,
+          titulo: true,
+          tipo: true,
+          peso: true,
+          progreso_minimo: true,
+          orden: true,
+          puntaje_aprobacion: true,
+          intentos_maximos: true,
+          esta_publicado: true,
+          limite_tiempo: true,
+          modulo_id: true,
+          _count: { select: { preguntas: true } }
         }
       }
     }
@@ -147,9 +165,19 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     }
 
     if (data.fecha_inicio) {
-      updateData.fecha_inicio = new Date(data.fecha_inicio)
+      const fechaInicio = sanitizeDatetimeInput(data.fecha_inicio)
+
+      updateData.fecha_inicio = fechaInicio ? new Date(fechaInicio) : null
     } else if (data.fecha_inicio === null) {
       updateData.fecha_inicio = null
+    }
+
+    if (data.fecha_fin) {
+      const fechaFin = sanitizeDatetimeInput(data.fecha_fin)
+
+      updateData.fecha_fin = fechaFin ? new Date(fechaFin) : null
+    } else if (data.fecha_fin === null) {
+      updateData.fecha_fin = null
     }
 
     // Verificar profesor si se cambia

@@ -5,6 +5,7 @@ import { crearCursoSchema, listarCursosQuerySchema } from '@/schemas/curso.schem
 import { validateRequest, handleApiError } from '@/utils/libs/validation'
 import { requireProfesorOrAdmin } from '@/utils/libs/auth-helpers'
 import { ApiResponse } from '@/utils/libs/apiResponse'
+import { sanitizeDatetimeInput } from '@/utils/functions/sanitizeDatetime'
 import { generateUniqueSlug } from '@/utils/libs/slug'
 
 
@@ -81,25 +82,34 @@ export async function GET(request: Request) {
       prisma.curso.count({ where })
     ])
 
-    // Contar lecciones por curso (Prisma no soporta nested _count directo)
-    const cursosConLecciones = await Promise.all(
+    // Contar lecciones por curso y obtener promedio de valoraciones
+    const cursosConEstadisticas = await Promise.all(
       cursos.map(async curso => {
-        const leccionesCount = await prisma.leccion.count({
-          where: { modulo: { curso_id: curso.id } }
-        })
+        const [leccionesCount, valoracionesStats] = await Promise.all([
+          prisma.leccion.count({
+            where: { modulo: { curso_id: curso.id } }
+          }),
+          prisma.valoracionCurso.aggregate({
+            where: { curso_id: curso.id },
+            _avg: { puntuacion: true },
+            _count: { id: true }
+          })
+        ])
 
         return {
           ...curso,
           _count: {
             ...curso._count,
-            lecciones: leccionesCount
-          }
+            lecciones: leccionesCount,
+            valoraciones: valoracionesStats._count.id
+          },
+          promedio_valoracion: valoracionesStats._avg.puntuacion || 0
         }
       })
     )
 
     return ApiResponse.success(request, {
-      cursos: cursosConLecciones,
+      cursos: cursosConEstadisticas,
       paginacion: {
         total,
         page,
@@ -163,11 +173,13 @@ export async function POST(request: Request) {
 
     const slug = await generateUniqueSlug(validation.data.titulo, prisma.curso)
 
+    const fechaInicio = sanitizeDatetimeInput(validation.data.fecha_inicio)
+
     const nuevoCurso = await prisma.curso.create({
       data: {
         ...validation.data,
         slug,
-        fecha_inicio: validation.data.fecha_inicio ? new Date(validation.data.fecha_inicio) : null,
+        fecha_inicio: fechaInicio ? new Date(fechaInicio) : null,
         estado: 'BORRADOR'
       },
       include: {

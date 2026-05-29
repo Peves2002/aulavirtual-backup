@@ -3,20 +3,42 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
-import type { Curso } from '../entity/Curso'
+import type { Curso, CursoListaItem } from '../entity/Curso'
 import type { CrearCursoDto, ActualizarCursoDto, CambiarEstadoCursoDto } from '@/schemas/curso.schema'
 import { AxiosCurso } from '../http/axiosCurso'
+import { AxiosCursoAdmin } from '../http/axiosCursoAdmin'
 
-const QUERY_KEY = { CURSOS: ['cursos'] }
+const QUERY_KEY = {
+  CURSOS: ['cursos'],
+  CURSOS_LISTA: ['cursos', 'lista']
+}
+
+const getAuthToken = async () => {
+  const s = await getSession()
+
+  return s?.user?.accessToken ?? null
+}
 
 // Singleton: instancia única reutilizada en todos los hooks (evita recrear en cada render)
-const axiosCurso = new AxiosCurso({
-  getAuthToken: async () => {
-    const s = await getSession()
+const axiosCurso = new AxiosCurso({ getAuthToken })
+const axiosCursoAdmin = new AxiosCursoAdmin({ getAuthToken })
 
-    return s?.user?.accessToken ?? null
-  }
-})
+/**
+ * Hook para obtener la lista simplificada de cursos (selector de cupones, rutas, etc.)
+ * Hidrata React Query con los datos prefetched desde el servidor.
+ */
+export function useCursosLista(initialData?: CursoListaItem[]) {
+  return useQuery<CursoListaItem[], any>({
+    queryKey: QUERY_KEY.CURSOS_LISTA,
+    queryFn: async () => await axiosCursoAdmin.getLista(),
+    
+    // Solo hidratar con initialData si el servidor devolvió datos reales.
+    // Si llega [] (fallo silencioso del server), dejamos que el cliente haga el fetch.
+    initialData: initialData?.length ? initialData : undefined,
+    staleTime: 60_000,
+    retry: 1
+  })
+}
 
 /**
  * Hook para listar cursos con filtros
@@ -189,6 +211,16 @@ export function useReorderLecciones() {
   })
 }
 
+export function useReorderExamenesModulo() {
+  const qc = useQueryClient()
+
+  return useMutation<any, any, { cursoId: string; moduloId: string; items: { id: string; orden: number }[] }>({
+    mutationFn: async ({ cursoId, moduloId, items }) =>
+      await axiosCurso.reorderExamenesModulo(cursoId, moduloId, items),
+    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY.CURSOS })
+  })
+}
+
 /**
  * Hook para obtener todos los comentarios de un curso
  */
@@ -203,7 +235,100 @@ export function useComentariosCurso(cursoId: string) {
   })
 }
 
-// ===================== EXÁMENES =====================
+// ===================== EXÁMENES (plural) =====================
+
+export function useExamenesCurso(cursoId: string) {
+  return useQuery<{ examenes: any[] }, any>({
+    queryKey: [...QUERY_KEY.CURSOS, cursoId, 'examenes'],
+    queryFn: async () => await axiosCurso.getExamenes(cursoId),
+    enabled: !!cursoId,
+    staleTime: 30_000
+  })
+}
+
+export function useExamenById(cursoId: string, examenId: string) {
+  return useQuery<{ examen: any }, any>({
+    queryKey: [...QUERY_KEY.CURSOS, cursoId, 'examenes', examenId],
+    queryFn: async () => await axiosCurso.getExamenById(cursoId, examenId),
+    enabled: !!cursoId && !!examenId,
+    staleTime: 30_000
+  })
+}
+
+export function useCreateExamen() {
+  const qc = useQueryClient()
+
+  return useMutation<any, any, { cursoId: string; data: any }>({
+    mutationFn: async ({ cursoId, data }) => await axiosCurso.createExamen(cursoId, data),
+    onSuccess: (_, { cursoId }) => {
+      qc.invalidateQueries({ queryKey: [...QUERY_KEY.CURSOS, cursoId, 'examenes'] })
+      qc.invalidateQueries({ queryKey: [...QUERY_KEY.CURSOS, cursoId] })
+    }
+  })
+}
+
+export function useUpdateExamen() {
+  const qc = useQueryClient()
+
+  return useMutation<any, any, { cursoId: string; examenId: string; data: any }>({
+    mutationFn: async ({ cursoId, examenId, data }) => await axiosCurso.updateExamen(cursoId, examenId, data),
+    onSuccess: (_, { cursoId, examenId }) => {
+      qc.invalidateQueries({ queryKey: [...QUERY_KEY.CURSOS, cursoId, 'examenes'] })
+      qc.invalidateQueries({ queryKey: [...QUERY_KEY.CURSOS, cursoId, 'examenes', examenId] })
+      qc.invalidateQueries({ queryKey: [...QUERY_KEY.CURSOS, cursoId] })
+    }
+  })
+}
+
+export function useDeleteExamen() {
+  const qc = useQueryClient()
+
+  return useMutation<any, any, { cursoId: string; examenId: string }>({
+    mutationFn: async ({ cursoId, examenId }) => await axiosCurso.deleteExamen(cursoId, examenId),
+    onSuccess: (_, { cursoId }) => {
+      qc.invalidateQueries({ queryKey: [...QUERY_KEY.CURSOS, cursoId, 'examenes'] })
+      qc.invalidateQueries({ queryKey: [...QUERY_KEY.CURSOS, cursoId] })
+    }
+  })
+}
+
+export function useCreatePreguntaExamen() {
+  const qc = useQueryClient()
+
+  return useMutation<any, any, { cursoId: string; examenId: string; data: any }>({
+    mutationFn: async ({ cursoId, examenId, data }) => await axiosCurso.createPreguntaExamen(cursoId, examenId, data),
+    onSuccess: (_, { cursoId, examenId }) => {
+      qc.invalidateQueries({ queryKey: [...QUERY_KEY.CURSOS, cursoId, 'examenes', examenId] })
+      qc.invalidateQueries({ queryKey: [...QUERY_KEY.CURSOS, cursoId, 'examenes'] })
+    }
+  })
+}
+
+export function useUpdatePreguntaExamen() {
+  const qc = useQueryClient()
+
+  return useMutation<any, any, { cursoId: string; examenId: string; preguntaId: string; data: any }>({
+    mutationFn: async ({ cursoId, examenId, preguntaId, data }) =>
+      await axiosCurso.updatePreguntaExamen(cursoId, examenId, preguntaId, data),
+    onSuccess: (_, { cursoId, examenId }) => {
+      qc.invalidateQueries({ queryKey: [...QUERY_KEY.CURSOS, cursoId, 'examenes', examenId] })
+    }
+  })
+}
+
+export function useDeletePreguntaExamen() {
+  const qc = useQueryClient()
+
+  return useMutation<any, any, { cursoId: string; examenId: string; preguntaId: string }>({
+    mutationFn: async ({ cursoId, examenId, preguntaId }) =>
+      await axiosCurso.deletePreguntaExamen(cursoId, examenId, preguntaId),
+    onSuccess: (_, { cursoId, examenId }) => {
+      qc.invalidateQueries({ queryKey: [...QUERY_KEY.CURSOS, cursoId, 'examenes', examenId] })
+    }
+  })
+}
+
+// ===================== EXÁMENES (legacy) =====================
 
 export function useExamenCurso(cursoId: string) {
 
