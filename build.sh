@@ -21,23 +21,10 @@ echo ""
 echo "🔨 Construyendo imagen..."
 echo ""
 
-# Leer NEXT_PUBLIC_APP_URL desde .env si existe
-APP_URL=""
-if [ -f ".env" ]; then
-    APP_URL=$(grep -E "^NEXT_PUBLIC_APP_URL=" .env | cut -d'=' -f2- | tr -d '"' | tr -d "'")
-fi
-
-if [ -z "$APP_URL" ]; then
-    read -p "Ingresa la URL pública de la app (ej: https://tudominio.com): " APP_URL
-fi
-
-echo "🌐 NEXT_PUBLIC_APP_URL: $APP_URL"
-echo ""
-
+# SOLUCIÓN: Agregamos --no-cache para obligar a Docker a leer el Dockerfile actualizado
 docker build \
   --no-cache \
-  -f dockerfile \
-  --build-arg NEXT_PUBLIC_APP_URL="$APP_URL" \
+  -f Dockerfile \
   -t $IMAGE_NAME \
   .
 
