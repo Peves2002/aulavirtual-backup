@@ -4,6 +4,8 @@ import { ArrowRight } from 'lucide-react'
 
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import CrecimientoSection from '@/features/web/nosotros/components/CrecimientoSection'
+import EquipoSection from '@/features/web/nosotros/components/EquipoSection'
+import IsosSection from '@/features/web/nosotros/components/IsosSection'
 import { MisionVisionSection, ValoresSection } from '@/features/web/nosotros/components/NosotrosInteractive'
 
 export const metadata = {
@@ -86,13 +88,12 @@ export default async function NosotrosPage() {
                     minHeight: 0,
                   }}
                 >
-                  <video
-                    src="/images/videoportada.mp4"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}
+                  <iframe
+                    src="https://www.youtube.com/embed/BMb2s8hBaio?autoplay=1&mute=1&rel=0&modestbranding=1"
+                    title="Video Grupo Ollarves"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    style={{ display: 'block', width: '100%', height: '100%', border: 'none' }}
                   />
                 </div>
 
@@ -120,10 +121,11 @@ export default async function NosotrosPage() {
 
             {/* Right: text */}
             <ScrollReveal direction="right" delay={0.1}>
-              <div>
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: 'calc(100vh - var(--navbar-height) - 3rem)' }}>
                 <div
                   style={{
                     display: 'inline-flex',
+                    alignSelf: 'flex-start',
                     alignItems: 'center',
                     gap: '0.5rem',
                     backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.12)',
@@ -265,8 +267,14 @@ export default async function NosotrosPage() {
       {/* ── 4. VALORES (client component) ─────────────── */}
       <ValoresSection />
 
-      {/* ── 5. CRECIMIENTO ────────────────────────────── */}
+      {/* ── 5. ISOS ───────────────────────────────────── */}
+      <IsosSection />
+
+      {/* ── 6. CRECIMIENTO ────────────────────────────── */}
       <CrecimientoSection />
+
+      {/* ── 7. EQUIPO ─────────────────────────────────── */}
+      <EquipoSection />
     </>
   )
 }
