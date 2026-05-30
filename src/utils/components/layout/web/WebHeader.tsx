@@ -34,7 +34,7 @@ export default function WebHeader({ initialCategories = [], platformName, platfo
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 bg-white border-b border-border shadow-sm z-50 flex items-center justify-between px-6 md:px-10"
+      className="fixed top-0 left-0 right-0 bg-white border-b border-border shadow-sm z-50 flex items-center justify-between px-3 sm:px-6 md:px-10"
       style={{ height: 'var(--navbar-height)' }}
     >
       {/* Logo */}

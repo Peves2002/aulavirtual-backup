@@ -70,9 +70,9 @@ function VisualCamaras() {
 
 function VisualIsos() {
   return (
-    <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
       {['/images/isos/iso9001.webp', '/images/isos/iso21001.webp'].map((src, i) => (
-        <div key={i} style={{ position: 'relative', width: '180px', height: '180px', filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.4))' }}>
+        <div key={i} style={{ position: 'relative', width: 'clamp(120px, 20vw, 180px)', height: 'clamp(120px, 20vw, 180px)', filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.4))' }}>
           <Image src={src} alt={`ISO ${i === 0 ? '9001' : '21001'}`} fill style={{ objectFit: 'contain' }} />
         </div>
       ))}
@@ -168,7 +168,7 @@ export default function HeroCarousel() {
             </div>
 
             {/* Stats */}
-            <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
               {STATS.map(s => (
                 <div key={s.label}>
                   <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.375rem', fontWeight: 800, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>{s.value}</div>
