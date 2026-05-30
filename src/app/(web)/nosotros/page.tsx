@@ -21,8 +21,8 @@ export default async function NosotrosPage() {
       <section
         style={{
           background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
-          height: 'calc(100vh - var(--navbar-height))',
-          padding: '1.5rem',
+          minHeight: 'calc(100vh - var(--navbar-height))',
+          padding: '2rem 1.5rem',
           display: 'flex',
           alignItems: 'center',
           position: 'relative',
@@ -52,7 +52,7 @@ export default async function NosotrosPage() {
           >
             {/* Left: stats visual */}
             <ScrollReveal direction="left">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem', height: 'calc(100vh - var(--navbar-height) - 3rem)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem', minHeight: 'clamp(400px, calc(100vh - var(--navbar-height) - 4rem), 800px)' }}>
 
                 {/* Card principal */}
                 <div
@@ -121,7 +121,7 @@ export default async function NosotrosPage() {
 
             {/* Right: text */}
             <ScrollReveal direction="right" delay={0.1}>
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: 'calc(100vh - var(--navbar-height) - 3rem)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 'clamp(400px, calc(100vh - var(--navbar-height) - 4rem), 800px)' }}>
                 <div
                   style={{
                     display: 'inline-flex',

@@ -115,7 +115,7 @@ export default function HeroCarousel() {
       background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
       position: 'relative',
       overflow: 'hidden',
-      height: '560px',
+      minHeight: '560px',
       display: 'flex',
       alignItems: 'center',
     }}>
@@ -194,7 +194,7 @@ export default function HeroCarousel() {
 
       {/* Imágenes absolutas relativas a la section (ignoran el padding) */}
       {slide.visual === 'portada3' && (
-        <div key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div key={`img-${current}`} className="hero-portada-img" style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
           <VisualImage
             src="/images/portada3.webp"
             alt="Grupo Ollarves equipo"
@@ -203,7 +203,7 @@ export default function HeroCarousel() {
         </div>
       )}
       {slide.visual === 'portada4' && (
-        <div key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div key={`img-${current}`} className="hero-portada-img" style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
           <VisualImage
             src="/images/portada4.webp"
             alt="Presencia nacional"
@@ -216,6 +216,14 @@ export default function HeroCarousel() {
         @keyframes heroFadeIn {
           from { opacity: 0; transform: translateY(16px); }
           to   { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 639px) {
+          .hero-portada-img { display: none !important; }
+          .hero-inner { padding: 2rem 1rem !important; }
+          .hero-stats { gap: 1rem !important; }
+        }
+        @media (max-width: 767px) {
+          .hero-portada-img { display: none !important; }
         }
       `}</style>
     </section>
