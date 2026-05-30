@@ -63,7 +63,7 @@ const columnHelper = createColumnHelper<Curso>()
 
 interface CursosPageProps {
   initialDataCursos: Curso[]
-  tipo?: 'CURSO' | 'DIPLOMADO'
+  tipo?: 'CURSO' | 'DIPLOMADO' | 'PROGRAMA'
 }
 
 export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
@@ -358,11 +358,17 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
             <Button
               variant='contained'
               startIcon={<i className='tabler-plus' />}
-              href={tipo === 'DIPLOMADO' ? '/admin/cursos/nuevo?tipo=DIPLOMADO' : '/admin/cursos/nuevo'}
+              href={
+                tipo === 'DIPLOMADO'
+                  ? '/admin/cursos/nuevo?tipo=DIPLOMADO'
+                  : tipo === 'PROGRAMA'
+                    ? '/admin/cursos/nuevo?tipo=PROGRAMA'
+                    : '/admin/cursos/nuevo'
+              }
               component='a'
               className='is-full sm:is-auto'
             >
-              {tipo === 'DIPLOMADO' ? 'Nuevo Diplomado' : 'Nuevo Curso'}
+              {tipo === 'DIPLOMADO' ? 'Nuevo Diplomado' : tipo === 'PROGRAMA' ? 'Nuevo Programa' : 'Nuevo Curso'}
             </Button>
           </div>
         </div>
@@ -405,7 +411,7 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
               <tbody>
                 <tr>
                   <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    {tipo === 'DIPLOMADO' ? 'No hay diplomados disponibles' : 'No hay cursos disponibles'}
+                    {tipo === 'DIPLOMADO' ? 'No hay diplomados disponibles' : tipo === 'PROGRAMA' ? 'No hay programas disponibles' : 'No hay cursos disponibles'}
                   </td>
                 </tr>
               </tbody>

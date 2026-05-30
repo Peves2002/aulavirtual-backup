@@ -33,6 +33,7 @@ import { useSnackbar } from 'notistack'
 import CustomTextField from '@core/components/mui/TextField'
 
 import { crearCursoSchema, type CrearCursoDto } from '@/schemas/curso.schema'
+import { sanitizeDatetimeInput } from '@/utils/functions/sanitizeDatetime'
 import MediaLibrary from '../components/MediaLibrary'
 
 import { useCreateCurso } from '../hooks/useCursos'
@@ -40,7 +41,7 @@ import { useCategorias } from '@/features/admin/categorias/hooks/useCategorias'
 
 interface CourseCreatePageProps {
   profesores: { id: string; nombre: string; apellido: string }[]
-  tipo?: 'CURSO' | 'DIPLOMADO'
+  tipo?: 'CURSO' | 'DIPLOMADO' | 'PROGRAMA'
   basePath?: string
 }
 
@@ -61,11 +62,16 @@ export const CourseCreatePage = ({ profesores, tipo = 'CURSO', basePath }: Cours
     if (basePath) return basePath
 
     if (session?.user?.rol === 'ADMIN') {
-      return esDiplomado ? '/admin/diplomados' : '/admin/cursos'
+      if (tipo === 'DIPLOMADO') return '/admin/diplomados'
+      if (tipo === 'PROGRAMA') return '/admin/programas'
+
+      return '/admin/cursos'
     }
 
-    
-return esDiplomado ? '/profesor/mis-diplomados' : '/profesor/mis-cursos'
+    if (tipo === 'DIPLOMADO') return '/profesor/mis-diplomados'
+    if (tipo === 'PROGRAMA') return '/profesor/mis-programas'
+
+    return '/profesor/mis-cursos'
   }
 
   const initialValues: CrearCursoDto = {

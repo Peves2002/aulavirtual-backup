@@ -669,6 +669,7 @@ enum NivelCurso {
 enum TipoCurso {
   CURSO
   DIPLOMADO
+  PROGRAMA
 }
 
 enum TipoDescuento {

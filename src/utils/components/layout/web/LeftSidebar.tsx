@@ -21,6 +21,7 @@ const ALL_NAV_ITEMS = [
   { key: 'inicio', title: 'Inicio', url: '/', icon: Home },
   { key: 'cursos', title: 'Cursos', url: '/cursos', icon: BookOpen },
   { key: 'diplomados', title: 'Diplomados', url: '/diplomados', icon: GraduationCap },
+  { key: 'programas', title: 'Programas', url: '/programas', icon: BookMarked },
   { key: 'rutas', title: 'Rutas', url: '/rutas', icon: Route },
   { key: 'empresas', title: 'Empresas', url: '/empresas', icon: Building2 },
   { key: 'nosotros', title: 'Nosotros', url: '/nosotros', icon: Users },
@@ -41,12 +42,13 @@ export default function LeftSidebar({
   const [expanded, setExpanded] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [menuPos, setMenuPos] = useState({ bottom: 0, left: 0 })
-  const [openPanel, setOpenPanel] = useState<'cursos' | 'diplomados' | null>(null)
+  const [openPanel, setOpenPanel] = useState<'cursos' | 'diplomados' | 'programas' | null>(null)
   const [categMenuPos, setCategMenuPos] = useState({ top: 0, left: 0 })
   const { data: session } = useSession()
   const userButtonRef = useRef<HTMLButtonElement>(null)
   const cursosButtonRef = useRef<HTMLButtonElement>(null)
   const diplomadosButtonRef = useRef<HTMLButtonElement>(null)
+  const programasButtonRef = useRef<HTMLButtonElement>(null)
 
   const navItems = ALL_NAV_ITEMS.filter(item => {
     if (item.key === 'rutas' && !rutasHabilitado) return false
@@ -65,7 +67,7 @@ export default function LeftSidebar({
     setUserMenuOpen(o => !o)
   }
 
-  const handleNavWithCategories = (key: 'cursos' | 'diplomados', fallbackUrl: string, ref: RefObject<HTMLButtonElement | null>) => {
+  const handleNavWithCategories = (key: 'cursos' | 'diplomados' | 'programas', fallbackUrl: string, ref: RefObject<HTMLButtonElement | null>) => {
     if (categories.length === 0) {
       router.push(fallbackUrl)
 
@@ -188,15 +190,15 @@ export default function LeftSidebar({
       {navItems.map(item => {
         const active = isActive(item.url)
 
-        if (item.key === 'cursos' || item.key === 'diplomados') {
-          const ref = item.key === 'cursos' ? cursosButtonRef : diplomadosButtonRef
+        if (item.key === 'cursos' || item.key === 'diplomados' || item.key === 'programas') {
+          const ref = item.key === 'cursos' ? cursosButtonRef : item.key === 'diplomados' ? diplomadosButtonRef : programasButtonRef
           const isOpen = openPanel === item.key
 
           return (
             <button
               key={item.key}
               ref={ref}
-              onClick={() => handleNavWithCategories(item.key as 'cursos' | 'diplomados', item.url, ref)}
+              onClick={() => handleNavWithCategories(item.key as 'cursos' | 'diplomados' | 'programas', item.url, ref)}
               className="flex items-center w-full px-4 transition-colors duration-200 relative"
               style={{
                 border: 'none',

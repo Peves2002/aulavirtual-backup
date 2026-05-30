@@ -35,11 +35,9 @@ export default function IsosSection() {
     setModalNombre(nombre)
     setModalPdf(pdfPath)
     setLoading(true)
-
     try {
       const res = await fetch(pdfPath)
       const blob = await res.blob()
-
       setBlobUrl(URL.createObjectURL(blob))
     } catch {
       setBlobUrl(null)
@@ -79,9 +77,9 @@ export default function IsosSection() {
             boxShadow: '0 24px 80px rgba(0,0,0,0.35)',
           }}>
             {/* Header del modal */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 1.5rem', borderBottom: '1px solid hsl(214,20%,92%)', background: 'linear-gradient(135deg,#012d22,#025E44)', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 1.5rem', borderBottom: '1px solid hsl(214,20%,92%)', background: 'var(--web-primary, #25927F)', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <ShieldCheck size={20} color="#BDD962" />
+                <ShieldCheck size={20} color="#ffffff" />
                 <span style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '1rem', color: '#ffffff' }}>
                   {modalNombre}
                 </span>
@@ -111,7 +109,7 @@ export default function IsosSection() {
                   No se pudo cargar la vista previa.
                 </p>
                 <a href={modalPdf ?? ''} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem', borderRadius: '10px', background: '#025E44', color: '#fff', fontFamily: 'Poppins, sans-serif', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }}>
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem', borderRadius: '10px', background: 'var(--web-primary, #25927F)', color: '#fff', fontFamily: 'Poppins, sans-serif', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }}>
                   <Download size={16} /> Abrir PDF
                 </a>
               </div>
@@ -124,12 +122,12 @@ export default function IsosSection() {
 
         {/* Header */}
         <div style={{ textAlign: 'center', maxWidth: '560px', margin: '0 auto 3.5rem' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'rgba(2,94,68,0.08)', border: '1px solid rgba(2,94,68,0.2)', borderRadius: '999px', padding: '0.375rem 1rem', marginBottom: '1rem' }}>
-            <ShieldCheck size={14} color="#025E44" />
-            <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: '#025E44', fontWeight: 600 }}>Certificaciones Internacionales</span>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'rgba(var(--web-primary-rgb, 37,146,127),0.08)', border: '1px solid rgba(var(--web-primary-rgb, 37,146,127),0.2)', borderRadius: '999px', padding: '0.375rem 1rem', marginBottom: '1rem' }}>
+            <ShieldCheck size={14} color="var(--web-primary, #25927F)" />
+            <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'var(--web-primary, #25927F)', fontWeight: 600 }}>Certificaciones Internacionales</span>
           </div>
           <h2 style={{ fontFamily: 'Poppins, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em', lineHeight: 1.25, marginBottom: '0.75rem' }}>
-            Calidad <span style={{ color: '#025E44' }}>certificada</span> a nivel internacional
+            Calidad <span style={{ color: 'var(--web-primary, #25927F)' }}>certificada</span> a nivel internacional
           </h2>
           <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#64748b', lineHeight: 1.7 }}>
             Contamos con certificaciones que respaldan nuestro compromiso con la excelencia educativa.
@@ -143,9 +141,9 @@ export default function IsosSection() {
               key={iso.nombre}
               style={{ borderRadius: '20px', overflow: 'hidden', border: '1.5px solid hsl(214,20%,91%)', boxShadow: '0 4px 24px rgba(0,0,0,0.06)', background: '#ffffff', display: 'flex', flexDirection: 'column' }}
             >
-              {/* Portada — imagen del certificado */}
-              <div style={{ background: 'linear-gradient(135deg, #012d22 0%, #025E44 100%)', padding: '3rem 2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1.25rem', position: 'relative', minHeight: '260px' }}>
-                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+              {/* Portada */}
+              <div style={{ background: 'var(--web-primary, #25927F)', padding: '3rem 2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1.25rem', position: 'relative', minHeight: '260px' }}>
+                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
                 <div style={{ position: 'relative', width: '150px', height: '150px', filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))' }}>
                   <Image
                     src={iso.imagen}
@@ -155,8 +153,8 @@ export default function IsosSection() {
                   />
                 </div>
                 <div style={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
-                  <p style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: '1.25rem', color: '#BDD962', margin: 0 }}>{iso.nombre}</p>
-                  <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)', margin: '0.25rem 0 0' }}>{iso.subtitulo}</p>
+                  <p style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', margin: 0 }}>{iso.nombre}</p>
+                  <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', margin: '0.25rem 0 0' }}>{iso.subtitulo}</p>
                 </div>
               </div>
 
@@ -168,13 +166,12 @@ export default function IsosSection() {
 
                 {/* Botones */}
                 <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto' }}>
-                  {/* Ver en modal */}
                   <button
                     onClick={() => openModal(iso.pdf, iso.nombre)}
                     style={{
                       flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                       padding: '0.75rem', borderRadius: '10px',
-                      background: 'linear-gradient(135deg, #012d22, #025E44)',
+                      background: 'var(--web-primary, #25927F)',
                       color: '#ffffff', fontFamily: 'Poppins, sans-serif', fontWeight: 600, fontSize: '0.8125rem',
                       border: 'none', cursor: 'pointer',
                     }}
@@ -182,15 +179,14 @@ export default function IsosSection() {
                     <Eye size={15} /> Ver certificado
                   </button>
 
-                  {/* Descargar */}
                   <a
                     href={iso.pdf}
                     download={iso.nombreArchivo}
                     style={{
                       flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                       padding: '0.75rem', borderRadius: '10px',
-                      background: 'transparent', border: '1.5px solid #025E44',
-                      color: '#025E44', fontFamily: 'Poppins, sans-serif', fontWeight: 600, fontSize: '0.8125rem',
+                      background: 'transparent', border: '1.5px solid var(--web-primary, #25927F)',
+                      color: 'var(--web-primary, #25927F)', fontFamily: 'Poppins, sans-serif', fontWeight: 600, fontSize: '0.8125rem',
                       textDecoration: 'none',
                     }}
                   >

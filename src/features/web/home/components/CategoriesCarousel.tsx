@@ -104,7 +104,6 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
               scrollbarWidth: 'none', // Oculta barra en Firefox
               msOverflowStyle: 'none', // Oculta barra en IE/Edge
               justifyContent: isFew ? 'center' : 'flex-start',
-              paddingTop: '1.25rem',  // espacio para el scale del hover (evita clipping)
               paddingBottom: '2rem', // espacio para sombras
             }}
             className="hidden-scroll pb-4" // Asumiendo que usamos alguna clase o el style de arriba

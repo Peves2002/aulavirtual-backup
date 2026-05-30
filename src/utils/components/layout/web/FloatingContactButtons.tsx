@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 
-import { useConfig } from '@/contexts/ConfigContext'
-
+const WHATSAPP_NUMBER = '51944270957'
+const PHONE_NUMBER = '+51944270957'
 
 const WhatsAppIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26">

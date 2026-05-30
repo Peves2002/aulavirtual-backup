@@ -68,7 +68,6 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "incuba-temp"
+    "node_modules"
   ]
 }

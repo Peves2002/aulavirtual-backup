@@ -51,7 +51,6 @@ function VisualCamaras() {
     { src: '/images/camaras/cc%20lima.webp', alt: 'CCL Cámara de Comercio Lima' },
     { src: '/images/camaras/CC%20ICA.webp', alt: 'Cámara de Comercio Industria y Turismo de Ica' },
   ]
-
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', width: '100%', maxWidth: '480px' }}>
       {logos.map(logo => (
@@ -70,9 +69,9 @@ function VisualCamaras() {
 
 function VisualIsos() {
   return (
-    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', justifyContent: 'center' }}>
       {['/images/isos/iso9001.webp', '/images/isos/iso21001.webp'].map((src, i) => (
-        <div key={i} style={{ position: 'relative', width: 'clamp(120px, 20vw, 180px)', height: 'clamp(120px, 20vw, 180px)', filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.4))' }}>
+        <div key={i} style={{ position: 'relative', width: '180px', height: '180px', filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.4))' }}>
           <Image src={src} alt={`ISO ${i === 0 ? '9001' : '21001'}`} fill style={{ objectFit: 'contain' }} />
         </div>
       ))}
@@ -99,23 +98,22 @@ export default function HeroCarousel() {
     setTimeout(() => setAnimating(false), 500)
   }, [animating])
 
+  const prev = () => goTo((current - 1 + SLIDES.length) % SLIDES.length)
   const next = useCallback(() => goTo((current + 1) % SLIDES.length), [current, goTo])
 
   useEffect(() => {
     const t = setInterval(next, 6000)
-
     return () => clearInterval(t)
   }, [next])
 
   const slide = SLIDES[current]
 
   return (
-
     <section style={{
       background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
       position: 'relative',
       overflow: 'hidden',
-      minHeight: '560px',
+      height: '560px',
       display: 'flex',
       alignItems: 'center',
     }}>
@@ -168,7 +166,7 @@ export default function HeroCarousel() {
             </div>
 
             {/* Stats */}
-            <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
               {STATS.map(s => (
                 <div key={s.label}>
                   <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.375rem', fontWeight: 800, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>{s.value}</div>
@@ -194,7 +192,7 @@ export default function HeroCarousel() {
 
       {/* Imágenes absolutas relativas a la section (ignoran el padding) */}
       {slide.visual === 'portada3' && (
-        <div key={`img-${current}`} className="hero-portada-img" style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
           <VisualImage
             src="/images/portada3.webp"
             alt="Grupo Ollarves equipo"
@@ -203,7 +201,7 @@ export default function HeroCarousel() {
         </div>
       )}
       {slide.visual === 'portada4' && (
-        <div key={`img-${current}`} className="hero-portada-img" style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
           <VisualImage
             src="/images/portada4.webp"
             alt="Presencia nacional"
@@ -216,14 +214,6 @@ export default function HeroCarousel() {
         @keyframes heroFadeIn {
           from { opacity: 0; transform: translateY(16px); }
           to   { opacity: 1; transform: translateY(0); }
-        }
-        @media (max-width: 639px) {
-          .hero-portada-img { display: none !important; }
-          .hero-inner { padding: 2rem 1rem !important; }
-          .hero-stats { gap: 1rem !important; }
-        }
-        @media (max-width: 767px) {
-          .hero-portada-img { display: none !important; }
         }
       `}</style>
     </section>

@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { Home, BookOpen, Users, Award, GraduationCap, Route, X, LayoutGrid, ChevronRight } from 'lucide-react'
+import { Home, BookOpen, Users, Award, GraduationCap, Route, X, LayoutGrid, ChevronRight, BookMarked } from 'lucide-react'
 
 import type { NavCategory } from './LeftSidebar'
 
@@ -13,6 +13,7 @@ const ALL_NAV_ITEMS = [
   { key: 'inicio', title: 'Inicio', url: '/', icon: Home },
   { key: 'cursos', title: 'Cursos', url: '/cursos', icon: BookOpen },
   { key: 'diplomados', title: 'Diplomados', url: '/diplomados', icon: GraduationCap },
+  { key: 'programas', title: 'Programas', url: '/programas', icon: BookMarked },
   { key: 'rutas', title: 'Rutas', url: '/rutas', icon: Route },
   { key: 'nosotros', title: 'Nosotros', url: '/nosotros', icon: Users },
   { key: 'certificado', title: 'Certificado', url: '/verificar-certificado', icon: Award },
@@ -26,7 +27,7 @@ export default function MobileBottomNav({
   categories?: NavCategory[]
 }) {
   const pathname = usePathname()
-  const [openPanel, setOpenPanel] = useState<'cursos' | 'diplomados' | null>(null)
+  const [openPanel, setOpenPanel] = useState<'cursos' | 'diplomados' | 'programas' | null>(null)
 
   const navItems = ALL_NAV_ITEMS.filter(item => {
     if (item.key === 'rutas' && !rutasHabilitado) return false
@@ -76,7 +77,7 @@ export default function MobileBottomNav({
               zIndex: 1,
             }}>
               <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', fontWeight: 700, color: '#0f172a' }}>
-                {openPanel === 'diplomados' ? 'Diplomados por categoría' : 'Cursos por categoría'}
+                {openPanel === 'diplomados' ? 'Diplomados por categoría' : openPanel === 'programas' ? 'Programas por categoría' : 'Cursos por categoría'}
               </span>
               <button
                 onClick={() => setOpenPanel(null)}
@@ -95,7 +96,7 @@ export default function MobileBottomNav({
                 style={{ color: 'var(--web-primary, #25927F)', fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', fontWeight: 700, backgroundColor: 'rgba(var(--web-primary-rgb,37,146,127),0.08)', marginBottom: '4px' }}
               >
                 <LayoutGrid size={18} />
-                {openPanel === 'diplomados' ? 'Todos los diplomados' : 'Todos los cursos'}
+                {openPanel === 'diplomados' ? 'Todos los diplomados' : openPanel === 'programas' ? 'Todos los programas' : 'Todos los cursos'}
               </Link>
               {categories.map(cat => (
                 <Link
@@ -128,13 +129,13 @@ export default function MobileBottomNav({
         {navItems.map(item => {
           const active = isActive(item.url)
 
-          if (item.key === 'cursos' || item.key === 'diplomados') {
+          if (item.key === 'cursos' || item.key === 'diplomados' || item.key === 'programas') {
             const isOpen = openPanel === item.key
 
             return (
               <button
                 key={item.key}
-                onClick={() => setOpenPanel(p => p === item.key ? null : item.key as 'cursos' | 'diplomados')}
+                onClick={() => setOpenPanel(p => p === item.key ? null : item.key as 'cursos' | 'diplomados' | 'programas')}
                 className="no-underline flex flex-col items-center justify-center gap-1 flex-1 h-full transition-colors"
                 style={{
                   color: active || isOpen ? 'var(--web-primary, #25927F)' : '#94a3b8',

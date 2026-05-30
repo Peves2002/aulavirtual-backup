@@ -5,6 +5,8 @@ import { getServerSession } from 'next-auth'
 import { Providers } from '@/components/Providers'
 import { getConfigs } from '@/utils/libs/config'
 import { getAuthOptions } from '@/utils/configs/auth'
+import { plus_jakarta_sans } from '@core/theme'
+
 import './globals.css'
 import '@assets/iconify-icons/generated-icons.css'
 
@@ -12,7 +14,6 @@ export async function generateMetadata(): Promise<Metadata> {
   const configs = await getConfigs()
   const title = configs.TEMPLATE_NAME || 'Aula Virtual'
   const slogan = configs.TEMPLATE_SLOGAN || ''
-
   return {
     title: slogan ? `${title} - ${slogan}` : title,
     description: slogan,

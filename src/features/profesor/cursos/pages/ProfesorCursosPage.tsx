@@ -33,7 +33,7 @@ import { useCursos } from '@/features/admin/cursos/hooks/useCursos'
 import TablePaginationComponent from '@/utils/components/others/TablePaginationComponent'
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 
-const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' }) => {
+const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' | 'PROGRAMA' }) => {
     const { data: session } = useSession()
     const router = useRouter()
     const [globalFilter, setGlobalFilter] = useState('')
@@ -50,7 +50,7 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' }
 
         return [
             columnHelper.accessor('miniatura', {
-                header: tipo === 'DIPLOMADO' ? 'Diplomado' : 'Curso',
+                header: tipo === 'DIPLOMADO' ? 'Diplomado' : tipo === 'PROGRAMA' ? 'Programa' : 'Curso',
                 cell: ({ row }) => (
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                         <CourseThumbnail
@@ -125,7 +125,11 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' }
                         </Tooltip>
                         <Tooltip title='Gestionar contenido'>
                             <IconButton
-                                onClick={() => router.push(`${tipo === 'DIPLOMADO' ? '/profesor/mis-diplomados' : '/profesor/mis-cursos'}/${row.original.id}`)}
+                                onClick={() => {
+                                    const base = tipo === 'DIPLOMADO' ? '/profesor/mis-diplomados' : tipo === 'PROGRAMA' ? '/profesor/mis-programas' : '/profesor/mis-cursos'
+
+                                    router.push(`${base}/${row.original.id}`)
+                                }}
                             >
                                 <i className='tabler-edit text-[22px] text-textSecondary' />
                             </IconButton>
@@ -149,14 +153,14 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' }
         onGlobalFilterChange: setGlobalFilter
     })
 
-    const basePath = tipo === 'DIPLOMADO' ? '/profesor/mis-diplomados' : '/profesor/mis-cursos'
+    const basePath = tipo === 'DIPLOMADO' ? '/profesor/mis-diplomados' : tipo === 'PROGRAMA' ? '/profesor/mis-programas' : '/profesor/mis-cursos'
 
     return (
         <Box>
             <Box sx={{ mb: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
                     <Typography variant='h4' sx={{ mb: 1, fontWeight: 700 }}>
-                        Mis {tipo === 'DIPLOMADO' ? 'Diplomados' : 'Cursos'}
+                        Mis {tipo === 'DIPLOMADO' ? 'Diplomados' : tipo === 'PROGRAMA' ? 'Programas' : 'Cursos'}
                     </Typography>
                     <Typography variant='body2' color='text.secondary'>
                         Gestiona el contenido y revisa el progreso de tus estudiantes.
@@ -168,7 +172,7 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' }
                     onClick={() => router.push(`${basePath}/nuevo`)}
                     sx={{ borderRadius: '8px' }}
                 >
-                    Crear Nuevo {tipo === 'DIPLOMADO' ? 'Diplomado' : 'Curso'}
+                    Crear Nuevo {tipo === 'DIPLOMADO' ? 'Diplomado' : tipo === 'PROGRAMA' ? 'Programa' : 'Curso'}
                 </Button>
             </Box>
 
@@ -179,7 +183,7 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' }
                             size='small'
                             value={globalFilter ?? ''}
                             onChange={e => setGlobalFilter(e.target.value)}
-                            placeholder={tipo === 'DIPLOMADO' ? 'Buscar diplomados...' : 'Buscar cursos...'}
+                            placeholder={tipo === 'DIPLOMADO' ? 'Buscar diplomados...' : tipo === 'PROGRAMA' ? 'Buscar programas...' : 'Buscar cursos...'}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position='start'>
@@ -207,13 +211,13 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' }
                                 {isLoading ? (
                                     <tr>
                                         <td colSpan={columns.length} className='px-6 py-10 text-center'>
-                                            Cargando tus {tipo === 'DIPLOMADO' ? 'diplomados' : 'cursos'}...
+                                            Cargando tus {tipo === 'DIPLOMADO' ? 'diplomados' : tipo === 'PROGRAMA' ? 'programas' : 'cursos'}...
                                         </td>
                                     </tr>
                                 ) : table.getRowModel().rows.length === 0 ? (
                                     <tr>
                                         <td colSpan={columns.length} className='px-6 py-10 text-center'>
-                                            Aún no has creado ningún {tipo === 'DIPLOMADO' ? 'diplomado' : 'curso'}. ¡Comienza hoy mismo!
+                                            Aún no has creado ningún {tipo === 'DIPLOMADO' ? 'diplomado' : tipo === 'PROGRAMA' ? 'programa' : 'curso'}. ¡Comienza hoy mismo!
                                         </td>
                                     </tr>
                                 ) : (
