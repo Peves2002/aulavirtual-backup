@@ -91,7 +91,7 @@ export default function EquipoSection() {
         </div>
 
         {/* Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: '1.25rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem' }}>
           {FOTOS.map((foto, i) => (
             <div
               key={foto.src}
@@ -100,7 +100,7 @@ export default function EquipoSection() {
               onMouseLeave={() => setHoveredIndex(null)}
               style={{
                 position: 'relative',
-                aspectRatio: '3/2',
+                aspectRatio: '4/3',
                 borderRadius: '14px',
                 overflow: 'hidden',
                 cursor: 'pointer',
