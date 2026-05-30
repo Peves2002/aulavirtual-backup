@@ -33,7 +33,6 @@ import { useSnackbar } from 'notistack'
 import CustomTextField from '@core/components/mui/TextField'
 
 import { crearCursoSchema, type CrearCursoDto } from '@/schemas/curso.schema'
-import { sanitizeDatetimeInput } from '@/utils/functions/sanitizeDatetime'
 import MediaLibrary from '../components/MediaLibrary'
 
 import { useCreateCurso } from '../hooks/useCursos'

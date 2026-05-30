@@ -127,7 +127,7 @@ async function getHomeData() {
 }
 
 export default async function HomePage() {
-  const { courses, rutas, teachers, categorias, heroTitle, heroDescription } = await getHomeData()
+  const { courses, rutas, teachers, categorias } = await getHomeData()
 
   return (
     <>

@@ -51,6 +51,7 @@ function VisualCamaras() {
     { src: '/images/camaras/cc%20lima.webp', alt: 'CCL Cámara de Comercio Lima' },
     { src: '/images/camaras/CC%20ICA.webp', alt: 'Cámara de Comercio Industria y Turismo de Ica' },
   ]
+
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', width: '100%', maxWidth: '480px' }}>
       {logos.map(logo => (
@@ -98,17 +99,18 @@ export default function HeroCarousel() {
     setTimeout(() => setAnimating(false), 500)
   }, [animating])
 
-  const prev = () => goTo((current - 1 + SLIDES.length) % SLIDES.length)
   const next = useCallback(() => goTo((current + 1) % SLIDES.length), [current, goTo])
 
   useEffect(() => {
     const t = setInterval(next, 6000)
+
     return () => clearInterval(t)
   }, [next])
 
   const slide = SLIDES[current]
 
   return (
+
     <section style={{
       background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
       position: 'relative',
