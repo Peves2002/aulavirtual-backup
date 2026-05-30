@@ -35,9 +35,11 @@ export default function IsosSection() {
     setModalNombre(nombre)
     setModalPdf(pdfPath)
     setLoading(true)
+
     try {
       const res = await fetch(pdfPath)
       const blob = await res.blob()
+
       setBlobUrl(URL.createObjectURL(blob))
     } catch {
       setBlobUrl(null)
