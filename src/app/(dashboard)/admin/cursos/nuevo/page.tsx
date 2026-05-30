@@ -12,8 +12,9 @@ export const metadata: Metadata = {
 }
 
 export default async function Page({ searchParams }: { searchParams?: { tipo?: string } }) {
-  const tipo = searchParams?.tipo === 'DIPLOMADO' ? 'DIPLOMADO' : 'CURSO'
-  const basePath = tipo === 'DIPLOMADO' ? '/admin/diplomados' : '/admin/cursos'
+  const tipoRaw = searchParams?.tipo
+  const tipo = tipoRaw === 'DIPLOMADO' ? 'DIPLOMADO' : tipoRaw === 'PROGRAMA' ? 'PROGRAMA' : 'CURSO'
+  const basePath = tipo === 'DIPLOMADO' ? '/admin/diplomados' : tipo === 'PROGRAMA' ? '/admin/programas' : '/admin/cursos'
   const session = await getAuthSession()
 
   if (!session) {

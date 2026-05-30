@@ -48,15 +48,15 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const tipo = searchParams.get('tipo')
 
-    const cursoWhere: any = { estado: 'PUBLICADO' }
+    const cursoWhere: any = { estado: 'PUBLICADO', es_privado: false }
 
-    if (tipo === 'CURSO' || tipo === 'DIPLOMADO') {
+    if (tipo === 'CURSO' || tipo === 'DIPLOMADO' || tipo === 'PROGRAMA') {
       cursoWhere.tipo = tipo
     }
 
     const [courses, categories] = await Promise.all([
       prisma.curso.findMany({
-        where: { estado: 'PUBLICADO', es_privado: false },
+        where: cursoWhere,
         include: {
           profesor: { select: { id: true, slug: true, nombre: true, apellido: true, avatar: true } },
           categoria: { select: { id: true, nombre: true, slug: true } },

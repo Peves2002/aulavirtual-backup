@@ -33,12 +33,12 @@ interface Category {
 interface CourseCatalogProps {
   courses: any[]
   categories: Category[]
-  type?: 'curso' | 'diplomado'
+  type?: 'curso' | 'diplomado' | 'programa'
 }
 
 const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogProps) => {
-  const label = type === 'diplomado' ? 'diplomados' : 'cursos'
-  const labelCapitalized = type === 'diplomado' ? 'Diplomados' : 'Cursos'
+  const label = type === 'diplomado' ? 'diplomados' : type === 'programa' ? 'programas' : 'cursos'
+  const labelCapitalized = type === 'diplomado' ? 'Diplomados' : type === 'programa' ? 'Programas' : 'Cursos'
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [selectedLevel, setSelectedLevel] = useState('all')
@@ -387,7 +387,7 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
                   sx={{ bgcolor: 'white', fontWeight: 700, color: 'text.secondary', border: '1px solid #e2e8f0', px: 1 }}
                 />
               </Stack>
-              <CourseList courses={filteredAndSortedCourses} />
+              <CourseList courses={filteredAndSortedCourses} label={label} />
             </Box>
           </Fade>
         </Stack>

@@ -30,7 +30,7 @@ export const crearCursoSchema = z.object({
   fecha_fin: z.string().optional().nullable(),
   vigencia_meses: z.coerce.number().int().positive().optional().nullable(),
   nivel: z.enum(['BASICO', 'INTERMEDIO', 'AVANZADO']).default('BASICO'),
-  tipo: z.enum(['CURSO', 'DIPLOMADO']).default('CURSO')
+  tipo: z.enum(['CURSO', 'DIPLOMADO', 'PROGRAMA']).default('CURSO')
 })
 
 export type CrearCursoDto = z.infer<typeof crearCursoSchema>
@@ -69,7 +69,7 @@ export const actualizarCursoSchema = z.object({
   metodologia: z.array(z.any()).optional(),
   beneficios: z.array(z.any()).optional(),
   incluye: z.array(z.any()).optional(),
-  tipo: z.enum(['CURSO', 'DIPLOMADO']).optional()
+  tipo: z.enum(['CURSO', 'DIPLOMADO', 'PROGRAMA']).optional()
 })
 
 export type ActualizarCursoDto = z.infer<typeof actualizarCursoSchema>
@@ -93,7 +93,7 @@ export const listarCursosQuerySchema = z.object({
   estado: z.enum(['BORRADOR', 'PUBLICADO', 'ARCHIVADO', '']).optional(),
   categoria_id: z.string().uuid().optional(),
   profesor_id: z.string().uuid().optional(),
-  tipo: z.enum(['CURSO', 'DIPLOMADO', '']).optional()
+  tipo: z.enum(['CURSO', 'DIPLOMADO', 'PROGRAMA', '']).optional()
 })
 
 export type ListarCursosQuery = z.infer<typeof listarCursosQuerySchema>
