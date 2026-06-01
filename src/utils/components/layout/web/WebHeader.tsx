@@ -48,15 +48,12 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 transition-all duration-300 ${
-        isScrolled ? 'bg-white border-b border-border shadow-sm' : 'bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 transition-all duration-300 ${isScrolled ? 'bg-white border-b border-border shadow-sm' : 'bg-transparent'
+        }`}
       style={{ height: 'var(--navbar-height)' }}
     >
       {/* Logo */}
-      <Link href="/" className="flex items-center gap-3 group no-underline">
-        <Logo />
-      </Link>
+      <Logo />
 
       {/* Auth Buttons */}
       <div className="flex items-center gap-3">

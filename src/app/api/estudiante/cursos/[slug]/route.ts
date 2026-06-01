@@ -4,13 +4,10 @@ import { NextResponse } from 'next/server'
 
 import { verify } from 'jsonwebtoken'
 
-import { getAuthSession } from '@/utils/libs/auth-helpers'
-
-import prisma from '@/utils/libs/prisma'
-
 import { ApiResponse } from '@/utils/libs/apiResponse'
+import { getAuthSession } from '@/utils/libs/auth-helpers'
 import { handleApiError } from '@/utils/libs/validation'
-import { esAccesoCursoVigente } from '@/utils/functions/calcularFechaCaducidadCurso'
+import prisma from '@/utils/libs/prisma'
 
 const JWT_SECRET = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || 'dev-secret'
 
@@ -104,7 +101,17 @@ export async function GET(request: Request, { params }: { params: { slug: string
         }
       })
 
-      if (!inscription || inscription.estado !== 'ACTIVO' || !esAccesoCursoVigente(inscription.acceso_hasta)) {
+      const vigenciaMeses = course.vigencia_meses ?? 0
+      let accesoVigente = true
+
+      if (vigenciaMeses > 0 && inscription) {
+        const accesHasta = new Date(inscription.inscrito_en)
+
+        accesHasta.setMonth(accesHasta.getMonth() + vigenciaMeses)
+        accesoVigente = accesHasta > new Date()
+      }
+
+      if (!inscription || inscription.estado !== 'ACTIVO' || !accesoVigente) {
         return NextResponse.json(
           {
             status: false,
@@ -178,6 +185,7 @@ export async function GET(request: Request, { params }: { params: { slug: string
             video_url: l.video_url,
             es_en_vivo: (l as any).es_en_vivo,
             fecha_programada: (l as any).fecha_programada,
+            fecha_fin: (l as any).fecha_fin,
             enlace_reunion: (l as any).enlace_reunion,
             completada: l.progreso[0]?.esta_completado || false,
             recursos: Array.isArray(l.recursos) ? l.recursos : []
@@ -189,11 +197,11 @@ export async function GET(request: Request, { params }: { params: { slug: string
         ya_aprobado: intentosPorExamen[ex.id]?.ya_aprobado ?? false,
         mejor_puntaje: intentosPorExamen[ex.id]?.mejor_puntaje ?? null
       })),
+      completar_automatico: course.completar_automatico,
       inscripcion: inscription
         ? {
             estado_nota: inscription.estado_nota,
-            nota_final: inscription.nota_final,
-            acceso_hasta: inscription.acceso_hasta
+            nota_final: inscription.nota_final
           }
         : null
     }
