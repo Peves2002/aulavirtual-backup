@@ -18,6 +18,7 @@ import { Logo } from "./Logo";
 const links = [
   { href: "/", label: "Inicio" },
   { href: "/cursos", label: "Cursos" },
+  { href: "/recetas", label: "Recetas" },
   { href: "/plan", label: "Plan" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },

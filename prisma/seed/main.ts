@@ -339,6 +339,176 @@ async function main() {
 
   console.log('✅ Cupones creados')
 
+  // ─── RECETAS ─────────────────────────────────────────────────────────────────
+
+  await prisma.receta.upsert({
+    where: { slug: 'tarta-de-frutas' },
+    update: {},
+    create: {
+      nombre: 'Tarta de Frutas',
+      slug: 'tarta-de-frutas',
+      descripcion: 'Tarta clásica con base de masa sucreé, crema pastelera y frutas frescas.',
+      insumos: [
+        {
+          grupo: 'Masa Sucreé',
+          items: [
+            { insumo: 'Harina pastelera', cantidad: '0.200' },
+            { insumo: 'Azúcar impalpable', cantidad: '0.100' },
+            { insumo: 'Mantequilla sin sal', cantidad: '0.120' },
+            { insumo: 'Huevo', cantidad: '0.030' }
+          ]
+        },
+        {
+          grupo: 'Crema Pastelera',
+          items: [
+            { insumo: 'Leche fresca', cantidad: '0.500' },
+            { insumo: 'Yema', cantidad: '0.120' },
+            { insumo: 'Azúcar blanca', cantidad: '0.120' },
+            { insumo: 'Maicena', cantidad: '0.040' },
+            { insumo: 'Esencia de vainilla', cantidad: '0.003' },
+            { insumo: 'Mantequilla sin sal', cantidad: '0.040' }
+          ]
+        },
+        {
+          grupo: 'Montaje',
+          items: [
+            { insumo: 'Fresa', cantidad: '0.120' },
+            { insumo: 'Durazno en conserva', cantidad: '0.120' },
+            { insumo: 'Mandarina', cantidad: '0.120' },
+            { insumo: 'Arándano', cantidad: '0.060' },
+            { insumo: 'Gel neutro', cantidad: '0.080' }
+          ]
+        }
+      ],
+      procedimiento: [
+        {
+          seccion: 'Elaboración de la Masa Sucreé',
+          pasos: [
+            'Cremar la mantequilla junto con el azúcar impalpable hasta obtener una textura suave y homogénea.',
+            'Agregar el huevo e incorporar completamente.',
+            'Añadir la harina pastelera y mezclar hasta integrar la masa, evitando sobre trabajarla.',
+            'Cubrir la masa y refrigerar durante 20 minutos.'
+          ]
+        },
+        {
+          seccion: 'Elaboración de la Crema Pastelera',
+          pasos: [
+            'Mezclar las yemas con el azúcar blanca y la maicena.',
+            'Batir hasta obtener una mezcla homogénea y ligeramente blanqueada. Reservar.',
+            'Colocar la leche fresca en una olla y llevar a ebullición.',
+            'Temperar la mezcla de yemas agregando parte de la leche caliente lentamente mientras se mezcla constantemente.',
+            'Retornar toda la preparación a la olla y cocinar a fuego moderado, removiendo continuamente hasta obtener una crema espesa.',
+            'Retirar del fuego y añadir la mantequilla junto con la esencia de vainilla.',
+            'Mezclar hasta homogenizar y cubrir a piel para evitar la formación de costra.',
+            'Reservar hasta enfriar completamente.'
+          ]
+        },
+        {
+          seccion: 'Armado y Cocción',
+          pasos: [
+            'Fonzar el molde con la masa sucreé.',
+            'Colocar papel aluminio y peso sobre la masa para evitar que se infle durante la cocción.',
+            'Hornear a 170°C durante 15 a 20 minutos hasta lograr una cocción completa.',
+            'Retirar del horno y dejar enfriar.',
+            'Colocar la crema pastelera sobre la base de tarta.',
+            'Decorar con las frutas: fresa, durazno en conserva, mandarina y arándanos.',
+            'Cubrir con gel neutro para aportar brillo y mejor presentación.'
+          ]
+        }
+      ]
+    }
+  })
+
+  await prisma.receta.upsert({
+    where: { slug: 'pye-de-limon' },
+    update: {},
+    create: {
+      nombre: 'Pye de Limón',
+      slug: 'pye-de-limon',
+      descripcion: 'Clásico pye de limón con base sablé, crema cítrica y merengue suizo dorado.',
+      observaciones: 'Para realizar relleno de maracuyá, reemplazar el zumo de limón por maracuyá (0.150 kg).',
+      insumos: [
+        {
+          grupo: 'Masa Sablé',
+          items: [
+            { insumo: 'Harina pastelera', cantidad: '0.200' },
+            { insumo: 'Mantequilla sin sal', cantidad: '0.120' },
+            { insumo: 'Azúcar impalpable', cantidad: '0.060' },
+            { insumo: 'Sal', cantidad: '0.002' },
+            { insumo: 'Huevo', cantidad: '0.024' }
+          ]
+        },
+        {
+          grupo: 'Crema de Limón',
+          items: [
+            { insumo: 'Yema', cantidad: '0.072' },
+            { insumo: 'Leche condensada', cantidad: '0.380' },
+            { insumo: 'Zumo de limón', cantidad: '0.110' }
+          ]
+        },
+        {
+          grupo: 'Merengue Suizo',
+          items: [
+            { insumo: 'Clara', cantidad: '0.100' },
+            { insumo: 'Azúcar blanca', cantidad: '0.150' }
+          ]
+        }
+      ],
+      procedimiento: [
+        {
+          seccion: 'Elaboración de la Masa Sablé',
+          pasos: [
+            'Arenar la mantequilla con la harina y el azúcar impalpable utilizando un cornet o espátula, hasta obtener una textura similar a la avena.',
+            'Incorporar el huevo y mezclar hasta homogenizar la masa.',
+            'Cubrir y refrigerar durante 20 minutos.'
+          ]
+        },
+        {
+          seccion: 'Elaboración de la Crema de Limón',
+          pasos: [
+            'Mezclar el zumo de limón con la leche condensada.',
+            'Incorporar las yemas y mezclar hasta homogenizar.',
+            'Reservar la preparación.'
+          ]
+        },
+        {
+          seccion: 'Pre Cocción de la Base',
+          pasos: [
+            'Fonzar la masa sobre el molde.',
+            'Colocar papel aluminio y peso sobre la masa.',
+            'Llevar a pre cocción a 170°C durante 10 a 15 minutos.'
+          ]
+        },
+        {
+          seccion: 'Cocción del Pye',
+          pasos: [
+            'Retirar la base del horno y colocar la crema de limón sobre la tarta.',
+            'Hornear a 150°C durante 10 a 15 minutos.',
+            'Retirar y dejar enfriar.'
+          ]
+        },
+        {
+          seccion: 'Elaboración del Merengue Suizo',
+          pasos: [
+            'Colocar las claras y el azúcar en un bol.',
+            'Llevar a baño maría removiendo constantemente hasta alcanzar una temperatura de 55°C a 60°C.',
+            'Batir la mezcla durante 10 minutos a velocidad media alta hasta obtener un merengue firme y brillante.'
+          ]
+        },
+        {
+          seccion: 'Decoración Final',
+          pasos: [
+            'Colocar el merengue en una manga pastelera.',
+            'Formar picos con ayuda de una boquilla.',
+            'Dorar el merengue horneando durante 5 minutos a 180°C o utilizando un soplete.'
+          ]
+        }
+      ]
+    }
+  })
+
+  console.log('✅ Recetas creadas')
+
   // ─── RESUMEN ─────────────────────────────────────────────────────────────────
 
   console.log('')
