@@ -39,6 +39,7 @@ export class AxiosMedia extends AxiosInternalHttpClient {
       formData.append('file', file)
 
       const qs = folder ? `?folder=${folder}` : ''
+
       const payload = await this.iPost<any>(qs, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'

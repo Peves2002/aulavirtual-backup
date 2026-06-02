@@ -142,7 +142,7 @@ export function RecetasPage({ initialDataRecetas, initialTotal = 0 }: RecetasPag
         </div>
       )
     })
-  ], [pagination.pageIndex, pagination.pageSize])
+  ], [pagination.pageIndex, pagination.pageSize, toggleStatus])
 
   const table = useReactTable({
     data: recetas,

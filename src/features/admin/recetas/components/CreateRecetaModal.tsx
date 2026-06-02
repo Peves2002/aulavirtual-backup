@@ -108,80 +108,151 @@ export const CreateRecetaModal = ({ open, handleClose, onSuccess }: Props) => {
                   <Box key={gi} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 2, mb: 2 }}>
                     <Box sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
                       <CustomTextField fullWidth size='small' label={`Nombre del grupo ${gi + 1}`}
-                        value={grupo.grupo} onChange={e => { const g = [...values.insumos]; g[gi] = { ...g[gi], grupo: e.target.value }; setFieldValue('insumos', g) }}
+                      value={grupo.grupo}
+                      onChange={e => {
+                        const g = [...values.insumos]
+
+                        g[gi] = { ...g[gi], grupo: e.target.value }
+                        setFieldValue('insumos', g)
+                      }}
+                    />
+                    {values.insumos.length > 1 && (
+                      <IconButton size='small' color='error' onClick={() => setFieldValue('insumos', values.insumos.filter((_: GrupoInsumos, i: number) => i !== gi))}>
+                        <i className='tabler-trash text-lg' />
+                      </IconButton>
+                    )}
+                  </Box>
+                  {grupo.items.map((item, ii) => (
+                    <Box key={ii} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
+                      <CustomTextField size='small' label='Insumo' value={item.insumo}
+                        sx={{ flex: 2 }}
+                        onChange={e => {
+                          const g = [...values.insumos]
+
+                          g[gi].items[ii] = { ...g[gi].items[ii], insumo: e.target.value }
+                          setFieldValue('insumos', g)
+                        }}
                       />
-                      {values.insumos.length > 1 && (
-                        <IconButton size='small' color='error' onClick={() => setFieldValue('insumos', values.insumos.filter((_: GrupoInsumos, i: number) => i !== gi))}>
-                          <i className='tabler-trash text-lg' />
+                      <CustomTextField size='small' label='Cantidad (kg)' value={item.cantidad}
+                        sx={{ flex: 1 }}
+                        onChange={e => {
+                          const g = [...values.insumos]
+
+                          g[gi].items[ii] = { ...g[gi].items[ii], cantidad: e.target.value }
+                          setFieldValue('insumos', g)
+                        }}
+                      />
+                      {grupo.items.length > 1 && (
+                        <IconButton
+                          size='small'
+                          color='error'
+                          onClick={() => {
+                            const g = [...values.insumos]
+
+                            g[gi].items = g[gi].items.filter((_: any, i: number) => i !== ii)
+                            setFieldValue('insumos', g)
+                          }}
+                        >
+                          <i className='tabler-x text-sm' />
                         </IconButton>
                       )}
                     </Box>
-                    {grupo.items.map((item, ii) => (
-                      <Box key={ii} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
-                        <CustomTextField size='small' label='Insumo' value={item.insumo}
-                          sx={{ flex: 2 }}
-                          onChange={e => { const g = [...values.insumos]; g[gi].items[ii] = { ...g[gi].items[ii], insumo: e.target.value }; setFieldValue('insumos', g) }}
-                        />
-                        <CustomTextField size='small' label='Cantidad (kg)' value={item.cantidad}
-                          sx={{ flex: 1 }}
-                          onChange={e => { const g = [...values.insumos]; g[gi].items[ii] = { ...g[gi].items[ii], cantidad: e.target.value }; setFieldValue('insumos', g) }}
-                        />
-                        {grupo.items.length > 1 && (
-                          <IconButton size='small' color='error' onClick={() => { const g = [...values.insumos]; g[gi].items = g[gi].items.filter((_: any, i: number) => i !== ii); setFieldValue('insumos', g) }}>
-                            <i className='tabler-x text-sm' />
-                          </IconButton>
-                        )}
-                      </Box>
-                    ))}
-                    <Button size='small' variant='text' startIcon={<i className='tabler-plus' />}
-                      onClick={() => { const g = [...values.insumos]; g[gi].items = [...g[gi].items, { insumo: '', cantidad: '' }]; setFieldValue('insumos', g) }}>
-                      Añadir insumo
-                    </Button>
-                  </Box>
-                ))}
-              </Grid>
+                  ))}
+                  <Button
+                    size='small'
+                    variant='text'
+                    startIcon={<i className='tabler-plus' />}
+                    onClick={() => {
+                      const g = [...values.insumos]
 
-              {/* Procedimiento */}
-              <Grid item xs={12}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
-                  <Typography variant='subtitle2' fontWeight={600}>Procedimiento</Typography>
-                  <Button size='small' startIcon={<i className='tabler-plus' />}
-                    onClick={() => setFieldValue('procedimiento', [...(values.procedimiento ?? []), { seccion: '', pasos: [''] }])}>
-                    Añadir sección
+                      g[gi].items = [...g[gi].items, { insumo: '', cantidad: '' }]
+                      setFieldValue('insumos', g)
+                    }}
+                  >
+                    Añadir insumo
                   </Button>
                 </Box>
-                {(values.procedimiento ?? []).map((sec: SeccionProcedimiento, si: number) => (
-                  <Box key={si} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 2, mb: 2 }}>
-                    <Box sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
-                      <CustomTextField fullWidth size='small' label={`Nombre de sección ${si + 1}`}
-                        value={sec.seccion} onChange={e => { const p = [...values.procedimiento]; p[si] = { ...p[si], seccion: e.target.value }; setFieldValue('procedimiento', p) }}
+              ))}
+            </Grid>
+
+            {/* Procedimiento */}
+            <Grid item xs={12}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                <Typography variant='subtitle2' fontWeight={600}>Procedimiento</Typography>
+                <Button size='small' startIcon={<i className='tabler-plus' />}
+                  onClick={() => setFieldValue('procedimiento', [...(values.procedimiento ?? []), { seccion: '', pasos: [''] }])}>
+                  Añadir sección
+                </Button>
+              </Box>
+              {(values.procedimiento ?? []).map((sec: SeccionProcedimiento, si: number) => (
+                <Box key={si} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 2, mb: 2 }}>
+                  <Box sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
+                    <CustomTextField
+                      fullWidth
+                      size='small'
+                      label={`Nombre de sección ${si + 1}`}
+                      value={sec.seccion}
+                      onChange={e => {
+                        const p = [...values.procedimiento]
+
+                        p[si] = { ...p[si], seccion: e.target.value }
+                        setFieldValue('procedimiento', p)
+                      }}
+                    />
+                    {values.procedimiento.length > 1 && (
+                      <IconButton size='small' color='error' onClick={() => setFieldValue('procedimiento', values.procedimiento.filter((_: SeccionProcedimiento, i: number) => i !== si))}>
+                        <i className='tabler-trash text-lg' />
+                      </IconButton>
+                    )}
+                  </Box>
+                  {sec.pasos.map((paso: string, pi: number) => (
+                    <Box key={pi} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'flex-start' }}>
+                      <Typography variant='caption' sx={{ pt: 1.5, minWidth: 20, color: 'text.secondary' }}>{pi + 1}.</Typography>
+                      <CustomTextField
+                        fullWidth
+                        size='small'
+                        multiline
+                        label={`Paso ${pi + 1}`}
+                        value={paso}
+                        onChange={e => {
+                          const p = [...values.procedimiento]
+
+                          p[si].pasos[pi] = e.target.value
+                          setFieldValue('procedimiento', p)
+                        }}
                       />
-                      {values.procedimiento.length > 1 && (
-                        <IconButton size='small' color='error' onClick={() => setFieldValue('procedimiento', values.procedimiento.filter((_: SeccionProcedimiento, i: number) => i !== si))}>
-                          <i className='tabler-trash text-lg' />
+                      {sec.pasos.length > 1 && (
+                        <IconButton
+                          size='small'
+                          color='error'
+                          onClick={() => {
+                            const p = [...values.procedimiento]
+
+                            p[si].pasos = p[si].pasos.filter((_: string, i: number) => i !== pi)
+                            setFieldValue('procedimiento', p)
+                          }}
+                        >
+                          <i className='tabler-x text-sm' />
                         </IconButton>
                       )}
                     </Box>
-                    {sec.pasos.map((paso: string, pi: number) => (
-                      <Box key={pi} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'flex-start' }}>
-                        <Typography variant='caption' sx={{ pt: 1.5, minWidth: 20, color: 'text.secondary' }}>{pi + 1}.</Typography>
-                        <CustomTextField fullWidth size='small' multiline label={`Paso ${pi + 1}`} value={paso}
-                          onChange={e => { const p = [...values.procedimiento]; p[si].pasos[pi] = e.target.value; setFieldValue('procedimiento', p) }}
-                        />
-                        {sec.pasos.length > 1 && (
-                          <IconButton size='small' color='error' onClick={() => { const p = [...values.procedimiento]; p[si].pasos = p[si].pasos.filter((_: string, i: number) => i !== pi); setFieldValue('procedimiento', p) }}>
-                            <i className='tabler-x text-sm' />
-                          </IconButton>
-                        )}
-                      </Box>
-                    ))}
-                    <Button size='small' variant='text' startIcon={<i className='tabler-plus' />}
-                      onClick={() => { const p = [...values.procedimiento]; p[si].pasos = [...p[si].pasos, '']; setFieldValue('procedimiento', p) }}>
-                      Añadir paso
-                    </Button>
-                  </Box>
-                ))}
-              </Grid>
+                  ))}
+                  <Button
+                    size='small'
+                    variant='text'
+                    startIcon={<i className='tabler-plus' />}
+                    onClick={() => {
+                      const p = [...values.procedimiento]
+
+                      p[si].pasos = [...p[si].pasos, '']
+                      setFieldValue('procedimiento', p)
+                    }}
+                  >
+                    Añadir paso
+                  </Button>
+                </Box>
+              ))}
+            </Grid>
 
               <Grid item xs={12}>
                 <CustomTextField fullWidth multiline rows={2} label='Observaciones (Opcional)' name='observaciones'
