@@ -46,7 +46,26 @@ async function main() {
 
 
 
-  console.log('✅ Cursos y categorías de ejemplo creados.')
+  // Crear simulacro de prueba
+  await prisma.simulacro.upsert({
+    where: { slug: 'simulacro-general-aptitud-profesional-ia' },
+    update: {},
+    create: {
+      titulo: 'Simulacro General — Aptitud Profesional con IA',
+      slug: 'simulacro-general-aptitud-profesional-ia',
+      descripcion: 'Pon a prueba tus conocimientos en IA aplicada a entornos profesionales. Este simulacro cubre herramientas de IA, prompts efectivos, automatización de tareas y uso estratégico de modelos de lenguaje en el trabajo diario.',
+      estado: 'PUBLICADO',
+      nivel: 'INTERMEDIO',
+      duracion: '90 minutos',
+      numero_preguntas: 40,
+      area_tematica: 'Inteligencia Artificial',
+      es_gratis: false,
+      precio: 49.00,
+      moneda: 'PEN',
+    },
+  })
+
+  console.log('✅ Simulacro de prueba creado.')
   console.log('🎉 Seed completado!')
 }
 
