@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Star, Users, Globe, ShieldCheck, Clock, TrendingUp, AlertTriangle, Target, Zap, Languages, Bot, Play, Check, Sparkles, Brain } from "lucide-react";
 import { Button } from "@/features/web/atd/ui/button";
 import { Card } from "@/features/web/atd/ui/card";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/features/web/atd/ui/accordion";
+import VideoTestimonialsSection from "@/features/web/atd/components/VideoTestimonialsSection";
+import FaqSection from "@/features/web/atd/components/FaqSection";
 const heroVideo = "/atd-assets/multimedia/videos/video-de-portada.mp4";
 
 const portadaImg = "/atd-assets/multimedia/imagenes/1-atd-portada.png";
@@ -46,7 +47,10 @@ const Home = () => {
 
       {/* HERO */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-black/60 z-10" />
+        {/* Overlay más ligero para que el video no tape el texto */}
+        <div className="absolute inset-0 bg-black/45 z-10" />
+        {/* Gradiente radial que ilumina el centro donde está el texto */}
+        <div className="absolute inset-0 z-10 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.55)_100%)]" />
         <video
           autoPlay
           loop
@@ -58,19 +62,19 @@ const Home = () => {
           <source src={heroVideo} type="video/mp4" />
         </video>
 
-        <div className="container relative pt-20 pb-24 md:pt-28 md:pb-32 text-center max-w-5xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary mb-8 animate-fade-up">
+        <div className="container relative z-20 pt-20 pb-24 md:pt-28 md:pb-32 text-center max-w-5xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/15 px-4 py-1.5 text-xs font-semibold text-primary mb-8 animate-fade-up backdrop-blur-sm">
             <Sparkles className="h-3.5 w-3.5" /> La academia #1 en IA aplicada en español
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] animate-fade-up">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] animate-fade-up text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.8)]">
             Domina la <span className="text-gradient-primary">Inteligencia Artificial</span>.
             <br className="hidden sm:inline" /> Multiplica tus ingresos.
             <br className="hidden sm:inline" /> Transforma tu profesión.
           </h1>
 
-          <p className="mt-6 md:mt-8 text-base md:text-xl text-muted-foreground max-w-3xl mx-auto animate-fade-up">
-            Únete a más de <span className="text-foreground font-semibold">10.000 profesionales hispanohablantes</span> que ya usan IA para trabajar menos, ganar más y liderar su industria. Aprende en español, aplica desde el primer día.
+          <p className="mt-6 md:mt-8 text-base md:text-xl text-white/80 max-w-3xl mx-auto animate-fade-up drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
+            Únete a más de <span className="text-white font-semibold">10.000 profesionales hispanohablantes</span> que ya usan IA para trabajar menos, ganar más y liderar su industria. Aprende en español, aplica desde el primer día.
           </p>
 
           <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-3 justify-center animate-fade-up">
@@ -82,11 +86,11 @@ const Home = () => {
             </Button>
           </div>
 
-          <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
+          <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-white/70">
             <Badge icon={<Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />}>4.9/5 valoración</Badge>
-            <Badge icon={<Users className="h-4 w-4 text-secondary" />}>+10.000 alumnos</Badge>
-            <Badge icon={<Globe className="h-4 w-4 text-secondary" />}>15 países</Badge>
-            <Badge icon={<ShieldCheck className="h-4 w-4 text-secondary" />}>Pago 100% seguro</Badge>
+            <Badge icon={<Users className="h-4 w-4 text-white/80" />}>+10.000 alumnos</Badge>
+            <Badge icon={<Globe className="h-4 w-4 text-white/80" />}>15 países</Badge>
+            <Badge icon={<ShieldCheck className="h-4 w-4 text-white/80" />}>Pago 100% seguro</Badge>
           </div>
         </div>
       </section>
@@ -262,41 +266,51 @@ const Home = () => {
 
 
       {/* FAQ */}
-      <section className="container py-24 max-w-3xl">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold">Preguntas frecuentes</h2>
-          <p className="mt-3 text-muted-foreground text-lg">Resuelve tus dudas en 30 segundos.</p>
-        </div>
-        <Accordion type="single" collapsible className="space-y-3">
-          {faqs.map((f, i) => (
-            <AccordionItem key={i} value={`f${i}`} className="border border-white/5 rounded-xl bg-card/50 px-5">
-              <AccordionTrigger className="text-left hover:no-underline">{f.q}</AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </section>
+      <FaqSection />
+
+      {/* TESTIMONIOS EN VIDEO */}
+      <VideoTestimonialsSection />
 
       {/* CTA FINAL */}
-      <section className="container py-24">
-        <Card className="relative overflow-hidden p-12 md:p-20 text-center border-primary/30">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/20" />
-          <div className="absolute inset-0 bg-mesh opacity-60" />
-          <div className="relative max-w-2xl mx-auto">
-            <h2 className="text-3xl md:text-5xl font-bold">Tu transformación empieza hoy.</h2>
-            <p className="mt-4 text-lg text-muted-foreground">
-              Únete a la academia que ya está cambiando la forma de trabajar de miles de profesionales.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-              <Button variant="hero" size="xl" asChild>
-                <Link href="/planes">Empieza gratis 7 días <ArrowRight className="h-5 w-5" /></Link>
-              </Button>
-              <Button variant="glass" size="xl" asChild>
-                <Link href="/contacto">Hablar con un asesor</Link>
-              </Button>
-            </div>
+      <section className="relative overflow-hidden py-32">
+        {/* Fondo agresivo */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-background to-background" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,hsl(var(--primary)/0.25),transparent)]" />
+        {/* Líneas decorativas */}
+        <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+        <div className="absolute left-0 bottom-0 h-px w-full bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+        {/* Orbes */}
+        <div className="absolute -left-32 top-1/2 -translate-y-1/2 h-64 w-64 rounded-full bg-primary/15 blur-3xl pointer-events-none" />
+        <div className="absolute -right-32 top-1/2 -translate-y-1/2 h-64 w-64 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
+
+        <div className="relative container text-center max-w-3xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary mb-8">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+            Plazas limitadas — cierra pronto
           </div>
-        </Card>
+
+          <h2 className="text-4xl md:text-6xl font-black font-display leading-[1.05] tracking-tight">
+            O te adaptas a la IA<br />
+            <span className="text-gradient-primary">o te quedas atrás.</span>
+          </h2>
+
+          <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-xl mx-auto leading-relaxed">
+            Cada semana que esperas, otros profesionales te adelantan. <strong className="text-foreground">Empieza hoy</strong> y domina la herramienta que está redefiniendo todas las industrias.
+          </p>
+
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <Button variant="hero" size="xl" asChild className="text-base font-bold shadow-lg shadow-primary/30">
+              <Link href="/planes">Empieza gratis ahora <ArrowRight className="h-5 w-5" /></Link>
+            </Button>
+            <Button variant="glass" size="xl" asChild className="text-base">
+              <Link href="/contacto">Hablar con un asesor</Link>
+            </Button>
+          </div>
+
+          <p className="mt-5 text-xs text-muted-foreground/60">
+            Sin tarjeta de crédito · Cancela cuando quieras · 7 días de garantía
+          </p>
+        </div>
       </section>
     </>
   );

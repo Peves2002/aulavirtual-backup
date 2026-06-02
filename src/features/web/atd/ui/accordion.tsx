@@ -10,7 +10,16 @@ const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
 >(({ className, ...props }, ref) => (
-  <AccordionPrimitive.Item ref={ref} className={cn("border-b", className)} {...props} />
+  <AccordionPrimitive.Item
+    ref={ref}
+    className={cn("group px-5 transition-all duration-200", className)}
+    style={{
+      borderRadius: "0.75rem",
+      border: "1px solid rgba(255,255,255,0.08)",
+      background: "rgba(255,255,255,0.04)",
+    }}
+    {...props}
+  />
 ));
 AccordionItem.displayName = "AccordionItem";
 
@@ -22,13 +31,20 @@ const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+        "flex flex-1 items-center justify-between py-4 text-sm font-medium text-left",
+        "transition-colors duration-200 [&[data-state=open]>span>svg]:rotate-180",
         className,
       )}
+      style={{ color: "rgba(255,255,255,0.8)" }}
       {...props}
     >
       {children}
-      <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+      <span
+        className="ml-4 flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center transition-all duration-300"
+        style={{ border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.06)" }}
+      >
+        <ChevronDown className="h-3.5 w-3.5 transition-transform duration-300" style={{ color: "rgba(255,255,255,0.5)" }} />
+      </span>
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));
@@ -40,10 +56,15 @@ const AccordionContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <AccordionPrimitive.Content
     ref={ref}
-    className="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+    className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
     {...props}
   >
-    <div className={cn("pb-4 pt-0", className)}>{children}</div>
+    <div
+      className={cn("pb-5 pt-3 leading-relaxed", className)}
+      style={{ color: "rgba(255,255,255,0.5)", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+    >
+      {children}
+    </div>
   </AccordionPrimitive.Content>
 ));
 

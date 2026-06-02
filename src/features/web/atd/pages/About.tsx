@@ -1,6 +1,8 @@
 import PageHeader from "@/features/web/atd/PageHeader";
 import { Card } from "@/features/web/atd/ui/card";
 import { Target, Heart, Globe, Zap } from "lucide-react";
+import StatsSection from "@/features/web/atd/components/StatsSection";
+import VideoTestimonialsSection from "@/features/web/atd/components/VideoTestimonialsSection";
 const principalImg = "/atd-assets/multimedia/equipo-humano/1-principal.png";
 const historiaImg = "/atd-assets/multimedia/equipo-humano/2-historia-atd.png";
 const otros1Img = "/atd-assets/multimedia/equipo-humano/3-otros.png";
@@ -57,6 +59,8 @@ const About = () => (
       </div>
     </section>
 
+    <StatsSection />
+
     <section className="container py-20">
       <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Nuestros valores</h2>
       <div className="grid gap-6 md:grid-cols-4">
@@ -76,6 +80,8 @@ const About = () => (
         ))}
       </div>
     </section>
+
+    <VideoTestimonialsSection />
   </>
 );
 

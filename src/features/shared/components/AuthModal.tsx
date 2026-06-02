@@ -24,7 +24,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { loginSchema, type LoginDto, registerSchema, type RegisterDto, forgotPasswordSchema, type ForgotPasswordDto, resetPasswordSchema, type ResetPasswordDto } from '@/schemas/auth.schema'
 import CustomTextField from '@core/components/mui/TextField'
-import Logo from '@components/layout/shared/Logo'
+const ATD_LOGO = "/atd-assets/general/logo.png";
 
 export type Mode = 'login' | 'register' | 'forgot-password' | 'reset-password'
 
@@ -284,9 +284,10 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
 
       <DialogContent sx={{ overflowX: 'hidden', overflowY: 'auto' }}>
         <Box sx={{ textAlign: 'center', mb: 4 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-            <Box sx={{ transform: 'scale(1.5)', transformOrigin: 'center', display: 'inline-block' }}>
-              <Logo />
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1, mb: 2 }}>
+            <img src={ATD_LOGO} alt="ATD Academy" style={{ height: 48, width: 'auto' }} />
+            <Box sx={{ fontWeight: 700, fontSize: '1.1rem', letterSpacing: '-0.02em' }}>
+              ATD <Box component="span" sx={{ color: 'text.secondary', fontWeight: 500 }}>Academy</Box>
             </Box>
           </Box>
           <Typography variant="h5" sx={{ mt: 3, fontWeight: 800 }}>
