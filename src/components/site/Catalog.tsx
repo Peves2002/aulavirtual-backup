@@ -18,14 +18,14 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
     if (search.trim()) {
       const q = search.toLowerCase();
 
-      result = result.filter(c => 
-        (c.title || "").toLowerCase().includes(q) || 
+      result = result.filter(c =>
+        (c.title || "").toLowerCase().includes(q) ||
         (c.desc || "").toLowerCase().includes(q)
       );
     }
 
     if (activeCategory && activeCategory !== "Todos") {
-      result = result.filter(c => 
+      result = result.filter(c =>
         c.category && c.category.toLowerCase().trim() === activeCategory.toLowerCase().trim()
       );
     }
@@ -43,6 +43,7 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
     } else if (sortBy === "precio-desc") {
       result.sort((a, b) => b.price - a.price);
     }
+
     // "orden": preserva el orden de la API (orden personalizado)
 
     return result;
@@ -77,7 +78,7 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
             <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
               <Search size={18} className="text-gray-400" />
             </div>
-            <input 
+            <input
               type="text"
               placeholder="Buscar por título o descripción..."
               value={search}
@@ -88,13 +89,13 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
 
           {/* Select Filters Container */}
           <div className="flex flex-wrap items-center justify-center gap-2 mt-2 bg-white px-3 py-2 rounded-full border border-gray-100 shadow-sm mx-auto w-fit">
-            
+
             {/* Categorias */}
             <div className="relative group">
               <div className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-gray-50 cursor-pointer text-[13px] font-medium text-gray-700">
                 <LayoutGrid size={15} className="text-gray-400" />
-                <select 
-                  value={activeCategory} 
+                <select
+                  value={activeCategory}
                   onChange={(e) => setActiveCategory(e.target.value)}
                   className="appearance-none bg-transparent outline-none cursor-pointer pr-4"
                 >
@@ -112,8 +113,8 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
             <div className="relative group">
               <div className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-gray-50 cursor-pointer text-[13px] font-medium text-gray-700">
                 <BarChart2 size={15} className="text-gray-400" />
-                <select 
-                  value={activeLevel} 
+                <select
+                  value={activeLevel}
                   onChange={(e) => setActiveLevel(e.target.value)}
                   className="appearance-none bg-transparent outline-none cursor-pointer pr-4"
                 >
@@ -132,8 +133,8 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
             <div className="relative group">
               <div className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-[#eef2ff] cursor-pointer text-[13px] font-semibold text-[#4f46e5] bg-[#f8fafc]">
                 <SlidersHorizontal size={15} />
-                <select 
-                  value={sortBy} 
+                <select
+                  value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                   className="appearance-none bg-transparent outline-none cursor-pointer pr-4 text-[#4f46e5]"
                 >
@@ -147,17 +148,18 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
             </div>
 
           </div>
-          
+
           <div className="mt-4 text-left w-full">
-             <span className="text-xs font-semibold text-gray-500 bg-white border border-gray-200 px-3 py-1 rounded-md shadow-sm">
-                {filteredAndSorted.length} cursos disponibles
-             </span>
+            <span className="text-xs font-semibold text-gray-500 bg-white border border-gray-200 px-3 py-1 rounded-md shadow-sm">
+              {filteredAndSorted.length} cursos disponibles
+            </span>
           </div>
         </div>
 
         {/* Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-          {filteredAndSorted.map((c, i) => (
+
+          {filteredAndSorted.map((c) => (
             <article
               key={c.id || c.title}
               className="overflow-hidden rounded-[24px] transition-all duration-300"
