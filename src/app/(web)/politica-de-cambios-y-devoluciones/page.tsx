@@ -48,7 +48,7 @@ export default function PoliticaCambiosYDevolucionesPage() {
             o solicitud de reembolso, dado que el servicio se considera consumido desde el inicio de su ejecución.
           </Typography>
           <Typography paragraph>
-            Esta condición es aplicable a todos los cursos, rutas de aprendizaje, paquetes y materiales
+            Esta condición es aplicable a todos los cursos, paquetes y materiales
             digitales disponibles en la plataforma.
           </Typography>
 

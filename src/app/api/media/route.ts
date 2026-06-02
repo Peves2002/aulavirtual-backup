@@ -74,7 +74,11 @@ export async function GET(request: Request) {
 
     if (!auth.authorized) return auth.error
 
+    const { searchParams } = new URL(request.url)
+    const folder = searchParams.get('folder')
+
     const media = await prisma.media.findMany({
+      where: folder ? { url: { startsWith: `/uploads/${folder}/` } } : undefined,
       orderBy: { creado_en: 'desc' }
     })
 
@@ -148,8 +152,9 @@ export async function POST(request: Request) {
     const nombreArchivo = `${id}.${safeExtension}`
     const nombreOriginal = file.name.replace(/[^a-zA-Z0-9._-]/g, '_') // Sanitizar nombre original
 
-    // Ruta relativa para la URL y ruta absoluta para guardar
-    const folder = isSignature ? 'firmas' : 'cursos'
+    const ALLOWED_FOLDERS = ['cursos', 'recetas', 'firmas']
+    const requestedFolder = searchParams.get('folder') ?? 'cursos'
+    const folder = isSignature ? 'firmas' : (ALLOWED_FOLDERS.includes(requestedFolder) ? requestedFolder : 'cursos')
     const relativePath = `/uploads/${folder}/${nombreArchivo}`
     const uploadDir = join(process.cwd(), 'public', 'uploads', folder)
     const absolutePath = join(uploadDir, nombreArchivo)

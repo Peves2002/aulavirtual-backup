@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 import { Box, Button, Grid, IconButton, InputAdornment, Typography } from '@mui/material'
 import { Formik, type FormikHelpers } from 'formik'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
@@ -7,6 +9,7 @@ import { useSnackbar } from 'notistack'
 
 import AppModal from '@/utils/components/AppModal'
 import CustomTextField from '@core/components/mui/TextField'
+import MediaLibrary from '@/features/admin/cursos/components/MediaLibrary'
 import { crearRecetaSchema, type CrearRecetaDto } from '@/schemas/receta.schema'
 import { useCreateReceta } from '../hooks/useRecetas'
 import type { GrupoInsumos, SeccionProcedimiento } from '../entity/Receta'
@@ -30,6 +33,7 @@ const emptyValues: CrearRecetaDto = {
 export const CreateRecetaModal = ({ open, handleClose, onSuccess }: Props) => {
   const { enqueueSnackbar } = useSnackbar()
   const createMutation = useCreateReceta()
+  const [openMedia, setOpenMedia] = useState(false)
 
   const handleSubmit = async (values: CrearRecetaDto, { setSubmitting, resetForm }: FormikHelpers<CrearRecetaDto>) => {
     try {
@@ -65,11 +69,24 @@ export const CreateRecetaModal = ({ open, handleClose, onSuccess }: Props) => {
               </Grid>
 
               <Grid item xs={12}>
-                <CustomTextField fullWidth label='URL de Imagen (Opcional)' name='imagen' value={values.imagen ?? ''}
-                  onChange={e => setFieldValue('imagen', e.target.value || null)}
-                  onBlur={handleBlur}
-                  InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-photo text-xl text-textSecondary' /></InputAdornment> }}
-                />
+                <Typography variant='subtitle2' fontWeight={600} sx={{ mb: 1 }}>Imagen (Opcional)</Typography>
+                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                  {values.imagen && (
+                    <Box sx={{ position: 'relative', width: 100, height: 100, borderRadius: 2, overflow: 'hidden', border: '1px solid', borderColor: 'divider', flexShrink: 0 }}>
+                      <img src={values.imagen} alt='imagen receta' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <IconButton size='small' color='error'
+                        onClick={() => setFieldValue('imagen', null)}
+                        sx={{ position: 'absolute', top: 2, right: 2, bgcolor: 'rgba(255,255,255,0.85)', '&:hover': { bgcolor: 'error.main', color: 'common.white' } }}>
+                        <i className='tabler-x text-sm' />
+                      </IconButton>
+                    </Box>
+                  )}
+                  <Button variant='tonal' startIcon={<i className='tabler-photo' />} onClick={() => setOpenMedia(true)}>
+                    {values.imagen ? 'Cambiar imagen' : 'Seleccionar imagen'}
+                  </Button>
+                </Box>
+                <MediaLibrary open={openMedia} onClose={() => setOpenMedia(false)} folder='recetas'
+                  onSelect={url => { setFieldValue('imagen', url); setOpenMedia(false) }} />
               </Grid>
 
               <Grid item xs={12}>

@@ -17,7 +17,7 @@ const seccionProcedimientoSchema = z.object({
 
 export const crearRecetaSchema = z.object({
   nombre: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
-  imagen: z.string().url('URL inválida').optional().nullable(),
+  imagen: z.string().min(1).optional().nullable(),
   descripcion: z.string().optional().nullable(),
   insumos: z.array(grupoInsumosSchema).default([]),
   procedimiento: z.array(seccionProcedimientoSchema).default([]),
@@ -25,7 +25,10 @@ export const crearRecetaSchema = z.object({
   esta_activo: z.boolean().optional()
 })
 
-export const actualizarRecetaSchema = crearRecetaSchema.partial()
+export const actualizarRecetaSchema = crearRecetaSchema.partial().extend({
+  insumos: z.array(grupoInsumosSchema).optional(),
+  procedimiento: z.array(seccionProcedimientoSchema).optional()
+})
 
 export const listarRecetasQuerySchema = z.object({
   page: z

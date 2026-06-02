@@ -20,12 +20,12 @@ const axiosMediaFactory = () => {
 /**
  * Hook para listar todos los medios
  */
-export function useMedia() {
+export function useMedia(folder?: string) {
   const axiosMedia = axiosMediaFactory()
 
   return useQuery<any[], any>({
-    queryKey: QUERY_KEY.MEDIA,
-    queryFn: async () => await axiosMedia.getAll(),
+    queryKey: folder ? [...QUERY_KEY.MEDIA, folder] : QUERY_KEY.MEDIA,
+    queryFn: async () => await axiosMedia.getAll(folder),
     staleTime: 60_000,
     retry: 1
   })
@@ -34,13 +34,13 @@ export function useMedia() {
 /**
  * Hook para subir un medio
  */
-export function useUploadMedia() {
+export function useUploadMedia(folder?: string) {
   const qc = useQueryClient()
   const axiosMedia = axiosMediaFactory()
 
   return useMutation<any, any, File>({
-    mutationFn: async file => await axiosMedia.upload(file),
-    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY.MEDIA })
+    mutationFn: async file => await axiosMedia.upload(file, folder),
+    onSuccess: () => qc.invalidateQueries({ queryKey: folder ? [...QUERY_KEY.MEDIA, folder] : QUERY_KEY.MEDIA })
   })
 }
 

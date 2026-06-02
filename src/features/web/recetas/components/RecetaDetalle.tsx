@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 
 import type { GrupoInsumos, SeccionProcedimiento } from '@/features/admin/recetas/entity/Receta'
 
@@ -16,6 +17,14 @@ type RecetaDetalleProps = {
 export function RecetaDetalle({ nombre, imagen, descripcion, insumos, procedimiento, observaciones }: RecetaDetalleProps) {
   return (
     <article className='max-w-4xl mx-auto px-5 lg:px-8 py-12'>
+      {/* Volver */}
+      <div className='mb-8'>
+        <Link href='/recetas' className='inline-flex items-center gap-2 text-sm font-medium text-[#4A7018] hover:text-[#2D5010] transition-colors'>
+          <i className='tabler-arrow-left text-base' />
+          Volver a Recetas
+        </Link>
+      </div>
+
       {/* Header */}
       <div className='mb-10 text-center'>
         <div className='inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-[#EAF7D0] border border-[#A8E060]/30'>

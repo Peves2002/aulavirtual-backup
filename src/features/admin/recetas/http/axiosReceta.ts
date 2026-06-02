@@ -44,7 +44,9 @@ export class AxiosReceta extends AxiosInternalHttpClient {
 
   async getById(id: string): Promise<Receta> {
     try {
-      return await this.iGet<Receta>(`/${id}`)
+      const result = await this.iGet<{ receta: Receta }>(`/${id}`)
+
+      return result.receta
     } catch (err: any) {
       throw err?.response?.data ?? err
     }

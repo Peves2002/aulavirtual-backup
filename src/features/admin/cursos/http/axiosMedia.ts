@@ -21,9 +21,10 @@ export class AxiosMedia extends AxiosInternalHttpClient {
     })
   }
 
-  async getAll(): Promise<any[]> {
+  async getAll(folder?: string): Promise<any[]> {
     try {
-      const payload = await this.iGet<any[]>('')
+      const qs = folder ? `?folder=${folder}` : ''
+      const payload = await this.iGet<any[]>(qs)
 
       return payload
     } catch (err: any) {
@@ -31,13 +32,14 @@ export class AxiosMedia extends AxiosInternalHttpClient {
     }
   }
 
-  async upload(file: File): Promise<any> {
+  async upload(file: File, folder?: string): Promise<any> {
     try {
       const formData = new FormData()
 
       formData.append('file', file)
 
-      const payload = await this.iPost<any>('', formData, {
+      const qs = folder ? `?folder=${folder}` : ''
+      const payload = await this.iPost<any>(qs, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

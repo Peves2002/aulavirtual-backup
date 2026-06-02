@@ -32,12 +32,13 @@ interface MediaLibraryProps {
   onSelect: (url: string, nombre?: string) => void
   title?: string
   acceptType?: 'IMAGEN' | 'VIDEO' | 'OTRO'
+  folder?: string
 }
 
-const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios', acceptType = 'IMAGEN' }: MediaLibraryProps) => {
+const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios', acceptType = 'IMAGEN', folder }: MediaLibraryProps) => {
   const [search, setSearch] = useState('')
-  const { data: media = [], isLoading } = useMedia()
-  const uploadMutation = useUploadMedia()
+  const { data: media = [], isLoading } = useMedia(folder)
+  const uploadMutation = useUploadMedia(folder)
   const deleteMutation = useDeleteMedia()
   const { enqueueSnackbar } = useSnackbar()
   const [deleteId, setDeleteId] = useState<string | null>(null)

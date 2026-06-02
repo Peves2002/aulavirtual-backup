@@ -101,41 +101,40 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
           </>
         )}
 
-        {rol === 'ADMIN' && (
-          <>
-            <Divider sx={{ my: 2 }} />
-            <MenuItem href='/admin/usuarios' icon={<i className='tabler-users' />}>
-              Usuarios
-            </MenuItem>
-            <MenuItem href='/admin/categorias' icon={<i className='tabler-category' />}>
-              Categorías
-            </MenuItem>
-            <MenuItem href='/admin/cursos' icon={<i className='tabler-book' />}>
-              Gestión Cursos
-            </MenuItem>
-            <MenuItem href='/admin/rutas' icon={<i className='tabler-route' />}>
-              Rutas Aprendizaje
-            </MenuItem>
-            <MenuItem href='/admin/pedidos' icon={<i className='tabler-shopping-cart' />}>
-              Pedidos
-            </MenuItem>
-            <MenuItem href='/admin/cupones' icon={<i className='tabler-ticket' />}>
-              Cupones
-            </MenuItem>
-            <MenuItem href='/admin/certificados' icon={<i className='tabler-certificate' />}>
-              Certificados
-            </MenuItem>
-            <MenuItem href='/admin/recetas' icon={<i className='tabler-tools-kitchen-2' />}>
-              Recetas
-            </MenuItem>
-            <MenuItem href='/admin/reclamaciones' icon={<i className='tabler-book-2' />}>
-              Reclamaciones
-            </MenuItem>
-            <MenuItem href='/admin/configuracion' icon={<i className='tabler-settings' />}>
-              Configuración
-            </MenuItem>
-          </>
-        )}
+        {
+          rol === 'ADMIN' && (
+            <>
+              <Divider sx={{ my: 2 }} />
+              <MenuItem href='/admin/usuarios' icon={<i className='tabler-users' />}>
+                Usuarios
+              </MenuItem>
+              <MenuItem href='/admin/categorias' icon={<i className='tabler-category' />}>
+                Categorías
+              </MenuItem>
+              <MenuItem href='/admin/cursos' icon={<i className='tabler-book' />}>
+                Gestión Cursos
+              </MenuItem>
+              <MenuItem href='/admin/pedidos' icon={<i className='tabler-shopping-cart' />}>
+                Pedidos
+              </MenuItem>
+              <MenuItem href='/admin/cupones' icon={<i className='tabler-ticket' />}>
+                Cupones
+              </MenuItem>
+              <MenuItem href='/admin/certificados' icon={<i className='tabler-certificate' />}>
+                Certificados
+              </MenuItem>
+              <MenuItem href='/admin/recetas' icon={<i className='tabler-tools-kitchen-2' />}>
+                Recetas
+              </MenuItem>
+              <MenuItem href='/admin/reclamaciones' icon={<i className='tabler-book-2' />}>
+                Reclamaciones
+              </MenuItem>
+              <MenuItem href='/admin/configuracion' icon={<i className='tabler-settings' />}>
+                Configuración
+              </MenuItem>
+            </>
+          )
+        }
 
         {rol === 'PROFESOR' && (
           <>
