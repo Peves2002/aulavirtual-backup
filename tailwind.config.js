@@ -9,6 +9,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        background: '#ffffff',
+        foreground: '#0A0A0A',
+        card: {
+          DEFAULT: '#f3f5f9',
+          foreground: '#0A0A0A',
+        },
         primary: {
           DEFAULT: '#25927F',
           foreground: '#ffffff',
@@ -20,12 +26,16 @@ module.exports = {
           foreground: '#0A0A0A',
         },
         muted: {
-          DEFAULT: 'hsl(210, 15%, 93%)',
-          foreground: 'hsl(215, 16%, 47%)',
+          DEFAULT: '#eef1f5',
+          foreground: '#64748b',
         },
-        border: 'hsl(214, 20%, 88%)',
-        foreground: '#0A0A0A',
-        background: 'hsl(0, 0%, 100%)',
+        accent: {
+          DEFAULT: '#eef1f5',
+          foreground: '#0A0A0A',
+        },
+        border: '#dde3ed',
+        input: '#eef1f5',
+        ring: '#25927F',
         'color-1': 'hsl(170, 60%, 36%)',
         'color-2': 'hsl(75, 63%, 62%)',
         'color-3': 'hsl(167, 96%, 19%)',

@@ -60,6 +60,11 @@ const nextConfig = {
         hostname: '*.googleusercontent.com',
         port: ''
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: ''
+      },
 
       // 🔐 SEGURIDAD: Reemplazar wildcards excesivos por patrones más restrictivos.
       // IMPORTANTE: Cambiar 'tu-bucket' por el nombre real de tu bucket S3 para máxima seguridad.

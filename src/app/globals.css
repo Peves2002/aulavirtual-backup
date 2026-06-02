@@ -34,6 +34,22 @@
   --navbar-height: 88px;
   --sidebar-width: 80px;
   --sidebar-width-expanded: 260px;
+
+}
+
+/* ── ACE Consulting PERÚ — design system ── */
+.ace-web {
+  --primary:        #25927F;
+  --secondary:      #BDD962;
+  --gradient-brand: linear-gradient(135deg, #1a7a69, #125047);
+  --gradient-hero:  linear-gradient(135deg, #012d22 0%, #025E44 50%, #0f4438 100%);
+  --shadow-glow:    0 10px 40px -10px rgba(37, 146, 127, 0.35);
+  --shadow-elegant: 0 20px 60px -20px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes heroSlideIn {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 *,

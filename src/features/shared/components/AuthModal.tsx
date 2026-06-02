@@ -24,7 +24,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { loginSchema, type LoginDto, registerSchema, type RegisterDto, forgotPasswordSchema, type ForgotPasswordDto, resetPasswordSchema, type ResetPasswordDto } from '@/schemas/auth.schema'
 import CustomTextField from '@core/components/mui/TextField'
-import Logo from '@components/layout/shared/Logo'
 import GoogleButton from './GoogleButton'
 
 export type Mode = 'login' | 'register' | 'forgot-password' | 'reset-password'
@@ -286,9 +285,8 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
       <DialogContent sx={{ overflowX: 'hidden', overflowY: 'auto' }}>
         <Box sx={{ textAlign: 'center', mb: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
-            <Box sx={{ transform: 'scale(1.5)', transformOrigin: 'center', display: 'inline-block' }}>
-              <Logo />
-            </Box>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src='/images/logo.png' alt='Logo' style={{ height: 56, width: 'auto' }} />
           </Box>
           <Typography variant="h5" sx={{ mt: 4, fontWeight: 800 }}>
             {mode === 'login' ? 'Iniciar Sesión' : mode === 'register' ? 'Crear Cuenta' : '¿Olvidaste tu contraseña?'}
