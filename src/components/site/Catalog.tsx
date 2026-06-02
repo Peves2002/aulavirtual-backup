@@ -10,7 +10,7 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [activeLevel, setActiveLevel] = useState("Todos");
-  const [sortBy, setSortBy] = useState("recientes");
+  const [sortBy, setSortBy] = useState("orden");
 
   const filteredAndSorted = useMemo(() => {
     let result = [...courses];
@@ -31,16 +31,19 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
     }
 
     if (activeLevel && activeLevel !== "Todos") {
-      result = result.filter(c => 
+      result = result.filter(c =>
         c.level && c.level.toLowerCase().trim() === activeLevel.toLowerCase().trim()
       );
     }
 
-    if (sortBy === "precio-asc") {
+    if (sortBy === "recientes") {
+      result.sort((a, b) => new Date(b.creado_en).getTime() - new Date(a.creado_en).getTime());
+    } else if (sortBy === "precio-asc") {
       result.sort((a, b) => a.price - b.price);
     } else if (sortBy === "precio-desc") {
       result.sort((a, b) => b.price - a.price);
     }
+    // "orden": preserva el orden de la API (orden personalizado)
 
     return result;
   }, [courses, search, activeCategory, activeLevel, sortBy]);
@@ -134,6 +137,7 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
                   onChange={(e) => setSortBy(e.target.value)}
                   className="appearance-none bg-transparent outline-none cursor-pointer pr-4 text-[#4f46e5]"
                 >
+                  <option value="orden">Orden predeterminado</option>
                   <option value="recientes">Recientes primero</option>
                   <option value="precio-asc">Menor precio</option>
                   <option value="precio-desc">Mayor precio</option>
@@ -156,11 +160,10 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
           {filteredAndSorted.map((c, i) => (
             <article
               key={c.id || c.title}
-              className="reveal overflow-hidden rounded-[24px] transition-all duration-300"
+              className="overflow-hidden rounded-[24px] transition-all duration-300"
               style={{
                 background: "#FFFFFF",
                 border: "1.5px solid #C8E890",
-                transitionDelay: `${i * 50}ms`,
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = "#A8E060";

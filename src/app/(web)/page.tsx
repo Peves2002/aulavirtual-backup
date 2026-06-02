@@ -20,7 +20,7 @@ export default async function HomePage() {
   try {
     const latestCourses = await prisma.curso.findMany({
       where: { estado: 'PUBLICADO' },
-      orderBy: { creado_en: 'desc' },
+      orderBy: { orden: 'asc' },
       take: 6,
       select: {
         id: true,
