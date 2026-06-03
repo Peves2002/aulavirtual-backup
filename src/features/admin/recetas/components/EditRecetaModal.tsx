@@ -73,15 +73,16 @@ export const EditRecetaModal = ({ open, handleClose, recetaId, onSuccess }: Prop
   }
 
   return (
-    <AppModal open={open} handleClose={handleClose}>
-      <Box sx={{ mb: 3, textAlign: 'center' }}>
+    <AppModal open={open} handleClose={handleClose} sx={{ p: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <Box sx={{ px: { xs: 4, sm: 8 }, pt: { xs: 4, sm: 8 }, pb: 2, textAlign: 'center' }}>
         <Typography variant='h4' fontWeight={600}>Editar Receta</Typography>
         <Typography variant='body2' color='text.secondary'>Modifica los datos de la receta</Typography>
       </Box>
 
       <Formik initialValues={initialValues} enableReinitialize validationSchema={toFormikValidationSchema(crearRecetaSchema)} onSubmit={handleSubmit}>
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit: submit, isSubmitting, setFieldValue }) => (
-          <form onSubmit={submit}>
+          <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+            <Box sx={{ flex: 1, overflowY: 'auto', px: { xs: 4, sm: 8 }, py: 2 }}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <CustomTextField fullWidth label='Nombre' name='nombre' value={values.nombre}
@@ -295,15 +296,15 @@ export const EditRecetaModal = ({ open, handleClose, recetaId, onSuccess }: Prop
                 />
               </Grid>
 
-              <Grid item xs={12}>
-                <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 2 }}>
-                  <Button variant='tonal' color='secondary' onClick={handleClose} disabled={isSubmitting} sx={{ px: 4 }}>Cancelar</Button>
-                  <Button variant='contained' type='submit' disabled={isSubmitting} sx={{ px: 4 }} startIcon={<i className='tabler-device-floppy' />}>
-                    {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
-                  </Button>
-                </Box>
-              </Grid>
             </Grid>
+            </Box>
+
+            <Box sx={{ px: { xs: 4, sm: 8 }, py: 3, borderTop: '1px solid', borderColor: 'divider', display: 'flex', justifyContent: 'center', gap: 2, flexShrink: 0 }}>
+              <Button variant='tonal' color='secondary' onClick={handleClose} disabled={isSubmitting} sx={{ px: 4 }}>Cancelar</Button>
+              <Button variant='contained' type='submit' disabled={isSubmitting} sx={{ px: 4 }} startIcon={<i className='tabler-device-floppy' />}>
+                {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
+              </Button>
+            </Box>
           </form>
         )}
       </Formik>
