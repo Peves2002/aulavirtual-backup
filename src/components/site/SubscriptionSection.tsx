@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { useSession } from "next-auth/react";
-import { CheckCircle2, MessageCircle, Star } from "lucide-react";
+import { CheckCircle2, MessageCircle } from "lucide-react";
 
 import { useAuthModal } from "@/contexts/AuthModalContext";
 import type { PlanPublico } from "@/features/estudiante/suscripciones/entity/Suscripcion";
@@ -85,10 +85,8 @@ export function SubscriptionSection() {
           </div>
         ) : planes.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
-            {planes.map((plan) => {
-              const esTrimestral = plan.intervalo === "TRIMESTRAL";
-              const esPopular = esTrimestral;
-              const beneficios: string[] = Array.isArray(plan.beneficios) ? plan.beneficios : [];
+              {planes.map((plan) => {
+                const beneficios: string[] = Array.isArray(plan.beneficios) ? plan.beneficios : [];
 
               return (
                 <div

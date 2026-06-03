@@ -1,4 +1,4 @@
-import { Repeat2, Sparkles, MessageCircle } from 'lucide-react'
+import { Sparkles, MessageCircle } from 'lucide-react'
 
 import { PlanesPublicos } from '@/features/web/suscripciones/components/PlanesPublicos'
 import type { PlanPublico } from '@/features/estudiante/suscripciones/entity/Suscripcion'

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 
 import { useSession } from 'next-auth/react'
 
-import { Check, Repeat2, BookOpen, Star, Sparkles } from 'lucide-react'
+import { Check, Repeat2, BookOpen } from 'lucide-react'
 
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import type { PlanPublico } from '@/features/estudiante/suscripciones/entity/Suscripcion'
@@ -48,8 +48,6 @@ export function PlanesPublicos({ planes }: PlanesPublicosProps) {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
       {planes.map(plan => {
         const isHovered = hoveredId === plan.id
-        const esTrimestral = plan.intervalo === 'TRIMESTRAL'
-        const esPopular = esTrimestral // Destacamos el plan trimestral como recomendado
         const beneficios: string[] = Array.isArray(plan.beneficios) ? plan.beneficios : []
         const tieneBeneficios = beneficios.length > 0
 
