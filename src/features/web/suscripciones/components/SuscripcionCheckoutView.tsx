@@ -174,8 +174,10 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
 
       {/* Hero */}
       <Box sx={{
-        background: 'linear-gradient(135deg, var(--web-dark-deep,#012d22) 0%, var(--web-dark,#025E44) 45%, var(--web-dark-mid,#0f4438) 100%)',
-        py: { xs: 4, md: 5 },
+        background: 'linear-gradient(135deg, #0A1A04 0%, #0E2807 50%, #0A1A04 100%)',
+        marginTop: '-5rem',
+        pt: { xs: '9rem', md: '10rem' },
+        pb: { xs: 4, md: 5 },
         px: { xs: 3, md: 8, lg: 12 },
         position: 'relative',
         overflow: 'hidden'
@@ -192,12 +194,12 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
                 <ChevronRight size={12} color="rgba(255,255,255,0.3)" />
               </Box>
             ))}
-            <span style={{ fontFamily: FONT, fontSize: '0.8125rem', fontWeight: 700, color: 'var(--web-light,#BDD962)' }}>Checkout</span>
+            <span style={{ fontFamily: FONT, fontSize: '0.8125rem', fontWeight: 700, color: '#A8E060' }}>Checkout</span>
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Box sx={{ width: 48, height: 48, borderRadius: '14px', bgcolor: 'rgba(189,217,98,0.15)', border: '1px solid rgba(189,217,98,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Repeat2 size={22} color="var(--web-light,#BDD962)" />
+            <Box sx={{ width: 48, height: 48, borderRadius: '14px', bgcolor: 'rgba(168,224,96,0.15)', border: '1px solid rgba(168,224,96,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Repeat2 size={22} color="#A8E060" />
             </Box>
             <Box>
               <Typography sx={{ fontFamily: FONT, fontWeight: 900, fontSize: { xs: '1.5rem', md: '2rem' }, color: '#fff', lineHeight: 1.1 }}>
@@ -227,10 +229,10 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3.5 }}>
                 <Box sx={{
                   width: 38, height: 38, borderRadius: '12px',
-                  bgcolor: 'rgba(37,146,127,0.08)',
+                  bgcolor: 'rgba(90,144,32,0.08)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center'
                 }}>
-                  <Lock size={18} color="var(--web-primary,#25927F)" />
+                  <Lock size={18} color="#5A9020" />
                 </Box>
                 <Box>
                   <Typography sx={{ fontFamily: FONT, fontSize: '1.125rem', fontWeight: 800, color: '#0f172a' }}>
@@ -251,15 +253,15 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
                 }}>
                   <Box sx={{
                     width: 44, height: 44, borderRadius: '50%',
-                    bgcolor: 'var(--web-primary,#25927F)',
+                    bgcolor: '#5A9020',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: '#fff', fontWeight: 700, fontSize: '1rem',
-                    boxShadow: '0 4px 12px rgba(37,146,127,0.2)'
+                    boxShadow: '0 4px 12px rgba(90,144,32,0.2)'
                   }}>
                     {((session.user as any)?.nombre?.[0] || session.user.name?.[0] || 'U').toUpperCase()}
                   </Box>
                   <Box sx={{ minWidth: 0, flex: 1 }}>
-                    <Typography sx={{ fontFamily: FONT, fontSize: '0.75rem', fontWeight: 700, color: 'var(--web-primary,#25927F)', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 0.25 }}>
+                    <Typography sx={{ fontFamily: FONT, fontSize: '0.75rem', fontWeight: 700, color: '#5A9020', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 0.25 }}>
                       Suscripción para
                     </Typography>
                     <Typography sx={{ fontFamily: FONT, fontSize: '0.9375rem', fontWeight: 700, color: '#0f172a', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
@@ -305,7 +307,7 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
                       onChange={(e) => setAceptaTerminos(e.target.checked)}
                       sx={{
                         color: '#cbd5e1',
-                        '&.Mui-checked': { color: 'var(--web-primary,#25927F)' },
+                        '&.Mui-checked': { color: '#5A9020' },
                         p: 0.75
                       }}
                     />
@@ -317,7 +319,7 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
                         href="/terminos-y-condiciones"
                         target="_blank"
                         style={{
-                          color: 'var(--web-primary,#25927F)',
+                          color: '#5A9020',
                           fontWeight: 600,
                           textDecoration: 'underline',
                           textUnderlineOffset: '2px'
@@ -345,14 +347,14 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
                   fontWeight: 700,
                   background: procesando
                     ? '#cbd5e1'
-                    : 'linear-gradient(135deg, var(--web-primary,#25927F) 0%, var(--web-dark,#025E44) 100%)',
+                    : 'linear-gradient(135deg, #5A9020 0%, #0A1A04 100%)',
                   color: '#ffffff',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '12px',
                   transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: procesando || (!aceptaTerminos && session?.user) ? 'none' : '0 4px 20px rgba(37,146,127,0.25)',
+                  boxShadow: procesando || (!aceptaTerminos && session?.user) ? 'none' : '0 4px 20px rgba(90,144,32,0.25)',
                   opacity: (!aceptaTerminos && session?.user && !procesando) ? 0.65 : 1
                 }}
               >
@@ -372,7 +374,7 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
               {!session?.user && (
                 <Typography sx={{ fontFamily: FONT, fontSize: '0.8125rem', color: '#94a3b8', textAlign: 'center', mt: 2 }}>
                   Necesitas{' '}
-                  <button onClick={() => openLogin()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--web-primary,#25927F)', fontWeight: 600, fontFamily: FONT, fontSize: '0.8125rem', padding: 0, textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+                  <button onClick={() => openLogin()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#5A9020', fontWeight: 600, fontFamily: FONT, fontSize: '0.8125rem', padding: 0, textDecoration: 'underline', textUnderlineOffset: '2px' }}>
                     iniciar sesión
                   </button>
                   {' '}para suscribirte.
@@ -404,7 +406,7 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
                 display: 'inline-flex', alignItems: 'center', gap: '6px',
                 transition: 'color 0.2s'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--web-primary,#25927F)'}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#5A9020'}
               onMouseLeave={(e) => e.currentTarget.style.color = '#64748b'}
               >
                 <ArrowLeft size={14} />
@@ -423,11 +425,11 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
             }}>
               <Box sx={{
                 p: 3.5, borderBottom: '1px solid #f1f5f9',
-                background: 'linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%)'
+                background: 'linear-gradient(135deg, #F7FBF0 0%, #ffffff 100%)'
               }}>
-                <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: '6px', bgcolor: 'rgba(37,146,127,0.08)', borderRadius: '20px', px: 1.5, py: 0.5, mb: 1.5 }}>
-                  <Repeat2 size={13} color="var(--web-primary,#25927F)" />
-                  <Typography sx={{ fontFamily: FONT, fontSize: '0.6875rem', fontWeight: 700, color: 'var(--web-primary,#25927F)', textTransform: 'uppercase' }}>
+                <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: '6px', bgcolor: 'rgba(90,144,32,0.08)', borderRadius: '20px', px: 1.5, py: 0.5, mb: 1.5 }}>
+                  <Repeat2 size={13} color="#5A9020" />
+                  <Typography sx={{ fontFamily: FONT, fontSize: '0.6875rem', fontWeight: 700, color: '#5A9020', textTransform: 'uppercase' }}>
                     {INTERVALO_LABELS[plan.intervalo]}
                   </Typography>
                 </Box>
@@ -472,11 +474,11 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
                         <Box key={i} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
                           <Box sx={{
                             width: 18, height: 18, borderRadius: '50%',
-                            bgcolor: 'rgba(37,146,127,0.1)',
+                            bgcolor: 'rgba(90,144,32,0.1)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             flexShrink: 0, mt: 0.15
                           }}>
-                            <Check size={11} color="var(--web-primary,#25927F)" strokeWidth={3} />
+                            <Check size={11} color="#5A9020" strokeWidth={3} />
                           </Box>
                           <Typography sx={{ fontFamily: FONT, fontSize: '0.875rem', color: '#334155', lineHeight: 1.4 }}>
                             {beneficio}
@@ -507,11 +509,11 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
                         <Box key={c.curso_id} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
                           <Box sx={{
                             width: 18, height: 18, borderRadius: '50%',
-                            bgcolor: 'rgba(37,146,127,0.1)',
+                            bgcolor: 'rgba(90,144,32,0.1)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             flexShrink: 0, mt: 0.15
                           }}>
-                            <Check size={11} color="var(--web-primary,#25927F)" strokeWidth={3} />
+                            <Check size={11} color="#5A9020" strokeWidth={3} />
                           </Box>
                           <Typography sx={{ fontFamily: FONT, fontSize: '0.875rem', color: '#334155', lineHeight: 1.4 }}>
                             {c.curso.titulo}

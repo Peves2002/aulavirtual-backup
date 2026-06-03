@@ -101,6 +101,7 @@ export default withAuth(
           path.startsWith('/politica-de-devoluciones') ||
           path.startsWith('/plan') ||
           path.startsWith('/suscripciones') ||
+          path.startsWith('/recetas') ||
           path === '/'
         ) {
           return true

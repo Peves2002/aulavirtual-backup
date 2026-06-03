@@ -18,10 +18,10 @@ import { Logo } from "./Logo";
 const links = [
   { href: "/", label: "Inicio" },
   { href: "/cursos", label: "Cursos" },
-  { href: "/recetas", label: "Recetas" },
-  { href: "/plan", label: "Plan" },
+  { href: "/suscripciones", label: "Suscripciones" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
+  { href: "/recetas", label: "Recetas" }
 ];
 
 export function Navbar() {
@@ -43,25 +43,24 @@ export function Navbar() {
 
     onScroll();
     window.addEventListener("scroll", onScroll);
-    
+
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <>
       <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ease-in-out ${
-          showBackground 
-            ? 'bg-[#0A1A04]/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.3)] border-b border-white/5 py-3' 
-            : 'bg-transparent shadow-none border-b border-transparent py-3 lg:py-4'
-        }`}
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ease-in-out ${showBackground
+          ? 'bg-[#0A1A04]/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.3)] border-b border-white/5 py-3'
+          : 'bg-transparent shadow-none border-b border-transparent py-3 lg:py-4'
+          }`}
       >
         <nav className="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between">
           {/* Logo Desktop */}
           <div className="hidden lg:block">
             <Logo white={isWhiteTheme} />
           </div>
-          
+
           {/* Logo Mobile */}
           <div className="block lg:hidden">
             <Logo white={true} />
@@ -90,7 +89,7 @@ export function Navbar() {
               <>
                 <button
                   onClick={() => openLogin()}
-                  className="font-bold text-[14px] rounded-full px-6 py-2.5 transition-all duration-300 border-2"
+                  className="cursor-pointer font-bold text-[14px] rounded-full px-6 py-2.5 transition-all duration-300 border-2"
                   style={{
                     borderColor: isWhiteTheme ? "rgba(255,255,255,0.4)" : "#5A9020",
                     color: isWhiteTheme ? "#FFFFFF" : "#5A9020",
@@ -107,9 +106,9 @@ export function Navbar() {
                 </button>
                 <button
                   onClick={() => openRegister()}
-                  className="inline-flex items-center gap-2 font-bold text-[14px] rounded-full px-8 py-3 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-                  style={{ 
-                    background: isWhiteTheme ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #A8E060 0%, #5A9020 100%)", 
+                  className="cursor-pointer inline-flex items-center gap-2 font-bold text-[14px] rounded-full px-8 py-3 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                  style={{
+                    background: isWhiteTheme ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #A8E060 0%, #5A9020 100%)",
                     color: isWhiteTheme ? "#FFFFFF" : "#1A3A0A",
                     border: isWhiteTheme ? "1px solid rgba(255,255,255,0.2)" : "none"
                   }}
@@ -123,7 +122,7 @@ export function Navbar() {
 
           <button
             aria-label="Menu"
-            className="lg:hidden p-3 rounded-2xl transition-all duration-300 bg-white/10 text-white hover:bg-white/20"
+            className="cursor-pointer lg:hidden p-3 rounded-2xl transition-all duration-300 bg-white/10 text-white hover:bg-white/20"
             onClick={() => setOpen(true)}
           >
             <Menu size={24} />
@@ -132,7 +131,7 @@ export function Navbar() {
       </header>
 
       {/* Mobile Menu Overlay */}
-      <div 
+      <div
         className={`fixed inset-0 z-[100] lg:hidden transition-all duration-500 ${open ? "visible opacity-100" : "invisible opacity-0"}`}
       >
         <div
@@ -144,14 +143,14 @@ export function Navbar() {
         >
           <div className="flex items-center justify-between p-8 border-b border-[#F7FBF0]">
             <Logo />
-            <button 
+            <button
               onClick={() => setOpen(false)}
-              className="w-12 h-12 flex items-center justify-center bg-[#F7FBF0] rounded-2xl text-[#1A3A0A]"
+              className="cursor-pointer w-12 h-12 flex items-center justify-center bg-[#F7FBF0] rounded-2xl text-[#1A3A0A]"
             >
               <X size={24} />
             </button>
           </div>
-          
+
           <div className="flex-1 overflow-y-auto py-10 px-8">
             <ul className="flex flex-col gap-8 list-none m-0 p-0">
               {links.map((l, i) => (

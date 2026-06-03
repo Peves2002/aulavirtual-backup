@@ -7,9 +7,6 @@ CREATE TYPE "EstadoSuscripcion" AS ENUM ('ACTIVA', 'CANCELADA', 'VENCIDA', 'PEND
 -- CreateEnum
 CREATE TYPE "EstadoPagoSuscripcion" AS ENUM ('PENDIENTE', 'COMPLETADO', 'FALLIDO', 'REEMBOLSADO');
 
--- AlterTable
-ALTER TABLE "cursos" ADD COLUMN     "orden" INTEGER NOT NULL DEFAULT 0;
-
 -- CreateTable
 CREATE TABLE "planes_suscripcion" (
     "id" TEXT NOT NULL,

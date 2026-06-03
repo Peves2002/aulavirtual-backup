@@ -1,4 +1,4 @@
-import { PrismaClient, Rol } from '@prisma/client'
+import { PrismaClient, Rol, IntervaloSuscripcion } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
@@ -675,6 +675,94 @@ async function main() {
   })
 
   console.log('✅ Recetas creadas')
+
+  // ─── PLANES DE SUSCRIPCIÓN ───────────────────────────────────────────────────
+
+  const todosCursos = await prisma.curso.findMany({ select: { id: true } })
+
+  const planMensual = await prisma.planSuscripcion.upsert({
+    where: { id: 'plan-mensual' },
+    update: {},
+    create: {
+      id: 'plan-mensual',
+      nombre: 'Plan Mensual',
+      descripcion: 'Accede a todo nuestro catálogo de cursos de forma mensual.',
+      precio: 99.00,
+      moneda: 'PEN',
+      intervalo: IntervaloSuscripcion.MENSUAL,
+      esta_activo: true,
+      dias_prueba: 0,
+      beneficios: [
+        'Acceso ilimitado a todos los cursos',
+        'Certificados digitales de participación',
+        'Recetarios completos paso a paso descargables',
+        'Asesoría y soporte directo por WhatsApp',
+        'Actualizaciones gratuitas'
+      ]
+    }
+  })
+
+  const planTrimestral = await prisma.planSuscripcion.upsert({
+    where: { id: 'plan-trimestral' },
+    update: {},
+    create: {
+      id: 'plan-trimestral',
+      nombre: 'Plan Trimestral',
+      descripcion: 'Ahorra con el acceso trimestral ilimitado.',
+      precio: 249.00,
+      moneda: 'PEN',
+      intervalo: IntervaloSuscripcion.TRIMESTRAL,
+      esta_activo: true,
+      dias_prueba: 0,
+      beneficios: [
+        'Acceso ilimitado a todos los cursos',
+        'Certificados digitales de participación',
+        'Recetarios completos paso a paso descargables',
+        'Asesoría y soporte directo por WhatsApp',
+        'Descuento del 15% en consultorías'
+      ]
+    }
+  })
+
+  const planAnual = await prisma.planSuscripcion.upsert({
+    where: { id: 'plan-anual' },
+    update: {},
+    create: {
+      id: 'plan-anual',
+      nombre: 'Plan Anual',
+      descripcion: 'El plan definitivo para tu formación completa con el mejor precio.',
+      precio: 799.00,
+      moneda: 'PEN',
+      intervalo: IntervaloSuscripcion.ANUAL,
+      esta_activo: true,
+      dias_prueba: 0,
+      beneficios: [
+        'Acceso ilimitado a todos los cursos',
+        'Certificados digitales de participación',
+        'Recetarios completos paso a paso descargables',
+        'Asesoría y soporte directo por WhatsApp',
+        'Acceso prioritario a clases en vivo',
+        'Descuento del 30% en consultorías'
+      ]
+    }
+  })
+
+  const planes = [planMensual, planTrimestral, planAnual]
+
+  for (const p of planes) {
+    for (const c of todosCursos) {
+      await prisma.cursoEnPlan.upsert({
+        where: { plan_id_curso_id: { plan_id: p.id, curso_id: c.id } },
+        update: {},
+        create: {
+          plan_id: p.id,
+          curso_id: c.id
+        }
+      })
+    }
+  }
+
+  console.log('✅ Planes de suscripción creados')
 
   // ─── RESUMEN ─────────────────────────────────────────────────────────────────
 

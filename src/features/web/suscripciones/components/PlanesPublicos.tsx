@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 
 import { useSession } from 'next-auth/react'
 
-import { Check, Repeat2, BookOpen } from 'lucide-react'
+import { Check, Repeat2, BookOpen, Star, Sparkles } from 'lucide-react'
 
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import type { PlanPublico } from '@/features/estudiante/suscripciones/entity/Suscripcion'
@@ -34,26 +34,22 @@ export function PlanesPublicos({ planes }: PlanesPublicosProps) {
 
   if (planes.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '4rem 2rem', color: '#64748b' }}>
-        <Repeat2 size={48} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
-        <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem' }}>
-          No hay planes disponibles en este momento.
+      <div className="text-center py-20 px-6 max-w-md mx-auto bg-white rounded-3xl shadow-sm border border-gray-100 animate-fade-up">
+        <Repeat2 size={48} className="mx-auto mb-4 text-gray-300 animate-spin" style={{ animationDuration: '4s' }} />
+        <h3 className="font-display font-bold text-lg text-[#1A3A0A] mb-2">No hay planes disponibles</h3>
+        <p className="text-gray-500 text-sm">
+          Estamos configurando los mejores planes para ti. Por favor, vuelve a intentarlo más tarde o contáctanos.
         </p>
       </div>
     )
   }
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-      gap: '1.5rem',
-      maxWidth: '1100px',
-      margin: '0 auto',
-      padding: '0 1rem'
-    }}>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
       {planes.map(plan => {
         const isHovered = hoveredId === plan.id
+        const esTrimestral = plan.intervalo === 'TRIMESTRAL'
+        const esPopular = esTrimestral // Destacamos el plan trimestral como recomendado
         const beneficios: string[] = Array.isArray(plan.beneficios) ? plan.beneficios : []
         const tieneBeneficios = beneficios.length > 0
 
@@ -62,155 +58,112 @@ export function PlanesPublicos({ planes }: PlanesPublicosProps) {
             key={plan.id}
             onMouseEnter={() => setHoveredId(plan.id)}
             onMouseLeave={() => setHoveredId(null)}
-            style={{
-              backgroundColor: '#ffffff',
-              borderRadius: '20px',
-              padding: '2rem',
-              border: isHovered ? '2px solid var(--web-primary, #25927F)' : '2px solid #e2e8f0',
-              boxShadow: isHovered ? '0 20px 40px rgba(37,146,127,0.15)' : '0 4px 16px rgba(0,0,0,0.06)',
-              transition: 'all 0.25s ease',
-              display: 'flex',
-              flexDirection: 'column',
-              transform: isHovered ? 'translateY(-4px)' : 'none'
-            }}
+            className={`relative flex flex-col justify-between bg-white border border-[#A8E060]/30 rounded-[32px] p-8 transition-all duration-300 ${
+              isHovered 
+                ? 'shadow-2xl -translate-y-2' 
+                : 'shadow-lg hover:shadow-xl'
+            }`}
           >
-            {/* Header */}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                backgroundColor: 'rgba(37,146,127,0.08)',
-                borderRadius: '20px',
-                padding: '4px 12px',
-                marginBottom: '0.75rem'
-              }}>
-                <Repeat2 size={14} color="var(--web-primary, #25927F)" />
-                <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', fontWeight: 600, color: 'var(--web-primary, #25927F)' }}>
-                  {INTERVALO_LABELS[plan.intervalo]}
-                </span>
+
+            <div>
+              {/* Plan Interval Badge */}
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EAF7D0] text-[#2D5010] text-[11px] font-bold uppercase tracking-widest mb-4">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#5A9020]"></span>
+                {INTERVALO_LABELS[plan.intervalo]}
               </div>
 
-              <h3 style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.25rem', fontWeight: 700, color: '#0f172a', margin: '0 0 0.5rem' }}>
+              {/* Title & Desc */}
+              <h3 className="font-display font-bold text-2xl text-[#1A3A0A] mb-3">
                 {plan.nombre}
               </h3>
 
               {plan.descripcion && (
-                <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', color: '#64748b', margin: 0, lineHeight: 1.5 }}>
+                <p className="text-gray-500 text-[13px] mb-6 leading-relaxed">
                   {plan.descripcion}
                 </p>
               )}
-            </div>
 
-            {/* Precio */}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9rem', fontWeight: 600, color: '#64748b' }}>
+              {/* Price */}
+              <div className="flex items-baseline gap-1 mb-6">
+                <span className="text-2xl font-bold text-[#1A3A0A]">
                   {plan.moneda === 'PEN' ? 'S/' : '$'}
                 </span>
-                <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '2.5rem', fontWeight: 800, color: '#0f172a', lineHeight: 1 }}>
-                  {Number(plan.precio).toFixed(2)}
+                <span className="text-5xl font-display font-black text-[#1A3A0A] tracking-tight">
+                  {Number(plan.precio).toFixed(0)}
                 </span>
-                <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', color: '#94a3b8' }}>
+                <span className="text-sm font-bold text-gray-400">
                   /{INTERVALO_LABELS[plan.intervalo]?.toLowerCase()}
                 </span>
               </div>
 
               {plan.dias_prueba > 0 && (
-                <span style={{
-                  display: 'inline-block',
-                  marginTop: '0.5rem',
-                  backgroundColor: '#f0fdf4',
-                  color: '#16a34a',
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  fontFamily: 'Poppins, sans-serif',
-                  padding: '3px 10px',
-                  borderRadius: '20px'
-                }}>
-                  {plan.dias_prueba} días gratis
+                <span className="inline-block mb-6 bg-[#EAF7D0] text-[#2D5010] text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                  {plan.dias_prueba} días de prueba gratis
                 </span>
               )}
-            </div>
 
-            {/* Beneficios o Cursos */}
-            <div style={{ flex: 1, marginBottom: '1.5rem' }}>
-              {tieneBeneficios ? (
-                <>
-                  <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8rem', fontWeight: 600, color: '#475569', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    ¿Qué incluye?
-                  </p>
-                  <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    {beneficios.map((beneficio, i) => (
-                      <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                        <Check size={15} color="var(--web-primary, #25927F)" strokeWidth={2.5} style={{ flexShrink: 0, marginTop: '2px' }} />
-                        <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', color: '#334155', lineHeight: 1.4 }}>
-                          {beneficio}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+              <div className="h-px w-full bg-gray-100 mb-6"></div>
 
-                  {/* Resumen de cursos debajo de los beneficios */}
-                  {plan.cursos.length > 0 && (
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      marginTop: '1rem',
-                      padding: '8px 12px',
-                      backgroundColor: '#f1f5f9',
-                      borderRadius: '8px'
-                    }}>
-                      <BookOpen size={14} color="#64748b" />
-                      <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: '#475569', fontWeight: 500 }}>
-                        {plan.cursos.length} curso{plan.cursos.length !== 1 ? 's' : ''} incluido{plan.cursos.length !== 1 ? 's' : ''}
-                      </span>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8rem', fontWeight: 600, color: '#475569', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    Incluye {plan.cursos.length} curso{plan.cursos.length !== 1 ? 's' : ''}
-                  </p>
-                  <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    {plan.cursos.slice(0, 5).map(c => (
-                      <li key={c.curso_id} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <Check size={15} color="var(--web-primary, #25927F)" strokeWidth={2.5} style={{ flexShrink: 0 }} />
-                        <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', color: '#334155' }}>
-                          {c.curso.titulo}
+              {/* Beneficios */}
+              <div className="mb-8">
+                {tieneBeneficios ? (
+                  <>
+                    <p className="font-display text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">
+                      ¿Qué incluye este plan?
+                    </p>
+                    <ul className="space-y-3">
+                      {beneficios.map((beneficio, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <div className="mt-0.5 w-5 h-5 rounded-full bg-[#EAF7D0] flex items-center justify-center flex-shrink-0">
+                            <Check size={12} className="text-[#5A9020]" strokeWidth={3} />
+                          </div>
+                          <span className="text-[#1A3A0A] text-[14px] leading-snug">
+                            {beneficio}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {plan.cursos.length > 0 && (
+                      <div className="flex items-center gap-2 mt-6 p-3 bg-[#F7FBF0] border border-[#EAF7D0] rounded-2xl">
+                        <BookOpen size={16} className="text-[#5A9020]" />
+                        <span className="font-display text-[12px] text-[#2D5010] font-semibold">
+                          {plan.cursos.length} curso{plan.cursos.length !== 1 ? 's' : ''} incluido{plan.cursos.length !== 1 ? 's' : ''}
                         </span>
-                      </li>
-                    ))}
-                    {plan.cursos.length > 5 && (
-                      <li style={{ paddingLeft: '23px' }}>
-                        <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8rem', color: '#94a3b8' }}>
-                          +{plan.cursos.length - 5} cursos más
-                        </span>
-                      </li>
+                      </div>
                     )}
-                  </ul>
-                </>
-              )}
+                  </>
+                ) : (
+                  <>
+                    <p className="font-display text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">
+                      Incluye {plan.cursos.length} curso{plan.cursos.length !== 1 ? 's' : ''}
+                    </p>
+                    <ul className="space-y-3">
+                      {plan.cursos.slice(0, 5).map(c => (
+                        <li key={c.curso_id} className="flex items-start gap-3">
+                          <div className="mt-0.5 w-5 h-5 rounded-full bg-[#EAF7D0] flex items-center justify-center flex-shrink-0">
+                            <Check size={12} className="text-[#5A9020]" strokeWidth={3} />
+                          </div>
+                          <span className="text-[#1A3A0A] text-[14px] leading-snug">
+                            {c.curso.titulo}
+                          </span>
+                        </li>
+                      ))}
+                      {plan.cursos.length > 5 && (
+                        <li className="pl-8 text-[12px] text-gray-400 font-medium">
+                          +{plan.cursos.length - 5} cursos más en el catálogo
+                        </li>
+                      )}
+                    </ul>
+                  </>
+                )}
+              </div>
             </div>
 
-            {/* CTA */}
+            {/* CTA Button */}
             <button
               onClick={() => handleSuscribirse(plan)}
-              style={{
-                width: '100%',
-                padding: '0.875rem',
-                borderRadius: '12px',
-                border: 'none',
-                cursor: 'pointer',
-                fontFamily: 'Poppins, sans-serif',
-                fontSize: '0.9375rem',
-                fontWeight: 700,
-                backgroundColor: isHovered ? 'var(--web-primary, #25927F)' : '#0f172a',
-                color: '#ffffff',
-                transition: 'background-color 0.2s ease'
-              }}
+              className="cursor-pointer w-full font-bold text-[15px] rounded-full py-4 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 text-center bg-[#0A1A04] text-white hover:bg-black"
             >
               Suscribirse ahora
             </button>
@@ -220,4 +173,3 @@ export function PlanesPublicos({ planes }: PlanesPublicosProps) {
     </div>
   )
 }
-

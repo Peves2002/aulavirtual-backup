@@ -31,7 +31,7 @@ export function Hero() {
         <img 
           src="/assets/hero.png" 
           alt="Hero Background" 
-          className="hidden lg:block w-full h-auto"
+          className="hidden lg:block absolute inset-0 w-full h-full object-cover object-right"
         />
 
         {/* Mobile Carousel Image Container */}
@@ -88,9 +88,9 @@ export function Hero() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4">
-              <button 
-                onClick={() => setShowSubscription(true)}
-                className="cursor-pointer w-full sm:w-auto inline-flex items-center justify-center gap-2 font-bold text-[14px] rounded-full px-8 py-4 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
+              <Link 
+                href="/suscripciones"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 font-bold text-[14px] rounded-full px-8 py-4 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
                 style={{ 
                   background: "linear-gradient(135deg, #5A9020 0%, #3A6010 100%)", 
                   color: "#FFFFFF" 
@@ -98,7 +98,7 @@ export function Hero() {
               >
                 SUSCRIBIRSE AHORA
                 <ArrowRight size={18} className="text-[#A8E060]" />
-              </button>
+              </Link>
 
               <Link 
                 href="/cursos"
