@@ -118,7 +118,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
                 Categorías
               </MenuItem>
               <MenuItem href='/admin/cursos' icon={<i className='tabler-book' />}>
-                Gestión Cursos
+                Cursos
               </MenuItem>
               <MenuItem href='/admin/pedidos' icon={<i className='tabler-shopping-cart' />}>
                 Pedidos
@@ -136,12 +136,12 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
                 Recetas
               </MenuItem>
               <MenuItem href='/admin/planes-suscripcion' icon={<i className='tabler-repeat' />}>
-              Planes de Suscripción
-            </MenuItem>
-            <MenuItem href='/admin/suscripciones' icon={<i className='tabler-users-group' />}>
-              Suscripciones
-            </MenuItem>
-            <MenuItem href='/admin/reclamaciones' icon={<i className='tabler-book-2' />}>
+                Planes
+              </MenuItem>
+              <MenuItem href='/admin/suscripciones' icon={<i className='tabler-users-group' />}>
+                Suscripciones
+              </MenuItem>
+              <MenuItem href='/admin/reclamaciones' icon={<i className='tabler-book-2' />}>
                 Reclamaciones
               </MenuItem>
               <MenuItem href='/admin/configuracion' icon={<i className='tabler-settings' />}>
