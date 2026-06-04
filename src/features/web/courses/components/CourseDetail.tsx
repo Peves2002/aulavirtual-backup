@@ -337,7 +337,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                   ) : (
                     <Chip label={course.nivel === 'BASICO' ? 'Intermedio' : 'Avanzado'} size="small" sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 600 }} />
                   )}
-                  <Chip label={course.tipo_emision === 'MIXTO' ? 'Mixto' : 'Sincrónico'} size="small" sx={{ bgcolor: 'secondary.main', color: 'white', fontWeight: 600 }} />
+                  <Chip label={course.tipo_emision === 'SINCRONO' ? 'Sincrónico' : course.tipo_emision === 'MIXTO' ? 'Mixto' : 'Asíncrono'} size="small" sx={{ bgcolor: 'secondary.main', color: 'white', fontWeight: 600 }} />
                 </Stack>
 
                 <Typography variant="h2" component="h1" sx={{ fontWeight: 900, color: 'white', lineHeight: 1.1, fontSize: { xs: '2.5rem', md: '3.5rem' } }}>
