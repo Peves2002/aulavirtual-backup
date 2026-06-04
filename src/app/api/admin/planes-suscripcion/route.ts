@@ -84,10 +84,13 @@ export async function POST(request: Request) {
     try {
       const shortName = `plan-${plan.id.slice(0, 8)}`
 
+      // Culqi no acepta tildes ni caracteres especiales en name/description
+      const sinTildes = (str: string) => str.normalize('NFD').replace(new RegExp('[\\u0300-\\u036f]', 'g'), '')
+
       const culqiPayload = {
-        name: plan.nombre,
+        name: sinTildes(plan.nombre),
         short_name: shortName,
-        description: plan.descripcion || plan.nombre, // description es requerida en Culqi (mín 5 chars)
+        description: sinTildes(plan.descripcion || plan.nombre),
         amount: Math.round(Number(plan.precio) * 100),
         currency: plan.moneda,
         interval_unit_time: plan.culqi_interval_unit,
