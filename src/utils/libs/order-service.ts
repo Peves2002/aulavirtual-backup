@@ -20,6 +20,11 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
       include: { detalles: true, usuario: true }
     })
 
+    // Fetch raw detalles to get simulacro_id (Prisma client may not know about this column yet)
+    const detallesRaw: any[] = await prisma.$queryRaw`
+      SELECT id, curso_id, simulacro_id FROM detalles_pedido WHERE pedido_id = ${pedidoId}`
+    const simulacroDetallesMap = new Map(detallesRaw.map(d => [d.id, d.simulacro_id]))
+
     if (!pedidoInit) throw new Error(`Pedido ${pedidoId} no encontrado.`)
 
     if (pedidoInit.estado === 'COMPLETADO') {
@@ -55,30 +60,48 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
           })
         }
 
-        // c) Crear inscripciones activas
+        // c) Crear inscripciones activas (cursos y simulacros)
         const inscripciones = []
 
         for (const detalle of pedidoInit.detalles) {
-          const ins = await tx.inscripcion.upsert({
-            where: {
-              usuario_id_curso_id: {
+          if (detalle.curso_id) {
+            const ins = await tx.inscripcion.upsert({
+              where: {
+                usuario_id_curso_id: {
+                  usuario_id: pedidoInit.usuario_id,
+                  curso_id: detalle.curso_id
+                }
+              },
+              update: { estado: 'ACTIVO', pedido_id: pedidoId },
+              create: {
                 usuario_id: pedidoInit.usuario_id,
-                curso_id: detalle.curso_id
+                curso_id: detalle.curso_id,
+                pedido_id: pedidoId,
+                estado: 'ACTIVO'
               }
-            },
-            update: {
-              estado: 'ACTIVO',
-              pedido_id: pedidoId
-            },
-            create: {
-              usuario_id: pedidoInit.usuario_id,
-              curso_id: detalle.curso_id,
-              pedido_id: pedidoId,
-              estado: 'ACTIVO'
-            }
-          })
+            })
+            inscripciones.push(ins)
+          }
 
-          inscripciones.push(ins)
+          const simulacroIdFromMap = simulacroDetallesMap.get(detalle.id)
+          if (simulacroIdFromMap) {
+            const simulacroId = simulacroIdFromMap
+            const existing = await tx.$queryRaw<any[]>`
+              SELECT id FROM inscripciones_simulacro
+              WHERE usuario_id = ${pedidoInit.usuario_id} AND simulacro_id = ${simulacroId} LIMIT 1`
+
+            if (existing.length > 0) {
+              await tx.$executeRaw`
+                UPDATE inscripciones_simulacro SET estado = 'ACTIVO'
+                WHERE usuario_id = ${pedidoInit.usuario_id} AND simulacro_id = ${simulacroId}`
+            } else {
+              const { randomUUID } = await import('crypto')
+              await tx.$executeRaw`
+                INSERT INTO inscripciones_simulacro (id, usuario_id, simulacro_id, estado, inscrito_en)
+                VALUES (${randomUUID()}, ${pedidoInit.usuario_id}, ${simulacroId}, 'ACTIVO', NOW())`
+            }
+            inscripciones.push({ simulacro_id: simulacroId })
+          }
         }
 
         return { pedido: pedidoActualizado, inscripciones }
