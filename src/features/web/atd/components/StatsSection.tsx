@@ -28,12 +28,12 @@ const stats = [
 ];
 
 const bars = [
-  { year: "2020", value: 800,  max: 10000 },
-  { year: "2021", value: 2100, max: 10000 },
-  { year: "2022", value: 4300, max: 10000 },
-  { year: "2023", value: 6500, max: 10000 },
-  { year: "2024", value: 8700, max: 10000 },
   { year: "2025", value: 10000, max: 10000 },
+  { year: "2024", value: 8700,  max: 10000 },
+  { year: "2023", value: 6500,  max: 10000 },
+  { year: "2022", value: 4300,  max: 10000 },
+  { year: "2021", value: 2100,  max: 10000 },
+  { year: "2020", value: 800,   max: 10000 },
 ];
 
 function useCountUp(target: number, duration = 1800, active: boolean) {
@@ -135,15 +135,32 @@ export default function StatsSection() {
           <div className="space-y-3">
             {bars.map((bar, i) => {
               const pct = (bar.value / bar.max) * 100;
+              const isFirst = i === 0;
               return (
-                <div key={bar.year} className="flex items-center gap-3">
-                  <span className="w-10 text-xs text-muted-foreground text-right flex-shrink-0">{bar.year}</span>
+                <div
+                  key={bar.year}
+                  className="flex items-center gap-3 transition-all duration-1000 ease-out"
+                  style={{
+                    opacity: barsVisible ? 1 : 0,
+                    transform: barsVisible ? "translateX(0)" : "translateX(-32px)",
+                    transitionDelay: `${i * 180}ms`,
+                  }}
+                >
+                  <span
+                    className="w-10 text-xs text-right flex-shrink-0 font-semibold"
+                    style={{ color: isFirst ? "hsl(var(--primary))" : undefined }}
+                  >
+                    {bar.year}
+                  </span>
                   <div className="flex-1 h-7 bg-white/5 rounded-md overflow-hidden relative">
                     <div
-                      className="h-full rounded-md bg-gradient-to-r from-primary to-primary/70 transition-all duration-1000 ease-out flex items-center justify-end pr-2"
+                      className="h-full rounded-md flex items-center justify-end pr-2 transition-all duration-1000 ease-out"
                       style={{
                         width: barsVisible ? `${pct}%` : "0%",
-                        transitionDelay: `${i * 120}ms`,
+                        transitionDelay: `${i * 180 + 300}ms`,
+                        background: isFirst
+                          ? "linear-gradient(to right, hsl(var(--primary)), hsl(var(--secondary)))"
+                          : `linear-gradient(to right, hsl(var(--primary) / ${0.9 - i * 0.1}), hsl(var(--primary) / ${0.5 - i * 0.05}))`,
                       }}
                     >
                       {barsVisible && (

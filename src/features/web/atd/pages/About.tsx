@@ -18,9 +18,9 @@ const About = () => (
       subtitle="Nacimos en Lima con una misión global: democratizar el dominio de la IA en español."
     />
     <section className="container py-20 grid gap-12 md:grid-cols-2 items-center">
-      <div className="relative group">
+      <div className="relative group overflow-hidden rounded-2xl" style={{ maxHeight: '70vh' }}>
         <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-        <img src={historiaImg} alt="Historia ATD" className="relative rounded-2xl border border-white/10" />
+        <img src={historiaImg} alt="Historia ATD" className="relative rounded-2xl border border-white/10 w-full h-full object-cover" />
       </div>
       <div>
         <h2 className="text-3xl md:text-4xl font-bold mb-4">Nuestra historia</h2>
@@ -52,9 +52,15 @@ const About = () => (
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <img src={principalImg} alt="Equipo" className="rounded-xl border border-white/10 col-span-2 shadow-2xl" />
-          <img src={otros1Img} alt="Equipo" className="rounded-xl border border-white/10" />
-          <img src={otros2Img} alt="Equipo" className="rounded-xl border border-white/10" />
+          <div className="col-span-2 rounded-xl overflow-hidden" style={{ maxHeight: '50vh' }}>
+            <img src={principalImg} alt="Equipo" className="rounded-xl border border-white/10 shadow-2xl w-full h-full object-cover" />
+          </div>
+          <div className="rounded-xl overflow-hidden" style={{ maxHeight: '35vh' }}>
+            <img src={otros1Img} alt="Equipo" className="rounded-xl border border-white/10 w-full h-full object-cover" />
+          </div>
+          <div className="rounded-xl overflow-hidden" style={{ maxHeight: '35vh' }}>
+            <img src={otros2Img} alt="Equipo" className="rounded-xl border border-white/10 w-full h-full object-cover" />
+          </div>
         </div>
       </div>
     </section>

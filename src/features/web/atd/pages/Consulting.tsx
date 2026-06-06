@@ -60,7 +60,9 @@ const Consulting = () => (
           <p className="text-muted-foreground leading-relaxed mb-6">
             No vendemos software. Vendemos soluciones. Nuestra consultoría se enfoca en resolver cuellos de botella específicos mediante IA, integrando herramientas que tu equipo realmente usará.
           </p>
-          <img src={serviciosImg} alt="Servicios ATD" className="rounded-xl border border-white/5 shadow-xl" />
+          <div className="rounded-xl overflow-hidden" style={{ maxHeight: '60vh' }}>
+            <img src={serviciosImg} alt="Servicios ATD" className="rounded-xl border border-white/5 shadow-xl w-full h-full object-cover" />
+          </div>
         </div>
       </div>
 

@@ -155,7 +155,9 @@ const Home = () => {
           </div>
           <div className="grid gap-12 items-center md:grid-cols-2">
             <div className="space-y-6">
-              <img src={portadaImg} alt="ATD Portada" className="rounded-2xl shadow-2xl border border-white/10 glow-primary" />
+              <div className="rounded-2xl overflow-hidden" style={{ maxHeight: '70vh' }}>
+                <img src={portadaImg} alt="ATD Portada" className="rounded-2xl shadow-2xl border border-white/10 glow-primary w-full h-full object-cover" />
+              </div>
             </div>
             <div className="grid gap-6 sm:grid-cols-2">
               {[
@@ -240,8 +242,12 @@ const Home = () => {
               Nuestros alumnos están transformando sus procesos diarios. Mira el cambio real antes y después de implementar IA.
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
-              <img src={antesDespuesImg} alt="Antes y después" className="rounded-xl border border-white/10" />
-              <img src={comunidadImg} alt="Comunidad ATD" className="rounded-xl border border-white/10" />
+              <div className="rounded-xl overflow-hidden" style={{ maxHeight: '40vh' }}>
+                <img src={antesDespuesImg} alt="Antes y después" className="rounded-xl border border-white/10 w-full h-full object-cover" />
+              </div>
+              <div className="rounded-xl overflow-hidden" style={{ maxHeight: '40vh' }}>
+                <img src={comunidadImg} alt="Comunidad ATD" className="rounded-xl border border-white/10 w-full h-full object-cover" />
+              </div>
             </div>
           </div>
           <div className="grid gap-6">

@@ -96,7 +96,9 @@ const Programs = () => {
             <p className="text-muted-foreground mb-6">
               Nuestra <strong>Mentoría Elite</strong> ofrece un camino 1-a-1 para líderes que necesitan dominar la IA en tiempo récord con un plan de estudios adaptado 100% a sus objetivos.
             </p>
-            <img src={promptDocentesImg} alt="Mentoría" className="rounded-xl border border-white/10 shadow-lg" />
+            <div className="rounded-xl overflow-hidden" style={{ maxHeight: '60vh' }}>
+              <img src={promptDocentesImg} alt="Mentoría" className="rounded-xl border border-white/10 shadow-lg w-full h-full object-cover" />
+            </div>
             <div className="mt-8">
               <Button variant="hero" asChild><Link href="/contacto">Consultar por Mentoría</Link></Button>
             </div>

@@ -31,6 +31,11 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
 
     if (!pedidoInit) throw new Error(`Pedido ${pedidoId} no encontrado.`)
 
+    // Pre-fetch producto_ia_id / simulacro_id por detalle (fuera del tipo Prisma)
+    const detallesRaw: any[] = await prisma.$queryRaw`
+      SELECT id, simulacro_id, producto_ia_id FROM detalles_pedido WHERE pedido_id = ${pedidoId}`
+    const extraMap = new Map(detallesRaw.map(d => [d.id, { simulacroId: d.simulacro_id, productoIaId: d.producto_ia_id }]))
+
     if (pedidoInit.estado === 'COMPLETADO') {
       console.log(`[Order-Service] El pedido ${pedidoId} ya está completado.`)
 
@@ -68,28 +73,42 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
         const inscripciones = []
 
         for (const detalle of pedidoInit.detalles) {
-          const fechaInscripcion = new Date()
+          const extra = extraMap.get(detalle.id)
 
-          const ins = await tx.inscripcion.upsert({
-            where: {
-              usuario_id_curso_id: {
-                usuario_id: pedidoInit.usuario_id,
-                curso_id: detalle.curso_id
-              }
-            },
-            update: {
-              estado: 'ACTIVO',
-              pedido_id: pedidoId
-            },
-            create: {
-              usuario_id: pedidoInit.usuario_id,
-              curso_id: detalle.curso_id,
-              pedido_id: pedidoId,
-              estado: 'ACTIVO',
-              inscrito_en: fechaInscripcion
+          // Inscripción de simulacro
+          if (extra?.simulacroId) {
+            const { randomUUID } = await import('crypto')
+            const existing: any[] = await tx.$queryRaw`
+              SELECT id FROM inscripciones_simulacro WHERE usuario_id = ${pedidoInit.usuario_id} AND simulacro_id = ${extra.simulacroId} LIMIT 1`
+            if (!existing.length) {
+              await tx.$executeRaw`
+                INSERT INTO inscripciones_simulacro (id, usuario_id, simulacro_id, estado, inscrito_en)
+                VALUES (${randomUUID()}, ${pedidoInit.usuario_id}, ${extra.simulacroId}, 'ACTIVO', NOW())`
             }
-          })
+            continue
+          }
 
+          // Inscripción de producto IA (GPT)
+          if (extra?.productoIaId) {
+            const { randomUUID } = await import('crypto')
+            const existing: any[] = await tx.$queryRaw`
+              SELECT id FROM inscripciones_gpt WHERE usuario_id = ${pedidoInit.usuario_id} AND producto_ia_id = ${extra.productoIaId} LIMIT 1`
+            if (!existing.length) {
+              await tx.$executeRaw`
+                INSERT INTO inscripciones_gpt (id, usuario_id, producto_ia_id, estado, inscrito_en)
+                VALUES (${randomUUID()}, ${pedidoInit.usuario_id}, ${extra.productoIaId}, 'ACTIVO', NOW())`
+            }
+            continue
+          }
+
+          // Inscripción de curso normal
+          if (!detalle.curso_id) continue
+          const fechaInscripcion = new Date()
+          const ins = await tx.inscripcion.upsert({
+            where: { usuario_id_curso_id: { usuario_id: pedidoInit.usuario_id, curso_id: detalle.curso_id } },
+            update: { estado: 'ACTIVO', pedido_id: pedidoId },
+            create: { usuario_id: pedidoInit.usuario_id, curso_id: detalle.curso_id, pedido_id: pedidoId, estado: 'ACTIVO', inscrito_en: fechaInscripcion }
+          })
           inscripciones.push(ins)
         }
 
