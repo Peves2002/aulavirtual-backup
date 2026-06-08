@@ -1,5 +1,4 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/utils/configs/auth'
+import { getAuthSession } from '@/utils/libs/auth-helpers'
 import prisma from '@/utils/libs/prisma'
 import MarketplacePage from '@/features/web/atd/pages/Marketplace'
 
@@ -7,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function Page() {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getAuthSession()
 
     const productos: any[] = await prisma.$queryRawUnsafe(
       `SELECT id, titulo, slug, descripcion, miniatura, precio, precio_falso, moneda, es_gratis, categoria

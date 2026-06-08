@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/utils/configs/auth'
+import { getAuthSession } from '@/utils/libs/auth-helpers'
 import prisma from '@/utils/libs/prisma'
 import ProductoIADetailView from '@/features/web/marketplace/ProductoIADetailView'
 
@@ -16,9 +15,13 @@ export default async function Page({ params }: Props) {
     )
     if (!rows.length || rows[0].estado !== 'PUBLICADO') notFound()
 
-    const producto = { ...rows[0], precio: Number(rows[0].precio), precio_falso: rows[0].precio_falso ? Number(rows[0].precio_falso) : null }
+    const producto = {
+      ...rows[0],
+      precio: Number(rows[0].precio),
+      precio_falso: rows[0].precio_falso ? Number(rows[0].precio_falso) : null
+    }
 
-    const session = await getServerSession(authOptions)
+    const session = await getAuthSession()
     let yaAdquirido = false
     if (session?.user?.id) {
       const ins: any[] = await prisma.$queryRawUnsafe(
@@ -29,7 +32,8 @@ export default async function Page({ params }: Props) {
     }
 
     return <ProductoIADetailView producto={producto} yaAdquirido={yaAdquirido} />
-  } catch {
+  } catch (e: any) {
+    if (e?.digest) throw e
     notFound()
   }
 }

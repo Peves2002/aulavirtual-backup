@@ -1,8 +1,11 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { Box, Container, Grid, Typography, Chip, Button, Stack, Divider, Paper } from '@mui/material'
 import { Bot, ShoppingCart, CheckCircle, ArrowLeft, Tag, Globe, Gift, ExternalLink } from 'lucide-react'
+import { useAuthModal } from '@/contexts/AuthModalContext'
 
 interface Producto {
   id: string
@@ -142,6 +145,18 @@ export default function ProductoIADetailView({ producto, yaAdquirido }: Props) {
 }
 
 function PriceAndCta({ producto, yaAdquirido }: { producto: Producto; yaAdquirido: boolean }) {
+  const { data: session } = useSession()
+  const { openLogin } = useAuthModal()
+  const router = useRouter()
+
+  const handleComprar = () => {
+    if (!session?.user) {
+      openLogin()
+    } else {
+      router.push(`/checkout/productos-ia/${producto.slug}`)
+    }
+  }
+
   return (
     <Stack spacing={2}>
       <Box>
@@ -177,7 +192,7 @@ function PriceAndCta({ producto, yaAdquirido }: { producto: Producto; yaAdquirid
           )}
         </>
       ) : (
-        <Button component={Link} href={`/checkout/productos-ia/${producto.slug}`} fullWidth variant="contained"
+        <Button fullWidth variant="contained" onClick={handleComprar}
           sx={{ py: 1.5, fontWeight: 700, fontSize: '1rem', borderRadius: 2, background: 'linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)', '&:hover': { opacity: 0.9 } }}
           startIcon={<ShoppingCart size={18} />}>
           {producto.es_gratis ? 'Obtener gratis' : 'Comprar ahora'}

@@ -74,16 +74,17 @@ export default function GptDetailPage({ gpt }: { gpt: GptItem }) {
           <Stack spacing={2}>
             {gpt.url_acceso ? (
               <Box sx={{ p: 2.5, borderRadius: 2, bgcolor: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.2)' }}>
-                <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ sm: 'center' }} gap={2}>
-                  <Box>
-                    <Typography fontWeight={700} mb={0.5}>Asistente GPT</Typography>
-                    <Typography variant="caption" color="text.secondary">Accede directamente a tu asistente IA configurado</Typography>
-                  </Box>
-                  <Button variant="contained" href={gpt.url_acceso} target="_blank" rel="noopener noreferrer"
-                    endIcon={<ExternalLink size={15} />} sx={{ bgcolor: '#10b981', '&:hover': { bgcolor: '#059669' }, fontWeight: 700, borderRadius: 2, minWidth: 140, flexShrink: 0 }}>
-                    Usar GPT
-                  </Button>
+                <Stack direction="row" gap={1} alignItems="center" mb={1}>
+                  <Typography fontWeight={700}>Asistente GPT</Typography>
                 </Stack>
+                <Typography variant="caption" color="text.secondary" display="block" mb={2}>
+                  Accede directamente a tu asistente IA configurado
+                </Typography>
+                <Button variant="contained" href={gpt.url_acceso} target="_blank" rel="noopener noreferrer"
+                  fullWidth endIcon={<ExternalLink size={16} />}
+                  sx={{ bgcolor: '#10b981', '&:hover': { bgcolor: '#059669' }, fontWeight: 700, borderRadius: 2, py: 1.8, fontSize: '1rem' }}>
+                  Usar GPT
+                </Button>
               </Box>
             ) : (
               <Box sx={{ p: 2.5, borderRadius: 2, bgcolor: 'rgba(0,0,0,0.04)', border: '1px dashed', borderColor: 'divider' }}>
@@ -95,20 +96,18 @@ export default function GptDetailPage({ gpt }: { gpt: GptItem }) {
               <>
                 <Divider />
                 <Box sx={{ p: 2.5, borderRadius: 2, bgcolor: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.2)' }}>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ sm: 'center' }} gap={2}>
-                    <Box>
-                      <Stack direction="row" gap={1} alignItems="center" mb={0.5}>
-                        <Gift size={16} color="#a78bfa" />
-                        <Typography fontWeight={700}>Contenido de regalo</Typography>
-                      </Stack>
-                      <Typography variant="caption" color="text.secondary">Recursos y materiales adicionales exclusivos para ti</Typography>
-                    </Box>
-                    <Button variant="outlined" href={gpt.url_regalo} target="_blank" rel="noopener noreferrer"
-                      endIcon={<ExternalLink size={15} />}
-                      sx={{ borderColor: 'rgba(139,92,246,0.5)', color: '#a78bfa', '&:hover': { borderColor: '#7c3aed', bgcolor: 'rgba(139,92,246,0.06)' }, fontWeight: 700, borderRadius: 2, minWidth: 140, flexShrink: 0 }}>
-                      Ver recursos
-                    </Button>
+                  <Stack direction="row" gap={1} alignItems="center" mb={1}>
+                    <Gift size={16} color="#a78bfa" />
+                    <Typography fontWeight={700}>Contenido de regalo</Typography>
                   </Stack>
+                  <Typography variant="caption" color="text.secondary" display="block" mb={2}>
+                    Recursos y materiales adicionales exclusivos para ti
+                  </Typography>
+                  <Button variant="outlined" href={gpt.url_regalo} target="_blank" rel="noopener noreferrer"
+                    fullWidth endIcon={<ExternalLink size={16} />}
+                    sx={{ borderColor: 'rgba(139,92,246,0.5)', color: '#a78bfa', '&:hover': { borderColor: '#7c3aed', bgcolor: 'rgba(139,92,246,0.08)' }, fontWeight: 700, borderRadius: 2, py: 1.8, fontSize: '1rem' }}>
+                    Ver contenido de regalo
+                  </Button>
                 </Box>
               </>
             )}

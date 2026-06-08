@@ -1,68 +1,40 @@
 import { NextResponse } from 'next/server'
 
 import { withAuth } from 'next-auth/middleware'
-import { Rol } from '@prisma/client'
 
 export default withAuth(
   function middleware(req) {
     const token = req.nextauth.token
     const path = req.nextUrl.pathname
-
-    // Si no hay token y está intentando acceder a rutas protegidas
-    // if (!token && !path.startsWith('/login') && !path.startsWith('/register')) {
-    //   console.log(path)
-
-    //     return NextResponse.redirect(new URL('/login', req.url))
-    // }
+    const rol = token?.rol as string | undefined
 
     // Si tiene token y está intentando acceder a login/register
     if (token && (path.startsWith('/login') || path.startsWith('/register'))) {
-      // Redirigir según rol
-      const rol = token.rol as Rol
-
-      if (rol === Rol.ADMIN) {
-        return NextResponse.redirect(new URL('/admin/dashboard', req.url), { status: 302 })
-      }
-
-      if (rol === Rol.PROFESOR) {
-        return NextResponse.redirect(new URL('/profesor/dashboard', req.url), { status: 302 })
-      }
-
+      if (rol === 'ADMIN') return NextResponse.redirect(new URL('/admin/dashboard', req.url), { status: 302 })
+      if (rol === 'PROFESOR') return NextResponse.redirect(new URL('/profesor/dashboard', req.url), { status: 302 })
       return NextResponse.redirect(new URL('/estudiante/dashboard', req.url), { status: 302 })
     }
 
     // Redirigir /dashboard genérico según rol
     if (path === '/dashboard') {
-      const rol = token?.rol as Rol
-
-      if (rol === Rol.ADMIN) {
-        return NextResponse.redirect(new URL('/admin/dashboard', req.url), { status: 302 })
-      }
-
-      if (rol === Rol.PROFESOR) {
-        return NextResponse.redirect(new URL('/profesor/dashboard', req.url), { status: 302 })
-      }
-
+      if (rol === 'ADMIN') return NextResponse.redirect(new URL('/admin/dashboard', req.url), { status: 302 })
+      if (rol === 'PROFESOR') return NextResponse.redirect(new URL('/profesor/dashboard', req.url), { status: 302 })
       return NextResponse.redirect(new URL('/estudiante/dashboard', req.url), { status: 302 })
     }
 
-    // Verificar acceso a rutas según rol
-    const rol = token?.rol as Rol
-
     // Rutas de admin - solo ADMIN
-    if (path.startsWith('/admin') && rol !== Rol.ADMIN) {
+    if (path.startsWith('/admin') && rol !== 'ADMIN') {
       return NextResponse.redirect(new URL('/unauthorized', req.url), { status: 302 })
     }
 
     // Rutas de profesor - solo PROFESOR o ADMIN
-    if (path.startsWith('/profesor') && rol !== Rol.ADMIN && rol !== Rol.PROFESOR) {
+    if (path.startsWith('/profesor') && rol !== 'ADMIN' && rol !== 'PROFESOR') {
       return NextResponse.redirect(new URL('/unauthorized', req.url), { status: 302 })
     }
 
-    // Rutas de estudiante - solo ESTUDIANTE o ADMIN (y PROFESOR para ver el reproductor)
-    if (path.startsWith('/estudiante') && rol !== Rol.ADMIN && rol !== Rol.ESTUDIANTE) {
-      // Excepción: Los profesores pueden acceder al reproductor para ver su curso
-      if (rol === Rol.PROFESOR && path.startsWith('/estudiante/aprender')) {
+    // Rutas de estudiante - ESTUDIANTE, ADMIN, y PROFESOR (para el reproductor)
+    if (path.startsWith('/estudiante') && rol !== 'ADMIN' && rol !== 'ESTUDIANTE') {
+      if (rol === 'PROFESOR' && path.startsWith('/estudiante/aprender')) {
         // Permitido
       } else {
         return NextResponse.redirect(new URL('/unauthorized', req.url), { status: 302 })
@@ -105,6 +77,7 @@ export default withAuth(
           path.startsWith('/assets') ||
           path.startsWith('/empresas') ||
           path.startsWith('/politica-de-devoluciones') ||
+          path.startsWith('/checkout') ||
           path === '/'
         ) {
           return true

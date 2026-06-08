@@ -102,7 +102,7 @@ function UserMenu() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-full border border-white/10 hover:border-white/20 hover:bg-white/5 transition-all group"
+        className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-full border border-white/10 bg-black/30 hover:border-white/20 hover:bg-white/8 transition-all group"
       >
         {/* Avatar */}
         {avatar ? (
@@ -112,7 +112,7 @@ function UserMenu() {
             {initials}
           </div>
         )}
-        <span className="text-sm font-medium text-foreground/80 group-hover:text-foreground max-w-[100px] truncate hidden xl:block">
+        <span className="text-sm font-medium text-white/90 group-hover:text-white max-w-[100px] truncate hidden xl:block">
           {nombre.split(" ")[0]}
         </span>
         <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground transition-transform duration-200", open && "rotate-180")} />
