@@ -12,9 +12,10 @@ type RecetaDetalleProps = {
   insumos: GrupoInsumos[]
   procedimiento: SeccionProcedimiento[]
   observaciones: string | null
+  video_url: string | null
 }
 
-export function RecetaDetalle({ nombre, imagen, descripcion, insumos, procedimiento, observaciones }: RecetaDetalleProps) {
+export function RecetaDetalle({ nombre, imagen, descripcion, insumos, procedimiento, observaciones, video_url }: RecetaDetalleProps) {
   return (
     <article className='max-w-4xl mx-auto px-5 lg:px-8 py-12'>
       {/* Volver */}
@@ -37,8 +38,26 @@ export function RecetaDetalle({ nombre, imagen, descripcion, insumos, procedimie
 
       {/* Imagen */}
       {imagen && (
-        <div className='relative w-full aspect-video rounded-2xl overflow-hidden mb-12 shadow-xl'>
+        <div className='relative w-full aspect-video rounded-2xl overflow-hidden shadow-xl' style={{ marginBottom: video_url ? '1rem' : '3rem' }}>
           <Image src={imagen} alt={nombre} fill sizes='(max-width: 1024px) 100vw, 896px' className='object-cover' />
+        </div>
+      )}
+
+      {/* Video YouTube */}
+      {video_url && (
+        <div className='mb-12'>
+          <a
+            href={video_url}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='flex items-center justify-center gap-3 w-full py-3 px-6 rounded-xl border-2 border-red-500 bg-red-50 hover:bg-red-100 transition-colors group'
+          >
+            <i className='tabler-brand-youtube text-2xl text-red-600' />
+            <span className='text-red-700 font-semibold text-base group-hover:underline'>
+              Para ver el video dale click aquí
+            </span>
+            <i className='tabler-external-link text-sm text-red-500' />
+          </a>
         </div>
       )}
 

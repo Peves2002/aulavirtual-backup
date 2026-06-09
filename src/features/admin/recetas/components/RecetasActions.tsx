@@ -26,7 +26,7 @@ export const RecetasActions = ({ recetaClicked, addReceta, editReceta, deleteRec
       <EditRecetaModal
         open={editReceta.isOpen}
         handleClose={editReceta.closeHandler}
-        recetaId={recetaClicked?.id || null}
+        receta={editReceta.isOpen ? recetaClicked : null}
         onSuccess={onSuccess}
       />
 

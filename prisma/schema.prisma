@@ -728,6 +728,7 @@ model Receta {
   insumos        Json
   procedimiento  Json
   observaciones  String?
+  video_url      String?
   esta_activo    Boolean  @default(true)
   creado_en      DateTime @default(now())
   actualizado_en DateTime @updatedAt

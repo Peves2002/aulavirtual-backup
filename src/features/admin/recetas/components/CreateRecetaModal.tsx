@@ -27,6 +27,7 @@ const emptyValues: CrearRecetaDto = {
   insumos: [{ grupo: '', items: [{ insumo: '', cantidad: '' }] }],
   procedimiento: [{ seccion: '', pasos: [''] }],
   observaciones: null,
+  video_url: null,
   esta_activo: true
 }
 
@@ -253,6 +254,18 @@ export const CreateRecetaModal = ({ open, handleClose, onSuccess }: Props) => {
                 </Box>
               ))}
             </Grid>
+
+              <Grid item xs={12}>
+                <CustomTextField fullWidth label='Video de YouTube (Opcional)' name='video_url'
+                  value={values.video_url ?? ''}
+                  onChange={e => setFieldValue('video_url', e.target.value || null)}
+                  onBlur={handleBlur}
+                  placeholder='https://www.youtube.com/watch?v=...'
+                  error={touched.video_url && Boolean(errors.video_url)}
+                  helperText={touched.video_url && errors.video_url}
+                  InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-brand-youtube text-xl text-textSecondary' /></InputAdornment> }}
+                />
+              </Grid>
 
               <Grid item xs={12}>
                 <CustomTextField fullWidth multiline rows={2} label='Observaciones (Opcional)' name='observaciones'

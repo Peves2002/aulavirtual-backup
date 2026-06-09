@@ -11,20 +11,19 @@ import AppModal from '@/utils/components/AppModal'
 import CustomTextField from '@core/components/mui/TextField'
 import MediaLibrary from '@/features/admin/cursos/components/MediaLibrary'
 import { crearRecetaSchema, type CrearRecetaDto } from '@/schemas/receta.schema'
-import { useEditReceta, useReceta } from '../hooks/useRecetas'
-import type { GrupoInsumos, SeccionProcedimiento } from '../entity/Receta'
+import { useEditReceta } from '../hooks/useRecetas'
+import type { GrupoInsumos, Receta, SeccionProcedimiento } from '../entity/Receta'
 
 type Props = {
   open: boolean
   handleClose: () => void
-  recetaId: string | null
+  receta: Receta | null
   onSuccess?: () => void
 }
 
-export const EditRecetaModal = ({ open, handleClose, recetaId, onSuccess }: Props) => {
+export const EditRecetaModal = ({ open, handleClose, receta, onSuccess }: Props) => {
   const { enqueueSnackbar } = useSnackbar()
   const editMutation = useEditReceta()
-  const { data: receta, isLoading } = useReceta(recetaId ?? '')
   const [openMedia, setOpenMedia] = useState(false)
 
   const initialValues: CrearRecetaDto = receta
@@ -35,6 +34,7 @@ export const EditRecetaModal = ({ open, handleClose, recetaId, onSuccess }: Prop
       insumos: receta.insumos,
       procedimiento: receta.procedimiento,
       observaciones: receta.observaciones,
+      video_url: receta.video_url,
       esta_activo: receta.esta_activo
     }
     : {
@@ -44,14 +44,15 @@ export const EditRecetaModal = ({ open, handleClose, recetaId, onSuccess }: Prop
       insumos: [{ grupo: '', items: [{ insumo: '', cantidad: '' }] }],
       procedimiento: [{ seccion: '', pasos: [''] }],
       observaciones: null,
+      video_url: null,
       esta_activo: true
     }
 
   const handleSubmit = async (values: CrearRecetaDto, { setSubmitting }: FormikHelpers<CrearRecetaDto>) => {
-    if (!recetaId) return
+    if (!receta) return
 
     try {
-      await editMutation.mutateAsync({ id: recetaId, data: values })
+      await editMutation.mutateAsync({ id: receta.id, data: values })
       enqueueSnackbar('Receta actualizada exitosamente', { variant: 'success' })
       handleClose()
       onSuccess?.()
@@ -62,15 +63,7 @@ export const EditRecetaModal = ({ open, handleClose, recetaId, onSuccess }: Prop
     }
   }
 
-  if (!open || !recetaId) return null
-
-  if (isLoading) {
-    return (
-      <AppModal open={open} handleClose={handleClose}>
-        <Typography>Cargando...</Typography>
-      </AppModal>
-    )
-  }
+  if (!open || !receta) return null
 
   return (
     <AppModal open={open} handleClose={handleClose} sx={{ p: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -288,6 +281,18 @@ export const EditRecetaModal = ({ open, handleClose, recetaId, onSuccess }: Prop
                     </Button>
                   </Box>
                 ))}
+              </Grid>
+
+              <Grid item xs={12}>
+                <CustomTextField fullWidth label='Video de YouTube (Opcional)' name='video_url'
+                  value={values.video_url ?? ''}
+                  onChange={e => setFieldValue('video_url', e.target.value || null)}
+                  onBlur={handleBlur}
+                  placeholder='https://www.youtube.com/watch?v=...'
+                  error={touched.video_url && Boolean(errors.video_url)}
+                  helperText={touched.video_url && errors.video_url}
+                  InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-brand-youtube text-xl text-textSecondary' /></InputAdornment> }}
+                />
               </Grid>
 
               <Grid item xs={12}>

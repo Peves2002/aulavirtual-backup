@@ -69,7 +69,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
     if (!validation.success) return validation.error
 
-    const { nombre, imagen, descripcion, insumos, procedimiento, observaciones, esta_activo } = validation.data
+    const { nombre, imagen, descripcion, insumos, procedimiento, observaciones, video_url, esta_activo } = validation.data
 
     const data: any = {}
 
@@ -83,6 +83,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     if (insumos !== undefined) data.insumos = insumos
     if (procedimiento !== undefined) data.procedimiento = procedimiento
     if (observaciones !== undefined) data.observaciones = observaciones
+    if (video_url !== undefined) data.video_url = video_url
     if (esta_activo !== undefined) data.esta_activo = esta_activo
 
     const receta = await prisma.receta.update({ where: { id: params.id }, data })

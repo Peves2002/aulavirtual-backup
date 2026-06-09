@@ -93,7 +93,7 @@ export async function POST(request: Request) {
 
     if (!validation.success) return validation.error
 
-    const { nombre, imagen, descripcion, insumos, procedimiento, observaciones, esta_activo } = validation.data
+    const { nombre, imagen, descripcion, insumos, procedimiento, observaciones, video_url, esta_activo } = validation.data
 
     const slug = await generateUniqueSlug(nombre)
 
@@ -106,6 +106,7 @@ export async function POST(request: Request) {
         insumos: insumos as any,
         procedimiento: procedimiento as any,
         observaciones: observaciones ?? null,
+        video_url: video_url ?? null,
         esta_activo: esta_activo ?? true
       }
     })

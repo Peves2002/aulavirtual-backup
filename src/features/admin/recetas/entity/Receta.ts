@@ -22,6 +22,7 @@ export interface Receta {
   insumos: GrupoInsumos[]
   procedimiento: SeccionProcedimiento[]
   observaciones: string | null
+  video_url: string | null
   esta_activo: boolean
   creado_en: string
   actualizado_en: string

@@ -22,6 +22,7 @@ export const crearRecetaSchema = z.object({
   insumos: z.array(grupoInsumosSchema).default([]),
   procedimiento: z.array(seccionProcedimientoSchema).default([]),
   observaciones: z.string().optional().nullable(),
+  video_url: z.string().url('Ingresa una URL válida').optional().nullable(),
   esta_activo: z.boolean().optional()
 })
 

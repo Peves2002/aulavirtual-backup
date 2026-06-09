@@ -11,6 +11,7 @@ type Props = {
     insumos: GrupoInsumos[]
     procedimiento: SeccionProcedimiento[]
     observaciones: string | null
+    video_url: string | null
   }
 }
 
