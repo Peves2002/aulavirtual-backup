@@ -8,14 +8,15 @@ import {
   Box,
   Button,
   Divider,
-  Grid
+  Grid,
+  CircularProgress
 } from '@mui/material'
 
 import Swal from 'sweetalert2'
 import { toast } from 'react-toastify'
 
 import HydratedDate from '@/utils/components/HydratedDate'
-import { useCancelarSuscripcion } from '../hooks/useSuscripcion'
+import { useCancelarSuscripcion, useSincronizarSuscripcion } from '../hooks/useSuscripcion'
 import type { Suscripcion } from '../entity/Suscripcion'
 import { INTERVALO_LABELS } from '../entity/Suscripcion'
 
@@ -33,6 +34,7 @@ interface SuscripcionCardProps {
 
 const SuscripcionCard = ({ suscripcion }: SuscripcionCardProps) => {
   const cancelar = useCancelarSuscripcion()
+  const sincronizar = useSincronizarSuscripcion()
   const estadoConfig = ESTADO_CONFIG[suscripcion.estado] ?? { label: suscripcion.estado, color: 'secondary' as const }
 
   const handleCancelar = async () => {
@@ -238,6 +240,39 @@ const SuscripcionCard = ({ suscripcion }: SuscripcionCardProps) => {
             </Box>
           </Grid>
         </Grid>
+
+        {suscripcion.estado === 'PENDIENTE' && (
+          <Box sx={{
+            mb: 3, p: 2, borderRadius: '14px',
+            bgcolor: '#fffbeb', border: '1px solid #fde68a',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, flexWrap: 'wrap'
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <i className='tabler-clock' style={{ color: '#d97706', fontSize: 20, flexShrink: 0 }} />
+              <Typography variant='body2' sx={{ color: '#92400e', fontWeight: 500, lineHeight: 1.4 }}>
+                Tu pago está siendo verificado. Esto puede tardar unos segundos.
+              </Typography>
+            </Box>
+            <Button
+              size='small'
+              variant='outlined'
+              onClick={() => sincronizar.mutate()}
+              disabled={sincronizar.isPending}
+              startIcon={sincronizar.isPending
+                ? <CircularProgress size={14} color='inherit' />
+                : <i className='tabler-refresh' style={{ fontSize: 14 }} />
+              }
+              sx={{
+                borderRadius: '10px', textTransform: 'none', fontWeight: 600,
+                borderColor: '#fbbf24', color: '#d97706', bgcolor: '#fff',
+                whiteSpace: 'nowrap', flexShrink: 0,
+                '&:hover': { borderColor: '#f59e0b', bgcolor: '#fef3c7' }
+              }}
+            >
+              {sincronizar.isPending ? 'Verificando...' : 'Verificar ahora'}
+            </Button>
+          </Box>
+        )}
 
         <Divider sx={{ my: 3, borderColor: '#f1f5f9' }} />
 

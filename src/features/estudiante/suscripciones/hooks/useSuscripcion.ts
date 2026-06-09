@@ -56,3 +56,16 @@ export function useCancelarSuscripcion() {
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.MI_SUSCRIPCION })
   })
 }
+
+export function useSincronizarSuscripcion() {
+  const qc = useQueryClient()
+
+  return useMutation({
+    mutationFn: () => suscripcionFactory().sincronizar(),
+    onSuccess: (data) => {
+      if (data.sincronizado) {
+        qc.invalidateQueries({ queryKey: KEYS.MI_SUSCRIPCION })
+      }
+    }
+  })
+}

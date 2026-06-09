@@ -25,6 +25,16 @@ export function useSuscripcionesAdmin(params: Record<string, string> = {}) {
   })
 }
 
+export function useActualizarSuscripcionAdmin() {
+  const qc = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: { estado?: string; fecha_proximo_cobro?: string | null } }) =>
+      factory().actualizar(id, data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY })
+  })
+}
+
 export function useCancelarSuscripcionAdmin() {
   const qc = useQueryClient()
 

@@ -1,10 +1,12 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
+
 import { useRouter } from 'next/navigation'
 
 import { Grid, Typography, Box, Alert, CircularProgress } from '@mui/material'
 
-import { useMiSuscripcion, usePlanesPublicos } from '../hooks/useSuscripcion'
+import { useMiSuscripcion, usePlanesPublicos, useSincronizarSuscripcion } from '../hooks/useSuscripcion'
 import PlanCard from '../components/PlanCard'
 import SuscripcionCard from '../components/SuscripcionCard'
 
@@ -12,7 +14,17 @@ export function SuscripcionPage() {
   const router = useRouter()
   const { data: suscripcion, isLoading: loadingSub } = useMiSuscripcion()
   const { data: planes = [], isLoading: loadingPlanes } = usePlanesPublicos()
+  const sincronizar = useSincronizarSuscripcion()
+  const syncLanzado = useRef(false)
   const planActualId = suscripcion?.plan?.id
+
+  // Si hay una suscripción PENDIENTE, consultar Culqi para activarla
+  useEffect(() => {
+    if (suscripcion?.estado === 'PENDIENTE' && !syncLanzado.current) {
+      syncLanzado.current = true
+      sincronizar.mutate()
+    }
+  }, [suscripcion?.estado]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const isLoading = loadingSub || loadingPlanes
 

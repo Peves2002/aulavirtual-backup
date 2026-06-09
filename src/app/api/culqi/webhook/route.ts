@@ -26,9 +26,22 @@ export async function POST(req: Request) {
 
     // ── charge.creation.succeeded ───────────────────────────────────────────────
     // Cargo genérico con subscription_id → registra PagoSuscripcion + actualiza estado
+
     if (tipo === 'charge.creation.succeeded') {
+
+      console.log('[CULQI_WEBHOOK] charge payload:', JSON.stringify(objeto))
+
+      // Culqi puede ubicar subscription_id en diferentes niveles del payload
       const suscripcionCulqiId = objeto?.subscription_id
+        ?? objeto?.metadata?.subscription_id
+
+        ?? objeto?.source?.subscription_id
+        
       const cargoId = objeto?.id
+
+      if (!suscripcionCulqiId) {
+        console.log('[CULQI_WEBHOOK] charge.creation.succeeded sin subscription_id — claves disponibles:', Object.keys(objeto ?? {}))
+      }
 
       if (suscripcionCulqiId && cargoId) {
         // Idempotencia: ignorar si este cargo ya fue registrado

@@ -32,6 +32,14 @@ export class AxiosSuscripcionAdmin extends AxiosInternalHttpClient {
     }
   }
 
+  async actualizar(id: string, data: { estado?: string; fecha_proximo_cobro?: string | null }): Promise<{ suscripcion: SuscripcionAdmin }> {
+    try {
+      return await this.iPatch<{ suscripcion: SuscripcionAdmin }>(`/${id}`, data)
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
   async cancelar(id: string): Promise<{ message: string }> {
     try {
       return await this.iDelete<{ message: string }>(`/${id}`)

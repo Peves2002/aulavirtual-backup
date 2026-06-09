@@ -48,6 +48,14 @@ export class AxiosSuscripcion extends AxiosInternalHttpClient {
       throw err?.response?.data ?? err
     }
   }
+
+  async sincronizar(): Promise<{ sincronizado: boolean; suscripcion?: Suscripcion; mensaje?: string }> {
+    try {
+      return await this.iPost<{ sincronizado: boolean; suscripcion?: Suscripcion; mensaje?: string }>('/sync', {})
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
 }
 
 export class AxiosPlanesSuscripcion extends AxiosInternalHttpClient {

@@ -31,6 +31,7 @@ import HydratedDate from '@/utils/components/HydratedDate'
 import { useSuscripcionesAdmin, useCancelarSuscripcionAdmin } from '../hooks/useSuscripcionesAdmin'
 import type { SuscripcionAdmin, EstadoSuscripcion } from '../entity/Suscripcion'
 import { INTERVALO_LABELS } from '@/features/admin/planes-suscripcion/entity/PlanSuscripcion'
+import { EditarSuscripcionModal } from '../components/EditarSuscripcionModal'
 
 const columnHelper = createColumnHelper<SuscripcionAdmin>()
 
@@ -44,6 +45,7 @@ const ESTADO_CONFIG: Record<EstadoSuscripcion, { label: string; color: 'success'
 
 export function SuscripcionesAdminPage() {
   const [estadoFiltro, setEstadoFiltro] = useState('')
+  const [editando, setEditando] = useState<SuscripcionAdmin | null>(null)
   const { data, isLoading } = useSuscripcionesAdmin(estadoFiltro ? { estado: estadoFiltro } : {})
   const cancelar = useCancelarSuscripcionAdmin()
 
@@ -130,11 +132,16 @@ export function SuscripcionesAdminPage() {
       id: 'acciones',
       header: 'Acciones',
       cell: ({ row }) => (
-        row.original.estado === 'ACTIVA' || row.original.estado === 'EN_PRUEBA' ? (
-          <IconButton onClick={() => handleCancelar(row.original)} size='small' color='error' title='Cancelar'>
-            <i className='tabler-x' />
+        <Box sx={{ display: 'flex', gap: 0.5 }}>
+          <IconButton onClick={() => setEditando(row.original)} size='small' color='primary' title='Editar'>
+            <i className='tabler-pencil' />
           </IconButton>
-        ) : null
+          {(row.original.estado === 'ACTIVA' || row.original.estado === 'EN_PRUEBA') && (
+            <IconButton onClick={() => handleCancelar(row.original)} size='small' color='error' title='Cancelar'>
+              <i className='tabler-x' />
+            </IconButton>
+          )}
+        </Box>
       )
     })
   ], [handleCancelar])
@@ -217,6 +224,12 @@ export function SuscripcionesAdminPage() {
         onPageChange={(_, page) => table.setPageIndex(page)}
         rowsPerPageOptions={[20, 50]}
         onRowsPerPageChange={e => table.setPageSize(Number(e.target.value))}
+      />
+
+      <EditarSuscripcionModal
+        open={!!editando}
+        suscripcion={editando}
+        handleClose={() => setEditando(null)}
       />
     </Card>
   )
