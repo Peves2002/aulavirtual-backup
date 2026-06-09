@@ -19,10 +19,10 @@ import { useActualizarSuscripcionAdmin } from '../hooks/useSuscripcionesAdmin'
 import type { SuscripcionAdmin, EstadoSuscripcion } from '../entity/Suscripcion'
 
 const ESTADOS: { value: EstadoSuscripcion; label: string; color: 'success' | 'error' | 'warning' | 'secondary' | 'info' }[] = [
-  { value: 'ACTIVA',    label: 'Activa',    color: 'success' },
+  { value: 'ACTIVA', label: 'Activa', color: 'success' },
   { value: 'EN_PRUEBA', label: 'En Prueba', color: 'info' },
   { value: 'PENDIENTE', label: 'Pendiente', color: 'warning' },
-  { value: 'VENCIDA',   label: 'Vencida',   color: 'error' },
+  { value: 'VENCIDA', label: 'Vencida', color: 'error' },
   { value: 'CANCELADA', label: 'Cancelada', color: 'secondary' }
 ]
 
