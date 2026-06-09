@@ -3,7 +3,7 @@ import { RecetasListPage } from '@/features/web/recetas/pages/RecetasListPage'
 import { AxiosWebRecetas } from '@/features/web/recetas/http/axiosWebRecetas'
 
 export const metadata = {
-  title: `${process.env.NEXT_PUBLIC_APP_NAME} | Recetas`,
+  title: "Recetas",
   description: 'Descubre nuestras recetas y aprende las técnicas de cocina profesional.'
 }
 

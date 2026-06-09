@@ -18,6 +18,7 @@ type RecetaCompleta = RecetaResumen & {
   insumos: any[]
   procedimiento: any[]
   observaciones: string | null
+  video_url: string | null
 }
 
 type Params = {

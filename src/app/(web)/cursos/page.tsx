@@ -33,7 +33,7 @@ async function getData(token: string | null) {
         creado_en: c.creado_en
       }))
     }
-    
+
     // Categorías como strings (para los tabs)
     const uniqueCategories = ["Todos"]
 
@@ -46,13 +46,13 @@ async function getData(token: string | null) {
     return { courses: data.courses || [], categories: uniqueCategories }
   } catch (error) {
     console.error('Error fetching data in CursosPage via API:', error)
-    
-return { courses: [], categories: ["Todos"] }
+
+    return { courses: [], categories: ["Todos"] }
   }
 }
 
 export const metadata = {
-  title: `${process.env.NEXT_PUBLIC_APP_NAME} | Cursos`,
+  title: "Cursos",
   description: 'Explora nuestra amplia variedad de cursos y comienza a aprender hoy mismo.'
 }
 

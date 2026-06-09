@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props) {
     const { receta } = await client.getBySlug(params.slug)
 
     return {
-      title: `${receta.nombre} | ${process.env.NEXT_PUBLIC_APP_NAME}`,
+      title: `${receta.nombre}`,
       description: receta.descripcion || `Receta de ${receta.nombre}`
     }
   } catch {

@@ -43,20 +43,20 @@ export function RecetaDetalle({ nombre, imagen, descripcion, insumos, procedimie
         </div>
       )}
 
-      {/* Video YouTube */}
+      {/* Video */}
       {video_url && (
         <div className='mb-12'>
           <a
             href={video_url}
             target='_blank'
             rel='noopener noreferrer'
-            className='flex items-center justify-center gap-3 w-full py-3 px-6 rounded-xl border-2 border-red-500 bg-red-50 hover:bg-red-100 transition-colors group'
+            className='flex items-center justify-center gap-3 w-full py-3 px-6 rounded-xl border-2 border-[#5A9020] bg-[#EAF7D0] hover:bg-[#D5F0A0] transition-colors group'
           >
-            <i className='tabler-brand-youtube text-2xl text-red-600' />
-            <span className='text-red-700 font-semibold text-base group-hover:underline'>
+            <i className='tabler-player-play-filled text-xl text-[#5A9020]' />
+            <span className='text-[#2D5010] font-semibold text-base group-hover:underline'>
               Para ver el video dale click aquí
             </span>
-            <i className='tabler-external-link text-sm text-red-500' />
+            <i className='tabler-external-link text-sm text-[#4A7018]' />
           </a>
         </div>
       )}
