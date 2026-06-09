@@ -6,6 +6,24 @@ import prisma from '@/utils/libs/prisma'
 import { getConfig } from '@/utils/libs/config'
 import RutasCatalog from '@/features/web/rutas/components/RutasCatalog'
 
+export const metadata = {
+  title: 'Rutas de Aprendizaje',
+  description: 'Explora nuestras rutas de aprendizaje especializadas y avanza paso a paso hacia el dominio de la cocina profesional.',
+  keywords: 'rutas de aprendizaje, cocina profesional, formación culinaria, programa de cocina, Incuba Cocina',
+  alternates: { canonical: 'https://incubacocina.com/rutas' },
+  openGraph: {
+    title: 'Rutas de Aprendizaje — Incuba Cocina',
+    description: 'Explora nuestras rutas de aprendizaje especializadas y avanza paso a paso hacia el dominio de la cocina profesional.',
+    url: 'https://incubacocina.com/rutas',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Rutas de Aprendizaje — Incuba Cocina',
+    description: 'Explora nuestras rutas de aprendizaje especializadas y avanza paso a paso hacia el dominio de la cocina profesional.',
+  },
+}
+
 async function getRutas() {
   try {
     const rutas = await prisma.rutaAprendizaje.findMany({

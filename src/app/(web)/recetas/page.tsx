@@ -3,8 +3,21 @@ import { RecetasListPage } from '@/features/web/recetas/pages/RecetasListPage'
 import { AxiosWebRecetas } from '@/features/web/recetas/http/axiosWebRecetas'
 
 export const metadata = {
-  title: "Recetas",
-  description: 'Descubre nuestras recetas y aprende las técnicas de cocina profesional.'
+  title: 'Recetas',
+  description: 'Descubre nuestras recetas de cocina profesional, aprende las técnicas y domina cada preparación paso a paso.',
+  keywords: 'recetas de cocina, recetas profesionales, técnicas culinarias, gastronomía, Incuba Cocina',
+  alternates: { canonical: 'https://incubacocina.com/recetas' },
+  openGraph: {
+    title: 'Recetas de Cocina Profesional — Incuba Cocina',
+    description: 'Descubre nuestras recetas de cocina profesional, aprende las técnicas y domina cada preparación paso a paso.',
+    url: 'https://incubacocina.com/recetas',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Recetas de Cocina Profesional — Incuba Cocina',
+    description: 'Descubre nuestras recetas de cocina profesional, aprende las técnicas y domina cada preparación paso a paso.',
+  },
 }
 
 async function getData() {

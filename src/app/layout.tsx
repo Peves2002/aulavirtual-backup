@@ -12,16 +12,31 @@ import '@assets/iconify-icons/generated-icons.css'
 
 export async function generateMetadata(): Promise<Metadata> {
   const configs = await getConfigs()
-  const title = configs.TEMPLATE_NAME || 'Aula Virtual'
-  const slogan = configs.TEMPLATE_SLOGAN || ''
+  const title = configs.TEMPLATE_NAME || 'Incuba Cocina'
+  const slogan = configs.TEMPLATE_SLOGAN || 'Aprende cocina profesional online'
   const logo = configs.TEMPLATE_LOGO || '/favicon.ico'
 
   return {
-    title: slogan ? `${title} - ${slogan}` : title,
+    metadataBase: new URL('https://incubacocina.com'),
+    title: {
+      default: slogan ? `${title} — ${slogan}` : title,
+      template: `%s | ${title}`
+    },
     description: slogan,
-    icons: {
-      icon: logo
-    }
+    icons: { icon: logo },
+    openGraph: {
+      type: 'website',
+      locale: 'es_PE',
+      siteName: title,
+    },
+    twitter: {
+      card: 'summary_large_image',
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true },
+    },
   }
 }
 

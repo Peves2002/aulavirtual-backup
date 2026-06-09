@@ -54,6 +54,7 @@ export async function POST(request: Request) {
         const culqiSub = await culqiSuscripcion.consultarSuscripcion(sub.culqi_suscripcion_id!)
 
         const nuevoEstado = mapearEstadoCulqi(culqiSub.status ?? 1)
+
         const nuevaFecha = culqiSub.next_billing_date
           ? new Date(Number(culqiSub.next_billing_date) * 1000)
           : null
@@ -103,6 +104,7 @@ export async function POST(request: Request) {
 
         if (nuevoEstado !== sub.estado) cambios.estado = nuevoEstado
         if (nuevaFecha && fechaCulqiMs !== fechaDbMs) cambios.fecha_proximo_cobro = nuevaFecha
+
         if (nuevoEstado === 'CANCELADA' && !sub.fecha_cancelacion) {
           cambios.fecha_cancelacion = new Date()
         }

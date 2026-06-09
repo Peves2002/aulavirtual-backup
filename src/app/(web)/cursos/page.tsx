@@ -52,8 +52,21 @@ async function getData(token: string | null) {
 }
 
 export const metadata = {
-  title: "Cursos",
-  description: 'Explora nuestra amplia variedad de cursos y comienza a aprender hoy mismo.'
+  title: 'Cursos',
+  description: 'Explora nuestra amplia variedad de cursos de cocina profesional y comienza a aprender hoy mismo.',
+  keywords: 'cursos de cocina, cocina profesional, aprender cocina online, Incuba Cocina, gastronomía',
+  alternates: { canonical: 'https://incubacocina.com/cursos' },
+  openGraph: {
+    title: 'Catálogo de Cursos — Incuba Cocina',
+    description: 'Explora nuestra amplia variedad de cursos de cocina profesional y comienza a aprender hoy mismo.',
+    url: 'https://incubacocina.com/cursos',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Catálogo de Cursos — Incuba Cocina',
+    description: 'Explora nuestra amplia variedad de cursos de cocina profesional y comienza a aprender hoy mismo.',
+  },
 }
 
 export default async function CursosPage() {

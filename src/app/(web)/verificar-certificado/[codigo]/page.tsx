@@ -36,9 +36,47 @@ interface Props {
 
 export const dynamic = 'force-dynamic'
 
-/**
- * Página pública de verificación de certificados
- */
+export async function generateMetadata({ params }: Props) {
+  const { codigo } = params
+
+  const certificado = await prisma.certificado.findUnique({
+    where: { codigo_verificacion: codigo },
+    include: {
+      curso: { select: { titulo: true } },
+      usuario: { select: { nombre: true, apellido: true } },
+    },
+  })
+
+  if (!certificado) {
+    return {
+      title: 'Certificado no encontrado',
+      robots: { index: false },
+    }
+  }
+
+  const snapshot = certificado.datos as any
+
+  const nombre = snapshot?.usuario?.nombre
+    ? `${snapshot.usuario.nombre} ${snapshot.usuario.apellido}`
+    : `${certificado.usuario.nombre} ${certificado.usuario.apellido}`
+
+  const curso = snapshot?.curso?.titulo || certificado.curso.titulo
+
+  return {
+    title: `Certificado de ${nombre}`,
+    description: `Verifica el certificado de ${nombre} por completar el curso "${curso}" en Incuba Cocina.`,
+    alternates: { canonical: `https://incubacocina.com/verificar-certificado/${codigo}` },
+    openGraph: {
+      title: `Certificado verificado — ${nombre}`,
+      description: `${nombre} completó el curso "${curso}" en Incuba Cocina.`,
+      type: 'article',
+    },
+
+    // Los certificados son públicos (se comparten por QR) pero no deben aparecer en búsquedas
+    robots: { index: false, follow: false },
+  }
+}
+
 export default async function VerificarCertificadoPage({ params }: Props) {
   const { codigo } = params
 
