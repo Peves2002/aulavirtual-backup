@@ -2,6 +2,10 @@ import type { MetadataRoute } from 'next'
 
 import prisma from '@/utils/libs/prisma'
 
+// Evita que Next.js intente generar el sitemap en build time.
+// La DB no está disponible durante el build de Docker — se genera en cada request.
+export const dynamic = 'force-dynamic'
+
 const BASE = 'https://incubacocina.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

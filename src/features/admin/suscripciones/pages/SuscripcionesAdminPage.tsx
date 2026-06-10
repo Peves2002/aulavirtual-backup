@@ -48,7 +48,7 @@ const ESTADO_CONFIG: Record<EstadoSuscripcion, { label: string; color: 'success'
 export function SuscripcionesAdminPage() {
   const [estadoFiltro, setEstadoFiltro] = useState('')
   const [editando, setEditando] = useState<SuscripcionAdmin | null>(null)
-  const { data, isLoading } = useSuscripcionesAdmin(estadoFiltro ? { estado: estadoFiltro } : {})
+  const { data, isLoading, isError, error } = useSuscripcionesAdmin(estadoFiltro ? { estado: estadoFiltro } : {})
   const cancelar = useCancelarSuscripcionAdmin()
   const sync = useSyncSuscripciones()
 

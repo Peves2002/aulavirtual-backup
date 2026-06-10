@@ -4,5 +4,6 @@ export const getBaseURL = () => {
     return process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
   }
 
-  return process.env.NEXT_PUBLIC_APP_URL || ''
+  // En el cliente siempre usar URL relativa para que funcione desde cualquier origen
+  return ''
 }
