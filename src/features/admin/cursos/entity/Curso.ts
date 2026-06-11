@@ -74,6 +74,7 @@ export interface Curso {
   estado: 'BORRADOR' | 'PUBLICADO' | 'ARCHIVADO'
   es_gratis: boolean
   es_privado: boolean
+  completar_automatico: boolean
   precio_certificado: number | null
   precio: number
   precio_falso: number
@@ -85,6 +86,7 @@ export interface Curso {
   categoria_id: string | null
   categoria: CursoCategoria | null
   modulos: CursoModulo[]
+  orden: number
   brochure: string | null
   objetivos: string[]
   metodologia: any[]

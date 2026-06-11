@@ -72,6 +72,7 @@ export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }
   const [videoUrl, setVideoUrl] = useState('')
   const [esEnVivo, setEsEnVivo] = useState(false)
   const [fechaProgramada, setFechaProgramada] = useState('')
+  const [fechaFin, setFechaFin] = useState('')
   const [enlaceReunion, setEnlaceReunion] = useState('')
   const [esVistaPrevia, setEsVistaPrevia] = useState(false)
   const [recursos, setRecursos] = useState<Recurso[]>([])
@@ -80,6 +81,17 @@ export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }
   const [recursoMode, setRecursoMode] = useState<'enlace' | 'archivo'>('enlace')
   const [newRecurso, setNewRecurso] = useState<Recurso>({ nombre: '', url: '', tipo: 'enlace' })
   const [openMediaResources, setOpenMediaResources] = useState(false)
+  const [errors, setErrors] = useState<{ fechaProgramada?: string; fechaFin?: string }>({})
+
+  // Estados para trabajos
+  const [tieneTrabajo, setTieneTrabajo] = useState(false)
+  const [trabajoTitulo, setTrabajoTitulo] = useState('')
+  const [trabajoDescripcion, setTrabajoDescripcion] = useState('')
+  const [trabajoArchivoUrl, setTrabajoArchivoUrl] = useState('')
+  const [trabajoArchivoNombre, setTrabajoArchivoNombre] = useState('')
+  const [trabajoFechaInicio, setTrabajoFechaInicio] = useState('')
+  const [trabajoFechaFin, setTrabajoFechaFin] = useState('')
+  const [openMediaTrabajo, setOpenMediaTrabajo] = useState(false)
 
   useEffect(() => {
     if (lessonData) {
@@ -88,28 +100,42 @@ export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }
       setVideoUrl(lessonData.video_url || '')
       setEsEnVivo(lessonData.es_en_vivo || false)
 
-      if (lessonData.fecha_programada) {
-        setFechaProgramada(toLocalDatetimeLocalValue(lessonData.fecha_programada))
-        setFechaProgramada(toLocalDatetimeLocalValue(lessonData.fecha_programada))
-      } else {
-        setFechaProgramada('')
-      }
-
+      setFechaProgramada(lessonData.fecha_programada ? toLocalDatetimeLocalValue(lessonData.fecha_programada) : '')
+      setFechaFin(lessonData.fecha_fin ? toLocalDatetimeLocalValue(lessonData.fecha_fin) : '')
       setEnlaceReunion(lessonData.enlace_reunion || '')
       setEsVistaPrevia(lessonData.es_vista_previa || false)
       setRecursos(lessonData.recursos || [])
       setContenido(lessonData.contenido || '')
+
+      setTieneTrabajo(!!lessonData.trabajo)
+      setTrabajoTitulo(lessonData.trabajo?.titulo || '')
+      setTrabajoDescripcion(lessonData.trabajo?.descripcion || '')
+      setTrabajoArchivoUrl(lessonData.trabajo?.archivo_url || '')
+      setTrabajoArchivoNombre(lessonData.trabajo?.archivo_nombre || '')
+      setTrabajoFechaInicio(lessonData.trabajo?.fecha_inicio ? toLocalDatetimeLocalValue(lessonData.trabajo.fecha_inicio) : '')
+      setTrabajoFechaFin(lessonData.trabajo?.fecha_fin ? toLocalDatetimeLocalValue(lessonData.trabajo.fecha_fin) : '')
     } else {
       setTitle('')
       setDuration('')
       setVideoUrl('')
       setEsEnVivo(false)
       setFechaProgramada('')
+      setFechaFin('')
       setEnlaceReunion('')
       setEsVistaPrevia(false)
       setRecursos([])
       setContenido('')
+
+      setTieneTrabajo(false)
+      setTrabajoTitulo('')
+      setTrabajoDescripcion('')
+      setTrabajoArchivoUrl('')
+      setTrabajoArchivoNombre('')
+      setTrabajoFechaInicio('')
+      setTrabajoFechaFin('')
     }
+
+    setErrors({})
   }, [lessonData])
 
   const handleAddRecurso = () => {
@@ -129,16 +155,46 @@ export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }
   }
 
   const handleSave = () => {
+    if (esEnVivo) {
+      const newErrors: { fechaProgramada?: string; fechaFin?: string } = {}
+
+      if (!fechaProgramada) newErrors.fechaProgramada = 'La fecha de inicio es obligatoria para clases en vivo'
+      if (!fechaFin) newErrors.fechaFin = 'La fecha de fin es obligatoria para clases en vivo'
+
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors)
+
+        return
+      }
+    }
+
+    if (tieneTrabajo && !trabajoTitulo.trim()) {
+      alert('Por favor, ingresa un título para el trabajo.')
+
+      return
+    }
+
+    setErrors({})
     onSave({
       titulo: title,
       duracion: duration ? Number(duration) : null,
       video_url: videoUrl || null,
       es_en_vivo: esEnVivo,
       fecha_programada: sanitizeDatetimeInput(fechaProgramada),
+      fecha_fin: sanitizeDatetimeInput(fechaFin),
       enlace_reunion: enlaceReunion || null,
       es_vista_previa: esVistaPrevia,
       contenido: contenido || null,
-      recursos: recursos
+      recursos: recursos,
+      trabajo: tieneTrabajo ? {
+        id: lessonData?.trabajo?.id,
+        titulo: trabajoTitulo.trim(),
+        descripcion: trabajoDescripcion || null,
+        archivo_url: trabajoArchivoUrl || null,
+        archivo_nombre: trabajoArchivoNombre || null,
+        fecha_inicio: sanitizeDatetimeInput(trabajoFechaInicio),
+        fecha_fin: sanitizeDatetimeInput(trabajoFechaFin)
+      } : null
     })
   }
 
@@ -191,10 +247,22 @@ export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }
               <CustomTextField
                 fullWidth
                 type='datetime-local'
-                label='Fecha y Hora Programada'
+                label='Fecha y Hora de Inicio *'
                 value={fechaProgramada}
-                onChange={e => setFechaProgramada(e.target.value)}
+                onChange={e => { setFechaProgramada(e.target.value); setErrors(p => ({ ...p, fechaProgramada: undefined })) }}
                 InputLabelProps={{ shrink: true }}
+                error={!!errors.fechaProgramada}
+                helperText={errors.fechaProgramada}
+              />
+              <CustomTextField
+                fullWidth
+                type='datetime-local'
+                label='Fecha y Hora de Fin *'
+                value={fechaFin}
+                onChange={e => { setFechaFin(e.target.value); setErrors(p => ({ ...p, fechaFin: undefined })) }}
+                InputLabelProps={{ shrink: true }}
+                error={!!errors.fechaFin}
+                helperText={errors.fechaFin}
               />
               <CustomTextField
                 fullWidth
@@ -451,6 +519,114 @@ export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }
               setOpenMediaResources(false)
             }}
             title='Seleccionar Recurso'
+            acceptType='OTRO'
+          />
+
+          <Divider />
+
+          {/* ── TRABAJO DE LA LECCIÓN ── */}
+          <Typography variant='subtitle2' sx={{ textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: '0.7rem', color: 'text.secondary' }}>
+            Trabajo / Tarea de la Lección
+          </Typography>
+
+          <FormControlLabel
+            control={
+              <Switch
+                checked={tieneTrabajo}
+                onChange={e => setTieneTrabajo(e.target.checked)}
+                color='primary'
+              />
+            }
+            label={
+              <Box>
+                <Typography variant='body2' fontWeight={600}>Habilitar entrega de trabajo</Typography>
+                <Typography variant='caption' color='text.secondary'>Permite a los estudiantes subir archivos para esta lección.</Typography>
+              </Box>
+            }
+          />
+
+          {tieneTrabajo && (
+            <Stack spacing={3} sx={{ pl: 2, borderLeft: '2px solid', borderColor: 'primary.main' }}>
+              <CustomTextField
+                fullWidth
+                label='Título del trabajo *'
+                placeholder='Ej: Informe de laboratorio 1'
+                value={trabajoTitulo}
+                onChange={e => setTrabajoTitulo(e.target.value)}
+                error={!trabajoTitulo.trim()}
+                helperText={!trabajoTitulo.trim() ? 'El título es obligatorio' : ''}
+              />
+
+              <CustomTextField
+                fullWidth
+                multiline
+                rows={3}
+                label='Instrucciones / Descripción'
+                placeholder='Escribe los detalles o requisitos del trabajo...'
+                value={trabajoDescripcion}
+                onChange={e => setTrabajoDescripcion(e.target.value)}
+              />
+
+              {/* Archivo adjunto */}
+              <Box>
+                <Typography variant='caption' sx={{ mb: 1, display: 'block', fontWeight: 600 }}>Archivo Guía o Plantilla (Opcional)</Typography>
+                {trabajoArchivoUrl ? (
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
+                    <i className='tabler-file text-xl text-primary' />
+                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                      <Typography variant='body2' fontWeight={600} noWrap>{trabajoArchivoNombre}</Typography>
+                      <Typography variant='caption' color='text.secondary' noWrap>{trabajoArchivoUrl}</Typography>
+                    </Box>
+                    <IconButton size='small' color='error' onClick={() => { setTrabajoArchivoUrl(''); setTrabajoArchivoNombre('') }}>
+                      <i className='tabler-trash text-base' />
+                    </IconButton>
+                  </Box>
+                ) : (
+                  <Button
+                    variant='outlined'
+                    size='small'
+                    startIcon={<i className='tabler-upload' />}
+                    onClick={() => setOpenMediaTrabajo(true)}
+                  >
+                    Seleccionar Archivo
+                  </Button>
+                )}
+              </Box>
+
+              {/* Fechas de entrega */}
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+                <CustomTextField
+                  fullWidth
+                  type='datetime-local'
+                  label='Fecha de Inicio'
+                  value={trabajoFechaInicio}
+                  onChange={e => setTrabajoFechaInicio(e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                />
+                <CustomTextField
+                  fullWidth
+                  type='datetime-local'
+                  label='Fecha de Fin'
+                  value={trabajoFechaFin}
+                  onChange={e => setTrabajoFechaFin(e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Box>
+            </Stack>
+          )}
+
+          <MediaLibrary
+            open={openMediaTrabajo}
+            onClose={() => setOpenMediaTrabajo(false)}
+            onSelect={(url: string, nombre?: string) => {
+              const parts = url.split('/')
+              const fileName = parts[parts.length - 1] || 'Guia'
+
+              setTrabajoArchivoUrl(url)
+              setTrabajoArchivoNombre(nombre || fileName.split('.')[0] || 'Archivo Guía')
+              setOpenMediaTrabajo(false)
+            }}
+            title='Seleccionar Guía/Plantilla de Trabajo'
             acceptType='OTRO'
           />
         </Stack>
