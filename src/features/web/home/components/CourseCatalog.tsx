@@ -110,7 +110,7 @@ const CourseCatalog = ({ courses, categories }: CourseCatalogProps) => {
         <Stack spacing={5}>
           <Box sx={{ textAlign: 'center' }}>
             <Typography variant="h3" sx={{ fontWeight: 900, mb: 1.5, color: '#1e293b', letterSpacing: '-0.03em' }}>
-              Nuestros Cursos
+              Nuestros Programas
             </Typography>
             <Typography variant="h6" sx={{ color: '#475569', fontWeight: 500, maxWidth: 600, mx: 'auto' }}>
               Aprende de expertos y potencia tu carrera profesional con nuestra selección premium.

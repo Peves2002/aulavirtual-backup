@@ -208,7 +208,7 @@ export default async function HomePage() {
             {/* Izquierda: texto */}
             <div className="lg:col-span-2 lg:sticky lg:top-28">
               <span className="text-xs font-bold uppercase tracking-[0.2em] text-brand-teal">
-                Cursos destacados
+                Programas destacados
               </span>
               <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight text-balance text-foreground sm:text-5xl">
                 Empieza a aprender hoy
@@ -235,7 +235,7 @@ export default async function HomePage() {
                 href="/cursos"
                 className="mt-10 inline-flex items-center gap-2 rounded-full bg-orange-gradient px-7 py-3.5 text-sm font-bold text-white shadow-soft transition-base hover:shadow-glow no-underline"
               >
-                Ver todos los cursos <ArrowRight className="h-4 w-4" />
+                Ver todos los programas <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 

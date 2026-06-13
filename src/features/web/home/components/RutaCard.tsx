@@ -118,7 +118,7 @@ const RutaCard = ({
             ))}
           </AvatarGroup>
           <Typography variant="caption" sx={{ color: 'white', fontWeight: 700, fontFamily: 'Poppins, sans-serif', letterSpacing: '0.02em', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-            {total_cursos} Cursos incluidos
+            {total_cursos} Programas incluidos
           </Typography>
         </Box>
       </Box>

@@ -297,7 +297,7 @@ export default async function DocentePage({ params }: Props) {
           <Grid item xs={12} md={5}>
             <ScrollReveal>
               <Typography variant="h5" sx={{ fontWeight: 800, mb: 3 }}>
-                Cursos de {docente!.nombre}
+                Programas de {docente!.nombre}
               </Typography>
               <Stack spacing={3}>
                 {docente!.cursos_dictados.length > 0 ? (

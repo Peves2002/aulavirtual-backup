@@ -7,7 +7,7 @@ import { Home, BookOpen, Phone } from 'lucide-react'
 
 const NAV_ITEMS = [
   { title: 'Inicio', url: '/', icon: Home },
-  { title: 'Cursos', url: '/cursos', icon: BookOpen },
+  { title: 'Programas', url: '/cursos', icon: BookOpen },
   { title: 'Contacto', url: '/contacto', icon: Phone },
 ]
 

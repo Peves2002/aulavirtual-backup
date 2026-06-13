@@ -28,7 +28,7 @@ interface WebHeaderProps {
 const links = [
   { to: '/',                      label: 'Inicio' },
   { to: '/nosotros',              label: 'Nosotros' },
-  { to: '/cursos',                label: 'Cursos' },
+  { to: '/cursos',                label: 'Programas' },
   { to: '/verificar-certificado', label: 'Certificado' },
   { to: '/contacto',              label: 'Contacto' },
 ] as const

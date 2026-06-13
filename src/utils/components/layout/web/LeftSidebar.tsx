@@ -13,7 +13,7 @@ import { Home, BookOpen, Users, Award, Map, Building2, LogIn, UserPlus, User, La
 
 const ALL_NAV_ITEMS = [
   { title: 'Inicio', url: '/', icon: Home, key: 'inicio' },
-  { title: 'Cursos', url: '/cursos', icon: BookOpen, key: 'cursos' },
+  { title: 'Programas', url: '/cursos', icon: BookOpen, key: 'cursos' },
   { title: 'Rutas', url: '/rutas', icon: Map, key: 'rutas' },
   { title: 'Empresas', url: '/empresas', icon: Building2, key: 'empresas' },
   { title: 'Nosotros', url: '/nosotros', icon: Users, key: 'nosotros' },
@@ -185,7 +185,7 @@ export default function LeftSidebar({
                 {[
                   { label: 'Mi Perfil', icon: User, href: '/perfil' },
                   ...(user?.rol === 'ADMIN' ? [{ label: 'Panel de Administración', icon: LayoutDashboard, href: '/admin/dashboard' }] : []),
-                  ...(user?.rol === 'ESTUDIANTE' ? [{ label: 'Mis Cursos', icon: BookMarked, href: '/estudiante/mis-cursos' }] : []),
+                  ...(user?.rol === 'ESTUDIANTE' ? [{ label: 'Mis Programas', icon: BookMarked, href: '/estudiante/mis-cursos' }] : []),
                 ].map(({ label, icon: Icon, href }) => (
                   <Link
                     key={href}
