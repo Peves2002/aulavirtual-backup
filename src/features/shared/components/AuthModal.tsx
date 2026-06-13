@@ -32,11 +32,12 @@ interface AuthModalProps {
   open: boolean
   mode: Mode
   callbackUrl?: string
+  onSuccess?: () => void
   onClose: () => void
   onSwitchMode: (mode: Mode) => void
 }
 
-const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModalProps) => {
+const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }: AuthModalProps) => {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [registerSuccess, setRegisterSuccess] = useState(false)
@@ -47,7 +48,7 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
 
   const loginForm = useForm<LoginDto>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { correo: '', contrasena: '' }
+    defaultValues: { correo: 'prueba@gmail.com', contrasena: 'Prueba123@' }
   })
 
   const registerForm = useForm<RegisterDto>({
@@ -91,7 +92,9 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
   const handleLoginSuccess = () => {
     onClose()
 
-    if (callbackUrl) {
+    if (onSuccess) {
+      onSuccess()
+    } else if (callbackUrl) {
       window.location.href = callbackUrl
     } else {
       router.refresh()
@@ -304,6 +307,12 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
 
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         {registerSuccess && <Alert severity="success" sx={{ mb: 2 }}>¡Registro exitoso! Iniciando sesión...</Alert>}
+
+        {mode === 'login' && (
+          <Alert severity="info" sx={{ mb: 2, fontSize: '0.8rem' }}>
+            <strong>Cuenta de prueba:</strong> prueba@gmail.com &nbsp;|&nbsp; <strong>Contraseña:</strong> Prueba123@
+          </Alert>
+        )}
 
         {mode === 'login' ? (
           <form key="login-form" onSubmit={loginForm.handleSubmit(onLoginSubmit)}>
