@@ -4,17 +4,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 
-import { Phone, Mail, MapPin, Facebook, Youtube, Instagram } from 'lucide-react'
+import { Phone, Mail, MapPin, Facebook, Youtube, Linkedin } from 'lucide-react'
 
 import { getConfigs } from '@/utils/libs/config'
 import HydratedDate from '@/utils/components/HydratedDate'
-
-// Simple TikTok SVG icon (not in lucide-react)
-const TikTokIcon = ({ size = 16 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z" />
-  </svg>
-)
 
 // Simple WhatsApp SVG icon
 const WhatsAppIcon = ({ size = 16 }: { size?: number }) => (
@@ -23,52 +16,60 @@ const WhatsAppIcon = ({ size = 16 }: { size?: number }) => (
   </svg>
 )
 
-const staticSocialLinks = [
-  { label: 'Facebook', href: 'https://www.facebook.com/flyup.store', icon: <Facebook size={20} /> },
-  { label: 'TikTok', href: 'https://tiktok.com/@flyupsale', icon: <TikTokIcon size={20} /> },
-  { label: 'Instagram', href: 'https://www.instagram.com/devrocket.software/', icon: <Instagram size={20} /> },
-  { label: 'Youtube', href: 'https://www.youtube.com/@Fly-s9b', icon: <Youtube size={20} /> },
-]
-
 interface WebFooterProps {
   platformName?: string
   rutasHabilitado?: boolean
 }
 
-const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true }: WebFooterProps) => {
+const WebFooter = async ({ platformName = 'ACE Consulting PERÚ', rutasHabilitado = true }: WebFooterProps) => {
   const configs = await getConfigs()
-  const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
+  const waNumber = configs.WHATSAPP_NUMERO || '51920184072'
 
   const socialLinks = [
-    ...staticSocialLinks,
+    { label: 'Facebook', href: 'https://www.facebook.com/ManuelNC', icon: <Facebook size={20} /> },
+    { label: 'YouTube', href: 'https://www.youtube.com/@ManuelNietoCourrejolles', icon: <Youtube size={20} /> },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ManuelNietoCourrejolles', icon: <Linkedin size={20} /> },
     { label: 'WhatsApp', href: `https://wa.me/${waNumber}`, icon: <WhatsAppIcon size={20} /> },
   ]
 
   return (
     <footer style={{ backgroundColor: '#0A0A0A', color: '#ffffff' }}>
+
+      {/* Slogan banner */}
+      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(2,94,68,0.18)' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-5 text-center">
+          <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: 'rgba(255,255,255,0.75)', fontStyle: 'italic', margin: 0 }}>
+            &ldquo;Más capacitación, mejores personas, mejores empresas, mejores resultados.&rdquo;
+          </p>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
-          {/* Contact */}
+          {/* Empresa */}
           <div>
             <h4
               className="mb-4"
               style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '1.0625rem', color: '#ffffff' }}
             >
-              Contacto
+              ACE Consulting PERÚ
             </h4>
-            <ul className="space-y-3" style={{ opacity: 0.8 }}>
-              <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
-                <Phone size={16} className="flex-shrink-0 mt-0.5" />
-                <span>+51 928 510 125</span>
+            <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, marginBottom: '1rem' }}>
+              Academia de Capacitación Ejecutiva especializada en emprendimiento, mundo corporativo y ventas. Cursos, eBooks y formación 100% virtual.
+            </p>
+            <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.7 }}>
+              <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem' }}>
+                <Phone size={14} className="flex-shrink-0 mt-0.5" />
+                <a href="tel:+51920184072" className="no-underline hover:opacity-80" style={{ color: 'inherit' }}>+51 920 184 072</a>
               </li>
-              <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
-                <Mail size={16} className="flex-shrink-0 mt-0.5" />
-                <span>flyup.sale@gmail.com</span>
+              <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem' }}>
+                <Mail size={14} className="flex-shrink-0 mt-0.5" />
+                <a href="mailto:aceconsultingperu@gmail.com" className="no-underline hover:opacity-80" style={{ color: 'inherit' }}>aceconsultingperu@gmail.com</a>
               </li>
-              <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
-                <MapPin size={16} className="flex-shrink-0 mt-0.5" />
-                <span>Lima, Miraflores</span>
+              <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem' }}>
+                <MapPin size={14} className="flex-shrink-0 mt-0.5" />
+                <span>Calle Lino Alarco 212, Miraflores, Lima</span>
               </li>
             </ul>
           </div>
@@ -84,7 +85,9 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
               {([
                 { label: 'Cursos', href: '/cursos' },
-                ...(rutasHabilitado ? [{ label: 'Rutas', href: '/rutas' }] : []),
+                { label: 'eBooks', href: '/ebooks' },
+                ...(rutasHabilitado ? [{ label: 'Rutas de Aprendizaje', href: '/rutas' }] : []),
+                { label: 'Verificar Certificado', href: '/verificar-certificado' },
               ] as { label: string; href: string }[]).map(link => (
                 <li key={link.label}>
                   <Link
@@ -110,8 +113,10 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
               {[
                 { label: 'Nosotros', href: '/nosotros' },
-                { label: 'Términos y condiciones', href: '/terminos-y-condiciones' },
+                { label: 'Contacto', href: '/contacto' },
+                { label: 'Términos y Condiciones', href: '/terminos-y-condiciones' },
                 { label: 'Política de Devoluciones', href: '/politica-de-cambios-y-devoluciones' },
+                { label: 'Libro de Reclamaciones', href: '/libro-de-reclamaciones' },
               ].map(link => (
                 <li key={link.label}>
                   <Link
@@ -150,6 +155,10 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
               Síguenos
             </h4>
 
+            <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.6)', marginBottom: '1rem', lineHeight: 1.6 }}>
+              Síguenos en redes sociales y mantente al día con nuestros cursos, eBooks y contenido ejecutivo.
+            </p>
+
             {/* Social icons row */}
             <div className="flex items-center gap-3 mb-5">
               {socialLinks.map(social => (
@@ -183,25 +192,46 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
             >
               Validar Certificado
             </Link>
+
+            {/* WhatsApp CTA */}
+            <div className="mt-4">
+              <a
+                href={`https://wa.me/${waNumber}?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20sus%20cursos%20y%20servicios.`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="no-underline inline-flex items-center gap-2 transition-opacity hover:opacity-90"
+                style={{
+                  fontFamily: 'Poppins, sans-serif',
+                  fontWeight: 600,
+                  fontSize: '0.875rem',
+                  color: '#ffffff',
+                  backgroundColor: '#25D366',
+                  borderRadius: '9999px',
+                  padding: '0.5rem 1.25rem',
+                }}
+              >
+                <WhatsAppIcon size={16} />
+                Escríbenos
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Bottom bar */}
       <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <p
-              style={{
-                fontFamily: 'Poppins, sans-serif',
-                fontSize: '0.8125rem',
-                color: 'rgba(255,255,255,0.5)',
-              }}
-            >
-              © <HydratedDate date={new Date()} format="year" /> {platformName}. Todos los derechos reservados.
-            </p>
-          </div>
-          <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p
+            style={{
+              fontFamily: 'Poppins, sans-serif',
+              fontSize: '0.8125rem',
+              color: 'rgba(255,255,255,0.5)',
+              margin: 0,
+            }}
+          >
+            © <HydratedDate date={new Date()} format="year" /> {platformName}. Todos los derechos reservados. | DNI: 07771730 | Manuel Nieto Courrejolles
+          </p>
+          <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
             Desarrollado con ❤️ por
             <Link
               href="https://flyup.pe"
