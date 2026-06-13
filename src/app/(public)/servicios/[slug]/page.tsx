@@ -1,30 +1,40 @@
-import React from 'react'
 import fs from 'fs'
 import path from 'path'
+
+import React from 'react'
+
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
 const toSentenceCase = (str: string) => {
   const words = str.split('-').filter(Boolean).map(w => w.toLowerCase())
+
   if (words.length > 0) {
     words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1)
   }
-  return words.join(' ')
+
+  
+return words.join(' ')
 }
 
 function getFirstImage(dir: string): string | null {
   if (!fs.existsSync(dir)) return null
   const items = fs.readdirSync(dir)
+
   for (const item of items) {
     const fullPath = path.join(dir, item)
+
     if (fs.statSync(fullPath).isDirectory()) {
       const res = getFirstImage(fullPath)
+
       if (res) return res
     } else if (/\.(jpg|jpeg|png|webp|gif)$/i.test(item)) {
       return fullPath
     }
   }
-  return null
+
+  
+return null
 }
 
 export default function ServicioDetallePage({ params }: { params: { slug: string } }) {
@@ -87,7 +97,9 @@ export default function ServicioDetallePage({ params }: { params: { slug: string
                   {subFolders.map(folder => {
                     const imgPath = getFirstImage(path.join(serviciosDir, folder))
                     const url = imgPath ? '/' + imgPath.replace(/\\/g, '/').split('/public/')[1] : null
-                    return (
+
+                    
+return (
                       <div key={folder} className="group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300">
                         <div className="w-full aspect-video bg-gray-100 flex items-center justify-center overflow-hidden relative">
                           {url ? (

@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react'
+
 import prisma from '@/utils/libs/prisma'
 import CourseCatalog from '@/features/web/home/components/CourseCatalog'
 

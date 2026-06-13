@@ -1,12 +1,11 @@
 import Link from 'next/link'
 
-import { ArrowRight, CheckCircle, Map } from 'lucide-react'
+import { ArrowRight, CheckCircle } from 'lucide-react'
 
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
 import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
 import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
-import RutasSection from '@/features/web/home/components/RutasSection'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
 import HeroVisual from '@/features/web/home/components/HeroVisual'
@@ -103,7 +102,7 @@ async function getHomeData() {
 }
 
 export default async function HomePage() {
-  const { courses, rutas, teachers, heroTitle, heroDescription, logos } = await getHomeData()
+  const { courses, teachers, heroTitle, heroDescription, logos } = await getHomeData()
 
   return (
     <>

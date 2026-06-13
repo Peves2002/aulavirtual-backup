@@ -170,7 +170,7 @@ function DynamicLogoCard({ label, url }: { label: string; url: string }) {
   )
 }
 
-function LogoCard({ label, initials, color, light }: HardcodedLogo) {
+function LogoCard({ label }: HardcodedLogo) {
   const ref = useRef<HTMLDivElement>(null)
 
   const handleEnter = () => {

@@ -1,6 +1,7 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
+
 import UserDropdown from '@components/layout/shared/UserDropdown'
 import { useAuthModal } from '@/contexts/AuthModalContext'
 

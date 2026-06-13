@@ -1,6 +1,9 @@
 import React from 'react'
+
 import Link from 'next/link'
+
 import { Facebook, Instagram, Linkedin, MapPin, Phone, Mail, ShieldCheck } from 'lucide-react'
+
 import Logo from '@components/layout/shared/Logo'
 import { AuthModalProvider } from '@/contexts/AuthModalContext'
 import PublicHeader from './PublicHeader'

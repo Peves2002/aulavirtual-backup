@@ -1,6 +1,7 @@
-import React from 'react'
 import fs from 'fs'
 import path from 'path'
+
+import React from 'react'
 
 export const metadata = {
   title: 'Servicios | IFSEC Group',
@@ -10,25 +11,33 @@ export const metadata = {
 // Función para formatear de kebab-case a Sentence case (Modo oración)
 const toSentenceCase = (str: string) => {
   const words = str.split('-').filter(Boolean).map(w => w.toLowerCase())
+
   if (words.length > 0) {
     words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1)
   }
-  return words.join(' ')
+
+  
+return words.join(' ')
 }
 
 function getFirstImage(dir: string): string | null {
   if (!fs.existsSync(dir)) return null
   const items = fs.readdirSync(dir)
+
   for (const item of items) {
     const fullPath = path.join(dir, item)
+
     if (fs.statSync(fullPath).isDirectory()) {
       const res = getFirstImage(fullPath)
+
       if (res) return res
     } else if (/\.(jpg|jpeg|png|webp|gif)$/i.test(item)) {
       return fullPath
     }
   }
-  return null
+
+  
+return null
 }
 
 export default function ServiciosPage() {
@@ -37,10 +46,13 @@ export default function ServiciosPage() {
   
   if (fs.existsSync(serviciosDir)) {
     const dirs = fs.readdirSync(serviciosDir).filter(d => fs.statSync(path.join(serviciosDir, d)).isDirectory())
+
     servicios = dirs.map(dir => {
       const imgPath = getFirstImage(path.join(serviciosDir, dir))
       const url = imgPath ? '/' + imgPath.replace(/\\/g, '/').split('/public/')[1] : null
-      return {
+
+      
+return {
         slug: dir,
         displayName: toSentenceCase(dir),
         image: url
@@ -61,7 +73,9 @@ export default function ServiciosPage() {
         {servicios.map((servicio) => {
           const waMsg = encodeURIComponent(`Hola, me interesa el servicio: ${servicio.displayName}. ¿Podrían brindarme más información?`)
           const waLink = `https://wa.me/51965052858?text=${waMsg}`
-          return (
+
+          
+return (
             <div key={servicio.slug} className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100 transition-all hover:-translate-y-2 hover:shadow-xl group flex flex-col h-full">
               <div className="w-full aspect-video bg-gray-100 rounded-2xl flex items-center justify-center mb-6 overflow-hidden">
                 {servicio.image ? (

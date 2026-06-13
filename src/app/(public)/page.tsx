@@ -1,40 +1,54 @@
-import React from 'react'
-import Link from 'next/link'
 import fs from 'fs'
+
 import path from 'path'
+
+import React from 'react'
+
+import Link from 'next/link'
+
 import prisma from '@/utils/libs/prisma'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
 
 // Función para formatear de kebab-case a Sentence case (Modo oración)
 const toSentenceCase = (str: string) => {
   const words = str.split('-').filter(Boolean).map(w => w.toLowerCase())
+
   if (words.length > 0) {
     words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1)
   }
-  return words.join(' ')
+
+  
+return words.join(' ')
 }
 
 function getFirstImage(dir: string): string | null {
   if (!fs.existsSync(dir)) return null
   const items = fs.readdirSync(dir)
+
   for (const item of items) {
     const fullPath = path.join(dir, item)
+
     if (fs.statSync(fullPath).isDirectory()) {
       const res = getFirstImage(fullPath)
+
       if (res) return res
     } else if (/\.(jpg|jpeg|png|webp|gif)$/i.test(item)) {
       return fullPath
     }
   }
-  return null
+
+  
+return null
 }
 
 export default async function LandingPage() {
   // Cargar clientes
   const clientesDir = path.join(process.cwd(), 'public', 'images', 'clientes')
   let logos: { label: string; url: string }[] = []
+
   if (fs.existsSync(clientesDir)) {
     const files = fs.readdirSync(clientesDir)
+
     logos = files
       .filter(f => /\.(jpg|jpeg|png|svg)$/i.test(f))
       .map(f => ({
@@ -46,12 +60,16 @@ export default async function LandingPage() {
   // Cargar servicios
   const serviciosDir = path.join(process.cwd(), 'public', 'images', 'servicios')
   let servicios: { slug: string; displayName: string; image: string | null }[] = []
+
   if (fs.existsSync(serviciosDir)) {
     const dirs = fs.readdirSync(serviciosDir).filter(d => fs.statSync(path.join(serviciosDir, d)).isDirectory())
+
     servicios = dirs.map(dir => {
       const imgPath = getFirstImage(path.join(serviciosDir, dir))
       const url = imgPath ? '/' + imgPath.replace(/\\/g, '/').split('/public/')[1] : null
-      return {
+
+      
+return {
         slug: dir,
         displayName: toSentenceCase(dir),
         image: url

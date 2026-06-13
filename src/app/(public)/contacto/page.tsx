@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { MapPin, Phone, Mail, FileText } from 'lucide-react'
 
 export const metadata = {

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+
 import Logo from '@components/layout/shared/Logo'
 import PublicHeaderAuth from './PublicHeaderAuth'
 

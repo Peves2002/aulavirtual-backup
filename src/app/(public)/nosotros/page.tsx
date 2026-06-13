@@ -1,6 +1,8 @@
-import React from 'react'
 import fs from 'fs'
 import path from 'path'
+
+import React from 'react'
+
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
 
 export const metadata = {
@@ -11,17 +13,22 @@ export const metadata = {
 // Función para formatear de kebab-case a Sentence case (Modo oración)
 const toSentenceCase = (str: string) => {
   const words = str.split('-').filter(Boolean).map(w => w.toLowerCase())
+
   if (words.length > 0) {
     words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1)
   }
-  return words.join(' ')
+
+  
+return words.join(' ')
 }
 
 export default function NosotrosPage() {
   const clientesDir = path.join(process.cwd(), 'public', 'images', 'clientes')
   let logos: { label: string; url: string }[] = []
+
   if (fs.existsSync(clientesDir)) {
     const files = fs.readdirSync(clientesDir)
+
     logos = files
       .filter(f => /\.(jpg|jpeg|png|svg)$/i.test(f))
       .map(f => ({
