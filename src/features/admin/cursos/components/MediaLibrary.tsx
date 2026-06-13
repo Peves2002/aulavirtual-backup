@@ -23,7 +23,7 @@ import {
 
 import { useSnackbar } from 'notistack'
 
-import { useMedia, useUploadMedia, useDeleteMedia } from '../hooks/useMedia'
+import { useMedia, useUploadMedia, useDeleteMedia, useUploadPrivateVideo } from '../hooks/useMedia'
 import CustomAlertDialog from '../../../../components/CustomAlertDialog'
 
 interface MediaLibraryProps {
@@ -38,6 +38,7 @@ const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios',
   const [search, setSearch] = useState('')
   const { data: media = [], isLoading } = useMedia()
   const uploadMutation = useUploadMedia()
+  const uploadVideoMutation = useUploadPrivateVideo()
   const deleteMutation = useDeleteMedia()
   const { enqueueSnackbar } = useSnackbar()
   const [deleteId, setDeleteId] = useState<string | null>(null)
@@ -48,7 +49,13 @@ const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios',
     if (!file) return
 
     try {
-      const result = await uploadMutation.mutateAsync(file)
+      let result
+
+      if (acceptType === 'VIDEO') {
+        result = await uploadVideoMutation.mutateAsync(file)
+      } else {
+        result = await uploadMutation.mutateAsync(file)
+      }
 
       onSelect(result.url, result.nombre)
       onClose()
@@ -99,11 +106,11 @@ const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios',
           <Button
             component="label"
             variant="contained"
-            startIcon={uploadMutation.isPending ? <CircularProgress size={20} color="inherit" /> : <i className="tabler-upload" />}
-            disabled={uploadMutation.isPending}
+            startIcon={(uploadMutation.isPending || uploadVideoMutation.isPending) ? <CircularProgress size={20} color="inherit" /> : <i className="tabler-upload" />}
+            disabled={uploadMutation.isPending || uploadVideoMutation.isPending}
             sx={{ whiteSpace: 'nowrap' }}
           >
-            {uploadMutation.isPending ? 'Subiendo...' : (acceptType === 'IMAGEN' ? 'Subir Imagen' : acceptType === 'PDF' ? 'Subir PDF' : 'Subir Recurso')}
+            {(uploadMutation.isPending || uploadVideoMutation.isPending) ? 'Subiendo...' : (acceptType === 'IMAGEN' ? 'Subir Imagen' : acceptType === 'VIDEO' ? 'Subir Video' : 'Subir Recurso')}
             <input
               type="file"
               hidden
@@ -150,7 +157,7 @@ const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios',
                   >
                     <i className="tabler-plus text-3xl text-primary" />
                     <Typography variant="body2" color="primary" sx={{ mt: 1, fontWeight: 600 }}>
-                      {acceptType === 'IMAGEN' ? 'Nueva Imagen' : acceptType === 'PDF' ? 'Nuevo PDF' : 'Nuevo Recurso'}
+                      {acceptType === 'IMAGEN' ? 'Nueva Imagen' : acceptType === 'VIDEO' ? 'Nuevo Video' : 'Nuevo Recurso'}
                     </Typography>
                     <input
                       type="file"
@@ -168,7 +175,7 @@ const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios',
                 <Box sx={{ textAlign: 'center', py: 10, bgcolor: 'action.hover', borderRadius: 4 }}>
                   <i className="tabler-photo-off text-5xl text-textDisabled" />
                   <Typography sx={{ mt: 2 }} color="text.secondary">
-                    {acceptType === 'IMAGEN' ? 'No se encontraron imágenes' : acceptType === 'PDF' ? 'No se encontraron PDFs' : 'No se encontraron recursos'}
+                    {acceptType === 'IMAGEN' ? 'No se encontraron imágenes' : acceptType === 'VIDEO' ? 'No se encontraron videos' : 'No se encontraron recursos'}
                   </Typography>
                 </Box>
               </Grid>
