@@ -125,7 +125,7 @@ function MisionCard() {
           Nuestra Misión
         </h3>
         <p style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Ser líderes en la formación de profesionales del sector público, brindando herramientas y recursos para aprobar exámenes de ascenso y fomentando la mejora continua y el desarrollo de habilidades para el desempeño efectivo en su trabajo. Nos esforzamos por ser una academia innovadora, que se adapta a los cambios en el entorno laboral y las necesidades de nuestros estudiantes, para brindar una formación integral que les permita crecer y alcanzar sus metas profesionales a largo plazo.&quot;
+          &quot;Brindar una preparación especializada y de alta calidad para concursos públicos y programas de especialización en Control Gubernamental y Gestión Pública, mediante una enseñanza práctica, actualizada y estratégica que contribuya al desarrollo profesional y al logro de los objetivos de nuestros participantes.&quot;
         </p>
       </div>
     </div>
@@ -189,7 +189,7 @@ function VisionCard() {
           Nuestra Visión
         </h3>
         <p style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Brindar herramientas y recursos de calidad a profesionales, con el fin de ayudarles a aprobar sus exámenes de ascenso y alcanzar sus metas profesionales. Nos comprometemos a proporcionar una educación de excelencia y una experiencia de aprendizaje adecuada para cada estudiante.&quot;
+          &quot;Ser la academia virtual líder en preparación para concursos de la CGR y referente nacional en cursos de especialización sobre Control Gubernamental, reconocida por sus resultados, innovación educativa y excelencia académica en la formación de profesionales del sector público.&quot;
         </p>
       </div>
     </div>

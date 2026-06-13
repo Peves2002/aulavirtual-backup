@@ -3,7 +3,7 @@ import React from 'react'
 import { Box, Container, Typography, Divider } from '@mui/material'
 
 export const metadata = {
-  title: 'Términos y Condiciones | ARM Asset Reliability Management',
+  title: 'Términos y Condiciones | Master Academy',
 }
 
 export default function TerminosYCondicionesPage() {
@@ -14,14 +14,14 @@ export default function TerminosYCondicionesPage() {
           Términos y Condiciones
         </Typography>
         <Typography variant="body1" color="text.secondary" textAlign="center" mb={6}>
-          Última actualización: Noviembre de 2024
+          Última actualización: Junio de 2026
         </Typography>
 
         <Box sx={{ '& h4': { color: 'var(--web-dark, #1A1A1A)', fontWeight: 800, mt: 5, mb: 2 }, '& p': { mb: 2, lineHeight: 1.8 } }}>
 
           <Typography paragraph>
-            Bienvenido a <strong>NOMBRE DE TU EMPRESA</strong> (&quot;Nosotros&quot;, &quot;ARM&quot;).
-            Al acceder a nuestro sitio web y utilizar nuestros servicios de Aula Virtual e Ingeniería,
+            Bienvenido a <strong>Master Academy — Master Academy Grupo de Estudio S.A.C.</strong> (&quot;Nosotros&quot;, &quot;Master Academy&quot;).
+            Al acceder a nuestro sitio web y utilizar nuestros servicios de Academia Virtual,
             usted (&quot;el Usuario&quot;) acepta estar sujeto a los presentes Términos y Condiciones.
             Le sugerimos leer esta página cuidadosamente antes de proceder con cualquier compra o inscripción.
           </Typography>
@@ -30,30 +30,37 @@ export default function TerminosYCondicionesPage() {
 
           <Typography variant="h4">1. Generalidades de los Servicios</Typography>
           <Typography paragraph>
-            ARM brinda servicios de capacitación, diseño web, consultoría y soluciones de mantenimiento industrial.
-            Nuestra Aula Virtual contiene cursos y certificaciones dirigidos a profesionales de la confiabilidad.
-            Al adquirir un curso, está comprando una licencia de acceso individual e intransferible.
+            Master Academy brinda servicios de capacitación virtual en Control Gubernamental y Gestión Pública,
+            cursos de preparación para concursos de la Contraloría General de la República (CGR) y Sunat,
+            y simulacros de aptitud académica en Control Gubernamental, Contratación Estatal, Gestión Pública y Aptitud Académica.
+            Nuestra Academia Virtual contiene cursos, simulacros y certificaciones dirigidos a profesionales del sector público.
+            Al adquirir un curso o simulacro, está comprando una licencia de acceso individual e intransferible.
           </Typography>
 
           <Typography variant="h4">2. Pagos, Precios e Impuestos</Typography>
           <Typography paragraph>
-            Todos los pagos procesados en nuestro sitio web se gestionan a través de pasarelas de pago seguras (como Cullqui o PayPal).
+            Todos los pagos procesados en nuestro sitio web se gestionan a través de pasarelas de pago seguras (Culqi, IziPay o PayPal).
             Los precios expuestos pueden estar sujetos a cambios; no obstante, una vez procesada una orden y validado el pago,
             el precio se mantendrá respetado. En caso de aplicar cupones de descuento, estos deben validarse antes del check-out final.
           </Typography>
 
           <Typography variant="h4">3. Políticas de Devolución</Typography>
           <Typography paragraph>
-            Debido a la naturaleza de los bienes digitales (cursos pre-grabados y contenido virtual descargable),
-            <strong>las devoluciones o reembolsos no están permitidos</strong> una vez que el usuario ingresa al Aula Virtual
-            o se comprueba la descarga del material. Ante cualquier incidencia inusual o fallo técnico,
-            puede escribir a nuestro equipo de soporte que evaluará excepciones únicamente ante defectos probados del sistema.
+            Debido a la naturaleza de los bienes digitales (cursos pregrabados, simulacros y contenido virtual descargable),
+            <strong> las devoluciones o reembolsos no están permitidos</strong> una vez que el usuario ingresa al Aula Virtual
+            o se comprueba la descarga o visualización del material. Ante cualquier incidencia inusual o fallo técnico,
+            puede escribir a nuestro equipo de soporte, que evaluará excepciones únicamente ante defectos probados del sistema.
+            Consulte nuestra{' '}
+            <a href="/politica-de-cambios-y-devoluciones" style={{ color: 'var(--web-primary, #D4AF37)', textDecoration: 'underline' }}>
+              Política de Cambios y Devoluciones
+            </a>{' '}
+            para mayor detalle.
           </Typography>
 
           <Typography variant="h4">4. Propiedad Intelectual e Industrial</Typography>
           <Typography paragraph>
-            Todo el material expuesto en la plataforma web (textos, gráficos, videos, diagramas y recursos)
-            pertenece originariamente a NOMBRE DE TU EMPRESA o a sus instructores afiliados.
+            Todo el material expuesto en la plataforma web (textos, gráficos, videos, simulacros, bancos de preguntas y recursos)
+            pertenece originariamente a <strong>Master Academy Grupo de Estudio S.A.C.</strong> o a sus instructores afiliados.
             Queda estrictamente prohibida su copia, distribución sin autorización comercial y cualquier modalidad de piratería.
             Cualquier violación directa implicará el bloqueo irrevocable de la cuenta y potenciales acciones civiles correspondientes.
           </Typography>
@@ -61,23 +68,24 @@ export default function TerminosYCondicionesPage() {
           <Typography variant="h4">5. Certificaciones</Typography>
           <Typography paragraph>
             La emisión de certificados dentro de nuestra plataforma se somete a los requisitos técnicos
-            indicados en cada curso (visualización al 100%, aprobación de evaluaciones, etc.). ARM se reserva
+            indicados en cada curso (visualización al 100%, aprobación de evaluaciones, etc.). Master Academy se reserva
             el derecho de verificar y cruzar la identidad de los estudiantes y de no emitir certificaciones si constata fraude o suplantación.
           </Typography>
 
           <Typography variant="h4">6. Privacidad y Datos Personales</Typography>
           <Typography paragraph>
             Nos comprometemos a mantener la confidencialidad de la información proporcionada por los usuarios en el momento
-            del registro (Ley de Protección de Datos Personales o norma correspondiente en territorio Peruano).
-            Los datos se utilizan estrictamente para el servicio comercial del curso y fines facturativos,
-            nunca serán expendidos a bases de datos de terceros.
+            del registro, conforme a la Ley de Protección de Datos Personales (Ley N° 29733) vigente en el territorio Peruano.
+            Los datos se utilizan estrictamente para la prestación del servicio y fines facturativos,
+            y nunca serán cedidos a bases de datos de terceros sin su consentimiento.
           </Typography>
 
           <Typography variant="h4">7. Contacto y Libro de Reclamaciones</Typography>
           <Typography paragraph>
-            Para consultas de soporte, envíe sus requerimientos a <strong>arm.confiabilidad@gmail.com</strong>.
+            Para consultas de soporte, envíe sus requerimientos a <strong>Informes@mastergrupodeestudio.com</strong> o
+            escríbanos por WhatsApp al <strong>+51 973 241 285</strong>.
             De acuerdo a la legislación vigente de protección al consumidor peruano, mantenemos un{' '}
-            <a href="/libro-de-reclamaciones" style={{ color: 'var(--web-dark, #1A1A1A)', textDecoration: 'underline' }}>Libro de Reclamaciones a disposición pública</a>{' '}
+            <a href="/libro-de-reclamaciones" style={{ color: 'var(--web-primary, #D4AF37)', textDecoration: 'underline' }}>Libro de Reclamaciones a disposición pública</a>{' '}
             en nuestra plataforma web.
           </Typography>
 

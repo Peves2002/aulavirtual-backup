@@ -24,7 +24,7 @@ const WhatsAppIcon = ({ size = 16 }: { size?: number }) => (
 )
 
 const staticSocialLinks = [
-  { label: 'Facebook', href: 'https://www.facebook.com/Grupo.Master.Academy', icon: <Facebook size={20} /> },
+  { label: 'Facebook', href: 'https://www.facebook.com/grupo.master.academy', icon: <Facebook size={20} /> },
   { label: 'TikTok', href: 'https://tiktok.com/@grupo.master.academy', icon: <TikTokIcon size={20} /> },
   { label: 'Instagram', href: 'https://www.instagram.com/grupo.master.academy/', icon: <Instagram size={20} /> },
 ]
@@ -34,9 +34,9 @@ interface WebFooterProps {
   rutasHabilitado?: boolean
 }
 
-const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true }: WebFooterProps) => {
+const WebFooter = async ({ platformName = 'Master Academy', rutasHabilitado = true }: WebFooterProps) => {
   const configs = await getConfigs()
-  const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
+  const waNumber = configs.WHATSAPP_NUMERO || '51973241285'
 
   const socialLinks = [
     ...staticSocialLinks,
@@ -45,29 +45,42 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
 
   return (
     <footer style={{ backgroundColor: '#0A0A0A', color: '#ffffff' }}>
+
+      {/* Slogan banner */}
+      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(var(--web-primary-rgb,212,175,55),0.08)' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-4 text-center">
+          <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: 'rgba(255,255,255,0.7)', fontStyle: 'italic', margin: 0 }}>
+            &ldquo;Nosotros te enseñamos, tú prósperas.&rdquo;
+          </p>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
-          {/* Contact */}
+          {/* Empresa */}
           <div>
             <h4
-              className="mb-4"
+              className="mb-3"
               style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '1.0625rem', color: '#ffffff' }}
             >
-              Contacto
+              Master Academy
             </h4>
-            <ul className="space-y-3" style={{ opacity: 0.8 }}>
-              <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
-                <Phone size={16} className="flex-shrink-0 mt-0.5" />
-                <span>+51 928 510 125</span>
+            <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, marginBottom: '1rem' }}>
+              Academia virtual líder en preparación para concursos de la CGR, Sunat y especialización en Control Gubernamental y Gestión Pública.
+            </p>
+            <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
+              <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem' }}>
+                <Phone size={14} className="flex-shrink-0 mt-0.5" />
+                <a href="tel:+51973241285" className="no-underline hover:opacity-80" style={{ color: 'inherit' }}>+51 973 241 285</a>
               </li>
-              <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
-                <Mail size={16} className="flex-shrink-0 mt-0.5" />
-                <span>Informes@mastergrupodeestudio.com</span>
+              <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem' }}>
+                <Mail size={14} className="flex-shrink-0 mt-0.5" />
+                <a href="mailto:Informes@mastergrupodeestudio.com" className="no-underline hover:opacity-80" style={{ color: 'inherit' }}>Informes@mastergrupodeestudio.com</a>
               </li>
-              <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
-                <MapPin size={16} className="flex-shrink-0 mt-0.5" />
-                <span>Lima, Miraflores</span>
+              <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem' }}>
+                <MapPin size={14} className="flex-shrink-0 mt-0.5" />
+                <span>Mz. D, Lt. 43, APV El Manantial, San Martín de Porres, Lima</span>
               </li>
             </ul>
           </div>
@@ -78,17 +91,14 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
               className="mb-4"
               style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '1.0625rem', color: '#ffffff' }}
             >
-              Enlaces
+              Formación
             </h4>
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
               {([
-                { label: 'Inicio', href: '/' },
                 { label: 'Cursos', href: '/cursos' },
                 { label: 'Simulacros', href: '/simulacros' },
-                { label: 'Nosotros', href: '/nosotros' },
                 { label: 'Verificar Certificado', href: '/verificar-certificado' },
-                { label: 'Contacto', href: '/contacto' },
-                ...(rutasHabilitado ? [{ label: 'Rutas', href: '/rutas' }] : []),
+                ...(rutasHabilitado ? [{ label: 'Rutas de Aprendizaje', href: '/rutas' }] : []),
               ] as { label: string; href: string }[]).map(link => (
                 <li key={link.label}>
                   <Link
@@ -109,13 +119,15 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
               className="mb-4"
               style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '1.0625rem', color: '#ffffff' }}
             >
-              Más Información
+              Información
             </h4>
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
               {[
                 { label: 'Nosotros', href: '/nosotros' },
-                { label: 'Términos y condiciones', href: '/terminos-y-condiciones' },
+                { label: 'Contacto', href: '/contacto' },
+                { label: 'Términos y Condiciones', href: '/terminos-y-condiciones' },
                 { label: 'Política de Devoluciones', href: '/politica-de-cambios-y-devoluciones' },
+                { label: 'Libro de Reclamaciones', href: '/libro-de-reclamaciones' },
               ].map(link => (
                 <li key={link.label}>
                   <Link
@@ -154,6 +166,10 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
               Síguenos
             </h4>
 
+            <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.6)', marginBottom: '0.875rem', lineHeight: 1.6 }}>
+              Síguenos en redes sociales y entérate de nuestros simulacros, cursos y convocatorias.
+            </p>
+
             {/* Social icons row */}
             <div className="flex items-center gap-3 mb-5">
               {socialLinks.map(social => (
@@ -174,7 +190,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
             {/* Validar Certificado button */}
             <Link
               href="/verificar-certificado"
-              className="no-underline inline-block text-center transition-opacity hover:opacity-90"
+              className="no-underline inline-block text-center transition-opacity hover:opacity-90 mb-3"
               style={{
                 fontFamily: 'Poppins, sans-serif',
                 fontWeight: 600,
@@ -187,25 +203,46 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
             >
               Validar Certificado
             </Link>
+
+            {/* WhatsApp CTA */}
+            <div>
+              <a
+                href={`https://wa.me/${waNumber}?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20sus%20cursos%20y%20simulacros.`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="no-underline inline-flex items-center gap-2 transition-opacity hover:opacity-90"
+                style={{
+                  fontFamily: 'Poppins, sans-serif',
+                  fontWeight: 600,
+                  fontSize: '0.875rem',
+                  color: '#ffffff',
+                  backgroundColor: '#25D366',
+                  borderRadius: '9999px',
+                  padding: '0.5rem 1.25rem',
+                }}
+              >
+                <WhatsAppIcon size={16} />
+                Escríbenos
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Bottom bar */}
       <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <p
-              style={{
-                fontFamily: 'Poppins, sans-serif',
-                fontSize: '0.8125rem',
-                color: 'rgba(255,255,255,0.5)',
-              }}
-            >
-              © <HydratedDate date={new Date()} format="year" /> {platformName}. Todos los derechos reservados.
-            </p>
-          </div>
-          <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p
+            style={{
+              fontFamily: 'Poppins, sans-serif',
+              fontSize: '0.8125rem',
+              color: 'rgba(255,255,255,0.5)',
+              margin: 0,
+            }}
+          >
+            © <HydratedDate date={new Date()} format="year" /> {platformName} — Master Academy Grupo de Estudio S.A.C. | RUC: 20611096627. Todos los derechos reservados.
+          </p>
+          <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
             Desarrollado con ❤️ por
             <Link
               href="https://flyup.pe"

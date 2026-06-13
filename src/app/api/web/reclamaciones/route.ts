@@ -48,14 +48,15 @@ export async function POST(request: Request) {
 
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
-        <div style="background-color: #02115C; padding: 15px; border-radius: 6px 6px 0 0; text-align: center;">
+        <div style="background-color: #1A1A1A; padding: 15px; border-radius: 6px 6px 0 0; text-align: center;">
           <h2 style="color: white; margin: 0;">Copia de ${data.tipo_reclamacion} - Libro Virtual</h2>
+          <p style="color: rgba(255,255,255,0.7); font-size: 13px; margin: 4px 0 0;">Master Academy Grupo de Estudio S.A.C.</p>
         </div>
         <div style="padding: 20px;">
           <p>Hola <strong>${data.nombre}</strong>,</p>
           <p>Hemos recibido tu ${data.tipo_reclamacion.toLowerCase()} de forma exitosa. Tu código de seguimiento oficial es:</p>
           <div style="text-align: center; margin: 20px 0;">
-            <span style="background-color: #f3f4f6; color: #02115C; padding: 10px 20px; font-size: 20px; font-weight: bold; border-radius: 4px; letter-spacing: 2px;">
+            <span style="background-color: #f3f4f6; color: #1A1A1A; padding: 10px 20px; font-size: 20px; font-weight: bold; border-radius: 4px; letter-spacing: 2px;">
               ${codigoReclamo}
             </span>
           </div>
@@ -85,7 +86,7 @@ export async function POST(request: Request) {
           </p>
         </div>
         <div style="background-color: #f3f4f6; padding: 15px; text-align: center; border-radius: 0 0 6px 6px; font-size: 12px; color: #888;">
-          NOMBRE DE TU EMPRESA - RUC: 20600000000
+          Master Academy Grupo de Estudio S.A.C. | RUC: 20611096627 | Informes@mastergrupodeestudio.com
         </div>
       </div>
     `
