@@ -25,6 +25,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema, type LoginDto, registerSchema, type RegisterDto, forgotPasswordSchema, type ForgotPasswordDto, resetPasswordSchema, type ResetPasswordDto } from '@/schemas/auth.schema'
 import CustomTextField from '@core/components/mui/TextField'
 import Logo from '@components/layout/shared/Logo'
+import GoogleButton from './GoogleButton'
 
 export type Mode = 'login' | 'register' | 'forgot-password' | 'reset-password'
 
@@ -32,11 +33,12 @@ interface AuthModalProps {
   open: boolean
   mode: Mode
   callbackUrl?: string
+  onSuccess?: () => void
   onClose: () => void
   onSwitchMode: (mode: Mode) => void
 }
 
-const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModalProps) => {
+const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }: AuthModalProps) => {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [registerSuccess, setRegisterSuccess] = useState(false)
@@ -47,7 +49,7 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
 
   const loginForm = useForm<LoginDto>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { correo: '', contrasena: '' }
+    defaultValues: { correo: 'prueba@gmail.com', contrasena: 'Prueba123@' }
   })
 
   const registerForm = useForm<RegisterDto>({
@@ -91,7 +93,9 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
   const handleLoginSuccess = () => {
     onClose()
 
-    if (callbackUrl) {
+    if (onSuccess) {
+      onSuccess()
+    } else if (callbackUrl) {
       window.location.href = callbackUrl
     } else {
       router.refresh()
@@ -292,7 +296,7 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
               style={{ height: '52px', width: 'auto', objectFit: 'contain', maxWidth: '180px' }}
             />
           </Box>
-          <Typography variant="h5" sx={{ mt: 3, fontWeight: 800 }}>
+          <Typography variant="h5" sx={{ mt: 4, fontWeight: 800 }}>
             {mode === 'login' ? 'Iniciar Sesión' : mode === 'register' ? 'Crear Cuenta' : '¿Olvidaste tu contraseña?'}
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -308,6 +312,12 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
 
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         {registerSuccess && <Alert severity="success" sx={{ mb: 2 }}>¡Registro exitoso! Iniciando sesión...</Alert>}
+
+        {mode === 'login' && (
+          <Alert severity="info" sx={{ mb: 2, fontSize: '0.8rem' }}>
+            <strong>Cuenta de prueba:</strong> prueba@gmail.com &nbsp;|&nbsp; <strong>Contraseña:</strong> Prueba123@
+          </Alert>
+        )}
 
         {mode === 'login' ? (
           <form key="login-form" onSubmit={loginForm.handleSubmit(onLoginSubmit)}>
@@ -377,18 +387,7 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
 
               <Divider>o</Divider>
 
-              <Button
-                fullWidth
-                variant="outlined"
-                color="secondary"
-                size="large"
-                startIcon={<i className="tabler-brand-google-filled" />}
-                onClick={handleGoogleAuth}
-                disabled={isLoading}
-                sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700 }}
-              >
-                Continuar con Google
-              </Button>
+              <GoogleButton onClick={handleGoogleAuth} disabled={isLoading} label='Continuar con Google' />
 
               <Box sx={{ textAlign: 'center' }}>
                 <Typography variant="body2" component="span">¿No tienes cuenta? </Typography>
@@ -569,18 +568,7 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
               </Grid>
 
               <Grid item xs={12}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color="secondary"
-                  size="large"
-                  startIcon={<i className="tabler-brand-google-filled" />}
-                  onClick={handleGoogleAuth}
-                  disabled={isLoading || registerSuccess}
-                  sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700 }}
-                >
-                  Registrarse con Google
-                </Button>
+                <GoogleButton onClick={handleGoogleAuth} disabled={isLoading || registerSuccess} label='Registrarse con Google' />
               </Grid>
 
               <Grid item xs={12}>
