@@ -97,7 +97,7 @@ const Logo = () => {
 
   return (
     <Link href='/' className='flex items-center'>
-      <img src={templateLogo} alt={`${templateName} Logo`} className='bs-[46px]' />
+      <img src={templateLogo} alt={`${templateName} Logo`} className='bs-[64px]' />
       <div
         className={`flex flex-col ${montserrat.className}`}
         ref={logoTextRef}
