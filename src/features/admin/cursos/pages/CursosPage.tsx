@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import {
   Avatar,
@@ -32,6 +32,24 @@ import type { ColumnDef } from '@tanstack/react-table'
 
 import classnames from 'classnames'
 
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+  arrayMove
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 import type { Curso } from '../entity/Curso'
 import { CursosActions } from '../components/CursosActions'
@@ -41,7 +59,7 @@ import TablePaginationComponent from '@/utils/components/others/TablePaginationC
 import type { ThemeColor } from '@/@core/types'
 import { fuzzyFilter } from '@/utils/components/others/FuzzyFilter'
 import tableStyles from '@core/styles/table.module.css'
-import { useCursos } from '../hooks/useCursos'
+import { useCursos, useReorderCursos } from '../hooks/useCursos'
 
 type EstadoColorMap = {
   [key: string]: ThemeColor
@@ -74,8 +92,8 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
   const [rowSelection, setRowSelection] = useState({})
   const [globalFilter, setGlobalFilter] = useState('')
   const [estadoFilter, setEstadoFilter] = useState<string>('all')
+  const [orderedCursos, setOrderedCursos] = useState<Curso[]>([])
 
-  // Estado para paginación manual
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10
@@ -89,8 +107,38 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
     tipo: tipo ?? ''
   })
 
+  const reorderMutation = useReorderCursos()
+
   const cursos = useMemo(() => data?.cursos ?? (pagination.pageIndex === 0 ? initialDataCursos : []), [data, initialDataCursos, pagination.pageIndex])
   const totalCursos = useMemo(() => data?.paginacion?.total ?? initialDataCursos.length, [data, initialDataCursos.length])
+
+  useEffect(() => {
+    setOrderedCursos([...cursos])
+  }, [cursos])
+
+  const isDragDisabled = globalFilter.trim().length > 0 || estadoFilter !== 'all'
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  )
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (!over || active.id === over.id) return
+
+    const oldIndex = orderedCursos.findIndex(c => c.id === active.id)
+    const newIndex = orderedCursos.findIndex(c => c.id === over.id)
+    const reordered = arrayMove(orderedCursos, oldIndex, newIndex)
+
+    setOrderedCursos(reordered)
+
+    const baseIndex = pagination.pageIndex * pagination.pageSize
+    const items = reordered.map((c, i) => ({ id: c.id, orden: baseIndex + i }))
+
+    await reorderMutation.mutateAsync({ items })
+  }
 
   const handleDeleteClick = (curso: Curso) => {
     setCursoToDelete(curso)
@@ -98,12 +146,17 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
   }
 
   const handleViewStudentsClick = (curso: Curso) => {
-    setCursoToDelete(curso) // Reutilizamos el estado para no crear otro
+    setCursoToDelete(curso)
     setOpenStudentsModal(true)
   }
 
   const columns = useMemo<ColumnDef<Curso, any>[]>(
     () => [
+      columnHelper.display({
+        id: 'drag-handle',
+        header: () => null,
+        cell: () => null
+      }),
       columnHelper.display({
         id: 'numero',
         header: '#',
@@ -289,7 +342,7 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
   )
 
   const table = useReactTable({
-    data: cursos,
+    data: orderedCursos,
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -314,7 +367,7 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
 
-
+  const rows = table.getRowModel().rows
 
   return (
     <>
@@ -384,7 +437,10 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
               {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map(header => (
-                    <th key={header.id}>
+                    <th
+                      key={header.id}
+                      style={header.id === 'drag-handle' ? { width: 40, padding: '0 8px' } : undefined}
+                    >
                       {header.isPlaceholder ? null : (
                         <div
                           className={classnames({

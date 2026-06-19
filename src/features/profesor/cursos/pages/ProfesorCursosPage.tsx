@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 
@@ -18,18 +18,35 @@ import {
 } from '@mui/material'
 
 import {
+    DndContext,
+    closestCenter,
+    PointerSensor,
+    KeyboardSensor,
+    useSensor,
+    useSensors,
+    type DragEndEvent
+} from '@dnd-kit/core'
+import {
+    SortableContext,
+    sortableKeyboardCoordinates,
+    useSortable,
+    verticalListSortingStrategy,
+    arrayMove
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
+import {
     createColumnHelper,
     flexRender,
     getCoreRowModel,
     useReactTable,
     getPaginationRowModel,
-    getSortedRowModel,
     getFilteredRowModel
 } from '@tanstack/react-table'
 
 import { useSession } from 'next-auth/react'
 
-import { useCursos } from '@/features/admin/cursos/hooks/useCursos'
+import { useCursos, useReorderCursos } from '@/features/admin/cursos/hooks/useCursos'
 import TablePaginationComponent from '@/utils/components/others/TablePaginationComponent'
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 
@@ -37,8 +54,8 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' |
     const { data: session } = useSession()
     const router = useRouter()
     const [globalFilter, setGlobalFilter] = useState('')
+    const [orderedCursos, setOrderedCursos] = useState<any[]>([])
 
-    // Usamos el hook de cursos pero filtrando por el ID del profesor actual
     const { data: cursosData, isLoading } = useCursos({
         profesor_id: session?.user?.id as string,
         limit: '100', // Para el listado de profesor traemos todos (o paginamos si es necesario)
@@ -49,6 +66,11 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' |
         const columnHelper = createColumnHelper<any>()
 
         return [
+            columnHelper.display({
+                id: 'drag-handle',
+                header: () => null,
+                cell: () => null
+            }),
             columnHelper.accessor('miniatura', {
                 header: tipo === 'DIPLOMADO' ? 'Diplomado' : tipo === 'PROGRAMA' ? 'Programa' : 'Curso',
                 cell: ({ row }) => (
@@ -141,15 +163,12 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' |
     }, [router, tipo])
 
     const table = useReactTable({
-        data: cursosData?.cursos || [],
+        data: orderedCursos,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        state: {
-            globalFilter
-        },
+        state: { globalFilter },
         onGlobalFilterChange: setGlobalFilter
     })
 
@@ -193,6 +212,11 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' |
                             }}
                             sx={{ maxWidth: 350 }}
                         />
+                        {!isDragDisabled && (
+                            <Typography variant='caption' color='text.secondary' sx={{ ml: 3 }}>
+                                Arrastra las filas para cambiar el orden
+                            </Typography>
+                        )}
                     </Box>
                     <Box sx={{ overflowX: 'auto' }}>
                         <table className='w-full border-collapse'>
@@ -200,7 +224,11 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' |
                                 {table.getHeaderGroups().map(headerGroup => (
                                     <tr key={headerGroup.id}>
                                         {headerGroup.headers.map(header => (
-                                            <th key={header.id} className='px-6 py-4 text-left text-xs font-bold text-textSecondary uppercase tracking-wider'>
+                                            <th
+                                                key={header.id}
+                                                className='px-6 py-4 text-left text-xs font-bold text-textSecondary uppercase tracking-wider'
+                                                style={header.id === 'drag-handle' ? { width: 40, padding: '0 8px' } : undefined}
+                                            >
                                                 {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                                             </th>
                                         ))}

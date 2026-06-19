@@ -67,7 +67,8 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
 
       const matchesCategory = selectedCategory === 'all' || course.categoria?.slug === selectedCategory
 
-      const matchesLevel = selectedLevel === 'all' || course.nivel === selectedLevel
+      const matchesLevel = selectedLevel === 'all' ||
+        (selectedLevel === 'none' ? !course.nivel : course.nivel === selectedLevel)
 
       const matchesPrice = selectedPrice === 'all' ||
         (selectedPrice === 'free' ? course.es_gratis : !course.es_gratis)
@@ -248,6 +249,7 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
                   <MenuItem value="BASICO">Básico</MenuItem>
                   <MenuItem value="INTERMEDIO">Intermedio</MenuItem>
                   <MenuItem value="AVANZADO">Avanzado</MenuItem>
+                  <MenuItem value="none">Sin nivel</MenuItem>
                 </TextField>
 
                 {/* Tipo/Precio */}

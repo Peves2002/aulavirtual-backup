@@ -49,7 +49,7 @@ export const actualizarCursoSchema = z.object({
   categoria_id: z.string().uuid('ID de categoría inválido').optional().nullable(),
   profesor_id: z.string().uuid('ID de profesor inválido').optional(),
   tipo_emision: z.enum(['SINCRONO', 'ASINCRONO', 'MIXTO']).optional(),
-  nivel: z.enum(['BASICO', 'INTERMEDIO', 'AVANZADO']).optional(),
+  nivel: z.enum(['BASICO', 'INTERMEDIO', 'AVANZADO']).optional().nullable(),
   es_gratis: z.boolean().optional(),
   es_privado: z.boolean().optional(),
   completar_automatico: z.boolean().optional(),
