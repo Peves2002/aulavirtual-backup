@@ -3,7 +3,7 @@ import React from 'react'
 import { Box, Container, Typography, Divider } from '@mui/material'
 
 export const metadata = {
-  title: 'Términos y Condiciones | ARM Asset Reliability Management',
+  title: 'Términos y Condiciones | Grupo Ollarves',
 }
 
 export default function TerminosYCondicionesPage() {
@@ -20,8 +20,9 @@ export default function TerminosYCondicionesPage() {
         <Box sx={{ '& h4': { color: 'var(--web-dark, #025E44)', fontWeight: 800, mt: 5, mb: 2 }, '& p': { mb: 2, lineHeight: 1.8 } }}>
 
           <Typography paragraph>
-            Bienvenido a <strong>NOMBRE DE TU EMPRESA</strong> (&quot;Nosotros&quot;, &quot;ARM&quot;).
-            Al acceder a nuestro sitio web y utilizar nuestros servicios de Aula Virtual e Ingeniería,
+            Bienvenido a <strong>GRUPO OLLARVES E.I.R.L.</strong> (&quot;Nosotros&quot;, &quot;Grupo Ollarves&quot;), con RUC <strong>20608467298</strong>,
+            domiciliada en Octavio Muñoz Najar 128 - Segundo Piso, Arequipa, Perú.
+            Al acceder a nuestro sitio web y utilizar nuestros servicios de Aula Virtual,
             usted (&quot;el Usuario&quot;) acepta estar sujeto a los presentes Términos y Condiciones.
             Le sugerimos leer esta página cuidadosamente antes de proceder con cualquier compra o inscripción.
           </Typography>
@@ -30,14 +31,14 @@ export default function TerminosYCondicionesPage() {
 
           <Typography variant="h4">1. Generalidades de los Servicios</Typography>
           <Typography paragraph>
-            ARM brinda servicios de capacitación, Consultoría en Sistemas de Gestión - ISO, Capacitaciones y entrenamiento, Eventos, activaciones BTL y campañas en SST y Respuesta ante emergencias, Actividades de Trabajos de Alto Riesgo.
-            Nuestra Aula Virtual contiene cursos y certificaciones dirigidos a profesionales de las diferentes especialidades y sectores económicos.
+            Grupo Ollarves brinda servicios de <strong>capacitación</strong> y <strong>consultoría</strong> dirigidos a profesionales de las diferentes especialidades y sectores económicos.
+            Nuestra Aula Virtual contiene cursos, diplomados y programas orientados al desarrollo profesional y la formación continua.
             Al adquirir un curso, está comprando una licencia de acceso individual e intransferible.
           </Typography>
 
           <Typography variant="h4">2. Pagos, Precios e Impuestos</Typography>
           <Typography paragraph>
-            Todos los pagos procesados en nuestro sitio web se gestionan a través de pasarelas de pago seguras (como Cullqui o PayPal).
+            Todos los pagos procesados en nuestro sitio web se gestionan a través de pasarelas de pago seguras (como <strong>IziPay</strong> o PayPal).
             Los precios expuestos pueden estar sujetos a cambios; no obstante, una vez procesada una orden y validado el pago,
             el precio se mantendrá respetado. En caso de aplicar cupones de descuento, estos deben validarse antes del check-out final.
           </Typography>
@@ -53,7 +54,7 @@ export default function TerminosYCondicionesPage() {
           <Typography variant="h4">4. Propiedad Intelectual e Industrial</Typography>
           <Typography paragraph>
             Todo el material expuesto en la plataforma web (textos, gráficos, videos, diagramas y recursos)
-            pertenece originariamente a NOMBRE DE TU EMPRESA o a sus instructores afiliados.
+            pertenece originariamente a GRUPO OLLARVES E.I.R.L. o a sus instructores afiliados.
             Queda estrictamente prohibida su copia, distribución sin autorización comercial y cualquier modalidad de piratería.
             Cualquier violación directa implicará el bloqueo irrevocable de la cuenta y potenciales acciones civiles correspondientes.
           </Typography>
@@ -61,21 +62,24 @@ export default function TerminosYCondicionesPage() {
           <Typography variant="h4">5. Certificaciones</Typography>
           <Typography paragraph>
             La emisión de certificados dentro de nuestra plataforma se somete a los requisitos técnicos
-            indicados en cada curso (visualización al 100%, aprobación de evaluaciones, etc.). ARM se reserva
+            indicados en cada curso (visualización al 100%, aprobación de evaluaciones, etc.). Grupo Ollarves se reserva
             el derecho de verificar y cruzar la identidad de los estudiantes y de no emitir certificaciones si constata fraude o suplantación.
           </Typography>
 
           <Typography variant="h4">6. Privacidad y Datos Personales</Typography>
           <Typography paragraph>
             Nos comprometemos a mantener la confidencialidad de la información proporcionada por los usuarios en el momento
-            del registro (Ley de Protección de Datos Personales o norma correspondiente en territorio Peruano).
+            del registro (Ley de Protección de Datos Personales — Ley N° 29733 del territorio Peruano).
             Los datos se utilizan estrictamente para el servicio comercial del curso y fines facturativos,
-            nunca serán expendidos a bases de datos de terceros.
+            nunca serán cedidos a bases de datos de terceros. Consulte nuestra{' '}
+            <a href="/politica-de-privacidad" style={{ color: 'var(--web-dark, #025E44)', textDecoration: 'underline' }}>Política de Privacidad</a>{' '}
+            para mayor detalle.
           </Typography>
 
           <Typography variant="h4">7. Contacto y Libro de Reclamaciones</Typography>
           <Typography paragraph>
-            Para consultas de soporte, envíe sus requerimientos a <strong>arm.confiabilidad@gmail.com</strong>.
+            Para consultas de soporte, envíe sus requerimientos a <strong>grupoollarvesmercadotecnia@gmail.com</strong> o comuníquese
+            al WhatsApp <strong>+51 944 270 957</strong>.
             De acuerdo a la legislación vigente de protección al consumidor peruano, mantenemos un{' '}
             <a href="/libro-de-reclamaciones" style={{ color: 'var(--web-dark, #025E44)', textDecoration: 'underline' }}>Libro de Reclamaciones a disposición pública</a>{' '}
             en nuestra plataforma web.

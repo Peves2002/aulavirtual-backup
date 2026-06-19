@@ -17,23 +17,7 @@ import {
     InputAdornment
 } from '@mui/material'
 
-import {
-    DndContext,
-    closestCenter,
-    PointerSensor,
-    KeyboardSensor,
-    useSensor,
-    useSensors,
-    type DragEndEvent
-} from '@dnd-kit/core'
-import {
-    SortableContext,
-    sortableKeyboardCoordinates,
-    useSortable,
-    verticalListSortingStrategy,
-    arrayMove
-} from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
+
 
 import {
     createColumnHelper,
@@ -46,7 +30,7 @@ import {
 
 import { useSession } from 'next-auth/react'
 
-import { useCursos, useReorderCursos } from '@/features/admin/cursos/hooks/useCursos'
+import { useCursos } from '@/features/admin/cursos/hooks/useCursos'
 import TablePaginationComponent from '@/utils/components/others/TablePaginationComponent'
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 
@@ -56,11 +40,15 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' |
     const [globalFilter, setGlobalFilter] = useState('')
     const [orderedCursos, setOrderedCursos] = useState<any[]>([])
 
-    const { data: cursosData, isLoading } = useCursos({
+    const { data: cursosRaw, isLoading } = useCursos({
         profesor_id: session?.user?.id as string,
         limit: '100', // Para el listado de profesor traemos todos (o paginamos si es necesario)
         tipo
     })
+
+    useEffect(() => {
+        setOrderedCursos(cursosRaw?.cursos ?? [])
+    }, [cursosRaw])
 
     const columns = useMemo(() => {
         const columnHelper = createColumnHelper<any>()

@@ -23,11 +23,7 @@ export default async function LearningPage({ params, searchParams }: { params: {
     }
   })
 
-  let phoneNumberProfesor = "51959436827"
-
-  if (profesorByCurso && profesorByCurso.profesor && profesorByCurso.profesor.celular) {
-    phoneNumberProfesor = profesorByCurso.profesor.celular
-  }
+  const phoneNumberProfesor = "51944270957"
 
   const token = session.user?.accessToken ?? null
 

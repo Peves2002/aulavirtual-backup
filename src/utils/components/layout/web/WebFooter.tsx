@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 
-import { Phone, Mail, MapPin, BookOpenCheck, Facebook, Instagram } from 'lucide-react'
+import { Phone, Mail, MapPin, Facebook, Instagram } from 'lucide-react'
 
 import { getConfigs } from '@/utils/libs/config'
 import HydratedDate from '@/utils/components/HydratedDate'
@@ -123,6 +123,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
                 { label: 'Nosotros', href: '/nosotros' },
                 { label: 'Términos y condiciones', href: '/terminos-y-condiciones' },
                 { label: 'Política de Devoluciones', href: '/politica-de-cambios-y-devoluciones' },
+                { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
               ].map(link => (
                 <li key={link.label}>
                   <Link
@@ -213,7 +214,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
             </p>
           </div>
           <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>
-            Desarrollado con ❤️ por
+            Desarrollado por
             <Link
               href="https://flyup.pe"
               target="_blank"

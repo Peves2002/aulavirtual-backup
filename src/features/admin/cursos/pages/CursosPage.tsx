@@ -32,23 +32,6 @@ import type { ColumnDef } from '@tanstack/react-table'
 
 import classnames from 'classnames'
 
-import {
-  DndContext,
-  closestCenter,
-  PointerSensor,
-  KeyboardSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent
-} from '@dnd-kit/core'
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-  arrayMove
-} from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
 
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 import type { Curso } from '../entity/Curso'
@@ -59,7 +42,7 @@ import TablePaginationComponent from '@/utils/components/others/TablePaginationC
 import type { ThemeColor } from '@/@core/types'
 import { fuzzyFilter } from '@/utils/components/others/FuzzyFilter'
 import tableStyles from '@core/styles/table.module.css'
-import { useCursos, useReorderCursos } from '../hooks/useCursos'
+import { useCursos } from '../hooks/useCursos'
 
 type EstadoColorMap = {
   [key: string]: ThemeColor
@@ -107,7 +90,6 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
     tipo: tipo ?? ''
   })
 
-  const reorderMutation = useReorderCursos()
 
   const cursos = useMemo(() => data?.cursos ?? (pagination.pageIndex === 0 ? initialDataCursos : []), [data, initialDataCursos, pagination.pageIndex])
   const totalCursos = useMemo(() => data?.paginacion?.total ?? initialDataCursos.length, [data, initialDataCursos.length])
@@ -115,30 +97,6 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
   useEffect(() => {
     setOrderedCursos([...cursos])
   }, [cursos])
-
-  const isDragDisabled = globalFilter.trim().length > 0 || estadoFilter !== 'all'
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  )
-
-  const handleDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event
-
-    if (!over || active.id === over.id) return
-
-    const oldIndex = orderedCursos.findIndex(c => c.id === active.id)
-    const newIndex = orderedCursos.findIndex(c => c.id === over.id)
-    const reordered = arrayMove(orderedCursos, oldIndex, newIndex)
-
-    setOrderedCursos(reordered)
-
-    const baseIndex = pagination.pageIndex * pagination.pageSize
-    const items = reordered.map((c, i) => ({ id: c.id, orden: baseIndex + i }))
-
-    await reorderMutation.mutateAsync({ items })
-  }
 
   const handleDeleteClick = (curso: Curso) => {
     setCursoToDelete(curso)
@@ -366,8 +324,6 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
-
-  const rows = table.getRowModel().rows
 
   return (
     <>

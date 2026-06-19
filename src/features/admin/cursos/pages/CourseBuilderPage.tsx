@@ -82,12 +82,20 @@ export function CourseBuilderPage({ cursoId, profesores, basePath }: CourseBuild
                 <Button
                     variant='outlined'
                     onClick={() => {
-                        if (basePath) { router.push(basePath); return }
+                        if (basePath) {
+                            router.push(basePath)
+
+                            return
+                        }
+
                         const isAdmin = session?.user?.rol === 'ADMIN'
+
                         const tipo = curso.tipo
+
                         const path = isAdmin
                             ? tipo === 'DIPLOMADO' ? '/admin/diplomados' : tipo === 'PROGRAMA' ? '/admin/programas' : '/admin/cursos'
                             : tipo === 'DIPLOMADO' ? '/profesor/mis-diplomados' : tipo === 'PROGRAMA' ? '/profesor/mis-programas' : '/profesor/mis-cursos'
+
                         router.push(path)
                     }}
                     startIcon={<i className='tabler-arrow-left' />}
