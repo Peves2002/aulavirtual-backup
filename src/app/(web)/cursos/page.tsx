@@ -131,7 +131,7 @@ export default async function CursosPage() {
         </Box>
       </Box>
 
-      <CourseCatalog courses={courses} categories={categories} />
+      <CourseCatalog courses={courses} categories={categories} type="curso" />
     </Box>
   )
 }

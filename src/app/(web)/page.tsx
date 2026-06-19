@@ -26,7 +26,7 @@ async function getHomeData() {
     const [coursesRaw, rutasRaw, teachersRaw, categoriasRaw, configs] = await Promise.all([
       // Cursos
       prisma.curso.findMany({
-        where: { estado: 'PUBLICADO' },
+        where: { estado: 'PUBLICADO', tipo: 'CURSO' },
         include: {
           profesor: { select: { nombre: true, apellido: true, avatar: true } },
           categoria: { select: { id: true, nombre: true } },

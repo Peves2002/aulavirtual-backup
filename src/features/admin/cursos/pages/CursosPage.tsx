@@ -319,7 +319,7 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
   return (
     <>
       <Card>
-        <CardHeader title={tipo === 'DIPLOMADO' ? 'Gestión de Diplomados' : 'Gestión de Cursos'} className='pbe-4' />
+        <CardHeader title={tipo === 'DIPLOMADO' ? 'Gestión de Diplomados' : tipo === 'PROGRAMA' ? 'Gestión de Programas' : 'Gestión de Cursos'} className='pbe-4' />
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select

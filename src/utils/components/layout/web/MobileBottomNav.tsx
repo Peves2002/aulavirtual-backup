@@ -13,7 +13,7 @@ const ALL_NAV_ITEMS = [
   { key: 'inicio', title: 'Inicio', url: '/', icon: Home },
   { key: 'cursos', title: 'Cursos', url: '/cursos', icon: BookOpen },
   { key: 'diplomados', title: 'Diplomados', url: '/diplomados', icon: GraduationCap },
-  { key: 'programas', title: 'Programas', url: '/programas', icon: BookMarked },
+  { key: 'programas', title: 'Programas de Perfeccionamiento', url: '/programas', icon: BookMarked },
   { key: 'rutas', title: 'Rutas', url: '/rutas', icon: Route },
   { key: 'nosotros', title: 'Nosotros', url: '/nosotros', icon: Users },
   { key: 'certificado', title: 'Certificado', url: '/verificar-certificado', icon: Award },

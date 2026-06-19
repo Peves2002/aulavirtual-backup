@@ -28,7 +28,7 @@ export default async function Page() {
     let initialDataCursos: Curso[] = []
 
     try {
-        const response = await axiosCurso.searchAll()
+        const response = await axiosCurso.searchAll({ tipo: 'CURSO' })
 
         initialDataCursos = response.cursos || []
     } catch (error) {
