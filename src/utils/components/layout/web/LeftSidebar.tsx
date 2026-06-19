@@ -139,7 +139,6 @@ export default function LeftSidebar({
   )
 
   return (
-    <>
     <aside
       className="fixed left-0 bottom-0 flex flex-col items-start py-6 gap-1 overflow-hidden shadow-xl transition-all duration-300 ease-in-out"
       style={{
@@ -170,6 +169,17 @@ export default function LeftSidebar({
             }}
           >
             <div style={{ padding: '6px' }}>
+              <Link
+                href={`/${openPanel}`}
+                onClick={() => setOpenPanel(null)}
+                className="no-underline flex items-center w-full px-4 transition-colors"
+                style={{ height: '44px', color: 'var(--web-light, #BDD962)', fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 600 }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.08)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent' }}
+              >
+                Todas las categorías
+              </Link>
+              <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.1)', margin: '4px 8px' }} />
               {categories.map(cat => (
                 <Link
                   key={cat.id}
@@ -362,10 +372,10 @@ export default function LeftSidebar({
 
           /* Not logged in — show login + register */
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <button
-              onClick={() => openLogin()}
-              className="flex items-center w-full rounded-xl px-3 transition-all"
-              style={{ height: '44px', gap: '12px', backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer' }}
+            <Link
+              href="/login"
+              className="no-underline flex items-center w-full rounded-xl px-3 transition-all"
+              style={{ height: '44px', gap: '12px', backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.12)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.06)' }}
             >
@@ -375,11 +385,11 @@ export default function LeftSidebar({
               <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 600, color: '#ffffff', opacity: expanded ? 1 : 0, maxWidth: expanded ? '160px' : '0px', transition: 'opacity 0.2s, max-width 0.3s', whiteSpace: 'nowrap', overflow: 'hidden' }}>
                 Iniciar Sesión
               </span>
-            </button>
-            <button
-              onClick={() => openRegister()}
-              className="flex items-center w-full rounded-xl px-3 transition-all"
-              style={{ height: '44px', gap: '12px', backgroundColor: 'var(--web-light, #BDD962)', border: '1px solid transparent', cursor: 'pointer' }}
+            </Link>
+            <Link
+              href="/registrarse"
+              className="no-underline flex items-center w-full rounded-xl px-3 transition-all"
+              style={{ height: '44px', gap: '12px', backgroundColor: 'var(--web-light, #BDD962)', border: '1px solid transparent' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--web-primary, #25927F)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--web-light, #BDD962)' }}
             >
@@ -389,11 +399,10 @@ export default function LeftSidebar({
               <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 700, color: '#0A0A0A', opacity: expanded ? 1 : 0, maxWidth: expanded ? '160px' : '0px', transition: 'opacity 0.2s, max-width 0.3s', whiteSpace: 'nowrap', overflow: 'hidden' }}>
                 Registrarse
               </span>
-            </button>
+            </Link>
           </div>
         )}
       </div>
     </aside>
-    </>
   )
 }

@@ -212,11 +212,6 @@ const ProfesorCursosPage = ({ tipo = 'CURSO' }: { tipo?: 'CURSO' | 'DIPLOMADO' |
                             }}
                             sx={{ maxWidth: 350 }}
                         />
-                        {!isDragDisabled && (
-                            <Typography variant='caption' color='text.secondary' sx={{ ml: 3 }}>
-                                Arrastra las filas para cambiar el orden
-                            </Typography>
-                        )}
                     </Box>
                     <Box sx={{ overflowX: 'auto' }}>
                         <table className='w-full border-collapse'>

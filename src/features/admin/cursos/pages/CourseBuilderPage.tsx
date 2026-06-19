@@ -37,7 +37,7 @@ interface CourseBuilderPageProps {
 }
 
 export function CourseBuilderPage({ cursoId, profesores, basePath }: CourseBuilderPageProps) {
-    const { data: curso, isLoading, refetch } = useCurso(cursoId)
+    const { data: curso, isLoading, refetch, isError } = useCurso(cursoId)
     const [activeTab, setActiveTab] = useState('1')
     const router = useRouter()
     const { data: session } = useSession()
