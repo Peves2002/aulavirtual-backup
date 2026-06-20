@@ -241,8 +241,8 @@ const CourseContentSidebar = ({
                         </Accordion>
                     )))}
 
-                {/* Sección de Examen y Certificado */}
-                {examenId && (
+                {/* Sección de Examen (solo si el curso tiene examen final) */}
+                {examenId && (examStatus === 'locked' || examStatus === 'available' || examStatus === 'failed') && (
                     <>
                         <Divider />
                         <Box sx={{ p: 3 }}>
@@ -260,7 +260,7 @@ const CourseContentSidebar = ({
                                 </Box>
                             )}
 
-                            {(examStatus === 'available' || examStatus === 'failed') && examenId && (
+                            {(examStatus === 'available' || examStatus === 'failed') && (
                                 <Button
                                     fullWidth
                                     variant={currentView === 'exam' && currentExamenId === examenId ? 'contained' : 'outlined'}
@@ -277,27 +277,29 @@ const CourseContentSidebar = ({
                                     📝 Realizar Examen Final
                                 </Button>
                             )}
-
-                            {examStatus === 'passed' && (
-                                <Button
-                                    fullWidth
-                                    variant={currentView === 'certificate' ? 'contained' : 'outlined'}
-                                    color="success"
-                                    startIcon={<i className="tabler-certificate" />}
-                                    onClick={() => setCurrentView('certificate')}
-                                    sx={{
-                                        borderRadius: '10px',
-                                        py: 1.5,
-                                        fontWeight: 700,
-                                        textTransform: 'none'
-                                    }}
-                                >
-                                    🎓 Ver Certificado
-                                </Button>
-                            )}
                         </Box>
                     </>
                 )}
+
+                {/* Obtener certificado: siempre visible, tenga o no examen el curso */}
+                <Divider />
+                <Box sx={{ p: 3 }}>
+                    <Button
+                        fullWidth
+                        variant={currentView === 'certificate' ? 'contained' : 'outlined'}
+                        color="success"
+                        startIcon={<i className="tabler-certificate" />}
+                        onClick={() => setCurrentView('certificate')}
+                        sx={{
+                            borderRadius: '10px',
+                            py: 1.5,
+                            fontWeight: 700,
+                            textTransform: 'none'
+                        }}
+                    >
+                        Obtener certificado
+                    </Button>
+                </Box>
             </Box>
         </Box>
     )

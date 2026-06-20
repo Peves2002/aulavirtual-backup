@@ -40,7 +40,9 @@ export const dynamic = 'force-dynamic'
  * Página pública de verificación de certificados
  */
 export default async function VerificarCertificadoPage({ params }: Props) {
-  const { codigo } = params
+  // Next.js no decodifica automáticamente los params de página (a diferencia de los Route Handlers),
+  // por lo que un código con "/" (ej: CER-2026-APGM/0001) llega aún codificado como %2F.
+  const codigo = decodeURIComponent(params.codigo)
 
   // 1. Buscar el certificado en la DB
   const [certificado, configs] = await Promise.all([

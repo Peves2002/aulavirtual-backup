@@ -88,7 +88,7 @@ const CertificateSection = ({ cursoId }: CertificateSectionProps) => {
             const link = document.createElement('a')
 
             link.href = url
-            link.setAttribute('download', `certificado-${certificado.codigoVerificacion}.pdf`)
+            link.setAttribute('download', `certificado-${certificado.codigoVerificacion.replace(/\//g, '-')}.pdf`)
             document.body.appendChild(link)
             link.click()
             link.remove()
@@ -218,7 +218,7 @@ const CertificateSection = ({ cursoId }: CertificateSectionProps) => {
             <Box sx={{ p: 5, textAlign: 'center', bgcolor: 'primary.50' }}>
                 <i className="tabler-certificate" style={{ fontSize: '3.5rem', color: 'var(--mui-palette-primary-main)' }} />
                 <Typography variant="h5" sx={{ fontWeight: 800, mt: 2 }}>
-                    ¡Felicidades! Has aprobado el examen
+                    ¡Felicidades! Has completado el curso
                 </Typography>
                 <Typography color="text.secondary" sx={{ mt: 1 }}>
                     Ahora puedes generar tu certificado de finalización

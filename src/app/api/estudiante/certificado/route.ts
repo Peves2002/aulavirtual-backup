@@ -99,19 +99,27 @@ export async function POST(request: Request) {
       return ApiResponse.error(request, 'Debes completar todas las lecciones', 403)
     }
 
-    // 3. Verificar que existe un examen aprobado
-    const examenAprobado = await prisma.intentoExamen.findFirst({
-      where: {
-        usuario_id: auth.user.id,
-        esta_aprobado: true,
-        examen: {
-          curso_id: cursoId
-        }
-      }
+    // 3. Si el curso tiene examen(es), se exige al menos uno aprobado.
+    // Cursos sin ningún examen configurado solo requieren el 100% de progreso (paso 2).
+    const tieneExamenes = await prisma.examen.findFirst({
+      where: { curso_id: cursoId },
+      select: { id: true }
     })
 
-    if (!examenAprobado) {
-      return ApiResponse.error(request, 'Debes aprobar el examen antes de obtener tu certificado', 403)
+    if (tieneExamenes) {
+      const examenAprobado = await prisma.intentoExamen.findFirst({
+        where: {
+          usuario_id: auth.user.id,
+          esta_aprobado: true,
+          examen: {
+            curso_id: cursoId
+          }
+        }
+      })
+
+      if (!examenAprobado) {
+        return ApiResponse.error(request, 'Debes aprobar el examen antes de obtener tu certificado', 403)
+      }
     }
 
     // 4. Verificar si ya existe un certificado
@@ -135,10 +143,7 @@ export async function POST(request: Request) {
       })
     }
 
-    // 5. Generar código de verificación único
-    const codigoVerificacion = `CERT-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
-
-    // 6. Capturar datos para el certificado (Snapshot)
+    // 5. Capturar datos para el certificado (Snapshot)
     const cursoData = await prisma.curso.findUnique({
       where: { id: cursoId },
       include: {
@@ -152,14 +157,24 @@ export async function POST(request: Request) {
       return ApiResponse.error(request, 'Curso no encontrado', 404)
     }
 
+    // 6. Generar código de verificación único: CER-{AÑO}-{CÓDIGO DE CURSO}/{N° CERTIFICADO}
+    // El número de certificado es secuencial por curso (1er certificado emitido para ese curso, 2do, etc.)
+    const anioEmision = new Date().getFullYear()
+    const codigoCurso = (cursoData.codigo || cursoData.titulo.replace(/[^a-zA-Z0-9]/g, '').slice(0, 4) || 'GEN').toUpperCase()
+    const certificadosDelCurso = await prisma.certificado.count({ where: { curso_id: cursoId } })
+    const numeroCertificado = String(certificadosDelCurso + 1).padStart(4, '0')
+    const codigoVerificacion = `CER-${anioEmision}-${codigoCurso} - ${numeroCertificado}`
+
     const datosSnapshot = {
       curso: {
         titulo: cursoData.titulo,
+        codigo: codigoCurso,
         duracion: cursoData.duracion,
         nivel: cursoData.nivel,
         tipo_emision: cursoData.tipo_emision,
         fecha_inicio: cursoData.fecha_inicio,
       },
+      numero_certificado: numeroCertificado,
       usuario: {
         nombre: auth.user.nombre,
         apellido: auth.user.apellido,
