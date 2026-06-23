@@ -61,6 +61,7 @@ export const EbookFormModal = ({ open, handleClose, ebook }: Props) => {
     new Promise(resolve => {
       const reader = new FileReader()
 
+      // Cada página individual tiene /Type /Page (sin 's')
       reader.onload = e => {
         const content = e.target?.result as string
 
