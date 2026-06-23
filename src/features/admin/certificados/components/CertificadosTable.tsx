@@ -11,7 +11,8 @@ import {
   IconButton,
   Tooltip,
   TablePagination,
-  MenuItem
+  MenuItem,
+  Button
 } from '@mui/material'
 
 import {
@@ -33,6 +34,7 @@ import type { Certificado } from '../entity/Certificado'
 import { useCertificados } from '../hooks/useCertificados'
 import { AxiosCertificado } from '../http/axiosCertificado'
 import HydratedDate from '@/utils/components/HydratedDate'
+import CreateCertificadoModal from './CreateCertificadoModal'
 
 const columnHelper = createColumnHelper<Certificado>()
 
@@ -42,8 +44,9 @@ interface CertificadosTableProps {
 
 export function CertificadosTable({ initialData }: CertificadosTableProps) {
   const [params, setParams] = useState({ page: 1, limit: 10, codigo: '', nombre: '' })
+  const [openCreateModal, setOpenCreateModal] = useState(false)
 
-  const { data, isLoading } = useCertificados(params, initialData || undefined)
+  const { data, isLoading, refetch } = useCertificados(params, initialData || undefined)
 
   const certificados = data?.certificados || []
   const total = data?.paginacion?.total || 0
@@ -215,6 +218,14 @@ export function CertificadosTable({ initialData }: CertificadosTableProps) {
             placeholder='Filtrar por estudiante'
             className='is-full sm:is-auto'
           />
+          <Button
+            variant='contained'
+            startIcon={<i className='tabler-certificate' />}
+            onClick={() => setOpenCreateModal(true)}
+            className='is-full sm:is-auto'
+          >
+            Crear Certificado
+          </Button>
         </Box>
       </Box>
 
@@ -265,6 +276,12 @@ export function CertificadosTable({ initialData }: CertificadosTableProps) {
         onRowsPerPageChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setParams(prev => ({ ...prev, limit: Number(e.target.value), page: 1 }))
         }}
+      />
+
+      <CreateCertificadoModal
+        open={openCreateModal}
+        handleClose={() => setOpenCreateModal(false)}
+        onSuccess={() => refetch()}
       />
     </Card>
   )

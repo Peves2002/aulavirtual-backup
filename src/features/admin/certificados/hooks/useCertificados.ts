@@ -1,8 +1,9 @@
-import { useQuery, keepPreviousData } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
 import { AxiosCertificado } from '../http/axiosCertificado'
-import type { CertificadosResponse } from '../entity/Certificado'
+import type { Certificado, CertificadosResponse } from '../entity/Certificado'
+import type { CrearCertificadoManualDto } from '@/schemas/certificado.schema'
 
 const axiosCertificadoFactory = () => {
   const getAuthToken = async () => {
@@ -30,5 +31,21 @@ export const useCertificados = (
     },
     initialData: isDefault ? initialData : undefined,
     placeholderData: keepPreviousData
+  })
+}
+
+/**
+ * Hook para crear un certificado manual (Admin)
+ */
+export const useCreateCertificadoManual = () => {
+  const qc = useQueryClient()
+
+  return useMutation<{ certificado: Certificado }, any, CrearCertificadoManualDto>({
+    mutationFn: async (data: CrearCertificadoManualDto) => {
+      const axiosCertificado = axiosCertificadoFactory()
+
+      return await axiosCertificado.createManual(data)
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-certificados'] })
   })
 }

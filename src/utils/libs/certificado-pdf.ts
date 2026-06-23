@@ -124,9 +124,6 @@ export async function buildCertificadoPdf({ certificado, inscripcion, configs, a
   const slogan = configs.CERTIFICADO_SLOGAN || 'Asset Reliability Management'
   const divisionLabel = configs.CERTIFICADO_DIVISION_LABEL || `${nombreInstitucion.toUpperCase()} INTERNATIONAL CERTIFICATION DIVISION`
 
-  // OBTENCIÓN AUTOMÁTICA DEL DOMINIO: Priorizamos config manual, luego host actual
-  const linkInstitucion = configs.CERTIFICADO_INSTITUTION_URL || configs.SETTINGS_INSTITUTION_URL || appUrl.replace(/^https?:\/\//, '')
-
   const [pr, pg, pb] = hexToRgb(colorPrimario)
   const goldColor: [number, number, number] = [184, 134, 11]
 
@@ -245,7 +242,6 @@ export async function buildCertificadoPdf({ certificado, inscripcion, configs, a
     : `${certificado.usuario.nombre} ${certificado.usuario.apellido}`
 
   const cursoTitulo = snapshot?.curso?.titulo || certificado.curso.titulo
-  const cursoCodigo = snapshot?.curso?.codigo || certificado.curso.codigo || '---'
   const cursoNivel = snapshot?.curso?.nivel || certificado.curso.nivel
   const cursoModalidad = snapshot?.curso?.tipo_emision || certificado.curso.tipo_emision
   const cursoDuracion = snapshot?.curso?.duracion || certificado.curso.duracion
@@ -399,12 +395,6 @@ export async function buildCertificadoPdf({ certificado, inscripcion, configs, a
     gerenteCargoDisplay,
     gerenteCredencialesDisplay
   )
-
-  doc.setFontSize(7)
-  doc.setTextColor(150, 150, 150)
-  doc.setFont('helvetica', 'normal')
-  doc.text(`Código de curso: ${cursoCodigo}`, 18, pageHeight - 14)
-  doc.text(`Plataforma: ${linkInstitucion}`, pageWidth - 18, pageHeight - 14, { align: 'right' })
 
   return doc.output('arraybuffer')
 }

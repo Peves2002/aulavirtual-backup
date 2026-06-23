@@ -187,6 +187,17 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       }
     }
 
+    // Verificar código único si se proporciona
+    if (data.codigo) {
+      const cursoConMismoCodigo = await prisma.curso.findFirst({
+        where: { codigo: data.codigo, NOT: { id } }
+      })
+
+      if (cursoConMismoCodigo) {
+        return ApiResponse.error(request, 'Ya existe un curso con ese código', 409)
+      }
+    }
+
     // Verificar categoría si se cambia
     if (data.categoria_id) {
       const categoria = await prisma.categoria.findUnique({

@@ -44,6 +44,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
     profesor_id: curso.profesor_id,
     tipo_emision: curso.tipo_emision,
     duracion: curso.duracion || '',
+    codigo: curso.codigo || '',
     miniatura: curso.miniatura || '',
     video_presentacion: curso.video_presentacion || '',
     brochure: curso.brochure || '',
@@ -66,6 +67,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
           profesor_id: form.profesor_id,
           tipo_emision: form.tipo_emision as 'SINCRONO' | 'ASINCRONO' | 'MIXTO',
           duracion: form.duracion || null,
+          codigo: form.codigo?.trim() || null,
           miniatura: form.miniatura || null,
           video_presentacion: form.video_presentacion || null,
           brochure: form.brochure || null,
@@ -193,18 +195,35 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
           />
         </Grid>
       )}
-      <Grid item xs={12} sm={6}>
-        <CustomTextField
-          fullWidth
-          label='Duración'
-          name='duracion'
-          placeholder='Ej: 12 horas'
-          value={form.duracion}
-          onChange={handleChange}
-          InputProps={{
-            startAdornment: <InputAdornment position='start'><i className='tabler-clock text-xl text-textSecondary' /></InputAdornment>
-          }}
-        />
+      <Grid item xs={12}>
+        <Grid container spacing={5}>
+          <Grid item xs={12} sm={6}>
+            <CustomTextField
+              fullWidth
+              label='Duración'
+              name='duracion'
+              placeholder='Ej: 12 horas'
+              value={form.duracion}
+              onChange={handleChange}
+              InputProps={{
+                startAdornment: <InputAdornment position='start'><i className='tabler-clock text-xl text-textSecondary' /></InputAdornment>
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomTextField
+              fullWidth
+              label='Código de Curso'
+              name='codigo'
+              placeholder='Ej: CUR-2026-001'
+              value={form.codigo}
+              onChange={handleChange}
+              InputProps={{
+                startAdornment: <InputAdornment position='start'><i className='tabler-hash text-xl text-textSecondary' /></InputAdornment>
+              }}
+            />
+          </Grid>
+        </Grid>
       </Grid>
       <Grid item xs={12} sm={6}>
         <Typography variant='subtitle2' sx={{ mb: 1 }}>Imagen de Portada</Typography>

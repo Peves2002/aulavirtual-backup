@@ -74,6 +74,7 @@ model Curso {
   id                 String          @id @default(uuid())
   titulo             String
   slug               String          @unique
+  codigo             String?         @unique
   descripcion        String?
   miniatura          String?
   video_presentacion String?

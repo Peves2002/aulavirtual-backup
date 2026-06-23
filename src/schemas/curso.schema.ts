@@ -49,6 +49,7 @@ export const actualizarCursoSchema = z.object({
   precio: z.coerce.number().min(0, 'El precio no puede ser negativo').optional(),
   moneda: z.string().max(3).optional(),
   duracion: z.string().max(50).optional().nullable(),
+  codigo: z.string().trim().max(50, 'El código no puede exceder 50 caracteres').optional().nullable(),
   miniatura: z.string().optional().nullable(),
   video_presentacion: z.string().optional().nullable(),
   brochure: z.string().optional().nullable(),

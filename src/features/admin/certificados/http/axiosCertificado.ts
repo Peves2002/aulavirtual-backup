@@ -4,7 +4,8 @@ import type { AxiosStatic } from 'axios'
 
 import { getBaseURL } from '@/utils/env'
 import { AxiosInternalHttpClient } from '@/features/shared/http/httpClient'
-import type { CertificadosResponse } from '../entity/Certificado'
+import type { CertificadosResponse, Certificado } from '../entity/Certificado'
+import type { CrearCertificadoManualDto } from '@/schemas/certificado.schema'
 
 type Params = {
   axiosLib?: AxiosStatic
@@ -32,6 +33,14 @@ export class AxiosCertificado extends AxiosInternalHttpClient {
   }): Promise<CertificadosResponse['result']> {
     try {
       return await this.iGet<CertificadosResponse['result']>('', { params })
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
+  async createManual(data: CrearCertificadoManualDto): Promise<{ certificado: Certificado }> {
+    try {
+      return await this.iPost<{ certificado: Certificado }>('', data)
     } catch (err: any) {
       throw err?.response?.data ?? err
     }
