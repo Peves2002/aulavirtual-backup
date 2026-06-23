@@ -23,12 +23,12 @@ export class AxiosCupon extends AxiosInternalHttpClient {
     })
   }
 
-  async getAll(buscar: string = ''): Promise<Cupon[]> {
+  async getAll(query?: Record<string, string>): Promise<{ cupones: Cupon[]; paginacion: any }> {
     try {
-      const query = buscar ? `?buscar=${buscar}` : ''
-      const res = await this.iGet<{ cupones: Cupon[] }>(query)
+      const queryString = query ? '?' + new URLSearchParams(query).toString() : ''
+      const payload = await this.iGet<{ cupones: Cupon[]; paginacion: any }>(queryString)
 
-      return res?.cupones || []
+      return payload
     } catch (err: any) {
       throw err?.response?.data ?? err
     }

@@ -28,7 +28,7 @@ import { Rol } from '@prisma/client'
 import { AxiosConfiguracion } from '../http/axiosConfiguracion'
 import type { Configuracion } from '../entity/Configuracion'
 import MediaLibrary from '../../cursos/components/MediaLibrary'
-import { useUsuarios } from '../../usuarios/hooks/useUsuarios'
+import { useUsuariosLista } from '../../usuarios/hooks/useUsuarios'
 
 interface ConfiguracionViewProps {
   initialData?: Configuracion[]
@@ -61,7 +61,7 @@ function CustomTabPanel(props: TabPanelProps) {
 }
 
 function CertificadosSettings({ config, onInputChange }: { config: any, onInputChange: (clave: string, valor: string) => void }) {
-  const { data: usuarios, isLoading } = useUsuarios()
+  const { data: usuarios, isLoading } = useUsuariosLista()
 
   // Filtrar solo Admins y Profesores para que puedan ser Gerentes
   const candidatos = (usuarios || []).filter(u => u.rol === Rol.ADMIN || u.rol === Rol.PROFESOR)

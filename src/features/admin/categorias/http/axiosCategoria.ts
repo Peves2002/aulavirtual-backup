@@ -13,6 +13,12 @@ type Params = {
   getAuthToken?: () => Promise<string | null> | string | null
 }
 
+function stripEmpty(query?: Record<string, string>): Record<string, string> {
+  if (!query) return {}
+
+  return Object.fromEntries(Object.entries(query).filter(([, value]) => value !== ''))
+}
+
 export class AxiosCategoria extends AxiosInternalHttpClient {
   constructor(params: Params = {}) {
     const baseURL = getBaseURL()
@@ -24,9 +30,24 @@ export class AxiosCategoria extends AxiosInternalHttpClient {
     })
   }
 
-  async searchAll(): Promise<Categoria[]> {
+  async searchAll(query?: Record<string, string>): Promise<{ categorias: Categoria[]; paginacion: any }> {
     try {
-      const payload = await this.iGet<{ categorias: Categoria[]; paginacion: any }>()
+      const queryString = query ? '?' + new URLSearchParams(stripEmpty(query)).toString() : ''
+      const payload = await this.iGet<{ categorias: Categoria[]; paginacion: any }>(queryString)
+
+      return payload
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
+  /**
+   * Lista completa (sin paginar) para selectores/dropdowns
+   */
+  async getLista(query?: Record<string, string>): Promise<Categoria[]> {
+    try {
+      const queryString = '?' + new URLSearchParams({ ...stripEmpty(query), limit: '10000' }).toString()
+      const payload = await this.iGet<{ categorias: Categoria[]; paginacion: any }>(queryString)
 
       return payload?.categorias || []
     } catch (err: any) {

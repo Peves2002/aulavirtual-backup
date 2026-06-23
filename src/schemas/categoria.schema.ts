@@ -77,7 +77,7 @@ export type ReordenarCategoriasDto = z.infer<typeof reordenarCategoriasSchema>
 // ---------------------------------------------------------------------------
 export const listarCategoriasQuerySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
-  limit: z.coerce.number().int().positive().max(100).default(50),
+  limit: z.coerce.number().int().positive().max(10000).default(10),
   buscar: z.string().optional(),
   esta_activo: z
     .enum(['true', 'false'])

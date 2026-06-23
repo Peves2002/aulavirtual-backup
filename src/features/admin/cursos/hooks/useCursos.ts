@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
 import type { Curso, CursoListaItem } from '../entity/Curso'
@@ -49,6 +49,7 @@ export function useCursos(query?: Record<string, string>) {
   return useQuery<{ cursos: Curso[]; paginacion: any }, any>({
     queryKey: [...QUERY_KEY.CURSOS, query],
     queryFn: async () => await axiosCurso.searchAll(query),
+    placeholderData: keepPreviousData,
     staleTime: 60_000,
     retry: 1
   })

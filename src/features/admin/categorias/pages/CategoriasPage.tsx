@@ -20,10 +20,6 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  getFilteredRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFacetedMinMaxValues,
   getPaginationRowModel,
   getSortedRowModel
 } from '@tanstack/react-table'
@@ -43,7 +39,6 @@ import type { Categoria } from '../entity/Categoria'
 import { useCategorias } from '../hooks/useCategorias'
 import { CategoriasActions } from '../components/CategoriasActions'
 import { DebouncedInput } from '@/utils/components/others/DebouncedInput'
-import { fuzzyFilter } from '@/utils/components/others/FuzzyFilter'
 import TablePaginationComponent from '@/utils/components/others/TablePaginationComponent'
 
 type StatusType = {
@@ -59,9 +54,10 @@ const columnHelper = createColumnHelper<Categoria>()
 
 interface CategoriasPageProps {
   initialDataCategorias?: Categoria[]
+  initialPaginacion?: any
 }
 
-export function CategoriasPage({ initialDataCategorias }: CategoriasPageProps) {
+export function CategoriasPage({ initialDataCategorias, initialPaginacion }: CategoriasPageProps) {
   const [categoriaToDelete, setCategoriaToDelete] = useState<Categoria | null>(null)
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [openCreateModal, setOpenCreateModal] = useState<boolean>(false)
@@ -69,18 +65,34 @@ export function CategoriasPage({ initialDataCategorias }: CategoriasPageProps) {
   const [categoriaToEdit, setCategoriaToEdit] = useState<Categoria | null>(null)
 
   const [rowSelection, setRowSelection] = useState({})
-  const [globalFilter, setGlobalFilter] = useState('')
+  const [buscar, setBuscar] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
 
-  const { data: categorias = [], isLoading, refetch: refetchCategorias } = useCategorias(initialDataCategorias)
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10
+  })
 
-  // La API ya filtra solo padres, pero aplicar filtro de estado local
-  const filteredData = useMemo(() => {
-    if (statusFilter === 'all') return categorias
-    const isActive = statusFilter === 'activo'
+  const { data, isLoading, refetch: refetchCategorias } = useCategorias(
+    {
+      page: (pagination.pageIndex + 1).toString(),
+      limit: pagination.pageSize.toString(),
+      buscar,
+      esta_activo: statusFilter === 'all' ? '' : statusFilter === 'activo' ? 'true' : 'false'
+    },
+    initialDataCategorias,
+    initialPaginacion
+  )
 
-    return categorias.filter(c => c.esta_activo === isActive)
-  }, [categorias, statusFilter])
+  const categorias = useMemo(
+    () => data?.categorias ?? (pagination.pageIndex === 0 ? initialDataCategorias ?? [] : []),
+    [data, initialDataCategorias, pagination.pageIndex]
+  )
+
+  const totalCategorias = useMemo(
+    () => data?.paginacion?.total ?? (initialDataCategorias?.length ?? 0),
+    [data, initialDataCategorias]
+  )
 
   const handleDeleteClick = (categoria: Categoria) => {
     setCategoriaToDelete(categoria)
@@ -99,7 +111,7 @@ export function CategoriasPage({ initialDataCategorias }: CategoriasPageProps) {
         header: '#',
         cell: ({ row }) => (
           <Typography color='text.secondary' variant='body2'>
-            {row.index + 1}
+            {pagination.pageIndex * pagination.pageSize + row.index + 1}
           </Typography>
         )
       }),
@@ -187,38 +199,27 @@ export function CategoriasPage({ initialDataCategorias }: CategoriasPageProps) {
         )
       })
     ],
-    []
+    [pagination]
   )
 
   const table = useReactTable({
-    data: filteredData,
+    data: categorias,
     columns,
-    filterFns: {
-      fuzzy: fuzzyFilter
-    },
     state: {
       rowSelection,
-      globalFilter
+      pagination
     },
-    initialState: {
-      pagination: {
-        pageSize: 10
-      }
-    },
+    onPaginationChange: setPagination,
+    manualPagination: true,
+    rowCount: totalCategorias,
     enableRowSelection: true,
-    globalFilterFn: fuzzyFilter,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
-    getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    getFacetedMinMaxValues: getFacetedMinMaxValues()
+    getPaginationRowModel: getPaginationRowModel()
   })
 
-  if (isLoading) {
+  if (isLoading && !data) {
     return (
       <Card>
         <CardHeader title='Categorías' />
@@ -246,7 +247,10 @@ export function CategoriasPage({ initialDataCategorias }: CategoriasPageProps) {
             <CustomTextField
               select
               value={statusFilter}
-              onChange={e => setStatusFilter(e.target.value)}
+              onChange={e => {
+                setStatusFilter(e.target.value)
+                table.setPageIndex(0)
+              }}
               className='is-full sm:is-[200px]'
             >
               <MenuItem value='all'>Todos los estados</MenuItem>
@@ -254,8 +258,11 @@ export function CategoriasPage({ initialDataCategorias }: CategoriasPageProps) {
               <MenuItem value='inactivo'>Inactivo</MenuItem>
             </CustomTextField>
             <DebouncedInput
-              value={globalFilter ?? ''}
-              onChange={value => setGlobalFilter(String(value))}
+              value={buscar}
+              onChange={value => {
+                setBuscar(String(value))
+                table.setPageIndex(0)
+              }}
               placeholder='Buscar categoría'
               className='is-full sm:is-auto'
             />
@@ -301,7 +308,7 @@ export function CategoriasPage({ initialDataCategorias }: CategoriasPageProps) {
                 </tr>
               ))}
             </thead>
-            {table.getFilteredRowModel().rows.length === 0 ? (
+            {categorias.length === 0 ? (
               <tbody>
                 <tr>
                   <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
@@ -329,7 +336,7 @@ export function CategoriasPage({ initialDataCategorias }: CategoriasPageProps) {
         </div>
         <TablePagination
           component={() => <TablePaginationComponent table={table as any} />}
-          count={table.getFilteredRowModel().rows.length}
+          count={totalCategorias}
           rowsPerPage={table.getState().pagination.pageSize}
           page={table.getState().pagination.pageIndex}
           onPageChange={(_, page) => table.setPageIndex(page)}

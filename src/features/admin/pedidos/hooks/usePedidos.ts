@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
 import type { Pedido } from '../entity/Pedido'
@@ -25,10 +25,13 @@ const axiosPedidoFactory = () => {
 export function usePedidos(query?: Record<string, string>, initialData?: Pedido[]) {
   const axiosPedido = axiosPedidoFactory()
 
+  const isDefaultQuery = (!query?.page || query.page === '1') && !query?.nro_pedido && !query?.nombre
+
   return useQuery<{ pedidos: Pedido[]; paginacion: any }, any>({
     queryKey: [...QUERY_KEY.PEDIDOS, query],
     queryFn: async () => await axiosPedido.getAll(query),
-    initialData: initialData ? { pedidos: initialData, paginacion: {} } : undefined,
+    initialData: isDefaultQuery && initialData ? { pedidos: initialData, paginacion: {} } : undefined,
+    placeholderData: keepPreviousData,
     staleTime: 60_000,
     retry: 1
   })

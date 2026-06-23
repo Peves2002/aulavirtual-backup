@@ -26,12 +26,16 @@ export default async function Page() {
   })
 
   let initialData: Usuario[] = []
+  let initialPaginacion: any = undefined
 
   try {
-    initialData = await axiosUsuario.searchAll()
+    const response = await axiosUsuario.searchAll({ page: '1', limit: '10' })
+
+    initialData = response.usuarios || []
+    initialPaginacion = response.paginacion
   } catch (error) {
     console.error('Error fetching usuarios:', error)
   }
 
-  return <UsuariosPage initialDataUsuarios={initialData} />
+  return <UsuariosPage initialDataUsuarios={initialData} initialPaginacion={initialPaginacion} />
 }

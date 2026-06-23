@@ -41,15 +41,34 @@ const columnHelper = createColumnHelper<Cupon>()
 
 interface CuponesPageProps {
   initialData?: Cupon[]
+  initialPaginacion?: any
   cursosInitialData?: CursoListaItem[]
 }
 
-export function CuponesPage({ initialData, cursosInitialData }: CuponesPageProps) {
+export function CuponesPage({ initialData, initialPaginacion, cursosInitialData }: CuponesPageProps) {
   const [buscar, setBuscar] = useState('')
+
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10
+  })
+
   const [openForm, setOpenForm] = useState(false)
   const [cuponToEdit, setCuponToEdit] = useState<Cupon | null>(null)
 
-  const { data: cupones = [], isLoading } = useCupones(buscar, initialData)
+  const { data, isLoading } = useCupones(
+    {
+      page: (pagination.pageIndex + 1).toString(),
+      limit: pagination.pageSize.toString(),
+      buscar
+    },
+    initialData,
+    initialPaginacion
+  )
+
+  const cupones = useMemo(() => data?.cupones ?? (pagination.pageIndex === 0 ? initialData ?? [] : []), [data, initialData, pagination.pageIndex])
+  const totalCupones = useMemo(() => data?.paginacion?.total ?? (initialData?.length ?? 0), [data, initialData])
+
   const { data: cursosDisponibles = [] } = useCursosLista(cursosInitialData)
   const { deleteCupon } = useCuponMutation()
 
@@ -148,17 +167,18 @@ export function CuponesPage({ initialData, cursosInitialData }: CuponesPageProps
   const table = useReactTable({
     data: cupones,
     columns,
+    state: {
+      pagination
+    },
+    onPaginationChange: setPagination,
+    manualPagination: true,
+    rowCount: totalCupones,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    initialState: {
-      pagination: {
-        pageSize: 10
-      }
-    }
+    getPaginationRowModel: getPaginationRowModel()
   })
 
-  if (isLoading) return <Card><Box p={6}>Cargando cupones...</Box></Card>
+  if (isLoading && !data) return <Card><Box p={6}>Cargando cupones...</Box></Card>
 
   return (
     <>
@@ -178,7 +198,10 @@ export function CuponesPage({ initialData, cursosInitialData }: CuponesPageProps
           <div className='flex flex-col sm:flex-row is-full sm:is-auto items-start sm:items-center gap-4'>
             <DebouncedInput
               value={buscar}
-              onChange={value => setBuscar(String(value))}
+              onChange={value => {
+                setBuscar(String(value))
+                table.setPageIndex(0)
+              }}
               placeholder='Buscar código'
               className='is-full sm:is-auto'
             />
@@ -229,7 +252,7 @@ export function CuponesPage({ initialData, cursosInitialData }: CuponesPageProps
         </div>
         <TablePagination
           component={() => <TablePaginationComponent table={table as any} />}
-          count={cupones.length}
+          count={totalCupones}
           rowsPerPage={table.getState().pagination.pageSize}
           page={table.getState().pagination.pageIndex}
           onPageChange={(_, page) => table.setPageIndex(page)}

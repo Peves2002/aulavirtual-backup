@@ -20,7 +20,7 @@ import { sanitizeDatetimeInput, toLocalDateInputValue } from '@/utils/functions/
 
 import type { Curso } from '../../entity/Curso'
 import { useEditCurso } from '../../hooks/useCursos'
-import { useCategorias } from '@/features/admin/categorias/hooks/useCategorias'
+import { useCategoriasLista } from '@/features/admin/categorias/hooks/useCategorias'
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 
 interface TabInformacionProps {
@@ -32,7 +32,7 @@ interface TabInformacionProps {
 export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionProps) {
   const { enqueueSnackbar } = useSnackbar()
   const editMutation = useEditCurso()
-  const { data: categorias = [] } = useCategorias()
+  const { data: categorias = [] } = useCategoriasLista()
 
   const [openMedia, setOpenMedia] = useState(false)
   const [openBrochure, setOpenBrochure] = useState(false)

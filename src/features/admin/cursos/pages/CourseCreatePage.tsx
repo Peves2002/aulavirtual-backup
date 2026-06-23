@@ -37,7 +37,7 @@ import { sanitizeDatetimeInput } from '@/utils/functions/sanitizeDatetime'
 import MediaLibrary from '../components/MediaLibrary'
 
 import { useCreateCurso } from '../hooks/useCursos'
-import { useCategorias } from '@/features/admin/categorias/hooks/useCategorias'
+import { useCategoriasLista } from '@/features/admin/categorias/hooks/useCategorias'
 
 interface CourseCreatePageProps {
   profesores: { id: string; nombre: string; apellido: string }[]
@@ -48,7 +48,7 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
   const { enqueueSnackbar } = useSnackbar()
   const router = useRouter()
   const createMutation = useCreateCurso()
-  const { data: categorias = [] } = useCategorias()
+  const { data: categorias = [] } = useCategoriasLista()
   const [activeTab, setActiveTab] = useState('1')
   const [openMedia, setOpenMedia] = useState(false)
   const [openBrochure, setOpenBrochure] = useState(false)

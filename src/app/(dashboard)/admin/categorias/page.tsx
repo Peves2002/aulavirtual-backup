@@ -28,12 +28,16 @@ export default async function Page() {
   })
 
   let initialData: Categoria[] = []
+  let initialPaginacion: any = undefined
 
   try {
-    initialData = await axiosCategoria.searchAll()
+    const response = await axiosCategoria.searchAll({ page: '1', limit: '10' })
+
+    initialData = response.categorias || []
+    initialPaginacion = response.paginacion
   } catch (error) {
     console.error('Error fetching categorias:', error)
   }
 
-  return <CategoriasPage initialDataCategorias={initialData} />
+  return <CategoriasPage initialDataCategorias={initialData} initialPaginacion={initialPaginacion} />
 }

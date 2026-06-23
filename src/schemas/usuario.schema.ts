@@ -197,7 +197,7 @@ export const listarUsuariosQuerySchema = z.object({
     .number()
     .int()
     .positive()
-    .max(1000)
+    .max(10000)
     .default(10),
   rol: z
     .nativeEnum(Rol)

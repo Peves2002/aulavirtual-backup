@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
 import { AxiosCertificado } from '../http/axiosCertificado'
@@ -28,6 +28,7 @@ export const useCertificados = (
 
       return await axiosCertificado.getAll(params)
     },
-    initialData: isDefault ? initialData : undefined
+    initialData: isDefault ? initialData : undefined,
+    placeholderData: keepPreviousData
   })
 }

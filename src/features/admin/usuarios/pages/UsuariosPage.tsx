@@ -22,10 +22,6 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  getFilteredRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFacetedMinMaxValues,
   getPaginationRowModel,
   getSortedRowModel
 } from '@tanstack/react-table'
@@ -40,7 +36,6 @@ import tableStyles from '@core/styles/table.module.css'
 import CustomTextField from '@/@core/components/mui/TextField'
 import type { ThemeColor } from '@/@core/types'
 import { DebouncedInput } from '@/utils/components/others/DebouncedInput'
-import { fuzzyFilter } from '@/utils/components/others/FuzzyFilter'
 import TablePaginationComponent from '@/utils/components/others/TablePaginationComponent'
 
 // Feature Imports
@@ -73,9 +68,10 @@ const columnHelper = createColumnHelper<Usuario>()
 
 interface UsuariosPageProps {
   initialDataUsuarios?: Usuario[]
+  initialPaginacion?: any
 }
 
-export function UsuariosPage({ initialDataUsuarios }: UsuariosPageProps) {
+export function UsuariosPage({ initialDataUsuarios, initialPaginacion }: UsuariosPageProps) {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [openCreateModal, setOpenCreateModal] = useState<boolean>(false)
   const [openUpdateModal, setOpenUpdateModal] = useState<boolean>(false)
@@ -83,16 +79,27 @@ export function UsuariosPage({ initialDataUsuarios }: UsuariosPageProps) {
   const [usuarioToEdit, setUsuarioToEdit] = useState<Usuario | null>(null)
 
   const [rowSelection, setRowSelection] = useState({})
-  const [globalFilter, setGlobalFilter] = useState('')
+  const [buscar, setBuscar] = useState('')
   const [rolFilter, setRolFilter] = useState<string>('all')
 
-  const { data: usuarios = [], isLoading, refetch: refetchUsuarios } = useUsuarios(initialDataUsuarios)
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10
+  })
 
-  const filteredData = useMemo(() => {
-    if (rolFilter === 'all') return usuarios
+  const { data, isLoading, refetch: refetchUsuarios } = useUsuarios(
+    {
+      page: (pagination.pageIndex + 1).toString(),
+      limit: pagination.pageSize.toString(),
+      buscar,
+      rol: rolFilter === 'all' ? '' : rolFilter
+    },
+    initialDataUsuarios,
+    initialPaginacion
+  )
 
-    return usuarios.filter(u => u.rol === rolFilter)
-  }, [usuarios, rolFilter])
+  const usuarios = useMemo(() => data?.usuarios ?? (pagination.pageIndex === 0 ? initialDataUsuarios ?? [] : []), [data, initialDataUsuarios, pagination.pageIndex])
+  const totalUsuarios = useMemo(() => data?.paginacion?.total ?? (initialDataUsuarios?.length ?? 0), [data, initialDataUsuarios])
 
   const handleDeleteClick = (usuario: Usuario) => {
     setUsuarioToEdit(usuario)
@@ -116,7 +123,7 @@ export function UsuariosPage({ initialDataUsuarios }: UsuariosPageProps) {
         header: '#',
         cell: ({ row }) => (
           <Typography color='text.secondary' variant='body2'>
-            {row.index + 1}
+            {pagination.pageIndex * pagination.pageSize + row.index + 1}
           </Typography>
         )
       }),
@@ -206,38 +213,27 @@ export function UsuariosPage({ initialDataUsuarios }: UsuariosPageProps) {
         )
       })
     ],
-    []
+    [pagination]
   )
 
   const table = useReactTable({
-    data: filteredData,
+    data: usuarios,
     columns,
-    filterFns: {
-      fuzzy: fuzzyFilter
-    },
     state: {
       rowSelection,
-      globalFilter
+      pagination
     },
-    initialState: {
-      pagination: {
-        pageSize: 10
-      }
-    },
+    onPaginationChange: setPagination,
+    manualPagination: true,
+    rowCount: totalUsuarios,
     enableRowSelection: true,
-    globalFilterFn: fuzzyFilter,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
-    getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    getFacetedMinMaxValues: getFacetedMinMaxValues()
+    getPaginationRowModel: getPaginationRowModel()
   })
 
-  if (isLoading) {
+  if (isLoading && !data) {
     return (
       <Card>
         <CardHeader title='Usuarios' />
@@ -265,7 +261,10 @@ export function UsuariosPage({ initialDataUsuarios }: UsuariosPageProps) {
             <CustomTextField
               select
               value={rolFilter}
-              onChange={e => setRolFilter(e.target.value)}
+              onChange={e => {
+                setRolFilter(e.target.value)
+                table.setPageIndex(0)
+              }}
               className='is-full sm:is-[200px]'
             >
               <MenuItem value='all'>Todos los roles</MenuItem>
@@ -274,8 +273,11 @@ export function UsuariosPage({ initialDataUsuarios }: UsuariosPageProps) {
               <MenuItem value={Rol.ESTUDIANTE}>Estudiante</MenuItem>
             </CustomTextField>
             <DebouncedInput
-              value={globalFilter ?? ''}
-              onChange={value => setGlobalFilter(String(value))}
+              value={buscar}
+              onChange={value => {
+                setBuscar(String(value))
+                table.setPageIndex(0)
+              }}
               placeholder='Buscar usuario'
               className='is-full sm:is-auto'
             />
@@ -321,7 +323,7 @@ export function UsuariosPage({ initialDataUsuarios }: UsuariosPageProps) {
                 </tr>
               ))}
             </thead>
-            {table.getFilteredRowModel().rows.length === 0 ? (
+            {usuarios.length === 0 ? (
               <tbody>
                 <tr>
                   <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
@@ -349,7 +351,7 @@ export function UsuariosPage({ initialDataUsuarios }: UsuariosPageProps) {
         </div>
         <TablePagination
           component={() => <TablePaginationComponent table={table as any} />}
-          count={table.getFilteredRowModel().rows.length}
+          count={totalUsuarios}
           rowsPerPage={table.getState().pagination.pageSize}
           page={table.getState().pagination.pageIndex}
           onPageChange={(_, page) => table.setPageIndex(page)}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
 import type { Categoria, CategoriaHijo } from '../entity/Categoria'
@@ -20,15 +20,38 @@ const axiosCategoriaFactory = () => {
 }
 
 /**
- * Hook para obtener todas las categorías (solo padres con hijos incluidos)
+ * Hook para listar categorías paginadas (tabla de gestión, solo padres con hijos incluidos)
  */
-export function useCategorias(initialData?: Categoria[]) {
+export function useCategorias(
+  query?: Record<string, string>,
+  initialData?: Categoria[],
+  initialPaginacion?: any
+) {
+  const axiosCategoria = axiosCategoriaFactory()
+
+  const isDefaultQuery = !query?.buscar && !query?.esta_activo && (!query?.page || query.page === '1')
+
+  return useQuery<{ categorias: Categoria[]; paginacion: any }, any>({
+    queryKey: [...QUERY_KEY.CATEGORIAS, query],
+    queryFn: async () => await axiosCategoria.searchAll(query),
+    initialData:
+      isDefaultQuery && initialData ? { categorias: initialData, paginacion: initialPaginacion ?? {} } : undefined,
+    placeholderData: keepPreviousData,
+    staleTime: 60_000,
+    retry: 1
+  })
+}
+
+/**
+ * Hook para obtener la lista completa de categorías padre (selectores/dropdowns)
+ */
+export function useCategoriasLista(initialData?: Categoria[]) {
   const axiosCategoria = axiosCategoriaFactory()
 
   return useQuery<Categoria[], any>({
-    queryKey: QUERY_KEY.CATEGORIAS,
-    queryFn: async () => await axiosCategoria.searchAll(),
-    initialData,
+    queryKey: [...QUERY_KEY.CATEGORIAS, 'lista'],
+    queryFn: async () => await axiosCategoria.getLista(),
+    initialData: initialData?.length ? initialData : undefined,
     staleTime: 60_000,
     retry: 1
   })

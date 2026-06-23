@@ -12,9 +12,7 @@ import {
     CardContent,
     Tooltip,
     IconButton,
-    Chip,
-    TextField,
-    InputAdornment
+    Chip
 } from '@mui/material'
 
 import {
@@ -23,26 +21,35 @@ import {
     getCoreRowModel,
     useReactTable,
     getPaginationRowModel,
-    getSortedRowModel,
-    getFilteredRowModel
+    getSortedRowModel
 } from '@tanstack/react-table'
 
 import { useSession } from 'next-auth/react'
 
 import { useCursos } from '@/features/admin/cursos/hooks/useCursos'
+import { DebouncedInput } from '@/utils/components/others/DebouncedInput'
 import TablePaginationComponent from '@/utils/components/others/TablePaginationComponent'
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 
 const ProfesorCursosPage = () => {
     const { data: session } = useSession()
     const router = useRouter()
-    const [globalFilter, setGlobalFilter] = useState('')
+    const [buscar, setBuscar] = useState('')
+
+    const [pagination, setPagination] = useState({
+        pageIndex: 0,
+        pageSize: 10
+    })
 
     // Usamos el hook de cursos pero filtrando por el ID del profesor actual
     const { data: cursosData, isLoading } = useCursos({
         profesor_id: session?.user?.id as string,
-        limit: '100' // Para el listado de profesor traemos todos (o paginamos si es necesario)
+        page: (pagination.pageIndex + 1).toString(),
+        limit: pagination.pageSize.toString(),
+        buscar
     })
+
+    const totalCursos = cursosData?.paginacion?.total ?? 0
 
     const columns = useMemo(() => {
         const columnHelper = createColumnHelper<any>()
@@ -138,14 +145,15 @@ const ProfesorCursosPage = () => {
     const table = useReactTable({
         data: cursosData?.cursos || [],
         columns,
+        state: {
+            pagination
+        },
+        onPaginationChange: setPagination,
+        manualPagination: true,
+        rowCount: totalCursos,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        state: {
-            globalFilter
-        },
-        onGlobalFilterChange: setGlobalFilter
+        getSortedRowModel: getSortedRowModel()
     })
 
     return (
@@ -172,18 +180,14 @@ const ProfesorCursosPage = () => {
             <Card sx={{ borderRadius: '12px', boxShadow: 'none', border: '1px solid', borderColor: 'divider' }}>
                 <CardContent sx={{ p: 0 }}>
                     <Box sx={{ p: 4, borderBottom: '1px solid', borderColor: 'divider' }}>
-                        <TextField
+                        <DebouncedInput
                             size='small'
-                            value={globalFilter ?? ''}
-                            onChange={e => setGlobalFilter(e.target.value)}
-                            placeholder='Buscar cursos...'
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position='start'>
-                                        <i className='tabler-search text-textSecondary' />
-                                    </InputAdornment>
-                                )
+                            value={buscar}
+                            onChange={value => {
+                                setBuscar(String(value))
+                                table.setPageIndex(0)
                             }}
+                            placeholder='Buscar cursos...'
                             sx={{ maxWidth: 350 }}
                         />
                     </Box>

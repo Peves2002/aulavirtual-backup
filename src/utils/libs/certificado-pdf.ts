@@ -26,6 +26,30 @@ function hexToRgb(hex: string): [number, number, number] {
 const MAX_IMAGE_DIMENSION = 600
 const JPEG_QUALITY = 85
 
+// El logo institucional es el elemento de marca más visible del certificado: a diferencia del
+// resto de imágenes, se mantiene en PNG sin pérdida (sin pasar por JPEG) para que el texto y los
+// bordes finos se vean nítidos tanto en la vista previa como en el PDF descargado.
+const LOGO_MAX_DIMENSION = 2000
+
+async function readImageBytes(url: string): Promise<Buffer | null> {
+  try {
+    if (url.startsWith('/')) {
+      const cleanUrl = url.replace(/\/+/g, '/')
+      const filePath = join(process.cwd(), 'public', cleanUrl)
+
+      return await readFile(filePath)
+    }
+
+    const response = await fetch(url)
+
+    if (!response.ok) return null
+
+    return Buffer.from(await response.arrayBuffer())
+  } catch {
+    return null
+  }
+}
+
 async function downscaleImage(buffer: Buffer, maxDimension: number): Promise<Buffer> {
   try {
     return await sharp(buffer)
@@ -40,27 +64,31 @@ async function downscaleImage(buffer: Buffer, maxDimension: number): Promise<Buf
 
 /** Intenta cargar una imagen (local o remota), la reescala y devuelve Buffer JPEG aplanado sobre blanco */
 async function fetchImageBuffer(url: string | null, maxDimension: number = MAX_IMAGE_DIMENSION): Promise<Buffer | null> {
+  if (!url) return null
+
+  const raw = await readImageBytes(url)
+
+  if (!raw) return null
+
+  return await downscaleImage(raw, maxDimension)
+}
+
+/** Carga el logo sin recompresión con pérdida: PNG, aplanado sobre blanco, solo se reescala si excede LOGO_MAX_DIMENSION */
+async function fetchLogoBuffer(url: string | null): Promise<Buffer | null> {
+  if (!url) return null
+
+  const raw = await readImageBytes(url)
+
+  if (!raw) return null
+
   try {
-    if (!url) return null
-
-    let raw: Buffer
-
-    if (url.startsWith('/')) {
-      const cleanUrl = url.replace(/\/+/g, '/')
-      const filePath = join(process.cwd(), 'public', cleanUrl)
-
-      raw = await readFile(filePath)
-    } else {
-      const response = await fetch(url)
-
-      if (!response.ok) return null
-
-      raw = Buffer.from(await response.arrayBuffer())
-    }
-
-    return await downscaleImage(raw, maxDimension)
+    return await sharp(raw)
+      .resize({ width: LOGO_MAX_DIMENSION, height: LOGO_MAX_DIMENSION, fit: 'inside', withoutEnlargement: true })
+      .flatten({ background: '#ffffff' })
+      .png({ compressionLevel: 9 })
+      .toBuffer()
   } catch {
-    return null
+    return raw
   }
 }
 
@@ -110,7 +138,8 @@ export async function buildCertificadoPdf({ certificado, inscripcion, configs, a
     color: { dark: '#000000', light: '#ffffff' }
   })
 
-  const logoBuffer = logoUrl ? await fetchImageBuffer(logoUrl) : null
+  const logoBuffer = logoUrl ? await fetchLogoBuffer(logoUrl) : null
+  const logoMeta = logoBuffer ? await sharp(logoBuffer).metadata() : null
   const sealBuffer = sealUrl ? await fetchImageBuffer(sealUrl) : null
 
   // El marco cubre la página completa, así que necesita más resolución que un logo/sello pequeño.
@@ -154,16 +183,21 @@ export async function buildCertificadoPdf({ certificado, inscripcion, configs, a
 
   // Logo (centrado, arriba) + sello: el sello se centra verticalmente junto al bloque
   // logo + "slogan" + división, no solo junto al logo.
-  const logoY = 20
-  const logoWidth = 64
-  const logoHeight = logoWidth * (419 / 1170)
-  const headerBlockHeight = logoHeight + 10 // +10: alto aproximado de las 2 líneas de texto debajo del logo
+  const logoY = 18
+  const logoWidth = 90
+
+  // Ratio calculado a partir de la imagen real (evita deformarla si el logo cambia de dimensiones).
+  const logoHeight = logoMeta?.width && logoMeta?.height
+    ? logoWidth * (logoMeta.height / logoMeta.width)
+    : logoWidth * (624 / 1655)
+
+  const headerBlockHeight = logoHeight + 22 // +22: alto aproximado de las 2 líneas de texto debajo del logo (que ahora tienen mayor tamaño)
   let headerBottomY = logoY + logoHeight
 
   if (sealBuffer) {
     try {
       const base64Seal = `data:image/jpeg;base64,${sealBuffer.toString('base64')}`
-      const sealSize = 30
+      const sealSize = 46
       const sealY = logoY + (headerBlockHeight - sealSize) / 2
 
       doc.addImage(base64Seal, 'JPEG', pageWidth - 18 - sealSize, sealY, sealSize, sealSize)
@@ -173,10 +207,10 @@ export async function buildCertificadoPdf({ certificado, inscripcion, configs, a
   // Si el logo no carga, se usa el nombre de la institución como respaldo.
   if (logoBuffer) {
     try {
-      const base64Logo = `data:image/jpeg;base64,${logoBuffer.toString('base64')}`
+      const base64Logo = `data:image/png;base64,${logoBuffer.toString('base64')}`
       const logoX = (pageWidth - logoWidth) / 2
 
-      doc.addImage(base64Logo, 'JPEG', logoX, logoY, logoWidth, logoHeight)
+      doc.addImage(base64Logo, 'PNG', logoX, logoY, logoWidth, logoHeight)
       headerBottomY = logoY + logoHeight
     } catch (err) { console.error('Logo Error:', err) }
   } else {
@@ -187,22 +221,22 @@ export async function buildCertificadoPdf({ certificado, inscripcion, configs, a
     headerBottomY = 30
   }
 
-  doc.setFontSize(11)
+  doc.setFontSize(22)
   doc.setTextColor(pr, pg, pb)
   doc.setFont('helvetica', 'bold')
-  doc.text(slogan, pageWidth / 2, headerBottomY + 5, { align: 'center' })
+  doc.text(slogan, pageWidth / 2, headerBottomY + 9, { align: 'center' })
 
-  doc.setFontSize(8)
+  doc.setFontSize(13)
   doc.setTextColor(pr, pg, pb)
   doc.setFont('helvetica', 'bold')
-  doc.text(divisionLabel.toUpperCase(), pageWidth / 2, headerBottomY + 10, { align: 'center' })
+  doc.text(divisionLabel.toUpperCase(), pageWidth / 2, headerBottomY + 17, { align: 'center' })
 
-  const bodyStartY = headerBottomY + 15
+  const bodyStartY = headerBottomY + 19
 
   doc.setFontSize(13)
   doc.setTextColor(60, 60, 60)
   doc.setFont('helvetica', 'normal')
-  doc.text('Se otorga el presente certificado a:', pageWidth / 2, bodyStartY + 9, { align: 'center' })
+  doc.text('Se otorga el presente certificado a:', pageWidth / 2, bodyStartY + 6, { align: 'center' })
 
   const snapshot = certificado.datos as any
 
@@ -219,19 +253,19 @@ export async function buildCertificadoPdf({ certificado, inscripcion, configs, a
   doc.setFontSize(26)
   doc.setTextColor(20, 20, 20)
   doc.setFont('helvetica', 'bold')
-  doc.text(`Ing. ${nombreCompleto}`, pageWidth / 2, bodyStartY + 22, { align: 'center' })
+  doc.text(`Ing. ${nombreCompleto}`, pageWidth / 2, bodyStartY + 18, { align: 'center' })
 
   doc.setFontSize(13)
   doc.setTextColor(60, 60, 60)
   doc.setFont('helvetica', 'normal')
-  doc.text('Por haber desarrollado satisfactoriamente el programa de especialización:', pageWidth / 2, bodyStartY + 33, { align: 'center' })
+  doc.text('Por haber desarrollado satisfactoriamente el programa de especialización:', pageWidth / 2, bodyStartY + 28, { align: 'center' })
 
   doc.setFontSize(16)
   doc.setTextColor(40, 40, 40)
   doc.setFont('helvetica', 'bold')
   const cursoTituloLines1 = doc.splitTextToSize(cursoTitulo.toUpperCase(), pageWidth - 80)
 
-  doc.text(cursoTituloLines1, pageWidth / 2, bodyStartY + 43, { align: 'center' })
+  doc.text(cursoTituloLines1, pageWidth / 2, bodyStartY + 37, { align: 'center' })
 
   const modalidad = cursoModalidad === 'ASINCRONO' ? 'VIRTUAL ASÍNCRONO' : 'PRESENCIAL/VIRTUAL'
   const tituloBlockHeight = cursoTituloLines1.length * 6
@@ -239,11 +273,11 @@ export async function buildCertificadoPdf({ certificado, inscripcion, configs, a
   doc.setFontSize(10)
   doc.setTextColor(100, 100, 100)
   doc.setFont('helvetica', 'bold')
-  doc.text(`NIVEL: ${cursoNivel}    •    MODALIDAD: ${modalidad}`, pageWidth / 2, bodyStartY + 52 + tituloBlockHeight, { align: 'center' })
+  doc.text(`NIVEL: ${cursoNivel}    •    MODALIDAD: ${modalidad}`, pageWidth / 2, bodyStartY + 45 + tituloBlockHeight, { align: 'center' })
 
   const boxWidth = 220
   const boxX = (pageWidth - boxWidth) / 2
-  const boxY = bodyStartY + 60 + tituloBlockHeight
+  const boxY = bodyStartY + 52 + tituloBlockHeight
   const boxHeight = 16
 
   doc.setFillColor(252, 251, 243)

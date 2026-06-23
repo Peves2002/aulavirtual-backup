@@ -24,7 +24,7 @@ import { MetodoPago } from '@prisma/client'
 import CustomTextField from '@core/components/mui/TextField'
 import { crearPedidoManualSchema, type CrearPedidoManualDto } from '@/schemas/pedido.schema'
 import { useCreatePedidoManual } from '../hooks/usePedidos'
-import { useUsuarios } from '@/features/admin/usuarios/hooks/useUsuarios'
+import { useUsuariosLista } from '@/features/admin/usuarios/hooks/useUsuarios'
 import { useCursos } from '@/features/admin/cursos/hooks/useCursos'
 
 export function ManualPedidoForm() {
@@ -32,7 +32,7 @@ export function ManualPedidoForm() {
     const { enqueueSnackbar } = useSnackbar()
     const [selectedCoursePrice, setSelectedCoursePrice] = useState<number>(0)
 
-    const { data: usuariosData, isLoading: isLoadingUsuarios } = useUsuarios()
+    const { data: usuariosData, isLoading: isLoadingUsuarios } = useUsuariosLista()
     const { data: cursosData, isLoading: isLoadingCursos } = useCursos()
 
     const usuarios = (usuariosData || []).filter(u => u.rol === 'ESTUDIANTE')

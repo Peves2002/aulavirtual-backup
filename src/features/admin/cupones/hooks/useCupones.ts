@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
 import { AxiosCupon } from '../http/axiosCupon'
@@ -16,15 +16,21 @@ const axiosCuponFactory = () => {
   return new AxiosCupon({ getAuthToken })
 }
 
-export const useCupones = (buscar: string = '', initialData?: Cupon[]) => {
-  return useQuery({
-    queryKey: ['cupones', buscar],
+export const useCupones = (query?: Record<string, string>, initialData?: Cupon[], initialPaginacion?: any) => {
+  const isDefaultQuery = !query?.buscar && (!query?.page || query.page === '1')
+
+  return useQuery<{ cupones: Cupon[]; paginacion: any }, any>({
+    queryKey: ['cupones', query],
     queryFn: async () => {
       const axiosCupon = axiosCuponFactory()
 
-      return await axiosCupon.getAll(buscar)
+      return await axiosCupon.getAll(query)
     },
-    initialData: buscar === '' ? initialData : undefined
+    initialData:
+      isDefaultQuery && initialData ? { cupones: initialData, paginacion: initialPaginacion ?? {} } : undefined,
+    placeholderData: keepPreviousData,
+    staleTime: 60_000,
+    retry: 1
   })
 }
 

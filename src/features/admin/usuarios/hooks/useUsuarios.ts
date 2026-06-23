@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
 import type { Usuario } from '../entity/Usuario'
@@ -21,25 +21,41 @@ const axiosUsuarioFactory = () => {
 }
 
 /**
- * Hook para obtener todos los usuarios
+ * Hook para listar usuarios paginados (tabla de gestión)
  */
-export function useUsuarios(initialData?: Usuario[]) {
+export function useUsuarios(
+  query?: Record<string, string>,
+  initialData?: Usuario[],
+  initialPaginacion?: any
+) {
+  const axiosUsuario = axiosUsuarioFactory()
+
+  const isDefaultQuery =
+    !query?.buscar && !query?.rol && !query?.esta_activo && (!query?.page || query.page === '1')
+
+  return useQuery<{ usuarios: Usuario[]; paginacion: any }, any>({
+    queryKey: [...QUERY_KEY.USUARIOS, query],
+    queryFn: async () => await axiosUsuario.searchAll(query),
+    initialData:
+      isDefaultQuery && initialData ? { usuarios: initialData, paginacion: initialPaginacion ?? {} } : undefined,
+    placeholderData: keepPreviousData,
+    staleTime: 60_000,
+    retry: 1
+  })
+}
+
+/**
+ * Hook para obtener la lista completa de usuarios (selectores/dropdowns)
+ */
+export function useUsuariosLista(query?: Record<string, string>, initialData?: Usuario[]) {
   const axiosUsuario = axiosUsuarioFactory()
 
   return useQuery<Usuario[], any>({
-    queryKey: QUERY_KEY.USUARIOS,
-    queryFn: async () => await axiosUsuario.searchAll(),
-    initialData,
+    queryKey: [...QUERY_KEY.USUARIOS, 'lista', query],
+    queryFn: async () => await axiosUsuario.getLista(query),
+    initialData: initialData?.length ? initialData : undefined,
     staleTime: 60_000,
-    retry: 1,
-    select: data => {
-      return [...data].sort((a, b) => {
-        const dateA = new Date(a.creado_en).getTime()
-        const dateB = new Date(b.creado_en).getTime()
-
-        return dateB - dateA
-      })
-    }
+    retry: 1
   })
 }
 

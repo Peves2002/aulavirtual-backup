@@ -29,8 +29,8 @@ export default async function Page() {
   try {
     // La API actual filtra por un rol a la vez, pedimos PROFESOR y ADMIN por separado
     const [profesoresRes, adminsRes] = await Promise.all([
-      axiosUsuario.searchAll({ rol: 'PROFESOR', esta_activo: 'true' }),
-      axiosUsuario.searchAll({ rol: 'ADMIN', esta_activo: 'true' })
+      axiosUsuario.getLista({ rol: 'PROFESOR', esta_activo: 'true' }),
+      axiosUsuario.getLista({ rol: 'ADMIN', esta_activo: 'true' })
     ])
 
     profesores = [...profesoresRes, ...adminsRes].map(p => ({

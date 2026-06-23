@@ -24,16 +24,18 @@ export default async function Page() {
   const axiosCupon = new AxiosCupon({ getAuthToken: () => token })
   const axiosCursoAdmin = new AxiosCursoAdmin({ getAuthToken: () => token })
 
-  let initialData: Awaited<ReturnType<typeof axiosCupon.getAll>> = []
+  let initialData: Awaited<ReturnType<typeof axiosCupon.getAll>>['cupones'] = []
+  let initialPaginacion: Awaited<ReturnType<typeof axiosCupon.getAll>>['paginacion'] = undefined
   let cursosDisponibles: Awaited<ReturnType<typeof axiosCursoAdmin.getLista>> = []
 
   const [cuponesResult, cursosResult] = await Promise.allSettled([
-    axiosCupon.getAll(),
+    axiosCupon.getAll({ page: '1', limit: '10' }),
     axiosCursoAdmin.getLista()
   ])
 
   if (cuponesResult.status === 'fulfilled') {
-    initialData = cuponesResult.value
+    initialData = cuponesResult.value.cupones
+    initialPaginacion = cuponesResult.value.paginacion
   } else {
     console.error('Error fetching cupones:', cuponesResult.reason)
   }
@@ -44,5 +46,11 @@ export default async function Page() {
     console.error('Error fetching cursos lista:', cursosResult.reason)
   }
 
-  return <CuponesPage initialData={initialData} cursosInitialData={cursosDisponibles} />
+  return (
+    <CuponesPage
+      initialData={initialData}
+      initialPaginacion={initialPaginacion}
+      cursosInitialData={cursosDisponibles}
+    />
+  )
 }
