@@ -364,6 +364,8 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
   const [showSecret, setShowSecret] = useState<{ [key: string]: boolean }>({})
   const [openLogoMedia, setOpenLogoMedia] = useState(false)
   const [pendingLogoLabel, setPendingLogoLabel] = useState('')
+  const [openCarruselMedia, setOpenCarruselMedia] = useState(false)
+  const [pendingCarruselLabel, setPendingCarruselLabel] = useState('')
 
   const initialMapped = (initialData || []).reduce((acc: { [key: string]: string }, curr: Configuracion) => {
     acc[curr.clave] = curr.valor
@@ -377,6 +379,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     WHATSAPP_NUMERO: '',
     WHATSAPP_NUMERO_EMPRESAS: '',
     HOME_LOGOS: '[]',
+    DASHBOARD_CARRUSEL_IMAGENES: '[]',
     TEMPLATE_NAME: 'Aula Virtual',
     TEMPLATE_SLOGAN: '',
     CERTIFICADO_INSTITUTION_NAME: '',
@@ -426,6 +429,16 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
   const logosArray: { label: string; url: string }[] = (() => {
     try { return JSON.parse(config.HOME_LOGOS || '[]') } catch { return [] }
   })()
+
+  const carruselArray: { label: string; url: string }[] = (() => {
+    try { return JSON.parse(config.DASHBOARD_CARRUSEL_IMAGENES || '[]') } catch { return [] }
+  })()
+
+  const handleRemoveCarruselImagen = (index: number) => {
+    const updated = carruselArray.filter((_, i) => i !== index)
+
+    handleInputChange('DASHBOARD_CARRUSEL_IMAGENES', JSON.stringify(updated))
+  }
 
   const handleRemoveLogo = (index: number) => {
     const updated = logosArray.filter((_, i) => i !== index)
@@ -736,6 +749,69 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
               title='Seleccionar Logo'
             />
           </Box>
+
+          <Divider />
+
+          <Box>
+            <SectionLabel>Carrusel del Panel</SectionLabel>
+            <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
+              Estas imágenes se muestran en el carrusel del dashboard de Administrador, Profesor y Estudiante.
+            </Typography>
+
+            {carruselArray.length > 0 && (
+              <Stack spacing={1} sx={{ mb: 3 }}>
+                {carruselArray.map((img, i) => (
+                  <Paper key={i} variant='outlined' sx={{ p: 1.5, display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <Box sx={{ width: 96, height: 54, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'grey.100', borderRadius: 1, overflow: 'hidden' }}>
+                      <img src={img.url} alt={img.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </Box>
+                    <Typography variant='body2' sx={{ flex: 1 }}>{img.label || 'Sin descripción'}</Typography>
+                    <IconButton size='small' color='error' onClick={() => handleRemoveCarruselImagen(i)}>
+                      <i className='tabler-trash' style={{ fontSize: '1rem' }} />
+                    </IconButton>
+                  </Paper>
+                ))}
+              </Stack>
+            )}
+
+            <Paper variant='outlined' sx={{ p: 2 }}>
+              <Typography variant='subtitle2' gutterBottom>Añadir Imagen</Typography>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems='flex-start'>
+                <TextField
+                  size='small'
+                  label='Descripción (opcional)'
+                  placeholder='Ej: Nueva certificación disponible'
+                  value={pendingCarruselLabel}
+                  onChange={(e) => setPendingCarruselLabel(e.target.value)}
+                  sx={{ flex: 1 }}
+                />
+                <Button
+                  variant='outlined'
+                  size='small'
+                  startIcon={<i className='tabler-photo' />}
+                  onClick={() => setOpenCarruselMedia(true)}
+                  sx={{ whiteSpace: 'nowrap' }}
+                >
+                  Seleccionar imagen
+                </Button>
+              </Stack>
+            </Paper>
+          </Box>
+
+          <MediaLibrary
+            open={openCarruselMedia}
+            onClose={() => setOpenCarruselMedia(false)}
+            onSelect={(url) => {
+              const nuevo = { label: pendingCarruselLabel.trim(), url }
+              const actualizado = [...carruselArray, nuevo]
+
+              handleInputChange('DASHBOARD_CARRUSEL_IMAGENES', JSON.stringify(actualizado))
+              setPendingCarruselLabel('')
+              setOpenCarruselMedia(false)
+            }}
+            title='Seleccionar Imagen del Carrusel'
+            acceptType='IMAGEN'
+          />
 
           <Divider />
 

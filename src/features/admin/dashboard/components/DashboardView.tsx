@@ -6,6 +6,7 @@ import { Grid, Card, CardContent, Typography, Box, Avatar, Table, TableBody, Tab
 
 import { useAdminDashboard } from '../hooks/useAdminDashboard'
 import HydratedDate from '@/utils/components/HydratedDate'
+import DashboardCarousel from '@/utils/components/DashboardCarousel'
 
 const StatCard = ({ title, value, icon, color }: { title: string, value: string | number, icon: string, color: string }) => (
   <Card sx={{ height: '100%' }}>
@@ -29,42 +30,44 @@ export function DashboardView({ initialData }: DashboardViewProps) {
   const { data, isLoading } = useAdminDashboard(initialData)
 
   if (isLoading) return <LinearProgress />
-  if (!data) return <Typography>Error cargando datos</Typography>
+  if (!data || !data.resumen) return <Typography>Error cargando datos</Typography>
 
-  const { resumen, pedidosRecientes, cursosPopulares, inscripcionesRecientes } = data
+  const { resumen, pedidosRecientes = [], cursosPopulares = [], inscripcionesRecientes = [] } = data
 
   return (
     <Grid container spacing={6}>
+      <Grid item xs={12}>
+        <DashboardCarousel />
+      </Grid>
       <Grid item xs={12} sm={6} md={3}>
-        <StatCard 
-          title='Ventas Totales' 
-          value={`S/ ${Number(resumen.ingresos).toFixed(2)}`} 
-          icon='tabler-currency-dollar' 
-          color='success' 
+        <StatCard
+          title='Ventas Totales'
+          value={`S/ ${Number(resumen.ingresos ?? 0).toFixed(2)}`} icon='tabler-currency-dollar'
+          color='success'
         />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
-        <StatCard 
-          title='Estudiantes' 
-          value={resumen.estudiantes} 
-          icon='tabler-users' 
-          color='primary' 
+        <StatCard
+          title='Estudiantes'
+          value={resumen.estudiantes ?? 0}
+          icon='tabler-users'
+          color='primary'
         />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
-        <StatCard 
-          title='Profesores' 
-          value={resumen.profesores} 
-          icon='tabler-user-share' 
-          color='info' 
+        <StatCard
+          title='Profesores'
+          value={resumen.profesores ?? 0}
+          icon='tabler-user-share'
+          color='info'
         />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
-        <StatCard 
-          title='Cursos' 
-          value={resumen.cursos} 
-          icon='tabler-book' 
-          color='warning' 
+        <StatCard
+          title='Cursos'
+          value={resumen.cursos ?? 0}
+          icon='tabler-book'
+          color='warning'
         />
       </Grid>
 
@@ -90,11 +93,11 @@ export function DashboardView({ initialData }: DashboardViewProps) {
                     <TableCell>{p.usuario.nombre} {p.usuario.apellido}</TableCell>
                     <TableCell>{p.moneda} {Number(p.total).toFixed(2)}</TableCell>
                     <TableCell>
-                      <Chip 
-                        label={p.estado} 
-                        size='small' 
-                        variant='tonal' 
-                        color={p.estado === 'COMPLETADO' ? 'success' : 'warning'} 
+                      <Chip
+                        label={p.estado}
+                        size='small'
+                        variant='tonal'
+                        color={p.estado === 'COMPLETADO' ? 'success' : 'warning'}
                       />
                     </TableCell>
                   </TableRow>

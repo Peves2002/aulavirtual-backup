@@ -101,6 +101,8 @@ export default withAuth(
           path.startsWith('/empresas') ||
           path.startsWith('/politica-de-devoluciones') ||
           path.startsWith('/suscripciones') ||
+          path.startsWith('/recursos') ||
+          path.startsWith('/campus-virtual') ||
           path === '/'
         ) {
           return true

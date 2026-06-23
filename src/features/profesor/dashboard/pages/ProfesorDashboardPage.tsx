@@ -6,6 +6,7 @@ import { Box, Typography, Grid, Card, CardContent, Avatar, Stack } from '@mui/ma
 import { useSession } from 'next-auth/react'
 
 import { useCursos } from '@/features/admin/cursos/hooks/useCursos'
+import DashboardCarousel from '@/utils/components/DashboardCarousel'
 
 const ProfesorDashboardPage = () => {
     const { data: session } = useSession()
@@ -30,6 +31,10 @@ const ProfesorDashboardPage = () => {
             </Box>
 
             <Grid container spacing={6}>
+                <Grid item xs={12}>
+                    <DashboardCarousel />
+                </Grid>
+
                 {/* Stats Cards */}
                 <Grid item xs={12} sm={6} md={4}>
                     <Card sx={{ borderRadius: '16px', border: '1px solid', borderColor: 'divider', boxShadow: 'none' }}>

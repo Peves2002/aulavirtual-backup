@@ -9,6 +9,7 @@ import type { DashboardData } from '../entity/Dashboard'
 import KpiCard from './KpiCard'
 import CursosEnProgreso from './CursosEnProgreso'
 import CertificadosRecientes from './CertificadosRecientes'
+import DashboardCarousel from '@/utils/components/DashboardCarousel'
 
 const KPI_CONFIG = [
   {
@@ -89,6 +90,11 @@ export default function EstudianteDashboardPage({ initialData, nombreUsuario }: 
         <Typography variant='body1' color='text.secondary' sx={{ mt: 0.75, fontWeight: 500 }}>
           Aquí tienes un resumen de tu actividad académica.
         </Typography>
+      </Box>
+
+      {/* ── Carrusel ── */}
+      <Box sx={{ mb: 5 }}>
+        <DashboardCarousel />
       </Box>
 
       {/* ── KPIs ── */}

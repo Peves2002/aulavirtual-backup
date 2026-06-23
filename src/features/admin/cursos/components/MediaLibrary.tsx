@@ -147,9 +147,11 @@ const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios',
 
       onSelect(result.url, result.nombre)
       onClose()
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error al subir archivo', error)
-      enqueueSnackbar('Error al subir archivo. Verifique el tamaño o el formato.', { variant: 'error' })
+      const mensaje = error?.response?.data?.message || error?.message || 'Error al subir archivo. Verifique su conexión e intente nuevamente.'
+
+      enqueueSnackbar(mensaje, { variant: 'error' })
     } finally {
       setUploadProgress(null)
     }
