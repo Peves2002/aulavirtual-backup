@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react'
 import { Box, Grid, InputAdornment, Typography } from '@mui/material'
 
 import CustomTextField from '@core/components/mui/TextField'
+import useVerticalNav from '@menu/hooks/useVerticalNav'
 import MyCourseCard from './MyCourseCard'
 
 interface Course {
@@ -28,6 +29,11 @@ interface MyCoursesListProps {
 
 const MyCoursesList = ({ courses }: MyCoursesListProps) => {
     const [searchQuery, setSearchQuery] = useState('')
+    const { isCollapsed } = useVerticalNav()
+
+    // Menú lateral contraído → más espacio disponible → 4 tarjetas por fila (md=3)
+    // Menú lateral desplegado → menos espacio disponible → 3 tarjetas por fila (md=4)
+    const cardColSpan = isCollapsed ? 3 : 4
 
     const filteredCourses = useMemo(() => {
         if (!searchQuery.trim()) {
@@ -92,7 +98,7 @@ const MyCoursesList = ({ courses }: MyCoursesListProps) => {
             ) : (
                 <Grid container spacing={{ xs: 3, sm: 4, md: 6, lg: 8 }}>
                     {filteredCourses.map((course) => (
-                        <Grid item xs={12} sm={6} md={4} key={course.id}>
+                        <Grid item xs={12} sm={6} md={cardColSpan} key={course.id}>
                             <MyCourseCard
                                 titulo={course.titulo}
                                 slug={course.slug}

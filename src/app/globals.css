@@ -130,6 +130,12 @@ ul:not([class]) {
   inline-size: 6px;
 }
 
+/* El menú lateral no necesita mostrar barra de scroll: ocultamos el riel siempre,
+   el scroll con la rueda del mouse sigue funcionando igual */
+.ts-vertical-nav-root .ps__rail-y {
+  display: none;
+}
+
 :where([class^='tabler-']) {
   font-size: 1.5rem;
 }

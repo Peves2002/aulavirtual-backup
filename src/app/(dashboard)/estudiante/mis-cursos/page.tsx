@@ -7,6 +7,7 @@ import { Container, Typography, Box, Stack, Button } from '@mui/material'
 import { getAuthSession } from '@/utils/libs/auth-helpers'
 import MyCoursesList from '@/features/estudiante/mis-cursos/components/MyCoursesList'
 import { AxiosMisCursos } from '@/features/estudiante/mis-cursos/http/axiosMisCursos'
+import KpiCard from '@/features/estudiante/dashboard/components/KpiCard'
 
 export default async function MyCoursesPage() {
     const session = await getAuthSession()
@@ -29,6 +30,10 @@ export default async function MyCoursesPage() {
         console.error('Error fetching inscribed courses via API:', error)
     }
 
+    const totalMatriculados = courses.length
+    const cursosEnProgreso = courses.filter(c => c.progreso > 0 && c.progreso < 100).length
+    const cursosCompletados = courses.filter(c => c.progreso >= 100).length
+
     return (
         <Box sx={{ py: { xs: 4, md: 6 } }}>
             <Container maxWidth={false} sx={{ px: { xs: 2, sm: 4, md: 8, lg: 12 } }}>
@@ -43,9 +48,39 @@ export default async function MyCoursesPage() {
                             </Typography>
                         </Box>
                         <Button variant='contained' color='primary' size='medium' sx={{ borderRadius: '10px' }} startIcon={<i className='tabler-search' />} href='/cursos'>
-                            Explorar Cursos
+                            Tienda de Cursos
                         </Button>
                     </Box>{/*  */}
+
+                    <Box
+                        sx={{
+                            display: 'grid',
+                            gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' },
+                            gap: 3
+                        }}
+                    >
+                        <KpiCard
+                            icon='tabler-books'
+                            label='Cursos matriculados'
+                            value={totalMatriculados}
+                            color='#3b82f6'
+                            bgColor='#eff6ff'
+                        />
+                        <KpiCard
+                            icon='tabler-loader'
+                            label='En progreso'
+                            value={cursosEnProgreso}
+                            color='#f59e0b'
+                            bgColor='#fffbeb'
+                        />
+                        <KpiCard
+                            icon='tabler-circle-check'
+                            label='Completados'
+                            value={cursosCompletados}
+                            color='#10b981'
+                            bgColor='#ecfdf5'
+                        />
+                    </Box>
 
                     <MyCoursesList courses={courses} />
                 </Stack>

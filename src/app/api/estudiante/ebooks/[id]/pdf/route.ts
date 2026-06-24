@@ -1,13 +1,13 @@
 export const dynamic = 'force-dynamic'
 
 import { readFile } from 'fs/promises'
-import path from 'path'
 
 import { NextResponse } from 'next/server'
 
 import { handleApiError } from '@/utils/libs/validation'
 import prisma from '@/utils/libs/prisma'
 import { requireAuth } from '@/utils/libs/auth-helpers'
+import { resolveUploadPath } from '@/utils/libs/uploads'
 
 /**
  * GET /api/estudiante/ebooks/[id]/pdf
@@ -48,12 +48,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
       if (!res.ok) return NextResponse.json({ error: 'No se pudo obtener el archivo' }, { status: 502 })
       pdfBuffer = Buffer.from(await res.arrayBuffer())
     } else {
-      // Paths from /api/media are relative URLs like /uploads/cursos/file.pdf
-      // path.isAbsolute('/uploads/...') returns true on Windows (/ is a path separator)
-      // but the actual file lives under public/ — always join with cwd/public
-      const absPath = path.join(process.cwd(), 'public', pdfPath)
-
-      pdfBuffer = await readFile(absPath)
+      // Paths from /api/media son URLs relativas como /uploads/cursos/file.pdf
+      pdfBuffer = await readFile(resolveUploadPath(pdfPath))
     }
 
     return new NextResponse(new Uint8Array(pdfBuffer), {

@@ -99,7 +99,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
               Mis Certificados
             </MenuItem>
             <MenuItem href='/cursos' icon={<i className='tabler-search' />}>
-              Explorar Cursos
+              Tienda de Cursos
             </MenuItem>
           </>
         )}

@@ -10,93 +10,22 @@ import {
   Lock,
   Eye,
   EyeOff,
-  PlayCircle,
   BookOpen,
   LogOut,
 } from "lucide-react";
 
 import { Navbar } from "@/marketing/components/site/Navbar";
 import { Footer } from "@/marketing/components/site/Footer";
+import { PublicCourseCard } from "@/marketing/components/site/PublicCourseCard";
 import { DASHBOARD_POR_ROL, ETIQUETA_ROL } from "@/marketing/lib/dashboard-roles";
+import type { CursoPublico } from "@/marketing/lib/getCursosPublicos";
 
-// ─── Course data (20 items) ───────────────────────────────────────────────────
-const courses = [
-  {
-    id: 1,
-    title: "AutoCAD Electrical - Diseño de Esquemas y Circuitos de Control",
-    image: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=600&q=80",
-    category: "Eléctrica",
-  },
-  {
-    id: 2,
-    title: "DIALux evo - Diseño de Iluminación de Interiores y Oficinas",
-    image: "https://images.unsplash.com/photo-1565538810844-1e1194116c07?w=600&q=80",
-    category: "Iluminación",
-  },
-  {
-    id: 3,
-    title: "DIALux evo - Iluminación de Vías Públicas y Alumbrado Urbano",
-    image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80",
-    category: "Iluminación",
-  },
-  {
-    id: 4,
-    title: "Revit MEP - Modelamiento BIM de Canalizaciones y Bandejas",
-    image: "https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=600&q=80",
-    category: "BIM Eléctrico",
-  },
-  {
-    id: 5,
-    title: "Diseño de Sistemas de Puesta a Tierra (SPAT) y Pozos a Tierra",
-    image: "https://images.unsplash.com/photo-1581093057726-442ba0bec3b1?w=600&q=80",
-    category: "Eléctrica",
-  },
-  {
-    id: 6,
-    title: "Diagrama Unifilar y Cuadro de Cargas según CNE",
-    image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=600&q=80",
-    category: "Eléctrica",
-  },
-  {
-    id: 7,
-    title: "Cálculo de Corriente de Cortocircuito y Coordinación con ETAP",
-    image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&q=80",
-    category: "Eléctrica",
-  },
-  {
-    id: 8,
-    title: "Subestaciones Eléctricas de Distribución y Celdas de Media Tensión",
-    image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80",
-    category: "Eléctrica",
-  },
-  {
-    id: 9,
-    title: "Auditorías de Eficiencia Energética e Iluminación LED",
-    image: "https://images.unsplash.com/photo-1513828760659-d1d88c7793ec?w=600&q=80",
-    category: "Iluminación",
-  },
-  {
-    id: 10,
-    title: "Seguridad y Prevención de Riesgos Eléctricos (NFPA 70E)",
-    image: "https://images.unsplash.com/photo-1590069261209-f8e9b8642343?w=600&q=80",
-    category: "Seguridad",
-  },
-  {
-    id: 11,
-    title: "Memorias de Cálculo de Instalaciones Eléctricas Industriales",
-    image: "https://images.unsplash.com/photo-1621905252507-b354bc25edac?w=600&q=80",
-    category: "Eléctrica",
-  },
-  {
-    id: 12,
-    title: "Revit MEP - Diseño y Coordinación de Tableros Eléctricos",
-    image: "https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?w=600&q=80",
-    category: "BIM Eléctrico",
-  },
-];
+interface CampusVirtualProps {
+  cursos: CursoPublico[];
+}
 
 // ─── Component ───────────────────────────────────────────────────────────────
-export default function CampusVirtual() {
+export default function CampusVirtual({ cursos }: CampusVirtualProps) {
   const { data: session, status } = useSession();
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
@@ -383,64 +312,30 @@ export default function CampusVirtual() {
             <div className="flex-1 max-w-[120px] h-px bg-gray-300" />
           </div>
 
-          {/* Grid 4 columns */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-            {courses.map((course, idx) => (
-              <motion.div
-                key={course.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.35, delay: (idx % 4) * 0.07 }}
-                className="bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-[#1a56e8]/30 hover:shadow-lg transition-all duration-300 group flex flex-col"
-              >
-                {/* Thumbnail */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-slate-800">
-                  {/* Grupo Corpus badge top-left */}
-                  <div className="absolute top-2 left-2 z-10 flex items-center gap-1 bg-[#1a56e8] text-white text-[8px] font-black uppercase px-2 py-0.5 rounded shadow-md tracking-wide">
-                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 2a6 6 0 110 12A6 6 0 0110 4z" />
-                    </svg>
-                    Grupo Corpus
-                  </div>
-                  <img
-                    src={course.image}
-                    alt={course.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  {/* Play overlay on hover */}
-                  <div className="absolute inset-0 bg-[#0e2a82]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <PlayCircle className="w-10 h-10 text-white drop-shadow-lg" />
-                  </div>
-                </div>
-
-                {/* Blue accent bar */}
-                <div className="h-[3px] bg-gradient-to-r from-[#0e2a82] to-[#1a56e8]" />
-
-                {/* Info */}
-                <div className="p-4 flex flex-col flex-grow">
-                  {/* Category tag */}
-                  <span className="text-[9px] font-black uppercase tracking-wider text-[#1a56e8] mb-1.5">
-                    {course.category}
-                  </span>
-                  {/* Title */}
-                  <h3 className="font-black text-[11px] text-[#0c1938] leading-snug uppercase line-clamp-3 group-hover:text-[#1a56e8] transition-colors duration-300 flex-grow">
-                    {course.title}
-                  </h3>
-
-                  {/* Button */}
-                  <button
-                    onClick={() => alert(`Accediendo al curso: ${course.title}`)}
-                    className="mt-4 w-full bg-[#0e2a82] hover:bg-[#1a56e8] text-white font-bold text-[10px] uppercase tracking-wider py-2.5 rounded flex items-center justify-center gap-1.5 transition-colors duration-300"
-                  >
-                    <PlayCircle className="w-3.5 h-3.5" />
-                    Ver Curso
-                  </button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {/* Grid 4 columnas, alineado a la izquierda */}
+          {cursos.length === 0 ? (
+            <div className="py-12 text-center text-gray-500 max-w-md mx-auto select-none">
+              <h3 className="font-bold text-lg text-gray-700">Próximamente nuevos cursos</h3>
+              <p className="text-sm text-gray-400 mt-2">
+                Estamos preparando nuevas capacitaciones. Vuelve pronto.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+              {cursos.map((curso, idx) => (
+                <motion.div
+                  key={curso.id}
+                  className="h-full"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.35, delay: (idx % 4) * 0.07 }}
+                >
+                  <PublicCourseCard curso={curso} enVivo={curso.tipoEmision === "SINCRONO"} />
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

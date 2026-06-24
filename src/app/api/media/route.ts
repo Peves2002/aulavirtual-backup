@@ -8,6 +8,7 @@ import prisma from '@/utils/libs/prisma'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { handleApiError } from '@/utils/libs/validation'
 import { requireAuth } from '@/utils/libs/auth-helpers'
+import { getUploadsDir } from '@/utils/libs/uploads'
 
 /** Tipos MIME permitidos y su extensión segura */
 const ALLOWED_MIMES: Record<string, string> = {
@@ -181,7 +182,7 @@ export async function POST(request: Request) {
     // Ruta relativa para la URL y ruta absoluta para guardar
     const folder = isSignature ? 'firmas' : 'cursos'
     const relativePath = `/uploads/${folder}/${nombreArchivo}`
-    const uploadDir = join(process.cwd(), 'public', 'uploads', folder)
+    const uploadDir = join(getUploadsDir(), folder)
     const absolutePath = join(uploadDir, nombreArchivo)
 
     try {
@@ -200,7 +201,7 @@ export async function POST(request: Request) {
       if (fsError.code === 'EACCES') {
         return ApiResponse.error(
           request,
-          `Error de permisos en el servidor (EACCES). No se pudo crear/escribir en ${fsError.path}. Ejecute 'sudo chown -R $USER:$USER public/uploads' en su servidor para solucionar este problema.`,
+          `Error de permisos en el servidor (EACCES). No se pudo crear/escribir en ${fsError.path}. Verifique los permisos del directorio de subidas (UPLOADS_DIR) en su servidor.`,
           500
         )
       }

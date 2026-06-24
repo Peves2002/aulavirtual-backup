@@ -122,7 +122,13 @@ const menuItemStyles = (verticalNavOptions: VerticalNavState, theme: Theme, sett
       ...((!isPopoutWhenCollapsed || popoutExpanded || (popoutCollapsed && level === 0)) && {
         transition: `opacity ${transitionDuration}ms ease-in-out`,
         ...(collapsedNotHovered && {
-          opacity: 0
+          opacity: 0,
+
+          // Sin esto, aunque sea invisible, el label sigue ocupando espacio (flex-grow)
+          // y descentra el ícono dentro del botón en modo contraído
+          flex: 'none',
+          inlineSize: 0,
+          overflow: 'hidden'
         })
       })
     }),

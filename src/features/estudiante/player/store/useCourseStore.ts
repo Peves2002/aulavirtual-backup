@@ -45,7 +45,7 @@ export interface Course {
 
 type ExamStatus = 'locked' | 'available' | 'in_progress' | 'passed' | 'failed'
 
-type PlayerView = 'lesson' | 'exam' | 'completion' | 'certificate'
+type PlayerView = 'temario' | 'lesson' | 'exam' | 'completion' | 'certificate'
 
 interface CourseState {
     course: Course | null
@@ -78,7 +78,7 @@ export const useCourseStore = create<CourseState>((set) => ({
     examenId: null,
     currentExamenId: null,
     certificateId: null,
-    currentView: 'lesson',
+    currentView: 'temario',
 
     setCourse: (course) => {
         set((state) => {
@@ -88,10 +88,11 @@ export const useCourseStore = create<CourseState>((set) => ({
             const completed = allLessons.filter(l => l.completada).length
             const percentage = allLessons.length > 0 ? Math.round((completed / allLessons.length) * 100) : 0
 
+            // Sin deep-link a una lección/examen específico, se aterriza en el temario (no en la primera lección).
             return {
                 course,
                 progressPercentage: percentage,
-                currentLessonId: state.currentLessonId || course.modulos[0]?.lecciones[0]?.id,
+                currentView: state.currentLessonId ? state.currentView : 'temario',
                 examStatus: percentage >= 100 ? 'available' : 'locked'
             }
         })

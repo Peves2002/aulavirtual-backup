@@ -10,7 +10,6 @@ import {
     Stack,
     Tab,
     Tabs,
-    Tooltip,
     Typography,
     useMediaQuery,
     useTheme
@@ -49,7 +48,6 @@ interface CoursePlayerViewProps {
 const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initialExamenId }: CoursePlayerViewProps) => {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('lg'))
-    const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
     const [activeTab, setActiveTab] = useState(0)
     const [ratingModalOpen, setRatingModalOpen] = useState(false)
 
@@ -65,6 +63,7 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
         updateLessonProgress,
         setExamenId,
         setExamStatus,
+        setCurrentView,
         openExam
     } = useCourseStore()
 
@@ -121,10 +120,10 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
     const prevLesson = currentIndex > 0 ? flatLessons[currentIndex - 1] : undefined
     const nextLesson = currentIndex < flatLessons.length - 1 ? flatLessons[currentIndex + 1] : undefined
 
-    useEffect(() => {
-        if (!mounted) return
-        setSidebarOpen(!isMobile)
-    }, [isMobile, mounted])
+    const currentModule = useMemo(
+        () => storeCourse?.modulos.find(m => m.lecciones.some(l => l.id === currentLessonId)),
+        [storeCourse?.modulos, currentLessonId]
+    )
 
     const refetchCourse = async () => {
         try {
@@ -215,9 +214,19 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
         }
     }
 
-    const TABS = ['Sobre el curso', 'Evaluaciones', 'Materiales', 'Certificación', 'Comentarios', ...(isMobile ? ['Temario'] : [])]
+    const TABS = ['Sobre el curso', 'Evaluaciones', 'Materiales', 'Certificación', 'Comentarios']
 
     const renderMainContent = () => {
+        if (currentView === 'temario') {
+            return (
+                <Grid item xs={12} key="temario-section">
+                    <Box sx={{ maxWidth: 760, mx: 'auto' }}>
+                        <CourseContentSidebar onLessonSelect={handleLessonSelect} />
+                    </Box>
+                </Grid>
+            )
+        }
+
         if (currentView === 'exam' && currentExamenId) {
             return (
                 <Grid item xs={12} key="exam-section">
@@ -257,6 +266,33 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
 
         return (
             <>
+                {/* ── Breadcrumb (estilo "página interna") ── */}
+                {currentLesson && (
+                    <Grid item xs={12}>
+                        <Stack direction="row" spacing={0.75} alignItems="center" sx={{ mb: 0.5, flexWrap: 'wrap' }}>
+                            <Typography
+                                variant="caption"
+                                onClick={() => setCurrentView('temario')}
+                                sx={{ color: 'text.secondary', fontWeight: 600, cursor: 'pointer', '&:hover': { color: '#025E44', textDecoration: 'underline' } }}
+                            >
+                                {course.titulo}
+                            </Typography>
+                            {currentModule && (
+                                <>
+                                    <i className="tabler-chevron-right" style={{ fontSize: '0.7rem', color: '#9ca3af' }} />
+                                    <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
+                                        {currentModule.titulo}
+                                    </Typography>
+                                </>
+                            )}
+                            <i className="tabler-chevron-right" style={{ fontSize: '0.7rem', color: '#9ca3af' }} />
+                            <Typography variant="caption" sx={{ color: '#025E44', fontWeight: 700 }}>
+                                {currentLesson.titulo}
+                            </Typography>
+                        </Stack>
+                    </Grid>
+                )}
+
                 {/* ── Lesson info row ── */}
                 {currentLesson && (
                     <Grid item xs={12}>
@@ -357,44 +393,10 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                     </Box>
                 </Grid>
 
-                {/* ── Navigation bar ── */}
-                <Grid item xs={12}>
-                    <Box sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1.5,
-                        py: 1.5,
-                        mt: 1,
-                        borderTop: '1px solid',
-                        borderBottom: '1px solid',
-                        borderColor: 'divider',
-                    }}>
-                        <Tooltip title={prevLesson ? prevLesson.titulo : ''}>
-                            <span>
-                                <Button
-                                    variant="outlined"
-                                    size="small"
-                                    disabled={!prevLesson}
-                                    onClick={() => prevLesson && handleLessonSelect(prevLesson.id)}
-                                    startIcon={<i className="tabler-chevron-left text-base" />}
-                                    sx={{
-                                        borderRadius: '10px',
-                                        textTransform: 'none',
-                                        fontWeight: 600,
-                                        fontSize: '0.82rem',
-                                        px: { xs: 1.5, sm: 2 },
-                                        flexShrink: 0,
-                                        borderColor: 'divider',
-                                        color: 'text.secondary',
-                                        '&:hover': { borderColor: 'primary.main', color: 'primary.main' }
-                                    }}
-                                >
-                                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>Anterior</Box>
-                                </Button>
-                            </span>
-                        </Tooltip>
-
-                        {currentLesson && (
+                {/* ── Marcar como completado ── */}
+                {currentLesson && (
+                    <Grid item xs={12}>
+                        <Box sx={{ py: 1, mt: 1 }}>
                             <Button
                                 fullWidth
                                 variant={currentLesson.completada ? 'outlined' : 'contained'}
@@ -420,32 +422,76 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                             >
                                 {currentLesson.completada ? 'Completado' : 'Marcar como completado'}
                             </Button>
-                        )}
+                        </Box>
+                    </Grid>
+                )}
 
-                        <Tooltip title={nextLesson ? nextLesson.titulo : ''}>
-                            <span>
-                                <Button
-                                    variant="outlined"
-                                    size="small"
-                                    disabled={!nextLesson}
-                                    onClick={() => nextLesson && handleLessonSelect(nextLesson.id)}
-                                    endIcon={<i className="tabler-chevron-right text-base" />}
-                                    sx={{
-                                        borderRadius: '10px',
-                                        textTransform: 'none',
-                                        fontWeight: 600,
-                                        fontSize: '0.82rem',
-                                        px: { xs: 1.5, sm: 2 },
-                                        flexShrink: 0,
-                                        borderColor: 'divider',
-                                        color: 'text.secondary',
-                                        '&:hover': { borderColor: 'primary.main', color: 'primary.main' }
-                                    }}
-                                >
-                                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>Siguiente</Box>
-                                </Button>
-                            </span>
-                        </Tooltip>
+                {/* ── Navegación: actividad previa / siguiente (estilo Moodle) ── */}
+                <Grid item xs={12}>
+                    <Box sx={{
+                        display: 'flex',
+                        alignItems: 'stretch',
+                        gap: 1.5,
+                        py: 1.5,
+                        mt: 1,
+                        borderTop: '1px solid',
+                        borderColor: 'divider',
+                    }}>
+                        <Box
+                            onClick={() => prevLesson && handleLessonSelect(prevLesson.id)}
+                            sx={{
+                                flex: 1,
+                                minWidth: 0,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1,
+                                px: 1,
+                                borderRadius: '10px',
+                                cursor: prevLesson ? 'pointer' : 'default',
+                                opacity: prevLesson ? 1 : 0.35,
+                                '&:hover': prevLesson ? { bgcolor: 'rgba(0,0,0,0.03)' } : {},
+                            }}
+                        >
+                            <i className="tabler-chevron-left text-base" style={{ color: '#9ca3af', flexShrink: 0 }} />
+                            <Box sx={{ minWidth: 0 }}>
+                                <Typography variant="caption" sx={{ display: 'block', color: 'text.disabled', fontWeight: 600, fontSize: '0.68rem' }}>
+                                    Actividad previa
+                                </Typography>
+                                <Typography variant="body2" noWrap sx={{ fontWeight: 700, color: 'text.primary', fontSize: '0.82rem' }}>
+                                    {prevLesson ? prevLesson.titulo : '—'}
+                                </Typography>
+                            </Box>
+                        </Box>
+
+                        <Box sx={{ width: '1px', bgcolor: 'divider', flexShrink: 0 }} />
+
+                        <Box
+                            onClick={() => nextLesson && handleLessonSelect(nextLesson.id)}
+                            sx={{
+                                flex: 1,
+                                minWidth: 0,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'flex-end',
+                                textAlign: 'right',
+                                gap: 1,
+                                px: 1,
+                                borderRadius: '10px',
+                                cursor: nextLesson ? 'pointer' : 'default',
+                                opacity: nextLesson ? 1 : 0.35,
+                                '&:hover': nextLesson ? { bgcolor: 'rgba(0,0,0,0.03)' } : {},
+                            }}
+                        >
+                            <Box sx={{ minWidth: 0 }}>
+                                <Typography variant="caption" sx={{ display: 'block', color: 'text.disabled', fontWeight: 600, fontSize: '0.68rem' }}>
+                                    Siguiente actividad
+                                </Typography>
+                                <Typography variant="body2" noWrap sx={{ fontWeight: 700, color: 'text.primary', fontSize: '0.82rem' }}>
+                                    {nextLesson ? nextLesson.titulo : '—'}
+                                </Typography>
+                            </Box>
+                            <i className="tabler-chevron-right text-base" style={{ color: '#9ca3af', flexShrink: 0 }} />
+                        </Box>
                     </Box>
                 </Grid>
 
@@ -783,12 +829,6 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                         </Box>
                     )}
 
-                    {/* Temario (mobile only) */}
-                    {isMobile && activeTab === 5 && (
-                        <Box sx={{ mt: 0 }}>
-                            <CourseContentSidebar onLessonSelect={handleLessonSelect} />
-                        </Box>
-                    )}
                 </Grid>
             </>
         )
@@ -864,16 +904,12 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                 </Box>
             )}
 
-            {/* ── Content + Sidebar ── */}
+            {/* ── Content (el temario solo se ve en la vista 'temario'; dentro de una lección no hay panel lateral) ── */}
             <Box sx={{ display: 'flex', flexGrow: 1, overflow: 'hidden', position: 'relative' }}>
-
-                {/* Main scrollable area */}
                 <Box sx={{
                     flexGrow: 1,
                     overflowY: { xs: 'auto', md: 'scroll' },
                     overflowX: 'hidden',
-                    transition: 'margin 0.3s',
-                    mr: sidebarOpen && !isMobile ? '380px' : 0,
                 }}>
                     <Box sx={{ px: { xs: 2, sm: 3, md: 4 }, pt: { xs: 2, md: 3 }, pb: 2 }}>
                         <Grid container spacing={0}>
@@ -881,27 +917,6 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                         </Grid>
                     </Box>
                 </Box>
-
-                {/* Desktop sidebar */}
-                {!isMobile && (
-                    <Box sx={{
-                        width: 380,
-                        position: 'absolute',
-                        top: 0,
-                        right: 0,
-                        height: '100%',
-                        borderLeft: '1px solid',
-                        borderColor: 'divider',
-                        bgcolor: 'background.paper',
-                        transform: sidebarOpen ? 'translateX(0)' : 'translateX(100%)',
-                        transition: 'transform 0.3s',
-                        zIndex: 10,
-                        display: 'flex',
-                        flexDirection: 'column',
-                    }}>
-                        <CourseContentSidebar onLessonSelect={handleLessonSelect} />
-                    </Box>
-                )}
             </Box>
             {/* ── Rating Modal ── */}
             {storeCourse && (

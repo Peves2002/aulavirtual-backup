@@ -8,6 +8,7 @@ import prisma from '@/utils/libs/prisma'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { requireAuth } from '@/utils/libs/auth-helpers'
 import { handleApiError } from '@/utils/libs/validation'
+import { getUploadsDir } from '@/utils/libs/uploads'
 
 const ALLOWED_IMAGE_MIMES: Record<string, string> = {
   'image/jpeg': 'jpg',
@@ -70,7 +71,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
     const ext = ALLOWED_IMAGE_MIMES[file.type]
     const fileName = `${randomUUID()}.${ext}`
-    const uploadDir = join(process.cwd(), 'public', 'uploads', 'vouchers')
+    const uploadDir = join(getUploadsDir(), 'vouchers')
     const absolutePath = join(uploadDir, fileName)
     const relativePath = `/uploads/vouchers/${fileName}`
 

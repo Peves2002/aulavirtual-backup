@@ -11,12 +11,11 @@ import {
     List,
     ListItem,
     ListItemButton,
-    ListItemIcon,
     LinearProgress,
     Divider,
     Button,
     InputAdornment,
-    Tooltip,
+    Checkbox,
 } from '@mui/material'
 
 import CustomTextField from '@core/components/mui/TextField'
@@ -137,24 +136,27 @@ const CourseContentSidebar = ({ onLessonSelect }: CourseContentSidebarProps) => 
                             defaultExpanded
                             disableGutters
                             elevation={0}
-                            sx={{ '&:before': { display: 'none' }, borderBottom: '1px solid', borderColor: 'divider' }}
+                            sx={{ '&:before': { display: 'none' }, mb: 1.5, mx: 1.5 }}
                         >
                             <AccordionSummary
                                 expandIcon={<i className="tabler-chevron-down" style={{ fontSize: '1rem', color: '#6b7280' }} />}
                                 sx={{
-                                    px: 3,
-                                    py: 1.25,
+                                    px: 2,
+                                    py: 1,
                                     minHeight: 'auto',
-                                    bgcolor: 'rgba(2,94,68,0.035)',
-                                    '& .MuiAccordionSummary-content': { my: 0 }
+                                    bgcolor: '#f1f3f5',
+                                    border: '1px solid',
+                                    borderColor: '#e1e4e8',
+                                    borderRadius: '6px',
+                                    '& .MuiAccordionSummary-content': { my: 0, justifyContent: 'center' }
                                 }}
                             >
-                                <Typography sx={{ fontWeight: 700, fontSize: '0.82rem', color: '#025E44', letterSpacing: '0.01em' }}>
+                                <Typography sx={{ fontWeight: 800, fontSize: '0.85rem', color: '#3c4043', letterSpacing: '0.01em', textAlign: 'center' }}>
                                     {module.titulo}
                                 </Typography>
                             </AccordionSummary>
 
-                            <AccordionDetails sx={{ p: 0 }}>
+                            <AccordionDetails sx={{ p: 0, border: '1px solid', borderColor: '#e1e4e8', borderTop: 'none', borderRadius: '0 0 6px 6px' }}>
                                 <List sx={{ p: 0 }}>
                                     {(() => {
                                         const allItems = [
@@ -171,147 +173,135 @@ const CourseContentSidebar = ({ onLessonSelect }: CourseContentSidebarProps) => 
                                         return allItems.map((item: any) => {
                                             const isLocked = item.tipo === 'examen' && progressPercentage < (item.progreso_minimo || 0)
                                             const isLockedLesson = item.tipo === 'leccion' && item.fecha_desbloqueo && new Date(item.fecha_desbloqueo) > new Date()
+                                            const isRestricted = isLocked || isLockedLesson
 
                                             const isSelected = item.tipo === 'leccion'
                                                 ? currentLessonId === item.id && currentView === 'lesson'
                                                 : currentExamenId === item.id && currentView === 'exam'
 
-                                            const getIcon = () => {
-                                                if (isLocked || isLockedLesson) {
-                                                    return (
-                                                        <i className="tabler-lock" style={{ fontSize: '1rem', color: '#9ca3af' }} />
-                                                    )
-                                                }
+                                            const isChecked = item.tipo === 'examen' ? !!item.ya_aprobado : !!item.completada
+
+                                            // Badge de icono (estilo Moodle: ícono dentro de un cuadro/círculo de color)
+                                            const iconBadge = (() => {
+                                                if (isRestricted) return { bg: '#e9ecef', color: '#9ca3af', icon: 'tabler-lock' }
 
                                                 if (item.tipo === 'examen') {
-                                                    if (item.ya_aprobado) {
-                                                        return (
-                                                            <i className="tabler-circle-check-filled" style={{ fontSize: '1rem', color: '#16a34a' }} />
-                                                        )
-                                                    }
+                                                    if (item.ya_aprobado) return { bg: '#16a34a', color: '#fff', icon: 'tabler-checkbox' }
+                                                    if ((item.intentos_realizados || 0) > 0) return { bg: '#dc2626', color: '#fff', icon: 'tabler-clipboard-x' }
 
-                                                    if ((item.intentos_realizados || 0) > 0) {
-                                                        return (
-                                                            <i className="tabler-circle-x-filled" style={{ fontSize: '1rem', color: '#dc2626' }} />
-                                                        )
-                                                    }
-
-                                                    return (
-                                                        <i className="tabler-clipboard-check" style={{ fontSize: '1rem', color: '#d97706' }} />
-                                                    )
+                                                    return { bg: '#d97706', color: '#fff', icon: 'tabler-clipboard-check' }
                                                 }
 
-                                                if (item.completada) {
-                                                    return (
-                                                        <i className="tabler-circle-check-filled" style={{ fontSize: '1rem', color: '#16a34a' }} />
-                                                    )
-                                                }
+                                                if (item.es_en_vivo) return { bg: '#7c3aed', color: '#fff', icon: 'tabler-video' }
 
-                                                return (
-                                                    <i className="tabler-player-play" style={{ fontSize: '1rem', color: isSelected ? '#025E44' : '#9ca3af' }} />
-                                                )
-                                            }
+                                                return { bg: '#1565c0', color: '#fff', icon: 'tabler-player-play-filled' }
+                                            })()
 
                                             const unlockDate = isLockedLesson && item.fecha_desbloqueo
-                                                ? new Date(item.fecha_desbloqueo).toLocaleString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                                                ? new Date(item.fecha_desbloqueo).toLocaleString('es-PE', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
                                                 : null
 
                                             return (
-                                                <ListItem key={item.id} disablePadding>
-                                                    <Tooltip
-                                                        title={unlockDate ? `Se desbloquea: ${unlockDate}` : ''}
-                                                        placement="left"
-                                                        arrow
+                                                <ListItem key={item.id} disablePadding sx={{ display: 'block' }}>
+                                                    <ListItemButton
+                                                        selected={isSelected}
+                                                        onClick={() => {
+                                                            if (isRestricted) return
+                                                            if (item.tipo === 'leccion') onLessonSelect(item.id)
+                                                            else openExam(item.id)
+                                                        }}
+                                                        disabled={isLocked}
+                                                        sx={{
+                                                            px: 2,
+                                                            py: 1.25,
+                                                            gap: 1.5,
+                                                            alignItems: 'flex-start',
+                                                            cursor: isLockedLesson ? 'not-allowed' : 'pointer',
+                                                            borderLeft: isSelected ? '3px solid #025E44' : '3px solid transparent',
+                                                            '&.Mui-selected': {
+                                                                bgcolor: 'rgba(2,94,68,0.06)',
+                                                                '&:hover': { bgcolor: 'rgba(2,94,68,0.09)' }
+                                                            },
+                                                            '&:hover': { bgcolor: 'rgba(0,0,0,0.03)' },
+                                                            '&.Mui-disabled': { opacity: 1 },
+                                                        }}
                                                     >
-                                                        <ListItemButton
-                                                            selected={isSelected}
-                                                            onClick={() => {
-                                                                if (isLockedLesson || isLocked) return
-                                                                if (item.tipo === 'leccion') onLessonSelect(item.id)
-                                                                else openExam(item.id)
-                                                            }}
-                                                            disabled={isLocked}
-                                                            sx={{
-                                                                px: 3,
-                                                                py: 1.25,
-                                                                gap: 1.5,
-                                                                opacity: (isLocked || isLockedLesson) ? 0.55 : 1,
-                                                                cursor: isLockedLesson ? 'not-allowed' : 'pointer',
-                                                                borderLeft: isSelected ? '3px solid #025E44' : '3px solid transparent',
-                                                                '&.Mui-selected': {
-                                                                    bgcolor: 'rgba(2,94,68,0.06)',
-                                                                    '&:hover': { bgcolor: 'rgba(2,94,68,0.09)' }
-                                                                },
-                                                                '&:hover': { bgcolor: 'rgba(0,0,0,0.03)' },
-                                                                '&.Mui-disabled': { opacity: 0.45 },
-                                                            }}
-                                                        >
-                                                            <ListItemIcon sx={{ minWidth: 'auto', color: 'inherit' }}>
-                                                                {getIcon()}
-                                                            </ListItemIcon>
-                                                            <Box sx={{ flex: 1, minWidth: 0 }}>
-                                                                <Typography
-                                                                    variant="body2"
-                                                                    sx={{
-                                                                        fontWeight: isSelected ? 700 : 500,
-                                                                        color: isSelected ? '#025E44' : 'text.primary',
-                                                                        fontSize: '0.82rem',
-                                                                        lineHeight: 1.35,
-                                                                        overflow: 'hidden',
-                                                                        textOverflow: 'ellipsis',
-                                                                        whiteSpace: 'nowrap',
-                                                                    }}
-                                                                >
-                                                                    {item.titulo}
-                                                                </Typography>
-                                                                {unlockDate && (
-                                                                    <Typography variant="caption" sx={{ color: '#9ca3af', fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.25 }}>
-                                                                        <i className="tabler-clock" style={{ fontSize: '0.7rem' }} />
-                                                                        Se desbloquea: {unlockDate}
-                                                                    </Typography>
-                                                                )}
-                                                            </Box>
+                                                        <Box sx={{
+                                                            width: 26, height: 26, borderRadius: '6px', flexShrink: 0, mt: 0.25,
+                                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                            bgcolor: iconBadge.bg
+                                                        }}>
+                                                            <i className={iconBadge.icon} style={{ fontSize: '0.85rem', color: iconBadge.color }} />
+                                                        </Box>
 
-                                                            {/* Fechas al lado derecho */}
+                                                        <Box sx={{ flex: 1, minWidth: 0 }}>
+                                                            <Typography
+                                                                variant="body2"
+                                                                sx={{
+                                                                    fontWeight: isSelected ? 700 : 500,
+                                                                    color: isSelected ? '#025E44' : 'text.primary',
+                                                                    fontSize: '0.82rem',
+                                                                    lineHeight: 1.35,
+                                                                }}
+                                                            >
+                                                                {item.titulo}
+                                                            </Typography>
+
+                                                            {/* Badge "Restringido" + fecha, siempre visible (estilo Moodle) */}
+                                                            {isRestricted && (
+                                                                <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 0.75, mt: 0.5 }}>
+                                                                    <Box component="span" sx={{
+                                                                        bgcolor: '#0d9488', color: '#fff', fontSize: '0.62rem', fontWeight: 700,
+                                                                        px: 0.9, py: 0.2, borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.03em'
+                                                                    }}>
+                                                                        Restringido
+                                                                    </Box>
+                                                                    {unlockDate && (
+                                                                        <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.7rem' }}>
+                                                                            Disponible desde <b>{unlockDate}</b>
+                                                                        </Typography>
+                                                                    )}
+                                                                </Box>
+                                                            )}
+
+                                                            {/* Fechas de examen */}
                                                             {item.tipo === 'examen' && (item.fecha_inicio || item.fecha_fin) && (
-                                                                <Box sx={{ flexShrink: 0, textAlign: 'right', ml: 1 }}>
+                                                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 0.4 }}>
                                                                     {item.fecha_inicio && (
-                                                                        <Typography variant="caption" sx={{
-                                                                            fontSize: '0.65rem', color: '#2563eb', fontWeight: 600,
-                                                                            display: 'flex', alignItems: 'center', gap: 0.4,
-                                                                            justifyContent: 'flex-end', whiteSpace: 'nowrap'
-                                                                        }}>
-                                                                            <i className="tabler-calendar-up" style={{ fontSize: '0.65rem' }} />
-                                                                            {new Date(item.fecha_inicio).toLocaleString('es-PE', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                                                                        <Typography variant="caption" sx={{ fontSize: '0.68rem', color: '#2563eb', fontWeight: 600 }}>
+                                                                            Desde {new Date(item.fecha_inicio).toLocaleString('es-PE', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
                                                                         </Typography>
                                                                     )}
                                                                     {item.fecha_fin && (
-                                                                        <Typography variant="caption" sx={{
-                                                                            fontSize: '0.65rem', color: '#dc2626', fontWeight: 600,
-                                                                            display: 'flex', alignItems: 'center', gap: 0.4,
-                                                                            justifyContent: 'flex-end', whiteSpace: 'nowrap', mt: 0.3
-                                                                        }}>
-                                                                            <i className="tabler-calendar-down" style={{ fontSize: '0.65rem' }} />
-                                                                            {new Date(item.fecha_fin).toLocaleString('es-PE', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                                                                        <Typography variant="caption" sx={{ fontSize: '0.68rem', color: '#dc2626', fontWeight: 600 }}>
+                                                                            Hasta {new Date(item.fecha_fin).toLocaleString('es-PE', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
                                                                         </Typography>
                                                                     )}
                                                                 </Box>
                                                             )}
+
                                                             {/* Fecha clase en vivo */}
                                                             {item.tipo === 'leccion' && item.es_en_vivo && item.fecha_programada && (
-                                                                <Box sx={{ flexShrink: 0, textAlign: 'right', ml: 1 }}>
-                                                                    <Typography variant="caption" sx={{
-                                                                        fontSize: '0.65rem', color: '#7c3aed', fontWeight: 600,
-                                                                        display: 'flex', alignItems: 'center', gap: 0.4,
-                                                                        justifyContent: 'flex-end', whiteSpace: 'nowrap'
-                                                                    }}>
-                                                                        <i className="tabler-video" style={{ fontSize: '0.65rem' }} />
-                                                                        {new Date(item.fecha_programada).toLocaleString('es-PE', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
-                                                                    </Typography>
-                                                                </Box>
+                                                                <Typography variant="caption" sx={{ display: 'block', fontSize: '0.68rem', color: '#7c3aed', fontWeight: 600, mt: 0.4 }}>
+                                                                    {new Date(item.fecha_programada).toLocaleString('es-PE', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                                                                </Typography>
                                                             )}
-                                                        </ListItemButton>
-                                                    </Tooltip>
+                                                        </Box>
+
+                                                        {/* Checkbox de completado, estilo Moodle */}
+                                                        <Checkbox
+                                                            checked={isChecked}
+                                                            disabled
+                                                            size="small"
+                                                            sx={{
+                                                                p: 0.25,
+                                                                flexShrink: 0,
+                                                                color: '#c1c7cd',
+                                                                '&.Mui-checked': { color: '#16a34a' },
+                                                                '&.Mui-disabled': { color: isChecked ? '#16a34a' : '#c1c7cd' },
+                                                            }}
+                                                        />
+                                                    </ListItemButton>
                                                 </ListItem>
                                             )
                                         })

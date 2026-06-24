@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Children, cloneElement } from 'react'
 import type { SyntheticEvent } from 'react'
 
 import {
@@ -31,10 +31,67 @@ import { useSnackbar } from 'notistack'
 import { getSession } from 'next-auth/react'
 import { Rol } from '@prisma/client'
 
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent
+} from '@dnd-kit/core'
+
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable'
+
+import { CSS } from '@dnd-kit/utilities'
+
 import { AxiosConfiguracion } from '../http/axiosConfiguracion'
 import type { Configuracion } from '../entity/Configuracion'
 import MediaLibrary from '../../cursos/components/MediaLibrary'
 import { useUsuarios } from '../../usuarios/hooks/useUsuarios'
+
+// Fila arrastrable para reordenar imágenes del carrusel
+const SortableCarruselItem = ({ id, children }: { id: string; children: React.ReactNode }) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id })
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    zIndex: isDragging ? 100 : 1,
+    opacity: isDragging ? 0.6 : 1,
+    position: 'relative' as const
+  }
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      {Children.map(children, (child: any) =>
+        cloneElement(child, { dragHandleProps: { ...attributes, ...listeners } })
+      )}
+    </div>
+  )
+}
+
+// Fila de una imagen del carrusel, con handle de arrastre dedicado
+const CarruselImagenRow = ({ img, onRemove, dragHandleProps }: any) => (
+  <Paper variant='outlined' sx={{ p: 1.5, display: 'flex', alignItems: 'center', gap: 2 }}>
+    <Box {...dragHandleProps} sx={{ display: 'flex', cursor: 'grab', color: 'text.disabled' }}>
+      <i className='tabler-grip-vertical text-xl' />
+    </Box>
+    <Box sx={{ width: 96, height: 54, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'grey.100', borderRadius: 1, overflow: 'hidden' }}>
+      <img src={img.url} alt={img.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+    </Box>
+    <Typography variant='body2' sx={{ flex: 1 }}>{img.label || 'Sin descripción'}</Typography>
+    <IconButton size='small' color='error' onClick={onRemove}>
+      <i className='tabler-trash' style={{ fontSize: '1rem' }} />
+    </IconButton>
+  </Paper>
+)
 
 interface ConfiguracionViewProps {
   initialData?: Configuracion[]
@@ -434,10 +491,30 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     try { return JSON.parse(config.DASHBOARD_CARRUSEL_IMAGENES || '[]') } catch { return [] }
   })()
 
+  const carruselSensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  )
+
   const handleRemoveCarruselImagen = (index: number) => {
     const updated = carruselArray.filter((_, i) => i !== index)
 
     handleInputChange('DASHBOARD_CARRUSEL_IMAGENES', JSON.stringify(updated))
+  }
+
+  const handleCarruselDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (!over || active.id === over.id) return
+
+    const oldIndex = carruselArray.findIndex(img => img.url === active.id)
+    const newIndex = carruselArray.findIndex(img => img.url === over.id)
+
+    if (oldIndex === -1 || newIndex === -1) return
+
+    const reordered = arrayMove(carruselArray, oldIndex, newIndex)
+
+    handleInputChange('DASHBOARD_CARRUSEL_IMAGENES', JSON.stringify(reordered))
   }
 
   const handleRemoveLogo = (index: number) => {
@@ -754,24 +831,27 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
 
           <Box>
             <SectionLabel>Carrusel del Panel</SectionLabel>
-            <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
+            <Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
               Estas imágenes se muestran en el carrusel del dashboard de Administrador, Profesor y Estudiante.
+              Arrastra una imagen desde el ícono <i className='tabler-grip-vertical' /> para cambiar su orden.
+            </Typography>
+            <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
+              Para definir el tamaño del carrusel, nombra una imagen con la descripción <strong>imagen-referencia</strong>;
+              el carrusel usará las proporciones de esa imagen.
             </Typography>
 
             {carruselArray.length > 0 && (
-              <Stack spacing={1} sx={{ mb: 3 }}>
-                {carruselArray.map((img, i) => (
-                  <Paper key={i} variant='outlined' sx={{ p: 1.5, display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Box sx={{ width: 96, height: 54, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'grey.100', borderRadius: 1, overflow: 'hidden' }}>
-                      <img src={img.url} alt={img.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    </Box>
-                    <Typography variant='body2' sx={{ flex: 1 }}>{img.label || 'Sin descripción'}</Typography>
-                    <IconButton size='small' color='error' onClick={() => handleRemoveCarruselImagen(i)}>
-                      <i className='tabler-trash' style={{ fontSize: '1rem' }} />
-                    </IconButton>
-                  </Paper>
-                ))}
-              </Stack>
+              <DndContext sensors={carruselSensors} collisionDetection={closestCenter} onDragEnd={handleCarruselDragEnd}>
+                <SortableContext items={carruselArray.map(img => img.url)} strategy={verticalListSortingStrategy}>
+                  <Stack spacing={1} sx={{ mb: 3 }}>
+                    {carruselArray.map((img, i) => (
+                      <SortableCarruselItem key={img.url} id={img.url}>
+                        <CarruselImagenRow img={img} onRemove={() => handleRemoveCarruselImagen(i)} />
+                      </SortableCarruselItem>
+                    ))}
+                  </Stack>
+                </SortableContext>
+              </DndContext>
             )}
 
             <Paper variant='outlined' sx={{ p: 2 }}>

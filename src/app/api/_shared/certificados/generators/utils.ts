@@ -1,6 +1,8 @@
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 
+import { resolveUploadPath } from '@/utils/libs/uploads'
+
 /** Convierte un color hex (#RRGGBB) a rgb [r, g, b] */
 export function hexToRgb(hex: string): [number, number, number] {
   try {
@@ -21,10 +23,14 @@ export async function fetchImageBuffer(url: string | null): Promise<Buffer | nul
   try {
     if (!url) return null
 
+    if (url.startsWith('/uploads/')) {
+      return await readFile(resolveUploadPath(url))
+    }
+
     if (url.startsWith('/')) {
       const filePath = join(process.cwd(), 'public', url.replace(/\/+/g, '/'))
 
-      
+
 return await readFile(filePath)
     }
 

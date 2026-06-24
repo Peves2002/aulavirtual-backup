@@ -5,6 +5,7 @@ import prisma from '@/utils/libs/prisma'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { handleApiError } from '@/utils/libs/validation'
 import { requireAuth } from '@/utils/libs/auth-helpers'
+import { resolveUploadPath } from '@/utils/libs/uploads'
 
 /**
  * DELETE /api/media/[id]
@@ -37,9 +38,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
 
       absolutePath = join(process.cwd(), 'private', 'videos', filename || '')
     } else {
-      const relativePath = media.url.startsWith('/') ? media.url.substring(1) : media.url
-
-      absolutePath = join(process.cwd(), 'public', relativePath)
+      absolutePath = resolveUploadPath(media.url)
     }
 
     try {

@@ -140,7 +140,7 @@ const UserDropdown = () => {
                       </MenuItem>
                       <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/cursos')}>
                         <i className='tabler-search text-[20px]' />
-                        <Typography color='text.primary'>Explorar Cursos</Typography>
+                        <Typography color='text.primary'>Tienda de Cursos</Typography>
                       </MenuItem>
                     </div>
                   )}

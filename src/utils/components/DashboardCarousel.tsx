@@ -12,6 +12,7 @@ interface CarruselImagen {
 }
 
 const AUTO_ADVANCE_MS = 6000
+const REFERENCIA_LABEL = 'imagen-referencia'
 
 export default function DashboardCarousel() {
   const configs = useConfig()
@@ -25,6 +26,30 @@ export default function DashboardCarousel() {
   })()
 
   const [index, setIndex] = useState(0)
+  const [refSize, setRefSize] = useState<{ width: number; height: number } | null>(null)
+
+  // Última imagen subida con descripción "imagen-referencia": define el tamaño del carrusel
+  const referencia = imagenes
+    .slice()
+    .reverse()
+    .find(img => img.label?.trim().toLowerCase() === REFERENCIA_LABEL)
+
+  useEffect(() => {
+    if (!referencia) {
+      setRefSize(null)
+
+      return
+    }
+
+    const img = new Image()
+
+    img.onload = () => setRefSize({ width: img.naturalWidth, height: img.naturalHeight })
+    img.src = referencia.url
+
+    return () => {
+      img.onload = null
+    }
+  }, [referencia?.url])
 
   useEffect(() => {
     if (imagenes.length <= 1) return
@@ -43,7 +68,16 @@ export default function DashboardCarousel() {
   const goTo = (i: number) => setIndex((i + imagenes.length) % imagenes.length)
 
   return (
-    <Paper sx={{ position: 'relative', overflow: 'hidden', borderRadius: 2, height: { xs: 180, sm: 240, md: 280 } }}>
+    <Paper
+      sx={{
+        position: 'relative',
+        overflow: 'hidden',
+        borderRadius: 2,
+        ...(refSize
+          ? { aspectRatio: `${refSize.width} / ${refSize.height}`, maxWidth: refSize.width, mx: 'auto' }
+          : { height: { xs: 180, sm: 240, md: 280 } })
+      }}
+    >
       <Box
         component='img'
         src={actual.url}

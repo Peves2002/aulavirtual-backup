@@ -1,5 +1,10 @@
 import CampusVirtual from '@/marketing/pages/CampusVirtual'
+import { getCursosPublicos } from '@/marketing/lib/getCursosPublicos'
 
-export default function Page() {
-  return <CampusVirtual />
+export const dynamic = 'force-dynamic'
+
+export default async function Page() {
+  const cursos = await getCursosPublicos()
+
+  return <CampusVirtual cursos={cursos} />
 }

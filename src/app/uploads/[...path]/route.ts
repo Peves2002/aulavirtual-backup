@@ -3,6 +3,8 @@ import { readFile } from 'fs/promises'
 
 import { NextResponse } from 'next/server'
 
+import { getUploadsDir } from '@/utils/libs/uploads'
+
 /**
  * Mapeo de extensiones a Content-Type para servir archivos correctamente
  */
@@ -23,7 +25,7 @@ export async function GET(request: Request, { params }: { params: { path: string
   try {
     const pathSegments = params.path
 
-    const filePath = join(process.cwd(), 'public', 'uploads', ...pathSegments)
+    const filePath = join(getUploadsDir(), ...pathSegments)
 
     // Obtener la extensión para el Content-Type
     const ext = pathSegments[pathSegments.length - 1]?.split('.').pop()?.toLowerCase() || ''
