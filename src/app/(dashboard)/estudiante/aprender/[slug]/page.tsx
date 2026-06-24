@@ -3,7 +3,6 @@ import { notFound, redirect } from 'next/navigation'
 import { AxiosPlayer } from '@/features/estudiante/player/http/axiosPlayer'
 import CoursePlayerView from '@/features/estudiante/player/components/CoursePlayerView'
 import { getAuthSession } from '@/utils/libs/auth-helpers'
-import { prisma } from '@/lib/prisma';
 
 export default async function LearningPage({ params, searchParams }: { params: { slug: string }; searchParams: { leccion?: string; examen?: string } }) {
   const session = await getAuthSession()
@@ -11,17 +10,6 @@ export default async function LearningPage({ params, searchParams }: { params: {
   if (!session) {
     redirect('/login')
   }
-
-  const profesorByCurso = await prisma.curso.findUnique({
-    where: { slug: params.slug },
-    include: {
-      profesor: {
-        select: {
-          celular: true,
-        }
-      }
-    }
-  })
 
   const phoneNumberProfesor = "51944270957"
 
