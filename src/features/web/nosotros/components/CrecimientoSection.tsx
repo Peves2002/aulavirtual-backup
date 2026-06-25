@@ -7,6 +7,7 @@ import { motion, useInView } from 'framer-motion'
 import { BookOpen, LayoutGrid, Users } from 'lucide-react'
 
 const yearData = [
+  { year: '2026', value: 1240 },
   { year: '2025', value: 1240 },
   { year: '2024', value: 890 },
   { year: '2023', value: 640 },

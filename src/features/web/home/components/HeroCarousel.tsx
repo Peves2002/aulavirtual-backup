@@ -123,7 +123,7 @@ export default function HeroCarousel() {
       <div aria-hidden style={{ position: 'absolute', top: '-20%', right: '-10%', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(var(--web-primary-rgb,37,146,127),0.25) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '3rem 1.5rem', width: '100%', position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', alignItems: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', alignItems: 'center' }}>
 
           {/* Izquierda: texto (igual para todos) */}
           <div
@@ -181,7 +181,7 @@ export default function HeroCarousel() {
           {(slide.visual === 'camaras' || slide.visual === 'isos') && (
             <div
               key={`right-${current}`}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'heroFadeIn 0.5s ease' }}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: slide.visual === 'isos' ? 'flex-start' : 'center', animation: 'heroFadeIn 0.5s ease' }}
             >
               {slide.visual === 'camaras' && <VisualCamaras />}
               {slide.visual === 'isos' && <VisualIsos />}
@@ -197,7 +197,7 @@ export default function HeroCarousel() {
           <VisualImage
             src="/images/portada3.webp"
             alt="Grupo Ollarves equipo"
-            style={{ right: '2%', width: '44%', height: '100%' }}
+            style={{ right: '16%', width: '44%', height: '100%' }}
           />
         </div>
       )}
@@ -206,10 +206,32 @@ export default function HeroCarousel() {
           <VisualImage
             src="/images/portada4.webp"
             alt="Presencia nacional"
-            style={{ left: '50%', transform: 'translateX(-10%)', width: '52%', top: '3rem' }}
+            style={{ left: '50%', transform: 'translateX(-18%)', width: '52%', top: '3rem' }}
           />
         </div>
       )}
+
+      {/* Indicadores de portada */}
+      <div style={{ position: 'absolute', left: 0, right: 0, bottom: '2rem', display: 'flex', justifyContent: 'center', gap: '0.625rem', zIndex: 2 }}>
+        {SLIDES.map((s, i) => (
+          <button
+            key={s.title}
+            type="button"
+            aria-label={`Ir a la portada ${i + 1}`}
+            onClick={() => goTo(i)}
+            style={{
+              width: i === current ? '28px' : '10px',
+              height: '10px',
+              borderRadius: '999px',
+              border: 'none',
+              padding: 0,
+              cursor: 'pointer',
+              backgroundColor: i === current ? 'var(--web-light, #BDD962)' : 'rgba(255,255,255,0.25)',
+              transition: 'all 0.3s ease',
+            }}
+          />
+        ))}
+      </div>
 
       <style>{`
         @keyframes heroFadeIn {

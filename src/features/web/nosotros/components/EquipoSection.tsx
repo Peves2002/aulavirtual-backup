@@ -79,11 +79,11 @@ export default function EquipoSection() {
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         {/* Header */}
         <div style={{ marginBottom: '3rem' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'rgba(2,94,68,0.08)', border: '1px solid rgba(2,94,68,0.2)', borderRadius: '999px', padding: '0.375rem 1rem', marginBottom: '1rem' }}>
-            <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: '#025E44', fontWeight: 600 }}>Galería</span>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'rgba(var(--web-dark-rgb,2,94,68),0.08)', border: '1px solid rgba(var(--web-dark-rgb,2,94,68),0.2)', borderRadius: '999px', padding: '0.375rem 1rem', marginBottom: '1rem' }}>
+            <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'var(--web-dark, #025E44)', fontWeight: 600 }}>Galería</span>
           </div>
           <h2 style={{ fontFamily: 'Poppins, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em', lineHeight: 1.25, margin: 0 }}>
-            Nuestro <span style={{ color: '#025E44' }}>Equipo</span>
+            Nuestro <span style={{ color: 'var(--web-dark, #025E44)' }}>Equipo</span>
           </h2>
           <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#64748b', lineHeight: 1.7, marginTop: '0.75rem', maxWidth: '520px' }}>
             Conoce a las personas que trabajan cada día para hacer posible nuestra misión educativa.
@@ -121,7 +121,7 @@ export default function EquipoSection() {
               <div style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'linear-gradient(to top, rgba(2,94,68,0.95) 0%, rgba(2,94,68,0.6) 50%, transparent 100%)',
+                background: 'linear-gradient(to top, rgba(var(--web-dark-rgb,2,94,68),0.95) 0%, rgba(var(--web-dark-rgb,2,94,68),0.6) 50%, transparent 100%)',
                 opacity: hoveredIndex === i ? 1 : 0,
                 transition: 'opacity 0.3s ease',
                 display: 'flex',
@@ -130,8 +130,8 @@ export default function EquipoSection() {
                 padding: '1.25rem',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.4rem' }}>
-                  <Briefcase size={13} color="#BDD962" />
-                  <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.7rem', fontWeight: 700, color: '#BDD962', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  <Briefcase size={13} color="var(--web-light, #BDD962)" />
+                  <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.7rem', fontWeight: 700, color: 'var(--web-light, #BDD962)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                     {foto.area}
                   </span>
                 </div>

@@ -41,6 +41,9 @@ export default function EnterpriseCTASection() {
         overflow: 'hidden',
       }}
     >
+      {/* Patrón decorativo */}
+      <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(var(--web-dark-rgb, 2, 94, 68),0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(var(--web-dark-rgb, 2, 94, 68),0.05) 1px, transparent 1px)', backgroundSize: '48px 48px' }} />
+
       {/* Decoración geométrica fondo */}
       <div
         style={{
