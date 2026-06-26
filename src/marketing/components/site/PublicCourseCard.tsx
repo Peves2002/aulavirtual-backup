@@ -1,37 +1,11 @@
 'use client'
 
+import { useRouter } from "next/navigation";
+
 import { Calendar, Clock, BookOpen, BadgeCheck } from "lucide-react";
 
 import type { CursoPublico } from "@/marketing/lib/getCursosPublicos";
-
-const WHATSAPP_NUMBER = "51956266147";
-
-function buildWhatsappLink(courseTitle: string) {
-  const message = `Hola, quiero información sobre el curso "${courseTitle}"`;
-
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-}
-
-const MESES = [
-  "enero", "febrero", "marzo", "abril", "mayo", "junio",
-  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-];
-
-function formatFechaLarga(iso: string | null): string {
-  if (!iso) return "";
-
-  const d = new Date(iso);
-
-  return `${d.getDate()} de ${MESES[d.getMonth()]} ${d.getFullYear()}`;
-}
-
-function formatHora(iso: string | null): string {
-  if (!iso) return "";
-
-  const d = new Date(iso);
-
-  return d.toLocaleTimeString("es-PE", { hour: "numeric", minute: "2-digit", hour12: true }).toUpperCase();
-}
+import { formatFechaLarga, formatHora } from "@/marketing/lib/formatFecha";
 
 const DEFAULT_DESCRIPTION = "Capacitación práctica y actualizada, con certificación incluida al finalizar.";
 
@@ -41,14 +15,15 @@ interface PublicCourseCardProps {
 }
 
 export function PublicCourseCard({ curso, enVivo = false }: PublicCourseCardProps) {
+  const router = useRouter();
   const fecha = formatFechaLarga(curso.fechaInicio);
   const hora = formatHora(curso.fechaInicio);
-  const whatsappLink = buildWhatsappLink(curso.title);
+  const detalleHref = `/cursos/${curso.slug}`;
 
   return (
     <div
       className="h-full bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col cursor-pointer"
-      onClick={() => window.open(whatsappLink, "_blank")}
+      onClick={() => router.push(detalleHref)}
     >
       {/* Imagen */}
       <div className="relative aspect-[16/8.2] overflow-hidden bg-slate-900 flex-shrink-0">
@@ -124,9 +99,7 @@ export function PublicCourseCard({ curso, enVivo = false }: PublicCourseCardProp
           </div>
 
           <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={detalleHref}
             onClick={(e) => e.stopPropagation()}
             className="block text-center bg-[#e8453c] hover:bg-[#d23a31] text-white font-bold text-sm py-3.5 rounded-xl transition-colors"
           >

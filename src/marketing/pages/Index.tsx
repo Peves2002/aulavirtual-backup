@@ -15,8 +15,13 @@ import { Faq } from "@/marketing/components/site/Faq";
 import { Footer } from "@/marketing/components/site/Footer";
 import { FinalCTA } from "@/marketing/components/site/FinalCTA";
 import { BackToTop, LoadingScreen, ScrollProgress, WhatsAppButton } from "@/marketing/components/site/Floating";
+import type { CursoPublico } from "@/marketing/lib/getCursosPublicos";
 
-const Index = () => (
+interface IndexProps {
+  cursos: CursoPublico[];
+}
+
+const Index = ({ cursos }: IndexProps) => (
   <div className="relative bg-white">
     <LoadingScreen />
     <ScrollProgress />
@@ -24,7 +29,7 @@ const Index = () => (
     <main>
       <Hero />
       <WhyUs />
-      <Courses />
+      <Courses cursos={cursos} />
       <StatsBar />
       <Marquee />
       <Methodology />

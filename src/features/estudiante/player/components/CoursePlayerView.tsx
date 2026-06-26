@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import {
     Box,
@@ -19,6 +19,7 @@ import axios from 'axios'
 
 import { toast } from 'react-toastify'
 
+import BreadcrumbTrail from './BreadcrumbTrail'
 import CertificateSection from './CertificateSection'
 import CommentsSection from './CommentsSection'
 import CompletionSummary from './CompletionSummary'
@@ -48,8 +49,19 @@ interface CoursePlayerViewProps {
 const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initialExamenId }: CoursePlayerViewProps) => {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('lg'))
+    const isCompact = useMediaQuery(theme.breakpoints.down('md'))
     const [activeTab, setActiveTab] = useState(0)
     const [ratingModalOpen, setRatingModalOpen] = useState(false)
+
+    // "Sticky" manual para las pestañas en móvil: el position:sticky nativo no es
+    // confiable ahí porque el contenedor raíz usa position:fixed (ver más abajo) para
+    // evitar el scroll de página externo. En vez de depender del navegador, medimos el
+    // scroll a mano y fijamos las pestañas por código cuando corresponde.
+    const scrollContainerRef = useRef<HTMLDivElement>(null)
+    const tabsAnchorRef = useRef<HTMLDivElement>(null)
+    const [tabsStuck, setTabsStuck] = useState(false)
+    const [tabsHeight, setTabsHeight] = useState(0)
+    const [stickyTop, setStickyTop] = useState(0)
 
     const {
         course: storeCourse,
@@ -64,10 +76,20 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
         setExamenId,
         setExamStatus,
         setCurrentView,
-        openExam
+        openExam,
+        resetToOverview
     } = useCourseStore()
 
     const [mounted, setMounted] = useState(false)
+
+    // Cada vez que se entra al reproductor (aunque sea el mismo curso de la sesión
+    // anterior) se aterriza en el temario, salvo que venga un deep-link explícito.
+    useEffect(() => {
+        if (!initialLessonId && !initialExamenId) {
+            resetToOverview()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     useEffect(() => {
         setMounted(true)
@@ -82,6 +104,43 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
             if ((course as any).inscripcion?.estado_nota === 'APROBADO') setExamStatus('passed')
         }
     }, [course, setCourse, setExamenId, setExamStatus])
+
+    useEffect(() => {
+        if (!isCompact) {
+            setTabsStuck(false)
+
+            return
+        }
+
+        const scrollEl = scrollContainerRef.current
+        const anchor = tabsAnchorRef.current
+
+        if (!scrollEl || !anchor) return
+
+        const handleScroll = () => {
+            const containerTop = scrollEl.getBoundingClientRect().top
+            const anchorRect = anchor.getBoundingClientRect()
+            const shouldStick = anchorRect.top <= containerTop
+
+            // Mide el alto natural (sin fijar) para que el "espaciador" que reemplaza
+            // a las pestañas en el flujo del documento no cambie el alto de la página.
+            if (!shouldStick) {
+                setTabsHeight(anchorRect.height)
+            }
+
+            setStickyTop(containerTop)
+            setTabsStuck(shouldStick)
+        }
+
+        handleScroll()
+        scrollEl.addEventListener('scroll', handleScroll, { passive: true })
+        window.addEventListener('resize', handleScroll)
+
+        return () => {
+            scrollEl.removeEventListener('scroll', handleScroll)
+            window.removeEventListener('resize', handleScroll)
+        }
+    }, [isCompact, currentView, currentLessonId])
 
     useEffect(() => {
         const checkExamStatus = async () => {
@@ -269,27 +328,14 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                 {/* ── Breadcrumb (estilo "página interna") ── */}
                 {currentLesson && (
                     <Grid item xs={12}>
-                        <Stack direction="row" spacing={0.75} alignItems="center" sx={{ mb: 0.5, flexWrap: 'wrap' }}>
-                            <Typography
-                                variant="caption"
-                                onClick={() => setCurrentView('temario')}
-                                sx={{ color: 'text.secondary', fontWeight: 600, cursor: 'pointer', '&:hover': { color: '#025E44', textDecoration: 'underline' } }}
-                            >
-                                {course.titulo}
-                            </Typography>
-                            {currentModule && (
-                                <>
-                                    <i className="tabler-chevron-right" style={{ fontSize: '0.7rem', color: '#9ca3af' }} />
-                                    <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
-                                        {currentModule.titulo}
-                                    </Typography>
-                                </>
-                            )}
-                            <i className="tabler-chevron-right" style={{ fontSize: '0.7rem', color: '#9ca3af' }} />
-                            <Typography variant="caption" sx={{ color: '#025E44', fontWeight: 700 }}>
-                                {currentLesson.titulo}
-                            </Typography>
-                        </Stack>
+                        <BreadcrumbTrail
+                            sx={{ mb: 1.5 }}
+                            steps={[
+                                { label: course.titulo, onClick: () => setCurrentView('temario') },
+                                ...(currentModule ? [{ label: currentModule.titulo }] : []),
+                                { label: currentLesson.titulo, active: true }
+                            ]}
+                        />
                     </Grid>
                 )}
 
@@ -495,31 +541,45 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                     </Box>
                 </Grid>
 
-                {/* ── Tabs ── */}
-                <Grid item xs={12} sx={{ position: { xs: 'sticky', md: 'relative' }, top: { xs: 'calc((100vw * 9)/16)', md: 0 }, zIndex: 5, bgcolor: 'background.paper' }}>
-                    <Tabs
-                        value={activeTab}
-                        onChange={(_, v) => setActiveTab(v)}
-                        variant="scrollable"
-                        scrollButtons="auto"
-                        textColor="primary"
-                        indicatorColor="primary"
+                {/* ── Tabs ──
+                    En escritorio se quedan en flujo normal (nunca fueron sticky ahí).
+                    En móvil, "tabsStuck" controla un sticky manual por JS (ver el efecto
+                    de scroll más arriba) en vez de depender de position:sticky nativo. */}
+                <Grid item xs={12} ref={tabsAnchorRef} sx={{ position: 'relative' }}>
+                    {tabsStuck && <Box sx={{ height: tabsHeight }} />}
+                    <Box
                         sx={{
-                            borderBottom: '1px solid',
-                            borderColor: 'divider',
-                            '& .MuiTab-root': {
-                                textTransform: 'none',
-                                fontWeight: 600,
-                                minHeight: '48px',
-                                px: { xs: 2, sm: 3 },
-                                color: 'text.secondary',
-                                '&.Mui-selected': { color: '#025E44', fontWeight: 700 }
-                            },
-                            '& .MuiTabs-indicator': { bgcolor: '#025E44', height: '2.5px', borderRadius: '2px 2px 0 0' }
+                            bgcolor: 'background.paper',
+                            zIndex: 5,
+                            ...(tabsStuck
+                                ? { position: 'fixed', top: stickyTop, left: 0, right: 0, px: { xs: 2, sm: 3 } }
+                                : { position: 'relative' })
                         }}
                     >
-                        {TABS.map((label) => <Tab key={label} label={label} />)}
-                    </Tabs>
+                        <Tabs
+                            value={activeTab}
+                            onChange={(_, v) => setActiveTab(v)}
+                            variant="scrollable"
+                            scrollButtons="auto"
+                            textColor="primary"
+                            indicatorColor="primary"
+                            sx={{
+                                borderBottom: '1px solid',
+                                borderColor: 'divider',
+                                '& .MuiTab-root': {
+                                    textTransform: 'none',
+                                    fontWeight: 600,
+                                    minHeight: '48px',
+                                    px: { xs: 2, sm: 3 },
+                                    color: 'text.secondary',
+                                    '&.Mui-selected': { color: '#025E44', fontWeight: 700 }
+                                },
+                                '& .MuiTabs-indicator': { bgcolor: '#025E44', height: '2.5px', borderRadius: '2px 2px 0 0' }
+                            }}
+                        >
+                            {TABS.map((label) => <Tab key={label} label={label} />)}
+                        </Tabs>
+                    </Box>
                 </Grid>
 
                 {/* ── Tab content ── */}
@@ -840,14 +900,20 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
         <Box sx={{
             display: 'flex',
             flexDirection: 'column',
-            height: 'calc(100dvh - 64px)',
             overflow: 'hidden',
-            position: 'relative',
-            ml: { xs: 'calc(50% - 50vw)', md: 0 },
-            mr: { xs: 'calc(50% - 50vw)', md: 0 },
-            mt: { xs: -3, md: 0 },
-            width: { xs: '100vw', md: '100%' },
             bgcolor: '#f8fafc',
+
+            // En escritorio, ocupa el alto disponible dentro del flujo normal del layout.
+            // En móvil, se ancla directamente al viewport con position:fixed para que el
+            // padding/margen del contenedor del dashboard no le agregue alto de más: ese
+            // sobrante habilitaba un scroll de página externo que descolocaba el sticky
+            // de las pestañas al hacer scroll.
+            position: { xs: 'fixed', md: 'relative' },
+            inset: { xs: '64px 0 0 0', md: 'auto' },
+            height: { xs: 'auto', md: 'calc(100dvh - 64px)' },
+            width: { xs: 'auto', md: '100%' },
+            zIndex: { xs: 1, md: 'auto' },
+            overscrollBehavior: { xs: 'none', md: 'auto' },
         }}>
             <style>{`footer { display: none !important; }`}</style>
 
@@ -869,6 +935,24 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                     </Typography>
 
                     <Stack direction="row" spacing={1} flexShrink={0}>
+                        {currentView !== 'temario' && (
+                            <Button
+                                variant="outlined"
+                                onClick={() => setCurrentView('temario')}
+                                startIcon={<i className="tabler-arrow-left" />}
+                                sx={{
+                                    borderRadius: '20px',
+                                    textTransform: 'none',
+                                    fontWeight: 600,
+                                    px: 2,
+                                    borderColor: 'divider',
+                                    color: 'text.secondary',
+                                    '&:hover': { borderColor: 'primary.main', color: 'primary.main', bgcolor: 'rgba(2,94,68,0.04)' }
+                                }}
+                            >
+                                Contenido del curso
+                            </Button>
+                        )}
                         <Button
                             variant="outlined"
                             onClick={() => setRatingModalOpen(true)}
@@ -906,11 +990,16 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
 
             {/* ── Content (el temario solo se ve en la vista 'temario'; dentro de una lección no hay panel lateral) ── */}
             <Box sx={{ display: 'flex', flexGrow: 1, overflow: 'hidden', position: 'relative' }}>
-                <Box sx={{
-                    flexGrow: 1,
-                    overflowY: { xs: 'auto', md: 'scroll' },
-                    overflowX: 'hidden',
-                }}>
+                <Box
+                    ref={scrollContainerRef}
+                    sx={{
+                        flexGrow: 1,
+                        overflowY: { xs: 'auto', md: 'scroll' },
+                        overflowX: 'hidden',
+                        WebkitOverflowScrolling: 'touch',
+                        overscrollBehavior: 'contain',
+                    }}
+                >
                     <Box sx={{ px: { xs: 2, sm: 3, md: 4 }, pt: { xs: 2, md: 3 }, pb: 2 }}>
                         <Grid container spacing={0}>
                             {renderMainContent()}

@@ -140,7 +140,7 @@ export const Hero = () => {
           <motion.div
             animate={{ y: [0, -15, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -bottom-10 -left-10 z-20 bg-white p-6 rounded-3xl shadow-2xl border border-gc-gray-light max-w-[240px]"
+            className="absolute -bottom-10 left-2 sm:-left-10 z-20 bg-white p-6 rounded-3xl shadow-2xl border border-gc-gray-light max-w-[240px]"
           >
             <div className="flex items-center gap-4 mb-3">
               <div className="w-12 h-12 rounded-2xl bg-gc-blue-corp flex items-center justify-center text-white shadow-lg shadow-gc-blue-corp/30">

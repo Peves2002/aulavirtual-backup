@@ -68,6 +68,7 @@ interface CourseState {
     setCertificateId: (id: string | null) => void
     setCurrentView: (view: PlayerView) => void
     openExam: (examenId: string) => void
+    resetToOverview: () => void
 }
 
 export const useCourseStore = create<CourseState>((set) => ({
@@ -145,5 +146,10 @@ export const useCourseStore = create<CourseState>((set) => ({
     setCertificateId: (id) => set({ certificateId: id }),
     setCurrentView: (view) => set({ currentView: view }),
 
-    openExam: (examenId) => set({ currentExamenId: examenId, currentView: 'exam' })
+    openExam: (examenId) => set({ currentExamenId: examenId, currentView: 'exam' }),
+
+    // Fuerza el aterrizaje en el temario al entrar de nuevo al reproductor, incluso si
+    // es el mismo curso de la última visita (el store vive en memoria durante toda la
+    // sesión y, sin esto, "setCourse" lo deja en la última lección vista).
+    resetToOverview: () => set({ currentLessonId: undefined, currentView: 'temario' })
 }))
