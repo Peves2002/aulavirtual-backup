@@ -18,13 +18,14 @@ import {
   Divider,
   InputAdornment
 } from '@mui/material'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { loginSchema, type LoginDto, registerSchema, type RegisterDto, forgotPasswordSchema, type ForgotPasswordDto, resetPasswordSchema, type ResetPasswordDto } from '@/schemas/auth.schema'
 import CustomTextField from '@core/components/mui/TextField'
 import Logo from '@components/layout/shared/Logo'
+import GoogleButton from './GoogleButton'
 
 export type Mode = 'login' | 'register' | 'forgot-password' | 'reset-password'
 
@@ -32,11 +33,12 @@ interface AuthModalProps {
   open: boolean
   mode: Mode
   callbackUrl?: string
+  onSuccess?: () => void
   onClose: () => void
   onSwitchMode: (mode: Mode) => void
 }
 
-const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModalProps) => {
+const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }: AuthModalProps) => {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [registerSuccess, setRegisterSuccess] = useState(false)
@@ -44,10 +46,11 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
   const [isPasswordShown, setIsPasswordShown] = useState(false)
   const [isConfirmPasswordShown, setIsConfirmPasswordShown] = useState(false)
   const router = useRouter()
+  const { update: updateSession } = useSession()
 
   const loginForm = useForm<LoginDto>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { correo: '', contrasena: '' }
+    defaultValues: { correo: 'alumno@gmail.com', contrasena: 'Alumno123@' }
   })
 
   const registerForm = useForm<RegisterDto>({
@@ -88,10 +91,14 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
     }
   }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = async () => {
     onClose()
 
-    if (callbackUrl) {
+    await updateSession()
+
+    if (onSuccess) {
+      onSuccess()
+    } else if (callbackUrl) {
       window.location.href = callbackUrl
     } else {
       router.refresh()
@@ -122,7 +129,7 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
       }
 
       if (result?.ok) {
-        handleLoginSuccess()
+        await handleLoginSuccess()
       }
     } catch {
       setError('Ocurrió un error inesperado. Intenta nuevamente.')
@@ -160,7 +167,7 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
       })
 
       if (loginResult?.ok) {
-        handleLoginSuccess()
+        await handleLoginSuccess()
       } else {
         // Si falla el auto-login, llevamos al modo login con mensaje de éxito
         onSwitchMode('login')
@@ -272,84 +279,27 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
           p: 2,
           overflowX: 'hidden',
           maxHeight: { xs: '92dvh', sm: '90vh' },
-          mx: { xs: 2, sm: 'auto' },
-          backgroundColor: '#0A0A0A',
-          border: '1px solid rgba(255,255,255,0.12)',
-          color: '#ffffff',
-          // Variables CSS del tema MUI — modo oscuro
-          '--mui-palette-text-primary': '#ffffff',
-          '--mui-palette-text-secondary': 'rgba(255,255,255,0.65)',
-          '--mui-palette-text-disabled': 'rgba(255,255,255,0.35)',
-          '--mui-palette-action-active': 'rgba(255,255,255,0.6)',
-          '--mui-palette-action-hover': 'rgba(255,255,255,0.06)',
-          '--mui-palette-action-disabled': 'rgba(255,255,255,0.3)',
-          '--mui-palette-divider': 'rgba(255,255,255,0.15)',
-          '--mui-palette-customColors-inputBorder': 'rgba(255,255,255,0.22)',
-          '--mui-palette-background-paper': '#141414',
-          '--mui-palette-primary-main': '#D4AF37',
+          mx: { xs: 2, sm: 'auto' }
         }
       }}
     >
       <Box sx={{ position: 'absolute', right: 16, top: 16, zIndex: 1 }}>
-        <IconButton onClick={onClose} disabled={isLoading} sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { backgroundColor: 'rgba(255,255,255,0.08)' } }}>
+        <IconButton onClick={onClose} disabled={isLoading}>
           <i className="tabler-x" />
         </IconButton>
       </Box>
 
-      <DialogContent sx={{
-        overflowX: 'hidden',
-        overflowY: 'auto',
-        // Tipografía
-        '& .MuiTypography-root': { color: '#ffffff' },
-        // Divisores
-        '& .MuiDivider-root': { borderColor: 'rgba(255,255,255,0.15)' },
-        '& .MuiDivider-wrapper': { color: 'rgba(255,255,255,0.5) !important', fontSize: '0.875rem' },
-        // Inputs (FilledInput es el variant que usa CustomTextField)
-        '& .MuiInputBase-root': {
-          backgroundColor: 'rgba(255,255,255,0.07) !important',
-          color: '#ffffff !important',
-          borderColor: 'rgba(255,255,255,0.22) !important',
-          '&:hover': { borderColor: 'rgba(255,255,255,0.45) !important' },
-          '&.Mui-focused': { borderColor: '#D4AF37 !important' },
-        },
-        '& .MuiInputBase-input': {
-          color: '#ffffff !important',
-          WebkitTextFillColor: '#ffffff !important',
-        },
-        '& .MuiInputBase-input::placeholder': {
-          color: 'rgba(255,255,255,0.3) !important',
-          opacity: '1 !important',
-        },
-        '& .MuiInputBase-input:-webkit-autofill': {
-          WebkitBoxShadow: '0 0 0 100px #1c1c1c inset !important',
-          WebkitTextFillColor: '#ffffff !important',
-        },
-        // Labels
-        '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.6) !important' },
-        '& .MuiInputLabel-root.Mui-focused': { color: '#D4AF37 !important' },
-        '& .MuiInputLabel-root.Mui-error': { color: '#f87171 !important' },
-        // Helper text
-        '& .MuiFormHelperText-root': { color: 'rgba(255,255,255,0.5) !important' },
-        '& .MuiFormHelperText-root.Mui-error': { color: '#f87171 !important' },
-        // Iconos de adorno (mostrar/ocultar contraseña)
-        '& .MuiIconButton-root': { color: 'rgba(255,255,255,0.65) !important' },
-        '& .MuiIconButton-root:hover': { backgroundColor: 'rgba(255,255,255,0.08) !important' },
-        '& .MuiIconButton-root.Mui-disabled': { color: 'rgba(255,255,255,0.2) !important' },
-        // Chip (código de verificación)
-        '& .MuiChip-root': { borderColor: 'rgba(255,255,255,0.25)', color: '#ffffff' },
-        // Alerts
-        '& .MuiAlert-root': { borderRadius: '10px' },
-      }}>
-        <Box sx={{ textAlign: 'center', mb: 4 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
+      <DialogContent sx={{ overflowX: 'hidden', overflowY: 'auto' }}>
+        <Box sx={{ textAlign: 'center', mb: 2 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
             <Box sx={{ transform: 'scale(1.5)', transformOrigin: 'center', display: 'inline-block' }}>
               <Logo />
             </Box>
           </Box>
-          <Typography variant="h5" sx={{ mt: 3, fontWeight: 800, color: '#ffffff' }}>
+          <Typography variant="h5" sx={{ mt: 4, fontWeight: 800 }}>
             {mode === 'login' ? 'Iniciar Sesión' : mode === 'register' ? 'Crear Cuenta' : '¿Olvidaste tu contraseña?'}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.55)' }}>
+          <Typography variant="body2" color="text.secondary">
             {mode === 'login'
               ? 'Ingresa tus datos para continuar'
               : mode === 'register'
@@ -362,6 +312,12 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
 
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         {registerSuccess && <Alert severity="success" sx={{ mb: 2 }}>¡Registro exitoso! Iniciando sesión...</Alert>}
+
+        {mode === 'login' && (
+          <Alert severity="info" sx={{ mb: 2, fontSize: '0.8rem' }}>
+            <strong>Cuenta de prueba:</strong> alumno@gmail.com &nbsp;|&nbsp; <strong>Contraseña:</strong> Alumno123@
+          </Alert>
+        )}
 
         {mode === 'login' ? (
           <form key="login-form" onSubmit={loginForm.handleSubmit(onLoginSubmit)}>
@@ -419,38 +375,28 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
                   component="button"
                   type="button"
                   onClick={() => handleSwitch('forgot-password')}
-                  sx={{ color: 'var(--web-primary, #D4AF37)', border: 'none', bgcolor: 'transparent', cursor: 'pointer', p: 0, '&:hover': { textDecoration: 'underline' } }}
+                  sx={{ color: 'primary.main', border: 'none', bgcolor: 'transparent', cursor: 'pointer', p: 0, '&:hover': { textDecoration: 'underline' } }}
                 >
                   ¿Olvidaste tu contraseña?
                 </Typography>
               </Box>
 
-              <Button fullWidth variant="contained" type="submit" size="large" disabled={isLoading} sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700, backgroundColor: 'var(--web-primary, #D4AF37)', color: '#ffffff', '&:hover': { backgroundColor: '#b8962e' }, '&:disabled': { opacity: 0.6 } }}>
+              <Button fullWidth variant="contained" type="submit" size="large" disabled={isLoading} sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700 }}>
                 {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Iniciar Sesión'}
               </Button>
 
               <Divider>o</Divider>
 
-              <Button
-                fullWidth
-                variant="outlined"
-                size="large"
-                startIcon={<i className="tabler-brand-google-filled" />}
-                onClick={handleGoogleAuth}
-                disabled={isLoading}
-                sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700, borderColor: 'rgba(255,255,255,0.25)', color: '#ffffff', '&:hover': { borderColor: 'rgba(255,255,255,0.5)', backgroundColor: 'rgba(255,255,255,0.06)' } }}
-              >
-                Continuar con Google
-              </Button>
+              <GoogleButton onClick={handleGoogleAuth} disabled={isLoading} label='Continuar con Google' />
 
               <Box sx={{ textAlign: 'center' }}>
-                <Typography variant="body2" component="span" sx={{ color: 'rgba(255,255,255,0.6)' }}>¿No tienes cuenta? </Typography>
+                <Typography variant="body2" component="span">¿No tienes cuenta? </Typography>
                 <Typography
                   variant="body2"
                   component="button"
                   type="button"
                   onClick={() => handleSwitch('register')}
-                  sx={{ color: 'var(--web-primary, #D4AF37)', fontWeight: 700, border: 'none', bgcolor: 'transparent', cursor: 'pointer', p: 0 }}
+                  sx={{ color: 'primary.main', fontWeight: 700, border: 'none', bgcolor: 'transparent', cursor: 'pointer', p: 0 }}
                 >
                   Regístrate aquí
                 </Typography>
@@ -612,7 +558,7 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
               </Grid>
 
               <Grid item xs={12}>
-                <Button fullWidth variant="contained" type="submit" size="large" disabled={isLoading || registerSuccess} sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700, backgroundColor: 'var(--web-primary, #D4AF37)', color: '#ffffff', '&:hover': { backgroundColor: '#b8962e' }, '&:disabled': { opacity: 0.6 } }}>
+                <Button fullWidth variant="contained" type="submit" size="large" disabled={isLoading || registerSuccess} sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700 }}>
                   {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Registrarse'}
                 </Button>
               </Grid>
@@ -622,28 +568,18 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
               </Grid>
 
               <Grid item xs={12}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  size="large"
-                  startIcon={<i className="tabler-brand-google-filled" />}
-                  onClick={handleGoogleAuth}
-                  disabled={isLoading || registerSuccess}
-                  sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700, borderColor: 'rgba(255,255,255,0.25)', color: '#ffffff', '&:hover': { borderColor: 'rgba(255,255,255,0.5)', backgroundColor: 'rgba(255,255,255,0.06)' } }}
-                >
-                  Registrarse con Google
-                </Button>
+                <GoogleButton onClick={handleGoogleAuth} disabled={isLoading || registerSuccess} label='Registrarse con Google' />
               </Grid>
 
               <Grid item xs={12}>
                 <Box sx={{ textAlign: 'center' }}>
-                  <Typography variant="body2" component="span" sx={{ color: 'rgba(255,255,255,0.6)' }}>¿Ya tienes cuenta? </Typography>
+                  <Typography variant="body2" component="span">¿Ya tienes cuenta? </Typography>
                   <Typography
                     variant="body2"
                     component="button"
                     type="button"
                     onClick={() => handleSwitch('login')}
-                    sx={{ color: 'var(--web-primary, #D4AF37)', fontWeight: 700, border: 'none', bgcolor: 'transparent', cursor: 'pointer', p: 0 }}
+                    sx={{ color: 'primary.main', fontWeight: 700, border: 'none', bgcolor: 'transparent', cursor: 'pointer', p: 0 }}
                   >
                     Inicia sesión
                   </Typography>
@@ -671,7 +607,7 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
                 )}
               />
 
-              <Button fullWidth variant="contained" type="submit" size="large" disabled={isLoading} sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700, backgroundColor: 'var(--web-primary, #D4AF37)', color: '#ffffff', '&:hover': { backgroundColor: '#b8962e' }, '&:disabled': { opacity: 0.6 } }}>
+              <Button fullWidth variant="contained" type="submit" size="large" disabled={isLoading} sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700 }}>
                 {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Enviar código'}
               </Button>
 
@@ -681,7 +617,7 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
                   component="button"
                   type="button"
                   onClick={() => handleSwitch('login')}
-                  sx={{ color: 'var(--web-primary, #D4AF37)', fontWeight: 700, border: 'none', bgcolor: 'transparent', cursor: 'pointer', p: 0, display: 'inline-flex', alignItems: 'center', gap: 0.5 }}
+                  sx={{ color: 'primary.main', fontWeight: 700, border: 'none', bgcolor: 'transparent', cursor: 'pointer', p: 0, display: 'inline-flex', alignItems: 'center', gap: 0.5 }}
                 >
                   <i className="tabler-chevron-left" style={{ fontSize: '1rem' }} />
                   Volver al inicio de sesión
@@ -693,8 +629,8 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
           forgotSuccess ? (
             <Stack key="reset-success" spacing={3} sx={{ textAlign: 'center', py: 2 }}>
               <Box sx={{ fontSize: '3rem' }}>✅</Box>
-              <Typography variant="h6" fontWeight={700} sx={{ color: '#ffffff' }}>¡Contraseña Restablecida!</Typography>
-              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)' }}>
+              <Typography variant="h6" fontWeight={700}>¡Contraseña Restablecida!</Typography>
+              <Typography variant="body2" color="text.secondary">
                 Tu contraseña ha sido actualizada con éxito. Ya puedes iniciar sesión con tus nuevas credenciales.
               </Typography>
               <Button
@@ -702,7 +638,7 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
                 variant="contained"
                 size="large"
                 onClick={() => handleSwitch('login')}
-                sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700, backgroundColor: 'var(--web-primary, #D4AF37)', color: '#ffffff', '&:hover': { backgroundColor: '#b8962e' } }}
+                sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700 }}
               >
                 Ir al inicio de sesión
               </Button>
@@ -793,7 +729,7 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
                   )}
                 />
 
-                <Button fullWidth variant="contained" type="submit" size="large" disabled={isLoading} sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700, backgroundColor: 'var(--web-primary, #D4AF37)', color: '#ffffff', '&:hover': { backgroundColor: '#b8962e' }, '&:disabled': { opacity: 0.6 } }}>
+                <Button fullWidth variant="contained" type="submit" size="large" disabled={isLoading} sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700 }}>
                   {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Restablecer contraseña'}
                 </Button>
 
@@ -803,7 +739,7 @@ const AuthModal = ({ open, mode, callbackUrl, onClose, onSwitchMode }: AuthModal
                     component="button"
                     type="button"
                     onClick={() => handleSwitch('login')}
-                    sx={{ color: 'var(--web-primary, #D4AF37)', fontWeight: 700, border: 'none', bgcolor: 'transparent', cursor: 'pointer', p: 0, display: 'inline-flex', alignItems: 'center', gap: 0.5 }}
+                    sx={{ color: 'primary.main', fontWeight: 700, border: 'none', bgcolor: 'transparent', cursor: 'pointer', p: 0, display: 'inline-flex', alignItems: 'center', gap: 0.5 }}
                   >
                     <i className="tabler-chevron-left" style={{ fontSize: '1rem' }} />
                     Volver al inicio de sesión

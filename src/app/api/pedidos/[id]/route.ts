@@ -1,9 +1,10 @@
 export const dynamic = 'force-dynamic'
 
-import prisma from '@/utils/libs/prisma'
-import { validateRequest, handleApiError } from '@/utils/libs/validation'
-import { requireAdmin } from '@/utils/libs/auth-helpers'
+import { handleApiError, validateRequest } from '@/utils/libs/validation'
+
 import { ApiResponse } from '@/utils/libs/apiResponse'
+import prisma from '@/utils/libs/prisma'
+import { requireAdmin } from '@/utils/libs/auth-helpers'
 import { updatePedidoSchema } from '@/schemas/pedido.schema'
 
 /**
@@ -27,7 +28,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
         cupon: true,
         detalles: {
           include: {
-            curso: { select: { id: true, titulo: true, miniatura: true, precio: true } }
+            curso: { select: { id: true, titulo: true, miniatura: true, precio: true } },
+            ebook: { select: { id: true, titulo: true, miniatura: true, precio: true } }
           }
         }
       }
@@ -68,7 +70,15 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
     const pedidoAnterior = await prisma.pedido.findUnique({
       where: { id },
-      include: { detalles: true }
+      include: {
+        detalles: {
+          include: {
+            curso: {
+              select: { id: true, vigencia_meses: true }
+            }
+          }
+        }
+      }
     })
 
     if (!pedidoAnterior) {
@@ -95,45 +105,71 @@ export async function PATCH(request: Request, { params }: { params: { id: string
         }
       })
 
+      const cursosIds = pedidoAnterior.detalles.map(d => d.curso_id).filter((cid): cid is string => !!cid)
+      const ebooksIds = pedidoAnterior.detalles.map(d => d.ebook_id).filter((eid): eid is string => !!eid)
+
       // Lógica de revocación si pasa de completado a otro estado
       if (pedidoAnterior.estado === 'COMPLETADO' && estado !== 'COMPLETADO') {
-        const cursosIds = pedidoAnterior.detalles.map(d => d.curso_id)
+        if (cursosIds.length > 0) {
+          await tx.inscripcion.deleteMany({
+            where: {
+              usuario_id: pedidoAnterior.usuario_id,
+              curso_id: { in: cursosIds },
+              pedido_id: id // Opcional, por seguridad extra
+            }
+          })
+        }
 
-        await tx.inscripcion.deleteMany({
-          where: {
-            usuario_id: pedidoAnterior.usuario_id,
-            curso_id: { in: cursosIds },
-            pedido_id: id // Opcional, por seguridad extra
-          }
-        })
+        if (ebooksIds.length > 0) {
+          await tx.ebookAcceso.deleteMany({
+            where: {
+              usuario_id: pedidoAnterior.usuario_id,
+              ebook_id: { in: ebooksIds }
+            }
+          })
+        }
       }
 
       // Lógica de aprobación manual si pasa a COMPLETADO
       if (pedidoAnterior.estado !== 'COMPLETADO' && estado === 'COMPLETADO') {
-        const cursosIds = pedidoAnterior.detalles.map(d => d.curso_id)
+        if (cursosIds.length > 0) {
+          // Evitar duplicados
+          const yaInscritos = await tx.inscripcion.findMany({
+            where: {
+              usuario_id: pedidoAnterior.usuario_id,
+              curso_id: { in: cursosIds }
+            }
+          })
 
-        // Evitar duplicados
-        const yaInscritos = await tx.inscripcion.findMany({
-          where: {
-            usuario_id: pedidoAnterior.usuario_id,
-            curso_id: { in: cursosIds }
+          const inscritosIds = yaInscritos.map(i => i.curso_id)
+          const cursosAInscribir = cursosIds.filter(cid => !inscritosIds.includes(cid))
+
+          if (cursosAInscribir.length > 0) {
+            await Promise.all(
+              cursosAInscribir.map(cid => {
+                const fechaInscripcion = new Date()
+
+                return tx.inscripcion.create({
+                  data: {
+                    usuario_id: pedidoAnterior.usuario_id,
+                    curso_id: cid,
+                    pedido_id: id,
+                    estado: 'ACTIVO',
+                    inscrito_en: fechaInscripcion
+                  }
+                })
+              })
+            )
           }
-        })
+        }
 
-        const inscritosIds = yaInscritos.map(i => i.curso_id)
-        const cursosAInscribir = cursosIds.filter(cid => !inscritosIds.includes(cid))
-
-        if (cursosAInscribir.length > 0) {
+        if (ebooksIds.length > 0) {
           await Promise.all(
-            cursosAInscribir.map(cid =>
-              tx.inscripcion.create({
-                data: {
-                  usuario_id: pedidoAnterior.usuario_id,
-                  curso_id: cid,
-                  pedido_id: id,
-                  estado: 'ACTIVO',
-                  inscrito_en: new Date()
-                }
+            ebooksIds.map(eid =>
+              tx.ebookAcceso.upsert({
+                where: { usuario_id_ebook_id: { usuario_id: pedidoAnterior.usuario_id, ebook_id: eid } },
+                update: {},
+                create: { usuario_id: pedidoAnterior.usuario_id, ebook_id: eid }
               })
             )
           )

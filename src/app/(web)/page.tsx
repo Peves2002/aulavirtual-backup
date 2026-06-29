@@ -11,6 +11,9 @@ import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarque
 import HeroCarousel from '@/features/web/home/components/HeroCarousel'
 import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
 import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
+import CompaniesSection from '@/features/web/home/components/CompaniesSection'
+import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
+import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
 
 export const metadata = {
   title: 'Master Academy - Formación Profesional para el Sector Público',
@@ -19,7 +22,7 @@ export const metadata = {
 
 async function getHomeData() {
   try {
-    const [coursesRaw, teachersRaw, configs] = await Promise.all([
+    const [coursesRaw, rutasRaw, teachersRaw, configs, ebooksRaw] = await Promise.all([
       // Cursos
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO' },
@@ -49,6 +52,19 @@ async function getHomeData() {
         take: 8,
       }),
       getConfigs(),
+
+      // Ebooks destacados
+      prisma.ebook.findMany({
+        where: { estado: 'PUBLICADO' },
+        select: {
+          id: true, titulo: true, slug: true, miniatura: true,
+          autor: true, precio: true, precio_falso: true, moneda: true,
+          es_gratis: true, paginas: true, genero: true,
+          categoria: { select: { nombre: true } },
+        },
+        orderBy: { creado_en: 'desc' },
+        take: 5,
+      }),
     ])
 
     const courses = await Promise.all(
@@ -65,25 +81,32 @@ async function getHomeData() {
 
     try { logos = configs.HOME_LOGOS ? JSON.parse(configs.HOME_LOGOS) : [] } catch { logos = [] }
 
+    const ebooks = ebooksRaw.map(e => ({
+      ...e,
+      precio: Number(e.precio),
+      precio_falso: Number(e.precio_falso),
+    }))
+
     return {
       courses: JSON.parse(JSON.stringify(courses)),
       teachers: JSON.parse(JSON.stringify(teachersRaw)),
+      ebooks: JSON.parse(JSON.stringify(ebooks)),
       heroTitle,
       heroDescription,
       logos,
     }
   } catch {
     return {
-      courses: [], teachers: [],
-      heroTitle: 'Formación de élite\npara el servicio público',
-      heroDescription: 'Fortalece tus competencias y capacidades para aprobar pruebas de aptitud académica y acceder a nuevos puestos de trabajo. Recupera los conocimientos que necesitas para avanzar en el camino del éxito laboral.',
+      courses: [], rutas: [], teachers: [], ebooks: [],
+      heroTitle: 'Aprende sin límites,\ncrece sin fronteras',
+      heroDescription: 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.',
       logos: [],
     }
   }
 }
 
 export default async function HomePage() {
-  const { courses, teachers, heroTitle, heroDescription, logos } = await getHomeData()
+  const { courses, rutas, teachers, ebooks, heroTitle, heroDescription, logos } = await getHomeData()
 
   return (
     <>
@@ -124,7 +147,10 @@ export default async function HomePage() {
         </ScrollReveal>
       </section>
 
-      {/* ── 4. CARACTERÍSTICAS DE CLASES ────────────── */}
+      {/* ── 4. EBOOKS DESTACADOS ────────────────────── */}
+      <HomeEbooksSection ebooks={ebooks} />
+
+      {/* ── 5. CARACTERÍSTICAS DE CLASES ────────────── */}
       <ClassFeaturesSection />
 
       {/* ── 5. ESPECIALISTAS ────────────────────────── */}
@@ -134,9 +160,9 @@ export default async function HomePage() {
       <SearchCertificateSection />
 
       {/* ── 10. CTA INSCRIPCIÓN ─────────────────────── */}
-      <section 
-        className="py-24 text-center" 
-        style={{ 
+      <section
+        className="py-24 text-center"
+        style={{
           backgroundImage: 'linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.60) 100%), url("https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2000&q=80")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',

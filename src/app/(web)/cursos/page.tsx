@@ -37,8 +37,8 @@ async function getData(token: string | null) {
 }
 
 export const metadata = {
-  title: `${process.env.NEXT_PUBLIC_APP_NAME} | Cursos`,
-  description: 'Cursos especializados para profesionales del sector público. Fortalece tus competencias y aprueba tus pruebas de aptitud académica con Master Academy.'
+  title: `${process.env.NEXT_PUBLIC_APP_URL} | Cursos`,
+  description: 'Explora nuestra amplia variedad de cursos y comienza a aprender hoy mismo.'
 }
 
 export default async function CursosPage() {

@@ -9,20 +9,29 @@ interface OrderCompletionData {
 
 /**
  * Servicio centralizado para completar un pedido.
- * Maneja transacciones, inscripciones, cupones, notificaciones administrativas
- * y el envío automático del correo de confirmación al usuario.
+ * Crea inscripciones (cursos) y accesos (ebooks), maneja cupones y notificaciones.
  */
 export async function completeOrder(pedidoId: string, data: OrderCompletionData) {
   try {
-    // 1. Verificar si el pedido ya fue completado (para evitar duplicados por webhooks concurrentes)
+    // 1. Verificar si el pedido ya fue completado (evita duplicados por webhooks concurrentes)
     const pedidoInit = await prisma.pedido.findUnique({
       where: { id: pedidoId },
-      include: { detalles: true, usuario: true }
+      include: {
+        detalles: {
+          include: {
+            curso: {
+              select: { id: true, vigencia_meses: true }
+            }
+          }
+        },
+        usuario: true
+      }
     })
 
     // Fetch raw detalles to get simulacro_id (Prisma client may not know about this column yet)
     const detallesRaw: any[] = await prisma.$queryRaw`
       SELECT id, curso_id, simulacro_id FROM detalles_pedido WHERE pedido_id = ${pedidoId}`
+
     const simulacroDetallesMap = new Map(detallesRaw.map(d => [d.id, d.simulacro_id]))
 
     if (!pedidoInit) throw new Error(`Pedido ${pedidoId} no encontrado.`)
@@ -37,6 +46,14 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
       return { pedido: pedidoInit, inscripciones, yaCompletado: true }
     }
 
+    // Obtener detalles de ebooks via raw SQL (ebook_id no está en el cliente Prisma aún)
+    const ebookDetalles = await prisma.$queryRaw<Array<{ ebook_id: string }>>`
+      SELECT ebook_id FROM detalles_pedido
+      WHERE pedido_id = ${pedidoId}
+        AND tipo_item = 'EBOOK'
+        AND ebook_id IS NOT NULL
+    `
+
     // 2. Transacción de Base de Datos
     const result = await prisma.$transaction(
       async tx => {
@@ -48,7 +65,7 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
             pagado_en: new Date(),
             metodo_pago: data.metodo_pago as any,
             transaccion_id: data.transaccion_id || null,
-            respuesta_izipay: data.respuesta_pago || null // Se usa este campo para el log de respuesta
+            respuesta_izipay: data.respuesta_pago || null
           }
         })
 
@@ -80,12 +97,15 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
                 estado: 'ACTIVO'
               }
             })
+
             inscripciones.push(ins)
           }
 
           const simulacroIdFromMap = simulacroDetallesMap.get(detalle.id)
+
           if (simulacroIdFromMap) {
             const simulacroId = simulacroIdFromMap
+
             const existing = await tx.$queryRaw<any[]>`
               SELECT id FROM inscripciones_simulacro
               WHERE usuario_id = ${pedidoInit.usuario_id} AND simulacro_id = ${simulacroId} LIMIT 1`
@@ -96,29 +116,37 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
                 WHERE usuario_id = ${pedidoInit.usuario_id} AND simulacro_id = ${simulacroId}`
             } else {
               const { randomUUID } = await import('crypto')
+
               await tx.$executeRaw`
                 INSERT INTO inscripciones_simulacro (id, usuario_id, simulacro_id, estado, inscrito_en)
                 VALUES (${randomUUID()}, ${pedidoInit.usuario_id}, ${simulacroId}, 'ACTIVO', NOW())`
             }
+
             inscripciones.push({ simulacro_id: simulacroId })
           }
         }
 
+        // d) Crear EbookAcceso para ebooks del pedido
+        for (const { ebook_id } of ebookDetalles) {
+          await tx.$executeRaw`
+            INSERT INTO ebook_accesos (id, usuario_id, ebook_id, creado_en)
+            VALUES (gen_random_uuid(), ${pedidoInit.usuario_id}, ${ebook_id}, NOW())
+            ON CONFLICT (usuario_id, ebook_id) DO NOTHING
+          `
+        }
+
         return { pedido: pedidoActualizado, inscripciones }
       },
-      {
-        timeout: 30000 // Aumentamos el tiempo de espera a 30 segundos
-      }
+      { timeout: 30000 }
     )
 
-    // d) Notificar a Admins (Fuera de la transacción para optimizar)
+    // e) Notificar a Admins (fuera de la transacción)
     try {
       const admins = await prisma.usuario.findMany({
         where: { rol: 'ADMIN' },
         select: { id: true }
       })
 
-      // Creamos las notificaciones en paralelo para mayor velocidad
       await Promise.all(
         admins.map(admin =>
           prisma.notificacion.create({
@@ -133,15 +161,12 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
         )
       )
     } catch (notifyError) {
-      console.error(`[Order-Service] Error enviando notificaciones a admins para pedido ${pedidoId}:`, notifyError)
-
-      // No lanzamos el error para no invalidar la respuesta exitosa del pedido si solo fallan las notificaciones
+      console.error(`[Order-Service] Error enviando notificaciones para pedido ${pedidoId}:`, notifyError)
     }
 
-    // 3. Envío de Correo Asíncrono (No bloquea la respuesta del API)
-    // Se dispara después de que la transacción haya sido confirmada exitosamente.
+    // 3. Envío de correo asíncrono
     sendOrderConfirmationEmail(pedidoId).catch(err => {
-      console.error(`[Order-Service] Error enviando mail después de completar pedido ${pedidoId}:`, err)
+      console.error(`[Order-Service] Error enviando mail para pedido ${pedidoId}:`, err)
     })
 
     return { ...result, yaCompletado: false }
