@@ -11,8 +11,7 @@ import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarque
 import HeroCarousel from '@/features/web/home/components/HeroCarousel'
 import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
 import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
-import CompaniesSection from '@/features/web/home/components/CompaniesSection'
-import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
+
 import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
 
 export const metadata = {
@@ -22,7 +21,7 @@ export const metadata = {
 
 async function getHomeData() {
   try {
-    const [coursesRaw, rutasRaw, teachersRaw, configs, ebooksRaw] = await Promise.all([
+    const [coursesRaw, teachersRaw, configs, ebooksRaw] = await Promise.all([
       // Cursos
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO' },
@@ -106,7 +105,7 @@ async function getHomeData() {
 }
 
 export default async function HomePage() {
-  const { courses, rutas, teachers, ebooks, heroTitle, heroDescription, logos } = await getHomeData()
+  const { courses, teachers, ebooks, heroTitle, heroDescription, logos } = await getHomeData()
 
   return (
     <>

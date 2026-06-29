@@ -85,14 +85,14 @@ export default function SimulacroDetailView({ simulacro, preguntas, tieneAcceso,
           position: 'relative',
           padding: '5rem 1.5rem 4rem',
           overflow: 'hidden',
-          background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 100%)',
+          background: 'linear-gradient(135deg, #0A0A0A 0%, rgba(var(--web-primary-rgb, 212,175,55), 0.22) 100%)',
         }}
       >
         {simulacro.miniatura && (
           <img src={simulacro.miniatura} alt='' aria-hidden
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.1 }} />
         )}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(1,45,34,0.55) 0%, rgba(2,94,68,0.65) 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(var(--web-primary-rgb, 212,175,55), 0.15) 100%)' }} />
         <div style={{ maxWidth: '900px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <Link href='/simulacros' style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', marginBottom: '1.5rem' }}>
             ← Volver a simulacros
@@ -213,7 +213,7 @@ export default function SimulacroDetailView({ simulacro, preguntas, tieneAcceso,
           {!tieneAcceso && (
             <div style={{
               padding: '2rem', borderRadius: '1rem', textAlign: 'center',
-              background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 100%)',
+              background: 'linear-gradient(135deg, #0A0A0A 0%, rgba(var(--web-primary-rgb, 212,175,55), 0.22) 100%)',
             }}>
               <p style={{ margin: '0 0 1.25rem', fontSize: '1rem', color: 'rgba(255,255,255,0.85)' }}>
                 ¿Listo para poner a prueba tus conocimientos?

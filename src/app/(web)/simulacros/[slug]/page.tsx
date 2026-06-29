@@ -63,8 +63,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   if (!data) return { title: 'Simulacro no encontrado' }
 
   return {
-    title: `${data.simulacro.titulo} | ATD Academy`,
-    description: data.simulacro.descripcion ?? 'Simulacro de examen en ATD Academy.',
+    title: `${data.simulacro.titulo}`,
+    description: data.simulacro.descripcion ?? 'Simulacro de examen',
   }
 }
 

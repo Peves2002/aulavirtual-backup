@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { Search, Award, ShieldCheck } from 'lucide-react'
 
 import ScrollReveal from './ScrollReveal'
-import { sectionH2Dark, sectionDescDark, smallText } from './typography'
+import { smallText } from './typography'
 
 export default function SearchCertificateSection({ light = false }: { light?: boolean }) {
   const router = useRouter()

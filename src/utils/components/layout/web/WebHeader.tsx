@@ -9,7 +9,7 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { signOut, useSession } from 'next-auth/react'
 
-import { Home, BookOpen, Users, Award, Map, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, Menu, X, ChevronDown, ClipboardList } from 'lucide-react'
+import { Home, BookOpen, Users, Award, Map, Building2, User, LayoutDashboard, BookMarked, LogOut, Menu, X, ChevronDown, ClipboardList } from 'lucide-react'
 
 import Logo from '@components/layout/shared/Logo'
 import CartIcon from '@/features/web/cart/components/CartIcon'

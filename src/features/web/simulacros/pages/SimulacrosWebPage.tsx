@@ -9,7 +9,7 @@ export default function SimulacrosWebPage({ simulacros }: { simulacros: Simulacr
       {/* Header */}
       <section
         style={{
-          background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 100%)',
+          background: 'linear-gradient(135deg, #0A0A0A 0%, rgba(var(--web-primary-rgb, 212,175,55), 0.22) 100%)',
           padding: '5rem 1.5rem 3rem',
           textAlign: 'center',
           position: 'relative',
@@ -17,11 +17,11 @@ export default function SimulacrosWebPage({ simulacros }: { simulacros: Simulacr
         }}
       >
         {/* Decorative circles */}
-        <div style={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', backgroundColor: 'rgba(var(--web-light-rgb, 189,217,98),0.08)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', backgroundColor: 'rgba(var(--web-primary-rgb, 212,175,55),0.08)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -60, left: 60, width: 260, height: 260, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.04)', pointerEvents: 'none' }} />
 
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <p style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--web-light, #BDD962)', marginBottom: '0.75rem' }}>
+          <p style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--web-primary, #D4AF37)', marginBottom: '0.75rem' }}>
             Simulacros
           </p>
           <h1 style={{ fontFamily: 'Poppins, sans-serif', fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 800, color: '#ffffff', margin: '0 0 1rem' }}>

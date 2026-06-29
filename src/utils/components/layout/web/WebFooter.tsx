@@ -126,8 +126,8 @@ const WebFooter = async ({ platformName = 'Master Academy', rutasHabilitado = tr
                 { label: 'Nosotros', href: '/nosotros' },
                 { label: 'Contacto', href: '/contacto' },
                 { label: 'Términos y Condiciones', href: '/terminos-y-condiciones' },
+                { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
                 { label: 'Política de Devoluciones', href: '/politica-de-cambios-y-devoluciones' },
-                { label: 'Libro de Reclamaciones', href: '/libro-de-reclamaciones' },
               ].map(link => (
                 <li key={link.label}>
                   <Link
