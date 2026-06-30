@@ -6,6 +6,17 @@ import {
 
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
+import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
+import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
+import RutasSection from '@/features/web/home/components/RutasSection'
+import ScrollReveal from '@/features/web/home/components/ScrollReveal'
+import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
+import HeroVisual from '@/features/web/home/components/HeroVisual'
+import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
+import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
+import CompaniesSection from '@/features/web/home/components/CompaniesSection'
+import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
+import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
 
 export const metadata = {
   title: 'Aula Virtual — Despierta tu talento, impulsa tu futuro',
@@ -13,21 +24,21 @@ export const metadata = {
 }
 
 const audiences = [
-  { icon: GraduationCap, label: 'Docentes',   color: 'text-brand-teal'   },
-  { icon: Scale,         label: 'Abogados',   color: 'text-brand-orange' },
-  { icon: Hammer,        label: 'Ingenieros', color: 'text-brand-lime'   },
-  { icon: HeartPulse,    label: 'Salud',      color: 'text-brand-teal'   },
+  { icon: GraduationCap, label: 'Docentes', color: 'text-brand-teal' },
+  { icon: Scale, label: 'Abogados', color: 'text-brand-orange' },
+  { icon: Hammer, label: 'Ingenieros', color: 'text-brand-lime' },
+  { icon: HeartPulse, label: 'Salud', color: 'text-brand-teal' },
 ]
 
 const pillars = [
-  { icon: BookOpen, title: 'Conocimiento profundo',  text: 'Programas diseñados para dominar tu campo, no solo aprobarlo. Contenido riguroso, actualizado y aplicable.' },
-  { icon: Users,    title: 'Atención cercana',       text: 'Acompañamos cada consulta con compromiso real. No eres un número: eres un profesional que merece superar sus expectativas.' },
-  { icon: Award,    title: 'Certificación que pesa', text: 'Diplomados y especializaciones que respaldan tu hoja de vida y abren puertas en el mercado peruano y la región.' },
+  { icon: BookOpen, title: 'Conocimiento profundo', text: 'Programas diseñados para dominar tu campo, no solo aprobarlo. Contenido riguroso, actualizado y aplicable.' },
+  { icon: Users, title: 'Atención cercana', text: 'Acompañamos cada consulta con compromiso real. No eres un número: eres un profesional que merece superar sus expectativas.' },
+  { icon: Award, title: 'Certificación que pesa', text: 'Diplomados y especializaciones que respaldan tu hoja de vida y abren puertas en el mercado peruano y la región.' },
 ]
 
 async function getHomeData() {
   try {
-    const [coursesRaw, configs] = await Promise.all([
+    const [coursesRaw, configs, ebooksRaw] = await Promise.all([
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO' },
         include: {
@@ -38,8 +49,70 @@ async function getHomeData() {
         take: 6,
       }),
       getConfigs(),
+
+      // Ebooks destacados
+      prisma.ebook.findMany({
+        where: { estado: 'PUBLICADO' },
+        select: {
+          id: true, titulo: true, slug: true, miniatura: true,
+          autor: true, precio: true, precio_falso: true, moneda: true,
+          es_gratis: true, paginas: true, genero: true,
+          categoria: { select: { nombre: true } },
+        },
+        orderBy: { creado_en: 'desc' },
+        take: 5,
+      }),
+      getConfigs(),
+
+      // Ebooks destacados
+      prisma.ebook.findMany({
+        where: { estado: 'PUBLICADO' },
+        select: {
+          id: true, titulo: true, slug: true, miniatura: true,
+          autor: true, precio: true, precio_falso: true, moneda: true,
+          es_gratis: true, paginas: true, genero: true,
+          categoria: { select: { nombre: true } },
+        },
+        orderBy: { creado_en: 'desc' },
+        take: 5,
+      }),
     ])
 
+    const courses = await Promise.all(
+      coursesRaw.map(async course => {
+        const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
+
+        return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
+      })
+    )
+
+    const rutas = rutasRaw.map(r => ({
+      ...r,
+      total_cursos: r.cursos.length,
+      cursos: r.cursos.map(c => ({ miniatura: c.curso.miniatura, titulo: c.curso.titulo })),
+    }))
+
+    const heroTitle = configs.HOME_HERO_TITLE || 'Aprende sin límites,\ncrece sin fronteras'
+    const heroDescription = configs.HOME_HERO_DESCRIPTION || 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.'
+    let logos: { label: string; url: string }[] = []
+
+    try { logos = configs.HOME_LOGOS ? JSON.parse(configs.HOME_LOGOS) : [] } catch { logos = [] }
+
+    const ebooks = ebooksRaw.map(e => ({
+      ...e,
+      precio: Number(e.precio),
+      precio_falso: Number(e.precio_falso),
+    }))
+
+    return {
+      courses: JSON.parse(JSON.stringify(courses)),
+      rutas: JSON.parse(JSON.stringify(rutas)),
+      teachers: JSON.parse(JSON.stringify(teachersRaw)),
+      ebooks: JSON.parse(JSON.stringify(ebooks)),
+      heroTitle,
+      heroDescription,
+      logos,
+    }
     const heroImg = configs.HOME_HERO_IMAGE || '/images/pagina/banner.png'
     const waNumber = configs.WHATSAPP_NUMERO || ''
     const waLink = waNumber ? `https://wa.me/${waNumber}` : '#'
@@ -47,15 +120,16 @@ async function getHomeData() {
     return { heroImg, waLink, courses: JSON.parse(JSON.stringify(coursesRaw)) }
   } catch {
     return {
-      heroImg: '/images/pagina/banner.png',
-      waLink: '#',
-      courses: [],
+      courses: [], rutas: [], teachers: [], ebooks: [],
+      heroTitle: 'Aprende sin límites,\ncrece sin fronteras',
+      heroDescription: 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.',
+      logos: [],
     }
   }
 }
 
 export default async function HomePage() {
-  const { heroImg, waLink, courses } = await getHomeData()
+  const { courses, rutas, teachers, ebooks, heroTitle, heroDescription, logos } = await getHomeData()
 
   return (
     <>
@@ -339,37 +413,28 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* MARQUEE */}
-      <section className="overflow-hidden border-y border-border bg-background py-10">
-        <div className="flex animate-marquee whitespace-nowrap">
-          {Array.from({ length: 2 }).map((_, k) => (
-            <div key={k} className="flex shrink-0 items-center gap-12 px-6">
-              {['Excelencia académica', 'Crecimiento profesional', 'Compromiso real', 'Impacto social', 'Conocimiento profundo', 'Atención cercana', 'Liderazgo formativo'].map(w => (
-                <span key={`${k}-${w}`} className="font-display text-3xl font-extrabold uppercase tracking-tight text-foreground/15">
-                  {w} <span className="text-brand-orange">●</span>
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* ── 4. EBOOKS DESTACADOS ────────────────────── */}
+      <HomeEbooksSection ebooks={ebooks} />
 
-      {/* FINAL CTA */}
-      <section className="py-24">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-[2.5rem] bg-edu-pattern p-12 text-white shadow-soft sm:p-16">
-            <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-brand-orange/40 blur-3xl" />
-            <div className="relative grid items-center gap-8 lg:grid-cols-3">
-              <div className="lg:col-span-2">
-                <h2 className="font-display text-3xl font-extrabold leading-tight text-balance sm:text-4xl">
-                  ¿Listo para dar el siguiente paso en tu carrera?
-                </h2>
-                <p className="mt-3 text-white/75">
-                  Escríbenos por WhatsApp y un asesor te orientará sobre el
-                  programa ideal para ti.
-                </p>
-              </div>
-              <div className="flex lg:justify-end">
+      {/* ── 5. CARACTERÍSTICAS DE CLASES ────────────── */}
+      <ClassFeaturesSection />
+
+      {/* ── 5. RUTAS DE APRENDIZAJE ─────────────────── */}
+      {rutas.length > 0 && (
+        <section style={{ backgroundColor: 'hsl(210, 15%, 97%)', borderTop: '1px solid hsl(214, 20%, 92%)' }}>
+          <div className="section-container">
+            <ScrollReveal>
+              <div className="flex items-end justify-between mb-2">
+                <div>
+                  <div
+                    className="inline-flex items-center gap-2 mb-3"
+                    style={{ color: 'var(--web-primary, #25927F)', fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}
+                  >
+                    <Map size={14} /> Especialízate
+                  </div>
+                  <h2 className="section-title" style={{ marginBottom: '0.25rem' }}>Rutas de Aprendizaje</h2>
+                  <p className="section-subtitle">Colecciones curadas para llevarte de principiante a experto.</p>
+                </div>
                 <Link
                   href="/contacto"
                   className="inline-flex items-center gap-2 rounded-full bg-orange-gradient px-7 py-4 text-sm font-bold text-white shadow-glow transition-base hover:scale-[1.03] no-underline"
@@ -378,10 +443,10 @@ export default async function HomePage() {
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
-            </div>
           </div>
         </div>
-      </section>
+        </div >
+      </section >
     </>
   )
 }
