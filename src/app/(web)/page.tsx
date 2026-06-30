@@ -5,6 +5,7 @@ import { TrendingUp, Briefcase, Target, ArrowRight, CheckCircle2, Users, BookOpe
 import prisma from '@/utils/libs/prisma'
 import HeroCarousel from '@/features/web/ace/HeroCarousel'
 import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
+import HeroInstallButton from '@/features/web/home/components/HeroInstallButton'
 import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
 import RutasSection from '@/features/web/home/components/RutasSection'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
