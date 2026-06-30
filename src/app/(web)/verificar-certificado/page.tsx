@@ -1,4 +1,4 @@
-import { Award, Sparkles } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 
 import type { Metadata } from 'next'
 

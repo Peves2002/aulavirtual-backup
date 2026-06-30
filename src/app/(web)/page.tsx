@@ -1,21 +1,14 @@
 import Link from 'next/link'
+
 import {
   ArrowRight, Award, BookOpen, CheckCircle2,
-  Clock, GraduationCap, HeartPulse, Hammer, Scale, Sparkles, Users,
+  Clock, GraduationCap, HeartPulse, Hammer, Map, Scale, Sparkles, Users,
 } from 'lucide-react'
 
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
-import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
-import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
-import RutasSection from '@/features/web/home/components/RutasSection'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
-import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
-import HeroVisual from '@/features/web/home/components/HeroVisual'
 import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
-import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
-import CompaniesSection from '@/features/web/home/components/CompaniesSection'
-import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
 import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
 
 export const metadata = {
@@ -38,7 +31,7 @@ const pillars = [
 
 async function getHomeData() {
   try {
-    const [coursesRaw, configs, ebooksRaw] = await Promise.all([
+    const [coursesRaw, configs, ebooksRaw, rutasRaw] = await Promise.all([
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO' },
         include: {
@@ -49,8 +42,6 @@ async function getHomeData() {
         take: 6,
       }),
       getConfigs(),
-
-      // Ebooks destacados
       prisma.ebook.findMany({
         where: { estado: 'PUBLICADO' },
         select: {
@@ -62,20 +53,16 @@ async function getHomeData() {
         orderBy: { creado_en: 'desc' },
         take: 5,
       }),
-      getConfigs(),
-
-      // Ebooks destacados
-      prisma.ebook.findMany({
-        where: { estado: 'PUBLICADO' },
-        select: {
-          id: true, titulo: true, slug: true, miniatura: true,
-          autor: true, precio: true, precio_falso: true, moneda: true,
-          es_gratis: true, paginas: true, genero: true,
-          categoria: { select: { nombre: true } },
+      prisma.rutaAprendizaje.findMany({
+        where: { esta_activo: true },
+        include: {
+          cursos: {
+            include: { curso: { select: { miniatura: true, titulo: true } } },
+          },
         },
         orderBy: { creado_en: 'desc' },
-        take: 5,
-      }),
+        take: 6,
+      })
     ])
 
     const courses = await Promise.all(
@@ -92,11 +79,9 @@ async function getHomeData() {
       cursos: r.cursos.map(c => ({ miniatura: c.curso.miniatura, titulo: c.curso.titulo })),
     }))
 
-    const heroTitle = configs.HOME_HERO_TITLE || 'Aprende sin límites,\ncrece sin fronteras'
-    const heroDescription = configs.HOME_HERO_DESCRIPTION || 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.'
-    let logos: { label: string; url: string }[] = []
-
-    try { logos = configs.HOME_LOGOS ? JSON.parse(configs.HOME_LOGOS) : [] } catch { logos = [] }
+    const heroImg = configs.HOME_HERO_IMAGE || '/images/pagina/banner.png'
+    const waNumber = configs.WHATSAPP_NUMERO || ''
+    const waLink = waNumber ? `https://wa.me/${waNumber}` : '#'
 
     const ebooks = ebooksRaw.map(e => ({
       ...e,
@@ -107,29 +92,21 @@ async function getHomeData() {
     return {
       courses: JSON.parse(JSON.stringify(courses)),
       rutas: JSON.parse(JSON.stringify(rutas)),
-      teachers: JSON.parse(JSON.stringify(teachersRaw)),
       ebooks: JSON.parse(JSON.stringify(ebooks)),
-      heroTitle,
-      heroDescription,
-      logos,
+      heroImg,
+      waLink,
     }
-    const heroImg = configs.HOME_HERO_IMAGE || '/images/pagina/banner.png'
-    const waNumber = configs.WHATSAPP_NUMERO || ''
-    const waLink = waNumber ? `https://wa.me/${waNumber}` : '#'
-
-    return { heroImg, waLink, courses: JSON.parse(JSON.stringify(coursesRaw)) }
   } catch {
     return {
-      courses: [], rutas: [], teachers: [], ebooks: [],
-      heroTitle: 'Aprende sin límites,\ncrece sin fronteras',
-      heroDescription: 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.',
-      logos: [],
+      courses: [], rutas: [], ebooks: [],
+      heroImg: '/images/pagina/banner.png',
+      waLink: '#',
     }
   }
 }
 
 export default async function HomePage() {
-  const { courses, rutas, teachers, ebooks, heroTitle, heroDescription, logos } = await getHomeData()
+  const { courses, rutas, ebooks, heroImg, waLink } = await getHomeData()
 
   return (
     <>
@@ -443,10 +420,10 @@ export default async function HomePage() {
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
+            </ScrollReveal>
           </div>
-        </div>
-        </div >
-      </section >
-    </>
+        </section>
+      )}
+</>
   )
 }

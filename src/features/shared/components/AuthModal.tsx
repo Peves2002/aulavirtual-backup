@@ -24,7 +24,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { loginSchema, type LoginDto, registerSchema, type RegisterDto, forgotPasswordSchema, type ForgotPasswordDto, resetPasswordSchema, type ResetPasswordDto } from '@/schemas/auth.schema'
 import CustomTextField from '@core/components/mui/TextField'
-import Logo from '@components/layout/shared/Logo'
 import GoogleButton from './GoogleButton'
 
 export type Mode = 'login' | 'register' | 'forgot-password' | 'reset-password'

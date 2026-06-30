@@ -51,6 +51,7 @@ function QuestionForm({
 }) {
   const [texto, setTexto] = useState(initial?.texto || '')
   const [puntos, setPuntos] = useState(initial?.puntos || 1)
+
   const [opciones, setOpciones] = useState<any[]>(
     initial?.opciones?.map((o: any) => ({ ...o })) || [
       { texto: '', es_correcta: false },
@@ -232,8 +233,10 @@ export function ActividadDialog({
   useEffect(() => {
     if (actividadData?.actividad && phase === 'config') {
       const a = actividadData.actividad
+
       const toLocal = (val: any) => {
         if (!val) return null
+
         const d = new Date(val)
 
         return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16)

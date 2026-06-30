@@ -47,9 +47,7 @@ interface CoursePlayerViewProps {
     initialExamenId?: string
 }
 
-const CoursePlayerView = ({ course, initialLessonId }: CoursePlayerViewProps) => {
-    const configs = useConfig()
-    const waNumber = configs.WHATSAPP_NUMERO || '51931529171'
+const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initialExamenId }: CoursePlayerViewProps) => {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('lg'))
     const [sidebarOpen, setSidebarOpen] = useState(!isMobile)

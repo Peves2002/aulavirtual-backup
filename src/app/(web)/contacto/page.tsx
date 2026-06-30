@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import { Mail, MapPin, Phone, Sparkles, Send } from 'lucide-react'
 
 import { useConfig } from '@/contexts/ConfigContext'
