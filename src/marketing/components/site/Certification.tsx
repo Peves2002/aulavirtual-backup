@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 
+const CERTIFICATE_IMAGE = "/images/imagenes/certificado-corpus-page/certificado-corpus-1.png";
+
 export const Certification = () => (
   <section id="certificacion" className="gc-section-padding bg-white overflow-hidden">
     <div className="gc-container-custom grid lg:grid-cols-2 gap-16 items-center">
@@ -13,42 +15,11 @@ export const Certification = () => (
         className="relative"
       >
         <div className="relative rounded-2xl p-0.5 bg-gradient-to-br from-gc-blue-corp to-gc-black shadow-2xl overflow-hidden group">
-          <div className="relative rounded-2xl bg-white p-8 md:p-12">
-            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-              <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </div>
-            
-            <div className="relative">
-              <div className="text-gc-blue-corp font-bold text-[10px] tracking-[0.3em] uppercase mb-4">Certificado de Especialización</div>
-              <div className="font-gc-display font-black text-3xl mb-1 text-gc-black">GRUPO CORPUS</div>
-              <div className="text-xs text-gc-gray-medium font-medium">Liderazgo en Formación Técnica Eléctrica</div>
-
-              <div className="mt-12 mb-8">
-                <div className="text-[10px] text-gc-gray-medium uppercase tracking-widest mb-2 font-bold">Otorgado a:</div>
-                <div className="font-gc-display font-bold text-3xl text-gc-black border-b-2 border-gc-gray-light pb-3">[ Tu nombre aquí ]</div>
-              </div>
-
-              <div className="mb-10">
-                <div className="text-[10px] text-gc-gray-medium uppercase tracking-widest mb-2 font-bold">Por haber completado satisfactoriamente el programa de:</div>
-                <div className="font-bold text-xl text-gc-blue-corp">Especialista en AutoCAD Electrical & DIALux</div>
-              </div>
-
-              <div className="flex items-end justify-between">
-                <div>
-                  <div className="w-32 h-0.5 bg-gc-black/20 mb-2" />
-                  <div className="text-[10px] text-gc-gray-medium font-bold uppercase tracking-widest">Director Académico</div>
-                </div>
-                <div className="w-20 h-20 bg-gc-gray-light rounded-lg flex items-center justify-center border border-gray-200">
-                  {/* Mock QR Code */}
-                  <div className="grid grid-cols-4 gap-1 p-2">
-                    {Array.from({ length: 16 }).map((_, i) => (
-                      <div key={i} className={`w-2 h-2 rounded-sm ${[0, 2, 3, 5, 6, 9, 10, 12, 14, 15].includes(i) ? "bg-gc-black" : "bg-transparent"}`} />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <img
+            src={CERTIFICATE_IMAGE}
+            alt="Certificado de especialización Grupo Corpus"
+            className="block w-full h-auto rounded-2xl bg-white transition-transform duration-700 group-hover:scale-[1.01]"
+          />
         </div>
       </motion.div>
 

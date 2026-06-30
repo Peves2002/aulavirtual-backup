@@ -48,7 +48,7 @@ const baseArticles: Article[] = [
     views: "3.2k",
     author: "Ing. Carlos Ramírez",
     authorRole: "Especialista en Diseño Eléctrico",
-    image: "",
+    image: "/images/imagenes/electrical.jpg",
     tags: ["AutoCAD", "Tableros", "Automatización", "Planos"],
     tableOfContents: [
       { id: "que-es", label: "¿Qué es AutoCAD Electrical?" },
@@ -105,7 +105,7 @@ const baseArticles: Article[] = [
     views: "2.8k",
     author: "Ing. Fernando Gómez",
     authorRole: "Especialista en Luminotecnia",
-    image: "https://images.unsplash.com/photo-1565538810844-1e1194116c07?w=1200&q=80",
+    image: "/images/imagenes/dialux.jpg",
     tags: ["DIALux", "Iluminación", "Luminotecnia", "RNE"],
     tableOfContents: [
       { id: "importancia", label: "Importancia del diseño lumínico" },
@@ -604,8 +604,8 @@ const ArticleDetail = ({ article, onBack }: { article: Article; onBack: () => vo
         <main>
           {/* Featured image */}
           {article.image && (
-            <div className="rounded-2xl overflow-hidden mb-10 shadow-xl">
-              <img src={article.image} alt={article.title} className="w-full object-cover max-h-[420px]" />
+            <div className="mb-10 overflow-hidden rounded-2xl bg-gray-100 shadow-xl">
+              <img src={article.image} alt={article.title} className="block w-full h-auto object-contain" />
             </div>
           )}
 

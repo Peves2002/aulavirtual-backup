@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 
+const WHATSAPP_NUMBER = "51956266147";
+
 const blocks = [
   {
     tag: "Herramienta #1 en la industria",
@@ -13,7 +15,7 @@ const blocks = [
       "Generación de reportes y listas de materiales",
       "Compatibilidad total con proyectos de ingeniería real",
     ],
-    image: "https://images.unsplash.com/photo-1537432376769-00f5c2f4c8d2?w=900&q=90",
+    image: "/images/imagenes/electrical.jpg",
     stats: [
       { label: "Archivos", value: ".dwg" },
       { label: "Normas", value: "IEC/ANSI" },
@@ -30,7 +32,10 @@ const blocks = [
       "Reportes técnicos listos para entrega a clientes",
       "Integración eficiente con planos de AutoCAD",
     ],
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&q=90",
+    image: "/images/imagenes/dialux.jpg",
+    gridClassName: "lg:grid-cols-[0.88fr_1.12fr]",
+    imageClassName:
+      "w-full h-auto max-h-[420px] sm:max-h-[480px] lg:max-h-[560px] xl:max-h-[620px] object-contain transition-transform duration-700 group-hover:scale-[1.02]",
     stats: [
       { label: "Cálculos", value: "Lux/fc" },
       { label: "Norma", value: "EN 12464" },
@@ -43,7 +48,10 @@ export const SoftwareShowcase = () => (
   <section className="gc-section-padding bg-white overflow-hidden">
     <div className="gc-container-custom space-y-32">
       {blocks.map((b, i) => (
-        <div key={b.title} className={`grid lg:grid-cols-2 gap-16 items-center ${i % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""}`}>
+        <div
+          key={b.title}
+          className={`grid gap-16 items-center ${b.gridClassName ?? "lg:grid-cols-2"} ${i % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""}`}
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -51,13 +59,13 @@ export const SoftwareShowcase = () => (
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <div className="relative rounded-[40px] overflow-hidden shadow-2xl border-4 border-gc-gray-light group">
+            <div className="relative rounded-[40px] overflow-hidden shadow-2xl border-4 border-gc-gray-light group bg-gc-gray-perla">
               <img
                 src={b.image}
                 alt={b.title}
-                className="w-full aspect-video lg:aspect-square object-cover transition-transform duration-700 group-hover:scale-105"
+                className={`block h-auto object-contain ${b.imageClassName ?? "w-full transition-transform duration-700 group-hover:scale-[1.02]"}`}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-gc-black/60 via-transparent to-transparent" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-gc-black/50 via-transparent to-transparent" />
               
               {/* Stats Panel */}
               <div className="absolute bottom-6 left-6 right-6">
@@ -91,7 +99,12 @@ export const SoftwareShowcase = () => (
                 </li>
               ))}
             </ul>
-            <a href="#cursos" className="inline-flex items-center gap-2 text-gc-black font-bold hover:text-gc-blue-corp transition-colors duration-300">
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, me gustaría conocer más sobre ${b.title}.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-gc-black font-bold hover:text-gc-blue-corp transition-colors duration-300"
+            >
               Conocer más del software
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </a>
