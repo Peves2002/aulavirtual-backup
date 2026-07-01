@@ -97,7 +97,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             </MenuItem> */}
             <MenuItem href='/estudiante/suscripcion' icon={<i className='tabler-repeat' />}>
               Mi Suscripción
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem href='/estudiante/calendario' icon={<i className='tabler-calendar' />}>
               Calendario
             </MenuItem>
