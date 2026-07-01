@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
 import { signOut, useSession } from "next-auth/react";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { ArrowRight, LayoutDashboard, Menu, X } from "lucide-react";
 
 import { useAuthModal } from "@/contexts/AuthModalContext";
 import CartIcon from "@/features/web/cart/components/CartIcon";
@@ -24,6 +24,12 @@ const links = [
   { href: "/contacto", label: "Contacto" },
   { href: "/recetas", label: "Recetas" }
 ];
+
+const roleDestination: Record<string, { href: string; label: string }> = {
+  ADMIN: { href: "/admin/dashboard", label: "Panel Administrativo" },
+  PROFESOR: { href: "/profesor/dashboard", label: "Panel del Profesor" },
+  ESTUDIANTE: { href: "/estudiante/mis-cursos", label: "Mis Cursos" }
+};
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -175,13 +181,30 @@ export function Navbar() {
 
           <div className="p-8 pt-4 flex flex-col gap-3">
             {session ? (
-              <button
-                onClick={handleLogout}
-                className="flex items-center justify-center w-full font-bold text-[16px] rounded-[24px] py-4 transition-all duration-300 border-2"
-                style={{ borderColor: "#5A9020", color: "#5A9020", background: "transparent" }}
-              >
-                Cerrar sesión
-              </button>
+              <>
+                {(() => {
+                  const dest = roleDestination[(session.user as any)?.rol];
+
+                  return dest ? (
+                    <Link
+                      href={dest.href}
+                      onClick={() => setOpen(false)}
+                      className="flex items-center justify-center gap-2 w-full font-bold text-[16px] rounded-[24px] py-4 transition-all duration-300 shadow-lg"
+                      style={{ background: "linear-gradient(135deg, #5A9020 0%, #3A6010 100%)", color: "#FFFFFF" }}
+                    >
+                      <LayoutDashboard size={18} />
+                      {dest.label}
+                    </Link>
+                  ) : null;
+                })()}
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center justify-center w-full font-bold text-[16px] rounded-[24px] py-4 transition-all duration-300 border-2"
+                  style={{ borderColor: "#5A9020", color: "#5A9020", background: "transparent" }}
+                >
+                  Cerrar sesión
+                </button>
+              </>
             ) : (
               <button
                 onClick={() => {

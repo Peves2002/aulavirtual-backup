@@ -32,7 +32,7 @@ export class AxiosMedia extends AxiosInternalHttpClient {
     }
   }
 
-  async upload(file: File, onProgress?: (progress: number) => void): Promise<any> {
+  async upload(file: File, onProgress?: (progress: number) => void, folder?: string): Promise<any> {
     try {
       const formData = new FormData()
 

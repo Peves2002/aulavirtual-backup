@@ -48,7 +48,7 @@ export function useUploadMedia(folder?: string) {
 /**
  * Hook para subir un video privado
  */
-export function useUploadPrivateVideo() {
+export function useUploadPrivateVideo(folder?: string) {
   const qc = useQueryClient()
   const axiosMedia = axiosMediaFactory()
 
