@@ -1,7 +1,5 @@
 import Link from 'next/link'
 
-import { Map, ArrowRight, CheckCircle } from 'lucide-react'
-
 import { Hero } from '@/components/site/Hero'
 import { SponsorsCarousel } from '@/components/site/SponsorsCarousel'
 import { Services } from '@/components/site/Services'
@@ -9,14 +7,7 @@ import { TestimonialsCta } from '@/components/site/TestimonialsCta'
 import { Recetas } from '@/components/site/Recetas'
 import { SubscriptionSection } from '@/components/site/SubscriptionSection'
 import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
-import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
-import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
-import RutasSection from '@/features/web/home/components/RutasSection'
-import CompaniesSection from '@/features/web/home/components/CompaniesSection'
-import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
-import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
-import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
 
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
@@ -131,7 +122,7 @@ async function getHomeData() {
 }
 
 export default async function HomePage() {
-  const { courses, rutas, teachers, ebooks } = await getHomeData()
+  const { courses } = await getHomeData()
 
   return (
     <div className="bg-transparent">

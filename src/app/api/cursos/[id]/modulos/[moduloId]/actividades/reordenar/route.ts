@@ -8,16 +8,12 @@ import { handleApiError } from '@/utils/libs/validation'
 /**
  * PATCH /api/cursos/[id]/modulos/[moduloId]/actividades/reordenar
  */
-export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string; moduloId: string } }
-) {
+export async function PATCH(request: Request) {
   try {
     const auth = await requireProfesorOrAdmin(request)
 
     if (!auth.authorized) return auth.error
 
-    const { moduloId } = params
     const { items } = await request.json()
 
     await Promise.all(

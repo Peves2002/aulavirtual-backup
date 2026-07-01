@@ -11,7 +11,6 @@ import prisma from '@/utils/libs/prisma'
 import { Navbar } from '@/components/site/Navbar'
 import { Footer } from '@/components/site/Footer'
 import { WhatsAppFab } from '@/components/site/WhatsAppFab'
-import PWAInstalledToast from '@/features/web/home/components/PWAInstalledToast'
 
 const getCategorias = unstable_cache(
   () =>
