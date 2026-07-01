@@ -2,11 +2,16 @@ import Link from 'next/link'
 
 import {
   ArrowRight, Award, BookOpen, CheckCircle2,
-  Clock, GraduationCap, HeartPulse, Hammer, Map, Scale, Sparkles, Users,
+  Clock, GraduationCap, HeartPulse, Hammer, Scale, Sparkles, Users,
 } from 'lucide-react'
 
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
+import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
+import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
+import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
+import HeroInstallButton from '@/features/web/home/components/HeroInstallButton'
+import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
 import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
@@ -31,38 +36,64 @@ const pillars = [
 
 async function getHomeData() {
   try {
-    const [coursesRaw, configs, ebooksRaw, rutasRaw] = await Promise.all([
+    const courseInclude = {
+      profesor: { select: { nombre: true, apellido: true, avatar: true } },
+      categoria: { select: { id: true, nombre: true } },
+      _count: { select: { modulos: true, inscripciones: true } }
+    }
+
+    const [coursesRaw, diplomadosRaw, especializacionesRaw, teachersRaw, configs, ebooksRaw] = await Promise.all([
       prisma.curso.findMany({
-        where: { estado: 'PUBLICADO' },
-        include: {
-          categoria: { select: { nombre: true, slug: true } },
-          _count: { select: { modulos: true } },
-        },
+        where: { estado: 'PUBLICADO', tipo: 'CURSO' },
+        include: courseInclude,
         orderBy: { creado_en: 'desc' },
-        take: 6,
+        take: 6
+      }),
+      prisma.curso.findMany({
+        where: { estado: 'PUBLICADO', tipo: 'DIPLOMADO' },
+        include: courseInclude,
+        orderBy: { creado_en: 'desc' },
+        take: 6
+      }),
+      prisma.curso.findMany({
+        where: { estado: 'PUBLICADO', tipo: 'ESPECIALIZACION' },
+        include: courseInclude,
+        orderBy: { creado_en: 'desc' },
+        take: 6
+      }),
+
+      // Profesores
+      prisma.usuario.findMany({
+        where: { rol: 'PROFESOR' },
+        select: {
+          id: true,
+          nombre: true,
+          apellido: true,
+          slug: true,
+          avatar: true,
+          cargo: true,
+          biografia: true,
+          _count: { select: { cursos_dictados: true } },
+        },
+        orderBy: { cursos_dictados: { _count: 'desc' } },
+        take: 8,
       }),
       getConfigs(),
-      prisma.ebook.findMany({
-        where: { estado: 'PUBLICADO' },
-        select: {
-          id: true, titulo: true, slug: true, miniatura: true,
-          autor: true, precio: true, precio_falso: true, moneda: true,
-          es_gratis: true, paginas: true, genero: true,
-          categoria: { select: { nombre: true } },
-        },
-        orderBy: { creado_en: 'desc' },
-        take: 5,
-      }),
-      prisma.rutaAprendizaje.findMany({
-        where: { esta_activo: true },
-        include: {
-          cursos: {
-            include: { curso: { select: { miniatura: true, titulo: true } } },
+
+      // Ebooks destacados
+      isFeatureEnabled('ebooks')
+        ? prisma.ebook.findMany({
+          where: { estado: 'PUBLICADO' },
+          select: {
+            id: true, titulo: true, slug: true, miniatura: true,
+            autor: true, precio: true, precio_falso: true, moneda: true,
+            es_gratis: true, paginas: true, genero: true,
+            categoria: { select: { nombre: true } },
           },
-        },
-        orderBy: { creado_en: 'desc' },
-        take: 6,
-      })
+          orderBy: { creado_en: 'desc' },
+          take: 5,
+        })
+        : Promise.resolve([]),
     ])
 
     const courses = await Promise.all(
@@ -73,11 +104,21 @@ async function getHomeData() {
       })
     )
 
-    const rutas = rutasRaw.map(r => ({
-      ...r,
-      total_cursos: r.cursos.length,
-      cursos: r.cursos.map(c => ({ miniatura: c.curso.miniatura, titulo: c.curso.titulo })),
-    }))
+    const diplomados = await Promise.all(
+      diplomadosRaw.map(async course => {
+        const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
+
+        return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
+      })
+    )
+
+    const especializaciones = await Promise.all(
+      especializacionesRaw.map(async course => {
+        const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
+
+        return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
+      })
+    )
 
     const heroImg = configs.HOME_HERO_IMAGE || '/images/pagina/banner.png'
     const waNumber = configs.WHATSAPP_NUMERO || ''
@@ -91,22 +132,28 @@ async function getHomeData() {
 
     return {
       courses: JSON.parse(JSON.stringify(courses)),
-      rutas: JSON.parse(JSON.stringify(rutas)),
+      diplomados: JSON.parse(JSON.stringify(diplomados)),
+      especializaciones: JSON.parse(JSON.stringify(especializaciones)),
+      teachers: JSON.parse(JSON.stringify(teachersRaw)),
       ebooks: JSON.parse(JSON.stringify(ebooks)),
       heroImg,
       waLink,
     }
   } catch {
     return {
-      courses: [], rutas: [], ebooks: [],
-      heroImg: '/images/pagina/banner.png',
-      waLink: '#',
+      courses: [], diplomados: [], especializaciones: [], teachers: [], ebooks: [],
+      heroTitle: 'Aprende sin límites,\ncrece sin fronteras',
+      heroDescription: 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.',
+      logos: [],
     }
   }
 }
 
 export default async function HomePage() {
-  const { courses, rutas, ebooks, heroImg, waLink } = await getHomeData()
+  const { courses, diplomados, especializaciones, teachers, ebooks, heroTitle, heroDescription, logos } = await getHomeData()
+  const cursosConfig = getTipoProgramaConfig('CURSO')
+  const diplomadosConfig = getTipoProgramaConfig('DIPLOMADO')
+  const especializacionesConfig = getTipoProgramaConfig('ESPECIALIZACION')
 
   return (
     <>
@@ -342,88 +389,152 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* WHY CHOOSE */}
-      <section className="bg-secondary py-24">
-        <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
-          <div className="relative">
-            <div className="overflow-hidden rounded-[2.5rem] shadow-soft">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/pagina/cl.png"
-                alt="Lo que nos distingue"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="absolute -right-4 -top-4 hidden h-32 w-32 rounded-3xl bg-orange-gradient shadow-glow lg:block" />
-            <div className="absolute -bottom-6 -left-6 hidden h-24 w-24 rounded-2xl bg-brand-lime shadow-soft lg:block" />
-          </div>
+      {/* ── 2. LOGO MARQUEE ─────────────────────────── */}
+      <ClientLogosMarquee logos={logos} />
 
-          <div>
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-brand-orange">
-              Lo que nos distingue
-            </span>
-            <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight text-balance text-foreground sm:text-5xl">
-              Una institución pensada para que tú llegues más lejos
-            </h2>
-            <ul className="mt-10 space-y-5">
-              {[
-                'Diplomados con sustento académico y enfoque práctico.',
-                'Docentes con experiencia real en su campo profesional.',
-                'Acompañamiento personalizado durante todo el programa.',
-                'Plataforma flexible: estudia a tu ritmo, sin perder calidad.',
-                'Certificación que respalda tu hoja de vida.',
-              ].map(t => (
-                <li key={t} className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-6 w-6 shrink-0 text-brand-teal" />
-                  <span className="text-base text-foreground/85">{t}</span>
-                </li>
-              ))}
-            </ul>
-            <Link
-              href="/nosotros"
-              className="mt-10 inline-flex items-center gap-2 rounded-full bg-hero-gradient px-7 py-3.5 text-sm font-bold text-white shadow-soft transition-base hover:shadow-glow no-underline"
-            >
-              Conoce más sobre nosotros
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 4. EBOOKS DESTACADOS ────────────────────── */}
-      <HomeEbooksSection ebooks={ebooks} />
-
-      {/* ── 5. CARACTERÍSTICAS DE CLASES ────────────── */}
-      <ClassFeaturesSection />
-
-      {/* ── 5. RUTAS DE APRENDIZAJE ─────────────────── */}
-      {rutas.length > 0 && (
-        <section style={{ backgroundColor: 'hsl(210, 15%, 97%)', borderTop: '1px solid hsl(214, 20%, 92%)' }}>
-          <div className="section-container">
-            <ScrollReveal>
-              <div className="flex items-end justify-between mb-2">
-                <div>
-                  <div
-                    className="inline-flex items-center gap-2 mb-3"
-                    style={{ color: 'var(--web-primary, #25927F)', fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}
-                  >
-                    <Map size={14} /> Especialízate
+      {/* ── 3. CURSOS DESTACADOS ────────────────────── */}
+      <section className="section-container">
+        <ScrollReveal>
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <h2 className="section-title">{cursosConfig.homeTitle}</h2>
+              <p className="section-subtitle">{cursosConfig.homeSubtitle}</p>
+              {/* WHY CHOOSE */}
+              <section className="bg-secondary py-24">
+                <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+                  <div className="relative">
+                    <div className="overflow-hidden rounded-[2.5rem] shadow-soft">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="/images/pagina/cl.png"
+                        alt="Lo que nos distingue"
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div className="absolute -right-4 -top-4 hidden h-32 w-32 rounded-3xl bg-orange-gradient shadow-glow lg:block" />
+                    <div className="absolute -bottom-6 -left-6 hidden h-24 w-24 rounded-2xl bg-brand-lime shadow-soft lg:block" />
                   </div>
-                  <h2 className="section-title" style={{ marginBottom: '0.25rem' }}>Rutas de Aprendizaje</h2>
-                  <p className="section-subtitle">Colecciones curadas para llevarte de principiante a experto.</p>
+
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-[0.2em] text-brand-orange">
+                      Lo que nos distingue
+                    </span>
+                    <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight text-balance text-foreground sm:text-5xl">
+                      Una institución pensada para que tú llegues más lejos
+                    </h2>
+                    <ul className="mt-10 space-y-5">
+                      {[
+                        'Diplomados con sustento académico y enfoque práctico.',
+                        'Docentes con experiencia real en su campo profesional.',
+                        'Acompañamiento personalizado durante todo el programa.',
+                        'Plataforma flexible: estudia a tu ritmo, sin perder calidad.',
+                        'Certificación que respalda tu hoja de vida.',
+                      ].map(t => (
+                        <li key={t} className="flex items-start gap-3">
+                          <CheckCircle2 className="mt-0.5 h-6 w-6 shrink-0 text-brand-teal" />
+                          <span className="text-base text-foreground/85">{t}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link
+                      href="/nosotros"
+                      className="mt-10 inline-flex items-center gap-2 rounded-full bg-hero-gradient px-7 py-3.5 text-sm font-bold text-white shadow-soft transition-base hover:shadow-glow no-underline"
+                    >
+                      Conoce más sobre nosotros
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
                 </div>
-                <Link
-                  href="/contacto"
-                  className="inline-flex items-center gap-2 rounded-full bg-orange-gradient px-7 py-4 text-sm font-bold text-white shadow-glow transition-base hover:scale-[1.03] no-underline"
-                >
-                  Hablar ahora
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
-      )}
-</>
-  )
+              </section>
+
+              {/* ── 4. EBOOKS DESTACADOS ────────────────────── */}
+              <HomeEbooksSection ebooks={ebooks} />
+
+              {/* ── 5. CARACTERÍSTICAS DE CLASES ────────────── */}
+              <ClassFeaturesSection />
+
+              {/* ── 5. RUTAS DE APRENDIZAJE ─────────────────── */}
+              {rutas.length > 0 && (
+                <section style={{ backgroundColor: 'hsl(210, 15%, 97%)', borderTop: '1px solid hsl(214, 20%, 92%)' }}>
+                  <div className="section-container">
+                    <ScrollReveal>
+                      <div className="flex items-end justify-between mb-2">
+                        <div>
+                          <div
+                            className="inline-flex items-center gap-2 mb-3"
+                            style={{ color: 'var(--web-primary, #25927F)', fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}
+                          >
+                            <Map size={14} /> Especialízate
+                          </div>
+                          <h2 className="section-title" style={{ marginBottom: '0.25rem' }}>Rutas de Aprendizaje</h2>
+                          <p className="section-subtitle">Colecciones curadas para llevarte de principiante a experto.</p>
+                        </div>
+                        <Link
+                          href="/contacto"
+                          className="inline-flex items-center gap-2 rounded-full bg-orange-gradient px-7 py-4 text-sm font-bold text-white shadow-glow transition-base hover:scale-[1.03] no-underline"
+                        >
+                          Hablar ahora
+                          <ArrowRight className="h-4 w-4" />
+                        </Link>
+                      </div>
+                    </ScrollReveal>
+                  </div>
+                </section>
+              )}
+
+              {/* ── 4. EBOOKS DESTACADOS ────────────────────── */}
+              {isFeatureEnabled('ebooks') && <HomeEbooksSection ebooks={ebooks} />}
+
+              {/* ── 5. CARACTERÍSTICAS DE CLASES ────────────── */}
+              <ClassFeaturesSection />
+
+              {/* ── 6. PROFESORES ───────────────────────────── */}
+              <ProfessorsCarousel teachers={teachers} />
+
+              {/* ── 7. EMPRESAS (B2B informativo) ───────────── */}
+              <CompaniesSection />
+
+              {/* ── 8. CTA AGENDAR REUNIÓN ──────────────────── */}
+              <EnterpriseCTASection />
+
+              {/* ── 9. VERIFICAR CERTIFICADO ────────────────── */}
+              <SearchCertificateSection />
+
+              {/* ── 10. CTA INSCRIPCIÓN ─────────────────────── */}
+              <section className="bg-white py-16 text-center" style={{ borderTop: '1px solid hsl(214, 20%, 88%)' }}>
+                <div className="max-w-3xl mx-auto px-4">
+                  <ScrollReveal>
+                    <div
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6"
+                      style={{ backgroundColor: 'rgba(var(--web-primary-rgb, 37, 146, 127),0.08)', color: 'var(--web-dark, #025E44)' }}
+                    >
+                      <CheckCircle size={16} />
+                      <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', fontWeight: 600 }}>
+                        Únete a miles de estudiantes
+                      </span>
+                    </div>
+                    <h2
+                      className="mb-4"
+                      style={{ fontFamily: 'Poppins, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', fontWeight: 700, color: '#0A0A0A', letterSpacing: '-0.02em' }}
+                    >
+                      ¿Listo para transformar tu carrera?
+                    </h2>
+                    <p
+                      className="mb-8 max-w-xl mx-auto"
+                      style={{ fontFamily: 'Poppins, sans-serif', color: 'hsl(215, 16%, 47%)', lineHeight: 1.7 }}
+                    >
+                      Inscríbete hoy y comienza a aprender con los mejores profesionales del sector.
+                    </p>
+                    <Link
+                      href="/cursos"
+                      className="no-underline inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-white transition-all duration-300 hover:scale-105"
+                      style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', boxShadow: '0 6px 20px rgba(var(--web-primary-rgb, 37, 146, 127),0.35)' }}
+                    >
+                      Inscribirse ahora <ArrowRight size={18} />
+                    </Link>
+                  </ScrollReveal>
+                </div>
+              </section>
+            </>
+            )
 }

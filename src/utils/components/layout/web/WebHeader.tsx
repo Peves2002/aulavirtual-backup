@@ -26,11 +26,11 @@ interface WebHeaderProps {
 }
 
 const links = [
-  { to: '/',                      label: 'Inicio' },
-  { to: '/nosotros',              label: 'Nosotros' },
-  { to: '/cursos',                label: 'Programas' },
+  { to: '/', label: 'Inicio' },
+  { to: '/nosotros', label: 'Nosotros' },
+  { to: '/cursos', label: 'Programas' },
   { to: '/verificar-certificado', label: 'Certificado' },
-  { to: '/contacto',              label: 'Contacto' },
+  { to: '/contacto', label: 'Contacto' },
 ] as const
 
 export default function WebHeader({ initialCategories = [], platformName = 'Aula Virtual', platformSlogan = 'Institute' }: WebHeaderProps) {
