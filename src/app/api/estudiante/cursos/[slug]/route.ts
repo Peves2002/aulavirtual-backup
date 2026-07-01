@@ -56,6 +56,13 @@ export async function GET(request: Request, { params }: { params: { slug: string
               include: {
                 progreso: {
                   where: { usuario_id: user.id }
+                },
+                trabajo: {
+                  include: {
+                    entregas: {
+                      where: { usuario_id: user.id }
+                    }
+                  }
                 }
               },
               orderBy: { orden: 'asc' }
@@ -170,11 +177,31 @@ export async function GET(request: Request, { params }: { params: { slug: string
             orden: l.orden,
             video_url: l.video_url,
             es_en_vivo: (l as any).es_en_vivo,
+            es_pdf: (l as any).es_pdf,
             fecha_programada: (l as any).fecha_programada,
             fecha_fin: (l as any).fecha_fin,
             enlace_reunion: (l as any).enlace_reunion,
             completada: l.progreso[0]?.esta_completado || false,
-            recursos: Array.isArray(l.recursos) ? l.recursos : []
+            recursos: Array.isArray(l.recursos) ? l.recursos : [],
+            trabajo: (l as any).trabajo ? {
+              id: (l as any).trabajo.id,
+              titulo: (l as any).trabajo.titulo,
+              descripcion: (l as any).trabajo.descripcion,
+              archivo_url: (l as any).trabajo.archivo_url,
+              archivo_nombre: (l as any).trabajo.archivo_nombre,
+              fecha_inicio: (l as any).trabajo.fecha_inicio,
+              fecha_fin: (l as any).trabajo.fecha_fin,
+              entrega: (l as any).trabajo.entregas[0] ? {
+                id: (l as any).trabajo.entregas[0].id,
+                archivo_url: (l as any).trabajo.entregas[0].archivo_url,
+                archivo_nombre: (l as any).trabajo.entregas[0].archivo_nombre,
+                comentario_estudiante: (l as any).trabajo.entregas[0].comentario_estudiante,
+                nota: (l as any).trabajo.entregas[0].nota,
+                comentario_docente: (l as any).trabajo.entregas[0].comentario_docente,
+                creado_en: (l as any).trabajo.entregas[0].creado_en,
+                actualizado_en: (l as any).trabajo.entregas[0].actualizado_en
+              } : null
+            } : null
           }))
       })),
       examenes: course.examenes.map(ex => ({

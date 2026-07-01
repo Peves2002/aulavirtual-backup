@@ -11,6 +11,7 @@ import prisma from '@/utils/libs/prisma'
 import { Navbar } from '@/components/site/Navbar'
 import { Footer } from '@/components/site/Footer'
 import { WhatsAppFab } from '@/components/site/WhatsAppFab'
+import PWAInstalledToast from '@/features/web/home/components/PWAInstalledToast'
 
 const getCategorias = unstable_cache(
   () =>
@@ -28,9 +29,9 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthModalProvider>
-      <div 
+      <div
         className="min-h-screen flex flex-col font-sans text-foreground"
-        style={{ 
+        style={{
           backgroundColor: '#FAFCF7', // Very subtle green tint to the white
           backgroundImage: `
             linear-gradient(to right, rgba(168, 224, 96, 0.15) 1px, transparent 1px),

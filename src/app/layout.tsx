@@ -15,6 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const title = configs.TEMPLATE_NAME || 'Incuba Cocina'
   const slogan = configs.TEMPLATE_SLOGAN || 'Aprende cocina profesional online'
   const logo = configs.TEMPLATE_LOGO || '/favicon.ico'
+  const themeColor = configs.PRIMARY_COLOR_MAIN || '#131FF2'
 
   return {
     metadataBase: new URL('https://incubacocina.com'),
@@ -23,20 +24,18 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${title}`
     },
     description: slogan,
-    icons: { icon: logo },
-    openGraph: {
-      type: 'website',
-      locale: 'es_PE',
-      siteName: title,
+    manifest: '/manifest.json',
+    icons: {
+      icon: logo,
+      apple: '/icons/apple-touch-icon.png'
     },
-    twitter: {
-      card: 'summary_large_image',
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: { index: true, follow: true },
-    },
+    other: {
+      'theme-color': themeColor,
+      'mobile-web-app-capable': 'yes',
+      'apple-mobile-web-app-capable': 'yes',
+      'apple-mobile-web-app-status-bar-style': 'default',
+      'apple-mobile-web-app-title': title
+    }
   }
 }
 
@@ -45,7 +44,7 @@ function hexToRgb(hex: string): string {
   const r = parseInt(clean.slice(0, 2), 16) || 0
   const g = parseInt(clean.slice(2, 4), 16) || 0
   const b = parseInt(clean.slice(4, 6), 16) || 0
-  
+
   return `${r}, ${g}, ${b}`
 }
 
@@ -54,7 +53,7 @@ function darkenHex(hex: string, factor: number): string {
   const r = Math.round((parseInt(clean.slice(0, 2), 16) || 0) * factor)
   const g = Math.round((parseInt(clean.slice(2, 4), 16) || 0) * factor)
   const b = Math.round((parseInt(clean.slice(4, 6), 16) || 0) * factor)
-  
+
   return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
 }
 
@@ -69,11 +68,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const primaryDark = configs.PRIMARY_COLOR_DARK || '#9196F2'
 
   // Colores web (con fallback al design system teal)
-  const webPrimary  = configs.PRIMARY_COLOR_MAIN  || '#25927F'
-  const webLight    = configs.PRIMARY_COLOR_LIGHT || '#BDD962'
-  const webDark     = configs.PRIMARY_COLOR_DARK  || '#025E44'
+  const webPrimary = configs.PRIMARY_COLOR_MAIN || '#25927F'
+  const webLight = configs.PRIMARY_COLOR_LIGHT || '#BDD962'
+  const webDark = configs.PRIMARY_COLOR_DARK || '#025E44'
   const webDarkDeep = darkenHex(webDark, 0.45)  // muy oscuro → reemplaza #012d22
-  const webDarkMid  = darkenHex(webDark, 0.72)  // oscuro medio → reemplaza #0f4438
+  const webDarkMid = darkenHex(webDark, 0.72)  // oscuro medio → reemplaza #0f4438
 
   return (
     <html lang='es' suppressHydrationWarning className={`${plus_jakarta_sans.variable} ${plus_jakarta_sans.className}`}>

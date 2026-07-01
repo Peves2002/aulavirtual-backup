@@ -6,19 +6,19 @@
   "scripts": {
     "dev": "next dev",
     "build": "pnpm run build:icons && next build",
-    "start": "next start",
+    "start": "dotenv -- node .next/standalone/server.js",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "build:icons": "tsx src/utils/assets/iconify-icons/bundle-icons-css.ts",
-    "db:client:setup": "prisma db pull && prisma generate",
-    "db:client:generate": "prisma generate",
+    "db:setup": "prisma db pull && prisma generate",
+    "db:push": "prisma db push & prisma generate",
+    "db:generate": "prisma generate",
     "db:migration:dev": "prisma migrate dev",
-    "db:client:push": "prisma db push & prisma generate",
     "db:migration:deploy": "prisma migrate deploy",
-    "db:main:seed": "dotenv -- tsx ./prisma/seed/main",
+    "db:seed": "dotenv -- tsx ./prisma/seed/main",
     "db:seed:suscripciones": "dotenv -- tsx ./prisma/seed/suscripciones",
-    "db:reset": "dotenv -e .env -- npx prisma migrate reset"
+    "db:reset": "dotenv -e .env -- pnpm prisma migrate reset"
   },
   "prisma": {
     "seed": "tsx prisma/seed_student.ts"
@@ -27,6 +27,7 @@
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@ducanh2912/next-pwa": "^10.2.9",
     "@emotion/cache": "11.11.0",
     "@emotion/react": "11.11.4",
     "@emotion/styled": "11.11.0",
@@ -102,6 +103,7 @@
     "react-day-picker": "^10.0.1",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.71.1",
+    "react-pdf": "^6.2.2",
     "react-perfect-scrollbar": "1.5.8",
     "react-resizable-panels": "^4.11.1",
     "react-toastify": "10.0.4",
