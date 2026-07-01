@@ -8,6 +8,7 @@ import CursosClient from './CursosClient'
 // Http Client
 import { AxiosWebCursos } from '@/features/web/cursos/http/axiosWebCursos'
 import { getAuthSession } from '@/utils/libs/auth-helpers'
+import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
 
 // Server Action / Data Fetching
 async function getData(token: string | null) {
@@ -43,8 +44,7 @@ export const metadata = {
 export default async function CursosPage() {
   const session = await getAuthSession()
   const token = session?.user?.accessToken ?? null
-
-  const { courses, categories } = await getData(token)
+  const { courses, categories } = await getProgramCatalogData('CURSO', token)
 
   return <CursosClient initialCourses={courses} initialCategories={categories} />
 }

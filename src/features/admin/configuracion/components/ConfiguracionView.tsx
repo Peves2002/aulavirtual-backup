@@ -363,6 +363,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
   const [openMedia, setOpenMedia] = useState(false)
   const [showSecret, setShowSecret] = useState<{ [key: string]: boolean }>({})
   const [openLogoMedia, setOpenLogoMedia] = useState(false)
+  const [openFaviconMedia, setOpenFaviconMedia] = useState(false)
   const [pendingLogoLabel, setPendingLogoLabel] = useState('')
 
   const initialMapped = (initialData || []).reduce((acc: { [key: string]: string }, curr: Configuracion) => {
@@ -383,13 +384,13 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     CERTIFICADO_SLOGAN: '',
     CERTIFICADO_INSTITUTION_URL: '',
     TEMPLATE_LOGO: '',
+    SITE_FAVICON: '',
     SETTINGS_COOKIE_NAME: 'arm',
     PRIMARY_COLOR_MAIN: '#131FF2',
     PRIMARY_COLOR_LIGHT: '#242CBF',
     PRIMARY_COLOR_DARK: '#9196F2',
     PAYPAL_ENABLED: 'true',
     PAYPAL_CLIENT_ID: '',
-    PAYPAL_CLIENT_SECRET: '',
     PAYPAL_API_URL: 'https://api-m.sandbox.paypal.com',
     PAYPAL_PUBLIC_CLIENT_ID: '',
     PAYPAL_EXCHANGE_RATE: '3.80',
@@ -397,13 +398,11 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     GOOGLE_CLIENT_SECRET: '',
     IZIPAY_ENABLED: 'true',
     IZIPAY_MERCHANT_CODE: '',
-    IZIPAY_API_KEY: '',
     IZIPAY_RSA_KEY: '',
     IZIPAY_ENDPOINT: 'https://sandbox-api-pw.izipay.pe',
     IZIPAY_SDK_URL: 'https://sandbox-checkout.izipay.pe/payments/v1/js/index.js',
     CULQI_ENABLED: 'true',
     CULQI_PUBLIC_KEY: '',
-    CULQI_PRIVATE_KEY: '',
     CULQI_RSA_ID: '',
     CULQI_RSA_PUBLIC_KEY: '',
     CERTIFICADO_GERENTE_GENERAL_ID: '',
@@ -412,9 +411,10 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     PAGO_MANUAL_WHATSAPP_NUMERO: '',
     PAGO_MANUAL_WHATSAPP_MENSAJE: '',
     MP_ENABLED: 'true',
-    MP_ACCESS_TOKEN: '',
     MP_PUBLIC_KEY: '',
     PEDIDOS_SOLICITAR_COMPROBANTE: 'true',
+    COMENTARIOS_REQUIERE_APROBACION: 'false',
+    chat_entre_alumnos: 'false',
     ...initialMapped
   })
 
@@ -459,7 +459,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
       const axiosConfig = new AxiosConfiguracion({ getAuthToken })
 
       await axiosConfig.save(payload)
-      enqueueSnackbar('Configuración actualizada. Los cambios estéticos pueden requerir recargar la página.', { variant: 'success' })
+      enqueueSnackbar('Configuración actualizada. Si cambiaste el favicon, recarga la pestaña del navegador (Ctrl+F5).', { variant: 'success' })
     } catch (err) {
       console.error(err)
       enqueueSnackbar('Error al guardar la configuración', { variant: 'error' })
@@ -605,10 +605,6 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
             <Paper variant='outlined' sx={{ p: 2, bgcolor: 'background.default' }}>
               <Stack spacing={1}>
                 <FormControlLabel
-                  control={<Switch checked={config.WEB_RUTAS_HABILITADO === 'true'} onChange={(e) => handleInputChange('WEB_RUTAS_HABILITADO', e.target.checked ? 'true' : 'false')} />}
-                  label='Mostrar página de Rutas de Aprendizaje'
-                />
-                <FormControlLabel
                   control={<Switch checked={config.WEB_EMPRESAS_HABILITADO === 'true'} onChange={(e) => handleInputChange('WEB_EMPRESAS_HABILITADO', e.target.checked ? 'true' : 'false')} />}
                   label='Mostrar página de Empresas'
                 />
@@ -633,6 +629,44 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
                   />
                 }
                 label='Habilitar solicitud de comprobantes en el Checkout'
+              />
+            </Paper>
+          </Box>
+
+          {/* Comentarios */}
+          <Box>
+            <Typography variant='h6' gutterBottom>Moderación de Comentarios</Typography>
+            <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
+              Controla si los comentarios de los estudiantes requieren aprobación antes de ser visibles públicamente. Los comentarios de admin y profesor siempre se publican de inmediato.
+            </Typography>
+            <Paper variant='outlined' sx={{ p: 2, bgcolor: 'background.default' }}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={config.COMENTARIOS_REQUIERE_APROBACION === 'true'}
+                    onChange={(e) => handleInputChange('COMENTARIOS_REQUIERE_APROBACION', e.target.checked ? 'true' : 'false')}
+                  />
+                }
+                label='Requerir aprobación antes de publicar comentarios de estudiantes'
+              />
+            </Paper>
+          </Box>
+
+          {/* Chat */}
+          <Box>
+            <Typography variant='h6' gutterBottom>Chat entre Usuarios</Typography>
+            <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
+              Controla si los alumnos pueden enviarse mensajes directos entre sí. Profesores y administradores siempre pueden chatear con sus alumnos.
+            </Typography>
+            <Paper variant='outlined' sx={{ p: 2, bgcolor: 'background.default' }}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={config.chat_entre_alumnos === 'true'}
+                    onChange={(e) => handleInputChange('chat_entre_alumnos', e.target.checked ? 'true' : 'false')}
+                  />
+                }
+                label='Permitir mensajes directos entre alumnos'
               />
             </Paper>
           </Box>
@@ -718,6 +752,68 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
                 enqueueSnackbar('Logo seleccionado — recuerda guardar los cambios', { variant: 'info' })
               }}
               title='Seleccionar Logo'
+            />
+          </Box>
+
+          <Divider />
+
+          <Box>
+            <SectionLabel>Favicon</SectionLabel>
+            <Typography variant='body2' color='text.secondary' sx={{ mb: 2 }}>
+              Icono que aparece en la pestaña del navegador. Usa una imagen cuadrada (mínimo 32×32 px).
+              Al guardar, se generará automáticamente el favicon del sitio.
+            </Typography>
+            <Grid container spacing={3} alignItems='flex-start'>
+              <Grid item xs={12} md={4}>
+                <Paper
+                  variant='outlined'
+                  sx={{
+                    p: 2, textAlign: 'center', borderRadius: 2,
+                    minHeight: 120, display: 'flex', flexDirection: 'column',
+                    alignItems: 'center', justifyContent: 'center', gap: 1.5
+                  }}
+                >
+                  {config.SITE_FAVICON ? (
+                    <img
+                      src={config.SITE_FAVICON}
+                      alt='Favicon'
+                      style={{ width: 48, height: 48, objectFit: 'contain' }}
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+                    />
+                  ) : (
+                    <Typography variant='caption' color='text.disabled'>Sin favicon personalizado</Typography>
+                  )}
+                  <Stack direction='row' spacing={1} flexWrap='wrap' justifyContent='center'>
+                    <Button
+                      variant='outlined'
+                      size='small'
+                      startIcon={<i className='tabler-photo' />}
+                      onClick={() => setOpenFaviconMedia(true)}
+                    >
+                      Cambiar favicon
+                    </Button>
+                    {config.SITE_FAVICON ? (
+                      <Button
+                        variant='text'
+                        size='small'
+                        color='error'
+                        onClick={() => handleInputChange('SITE_FAVICON', '')}
+                      >
+                        Quitar
+                      </Button>
+                    ) : null}
+                  </Stack>
+                </Paper>
+              </Grid>
+            </Grid>
+            <MediaLibrary
+              open={openFaviconMedia}
+              onClose={() => setOpenFaviconMedia(false)}
+              onSelect={(url) => {
+                handleInputChange('SITE_FAVICON', url)
+                enqueueSnackbar('Favicon seleccionado — recuerda guardar los cambios', { variant: 'info' })
+              }}
+              title='Seleccionar Favicon'
             />
           </Box>
 
@@ -827,6 +923,21 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
       icon: 'tabler-credit-card',
       content: (
         <Stack spacing={1.5}>
+          <Paper
+            variant='outlined'
+            sx={{
+              p: 2, borderRadius: 2, borderLeft: '4px solid',
+              borderLeftColor: 'info.main', bgcolor: 'action.hover'
+            }}
+          >
+            <Stack direction='row' spacing={1.5} alignItems='center'>
+              <i className='tabler-info-circle' style={{ fontSize: 20, color: 'var(--mui-palette-info-main)' }} />
+              <Typography variant='body2' color='text.secondary'>
+                Las claves <strong>privadas/secretas</strong> (Secret Key, API Key, Access Token) se gestionan de forma segura en el servidor y no se muestran aquí.
+              </Typography>
+            </Stack>
+          </Paper>
+
           <GatewayAccordion
             icon='tabler-building-bank'
             title='Culqi'
@@ -845,13 +956,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
                   helperText='pk_test_... o pk_live_... — usada en el frontend para tokenizar'
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
-                <SecretField
-                  label='Private Key'
-                  configKey='CULQI_PRIVATE_KEY'
-                  helperText='sk_test_... o sk_live_... — usada en el backend para el cargo'
-                />
-              </Grid>
+
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth
@@ -892,9 +997,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
                   onChange={(e) => handleInputChange('IZIPAY_MERCHANT_CODE', e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
-                <SecretField label='API Key' configKey='IZIPAY_API_KEY' />
-              </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -942,9 +1045,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
                   onChange={(e) => handleInputChange('PAYPAL_CLIENT_ID', e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
-                <SecretField label='Client Secret' configKey='PAYPAL_CLIENT_SECRET' />
-              </Grid>
+
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth
@@ -985,13 +1086,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
             onInputChange={handleInputChange}
           >
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
-                <SecretField
-                  label='Access Token'
-                  configKey='MP_ACCESS_TOKEN'
-                  helperText='TEST-... (sandbox) o APP_USR-... (producción)'
-                />
-              </Grid>
+
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth

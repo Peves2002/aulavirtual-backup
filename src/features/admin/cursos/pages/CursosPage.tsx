@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import {
   Avatar,
@@ -32,6 +32,24 @@ import type { ColumnDef } from '@tanstack/react-table'
 
 import classnames from 'classnames'
 
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+  arrayMove
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 import type { Curso } from '../entity/Curso'
 import { CursosActions } from '../components/CursosActions'
@@ -41,7 +59,9 @@ import TablePaginationComponent from '@/utils/components/others/TablePaginationC
 import type { ThemeColor } from '@/@core/types'
 import { fuzzyFilter } from '@/utils/components/others/FuzzyFilter'
 import tableStyles from '@core/styles/table.module.css'
-import { useCursos } from '../hooks/useCursos'
+import { useCursos, useReorderCursos } from '../hooks/useCursos'
+import type { TipoPrograma } from '@/utils/configs/tipoPrograma'
+import { getTipoProgramaColor, getTipoProgramaLabel } from '@/utils/configs/tipoProgramaOptions'
 
 type EstadoColorMap = {
   [key: string]: ThemeColor
@@ -65,6 +85,45 @@ interface CursosPageProps {
   initialDataCursos: Curso[]
 }
 
+// ─── Fila sortable ────────────────────────────────────────────────────────────
+
+function SortableRow({
+  id,
+  children,
+  isDragDisabled,
+  isSelected
+}: {
+  id: string
+  children: (dragHandleProps: any) => React.ReactNode
+  isDragDisabled: boolean
+  isSelected: boolean
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id,
+    disabled: isDragDisabled
+  })
+
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 10 : undefined,
+    opacity: isDragging ? 0.6 : 1,
+    position: isDragging ? 'relative' : undefined
+  }
+
+  return (
+    <tr
+      ref={setNodeRef}
+      style={style}
+      className={classnames({ selected: isSelected })}
+    >
+      {children({ attributes, listeners })}
+    </tr>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 export function CursosPage({ initialDataCursos }: CursosPageProps) {
   const [cursoToDelete, setCursoToDelete] = useState<Curso | null>(null)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
@@ -73,8 +132,9 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
   const [rowSelection, setRowSelection] = useState({})
   const [globalFilter, setGlobalFilter] = useState('')
   const [estadoFilter, setEstadoFilter] = useState<string>('all')
+  const [tipoFilter, setTipoFilter] = useState<'all' | TipoPrograma>('all')
+  const [orderedCursos, setOrderedCursos] = useState<Curso[]>([])
 
-  // Estado para paginación manual
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10
@@ -84,11 +144,42 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
     page: (pagination.pageIndex + 1).toString(),
     limit: pagination.pageSize.toString(),
     buscar: globalFilter,
-    estado: estadoFilter === 'all' ? '' : estadoFilter
+    estado: estadoFilter === 'all' ? '' : estadoFilter,
+    ...(tipoFilter !== 'all' ? { tipo: tipoFilter } : {})
   })
+
+  const reorderMutation = useReorderCursos()
 
   const cursos = useMemo(() => data?.cursos ?? (pagination.pageIndex === 0 ? initialDataCursos : []), [data, initialDataCursos, pagination.pageIndex])
   const totalCursos = useMemo(() => data?.paginacion?.total ?? initialDataCursos.length, [data, initialDataCursos.length])
+
+  useEffect(() => {
+    setOrderedCursos([...cursos])
+  }, [cursos])
+
+  const isDragDisabled = globalFilter.trim().length > 0 || estadoFilter !== 'all' || tipoFilter !== 'all'
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  )
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (!over || active.id === over.id) return
+
+    const oldIndex = orderedCursos.findIndex(c => c.id === active.id)
+    const newIndex = orderedCursos.findIndex(c => c.id === over.id)
+    const reordered = arrayMove(orderedCursos, oldIndex, newIndex)
+
+    setOrderedCursos(reordered)
+
+    const baseIndex = pagination.pageIndex * pagination.pageSize
+    const items = reordered.map((c, i) => ({ id: c.id, orden: baseIndex + i }))
+
+    await reorderMutation.mutateAsync({ items })
+  }
 
   const handleDeleteClick = (curso: Curso) => {
     setCursoToDelete(curso)
@@ -96,12 +187,17 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
   }
 
   const handleViewStudentsClick = (curso: Curso) => {
-    setCursoToDelete(curso) // Reutilizamos el estado para no crear otro
+    setCursoToDelete(curso)
     setOpenStudentsModal(true)
   }
 
   const columns = useMemo<ColumnDef<Curso, any>[]>(
     () => [
+      columnHelper.display({
+        id: 'drag-handle',
+        header: () => null,
+        cell: () => null
+      }),
       columnHelper.display({
         id: 'numero',
         header: '#',
@@ -133,19 +229,27 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
               >
                 {row.original.titulo}
               </Typography>
-              <Typography
-                variant='caption'
-                color='text.secondary'
-                noWrap
-                sx={{
-                  fontFamily: 'monospace',
-                  display: 'block',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
-                }}
-              >
-                {row.original.slug}
-              </Typography>
+              <Tooltip title='Copiar ID' placement='bottom' arrow>
+                <Typography
+                  variant='caption'
+                  color='text.secondary'
+                  noWrap
+                  onClick={e => {
+                    e.stopPropagation()
+                    navigator.clipboard.writeText(row.original.id)
+                  }}
+                  sx={{
+                    fontFamily: 'monospace',
+                    display: 'block',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    cursor: 'pointer',
+                    '&:hover': { color: 'primary.main' }
+                  }}
+                >
+                  {row.original.id}
+                </Typography>
+              </Tooltip>
             </Box>
           </Box>
         )
@@ -171,6 +275,18 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
             </Box>
           )
         }
+      }),
+      columnHelper.display({
+        id: 'tipo_programa',
+        header: 'Tipo',
+        cell: ({ row }) => (
+          <Chip
+            label={getTipoProgramaLabel(row.original.tipo)}
+            size='small'
+            variant='tonal'
+            color={getTipoProgramaColor(row.original.tipo)}
+          />
+        )
       }),
       columnHelper.display({
         id: 'categoria',
@@ -287,7 +403,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
   )
 
   const table = useReactTable({
-    data: cursos,
+    data: orderedCursos,
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -312,7 +428,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
 
-
+  const rows = table.getRowModel().rows
 
   return (
     <>
@@ -330,6 +446,20 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
             <MenuItem value='50'>50</MenuItem>
           </CustomTextField>
           <div className='flex flex-col sm:flex-row is-full sm:is-auto items-start sm:items-center gap-4'>
+            <CustomTextField
+              select
+              value={tipoFilter}
+              onChange={e => {
+                setTipoFilter(e.target.value as 'all' | TipoPrograma)
+                table.setPageIndex(0)
+              }}
+              className='is-full sm:is-[200px]'
+            >
+              <MenuItem value='all'>Todos los tipos</MenuItem>
+              <MenuItem value='CURSO'>Cursos</MenuItem>
+              <MenuItem value='DIPLOMADO'>Diplomados</MenuItem>
+              <MenuItem value='ESPECIALIZACION'>Especializaciones</MenuItem>
+            </CustomTextField>
             <CustomTextField
               select
               value={estadoFilter}
@@ -376,7 +506,10 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
               {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map(header => (
-                    <th key={header.id}>
+                    <th
+                      key={header.id}
+                      style={header.id === 'drag-handle' ? { width: 40, padding: '0 8px' } : undefined}
+                    >
                       {header.isPlaceholder ? null : (
                         <div
                           className={classnames({
@@ -399,30 +532,58 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
                 </tr>
               ))}
             </thead>
-            {cursos.length === 0 ? (
-              <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    No hay cursos disponibles
-                  </td>
-                </tr>
-              </tbody>
-            ) : (
-              <tbody>
-                {table
-                  .getRowModel()
-                  .rows
-                  .map(row => (
-                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                      {row.getVisibleCells().map(cell => (
-                        <td key={cell.id}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </td>
-                      ))}
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={rows.map(r => r.original.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                {orderedCursos.length === 0 ? (
+                  <tbody>
+                    <tr>
+                      <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                        No hay cursos disponibles
+                      </td>
                     </tr>
-                  ))}
-              </tbody>
-            )}
+                  </tbody>
+                ) : (
+                  <tbody>
+                    {rows.map(row => (
+                      <SortableRow
+                        key={row.id}
+                        id={row.original.id}
+                        isDragDisabled={isDragDisabled}
+                        isSelected={row.getIsSelected()}
+                      >
+                        {(dragHandleProps) => (
+                          <>
+                            <td style={{ width: 40, padding: '0 8px', textAlign: 'center' }}>
+                              {!isDragDisabled && (
+                                <span
+                                  {...dragHandleProps.attributes}
+                                  {...dragHandleProps.listeners}
+                                  style={{ cursor: 'grab', touchAction: 'none', display: 'inline-flex', alignItems: 'center' }}
+                                >
+                                  <i className='tabler-grip-vertical text-[20px] text-textDisabled' />
+                                </span>
+                              )}
+                            </td>
+                            {row.getVisibleCells().filter(c => c.column.id !== 'drag-handle').map(cell => (
+                              <td key={cell.id}>
+                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                              </td>
+                            ))}
+                          </>
+                        )}
+                      </SortableRow>
+                    ))}
+                  </tbody>
+                )}
+              </SortableContext>
+            </DndContext>
           </table>
         </div>
         <TablePagination
