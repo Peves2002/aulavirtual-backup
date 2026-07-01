@@ -35,7 +35,20 @@ export async function generateMetadata(): Promise<Metadata> {
       'apple-mobile-web-app-capable': 'yes',
       'apple-mobile-web-app-status-bar-style': 'default',
       'apple-mobile-web-app-title': title
-    }
+    },
+    openGraph: {
+      type: 'website',
+      locale: 'es_PE',
+      siteName: title,
+    },
+    twitter: {
+      card: 'summary_large_image',
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true },
+    },
   }
 }
 

@@ -1,22 +1,32 @@
 import Link from 'next/link'
 
+import { Map, ArrowRight, CheckCircle } from 'lucide-react'
+
 import { Hero } from '@/components/site/Hero'
+import { SponsorsCarousel } from '@/components/site/SponsorsCarousel'
 import { Services } from '@/components/site/Services'
 import { TestimonialsCta } from '@/components/site/TestimonialsCta'
 import { Recetas } from '@/components/site/Recetas'
 import { SubscriptionSection } from '@/components/site/SubscriptionSection'
 import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
+import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
+import ScrollReveal from '@/features/web/home/components/ScrollReveal'
+import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
+import RutasSection from '@/features/web/home/components/RutasSection'
+import CompaniesSection from '@/features/web/home/components/CompaniesSection'
+import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
+import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
+import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
 
 import prisma from '@/utils/libs/prisma'
+import { getConfigs } from '@/utils/libs/config'
 
 export const metadata = {
   title: 'Incuba Cocina - Escuela de Cocina y Emprendimiento',
   description: 'Cursos cortos de cocina y emprendimiento gastronómico. Aprende recetas profesionales, costea y vende.',
 }
 
-export default async function HomePage() {
-  let mappedCourses: any[] = [];
-
+async function getHomeData() {
   try {
     const [coursesRaw, rutasRaw, teachersRaw, configs, ebooksRaw] = await Promise.all([
       // Cursos
@@ -27,7 +37,7 @@ export default async function HomePage() {
           categoria: { select: { id: true, nombre: true } },
           _count: { select: { modulos: true, inscripciones: true } },
         },
-        orderBy: { creado_en: 'desc' },
+        orderBy: [{ orden: 'asc' }, { creado_en: 'desc' }],
         take: 6,
       }),
 
@@ -121,11 +131,13 @@ export default async function HomePage() {
 }
 
 export default async function HomePage() {
-  const { courses, rutas, teachers, ebooks, heroTitle, heroDescription, logos } = await getHomeData()
+  const { courses, rutas, teachers, ebooks } = await getHomeData()
 
   return (
     <div className="bg-transparent">
       <Hero />
+
+      <SponsorsCarousel />
 
       {/* Latest Courses Section */}
       <section className="py-24 relative" style={{ backgroundColor: "#F7FBF0", backgroundImage: "radial-gradient(#d9f99d 1px, transparent 1px)", backgroundSize: "24px 24px" }}>
@@ -133,35 +145,37 @@ export default async function HomePage() {
         <div className="absolute top-20 right-0 w-64 h-64 bg-[#A8E060] rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
         <div className="absolute bottom-20 left-0 w-64 h-64 bg-[#5A9020] rounded-full blur-[100px] opacity-10 pointer-events-none"></div>
 
-        <div className="relative max-w-7xl mx-auto px-5 lg:px-8">
-          <div className="text-center mx-auto max-w-3xl mb-16 reveal">
-            <h2 className="font-display font-bold text-3xl lg:text-5xl text-[#1A3A0A] mb-4">
-              Nuestros <span className="text-[#5A9020]">Últimos Cursos</span>
-            </h2>
-            <p className="text-[#4A7018] text-lg">
-              Aprende las mejores técnicas y recetas rentables paso a paso.
-            </p>
-          </div>
+        <ScrollReveal>
+          <div className="relative max-w-7xl mx-auto px-5 lg:px-8">
+            <div className="text-center mx-auto max-w-3xl mb-16 reveal">
+              <h2 className="font-display font-bold text-3xl lg:text-5xl text-[#1A3A0A] mb-4">
+                Nuestros <span className="text-[#5A9020]">Últimos Cursos</span>
+              </h2>
+              <p className="text-[#4A7018] text-lg">
+                Aprende las mejores técnicas y recetas rentables paso a paso.
+              </p>
+            </div>
 
-          <HomeCoursesSection courses={mappedCourses} />
+            <HomeCoursesSection courses={courses} />
 
-          <div className="mt-12 text-center">
-            <Link
-              href="/cursos"
-              className="inline-flex items-center gap-2 font-bold text-[15px] rounded-full px-8 py-4 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1"
-              style={{ border: "2px solid #5A9020", color: "#5A9020" }}
-            >
-              VER TODOS LOS CURSOS
-            </Link>
+            <div className="mt-12 text-center">
+              <Link
+                href="/cursos"
+                className="inline-flex items-center gap-2 font-bold text-[15px] rounded-full px-8 py-4 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1"
+                style={{ border: "2px solid #5A9020", color: "#5A9020" }}
+              >
+                VER TODOS LOS CURSOS
+              </Link>
+            </div>
           </div>
         </ScrollReveal>
       </section>
 
       {/* ── 4. CARACTERÍSTICAS DE CLASES ────────────── */}
-      <ClassFeaturesSection />
+      {/* <ClassFeaturesSection /> */}
 
       {/* ── 5. RUTAS DE APRENDIZAJE ─────────────────── */}
-      {rutas.length > 0 && (
+      {/* {rutas.length > 0 && (
         <section style={{ backgroundColor: 'hsl(210, 15%, 97%)', borderTop: '1px solid hsl(214, 20%, 92%)' }}>
           <div className="section-container">
             <ScrollReveal>
@@ -190,22 +204,25 @@ export default async function HomePage() {
             </ScrollReveal>
           </div>
         </section>
-      )}
+      )} */}
+
+      {/* ── 5b. EBOOKS DESTACADOS ───────────────────── */}
+      {/* <HomeEbooksSection ebooks={ebooks} /> */}
 
       {/* ── 6. PROFESORES ───────────────────────────── */}
-      <ProfessorsCarousel teachers={teachers} />
+      {/* <ProfessorsCarousel teachers={teachers} /> */}
 
       {/* ── 7. EMPRESAS (B2B informativo) ───────────── */}
-      <CompaniesSection />
+      {/* <CompaniesSection /> */}
 
       {/* ── 8. CTA AGENDAR REUNIÓN ──────────────────── */}
-      <EnterpriseCTASection />
+      {/* <EnterpriseCTASection /> */}
 
       {/* ── 9. VERIFICAR CERTIFICADO ────────────────── */}
-      <SearchCertificateSection />
+      {/* <SearchCertificateSection /> */}
 
       {/* ── 10. CTA INSCRIPCIÓN ─────────────────────── */}
-      <section className="bg-white py-16 text-center" style={{ borderTop: '1px solid hsl(214, 20%, 88%)' }}>
+      {/* <section className="bg-white py-16 text-center" style={{ borderTop: '1px solid hsl(214, 20%, 88%)' }}>
         <div className="max-w-3xl mx-auto px-4">
           <ScrollReveal>
             <div
@@ -238,7 +255,7 @@ export default async function HomePage() {
             </Link>
           </ScrollReveal>
         </div>
-      </section>
+      </section> */}
 
       <Services />
 

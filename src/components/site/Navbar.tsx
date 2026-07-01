@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from "react";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { ArrowRight, Menu, X } from "lucide-react";
 
 import { useAuthModal } from "@/contexts/AuthModalContext";
@@ -14,6 +14,7 @@ import { useReveal } from "@/hooks/use-reveal";
 import UserDropdown from "@/utils/components/layout/shared/UserDropdown";
 
 import { Logo } from "./Logo";
+import NavInstallButton from "./NavInstallButton";
 
 const links = [
   { href: "/", label: "Inicio" },
@@ -28,8 +29,9 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
-  const { openLogin, openRegister } = useAuthModal();
+  const { openLogin } = useAuthModal();
   const pathname = usePathname();
+  const router = useRouter();
 
   const isHome = pathname === "/";
   const showBackground = scrolled;
@@ -37,6 +39,13 @@ export function Navbar() {
   const isWhiteTheme = !isHome || scrolled;
 
   useReveal();
+
+  const handleLogout = async () => {
+    setOpen(false);
+    await signOut({ redirect: false });
+    router.push("/");
+    router.refresh();
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -104,18 +113,13 @@ export function Navbar() {
                 >
                   Iniciar Sesión
                 </button>
-                <button
-                  onClick={() => openRegister()}
-                  className="cursor-pointer inline-flex items-center gap-2 font-bold text-[14px] rounded-full px-8 py-3 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-                  style={{
-                    background: isWhiteTheme ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #A8E060 0%, #5A9020 100%)",
-                    color: isWhiteTheme ? "#FFFFFF" : "#1A3A0A",
-                    border: isWhiteTheme ? "1px solid rgba(255,255,255,0.2)" : "none"
-                  }}
-                >
-                  Registrarse
-                  <ArrowRight size={16} className={isWhiteTheme ? "text-[#A8E060]" : "text-[#1A3A0A]"} />
-                </button>
+                <NavInstallButton
+                  className={`cursor-pointer inline-flex items-center gap-2 font-bold text-[14px] rounded-full px-8 py-3 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 ${
+                    isWhiteTheme
+                      ? 'bg-white/10 text-white border border-white/20'
+                      : 'bg-gradient-to-br from-[#A8E060] to-[#5A9020] text-[#1A3A0A]'
+                  }`}
+                />
               </>
             )}
           </div>
@@ -151,8 +155,8 @@ export function Navbar() {
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto py-10 px-8">
-            <ul className="flex flex-col gap-8 list-none m-0 p-0">
+          <div className="flex-1 overflow-y-auto py-8 px-8">
+            <ul className="flex flex-col gap-4 list-none m-0 p-0">
               {links.map((l, i) => (
                 <li key={l.href} style={{ transitionDelay: `${i * 50}ms` }} className={`${open ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"} transition-all duration-500`}>
                   <Link href={l.href}
@@ -169,14 +173,28 @@ export function Navbar() {
             </ul>
           </div>
 
-          <div className="p-8">
-            <Link href="/cursos"
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-center w-full font-bold text-[16px] rounded-[24px] py-5 transition-all duration-300 shadow-xl"
-              style={{ background: "#A8E060", color: "#0A1A04" }}
-            >
-              Inscribirme ahora
-            </Link>
+          <div className="p-8 pt-4 flex flex-col gap-3">
+            {session ? (
+              <button
+                onClick={handleLogout}
+                className="flex items-center justify-center w-full font-bold text-[16px] rounded-[24px] py-4 transition-all duration-300 border-2"
+                style={{ borderColor: "#5A9020", color: "#5A9020", background: "transparent" }}
+              >
+                Cerrar sesión
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  openLogin();
+                }}
+                className="flex items-center justify-center w-full font-bold text-[16px] rounded-[24px] py-4 transition-all duration-300 border-2"
+                style={{ borderColor: "#5A9020", color: "#5A9020", background: "transparent" }}
+              >
+                Iniciar sesión
+              </button>
+            )}
+            <NavInstallButton onAction={() => setOpen(false)} />
           </div>
         </aside>
       </div>

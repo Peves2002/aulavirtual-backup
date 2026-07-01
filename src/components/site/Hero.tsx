@@ -6,16 +6,30 @@ import Link from "next/link";
 
 import { ArrowRight, Play, X, ChefHat, Coins, BookOpen, Users, CheckCircle2, MessageCircle } from "lucide-react";
 
-const mobileImages = ["/assets/mobil/1.png", "/assets/mobil/2.png"];
+const desktopImages = [
+  "/assets/portada/desktop/brasas-y-parrillas.jpg",
+  "/assets/portada/desktop/panaderia.jpg",
+  "/assets/portada/desktop/pasteleria.jpg",
+  "/assets/portada/desktop/street-food.jpg",
+  "/assets/portada/desktop/vegano-vegetariano.jpg",
+];
+
+const mobileImages = [
+  "/assets/portada/mobile/brasas-y-parrillas.jpg",
+  "/assets/portada/mobile/panaderia.jpg",
+  "/assets/portada/mobile/pasteleria.jpg",
+  "/assets/portada/mobile/street-food.jpg",
+  "/assets/portada/mobile/vegano-vegetariano.jpg",
+];
 
 export function Hero() {
   const [showSubscription, setShowSubscription] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-  
+
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % mobileImages.length);
+      setCurrentSlide((prev) => (prev + 1) % desktopImages.length);
     }, 4000);
 
     return () => clearInterval(timer);
@@ -27,12 +41,19 @@ export function Hero() {
         id="inicio"
         className="relative overflow-hidden w-full -mt-[5rem] min-h-[100vh] flex flex-col lg:flex-row lg:items-center bg-black lg:bg-transparent"
       >
-        {/* Desktop: Image dictates height */}
-        <img 
-          src="/assets/hero.png" 
-          alt="Hero Background" 
-          className="hidden lg:block absolute inset-0 w-full h-full object-cover object-right"
-        />
+        {/* Desktop: Carousel Background */}
+        <div className="hidden lg:block absolute inset-0">
+          {desktopImages.map((src, idx) => (
+            <img
+              key={src}
+              src={src}
+              alt={`Hero Desktop ${idx + 1}`}
+              className={`absolute inset-0 w-full h-full object-cover object-right transition-opacity duration-1000 ${
+                idx === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
+              }`}
+            />
+          ))}
+        </div>
 
         {/* Mobile Carousel Image Container */}
         <div className="lg:hidden relative w-full bg-black">
