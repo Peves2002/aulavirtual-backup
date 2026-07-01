@@ -20,7 +20,7 @@ import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 
 // Hook Imports
-import { useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 
 import UserAvatar from '@/utils/components/UserAvatar'
 
@@ -76,6 +76,11 @@ const UserDropdown = () => {
     setOpen(false)
   }
 
+  const handleUserLogout = async (e: MouseEvent<HTMLLIElement> | (MouseEvent | TouchEvent)) => {
+    handleDropdownClose(e)
+    await signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL || '/' })
+  }
+
   const dashboardPath = getDashboardPath(data?.user?.rol)
 
   return (
@@ -121,9 +126,9 @@ const UserDropdown = () => {
                     />
                     <div className='flex items-start flex-col'>
                       <Typography className='font-medium' color='text.primary'>
-                        {`${data?.user.name}`}
+                        {`${data?.user?.name}`}
                       </Typography>
-                      <Typography variant='caption'>{`${data?.user.email}`}</Typography>
+                      <Typography variant='caption'>{`${data?.user?.email}`}</Typography>
                     </div>
                   </div>
                   <Divider className='mlb-1' />
@@ -134,6 +139,11 @@ const UserDropdown = () => {
                   <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, dashboardPath)}>
                     <i className='tabler-layout-dashboard text-[22px]' />
                     <Typography color='text.primary'>Mi Panel</Typography>
+                  </MenuItem>
+                  <Divider className='mlb-1' />
+                  <MenuItem className='mli-2 gap-3' onClick={handleUserLogout}>
+                    <i className='tabler-logout text-[22px]' />
+                    <Typography color='text.primary'>Cerrar Sesión</Typography>
                   </MenuItem>
                 </MenuList>
               </ClickAwayListener>

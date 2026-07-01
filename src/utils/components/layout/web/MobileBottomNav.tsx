@@ -5,7 +5,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { Home, BookOpen, Phone } from 'lucide-react'
+import { Home, BookOpen, Phone, MonitorSmartphone } from 'lucide-react'
+import { usePWAInstall } from '@/utils/hooks/usePWAInstall'
 
 const NAV_ITEMS = [
   { title: 'Inicio', url: '/', icon: Home },
