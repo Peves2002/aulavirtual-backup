@@ -71,7 +71,7 @@ export default async function CursosPage() {
         badge="CURSOS"
         title="Capacitación ejecutiva 100% virtual"
         description="Programas asincrónicos diseñados para profesionales y empresas que buscan resultados reales."
-        image="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?fit=crop&w=1920&h=640&q=80"
+        image="/others/curso.jpg"
       />
       <CourseCatalog courses={courses} categories={categories} />
     </Box>

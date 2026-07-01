@@ -95,13 +95,7 @@ export default function EbookDetail({ ebook }: EbookDetailProps) {
   // Un ebook con precio 0 se trata como gratis aunque el flag es_gratis no se haya marcado
   const esGratisEfectivo = ebook.es_gratis || precio === 0
 
-  const handleObtenerGratis = async () => {
-    if (!session) {
-      openLogin(undefined, handleObtenerGratis)
-
-      return
-    }
-
+  const doObtenerGratis = async () => {
     setObtaining(true)
 
     try {
@@ -113,6 +107,16 @@ export default function EbookDetail({ ebook }: EbookDetailProps) {
     } finally {
       setObtaining(false)
     }
+  }
+
+  const handleObtenerGratis = async () => {
+    if (!session) {
+      openLogin(undefined, doObtenerGratis)
+
+      return
+    }
+
+    doObtenerGratis()
   }
 
   const handleComprar = () => {

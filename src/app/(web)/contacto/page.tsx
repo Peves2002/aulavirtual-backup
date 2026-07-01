@@ -7,12 +7,12 @@ import { MapPin, Mail, Phone, MessageCircle, Send } from 'lucide-react'
 import PageHero from '@/features/web/ace/PageHero'
 
 export default function ContactoPage() {
-  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    const text = `Hola ACE Consulting, soy ${form.name} (${form.email}). ${form.message}`
+    const text = `Hola ACE Consulting, soy ${form.name} (${form.email}${form.phone ? `, cel: ${form.phone}` : ''}). ${form.message}`
 
     window.open(`https://wa.me/51920184072?text=${encodeURIComponent(text)}`, '_blank')
   }
@@ -23,7 +23,7 @@ export default function ContactoPage() {
         badge="CONTACTO"
         title="Conversemos"
         description="Cuéntanos qué necesitas y te responderemos a la brevedad."
-        image="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?fit=crop&w=1920&h=640&q=80"
+        image="/others/contacto.jpg"
       />
 
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 grid gap-10 lg:grid-cols-2">
@@ -72,6 +72,16 @@ export default function ContactoPage() {
               required
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
+              className="w-full px-4 py-2.5 rounded-md bg-input border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Celular</label>
+            <input
+              type="tel"
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              placeholder="+51 999 999 999"
               className="w-full px-4 py-2.5 rounded-md bg-input border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>

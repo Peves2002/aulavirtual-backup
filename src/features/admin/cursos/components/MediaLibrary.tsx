@@ -60,6 +60,10 @@ const ALLOWED_OTHER_EXT = [
   '.mp4', '.webm', '.mkv'
 ]
 
+const ACCEPT_IMAGE = [...ALLOWED_IMAGE_TYPES, ...ALLOWED_IMAGE_EXT].join(',')
+const ACCEPT_VIDEO = [...ALLOWED_VIDEO_TYPES, ...ALLOWED_VIDEO_EXT].join(',')
+const ACCEPT_OTHER = [...ALLOWED_OTHER_TYPES, ...ALLOWED_OTHER_EXT].join(',')
+
 
 
 interface MediaLibraryProps {

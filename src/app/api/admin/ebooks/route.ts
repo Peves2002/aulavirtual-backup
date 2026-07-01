@@ -99,7 +99,7 @@ export async function POST(request: Request) {
         paginas: paginas ?? null,
         genero: genero?.trim() || null,
         categoria_id: categoria_id || null,
-        estado,
+        estado: estado ?? 'PUBLICADO',
         editorial: editorial?.trim() || null,
         anio_edicion: anio_edicion ?? null,
         saga: saga?.trim() || null,
