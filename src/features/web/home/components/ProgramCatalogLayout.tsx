@@ -19,14 +19,14 @@ export default function ProgramCatalogLayout({ tipo, courses, categories }: Prog
     <Box sx={{ flexGrow: 1, bgcolor: 'background.default' }}>
       <Box
         sx={{
-          background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 100%)',
+          background: 'linear-gradient(135deg, #13294D 0%, #1B3A6B 100%)',
           py: { xs: 5, md: 7 },
           px: { xs: 3, md: 6 },
           position: 'relative',
           overflow: 'hidden'
         }}
       >
-        <Box sx={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.06)', pointerEvents: 'none' }} />
+        <Box sx={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', backgroundColor: 'rgba(59,168,197,0.10)', pointerEvents: 'none' }} />
         <Box sx={{ position: 'absolute', bottom: -60, right: 80, width: 300, height: 300, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.03)', pointerEvents: 'none' }} />
 
         <Box sx={{ maxWidth: 1280, mx: 'auto', position: 'relative', zIndex: 1 }}>
@@ -34,12 +34,12 @@ export default function ProgramCatalogLayout({ tipo, courses, categories }: Prog
             <Box
               component="a"
               href="/"
-              sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.55)', textDecoration: 'none', '&:hover': { color: 'var(--web-light, #BDD962)' }, transition: 'color 0.2s' }}
+              sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.55)', textDecoration: 'none', '&:hover': { color: '#3BA8C5' }, transition: 'color 0.2s' }}
             >
               Inicio
             </Box>
             <Box component="span" sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem' }}>/</Box>
-            <Box component="span" sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>
+            <Box component="span" sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: '#3BA8C5', fontWeight: 600 }}>
               {config.labelPlural}
             </Box>
           </Box>

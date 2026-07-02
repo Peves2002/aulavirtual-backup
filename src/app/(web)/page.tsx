@@ -1,408 +1,215 @@
 import Link from 'next/link'
 
-import { ArrowRight, CheckCircle } from 'lucide-react'
+import { ArrowRight, ChevronRight, BookOpen, Quote, Building2 } from 'lucide-react'
 
-import prisma from '@/utils/libs/prisma'
-import { getConfigs } from '@/utils/libs/config'
-import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
-import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
-import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
-import HeroInstallButton from '@/features/web/home/components/HeroInstallButton'
-import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
-import ScrollReveal from '@/features/web/home/components/ScrollReveal'
-import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
-import HeroVisual from '@/features/web/home/components/HeroVisual'
-import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
-import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
-import CompaniesSection from '@/features/web/home/components/CompaniesSection'
-import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
-import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
+import AdphHeroForm from '@/features/web/adph/components/AdphHeroForm'
+import { ESCUELAS } from '@/features/web/adph/data/escuelas'
+import { PROGRAMAS } from '@/features/web/adph/data/programas'
 
-export const metadata = {
-  title: 'Aula Virtual - Aprende sin límites',
-  description: 'Plataforma de aprendizaje online con cursos especializados y certificados.',
-}
+const TESTIMONIOS = [
+  { id: 1, name: 'María Fernández', role: 'Gerente de RRHH en TechLatam', quote: 'Los programas de ADPH me dieron las herramientas prácticas que necesitaba para reestructurar todo nuestro departamento. Excelente nivel.', image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=150&q=80' },
+  { id: 2, name: 'Carlos Ramírez', role: 'Director de Operaciones', quote: 'La metodología de casos de la Escuela de Liderazgo superó mis expectativas. Pude aplicar lo aprendido desde la primera semana.', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&q=80' },
+  { id: 3, name: 'Lucía Vargas', role: 'Analista de Cultura Org.', quote: 'Destaco la calidad de los docentes. Profesionales con trayectoria real que comparten su experiencia y te guían paso a paso.', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&q=80' },
+]
 
-async function getHomeData() {
-  try {
-    const courseInclude = {
-      profesor: { select: { nombre: true, apellido: true, avatar: true } },
-      categoria: { select: { id: true, nombre: true } },
-      _count: { select: { modulos: true, inscripciones: true } }
-    }
+const BLOGS = [
+  { id: 1, title: 'El futuro del liderazgo en la era digital y remota', date: '15 Oct, 2023', image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&q=80' },
+  { id: 2, title: 'Salud Mental y Prevención en el Entorno Laboral', date: '02 Nov, 2023', image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=400&q=80' },
+  { id: 3, title: 'Gamificación: El secreto del aprendizaje corporativo', date: '20 Nov, 2023', image: 'https://images.unsplash.com/photo-1586528116311-ad8ed7c80a30?w=400&q=80' },
+]
 
-    const [coursesRaw, diplomadosRaw, especializacionesRaw, teachersRaw, configs, ebooksRaw] = await Promise.all([
-      prisma.curso.findMany({
-        where: { estado: 'PUBLICADO', tipo: 'CURSO' },
-        include: courseInclude,
-        orderBy: { creado_en: 'desc' },
-        take: 6
-      }),
-      prisma.curso.findMany({
-        where: { estado: 'PUBLICADO', tipo: 'DIPLOMADO' },
-        include: courseInclude,
-        orderBy: { creado_en: 'desc' },
-        take: 6
-      }),
-      prisma.curso.findMany({
-        where: { estado: 'PUBLICADO', tipo: 'ESPECIALIZACION' },
-        include: courseInclude,
-        orderBy: { creado_en: 'desc' },
-        take: 6
-      }),
-
-      // Profesores
-      prisma.usuario.findMany({
-        where: { rol: 'PROFESOR' },
-        select: {
-          id: true,
-          nombre: true,
-          apellido: true,
-          slug: true,
-          avatar: true,
-          cargo: true,
-          biografia: true,
-          _count: { select: { cursos_dictados: true } },
-        },
-        orderBy: { cursos_dictados: { _count: 'desc' } },
-        take: 8,
-      }),
-      getConfigs(),
-
-      // Ebooks destacados
-      isFeatureEnabled('ebooks')
-        ? prisma.ebook.findMany({
-            where: { estado: 'PUBLICADO' },
-            select: {
-              id: true, titulo: true, slug: true, miniatura: true,
-              autor: true, precio: true, precio_falso: true, moneda: true,
-              es_gratis: true, paginas: true, genero: true,
-              categoria: { select: { nombre: true } },
-            },
-            orderBy: { creado_en: 'desc' },
-            take: 5,
-          })
-        : Promise.resolve([]),
-    ])
-
-    const courses = await Promise.all(
-      coursesRaw.map(async course => {
-        const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
-
-        return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
-      })
-    )
-
-    const diplomados = await Promise.all(
-      diplomadosRaw.map(async course => {
-        const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
-
-        return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
-      })
-    )
-
-    const especializaciones = await Promise.all(
-      especializacionesRaw.map(async course => {
-        const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
-
-        return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
-      })
-    )
-
-    const heroTitle = configs.HOME_HERO_TITLE || 'Aprende sin límites,\ncrece sin fronteras'
-    const heroDescription = configs.HOME_HERO_DESCRIPTION || 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.'
-    let logos: { label: string; url: string }[] = []
-
-    try { logos = configs.HOME_LOGOS ? JSON.parse(configs.HOME_LOGOS) : [] } catch { logos = [] }
-
-    const ebooks = ebooksRaw.map(e => ({
-      ...e,
-      precio: Number(e.precio),
-      precio_falso: Number(e.precio_falso),
-    }))
-
-    return {
-      courses: JSON.parse(JSON.stringify(courses)),
-      diplomados: JSON.parse(JSON.stringify(diplomados)),
-      especializaciones: JSON.parse(JSON.stringify(especializaciones)),
-      teachers: JSON.parse(JSON.stringify(teachersRaw)),
-      ebooks: JSON.parse(JSON.stringify(ebooks)),
-      heroTitle,
-      heroDescription,
-      logos,
-    }
-  } catch {
-    return {
-      courses: [], diplomados: [], especializaciones: [], teachers: [], ebooks: [],
-      heroTitle: 'Aprende sin límites,\ncrece sin fronteras',
-      heroDescription: 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.',
-      logos: [],
-    }
-  }
-}
-
-export default async function HomePage() {
-  const { courses, diplomados, especializaciones, teachers, ebooks, heroTitle, heroDescription, logos } = await getHomeData()
-  const cursosConfig = getTipoProgramaConfig('CURSO')
-  const diplomadosConfig = getTipoProgramaConfig('DIPLOMADO')
-  const especializacionesConfig = getTipoProgramaConfig('ESPECIALIZACION')
-
+export default function HomePage() {
   return (
     <>
-      {/* ── 1. HERO ─────────────────────────────────── */}
-      <section
-        style={{
-          background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Patrón de grid decorativo */}
-        <div
-          aria-hidden
-          style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
-        />
-        {/* Glow derecho */}
-        <div aria-hidden style={{ position: 'absolute', top: '-20%', right: '-10%', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(var(--web-primary-rgb, 37, 146, 127),0.25) 0%, transparent 65%)', pointerEvents: 'none' }} />
+      {/* 2. PORTADA INICIAL (HeroForm) */}
+      <AdphHeroForm
+        title={<>Desarrolla tu potencial <br />con ADPH Group</>}
+        subtitle="Educación ejecutiva especializada para líderes que buscan transformar la cultura y productividad de sus organizaciones."
+        backgroundImage="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
+        formTitle="REGÍSTRATE A NUESTRO VIVE DPA"
+      />
 
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '5rem 1.5rem' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', alignItems: 'center' }}>
+      {/* 3. SECCIÓN 'ESCUELAS' */}
+      <section className="py-24 bg-white border-b border-slate-100">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
+          <div className="mb-16">
+            <span className="text-[#3BA8C5] font-extrabold text-xs uppercase tracking-widest block mb-4">Nuestra Oferta Académica</span>
+            <h2 className="text-slate-900 font-black text-3xl md:text-4xl tracking-tight">Escuelas Especializadas</h2>
+            <div className="w-16 h-1.5 bg-[#3BA8C5] mt-6"></div>
+          </div>
 
-            {/* ── Izquierda: texto ── */}
-            <div style={{ position: 'relative', zIndex: 2 }}>
-              {/* Eyebrow */}
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-5"
-                style={{ backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.15)', border: '1px solid rgba(var(--web-light-rgb, 189, 217, 98),0.3)' }}
-              >
-                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--web-light, #BDD962)' }} />
-                <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>
-                  Plataforma educativa online
-                </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {ESCUELAS.map(escuela => (
+              <div key={escuela.id} className="group cursor-pointer bg-slate-50 border border-slate-200 hover:shadow-xl transition-all duration-300 flex flex-col h-full rounded-none">
+                <div className="h-48 overflow-hidden relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={escuela.image} alt={escuela.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors" />
+                </div>
+                <div className="p-6 flex flex-col flex-grow">
+                  <h3 className="text-lg font-black text-slate-900 mb-2 leading-tight">{escuela.name}</h3>
+                  <p className="text-sm text-slate-600 font-semibold line-clamp-3 mb-6 flex-grow">{escuela.desc}</p>
+                  <Link href={`/escuelas/${escuela.id}`} className="inline-flex items-center gap-1.5 text-xs font-bold text-[#3BA8C5] uppercase tracking-widest hover:text-[#0083B0] transition-colors mt-auto">
+                    Conocer más <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              {/* H1 */}
-              <h1
-                style={{
-                  fontFamily: 'Poppins, sans-serif',
-                  fontSize: 'clamp(2rem, 5vw, 3.25rem)',
-                  fontWeight: 800,
-                  color: '#ffffff',
-                  letterSpacing: '-0.025em',
-                  lineHeight: 1.15,
-                  marginBottom: '1.25rem',
-                }}
-              >
-                {heroTitle.split('\n')[0]}
-                {heroTitle.split('\n')[1] && (
-                  <>
-                    <br />
-                    <span style={{ color: 'var(--web-light, #BDD962)' }}>{heroTitle.split('\n')[1]}</span>
-                  </>
-                )}
-              </h1>
+      {/* 4. SECCIÓN 'PROGRAMAS RECIENTES' */}
+      <section className="py-24 bg-[#FBFCFD] border-b border-slate-100">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
+          <div className="mb-16 text-center">
+            <h2 className="text-slate-900 font-black text-3xl md:text-4xl tracking-tight">Programas Recientes</h2>
+            <div className="w-16 h-1.5 bg-[#3BA8C5] mx-auto mt-6"></div>
+          </div>
 
-              {/* Descripción */}
-              <p
-                style={{
-                  fontFamily: 'Poppins, sans-serif',
-                  fontSize: '1rem',
-                  color: 'rgba(255,255,255,0.7)',
-                  lineHeight: 1.75,
-                  maxWidth: '480px',
-                  marginBottom: '2.5rem',
-                }}
-              >
-                {heroDescription}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {PROGRAMAS.map(prog => (
+              <div key={prog.id} className="bg-white border border-slate-200 hover:shadow-lg transition-all duration-300 rounded-none overflow-hidden group flex flex-col">
+                <div className="h-56 relative overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={prog.image} alt={prog.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 text-[10px] font-bold text-slate-900 uppercase tracking-wider rounded-none">
+                    {prog.category}
+                  </div>
+                </div>
+                <div className="p-8 flex flex-col flex-grow">
+                  <span className="text-[10px] font-extrabold text-[#3BA8C5] uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                    <BookOpen className="w-3.5 h-3.5" /> {prog.duration}
+                  </span>
+                  <h3 className="text-xl font-black text-slate-900 leading-tight mb-4">{prog.title}</h3>
+                  <div className="mt-auto pt-6 border-t border-slate-100">
+                    <Link href={`/cursos`} className="text-sm font-bold text-slate-700 hover:text-[#3BA8C5] inline-flex items-center gap-2 transition-colors">
+                      Ver detalle <ChevronRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-16 text-center">
+            <Link href="/cursos" className="inline-flex items-center justify-center bg-slate-900 hover:bg-[#3BA8C5] text-white font-extrabold text-xs uppercase tracking-widest px-8 py-4 rounded-none transition-colors shadow-lg">
+              Ver más Programas
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. SECCIÓN 'SOLUCIONES CORPORATIVAS' */}
+      <section className="py-32 bg-slate-900 border-b border-slate-800 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 relative z-10 text-center">
+          <span className="text-[#3BA8C5] font-extrabold text-xs uppercase tracking-widest block mb-4">Empresas B2B</span>
+          <h2 className="text-white font-black text-3xl md:text-5xl tracking-tight mb-6">Soluciones Corporativas</h2>
+          <p className="max-w-2xl mx-auto text-slate-300 font-semibold leading-relaxed mb-10">
+            Diseñamos programas a medida para potenciar el talento de tu organización: capacitación in-company, consultoría y tecnología de gestión humana.
+          </p>
+          <Link
+            href="/empresas"
+            className="inline-flex items-center gap-2 bg-[#3BA8C5] hover:bg-[#0083B0] text-white font-extrabold text-xs uppercase tracking-widest px-8 py-4 rounded-none transition-colors shadow-lg"
+          >
+            <Building2 className="w-4 h-4" /> Conocer Soluciones Corporativas
+          </Link>
+        </div>
+      </section>
+
+      {/* 6. SECCIÓN 'NOSOTROS' */}
+      <section className="py-24 bg-white border-b border-slate-100 overflow-hidden">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-6">
+              <span className="text-[#3BA8C5] font-extrabold text-xs uppercase tracking-widest block">Sobre Nosotros</span>
+              <h2 className="text-slate-900 font-black text-3xl md:text-4xl tracking-tight">Expertos en formación ejecutiva</h2>
+              <p className="text-slate-600 text-base md:text-lg font-semibold leading-relaxed">
+                ADPH Group es una institución líder dedicada a transformar el talento de los profesionales de Latinoamérica. Mediante programas de alta exigencia, una plana docente de primer nivel y metodologías centradas en la acción, garantizamos un aprendizaje orientado a resultados corporativos tangibles.
               </p>
-
-              {/* Botones */}
-              <div className="flex flex-wrap gap-4" style={{ marginBottom: '2.5rem' }}>
-                <HeroInstallButton />
-                <Link
-                  href="/cursos"
-                  className="inline-flex items-center gap-2 no-underline rounded-xl font-semibold transition-all duration-200"
-                  style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'rgba(255,255,255,0.08)', color: '#ffffff', fontSize: '0.9375rem', padding: '0.875rem 1.75rem', border: '1.5px solid rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)' }}
-                >
-                  Ver Cursos <ArrowRight size={18} />
+              <div className="pt-4">
+                <Link href="/nosotros" className="inline-flex items-center gap-2 text-[#3BA8C5] font-extrabold uppercase text-xs tracking-widest hover:text-[#0083B0] transition-colors">
+                  Conoce nuestra historia <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
+            </div>
+            <div className="relative">
+              <div className="aspect-[4/3] w-full overflow-hidden border border-slate-100 shadow-xl rounded-none">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80" alt="Nosotros ADPH Group" className="w-full h-full object-cover" />
+              </div>
+              <div className="absolute -bottom-6 -left-6 w-32 h-32 z-0 rounded-none -rotate-6" style={{ backgroundColor: 'rgba(59,168,197,0.1)', border: '1px solid rgba(59,168,197,0.2)' }}></div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              {/* Mini stats */}
-              <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-                {[
-                  { value: '+1,200', label: 'Estudiantes' },
-                  { value: '+80', label: 'Cursos' },
-                  { value: '98%', label: 'Satisfacción' },
-                ].map(stat => (
-                  <div key={stat.label}>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.375rem', fontWeight: 800, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>{stat.value}</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '3px' }}>{stat.label}</div>
+      {/* 7. SECCIÓN 'TESTIMONIOS' */}
+      <section className="py-24 bg-slate-50 border-b border-slate-100">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
+          <div className="mb-16 text-center">
+            <h2 className="text-slate-900 font-black text-3xl md:text-4xl tracking-tight">Lo que dicen nuestros alumnos</h2>
+            <div className="w-16 h-1.5 bg-[#3BA8C5] mx-auto mt-6"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {TESTIMONIOS.map(testimonio => (
+              <div key={testimonio.id} className="bg-white p-8 border border-slate-200 rounded-none relative flex flex-col shadow-sm hover:shadow-md transition-shadow">
+                <Quote className="absolute top-6 right-6 w-10 h-10 text-slate-100" />
+                <p className="text-slate-600 font-semibold text-sm leading-relaxed mb-8 flex-grow relative z-10 italic">
+                  &quot;{testimonio.quote}&quot;
+                </p>
+                <div className="flex items-center gap-4 mt-auto">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={testimonio.image} alt={testimonio.name} className="w-12 h-12 rounded-full object-cover border border-slate-200" />
+                  <div>
+                    <h4 className="text-slate-900 font-bold text-sm leading-tight">{testimonio.name}</h4>
+                    <span className="text-slate-500 text-xs font-semibold">{testimonio.role}</span>
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
-
-            {/* ── Derecha: visual interactivo ── */}
-            <HeroVisual />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── 2. LOGO MARQUEE ─────────────────────────── */}
-      <ClientLogosMarquee logos={logos} />
-
-      {/* ── 3. CURSOS DESTACADOS ────────────────────── */}
-      <section className="section-container">
-        <ScrollReveal>
-          <div className="flex items-end justify-between mb-8">
+      {/* 8. SECCIÓN 'BLOGS' */}
+      <section className="py-24 bg-white border-b border-slate-100">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
             <div>
-              <h2 className="section-title">{cursosConfig.homeTitle}</h2>
-              <p className="section-subtitle">{cursosConfig.homeSubtitle}</p>
+              <span className="text-[#3BA8C5] font-extrabold text-xs uppercase tracking-widest block mb-4">Actualidad</span>
+              <h2 className="text-slate-900 font-black text-3xl tracking-tight">Nuestro Blog</h2>
+              <div className="w-16 h-1.5 bg-[#3BA8C5] mt-4"></div>
             </div>
-            <Link
-              href="/cursos"
-              className="no-underline hidden sm:inline-flex items-center gap-2 text-sm font-semibold"
-              style={{ fontFamily: 'Poppins, sans-serif', color: 'var(--web-primary, #25927F)' }}
-            >
-              Ver todos <ArrowRight size={16} />
+            <Link href="/blog" className="inline-flex text-xs font-extrabold uppercase tracking-widest text-[#3BA8C5] hover:text-[#0083B0] items-center gap-2 transition-colors">
+              Ver todos los artículos <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-        </ScrollReveal>
-        <ScrollReveal delay={0.1}>
-          <HomeCoursesSection
-            courses={courses}
-            catalogHref={cursosConfig.webPath}
-            emptyMessage={cursosConfig.emptyMessage}
-            viewLabel="Ver curso"
-          />
-          <div className="flex justify-center mt-8 sm:hidden">
-            <Link
-              href="/cursos"
-              className="no-underline inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm"
-              style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', color: '#ffffff' }}
-            >
-              Ver todos los cursos <ArrowRight size={16} />
-            </Link>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {BLOGS.map(blog => (
+              <div key={blog.id} className="group cursor-pointer flex flex-col">
+                <div className="h-56 overflow-hidden rounded-none mb-6 border border-slate-100">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={blog.image} alt={blog.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                </div>
+                <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-2">{blog.date}</span>
+                <h3 className="text-lg font-black text-slate-900 group-hover:text-[#3BA8C5] transition-colors leading-tight">{blog.title}</h3>
+              </div>
+            ))}
           </div>
-        </ScrollReveal>
-      </section>
-
-      {/* ── 3b. DIPLOMADOS DESTACADOS ───────────────── */}
-      {diplomados.length > 0 && (
-        <section className="section-container" style={{ borderTop: '1px solid hsl(214, 20%, 92%)' }}>
-          <ScrollReveal>
-            <div className="flex items-end justify-between mb-8">
-              <div>
-                <h2 className="section-title">{diplomadosConfig.homeTitle}</h2>
-                <p className="section-subtitle">{diplomadosConfig.homeSubtitle}</p>
-              </div>
-              <Link
-                href={diplomadosConfig.webPath}
-                className="no-underline hidden sm:inline-flex items-center gap-2 text-sm font-semibold"
-                style={{ fontFamily: 'Poppins, sans-serif', color: 'var(--web-primary, #25927F)' }}
-              >
-                Ver todos <ArrowRight size={16} />
-              </Link>
-            </div>
-          </ScrollReveal>
-          <ScrollReveal delay={0.1}>
-            <HomeCoursesSection
-              courses={diplomados}
-              catalogHref={diplomadosConfig.webPath}
-              emptyMessage={diplomadosConfig.emptyMessage}
-              viewLabel="Ver diplomado"
-            />
-          </ScrollReveal>
-        </section>
-      )}
-
-      {/* ── 3c. ESPECIALIZACIONES DESTACADAS ────────── */}
-      {especializaciones.length > 0 && (
-        <section className="section-container" style={{ borderTop: '1px solid hsl(214, 20%, 92%)' }}>
-          <ScrollReveal>
-            <div className="flex items-end justify-between mb-8">
-              <div>
-                <h2 className="section-title">{especializacionesConfig.homeTitle}</h2>
-                <p className="section-subtitle">{especializacionesConfig.homeSubtitle}</p>
-              </div>
-              <Link
-                href={especializacionesConfig.webPath}
-                className="no-underline hidden sm:inline-flex items-center gap-2 text-sm font-semibold"
-                style={{ fontFamily: 'Poppins, sans-serif', color: 'var(--web-primary, #25927F)' }}
-              >
-                Ver todas <ArrowRight size={16} />
-              </Link>
-            </div>
-          </ScrollReveal>
-          <ScrollReveal delay={0.1}>
-            <HomeCoursesSection
-              courses={especializaciones}
-              catalogHref={especializacionesConfig.webPath}
-              emptyMessage={especializacionesConfig.emptyMessage}
-              viewLabel="Ver especialización"
-            />
-          </ScrollReveal>
-        </section>
-      )}
-
-      {/* ── 4. EBOOKS DESTACADOS ────────────────────── */}
-      {isFeatureEnabled('ebooks') && <HomeEbooksSection ebooks={ebooks} />}
-
-      {/* ── 5. CARACTERÍSTICAS DE CLASES ────────────── */}
-      <ClassFeaturesSection />
-
-      {/* ── 6. PROFESORES ───────────────────────────── */}
-      <ProfessorsCarousel teachers={teachers} />
-
-      {/* ── 7. EMPRESAS (B2B informativo) ───────────── */}
-      <CompaniesSection />
-
-      {/* ── 8. CTA AGENDAR REUNIÓN ──────────────────── */}
-      <EnterpriseCTASection />
-
-      {/* ── 9. VERIFICAR CERTIFICADO ────────────────── */}
-      <SearchCertificateSection />
-
-      {/* ── 10. CTA INSCRIPCIÓN ─────────────────────── */}
-      <section className="bg-white py-16 text-center" style={{ borderTop: '1px solid hsl(214, 20%, 88%)' }}>
-        <div className="max-w-3xl mx-auto px-4">
-          <ScrollReveal>
-            <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6"
-              style={{ backgroundColor: 'rgba(var(--web-primary-rgb, 37, 146, 127),0.08)', color: 'var(--web-dark, #025E44)' }}
-            >
-              <CheckCircle size={16} />
-              <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', fontWeight: 600 }}>
-                Únete a miles de estudiantes
-              </span>
-            </div>
-            <h2
-              className="mb-4"
-              style={{ fontFamily: 'Poppins, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', fontWeight: 700, color: '#0A0A0A', letterSpacing: '-0.02em' }}
-            >
-              ¿Listo para transformar tu carrera?
-            </h2>
-            <p
-              className="mb-8 max-w-xl mx-auto"
-              style={{ fontFamily: 'Poppins, sans-serif', color: 'hsl(215, 16%, 47%)', lineHeight: 1.7 }}
-            >
-              Inscríbete hoy y comienza a aprender con los mejores profesionales del sector.
-            </p>
-            <Link
-              href="/cursos"
-              className="no-underline inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-white transition-all duration-300 hover:scale-105"
-              style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', boxShadow: '0 6px 20px rgba(var(--web-primary-rgb, 37, 146, 127),0.35)' }}
-            >
-              Inscribirse ahora <ArrowRight size={18} />
-            </Link>
-          </ScrollReveal>
         </div>
       </section>
+
+      {/* 9. CTA FINAL ADPH */}
+      <AdphHeroForm
+        title={<>Inicia tu proceso de <br /><span style={{ color: '#3BA8C5' }}>Admisión</span></>}
+        subtitle="Únete a nuestra exclusiva red de profesionales. Completa el formulario y un asesor académico se pondrá en contacto contigo a la brevedad."
+        backgroundImage="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1920&q=80"
+        formTitle="REGÍSTRATE A NUESTRO PROGRAMA"
+      />
     </>
   )
 }

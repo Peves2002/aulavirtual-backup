@@ -103,6 +103,12 @@ export default withAuth(
           path.startsWith('/empresas') ||
           path.startsWith('/politica-de-devoluciones') ||
           path.startsWith('/suscripciones') ||
+          path.startsWith('/hrcorex') ||
+          path.startsWith('/blog') ||
+          path.startsWith('/eventos') ||
+          path.startsWith('/entrenamiento-digital') ||
+          path.startsWith('/ficha-de-inscripcion') ||
+          path.startsWith('/escuelas') ||
           path === '/'
         ) {
           return true

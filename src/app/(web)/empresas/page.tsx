@@ -5,7 +5,7 @@ import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASe
 import { getConfig } from '@/utils/libs/config'
 
 export const metadata = {
-  title: 'Soluciones Corporativas - Aula Virtual',
+  title: 'Soluciones Corporativas - ADPH Group',
   description: 'Descubre nuestros planes corporativos y capacita a tu equipo con los mejores profesionales del sector.',
 }
 
@@ -19,7 +19,7 @@ export default async function EmpresasPage() {
       {/* ── 1. HERO EMPRESAS ─────────────────────── */}
       <section
         style={{
-          background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
+          background: 'linear-gradient(135deg, #13294D 0%, #1B3A6B 45%, #1B3A6B 100%)',
           padding: '6rem 1.5rem 5rem',
           position: 'relative',
           overflow: 'hidden',
@@ -35,7 +35,7 @@ export default async function EmpresasPage() {
           }}
         />
         {/* Glow */}
-        <div aria-hidden style={{ position: 'absolute', top: '-20%', right: '-10%', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(var(--web-primary-rgb, 37, 146, 127),0.22) 0%, transparent 65%)', pointerEvents: 'none' }} />
+        <div aria-hidden style={{ position: 'absolute', top: '-20%', right: '-10%', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,168,197,0.22) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '1280px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div
@@ -54,15 +54,15 @@ export default async function EmpresasPage() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.12)',
-                border: '1px solid rgba(var(--web-light-rgb, 189, 217, 98),0.25)',
+                backgroundColor: 'rgba(59,168,197,0.12)',
+                border: '1px solid rgba(59,168,197,0.25)',
                 borderRadius: '999px',
                 padding: '0.375rem 1rem',
                 marginBottom: '0.5rem',
               }}
             >
-              <div style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: 'var(--web-light, #BDD962)', boxShadow: '0 0 6px var(--web-light, #BDD962)' }} />
-              <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'var(--web-light, #BDD962)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <div style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#3BA8C5', boxShadow: '0 0 6px #3BA8C5' }} />
+              <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: '#3BA8C5', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Para Empresas
               </span>
             </div>
@@ -77,7 +77,7 @@ export default async function EmpresasPage() {
                 lineHeight: 1.15,
               }}
             >
-              Lleva a tu equipo al <span style={{ color: 'var(--web-light, #BDD962)' }}>siguiente nivel</span>
+              Lleva a tu equipo al <span style={{ color: '#3BA8C5' }}>siguiente nivel</span>
             </h1>
 
             <p
