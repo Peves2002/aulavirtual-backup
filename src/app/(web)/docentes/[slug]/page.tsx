@@ -133,7 +133,7 @@ export default async function DocentePage({ params }: Props) {
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           {/* Breadcrumb */}
           <Link
-            href="/cursos"
+            href="/programas"
             style={{
               display: 'inline-flex',
               alignItems: 'center',

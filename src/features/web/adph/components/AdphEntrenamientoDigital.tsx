@@ -427,7 +427,7 @@ export default function AdphEntrenamientoDigital() {
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
-              href="/cursos"
+              href="/programas"
               className="inline-flex items-center gap-2 bg-[#3BA8C5] hover:bg-[#0083B0] text-white font-extrabold text-xs uppercase tracking-widest px-8 py-4 rounded-none transition-colors shadow-lg"
             >
               Explorar Programas <ChevronRight className="w-4 h-4" />

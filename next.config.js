@@ -73,6 +73,7 @@ const nextConfig = {
   async redirects() {
     return [
       { source: '/rutas/:path*', destination: '/', permanent: false },
+      { source: '/cursos', destination: '/programas', permanent: true },
     ]
   },
   async headers() {

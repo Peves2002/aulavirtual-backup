@@ -240,7 +240,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
           <Box sx={{ mb: 5, display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
             {[
               { label: 'Inicio', href: '/' },
-              { label: 'Cursos', href: '/cursos' },
+              { label: 'Cursos', href: '/programas' },
               ...(course.categoria ? [{ label: course.categoria.nombre, href: null }] : []),
             ].map((item, i) => (
               <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

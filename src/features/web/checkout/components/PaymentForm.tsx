@@ -1074,7 +1074,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
       {/* Modal de Confirmación de Pedido */}
       <AppModal
         open={confirmModalOpen}
-        handleClose={() => { setConfirmModalOpen(false); router.push('/cursos') }}
+        handleClose={() => { setConfirmModalOpen(false); router.push('/programas') }}
         sx={{ p: 0, maxWidth: 780, width: 'calc(100% - 24px)', mx: 'auto', overflow: 'hidden' }}
       >
         {/* Header verde */}
@@ -1183,7 +1183,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                   variant='outlined'
                   size='large'
                   startIcon={<i className='tabler-school' />}
-                  onClick={() => { setConfirmModalOpen(false); router.push('/cursos') }}
+                  onClick={() => { setConfirmModalOpen(false); router.push('/programas') }}
                   sx={{ borderRadius: 2.5, fontWeight: 700, py: 1.4 }}
                 >
                   Explorar más cursos

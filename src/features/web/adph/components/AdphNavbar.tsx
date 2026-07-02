@@ -14,7 +14,7 @@ import { useAuthModal } from '@/contexts/AuthModalContext'
 import { ESCUELAS } from '@/features/web/adph/data/escuelas'
 
 const MAIN_NAV = [
-  { label: 'Programas', href: '/cursos' },
+  { label: 'Programas', href: '/programas' },
   { label: 'Soluciones Corporativas', href: '/consultoria' },
   { label: 'Admisión', href: '/ficha-de-inscripcion' },
   { label: 'Nosotros', href: '/nosotros' },

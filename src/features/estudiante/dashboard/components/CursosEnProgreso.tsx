@@ -164,7 +164,7 @@ export default function CursosEnProgreso({ cursos, loading }: Props) {
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center' }}>
           <Button
             variant='contained'
-            href='/cursos'
+            href='/programas'
             size='small'
             startIcon={<i className='tabler-search' />}
             sx={{ borderRadius: '10px', fontWeight: 700, textTransform: 'none' }}

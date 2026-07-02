@@ -5,7 +5,7 @@ export const TIPO_PROGRAMA_CONFIG = {
     label: 'Curso',
     labelPlural: 'Cursos',
     adminBasePath: '/admin/cursos',
-    webPath: '/cursos',
+    webPath: '/programas',
     catalogTitle: 'Catálogo de Cursos',
     catalogDescription: 'Explora nuestra selección de cursos y comienza a aprender hoy.',
     catalogSectionTitle: 'Nuestros Cursos',

@@ -49,7 +49,7 @@ const CheckoutView = ({ courses, ebooks }: CheckoutViewProps) => {
 
     const breadcrumbBack = hasOnlyEbooks
         ? { label: 'Ebooks', href: '/ebooks' }
-        : { label: 'Cursos', href: courses[0] ? `/cursos/${courses[0].slug}` : '/cursos' }
+        : { label: 'Cursos', href: courses[0] ? `/cursos/${courses[0].slug}` : '/programas' }
 
     return (
         <Box sx={{ bgcolor: '#f8fafc', minHeight: 'calc(100vh - 64px)', fontFamily: FONT }}>

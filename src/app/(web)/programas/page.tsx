@@ -3,7 +3,7 @@ import { getProgramCatalogData } from '@/features/web/cursos/getProgramCatalogDa
 import { getAuthSession } from '@/utils/libs/auth-helpers'
 import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
 
-export default async function CursosPage() {
+export default async function ProgramasPage() {
   const session = await getAuthSession()
   const token = session?.user?.accessToken ?? null
   const { courses, categories } = await getProgramCatalogData('CURSO', token)

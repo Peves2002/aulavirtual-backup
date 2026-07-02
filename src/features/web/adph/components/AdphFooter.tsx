@@ -32,7 +32,7 @@ const TikTokIcon = (props: IconProps) => (
 
 // Links actualizados a las rutas de aulavirtual
 const PROGRAMAS_LINKS = [
-  { label: 'Cursos de Especialización', href: '/cursos' },
+  { label: 'Cursos de Especialización', href: '/programas' },
   { label: 'Diplomados Ejecutivos', href: '/diplomados' },
   { label: 'Programas de Especialización', href: '/especializaciones' },
   { label: 'Capacitaciones', href: '/capacitacion' },

@@ -145,7 +145,7 @@ export function CalendarioView() {
     ? '/estudiante/aprender'
     : pathname.includes('/profesor')
       ? '/profesor/mis-cursos'
-      : '/cursos'
+      : '/programas'
 
   const [eventoSeleccionado, setEventoSeleccionado] = useState<any>(null)
   const [modalOpen, setModalOpen] = useState(false)

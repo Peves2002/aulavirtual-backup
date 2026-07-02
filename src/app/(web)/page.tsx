@@ -83,7 +83,7 @@ export default function HomePage() {
                   </span>
                   <h3 className="text-xl font-black text-slate-900 leading-tight mb-4">{prog.title}</h3>
                   <div className="mt-auto pt-6 border-t border-slate-100">
-                    <Link href={`/cursos`} className="text-sm font-bold text-slate-700 hover:text-[#3BA8C5] inline-flex items-center gap-2 transition-colors">
+                    <Link href={`/programas`} className="text-sm font-bold text-slate-700 hover:text-[#3BA8C5] inline-flex items-center gap-2 transition-colors">
                       Ver detalle <ChevronRight className="w-4 h-4" />
                     </Link>
                   </div>
@@ -93,7 +93,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-16 text-center">
-            <Link href="/cursos" className="inline-flex items-center justify-center bg-slate-900 hover:bg-[#3BA8C5] text-white font-extrabold text-xs uppercase tracking-widest px-8 py-4 rounded-none transition-colors shadow-lg">
+            <Link href="/programas" className="inline-flex items-center justify-center bg-slate-900 hover:bg-[#3BA8C5] text-white font-extrabold text-xs uppercase tracking-widest px-8 py-4 rounded-none transition-colors shadow-lg">
               Ver más Programas
             </Link>
           </div>

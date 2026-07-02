@@ -197,7 +197,7 @@ export default async function NosotrosPage() {
 
                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                   <Link
-                    href="/cursos"
+                    href="/programas"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',

@@ -58,7 +58,7 @@ export default function EscuelaPage({ params }: { params: { escuelaId: string } 
                     </span>
                     <h3 className="text-xl font-black text-slate-900 leading-tight mb-4">{prog.title}</h3>
                     <div className="mt-auto pt-6 border-t border-slate-100">
-                      <Link href="/cursos" className="text-sm font-bold text-slate-700 hover:text-[#3BA8C5] inline-flex items-center gap-2 transition-colors">
+                      <Link href="/programas" className="text-sm font-bold text-slate-700 hover:text-[#3BA8C5] inline-flex items-center gap-2 transition-colors">
                         Ver detalle <ChevronRight className="w-4 h-4" />
                       </Link>
                     </div>

@@ -15,7 +15,7 @@ export default function CartCheckoutPage() {
 
     useEffect(() => {
         if (itemCount === 0) {
-            router.push('/cursos')
+            router.push('/programas')
         }
     }, [itemCount, router])
 

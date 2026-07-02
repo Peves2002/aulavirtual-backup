@@ -48,7 +48,7 @@ export default function MisCursosPage() {
                 size="medium"
                 sx={{ borderRadius: '10px' }}
                 startIcon={<i className="tabler-search" />}
-                href="/cursos"
+                href="/programas"
               >
                 Explorar Cursos
               </Button>
