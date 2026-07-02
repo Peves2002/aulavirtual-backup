@@ -37,6 +37,7 @@ interface WebFooterProps {
 const WebFooter = async ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
   const configs = await getConfigs()
   const waNumber = configs.WHATSAPP_NUMERO || '51906741327'
+  const empresasHabilitado = configs.WEB_EMPRESAS_HABILITADO !== 'false'
 
   const socialLinks = [
     ...staticSocialLinks,
@@ -83,6 +84,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
               {([
                 { label: 'Cursos', href: '/cursos' },
+                ...(isFeatureEnabled('ebooks') ? [{ label: 'Ebooks', href: '/ebooks' }] : []),
                 { label: 'Diplomados', href: '/diplomados' },
                 { label: 'Especializaciones', href: '/especializaciones' },
                 ...(isFeatureEnabled('rutas') ? [{ label: 'Rutas', href: '/rutas' }] : []),
@@ -109,13 +111,15 @@ const WebFooter = async ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
               Más Información
             </h4>
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
-              {[
+              {([
+                { label: 'Inicio', href: '/' },
                 { label: 'Nosotros', href: '/nosotros' },
+                ...(empresasHabilitado ? [{ label: 'Empresas', href: '/empresas' }] : []),
                 { label: 'Preguntas Frecuentes', href: '/preguntas-frecuentes' },
                 { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
                 { label: 'Términos y condiciones', href: '/terminos-y-condiciones' },
                 { label: 'Política de Devoluciones', href: '/politica-de-cambios-y-devoluciones' },
-              ].map(link => (
+              ] as { label: string; href: string }[]).map(link => (
                 <li key={link.label}>
                   <Link
                     href={link.href}

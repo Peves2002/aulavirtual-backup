@@ -9,7 +9,7 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { signOut, useSession } from 'next-auth/react'
 
-import { Home, BookOpen, Users, Award, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, MonitorSmartphone, GraduationCap, Layers, Map } from 'lucide-react'
+import { Home, BookOpen, Users, Award, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, MonitorSmartphone, GraduationCap, Layers, Map, ClipboardList, BookText, Repeat2 } from 'lucide-react'
 
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import { usePWAInstall } from '@/utils/hooks/usePWAInstall'
@@ -18,22 +18,14 @@ import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 const ALL_NAV_ITEMS = [
   { title: 'Inicio', url: '/', icon: Home, key: 'inicio' },
   { title: 'Cursos', url: '/cursos', icon: BookOpen, key: 'cursos' },
-  { title: 'Diplomados', url: '/diplomados', icon: GraduationCap, key: 'diplomados' },
-  { title: 'Especializaciones', url: '/especializaciones', icon: Layers, key: 'especializaciones' },
-  ...(isFeatureEnabled('simulacros')
-    ? [{ title: 'Simulacros', url: '/simulacros', icon: ClipboardList, key: 'simulacros' as const }]
-    : []),
-  ...(isFeatureEnabled('ebooks')
-    ? [{ title: 'Ebooks', url: '/ebooks', icon: BookText, key: 'ebooks' as const }]
-    : []),
-  ...(isFeatureEnabled('rutas')
-    ? [{ title: 'Rutas', url: '/rutas', icon: Map, key: 'rutas' as const }]
-    : []),
+  // { title: 'Diplomados', url: '/diplomados', icon: GraduationCap, key: 'diplomados' },
+  // { title: 'Especializaciones', url: '/especializaciones', icon: Layers, key: 'especializaciones' },
+  // ...(isFeatureEnabled('simulacros')
+  //   ? [{ title: 'Simulacros', url: '/simulacros', icon: ClipboardList, key: 'simulacros' as const }]
+  //   : []),
+  { title: 'Ebooks', url: '/ebooks', icon: BookText, key: 'ebooks' as const },
+  { title: 'Rutas', url: '/rutas', icon: Map, key: 'rutas' as const },
   { title: 'Empresas', url: '/empresas', icon: Building2, key: 'empresas' },
-  ...(isFeatureEnabled('suscripciones')
-    ? [{ title: 'Suscripciones', url: '/suscripciones', icon: Repeat2, key: 'suscripciones' as const }]
-    : []),
-
   // { title: 'Suscripciones', url: '/suscripciones', icon: Repeat2, key: 'suscripciones' },
   { title: 'Nosotros', url: '/nosotros', icon: Users, key: 'nosotros' },
   { title: 'Certificado', url: '/verificar-certificado', icon: Award, key: 'certificado' },
@@ -164,7 +156,7 @@ export default function LeftSidebar({
           {/* Install PWA button — always visible while not installed */}
           {canInstall && (
             <div style={{ position: 'relative', padding: '0 12px', marginBottom: '8px' }}>
-              <button
+              {/* <button
                 onClick={() => hasNativePrompt ? install() : setShowInstallTip(t => !t)}
                 title="Instalar aplicación"
                 className="flex items-center w-full rounded-xl transition-all"
@@ -178,7 +170,7 @@ export default function LeftSidebar({
                 <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 700, color: '#0A0A0A', opacity: expanded ? 1 : 0, maxWidth: expanded ? '160px' : '0px', transition: 'opacity 0.2s, max-width 0.3s', whiteSpace: 'nowrap', overflow: 'hidden' }}>
                   Instalar App
                 </span>
-              </button>
+              </button> */}
 
               {showInstallTip && !hasNativePrompt && (
                 <>

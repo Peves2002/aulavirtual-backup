@@ -10,11 +10,12 @@ import TargetAudienceSection from '@/features/web/home/components/TargetAudience
 import WorkModelsSection from '@/features/web/home/components/WorkModelsSection'
 import ServicesSection from '@/features/web/home/components/ServicesSection'
 import WhyUsSection from '@/features/web/home/components/WhyUsSection'
-import NewsletterSection from '@/features/web/home/components/NewsletterSection'
 import FinalCTASection from '@/features/web/home/components/FinalCTASection'
 import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
 import { getConfigs } from '@/utils/libs/config'
+import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
+import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
 export const metadata = {
   title: 'CEPAV - Capacitación Especializada para el Sector Turismo',
@@ -128,6 +129,7 @@ async function getHomeData() {
       heroTitle,
       heroDescription,
       logos,
+      whatsappNumero: configs.WHATSAPP_NUMERO || '51906741327',
     }
   } catch {
     return {
@@ -135,15 +137,15 @@ async function getHomeData() {
       heroTitle: 'Aprende sin límites,\ncrece sin fronteras',
       heroDescription: 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.',
       logos: [],
+      whatsappNumero: '51906741327',
     }
   }
 }
 
 export default async function HomePage() {
-  const { courses, diplomados, especializaciones, teachers, ebooks, heroTitle, heroDescription, logos } = await getHomeData()
+  const { courses, heroDescription, logos, whatsappNumero } = await getHomeData()
   const cursosConfig = getTipoProgramaConfig('CURSO')
-  const diplomadosConfig = getTipoProgramaConfig('DIPLOMADO')
-  const especializacionesConfig = getTipoProgramaConfig('ESPECIALIZACION')
+  const waLink = `https://wa.me/${whatsappNumero}?text=${encodeURIComponent('Hola, me gustaría más información sobre las capacitaciones para mi equipo.')}`
 
   return (
     <div className="is-home">

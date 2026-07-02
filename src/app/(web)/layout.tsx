@@ -10,7 +10,6 @@ import WebHeader from '@/utils/components/layout/web/WebHeader'
 import LeftSidebar from '@/utils/components/layout/web/LeftSidebar'
 import MobileBottomNav from '@/utils/components/layout/web/MobileBottomNav'
 import PWAInstalledToast from '@/features/web/home/components/PWAInstalledToast'
-import FloatingContactButtons from '@/utils/components/layout/web/FloatingContactButtons'
 
 const getCategorias = unstable_cache(
   () =>
@@ -50,7 +49,7 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
           </main>
         </div>
         {/* Bottom nav: visible solo en mobile */}
-        <MobileBottomNav rutasHabilitado={rutasHabilitado} />
+        <MobileBottomNav />
         <PWAInstalledToast />
       </div>
     </AuthModalProvider>

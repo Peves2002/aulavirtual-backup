@@ -18,9 +18,10 @@ import MenuList from '@mui/material/MenuList'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
+import Button from '@mui/material/Button'
 
 // Hook Imports
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 
 import UserAvatar from '@/utils/components/UserAvatar'
 
@@ -74,6 +75,13 @@ const UserDropdown = () => {
     }
 
     setOpen(false)
+  }
+
+  const handleUserLogout = async () => {
+    await signOut({ redirect: false })
+
+    router.push('/')
+    router.refresh()
   }
 
   const dashboardPath = getDashboardPath(data?.user?.rol)
@@ -135,6 +143,19 @@ const UserDropdown = () => {
                     <i className='tabler-layout-dashboard text-[22px]' />
                     <Typography color='text.primary'>Mi Panel</Typography>
                   </MenuItem>
+                  <div className='flex items-center plb-2 pli-3'>
+                    <Button
+                      fullWidth
+                      variant='contained'
+                      color='error'
+                      size='small'
+                      endIcon={<i className='tabler-logout' />}
+                      onClick={handleUserLogout}
+                      sx={{ '& .MuiButton-endIcon': { marginInlineStart: 1.5 } }}
+                    >
+                      Cerrar Sesión
+                    </Button>
+                  </div>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
