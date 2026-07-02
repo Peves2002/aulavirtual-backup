@@ -329,6 +329,7 @@ export const generarOllarves: GeneratorFn = async data => {
   doc.setFontSize(12)
   doc.setFont('helvetica', 'normal')
   doc.setTextColor(GRAY.r, GRAY.g, GRAY.b)
+
   const duracionTxt = cursoDuracion?.match(/hora/i)
     ? (cursoDuracion || '---')
     : `${cursoDuracion || '---'} horas lectivas`
@@ -414,6 +415,7 @@ export const generarOllarves: GeneratorFn = async data => {
   const T = { sectionTitle: 9, label: 8, body: 8, small: 7, score: 22 }
   const p2Margin = 12
   const headerH = 18
+
   const lightBg = {
     r: Math.round(BLUE.r * 0.1 + 255 * 0.9),
     g: Math.round(BLUE.g * 0.1 + 255 * 0.9),
@@ -488,6 +490,7 @@ export const generarOllarves: GeneratorFn = async data => {
   })
 
   const notaMax = 20
+
   const notaFinal =
     promediosPorModulo.length > 0
       ? promediosPorModulo.reduce((a, b) => a + b, 0) / promediosPorModulo.length
@@ -599,6 +602,7 @@ export const generarOllarves: GeneratorFn = async data => {
   const boxW = (pageWidth - p2Margin * 2 - 8) / 3
   const boxH = 10
   const horasValue = cursoDuracion?.match(/hora/i) ? cursoDuracion : `${cursoDuracion || '---'} horas`
+
   const infoItems = [
     { label: 'TOTAL DE HORAS:', value: horasValue },
     { label: 'DURACIÓN:', value: mesesEntre(fechaInicioVal, fechaFinVal) },

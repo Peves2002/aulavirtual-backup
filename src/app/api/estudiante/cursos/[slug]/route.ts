@@ -195,7 +195,7 @@ export async function GET(request: Request, { params }: { params: { slug: string
             fecha_programada: (l as any).fecha_programada,
             fecha_fin: (l as any).fecha_fin,
             enlace_reunion: (l as any).enlace_reunion,
-            completada: l.progreso[0]?.esta_completado || false,
+            completada: (l as any).progreso?.[0]?.esta_completado || false,
             recursos: Array.isArray(l.recursos) ? l.recursos : [],
             trabajo: (l as any).trabajo
               ? {

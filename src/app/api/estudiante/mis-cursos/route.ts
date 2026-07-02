@@ -81,11 +81,8 @@ export async function GET(request: Request) {
       origen: 'SUSCRIPCION'
     }> = []
 
-    const suscripcionDelegate = (prisma as { suscripcion?: { findFirst: typeof prisma.inscripcion.findFirst } }).suscripcion
-
-    if (suscripcionDelegate) {
-      try {
-        const suscripcionActiva = await suscripcionDelegate.findFirst({
+    try {
+      const suscripcionActiva = await prisma.suscripcion.findFirst({
           where: {
             usuario_id: user.id,
             estado: { in: ['ACTIVA', 'EN_PRUEBA'] },
@@ -121,9 +118,8 @@ export async function GET(request: Request) {
             tieneAcceso: true,
             origen: 'SUSCRIPCION' as const,
           })) ?? []
-      } catch {
-        /* suscripciones no disponibles — continuar solo con inscripciones */
-      }
+    } catch {
+      /* suscripciones no disponibles — continuar solo con inscripciones */
     }
 
     // Combinar y deduplicar por id (compra tiene prioridad sobre suscripción)
