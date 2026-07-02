@@ -68,42 +68,63 @@ export async function GET(request: Request) {
       }
     })
 
-    // Incluir cursos de suscripción activa
-    const suscripcionActiva = await prisma.suscripcion.findFirst({
-      where: {
-        usuario_id: user.id,
-        estado: { in: ['ACTIVA', 'EN_PRUEBA'] }
-      },
-      include: {
-        plan: {
-          include: {
-            cursos: {
-              include: {
-                curso: {
-                  include: {
-                    profesor: { select: { nombre: true, apellido: true } },
-                    categoria: { select: { nombre: true } },
-                    progreso: { where: { usuario_id: user.id } }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    })
+    // Cursos de suscripción (opcional — si el cliente Prisma no tiene el modelo aún)
+    let cursosSuscripcion: Array<{
+      id: string
+      titulo: string
+      slug: string
+      miniatura?: string
+      profesor: { nombre: string; apellido: string }
+      categoria?: string
+      progreso: number
+      tieneAcceso: boolean
+      origen: 'SUSCRIPCION'
+    }> = []
 
-    const cursosSuscripcion = suscripcionActiva?.plan.cursos.map(cp => ({
-      id: cp.curso.id,
-      titulo: cp.curso.titulo,
-      slug: cp.curso.slug,
-      miniatura: cp.curso.miniatura ?? undefined,
-      profesor: cp.curso.profesor,
-      categoria: cp.curso.categoria?.nombre,
-      progreso: cp.curso.progreso[0]?.porcentaje_progreso || 0,
-      tieneAcceso: true,
-      origen: 'SUSCRIPCION' as const
-    })) ?? []
+    const suscripcionDelegate = (prisma as { suscripcion?: { findFirst: typeof prisma.inscripcion.findFirst } }).suscripcion
+
+    if (suscripcionDelegate) {
+      try {
+        const suscripcionActiva = await suscripcionDelegate.findFirst({
+          where: {
+            usuario_id: user.id,
+            estado: { in: ['ACTIVA', 'EN_PRUEBA'] },
+          },
+          include: {
+            plan: {
+              include: {
+                cursos: {
+                  include: {
+                    curso: {
+                      include: {
+                        profesor: { select: { nombre: true, apellido: true } },
+                        categoria: { select: { nombre: true } },
+                        progreso: { where: { usuario_id: user.id } },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        })
+
+        cursosSuscripcion =
+          suscripcionActiva?.plan.cursos.map(cp => ({
+            id: cp.curso.id,
+            titulo: cp.curso.titulo,
+            slug: cp.curso.slug,
+            miniatura: cp.curso.miniatura ?? undefined,
+            profesor: cp.curso.profesor,
+            categoria: cp.curso.categoria?.nombre,
+            progreso: cp.curso.progreso[0]?.porcentaje_progreso || 0,
+            tieneAcceso: true,
+            origen: 'SUSCRIPCION' as const,
+          })) ?? []
+      } catch {
+        /* suscripciones no disponibles — continuar solo con inscripciones */
+      }
+    }
 
     // Combinar y deduplicar por id (compra tiene prioridad sobre suscripción)
     const idsInscritos = new Set(cursosInscritos.map(c => c.id))

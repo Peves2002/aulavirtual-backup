@@ -12,6 +12,62 @@ import { puedeAccederCurso } from '@/utils/libs/subscription-access'
 
 const JWT_SECRET = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || 'dev-secret'
 
+async function fetchCourseForPlayer(slug: string, userId: string) {
+  const examenesInclude = {
+    where: { esta_publicado: true },
+    select: {
+      id: true,
+      titulo: true,
+      tipo: true,
+      peso: true,
+      progreso_minimo: true,
+      orden: true,
+      modulo_id: true,
+      puntaje_aprobacion: true,
+      intentos_maximos: true,
+      esta_publicado: true,
+      fecha_inicio: true,
+      fecha_fin: true,
+    },
+  } as const
+
+  const leccionIncludeBase = {
+    progreso: { where: { usuario_id: userId } },
+  }
+
+  const leccionIncludeWithTrabajo = {
+    ...leccionIncludeBase,
+    trabajo: {
+      include: {
+        entregas: { where: { usuario_id: userId } },
+      },
+    },
+  }
+
+  const buildQuery = (leccionInclude: object) =>
+    prisma.curso.findUnique({
+      where: { slug },
+      include: {
+        modulos: {
+          include: {
+            lecciones: {
+              include: leccionInclude,
+              orderBy: { orden: 'asc' },
+            },
+          },
+          orderBy: { orden: 'asc' },
+        },
+        examenes: examenesInclude,
+      },
+    })
+
+  try {
+    return await buildQuery(leccionIncludeWithTrabajo)
+  } catch {
+    return buildQuery(leccionIncludeBase)
+  }
+}
+
 export async function GET(request: Request, { params }: { params: { slug: string } }) {
   try {
     let user: any = null
@@ -47,48 +103,7 @@ export async function GET(request: Request, { params }: { params: { slug: string
 
     const { slug } = params
 
-    const course = await prisma.curso.findUnique({
-      where: { slug },
-      include: {
-        modulos: {
-          include: {
-            lecciones: {
-              include: {
-                progreso: {
-                  where: { usuario_id: user.id }
-                },
-                trabajo: {
-                  include: {
-                    entregas: {
-                      where: { usuario_id: user.id }
-                    }
-                  }
-                }
-              },
-              orderBy: { orden: 'asc' }
-            }
-          },
-          orderBy: { orden: 'asc' }
-        },
-        examenes: {
-          where: { esta_publicado: true },
-          select: {
-            id: true,
-            titulo: true,
-            tipo: true,
-            peso: true,
-            progreso_minimo: true,
-            orden: true,
-            modulo_id: true,
-            puntaje_aprobacion: true,
-            intentos_maximos: true,
-            esta_publicado: true,
-            fecha_inicio: true,
-            fecha_fin: true
-          }
-        }
-      }
-    })
+    const course = await fetchCourseForPlayer(slug, user.id)
 
     if (!course) {
       return ApiResponse.error(request, 'Curso no encontrado', 404)
@@ -182,25 +197,29 @@ export async function GET(request: Request, { params }: { params: { slug: string
             enlace_reunion: (l as any).enlace_reunion,
             completada: l.progreso[0]?.esta_completado || false,
             recursos: Array.isArray(l.recursos) ? l.recursos : [],
-            trabajo: (l as any).trabajo ? {
-              id: (l as any).trabajo.id,
-              titulo: (l as any).trabajo.titulo,
-              descripcion: (l as any).trabajo.descripcion,
-              archivo_url: (l as any).trabajo.archivo_url,
-              archivo_nombre: (l as any).trabajo.archivo_nombre,
-              fecha_inicio: (l as any).trabajo.fecha_inicio,
-              fecha_fin: (l as any).trabajo.fecha_fin,
-              entrega: (l as any).trabajo.entregas[0] ? {
-                id: (l as any).trabajo.entregas[0].id,
-                archivo_url: (l as any).trabajo.entregas[0].archivo_url,
-                archivo_nombre: (l as any).trabajo.entregas[0].archivo_nombre,
-                comentario_estudiante: (l as any).trabajo.entregas[0].comentario_estudiante,
-                nota: (l as any).trabajo.entregas[0].nota,
-                comentario_docente: (l as any).trabajo.entregas[0].comentario_docente,
-                creado_en: (l as any).trabajo.entregas[0].creado_en,
-                actualizado_en: (l as any).trabajo.entregas[0].actualizado_en
-              } : null
-            } : null
+            trabajo: (l as any).trabajo
+              ? {
+                  id: (l as any).trabajo.id,
+                  titulo: (l as any).trabajo.titulo,
+                  descripcion: (l as any).trabajo.descripcion,
+                  archivo_url: (l as any).trabajo.archivo_url,
+                  archivo_nombre: (l as any).trabajo.archivo_nombre,
+                  fecha_inicio: (l as any).trabajo.fecha_inicio,
+                  fecha_fin: (l as any).trabajo.fecha_fin,
+                  entrega: (l as any).trabajo.entregas[0]
+                    ? {
+                        id: (l as any).trabajo.entregas[0].id,
+                        archivo_url: (l as any).trabajo.entregas[0].archivo_url,
+                        archivo_nombre: (l as any).trabajo.entregas[0].archivo_nombre,
+                        comentario_estudiante: (l as any).trabajo.entregas[0].comentario_estudiante,
+                        nota: (l as any).trabajo.entregas[0].nota,
+                        comentario_docente: (l as any).trabajo.entregas[0].comentario_docente,
+                        creado_en: (l as any).trabajo.entregas[0].creado_en,
+                        actualizado_en: (l as any).trabajo.entregas[0].actualizado_en,
+                      }
+                    : null,
+                }
+              : null,
           }))
       })),
       examenes: course.examenes.map(ex => ({

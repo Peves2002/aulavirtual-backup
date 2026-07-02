@@ -29,15 +29,23 @@ export async function puedeAccederCurso(
   }
 
   // Verificar suscripción activa que incluya el curso
-  const suscripcion = await prisma.suscripcion.findFirst({
-    where: {
-      usuario_id: usuarioId,
-      estado: { in: ['ACTIVA', 'EN_PRUEBA'] },
-      plan: { cursos: { some: { curso_id: cursoId } } }
-    }
-  })
+  const suscripcionDelegate = (prisma as { suscripcion?: { findFirst: typeof prisma.inscripcion.findFirst } }).suscripcion
 
-  if (suscripcion) return { acceso: true, razon: 'SUSCRIPCION' }
+  if (suscripcionDelegate) {
+    try {
+      const suscripcion = await suscripcionDelegate.findFirst({
+        where: {
+          usuario_id: usuarioId,
+          estado: { in: ['ACTIVA', 'EN_PRUEBA'] },
+          plan: { cursos: { some: { curso_id: cursoId } } },
+        },
+      })
+
+      if (suscripcion) return { acceso: true, razon: 'SUSCRIPCION' }
+    } catch {
+      /* cliente Prisma sin suscripciones */
+    }
+  }
 
   return { acceso: false, razon: 'SIN_ACCESO' }
 }

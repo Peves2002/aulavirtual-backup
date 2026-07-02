@@ -109,6 +109,12 @@ const PLANTILLAS_CERTIFICADO = [
     descripcion: 'Fondo crema con bordes ornamentales. Estilo universitario.',
     thumbnail: '/images/plantillas-certificado/elegante.png',
   },
+  {
+    id: 'ollarves',
+    nombre: 'Ollarves',
+    descripcion: 'Grupo Ollarves + UNMSM San Luis Gonzaga. Barra lateral, marca de agua y temario con notas.',
+    thumbnail: '/images/plantillas-certificado/ollarves.png',
+  },
 ]
 
 function CertificadosSettings({ config, onInputChange }: { config: any; onInputChange: (clave: string, valor: string) => void }) {
