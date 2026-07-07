@@ -15,9 +15,8 @@ export default withAuth(
     //     return NextResponse.redirect(new URL('/login', req.url))
     // }
 
-    // Si tiene token y está intentando acceder a login/register
+    // Si tiene token y está intentando acceder a login/register → panel según rol
     if (token && (path.startsWith('/login') || path.startsWith('/register'))) {
-      // Redirigir según rol
       const rol = token.rol as Rol
 
       if (rol === Rol.ADMIN) {
@@ -29,6 +28,35 @@ export default withAuth(
       }
 
       return NextResponse.redirect(new URL('/estudiante/dashboard', req.url), { status: 302 })
+    }
+
+    // Redirigir /login y /register al modal en Campus (nunca mostrar páginas en blanco)
+    if (path.startsWith('/login')) {
+      const url = new URL('/campus', req.url)
+
+      url.searchParams.set('auth', 'login')
+
+      const callbackUrl = req.nextUrl.searchParams.get('callbackUrl')
+
+      if (callbackUrl) url.searchParams.set('callbackUrl', callbackUrl)
+
+      const error = req.nextUrl.searchParams.get('error')
+
+      if (error) url.searchParams.set('error', error)
+
+      return NextResponse.redirect(url)
+    }
+
+    if (path.startsWith('/register')) {
+      const url = new URL('/campus', req.url)
+
+      url.searchParams.set('auth', 'register')
+
+      const callbackUrl = req.nextUrl.searchParams.get('callbackUrl')
+
+      if (callbackUrl) url.searchParams.set('callbackUrl', callbackUrl)
+
+      return NextResponse.redirect(url)
     }
 
     // Redirigir /dashboard genérico según rol
@@ -80,6 +108,7 @@ export default withAuth(
         if (
           path.startsWith('/login') ||
           path.startsWith('/register') ||
+          path.startsWith('/campus') ||
           path.startsWith('/cursos') ||
           path.startsWith('/ebooks') ||
           path.startsWith('/rutas') ||

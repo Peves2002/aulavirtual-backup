@@ -60,6 +60,12 @@ const nextConfig = {
     '@fullcalendar/list',
     '@fullcalendar/interaction'
   ],
+  async redirects() {
+    return [
+      { source: '/soluciones', destination: '/cursos', permanent: false },
+      { source: '/soluciones/:path*', destination: '/cursos', permanent: false },
+    ]
+  },
   async headers() {
     return [
       {
@@ -86,6 +92,11 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: '*.s3.*.amazonaws.com',
+        port: ''
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
         port: ''
       }
     ]

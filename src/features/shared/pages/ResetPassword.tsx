@@ -132,7 +132,7 @@ const ResetPassword = ({ mode }: { mode: SystemMode }) => {
       setSuccess('¡Contraseña restablecida con éxito! Serás redirigido al inicio de sesión.')
 
       setTimeout(() => {
-        router.push('/login')
+        router.push('/campus?auth=login')
       }, 3000)
     } catch (err: any) {
       setError(err.message || 'Ocurrió un error inesperado. Intenta nuevamente.')
@@ -285,7 +285,7 @@ const ResetPassword = ({ mode }: { mode: SystemMode }) => {
             </Button>
 
             <Typography className='flex justify-center items-center' color='primary'>
-              <Link href='/login' className='flex items-center gap-1.5'>
+              <Link href='/campus?auth=login' className='flex items-center gap-1.5'>
                 <i className='tabler-chevron-left text-xl' />
                 <span>Volver al inicio de sesión</span>
               </Link>

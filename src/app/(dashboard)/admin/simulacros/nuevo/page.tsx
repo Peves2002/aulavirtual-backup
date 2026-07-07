@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default async function Page() {
   const session = await getAuthSession()
 
-  if (!session) redirect('/login')
+  if (!session) redirect('/campus?auth=login')
 
   return <SimulacroFormPage mode='create' />
 }

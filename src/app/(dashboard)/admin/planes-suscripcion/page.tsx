@@ -12,7 +12,7 @@ export const metadata = {
 export default async function Page() {
   const session = await getAuthSession()
 
-  if (!session) redirect('/login')
+  if (!session) redirect('/campus?auth=login')
 
   const token = session.user?.accessToken ?? null
   const axiosPlan = new AxiosPlanSuscripcion({ getAuthToken: () => token })

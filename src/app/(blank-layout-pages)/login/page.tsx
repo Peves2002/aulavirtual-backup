@@ -1,22 +1,24 @@
-// Next Imports
-import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 
-// Component Imports
-import Login from '@/features/shared/pages/Login'
-
-// Server Action Imports
-import { getServerMode } from '@core/utils/serverHelpers'
-
-export const metadata: Metadata = {
-  title: 'Login',
-  description: 'Login to your account'
+export const metadata = {
+  title: 'Iniciar sesión',
+  description: 'Accede al Campus Digital Azul',
 }
 
-const LoginPage = () => {
-  // Vars
-  const mode = getServerMode()
-
-  return <Login mode={mode} />
+type Props = {
+  searchParams: { callbackUrl?: string; error?: string }
 }
 
-export default LoginPage
+export default function LoginPage({ searchParams }: Props) {
+  const params = new URLSearchParams({ auth: 'login' })
+
+  if (searchParams.callbackUrl) {
+    params.set('callbackUrl', searchParams.callbackUrl)
+  }
+
+  if (searchParams.error) {
+    params.set('error', searchParams.error)
+  }
+
+  redirect(`/campus?${params.toString()}`)
+}

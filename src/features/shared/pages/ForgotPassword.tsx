@@ -186,7 +186,7 @@ const ForgotPassword = ({ mode }: { mode: SystemMode }) => {
             </Button>
 
             <Typography className='flex justify-center items-center' sx={{ color: 'var(--web-primary, #25927F)' }}>
-              <Link href='/login' className='flex items-center gap-1.5'>
+              <Link href='/campus?auth=login' className='flex items-center gap-1.5'>
                 <i className='tabler-chevron-left text-xl' />
                 <span>Volver al inicio de sesión</span>
               </Link>

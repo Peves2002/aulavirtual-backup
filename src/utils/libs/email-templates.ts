@@ -137,7 +137,7 @@ export const getWelcomeTemplate = (data: WelcomeEmailData) => {
 
         <!-- Action Button -->
         <div style="text-align: center; margin-top: 40px;">
-          <a href="${appUrl}/login" style="background-color: ${primaryColor}; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: 700; display: inline-block; box-shadow: 0 4px 10px rgba(37, 146, 127, 0.3);">
+          <a href="${appUrl}/campus?auth=login" style="background-color: ${primaryColor}; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: 700; display: inline-block; box-shadow: 0 4px 10px rgba(37, 146, 127, 0.3);">
             INICIAR SESIÓN AHORA
           </a>
         </div>

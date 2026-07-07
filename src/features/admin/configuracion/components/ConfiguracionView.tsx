@@ -372,13 +372,14 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
   }, {})
 
   const [config, setConfig] = useState<{ [key: string]: string }>({
-    HOME_HERO_TITLE: '',
-    HOME_HERO_DESCRIPTION: '',
+    HOME_HERO_TITLE: 'Transformamos conocimiento en capacidades aplicables',
+    HOME_HERO_DESCRIPTION: 'Soluciones de aprendizaje para personas y organizaciones que buscan avanzar al siguiente nivel.',
+    HOME_FEATURED_SLUGS: '',
     WHATSAPP_NUMERO: '',
     WHATSAPP_NUMERO_EMPRESAS: '',
     HOME_LOGOS: '[]',
-    TEMPLATE_NAME: 'Aula Virtual',
-    TEMPLATE_SLOGAN: '',
+    TEMPLATE_NAME: 'Digital Azul',
+    TEMPLATE_SLOGAN: 'Conocimiento que impulsa capacidades',
     CERTIFICADO_INSTITUTION_NAME: '',
     CERTIFICADO_SLOGAN: '',
     CERTIFICADO_INSTITUTION_URL: '',
@@ -494,7 +495,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
           <Box>
             <Typography variant='h6' gutterBottom>Hero de la Página Principal</Typography>
             <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
-              Separa el título en dos líneas usando un salto de línea — la segunda línea se resaltará en color.
+              Título y mensaje institucional del bloque principal de la página de inicio Digital Azul v1.0.
             </Typography>
             <Stack spacing={3}>
               <TextField
@@ -502,7 +503,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
                 multiline
                 rows={2}
                 label='Título del Hero'
-                placeholder={'Aprende sin límites,\ncrece sin fronteras'}
+                placeholder='Transformamos conocimiento en capacidades aplicables'
                 value={config.HOME_HERO_TITLE}
                 onChange={(e) => handleInputChange('HOME_HERO_TITLE', e.target.value)}
                 helperText='Usa Enter para separar líneas. La segunda línea aparece en color.'
@@ -512,9 +513,17 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
                 multiline
                 rows={3}
                 label='Descripción del Hero'
-                placeholder='Accede a cursos especializados, rutas de aprendizaje y certificaciones...'
+                placeholder='Soluciones de aprendizaje para personas y organizaciones...'
                 value={config.HOME_HERO_DESCRIPTION}
                 onChange={(e) => handleInputChange('HOME_HERO_DESCRIPTION', e.target.value)}
+              />
+              <TextField
+                fullWidth
+                label='Programas destacados (slugs)'
+                placeholder='regimen-disciplinario, control-interno, etica-funcion-publica'
+                value={config.HOME_FEATURED_SLUGS || ''}
+                onChange={(e) => handleInputChange('HOME_FEATURED_SLUGS', e.target.value)}
+                helperText='Slugs de cursos publicados separados por coma. Si está vacío, se muestran los 4 más recientes.'
               />
             </Stack>
           </Box>

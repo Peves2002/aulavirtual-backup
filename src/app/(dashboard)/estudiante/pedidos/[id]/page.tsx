@@ -12,7 +12,7 @@ export default async function Page() {
   const session = await getAuthSession()
 
   if (!session) {
-    redirect('/login')
+    redirect('/campus?auth=login')
   }
 
   return <MiPedidoDetallePage />

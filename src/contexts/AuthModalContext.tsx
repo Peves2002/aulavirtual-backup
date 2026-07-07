@@ -1,8 +1,10 @@
 'use client'
 
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import { Suspense, createContext, useContext, useState, type ReactNode } from 'react'
 
 import AuthModal from '@/features/shared/components/AuthModal'
+import AuthQueryListener from '@/features/shared/components/AuthQueryListener'
+import { useBodyScrollLock } from '@/utils/hooks/useBodyScrollLock'
 
 type Mode = 'login' | 'register' | 'forgot-password' | 'reset-password'
 
@@ -36,9 +38,14 @@ export function AuthModalProvider({ children }: { children: ReactNode }) {
 
   const close = () => setOpen(false)
 
+  useBodyScrollLock(open)
+
   return (
     <AuthModalContext.Provider value={{ openLogin, openRegister, close }}>
       {children}
+      <Suspense fallback={null}>
+        <AuthQueryListener />
+      </Suspense>
       <AuthModal
         open={open}
         mode={mode}

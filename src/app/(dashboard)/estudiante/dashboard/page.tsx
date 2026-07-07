@@ -6,15 +6,15 @@ import { AxiosDashboard } from '@/features/estudiante/dashboard/http/axiosDashbo
 import type { DashboardData } from '@/features/estudiante/dashboard/entity/Dashboard'
 
 export const metadata = {
-  title: 'Mi Dashboard | Aula Virtual',
-  description: 'Resumen de tu actividad académica: cursos, progreso y certificados.'
+  title: 'Campus Digital Azul | Inicio',
+  description: 'Pantalla principal del participante: programas, avance y recursos.',
 }
 
 export default async function EstudianteDashboardRoute() {
   const session = await getAuthSession()
 
   if (!session) {
-    redirect('/login')
+    redirect('/campus?auth=login')
   }
 
   const token = session.user?.accessToken ?? null

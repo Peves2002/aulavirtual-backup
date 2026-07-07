@@ -18,27 +18,27 @@ const features = [
   {
     icon: Video,
     title: 'Clases en vivo y grabadas',
-    desc: 'Sesiones sincrónicas con instructor en tiempo real y acceso a grabaciones para repasar cuando quieras.',
+    desc: 'Sesiones sincrónicas con especialistas y acceso a grabaciones desde el Campus Digital Azul.',
   },
   {
     icon: Download,
-    title: 'Material descargable',
-    desc: 'PDFs, plantillas y recursos de cada clase disponibles para siempre en tu biblioteca personal.',
+    title: 'Recursos especializados',
+    desc: 'Material descargable y contenidos de cada programa disponibles para los participantes.',
   },
   {
     icon: ClipboardList,
     title: 'Evaluaciones y seguimiento',
-    desc: 'Exámenes por módulo con retroalimentación inmediata y panel de progreso detallado.',
+    desc: 'Evaluaciones por módulo con retroalimentación y panel de avance para participantes y coordinadores.',
   },
   {
     icon: MessageSquare,
-    title: 'Foro de estudiantes',
-    desc: 'Comunidad activa donde puedes resolver dudas, compartir experiencias y hacer networking.',
+    title: 'Comunidad de aprendizaje',
+    desc: 'Espacios de interacción para resolver dudas y compartir experiencias entre participantes.',
   },
   {
     icon: Award,
-    title: 'Certificado verificable',
-    desc: 'Al finalizar recibes un certificado con código QR que cualquier empresa puede validar.',
+    title: 'Certificación verificable',
+    desc: 'Certificados con código QR que respaldan las capacidades desarrolladas en cada programa.',
   },
 ]
 
@@ -287,13 +287,13 @@ export default function ClassFeaturesSection() {
           <div>
             <ScrollReveal direction="left">
               <div style={{ marginBottom: '2.5rem' }}>
-                <p style={eyebrowDark}>Experiencia de aprendizaje</p>
+                <p style={eyebrowDark}>Campus Digital Azul</p>
                 <h2 style={sectionH2Dark}>
-                  Todo lo que necesitas<br />
-                  <span style={{ color: 'var(--web-primary, #25927F)' }}>en un solo lugar</span>
+                  Aprendizaje moderno,<br />
+                  <span style={{ color: 'var(--web-primary, #25927F)' }}>simple y profesional</span>
                 </h2>
                 <p style={sectionDescDark}>
-                  Una plataforma diseñada para que el aprendizaje sea efectivo, flexible y reconocido por las empresas.
+                  Gestiona cursos, evaluaciones, certificación y reportes en una experiencia tecnológica diseñada para participantes y organizaciones.
                 </p>
               </div>
             </ScrollReveal>

@@ -12,7 +12,7 @@ export default async function MyCoursesPage() {
     const session = await getAuthSession()
 
     if (!session) {
-        redirect('/login')
+        redirect('/campus?auth=login')
     }
 
     const token = session.user?.accessToken ?? null
@@ -35,15 +35,15 @@ export default async function MyCoursesPage() {
                 <Stack spacing={{ xs: 3, md: 4 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box>
-                            <Typography variant="h4" sx={{ fontWeight: 900, mb: 1, color: 'text.primary' }}>
-                                Mis <span style={{ color: 'var(--mui-palette-primary-main)' }}>Cursos</span>
+                            <Typography variant="h4" sx={{ fontWeight: 900, mb: 1, color: 'text.primary', fontFamily: 'Poppins, sans-serif' }}>
+                                Mis <span style={{ color: 'var(--mui-palette-primary-main)' }}>Programas</span>
                             </Typography>
-                            <Typography variant="body1" color="text.secondary" sx={{ fontWeight: 500 }}>
-                                Gestiona tu aprendizaje y sigue tu progreso en cada curso.
+                            <Typography variant="body1" color="text.secondary" sx={{ fontWeight: 500, fontFamily: 'Poppins, sans-serif' }}>
+                                Todos tus programas inscritos en el Campus Digital Azul.
                             </Typography>
                         </Box>
-                        <Button variant='contained' color='primary' size='medium' sx={{ borderRadius: '10px' }} startIcon={<i className='tabler-search' />} href='/cursos'>
-                            Explorar Cursos
+                        <Button variant='contained' color='primary' size='medium' sx={{ borderRadius: '10px', fontFamily: 'Poppins, sans-serif', textTransform: 'none' }} startIcon={<i className='tabler-search' />} href='/cursos'>
+                            Explorar capacitaciones
                         </Button>
                     </Box>{/*  */}
 

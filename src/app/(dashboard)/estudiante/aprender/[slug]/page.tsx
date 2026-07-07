@@ -9,7 +9,7 @@ export default async function LearningPage({ params, searchParams }: { params: {
   const session = await getAuthSession()
 
   if (!session) {
-    redirect('/login')
+    redirect('/campus?auth=login')
   }
 
   const profesorByCurso = await prisma.curso.findUnique({

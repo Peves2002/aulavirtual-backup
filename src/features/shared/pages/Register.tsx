@@ -74,7 +74,7 @@ const Register = ({ mode }: { mode: SystemMode }) => {
   const [error, setError] = useState<string>('')
   const [success, setSuccess] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [loginUrl, setLoginUrl] = useState('/login')
+  const [loginUrl, setLoginUrl] = useState('/campus?auth=login')
 
   // Vars
   const darkImg = '/images/pages/auth-mask-dark.png'
@@ -95,7 +95,7 @@ const Register = ({ mode }: { mode: SystemMode }) => {
     const callbackUrl = new URLSearchParams(window.location.search).get('callbackUrl')
 
     if (callbackUrl) {
-      setLoginUrl(`/login?callbackUrl=${callbackUrl}`)
+      setLoginUrl(`/campus?auth=login&callbackUrl=${encodeURIComponent(callbackUrl)}`)
     }
   }, [])
 
@@ -150,7 +150,11 @@ const Register = ({ mode }: { mode: SystemMode }) => {
         const urlParams = new URLSearchParams(window.location.search)
         const callbackUrl = urlParams.get('callbackUrl')
 
-        router.push(callbackUrl ? `/login?callbackUrl=${callbackUrl}` : '/login')
+        router.push(
+          callbackUrl
+            ? `/campus?auth=login&callbackUrl=${encodeURIComponent(callbackUrl)}`
+            : '/campus?auth=login'
+        )
       }, 2000)
     } catch (err) {
       setError('Ocurrió un error al registrar el usuario')

@@ -3,6 +3,10 @@ export interface DashboardKpis {
   cursosEnProgreso: number
   cursosCompletados: number
   totalCertificados: number
+  /** Promedio de avance en programas activos (0–100) */
+  avanceGeneral: number
+  /** Programas con progreso < 100% */
+  programasActivos: number
 }
 
 export interface DashboardCurso {
@@ -16,6 +20,23 @@ export interface DashboardCurso {
   }
   categoria?: string
   progreso: number
+  /** Sin iniciar | En progreso | Completado */
+  estado: 'sin_iniciar' | 'en_progreso' | 'completado'
+}
+
+export interface DashboardProgramaRecomendado {
+  id: string
+  titulo: string
+  slug: string
+  miniatura?: string
+  categoria?: string
+}
+
+export interface DashboardRecursoNovedad {
+  id: string
+  titulo: string
+  tipo: 'articulo' | 'guia' | 'plantilla' | 'noticia'
+  href: string
 }
 
 export interface DashboardCertificado {
@@ -37,8 +58,12 @@ export interface DashboardCertificado {
 
 export interface DashboardData {
   kpis: DashboardKpis
+  /** Todos los programas inscritos activos (< 100%) */
+  misProgramas: DashboardCurso[]
   cursosRecientes: DashboardCurso[]
   certificadosRecientes: DashboardCertificado[]
+  programasRecomendados: DashboardProgramaRecomendado[]
+  recursosNovedades: DashboardRecursoNovedad[]
 }
 
 export interface DashboardResponse {

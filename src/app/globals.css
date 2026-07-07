@@ -52,6 +52,18 @@ html {
   min-block-size: 100%;
 }
 
+html.scroll-locked {
+  overflow: hidden;
+}
+
+html.scroll-locked [data-scroll-lock-fixed] {
+  padding-right: var(--scrollbar-width, 0px);
+}
+
+html.scroll-locked [data-scroll-lock-fixed-right] {
+  right: calc(var(--scroll-lock-base-right, 1.5rem) + var(--scrollbar-width, 0px)) !important;
+}
+
 a {
   color: inherit;
   text-decoration: none;

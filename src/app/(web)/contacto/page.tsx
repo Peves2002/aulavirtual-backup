@@ -3,9 +3,11 @@ import { eyebrow, sectionDesc } from '@/features/web/home/components/typography'
 
 import { ContactList, ContactActions } from './components/ContactoClient'
 
+import { digitalAzulBrand } from '@/features/web/digital-azul/data/digitalAzulContent'
+
 export const metadata = {
-  title: 'Contacto - ARM',
-  description: 'Ponte en contacto con nosotros',
+  title: `Contacto - ${digitalAzulBrand.name}`,
+  description: 'Canales de comunicación institucional: formulario, WhatsApp, correo y redes sociales.',
 }
 
 export default function ContactoPage() {

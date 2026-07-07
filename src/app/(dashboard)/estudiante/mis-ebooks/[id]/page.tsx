@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props) {
 export default async function Page({ params }: Props) {
   const session = await getAuthSession()
 
-  if (!session) redirect('/login')
+  if (!session) redirect('/campus?auth=login')
 
   const ebook = await prisma.ebook.findFirst({
     where: { OR: [{ id: params.id }, { slug: params.id }], estado: 'PUBLICADO' },

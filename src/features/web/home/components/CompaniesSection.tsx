@@ -21,19 +21,19 @@ import { useConfig } from '@/contexts/ConfigContext'
 import ScrollReveal from './ScrollReveal'
 import { eyebrow, sectionH2, sectionDesc, cardTitle, cardBody, smallText } from './typography'
 
-const WHATSAPP_MSG = encodeURIComponent('Hola, me interesa conocer las opciones corporativas para capacitar a mi equipo.')
+const WHATSAPP_MSG = encodeURIComponent('Hola, me interesa conocer los programas de formación de Digital Azul para mi organización.')
 
 const stats = [
-  { icon: Building2, value: 'Empresas', label: 'Descuentos por volumen' },
-  { icon: Users, value: 'Equipos', label: 'Crecimiento profesional' },
+  { icon: Building2, value: 'Corporativo', label: 'Programas a medida' },
+  { icon: Users, value: 'Institucional', label: 'Entidades públicas' },
   { icon: TrendingUp, value: 'Reportes', label: 'Seguimiento de avance' },
 ]
 
 const benefits = [
-  'Descuentos especiales por volumen de inscripciones',
-  'Accesos personalizados para cada colaborador',
-  'Asesoría personalizada para elegir la ruta de aprendizaje ideal',
-  'Certificados válidos que respaldan las habilidades de tu equipo',
+  'Programas institucionales y corporativos diseñados según necesidades',
+  'Accesos personalizados para cada participante en el Campus Digital Azul',
+  'Asesoría para elegir la ruta de aprendizaje ideal',
+  'Certificación verificable y reportes para entidades contratantes',
 ]
 
 export default function CompaniesSection() {
@@ -56,13 +56,13 @@ export default function CompaniesSection() {
           {/* ── Izquierda ── */}
           <ScrollReveal direction="left">
             <div>
-              <p style={eyebrow}>Soluciones corporativas</p>
+              <p style={eyebrow}>Programas para organizaciones</p>
               <h2 style={sectionH2}>
-                Capacita a tu equipo<br />
-                <span style={{ color: 'var(--web-primary, #25927F)' }}>sin complicaciones</span>
+                Fortalece capacidades<br />
+                <span style={{ color: 'var(--web-primary, #25927F)' }}>en tu institución o empresa</span>
               </h2>
               <p style={{ ...sectionDesc, marginBottom: '2rem' }}>
-                Ofrecemos planes especiales para empresas que quieren mantener a sus colaboradores actualizados y certificados en las últimas tendencias del sector.
+                Digital Azul diseña soluciones de aprendizaje para entidades públicas y privadas: desde régimen disciplinario e integridad institucional hasta inducción y desarrollo de competencias.
               </p>
 
               {/* Beneficios */}
@@ -188,10 +188,10 @@ export default function CompaniesSection() {
                 <span style={{ fontSize: '2rem' }}>🏆</span>
                 <div>
                   <div style={{ ...cardTitle, color: '#ffffff', marginBottom: '0.25rem' }}>
-                    Certificados con validez empresarial
+                    Certificación y reportes integrados
                   </div>
                   <div style={{ ...smallText, color: 'rgba(255,255,255,0.65)' }}>
-                    Reconocidos por las principales empresas del sector
+                    Visibilidad del avance para coordinadores y entidades contratantes
                   </div>
                 </div>
               </div>

@@ -96,8 +96,8 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
     },
 
     pages: {
-      signIn: '/login',
-      error: '/login'
+      signIn: '/campus?auth=login',
+      error: '/campus?auth=login'
     },
 
     callbacks: {

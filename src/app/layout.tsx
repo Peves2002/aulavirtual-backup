@@ -12,8 +12,8 @@ import '@assets/iconify-icons/generated-icons.css'
 
 export async function generateMetadata(): Promise<Metadata> {
   const configs = await getConfigs()
-  const title = configs.TEMPLATE_NAME || 'Aula Virtual'
-  const slogan = configs.TEMPLATE_SLOGAN || ''
+  const title = configs.TEMPLATE_NAME || 'Digital Azul'
+  const slogan = configs.TEMPLATE_SLOGAN || 'Conocimiento que impulsa capacidades'
   const logo = configs.TEMPLATE_LOGO || '/favicon.ico'
 
   return {
@@ -53,10 +53,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const primaryLight = configs.PRIMARY_COLOR_LIGHT || '#242CBF'
   const primaryDark = configs.PRIMARY_COLOR_DARK || '#9196F2'
 
-  // Colores web (con fallback al design system teal)
-  const webPrimary  = configs.PRIMARY_COLOR_MAIN  || '#25927F'
-  const webLight    = configs.PRIMARY_COLOR_LIGHT || '#BDD962'
-  const webDark     = configs.PRIMARY_COLOR_DARK  || '#025E44'
+  // Colores web — identidad Digital Azul (azul profesional)
+  const webPrimary  = configs.PRIMARY_COLOR_MAIN  || '#2563EB'
+  const webLight    = configs.PRIMARY_COLOR_LIGHT || '#38BDF8'
+  const webDark     = configs.PRIMARY_COLOR_DARK  || '#1E40AF'
   const webDarkDeep = darkenHex(webDark, 0.45)  // muy oscuro → reemplaza #012d22
   const webDarkMid  = darkenHex(webDark, 0.72)  // oscuro medio → reemplaza #0f4438
 

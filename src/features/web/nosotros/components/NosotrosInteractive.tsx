@@ -1,37 +1,12 @@
 'use client'
 
-import { Heart, Lightbulb, Users, TrendingUp, ShieldCheck } from 'lucide-react'
+import { Heart, Lightbulb, Rocket, ShieldCheck, Sparkles } from 'lucide-react'
 
+import { digitalAzulMissionVision, digitalAzulValues } from '@/features/web/digital-azul/data/digitalAzulContent'
 import { eyebrow, sectionH2, sectionDesc, cardTitle, cardBody } from '@/features/web/home/components/typography'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 
-const valores = [
-  {
-    icon: Heart,
-    title: 'Compromiso',
-    desc: 'Nos dedicamos plenamente a la formación de cada estudiante, acompañándolos en cada etapa de su aprendizaje.',
-  },
-  {
-    icon: Lightbulb,
-    title: 'Innovación',
-    desc: 'Buscamos constantemente nuevas formas de enseñar y de acercar el conocimiento de manera más efectiva.',
-  },
-  {
-    icon: Users,
-    title: 'Trabajo en Equipo',
-    desc: 'Creemos en la colaboración como motor del aprendizaje y el crecimiento colectivo.',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Mejora Continua',
-    desc: 'Actualizamos nuestros contenidos y metodologías para mantenernos a la vanguardia del sector.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Integridad',
-    desc: 'Actuamos con transparencia y honestidad, generando confianza en cada relación con nuestros estudiantes y empresas.',
-  },
-]
+const valorIcons = [ShieldCheck, Sparkles, Heart, Lightbulb, Rocket]
 
 /* ── Misión / Visión ────────────────────────────────────── */
 export function MisionVisionSection() {
@@ -41,7 +16,7 @@ export function MisionVisionSection() {
         <ScrollReveal>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <p style={{ ...eyebrow, display: 'block', textAlign: 'center' }}>Quiénes somos</p>
-            <h2 style={{ ...sectionH2, textAlign: 'center' }}>Misión y Visión</h2>
+            <h2 style={{ ...sectionH2, textAlign: 'center' }}>Misión y visión</h2>
           </div>
         </ScrollReveal>
 
@@ -52,12 +27,10 @@ export function MisionVisionSection() {
             gap: '2rem',
           }}
         >
-          {/* Misión */}
           <ScrollReveal direction="left" delay={0.05}>
             <MisionCard />
           </ScrollReveal>
 
-          {/* Visión */}
           <ScrollReveal direction="right" delay={0.1}>
             <VisionCard />
           </ScrollReveal>
@@ -118,12 +91,10 @@ function MisionCard() {
       </div>
       <div style={{ padding: '1.75rem 2rem 2rem' }}>
         <h3 style={{ ...cardTitle, fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--web-dark, #025E44)' }}>
-          Nuestra Misión
+          Nuestra misión
         </h3>
         <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Brindar formación profesional de alta calidad, accesible y orientada al sector industrial,
-          impulsando el desarrollo de competencias que generan valor real en las organizaciones y en
-          la carrera de nuestros estudiantes.&quot;
+          &quot;{digitalAzulMissionVision.mission}&quot;
         </p>
       </div>
     </div>
@@ -181,12 +152,10 @@ function VisionCard() {
       </div>
       <div style={{ padding: '1.75rem 2rem 2rem' }}>
         <h3 style={{ ...cardTitle, fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--web-dark, #025E44)' }}>
-          Nuestra Visión
+          Nuestra visión
         </h3>
         <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Ser la plataforma de referencia en formación profesional especializada en Latinoamérica,
-          reconocida por la excelencia de sus contenidos, la solidez de sus certificaciones y su
-          compromiso con la transformación del sector industrial.&quot;
+          &quot;{digitalAzulMissionVision.vision}&quot;
         </p>
       </div>
     </div>
@@ -200,10 +169,10 @@ export function ValoresSection() {
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         <ScrollReveal>
           <div style={{ textAlign: 'center', maxWidth: '560px', margin: '0 auto 3.5rem' }}>
-            <p style={{ ...eyebrow, display: 'block', textAlign: 'center' }}>Lo que nos define</p>
+            <p style={{ ...eyebrow, display: 'block', textAlign: 'center' }}>Experiencia que buscamos</p>
             <h2 style={{ ...sectionH2, textAlign: 'center' }}>Valores que nos identifican</h2>
             <p style={{ ...sectionDesc, textAlign: 'center', marginTop: '0.75rem' }}>
-              &quot;La excelencia no es un acto, sino un hábito. Cada valor que practicamos a diario define quiénes somos y hacia dónde vamos.&quot;
+              Una plataforma moderna, limpia y profesional — lejos del modelo tradicional de academia o universidad virtual.
             </p>
           </div>
         </ScrollReveal>
@@ -213,11 +182,12 @@ export function ValoresSection() {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
             gap: '1.5rem',
+            alignItems: 'stretch',
           }}
         >
-          {valores.map((v, i) => (
-            <ScrollReveal key={i} delay={i * 0.06}>
-              <ValorCard v={v} />
+          {digitalAzulValues.map((v, i) => (
+            <ScrollReveal key={v.title} delay={i * 0.06} className="h-full">
+              <ValorCard v={v} icon={valorIcons[i]} />
             </ScrollReveal>
           ))}
         </div>
@@ -226,10 +196,14 @@ export function ValoresSection() {
   )
 }
 
-function ValorCard({ v }: { v: typeof valores[number] }) {
+function ValorCard({ v, icon: Icon }: { v: typeof digitalAzulValues[number]; icon: typeof valorIcons[number] }) {
   return (
     <div
       style={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         backgroundColor: '#f8fafc',
         borderRadius: '20px',
         padding: '2rem 1.5rem',
@@ -237,6 +211,7 @@ function ValorCard({ v }: { v: typeof valores[number] }) {
         textAlign: 'center',
         cursor: 'default',
         transition: 'transform 0.3s, box-shadow 0.3s, border-color 0.3s, background-color 0.3s',
+        boxSizing: 'border-box',
       }}
       onMouseEnter={e => {
         const el = e.currentTarget as HTMLDivElement
@@ -264,12 +239,12 @@ function ValorCard({ v }: { v: typeof valores[number] }) {
           border: '1.5px solid rgba(var(--web-primary-rgb, 37, 146, 127),0.2)',
         }}
       >
-        <v.icon size={28} color="var(--web-primary, #25927F)" />
+        <Icon size={28} color="var(--web-primary, #25927F)" />
       </div>
       <h3 style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', fontWeight: 700, color: '#0A0A0A', marginBottom: '0.625rem' }}>
         {v.title}
       </h3>
-      <p style={{ ...cardBody, textAlign: 'center' }}>{v.desc}</p>
+      <p style={{ ...cardBody, textAlign: 'center', flex: 1, margin: 0 }}>{v.desc}</p>
     </div>
   )
 }

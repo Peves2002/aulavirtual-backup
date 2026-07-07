@@ -19,12 +19,12 @@ import { useConfig } from '@/contexts/ConfigContext'
 import ScrollReveal from './ScrollReveal'
 import { sectionH2, sectionDesc, cardTitle, cardBody, smallText } from './typography'
 
-const WHATSAPP_MSG = encodeURIComponent('Hola, me gustaría agendar una reunión para explorar sus planes corporativos.')
+const WHATSAPP_MSG = encodeURIComponent('Hola, me gustaría agendar una reunión para explorar los programas de Digital Azul para mi organización.')
 
 const bullets = [
-  { icon: Zap, text: 'Planes desde 5 hasta 100+ colaboradores' },
-  { icon: Shield, text: 'Facturación a nombre de empresa con RUC' },
-  { icon: HeadphonesIcon, text: 'Soporte dedicado 24 / 7' },
+  { icon: Zap, text: 'Programas institucionales y corporativos a medida' },
+  { icon: Shield, text: 'Facturación a nombre de entidad con RUC' },
+  { icon: HeadphonesIcon, text: 'Soporte y acompañamiento dedicado' },
 ]
 
 export default function EnterpriseCTASection() {
@@ -93,15 +93,15 @@ export default function EnterpriseCTASection() {
               >
                 <Calendar size={14} color="var(--web-dark, #025E44)" />
                 <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', fontWeight: 700, color: 'var(--web-dark, #025E44)', letterSpacing: '0.08em', textTransform: 'uppercase' as const }}>
-                  Para empresas
+                  Para organizaciones
                 </span>
               </div>
 
               <h2 style={{ ...sectionH2, marginBottom: '1rem' }}>
-                ¿Capacitas equipos<br />en tu empresa?
+                ¿Necesitas un programa<br />a medida?
               </h2>
               <p style={{ ...sectionDesc, color: 'rgba(10,10,10,0.6)', marginBottom: '2rem', maxWidth: '440px' }}>
-                Agenda una reunión gratuita con nuestro equipo y descubre cómo podemos diseñar un plan de formación a medida para tus colaboradores.
+                Agenda una reunión con nuestro equipo y descubre cómo Digital Azul puede diseñar una solución de aprendizaje para tu entidad pública o privada.
               </p>
 
               {/* Bullets */}

@@ -13,7 +13,7 @@ export const metadata = {
 export default async function Page() {
   const session = await getAuthSession()
 
-  if (!session) redirect('/login')
+  if (!session) redirect('/campus?auth=login')
 
   const accesos = await prisma.ebookAcceso.findMany({
     where: { usuario_id: session.user.id },

@@ -1,22 +1,20 @@
-// Next Imports
-import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 
-// Component Imports
-import Register from '@/features/shared/pages/Register'
-
-// Server Action Imports
-import { getServerMode } from '@core/utils/serverHelpers'
-
-export const metadata: Metadata = {
+export const metadata = {
   title: 'Registro',
-  description: 'Crea tu cuenta'
+  description: 'Crea tu cuenta en el Campus Digital Azul',
 }
 
-const RegisterPage = () => {
-  // Vars
-  const mode = getServerMode()
-
-  return <Register mode={mode} />
+type Props = {
+  searchParams: { callbackUrl?: string }
 }
 
-export default RegisterPage
+export default function RegisterPage({ searchParams }: Props) {
+  const params = new URLSearchParams({ auth: 'register' })
+
+  if (searchParams.callbackUrl) {
+    params.set('callbackUrl', searchParams.callbackUrl)
+  }
+
+  redirect(`/campus?${params.toString()}`)
+}

@@ -11,7 +11,7 @@ export const metadata = { title: 'Mis Simulacros' }
 export default async function MisSimulacrosPage() {
   const session = await getAuthSession()
 
-  if (!session) redirect('/login')
+  if (!session) redirect('/campus?auth=login')
 
   const token = session.user?.accessToken ?? null
   const client = new AxiosMisSimulacros({ getAuthToken: () => token })

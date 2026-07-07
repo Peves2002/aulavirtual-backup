@@ -3,39 +3,26 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { Home, BookOpen, Users, Award, Map, BookText, ClipboardList } from 'lucide-react'
+import { Menu } from 'lucide-react'
 
-const ALL_NAV_ITEMS = [
-  { title: 'Inicio', url: '/', icon: Home, key: 'inicio' },
-  { title: 'Cursos', url: '/cursos', icon: BookOpen, key: 'cursos' },
-  { title: 'Simulacros', url: '/simulacros', icon: ClipboardList, key: 'simulacros' },
-  { title: 'Ebooks', url: '/ebooks', icon: BookText, key: 'ebooks' },
-  { title: 'Rutas', url: '/rutas', icon: Map, key: 'rutas' },
-  { title: 'Nosotros', url: '/nosotros', icon: Users, key: 'nosotros' },
-  { title: 'Certificado', url: '/verificar-certificado', icon: Award, key: 'certificado' },
-]
+import { useWebNavMenu } from '@/contexts/WebNavMenuContext'
+import {
+  MAIN_NAV_ITEMS,
+  MOBILE_BOTTOM_NAV_KEYS,
+  isNavItemActive,
+} from '@/features/web/digital-azul/navigation/webNav'
 
-export default function MobileBottomNav({
-  rutasHabilitado = true,
-}: {
-  rutasHabilitado?: boolean
-}) {
+export default function MobileBottomNav() {
   const pathname = usePathname()
+  const { toggleMenu } = useWebNavMenu()
 
-  const navItems = ALL_NAV_ITEMS.filter(item => {
-    if (item.key === 'rutas' && !rutasHabilitado) return false
-
-    return true
-  })
-
-  const isActive = (url: string) => {
-    if (url === '/') return pathname === '/'
-
-    return pathname.startsWith(url)
-  }
+  const navItems = MAIN_NAV_ITEMS.filter(item =>
+    (MOBILE_BOTTOM_NAV_KEYS as readonly string[]).includes(item.key),
+  )
 
   return (
     <nav
+      data-scroll-lock-fixed
       className="fixed bottom-0 left-0 right-0 flex items-center justify-around sm:hidden z-50"
       style={{
         height: '64px',
@@ -45,21 +32,21 @@ export default function MobileBottomNav({
       }}
     >
       {navItems.map(item => {
-        const active = isActive(item.url)
+        const active = isNavItemActive(pathname, item)
 
         return (
           <Link
-            key={item.title}
+            key={item.key}
             href={item.url}
             className="no-underline flex flex-col items-center justify-center gap-1 flex-1 h-full transition-colors"
-            style={{ color: active ? 'var(--web-primary, #25927F)' : '#94a3b8' }}
+            style={{ color: active ? 'var(--web-primary, #2563EB)' : '#94a3b8' }}
           >
             <div
               className="flex items-center justify-center rounded-xl transition-all duration-200"
               style={{
                 width: '36px',
                 height: '28px',
-                backgroundColor: active ? 'rgba(var(--web-primary-rgb, 37, 146, 127),0.1)' : 'transparent',
+                backgroundColor: active ? 'rgba(var(--web-primary-rgb, 37, 99, 235), 0.1)' : 'transparent',
               }}
             >
               <item.icon size={active ? 22 : 20} strokeWidth={active ? 2.5 : 1.8} />
@@ -77,6 +64,21 @@ export default function MobileBottomNav({
           </Link>
         )
       })}
+
+      <button
+        type="button"
+        onClick={toggleMenu}
+        className="flex flex-col items-center justify-center gap-1 flex-1 h-full border-none bg-transparent cursor-pointer"
+        style={{ color: '#94a3b8' }}
+        aria-label="Abrir menú completo"
+      >
+        <div className="flex items-center justify-center rounded-xl" style={{ width: '36px', height: '28px' }}>
+          <Menu size={20} />
+        </div>
+        <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.625rem', fontWeight: 500, lineHeight: 1 }}>
+          Más
+        </span>
+      </button>
     </nav>
   )
 }

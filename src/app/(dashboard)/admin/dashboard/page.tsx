@@ -19,8 +19,8 @@ export default async function Page() {
   console.log('[Dashboard Page] Server Session:', session ? 'Encontrada' : 'Nula')
 
   if (!session) {
-    console.log('[Dashboard Page] Redirigiendo a /login (Sesión Nula)')
-    redirect('/login')
+    console.log('[Dashboard Page] Redirigiendo a Campus (Sesión Nula)')
+    redirect('/campus?auth=login')
   }
 
   const token = session.user?.accessToken ?? null

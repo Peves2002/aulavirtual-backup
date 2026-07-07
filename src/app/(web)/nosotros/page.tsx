@@ -6,10 +6,11 @@ import prisma from '@/utils/libs/prisma'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
 import { MisionVisionSection, ValoresSection } from '@/features/web/nosotros/components/NosotrosInteractive'
+import { digitalAzulBrand, digitalAzulUserRoles } from '@/features/web/digital-azul/data/digitalAzulContent'
 
 export const metadata = {
-  title: 'Nosotros - Aula Virtual',
-  description: 'Conoce quiénes somos, nuestra misión, visión y los valores que guían nuestra plataforma educativa.',
+  title: `Nosotros - ${digitalAzulBrand.name}`,
+  description: digitalAzulBrand.description,
 }
 
 async function getTeachers() {
@@ -90,19 +91,19 @@ export default async function NosotrosPage() {
                     🎓
                   </div>
                   <div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.6875rem', color: 'rgba(255,255,255,0.4)', fontWeight: 500, marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Plataforma educativa</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', fontWeight: 800, color: '#ffffff', lineHeight: 1.2 }}>Formación profesional</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>especializada y certificada</div>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.6875rem', color: 'rgba(255,255,255,0.4)', fontWeight: 500, marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Digital Azul</div>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', fontWeight: 800, color: '#ffffff', lineHeight: 1.2 }}>Soluciones de aprendizaje</div>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>para organizaciones y personas</div>
                   </div>
                 </div>
 
                 {/* Stats 2×2 */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                   {[
-                    { emoji: '👩‍🎓', value: '+1,200', label: 'Estudiantes formados' },
-                    { emoji: '📚', value: '+80', label: 'Cursos disponibles' },
-                    { emoji: '👨‍🏫', value: '+30', label: 'Docentes expertos' },
-                    { emoji: '🏆', value: '98%', label: 'Tasa de satisfacción' },
+                    { emoji: '🏛️', value: 'Público', label: 'Programas institucionales' },
+                    { emoji: '🏢', value: 'Privado', label: 'Programas corporativos' },
+                    { emoji: '👤', value: 'Individual', label: 'Cursos abiertos' },
+                    { emoji: '🎓', value: 'Campus', label: 'Digital Azul integrado' },
                   ].map((s, i) => (
                     <div
                       key={i}
@@ -135,8 +136,8 @@ export default async function NosotrosPage() {
                 >
                   <div style={{ fontSize: '1.75rem', flexShrink: 0 }}>📜</div>
                   <div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', fontWeight: 700, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>Certificados con validez empresarial</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '4px' }}>Reconocidos por las principales empresas del sector</div>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', fontWeight: 700, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>Ecosistema escalable e integrado</div>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '4px' }}>Formación, certificación y reportes en una sola plataforma</div>
                   </div>
                 </div>
 
@@ -175,9 +176,8 @@ export default async function NosotrosPage() {
                     marginBottom: '1.25rem',
                   }}
                 >
-                  Somos calidad y{' '}
-                  <span style={{ color: 'var(--web-light, #BDD962)' }}>responsabilidad</span>{' '}
-                  a tu servicio
+                  Somos{' '}
+                  <span style={{ color: 'var(--web-light, #BDD962)' }}>Digital Azul</span>
                 </h1>
 
                 <p
@@ -187,13 +187,31 @@ export default async function NosotrosPage() {
                     color: 'rgba(255,255,255,0.65)',
                     lineHeight: 1.75,
                     maxWidth: '480px',
-                    marginBottom: '2.5rem',
+                    marginBottom: '1.5rem',
                   }}
                 >
-                  Somos una plataforma educativa especializada en la formación profesional de alto impacto.
-                  Ofrecemos cursos diseñados por expertos del sector, con certificaciones reconocidas
-                  que impulsan tu desarrollo profesional y el de tu equipo.
+                  {digitalAzulBrand.description}
                 </p>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '2.5rem', maxWidth: '520px' }}>
+                  {digitalAzulUserRoles.map(role => (
+                    <span
+                      key={role}
+                      style={{
+                        fontFamily: 'Poppins, sans-serif',
+                        fontSize: '0.6875rem',
+                        fontWeight: 600,
+                        color: 'rgba(255,255,255,0.75)',
+                        backgroundColor: 'rgba(255,255,255,0.08)',
+                        border: '1px solid rgba(255,255,255,0.12)',
+                        borderRadius: '999px',
+                        padding: '0.375rem 0.75rem',
+                      }}
+                    >
+                      {role}
+                    </span>
+                  ))}
+                </div>
 
                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                   <Link
@@ -213,7 +231,7 @@ export default async function NosotrosPage() {
                       boxShadow: '0 4px 20px rgba(var(--web-light-rgb, 189, 217, 98),0.35)',
                     }}
                   >
-                    Ver cursos <ArrowRight size={18} />
+                    Ver capacitaciones <ArrowRight size={18} />
                   </Link>
                   <Link
                     href="/contacto"
@@ -233,7 +251,7 @@ export default async function NosotrosPage() {
                       backdropFilter: 'blur(8px)',
                     }}
                   >
-                    Trabaja con nosotros
+                    Contactar
                   </Link>
                 </div>
               </div>
