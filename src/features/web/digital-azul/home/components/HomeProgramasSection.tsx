@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 
 import type { FeaturedProgram } from '../getFeaturedPrograms'
-import { daFont, sectionPadding, sectionWrap } from '../homeTheme'
+import { daCardPadding, daColors, daType, sectionPadding, sectionWrap } from '../homeTheme'
 
 type Props = {
   programs: FeaturedProgram[]
@@ -25,36 +25,25 @@ export default function HomeProgramasSection({ programs }: Props) {
           }}
         >
           <div>
-            <h2
-              style={{
-                fontFamily: daFont,
-                fontWeight: 800,
-                fontSize: 'clamp(1.25rem, 3vw, 1.625rem)',
-                color: '#0F172A',
-                letterSpacing: '0.02em',
-                margin: '0 0 0.5rem',
-              }}
-            >
-              PROGRAMAS DESTACADOS
-            </h2>
-            <p style={{ fontFamily: daFont, fontSize: '0.875rem', color: '#64748B', margin: 0, lineHeight: 1.6 }}>
+            <h2 style={{ ...daType.sectionTitle, margin: '0 0 0.625rem' }}>PROGRAMAS DESTACADOS</h2>
+            <p style={{ ...daType.sectionSubtitle, margin: 0 }}>
               Programas estratégicos disponibles en el Campus Digital Azul.
             </p>
           </div>
           <Link
             href="/cursos"
             className="no-underline inline-flex items-center gap-1 flex-shrink-0"
-            style={{ fontFamily: daFont, fontSize: '0.8125rem', fontWeight: 700, color: '#0B3A82' }}
+            style={{ ...daType.link, color: daColors.blue }}
           >
-            Ver todos los programas <ArrowRight size={14} />
+            Ver todos los programas <ArrowRight size={16} />
           </Link>
         </div>
 
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '1rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gap: '1.25rem',
             alignItems: 'stretch',
           }}
         >
@@ -62,7 +51,7 @@ export default function HomeProgramasSection({ programs }: Props) {
             <div
               key={item.title}
               style={{
-                borderRadius: '12px',
+                borderRadius: '14px',
                 overflow: 'hidden',
                 border: '1px solid #E2E8F0',
                 backgroundColor: '#FAFBFC',
@@ -72,7 +61,7 @@ export default function HomeProgramasSection({ programs }: Props) {
                 boxSizing: 'border-box',
               }}
             >
-              <div style={{ position: 'relative', height: 140, flexShrink: 0 }}>
+              <div style={{ position: 'relative', height: 160, flexShrink: 0 }}>
                 <Image
                   src={item.image}
                   alt={item.title}
@@ -89,36 +78,15 @@ export default function HomeProgramasSection({ programs }: Props) {
                 />
               </div>
 
-              <div style={{ padding: '1.25rem 1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <h3
-                  style={{
-                    fontFamily: daFont,
-                    fontWeight: 700,
-                    fontSize: '0.9375rem',
-                    color: '#0F172A',
-                    marginBottom: '0.375rem',
-                  }}
-                >
-                  {item.title}
-                </h3>
-                <p
-                  style={{
-                    fontFamily: daFont,
-                    fontSize: '0.8125rem',
-                    color: '#64748B',
-                    margin: '0 0 0.75rem',
-                    lineHeight: 1.5,
-                    flex: 1,
-                  }}
-                >
-                  {item.description}
-                </p>
+              <div style={{ padding: daCardPadding, flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <h3 style={{ ...daType.cardTitle, marginBottom: '0.5rem' }}>{item.title}</h3>
+                <p style={{ ...daType.cardBody, margin: '0 0 0.875rem', flex: 1 }}>{item.description}</p>
                 <Link
                   href={item.href}
                   className="no-underline inline-flex items-center gap-1"
-                  style={{ fontFamily: daFont, fontSize: '0.75rem', fontWeight: 700, color: item.color }}
+                  style={{ ...daType.link, fontSize: '0.875rem', color: item.color }}
                 >
-                  Ver programa <ArrowRight size={12} />
+                  Ver programa <ArrowRight size={14} />
                 </Link>
               </div>
             </div>

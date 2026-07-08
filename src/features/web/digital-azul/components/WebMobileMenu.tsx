@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 
 import { ChevronRight, Mail, X } from 'lucide-react'
 
-import { daColors, daFont } from '@/features/web/digital-azul/home/homeTheme'
+import { daColors, daType } from '@/features/web/digital-azul/home/homeTheme'
 import { useWebNavMenu } from '@/contexts/WebNavMenuContext'
 import {
   HIGHLIGHTED_CTAS,
@@ -41,7 +41,7 @@ export default function WebMobileMenu() {
           className="flex items-center justify-between px-5 border-b"
           style={{ height: 'var(--navbar-height)', borderColor: 'hsl(214, 20%, 92%)' }}
         >
-          <span style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '0.9375rem', color: '#0A0A0A' }}>
+          <span style={{ ...daType.nav, fontWeight: 700, color: '#0A0A0A' }}>
             Menú
           </span>
           <button
@@ -68,8 +68,7 @@ export default function WebMobileMenu() {
                   onClick={closeMenu}
                   className="no-underline flex items-center gap-3 px-3 py-3 rounded-xl transition-colors"
                   style={{
-                    fontFamily: 'Poppins, sans-serif',
-                    fontSize: '0.9375rem',
+                    ...daType.nav,
                     fontWeight: active ? 700 : 600,
                     color: active ? 'var(--web-primary, #2563EB)' : '#334155',
                     backgroundColor: active ? 'rgba(var(--web-primary-rgb, 37, 99, 235), 0.08)' : 'transparent',
@@ -89,8 +88,7 @@ export default function WebMobileMenu() {
             onClick={closeMenu}
             className="no-underline text-center rounded-xl py-3 font-semibold inline-flex items-center justify-center gap-2"
             style={{
-              fontFamily: daFont,
-              fontSize: '0.875rem',
+              ...daType.navSm,
               fontWeight: 600,
               color: daColors.blue,
               border: `1.5px solid ${daColors.blue}`,
@@ -105,8 +103,8 @@ export default function WebMobileMenu() {
             onClick={closeMenu}
             className="no-underline text-center rounded-xl py-3 font-bold text-white flex items-center justify-center gap-2"
             style={{
-              fontFamily: daFont,
-              fontSize: '0.875rem',
+              ...daType.navSm,
+              fontWeight: 700,
               backgroundColor: daColors.blueDark,
             }}
           >

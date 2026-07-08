@@ -6,7 +6,7 @@ export const homeHero = {
   subtitle:
     'Soluciones de aprendizaje para personas y organizaciones que buscan avanzar al siguiente nivel.',
   cta: { label: 'Explorar programas', href: '/cursos' },
-  image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1400&q=80',
+  images: ['/images/1.jpg', '/images/2.jpg', '/images/3.jpg'],
 }
 
 /** Bloque 2 — orden spec: Especialistas, Tecnología educativa, Experiencia */
@@ -27,7 +27,7 @@ export const homeWhy = {
         'Plataforma moderna, intuitiva y accesible que integra formación, evaluación, certificación y reportes en un solo ecosistema.',
       color: daColors.teal,
       icon: 'monitor',
-      image: 'https://images.unsplash.com/photo-1581291518633-83b4ebd8653b?auto=format&fit=crop&w=600&q=80',
+      image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80',
     },
     {
       title: 'Experiencia',
@@ -142,7 +142,7 @@ export const homeCasosExito = [
     client: 'Organismo público',
     result: '200 participantes',
     testimonial: 'Formación aplicable que impulsó la cultura de integridad en la organización.',
-    image: 'https://images.unsplash.com/photo-1517245386807-bb43d82cef5d?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=600&q=80',
   },
   {
     title: 'Desarrollo de Competencias',
@@ -178,7 +178,7 @@ export const homeRecursos = {
       color: daColors.teal,
       href: '/recursos',
       linkLabel: 'Ver guías',
-      image: 'https://images.unsplash.com/photo-1434030216411-0b7938213ff?auto=format&fit=crop&w=600&q=80',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
     },
     {
       title: 'Plantillas',
@@ -186,7 +186,7 @@ export const homeRecursos = {
       color: daColors.purple,
       href: '/recursos',
       linkLabel: 'Ver plantillas',
-      image: 'https://images.unsplash.com/photo-1586281380349-632531db5215?auto=format&fit=crop&w=600&q=80',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80',
     },
     {
       title: 'Artículos',

@@ -69,7 +69,7 @@ export default function InstitutionalHero({
           <h1
             style={{
               fontFamily: 'Poppins, sans-serif',
-              fontSize: 'clamp(2rem, 5vw, 3.25rem)',
+              fontSize: 'clamp(2.125rem, 5vw, 3.5rem)',
               fontWeight: 800,
               color: '#ffffff',
               lineHeight: 1.15,

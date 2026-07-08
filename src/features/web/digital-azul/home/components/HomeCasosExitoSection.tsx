@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 
 import { homeCasosExito } from '../homeContent'
-import { daColors, daFont, sectionPadding, sectionWrap } from '../homeTheme'
+import { daCardPadding, daColors, daType, sectionPadding, sectionWrap } from '../homeTheme'
 
 export default function HomeCasosExitoSection() {
   return (
@@ -21,36 +21,25 @@ export default function HomeCasosExitoSection() {
           }}
         >
           <div>
-            <h2
-              style={{
-                fontFamily: daFont,
-                fontWeight: 800,
-                fontSize: 'clamp(1.25rem, 3vw, 1.625rem)',
-                color: '#0F172A',
-                letterSpacing: '0.02em',
-                margin: '0 0 0.5rem',
-              }}
-            >
-              CASOS DE ÉXITO
-            </h2>
-            <p style={{ fontFamily: daFont, fontSize: '0.875rem', color: '#64748B', margin: 0, maxWidth: 480, lineHeight: 1.6 }}>
+            <h2 style={{ ...daType.sectionTitle, margin: '0 0 0.625rem' }}>CASOS DE ÉXITO</h2>
+            <p style={{ ...daType.sectionSubtitle, margin: 0, maxWidth: 520 }}>
               Experiencias, resultados y entidades que confían en nuestras soluciones de aprendizaje.
             </p>
           </div>
           <Link
             href="/casos-de-exito"
             className="no-underline inline-flex items-center gap-1 flex-shrink-0"
-            style={{ fontFamily: daFont, fontSize: '0.8125rem', fontWeight: 700, color: daColors.blue }}
+            style={{ ...daType.link, color: daColors.blue }}
           >
-            Ver todos los casos <ArrowRight size={14} />
+            Ver todos los casos <ArrowRight size={16} />
           </Link>
         </div>
 
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '1.25rem',
             alignItems: 'stretch',
           }}
         >
@@ -68,52 +57,36 @@ export default function HomeCasosExitoSection() {
                 height: '100%',
               }}
             >
-              <div style={{ position: 'relative', height: 130, flexShrink: 0 }}>
+              <div style={{ position: 'relative', height: 150, flexShrink: 0 }}>
                 <Image src={caso.image} alt={caso.title} fill sizes="240px" style={{ objectFit: 'cover' }} />
               </div>
-              <div style={{ padding: '1rem 1.125rem 1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <div style={{ padding: daCardPadding, flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <p
                   style={{
-                    fontFamily: daFont,
-                    fontSize: '0.6875rem',
+                    ...daType.cardBodySm,
                     fontWeight: 700,
                     color: daColors.teal,
                     letterSpacing: '0.04em',
                     textTransform: 'uppercase',
-                    margin: '0 0 0.375rem',
+                    margin: '0 0 0.5rem',
                   }}
                 >
                   {caso.result}
                 </p>
+                <p style={{ ...daType.cardTitle, margin: '0 0 0.5rem' }}>{caso.title}</p>
                 <p
                   style={{
-                    fontFamily: daFont,
-                    fontSize: '0.8125rem',
-                    fontWeight: 700,
-                    color: '#0F172A',
-                    lineHeight: 1.35,
-                    margin: '0 0 0.375rem',
-                  }}
-                >
-                  {caso.title}
-                </p>
-                <p
-                  style={{
-                    fontFamily: daFont,
-                    fontSize: '0.6875rem',
+                    ...daType.cardBodySm,
                     fontWeight: 600,
                     color: daColors.blue,
-                    margin: '0 0 0.5rem',
+                    margin: '0 0 0.625rem',
                   }}
                 >
                   {caso.client}
                 </p>
                 <p
                   style={{
-                    fontFamily: daFont,
-                    fontSize: '0.75rem',
-                    color: '#64748B',
-                    lineHeight: 1.5,
+                    ...daType.cardBody,
                     margin: 0,
                     flex: 1,
                     display: '-webkit-box',

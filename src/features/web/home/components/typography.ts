@@ -8,7 +8,7 @@ import type { CSSProperties } from 'react'
 // ── Eyebrow (label encima del título) ──────────────────────
 export const eyebrow: CSSProperties = {
   fontFamily: 'Poppins, sans-serif',
-  fontSize: '0.75rem',
+  fontSize: '0.8125rem',
   fontWeight: 700,
   letterSpacing: '0.12em',
   textTransform: 'uppercase',
@@ -23,11 +23,9 @@ export const eyebrowDark: CSSProperties = {
 }
 
 // ── H2 de sección ──────────────────────────────────────────
-// 1.75 rem en mobile, 2 rem en ≥768 px
-// Se aplica via className="section-title" (globals.css) o con este objeto
 export const sectionH2: CSSProperties = {
   fontFamily: 'Poppins, sans-serif',
-  fontSize: 'clamp(1.75rem, 3vw, 2rem)',
+  fontSize: 'clamp(1.875rem, 3.5vw, 2.25rem)',
   fontWeight: 800,
   color: '#0A0A0A',
   letterSpacing: '-0.02em',
@@ -43,7 +41,7 @@ export const sectionH2Dark: CSSProperties = {
 // ── Descripción / subtítulo de sección ─────────────────────
 export const sectionDesc: CSSProperties = {
   fontFamily: 'Poppins, sans-serif',
-  fontSize: '1rem',
+  fontSize: '1.0625rem',
   fontWeight: 400,
   color: '#64748b',
   lineHeight: 1.7,
@@ -57,7 +55,7 @@ export const sectionDescDark: CSSProperties = {
 // ── Título de card ──────────────────────────────────────────
 export const cardTitle: CSSProperties = {
   fontFamily: 'Poppins, sans-serif',
-  fontSize: '1rem',
+  fontSize: '1.125rem',
   fontWeight: 700,
   color: '#0A0A0A',
   letterSpacing: '-0.01em',
@@ -72,10 +70,10 @@ export const cardTitleDark: CSSProperties = {
 // ── Cuerpo de card ──────────────────────────────────────────
 export const cardBody: CSSProperties = {
   fontFamily: 'Poppins, sans-serif',
-  fontSize: '0.875rem',
+  fontSize: '0.9375rem',
   fontWeight: 400,
   color: '#64748b',
-  lineHeight: 1.6,
+  lineHeight: 1.65,
 }
 
 export const cardBodyDark: CSSProperties = {
@@ -86,8 +84,8 @@ export const cardBodyDark: CSSProperties = {
 // ── Texto pequeño / meta ────────────────────────────────────
 export const smallText: CSSProperties = {
   fontFamily: 'Poppins, sans-serif',
-  fontSize: '0.8125rem',
+  fontSize: '0.875rem',
   fontWeight: 400,
   color: '#94a3b8',
-  lineHeight: 1.5,
+  lineHeight: 1.55,
 }

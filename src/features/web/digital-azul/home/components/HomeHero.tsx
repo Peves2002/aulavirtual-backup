@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import Image from 'next/image'
 
 import { ArrowRight, GraduationCap } from 'lucide-react'
 
 import { homeHero } from '../homeContent'
-import { daColors, daFont, sectionWrap } from '../homeTheme'
+import { daColors, daType, sectionWrap } from '../homeTheme'
+import HomeHeroCarousel from './HomeHeroCarousel'
 
 type Props = {
   title?: string
@@ -23,24 +23,13 @@ export default function HomeHero({ title, subtitle }: Props) {
         overflow: 'hidden',
       }}
     >
-      {/* Fondo imagen */}
-      <div style={{ position: 'absolute', inset: 0 }}>
-        <Image
-          src={homeHero.image}
-          alt="Formación en aula"
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: 'cover', objectPosition: 'center right' }}
-        />
-      </div>
+      <HomeHeroCarousel images={homeHero.images} />
 
-      {/* Overlay azul izquierdo */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: `linear-gradient(90deg, ${daColors.blue} 0%, ${daColors.blue} 42%, rgba(11,58,130,0.85) 58%, rgba(11,58,130,0.4) 75%, transparent 100%)`,
+          background: `linear-gradient(90deg, rgba(11,58,130,0.72) 0%, rgba(11,58,130,0.58) 42%, rgba(11,58,130,0.38) 58%, rgba(11,58,130,0.18) 75%, transparent 100%)`,
         }}
       />
 
@@ -55,27 +44,21 @@ export default function HomeHero({ title, subtitle }: Props) {
           maxWidth: '1200px',
         }}
       >
-        <div style={{ maxWidth: '520px' }}>
+        <div style={{ maxWidth: '560px' }}>
           <h1
             style={{
-              fontFamily: daFont,
-              fontSize: 'clamp(1.875rem, 4vw, 2.75rem)',
-              fontWeight: 800,
+              ...daType.heroTitle,
               color: '#ffffff',
-              lineHeight: 1.15,
-              marginBottom: '1.25rem',
-              letterSpacing: '-0.02em',
+              marginBottom: '1.375rem',
             }}
           >
             {title || homeHero.title}
           </h1>
           <p
             style={{
-              fontFamily: daFont,
-              fontSize: '1.0625rem',
-              color: 'rgba(255,255,255,0.88)',
-              lineHeight: 1.65,
-              marginBottom: '2rem',
+              ...daType.heroBody,
+              color: 'rgba(255,255,255,0.92)',
+              marginBottom: '2.25rem',
             }}
           >
             {subtitle || homeHero.subtitle}
@@ -84,19 +67,18 @@ export default function HomeHero({ title, subtitle }: Props) {
             href={homeHero.cta.href}
             className="no-underline inline-flex items-center gap-2.5 transition-opacity hover:opacity-90"
             style={{
-              fontFamily: daFont,
-              fontWeight: 700,
-              fontSize: '0.9375rem',
+              ...daType.link,
+              fontSize: '1rem',
               color: daColors.blue,
               backgroundColor: '#ffffff',
-              padding: '0.875rem 1.5rem',
+              padding: '1rem 1.625rem',
               borderRadius: '8px',
               boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
             }}
           >
-            <GraduationCap size={20} />
+            <GraduationCap size={22} />
             {homeHero.cta.label}
-            <ArrowRight size={18} />
+            <ArrowRight size={20} />
           </Link>
         </div>
       </div>

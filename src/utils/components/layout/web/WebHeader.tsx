@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react'
 import UserDropdown from '@components/layout/shared/UserDropdown'
 import CartIcon from '@/features/web/cart/components/CartIcon'
 import WebBrandLogo from '@/features/web/digital-azul/components/WebBrandLogo'
-import { daColors, daFont } from '@/features/web/digital-azul/home/homeTheme'
+import { daColors, daType } from '@/features/web/digital-azul/home/homeTheme'
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import { useWebNavMenu } from '@/contexts/WebNavMenuContext'
 import {
@@ -45,8 +45,7 @@ export default function WebHeader({
   const { toggleMenu } = useWebNavMenu()
 
   const navLinkStyle = (active: boolean) => ({
-    fontFamily: daFont,
-    fontSize: '0.8125rem',
+    ...daType.nav,
     fontWeight: active ? 700 : 500,
     color: active ? daColors.blue : '#334155',
   })
@@ -87,8 +86,7 @@ export default function WebHeader({
             href={HIGHLIGHTED_CTAS.contact.url}
             className="no-underline hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg font-semibold transition-all hover:opacity-90"
             style={{
-              fontFamily: daFont,
-              fontSize: '0.75rem',
+              ...daType.navSm,
               fontWeight: 600,
               color: daColors.blue,
               border: `1.5px solid ${daColors.blue}`,
@@ -103,8 +101,8 @@ export default function WebHeader({
             href={session ? '/campus' : HIGHLIGHTED_CTAS.campus.url}
             className="no-underline inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg font-bold text-white"
             style={{
-              fontFamily: daFont,
-              fontSize: '0.75rem',
+              ...daType.navSm,
+              fontWeight: 700,
               backgroundColor: daColors.blueDark,
             }}
           >

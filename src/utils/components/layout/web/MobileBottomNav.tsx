@@ -54,7 +54,7 @@ export default function MobileBottomNav() {
             <span
               style={{
                 fontFamily: 'Poppins, sans-serif',
-                fontSize: '0.625rem',
+                fontSize: '0.6875rem',
                 fontWeight: active ? 700 : 500,
                 lineHeight: 1,
               }}
