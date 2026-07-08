@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import type { SyntheticEvent } from 'react'
 
 import {
@@ -35,6 +35,7 @@ import { AxiosConfiguracion } from '../http/axiosConfiguracion'
 import type { Configuracion } from '../entity/Configuracion'
 import MediaLibrary from '../../cursos/components/MediaLibrary'
 import { useUsuarios } from '../../usuarios/hooks/useUsuarios'
+import { BrandingColorFieldBound } from './BrandingColorField'
 
 interface ConfiguracionViewProps {
   initialData?: Configuracion[]
@@ -420,9 +421,9 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     setTabValue(newValue)
   }
 
-  const handleInputChange = (clave: string, valor: string) => {
+  const handleInputChange = useCallback((clave: string, valor: string) => {
     setConfig(prev => ({ ...prev, [clave]: valor }))
-  }
+  }, [])
 
   const logosArray: { label: string; url: string }[] = (() => {
     try { return JSON.parse(config.HOME_LOGOS || '[]') } catch { return [] }
@@ -814,32 +815,12 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
                 { label: 'Color Primario Oscuro (Dark)', key: 'PRIMARY_COLOR_DARK' }
               ].map(({ label, key }) => (
                 <Grid item xs={12} md={4} key={key}>
-                  <Typography variant='body2' fontWeight={500} sx={{ mb: 1 }}>{label}</Typography>
-                  <Stack direction='row' spacing={1.5} alignItems='center'>
-                    <TextField
-                      fullWidth
-                      size='small'
-                      value={config[key]}
-                      onChange={(e) => handleInputChange(key, e.target.value)}
-                      inputProps={{ style: { fontFamily: 'monospace', fontSize: 13 } }}
-                    />
-                    <Box
-                      sx={{
-                        width: 44, height: 44, flexShrink: 0,
-                        borderRadius: 1.5, bgcolor: config[key],
-                        border: '2px solid', borderColor: 'divider',
-                        cursor: 'pointer'
-                      }}
-                      component='label'
-                    >
-                      <input
-                        type='color'
-                        value={/^#[0-9A-Fa-f]{6}$/.test(config[key]) ? config[key] : '#000000'}
-                        onChange={(e) => handleInputChange(key, e.target.value)}
-                        style={{ opacity: 0, width: 0, height: 0, position: 'absolute' }}
-                      />
-                    </Box>
-                  </Stack>
+                  <BrandingColorFieldBound
+                    label={label}
+                    configKey={key}
+                    value={config[key]}
+                    onFieldChange={handleInputChange}
+                  />
                 </Grid>
               ))}
             </Grid>

@@ -81,8 +81,8 @@ export const homeSoluciones = {
       color: daColors.blueDark,
       icon: 'book',
       image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=600&q=80',
-      href: '/recursos',
-      ctaLabel: 'Ver recursos',
+      href: '/cursos',
+      ctaLabel: 'Ver catálogo',
     },
   ],
 }
@@ -178,7 +178,7 @@ export const homeRecursos = {
       color: daColors.teal,
       href: '/recursos',
       linkLabel: 'Ver guías',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
+      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80',
     },
     {
       title: 'Plantillas',
@@ -198,3 +198,31 @@ export const homeRecursos = {
     },
   ],
 }
+
+/** Tarjetas de la página /recursos (biblioteca pública) */
+export const recursosPageItems = [
+  {
+    title: 'Artículos',
+    description: 'Contenidos especializados sobre aprendizaje, capacitación y desarrollo de competencias.',
+    color: daColors.orange,
+    image: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    title: 'Guías',
+    description: 'Material práctico para implementar programas formativos en organizaciones.',
+    color: daColors.teal,
+    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    title: 'Plantillas',
+    description: 'Recursos descargables para planificar y ejecutar iniciativas de formación.',
+    color: daColors.purple,
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    title: 'Materiales gratuitos',
+    description: 'Contenido de valor para conocer nuestra propuesta antes de contratar un programa.',
+    color: daColors.blue,
+    image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80',
+  },
+]

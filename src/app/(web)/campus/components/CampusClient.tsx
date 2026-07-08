@@ -1,12 +1,15 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 
-import { useSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 
-import { ArrowRight, BookOpen, KeyRound, LayoutDashboard, LogIn, Map, BarChart3 } from 'lucide-react'
+import { ArrowRight, BookOpen, LayoutDashboard, Map, BarChart3 } from 'lucide-react'
 
-import { useAuthModal } from '@/contexts/AuthModalContext'
+import AuthFormPanel, { type AuthFormMode } from '@/features/shared/components/AuthFormPanel'
 
 type CampusLink = {
   label: string
@@ -47,11 +50,55 @@ function getCampusLinks(rol?: string): CampusLink[] {
   return common
 }
 
+function getPostAuthRedirect(rol?: string) {
+  if (rol === 'ESTUDIANTE') return '/estudiante/dashboard'
+  if (rol === 'ADMIN') return '/admin/dashboard'
+  if (rol === 'PROFESOR') return '/profesor/mis-cursos'
+
+  return null
+}
+
 export default function CampusClient() {
   const { data: session, status } = useSession()
-  const { openLogin, openRegister } = useAuthModal()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [authMode, setAuthMode] = useState<AuthFormMode>('login')
+
   const user = session?.user as { rol?: string } | undefined
   const links = getCampusLinks(user?.rol)
+
+  useEffect(() => {
+    const auth = searchParams.get('auth')
+
+    if (auth === 'register') {
+      setAuthMode('register')
+    } else if (auth === 'login') {
+      setAuthMode('login')
+    }
+
+    if (auth === 'login' || auth === 'register') {
+      const params = new URLSearchParams(searchParams.toString())
+
+      params.delete('auth')
+
+      const query = params.toString()
+
+      router.replace(query ? `/campus?${query}` : '/campus', { scroll: false })
+    }
+  }, [searchParams, router])
+
+  const handleAuthSuccess = async () => {
+    const freshSession = await getSession()
+    const rol = (freshSession?.user as { rol?: string } | undefined)?.rol
+    const redirectTo = getPostAuthRedirect(rol)
+
+    if (redirectTo) {
+      router.push(redirectTo)
+      return
+    }
+
+    router.refresh()
+  }
 
   if (status === 'loading') {
     return (
@@ -63,71 +110,55 @@ export default function CampusClient() {
 
   if (!session) {
     return (
-      <section style={{ backgroundColor: '#f8fafc', padding: '5rem 1.5rem' }}>
-        <div style={{ maxWidth: '480px', margin: '0 auto', textAlign: 'center' }}>
+      <section style={{ backgroundColor: '#f8fafc', padding: '3rem 1.5rem 5rem' }}>
+        <div style={{ maxWidth: authMode === 'register' ? '640px' : '480px', margin: '0 auto' }}>
           <div
             style={{
               backgroundColor: '#ffffff',
               borderRadius: '24px',
-              padding: '2.5rem',
+              padding: '2rem 2rem 2.5rem',
               boxShadow: '0 8px 32px rgba(0,0,0,0.06)',
               border: '1px solid hsl(214, 20%, 92%)',
             }}
           >
-            <div
-              style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '18px',
-                backgroundColor: 'rgba(var(--web-primary-rgb, 37, 99, 235), 0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 1.5rem',
-              }}
-            >
-              <LogIn size={28} color="var(--web-primary, #2563EB)" />
+            <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+              <h2 style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.375rem', fontWeight: 700, marginBottom: '0.5rem', color: '#0A0A0A' }}>
+                {authMode === 'register' ? 'Crear cuenta' : 'Accede al Campus Digital Azul'}
+              </h2>
+              <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#64748b', lineHeight: 1.7, margin: 0 }}>
+                {authMode === 'register'
+                  ? 'Completa tus datos para registrarte y acceder a tus programas.'
+                  : 'Inicia sesión para acceder a tus programas, cursos, evaluaciones y certificados.'}
+              </p>
             </div>
-            <h2 style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.375rem', fontWeight: 700, marginBottom: '0.75rem', color: '#0A0A0A' }}>
-              Accede al Campus Digital Azul
-            </h2>
-            <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#64748b', lineHeight: 1.7, marginBottom: '2rem' }}>
-              Inicia sesión para acceder a tus programas, cursos, evaluaciones y certificados.
-            </p>
 
-            <button
-              type="button"
-              onClick={() => openLogin()}
-              className="w-full mb-3 rounded-xl py-3 font-bold text-white border-none cursor-pointer"
-              style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'var(--web-primary, #2563EB)' }}
-            >
-              Iniciar sesión
-            </button>
-            <button
-              type="button"
-              onClick={() => openRegister()}
-              className="w-full mb-4 rounded-xl py-3 font-semibold cursor-pointer"
-              style={{
-                fontFamily: 'Poppins, sans-serif',
-                backgroundColor: 'transparent',
-                color: 'var(--web-primary, #2563EB)',
-                border: '1.5px solid var(--web-primary, #2563EB)',
-              }}
-            >
-              Crear cuenta
-            </button>
+            <AuthFormPanel
+              mode={authMode}
+              onSwitchMode={setAuthMode}
+              onSuccess={handleAuthSuccess}
+              callbackUrl="/campus"
+              showLogo={false}
+              showDemoAccount={false}
+            />
 
-            <Link
-              href="/forgot-password"
-              className="no-underline inline-flex items-center gap-2 justify-center"
-              style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', fontWeight: 600, color: '#64748b' }}
-            >
-              <KeyRound size={16} />
-              Recuperar contraseña
-            </Link>
+            {authMode === 'login' ? (
+              <button
+                type="button"
+                onClick={() => setAuthMode('register')}
+                className="w-full mt-3 rounded-xl py-3 font-semibold cursor-pointer"
+                style={{
+                  fontFamily: 'Poppins, sans-serif',
+                  backgroundColor: 'transparent',
+                  color: 'var(--web-primary, #2563EB)',
+                  border: '1.5px solid var(--web-primary, #2563EB)',
+                }}
+              >
+                Crear cuenta
+              </button>
+            ) : null}
           </div>
 
-          <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', color: '#64748b', marginTop: '2rem' }}>
+          <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', color: '#64748b', marginTop: '2rem', textAlign: 'center' }}>
             ¿Aún no tienes acceso?{' '}
             <Link href="/cursos" className="no-underline font-semibold" style={{ color: 'var(--web-primary, #2563EB)' }}>
               Explora las capacitaciones disponibles

@@ -117,6 +117,7 @@ export default withAuth(
           path.startsWith('/consultoria') ||
           path.startsWith('/capacitacion') ||
           path.startsWith('/contacto') ||
+          path.startsWith('/recursos') ||
           path.startsWith('/nosotros') ||
           path.startsWith('/docentes') ||
           path.startsWith('/libro-de-reclamaciones') ||

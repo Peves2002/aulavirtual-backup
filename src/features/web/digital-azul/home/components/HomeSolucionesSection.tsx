@@ -6,6 +6,8 @@ import { ArrowRight } from 'lucide-react'
 import { homeSoluciones } from '../homeContent'
 import { daCardPadding, daType, sectionPadding, sectionWrap } from '../homeTheme'
 
+const CURSOS_URL = '/cursos'
+
 export default function HomeSolucionesSection() {
   return (
     <section id="soluciones" style={{ backgroundColor: '#F4F7FB', padding: sectionPadding }}>
@@ -24,8 +26,10 @@ export default function HomeSolucionesSection() {
           }}
         >
           {homeSoluciones.cards.map(card => (
-            <div
+            <Link
               key={card.title}
+              href={CURSOS_URL}
+              className="no-underline group"
               style={{
                 backgroundColor: '#ffffff',
                 borderRadius: '14px',
@@ -35,6 +39,7 @@ export default function HomeSolucionesSection() {
                 display: 'flex',
                 flexDirection: 'column',
                 height: '100%',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
               }}
             >
               <div style={{ position: 'relative', height: 160 }}>
@@ -67,15 +72,14 @@ export default function HomeSolucionesSection() {
               <div style={{ padding: daCardPadding, flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <p style={{ ...daType.cardBody, color: '#475569', margin: '0 0 1.25rem', flex: 1 }}>{card.description}</p>
 
-                <Link
-                  href={card.href}
-                  className="no-underline inline-flex items-center gap-1"
+                <span
+                  className="inline-flex items-center gap-1 transition-transform group-hover:translate-x-0.5"
                   style={{ ...daType.link, color: card.color }}
                 >
                   {card.ctaLabel} <ArrowRight size={16} />
-                </Link>
+                </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

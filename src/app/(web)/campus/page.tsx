@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { redirect } from 'next/navigation'
 
 import { getAuthSession } from '@/utils/libs/auth-helpers'
@@ -25,7 +26,13 @@ export default async function CampusPage() {
         title={<>Tu espacio de <span style={{ color: 'var(--web-light, #38BDF8)' }}>aprendizaje</span></>}
         description="Accede a programas, cursos, evaluaciones, certificación y reportes en un entorno moderno e integrado."
       />
-      <CampusClient />
+      <Suspense fallback={(
+        <div style={{ padding: '4rem 1.5rem', textAlign: 'center', fontFamily: 'Poppins, sans-serif', color: '#64748b' }}>
+          Cargando Campus Digital Azul...
+        </div>
+      )}>
+        <CampusClient />
+      </Suspense>
     </>
   )
 }

@@ -19,6 +19,9 @@ export default function AuthQueryListener() {
 
     if (auth !== 'login' && auth !== 'register') return
 
+    // En /campus el formulario va embebido; CampusClient maneja ?auth=
+    if (pathname === '/campus') return
+
     const key = `${auth}:${searchParams.toString()}`
 
     if (handled.current === key) return

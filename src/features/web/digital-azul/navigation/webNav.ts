@@ -4,6 +4,7 @@ import {
   Users,
   GraduationCap,
   BookOpen,
+  BookMarked,
   Trophy,
   Mail,
   Landmark,
@@ -32,6 +33,7 @@ export type SolucionesNavItem = {
 export const MAIN_NAV_ITEMS: WebNavItem[] = [
   { title: 'Inicio', url: '/', icon: Home, key: 'inicio' },
   { title: 'Nosotros', url: '/nosotros', icon: Users, key: 'nosotros' },
+  { title: 'Cursos', url: '/cursos', icon: BookMarked, key: 'cursos' },
   { title: 'Campus', url: '/campus', icon: GraduationCap, key: 'campus', matchPaths: ['/login', '/forgot-password'] },
   { title: 'Recursos', url: '/recursos', icon: BookOpen, key: 'recursos' },
   { title: 'Casos de Éxito', url: '/casos-de-exito', icon: Trophy, key: 'casos' },
@@ -72,8 +74,8 @@ export const HIGHLIGHTED_CTAS = {
   contact: { label: 'Contacto', url: '/contacto' },
 } as const
 
-/** Ítems del menú central (sin Contacto — va como CTA destacado) */
-export const HEADER_NAV_ITEMS = MAIN_NAV_ITEMS.filter(item => item.key !== 'contacto')
+/** Ítems del menú central (sin Contacto ni Campus — van como CTAs destacados) */
+export const HEADER_NAV_ITEMS = MAIN_NAV_ITEMS.filter(item => !['contacto', 'campus'].includes(item.key))
 
 /** Ítems prioritarios para la barra inferior móvil */
 export const MOBILE_BOTTOM_NAV_KEYS = ['inicio', 'recursos', 'campus', 'contacto'] as const
