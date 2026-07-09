@@ -3,6 +3,8 @@ import { ApiResponse } from '@/utils/libs/apiResponse'
 import { requireAuth } from '@/utils/libs/auth-helpers'
 import { handleApiError } from '@/utils/libs/validation'
 import { completeOrder } from '@/utils/libs/order-service'
+import { getConfigs } from '@/utils/libs/config'
+import { verifyIzipaySignature } from '@/utils/libs/izipay-signature'
 
 /**
  * POST /api/izipay/confirm
@@ -38,8 +40,44 @@ export async function POST(request: Request) {
       return ApiResponse.error(request, 'Este pedido ya fue completado', 400)
     }
 
-    // 2. Verificar si el pago fue exitoso (code === '00' en Izipay Web Core)
-    const isPaymentSuccessful = izipayResponse.code === '00'
+    // 2. Verificar la firma HMAC-SHA256 de Izipay antes de confiar en cualquier dato
+    //    de la respuesta: sin esto, el navegador del cliente podría fabricar
+    //    { code: '00' } y obtener el curso sin pagar.
+    console.log(`[IZIPAY_CONFIRM] Campos recibidos en la respuesta para pedido ${pedido.id}:`, Object.keys(izipayResponse))
+
+    const payloadHttp = izipayResponse.payloadHttp
+    const signature = izipayResponse.signature
+    const krAnswer = izipayResponse['kr-answer']
+    const krHash = izipayResponse['kr-hash']
+
+    const configs = await getConfigs()
+    const claveHash = configs.IZIPAY_HASH_KEY
+
+    if (!claveHash) {
+      console.error('[IZIPAY_CONFIRM] IZIPAY_HASH_KEY no configurado. Rechazando confirmación por seguridad.')
+
+      return ApiResponse.error(request, 'La pasarela Izipay no está configurada correctamente', 500)
+    }
+
+    if (!verifyIzipaySignature({ krAnswer, krHash, payloadHttp, signature }, claveHash)) {
+      console.warn(`[IZIPAY_CONFIRM] Firma inválida para pedido ${pedido.id}. Posible intento de fraude.`)
+
+      return ApiResponse.error(request, 'No se pudo verificar la autenticidad del pago', 401)
+    }
+
+    // 3. Verificar si el pago fue exitoso. Con kr-answer el estado real viene en el
+    //    JSON firmado (orderStatus); si no, se usa el code de nivel superior.
+    let isPaymentSuccessful = izipayResponse.code === '00'
+
+    if (krAnswer) {
+      try {
+        const answer = JSON.parse(krAnswer)
+
+        isPaymentSuccessful = answer.orderStatus === 'PAID'
+      } catch {
+        isPaymentSuccessful = false
+      }
+    }
 
     if (!isPaymentSuccessful) {
       // Actualizar pedido como cancelado
@@ -55,7 +93,7 @@ export async function POST(request: Request) {
       return ApiResponse.error(request, izipayResponse.messageUser || 'El pago no fue exitoso', 400)
     }
 
-    // 3. Pago exitoso - Completar Pedido usando el servicio centralizado
+    // 4. Pago exitoso - Completar Pedido usando el servicio centralizado
     const { pedido: pedidoActualizado, inscripciones } = await completeOrder(pedidoId, {
       metodo_pago: 'IZIPAY',
       respuesta_pago: izipayResponse,

@@ -18,6 +18,7 @@ const ENV_OVERRIDES: Record<string, string> = {
 
   // IziPay
   IZIPAY_API_KEY:        process.env.IZIPAY_API_KEY        ?? '',
+  IZIPAY_HASH_KEY:       process.env.IZIPAY_HASH_KEY       ?? '',
 
   // PayPal
   PAYPAL_CLIENT_SECRET:  process.env.PAYPAL_CLIENT_SECRET  ?? '',
