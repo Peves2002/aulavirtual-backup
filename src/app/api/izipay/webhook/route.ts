@@ -22,10 +22,6 @@ export async function POST(request: Request) {
     const rawBody = await request.text()
     const params = new URLSearchParams(rawBody)
 
-    // TEMPORAL: diagnóstico para depurar la verificación de firma end-to-end.
-    console.log('[WEBHOOK IZIPAY][DEBUG] Content-Type:', request.headers.get('content-type'))
-    console.log('[WEBHOOK IZIPAY][DEBUG] Raw body:', rawBody)
-
     const configs = await getConfigs()
     const claveHash = configs.IZIPAY_HASH_KEY
 

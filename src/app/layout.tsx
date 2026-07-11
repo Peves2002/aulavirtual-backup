@@ -4,7 +4,6 @@ import { getServerSession } from 'next-auth'
 
 import { Providers } from '@/components/Providers'
 import { getConfigs } from '@/utils/libs/config'
-import { resolveFaviconUrl } from '@/utils/functions/syncFavicon'
 import { getAuthOptions } from '@/utils/configs/auth'
 import './globals.css'
 import '@assets/iconify-icons/generated-icons.css'

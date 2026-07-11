@@ -92,10 +92,9 @@ export interface Curso {
   fecha_fin: string | Date | null
   duracion: string | null
   tipo_emision: 'SINCRONO' | 'ASINCRONO' | 'MIXTO'
-  tipo: 'CURSO' | 'DIPLOMADO' | 'ESPECIALIZACION'
+  tipo: 'CURSO' | 'DIPLOMADO' | 'PROGRAMA' | 'ESPECIALIZACION'
   nivel: 'BASICO' | 'INTERMEDIO' | 'AVANZADO'
   estado: 'BORRADOR' | 'PUBLICADO' | 'ARCHIVADO'
-  tipo: 'CURSO' | 'DIPLOMADO' | 'PROGRAMA'
   es_gratis: boolean
   es_privado: boolean
   completar_automatico: boolean

@@ -9,7 +9,7 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { signOut, useSession } from 'next-auth/react'
 
-import { Home, BookOpen, Users, Award, GraduationCap, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, Route } from 'lucide-react'
+import { Home, BookOpen, Users, Award, GraduationCap, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut } from 'lucide-react'
 
 export interface NavCategory {
   id: string
@@ -22,7 +22,6 @@ const ALL_NAV_ITEMS = [
   { key: 'cursos', title: 'Cursos', url: '/cursos', icon: BookOpen },
   { key: 'diplomados', title: 'Diplomados', url: '/diplomados', icon: GraduationCap },
   { key: 'programas', title: 'Programas', url: '/programas', icon: BookMarked },
-  { key: 'rutas', title: 'Rutas', url: '/rutas', icon: Route },
   { key: 'empresas', title: 'Empresas', url: '/empresas', icon: Building2 },
   { key: 'nosotros', title: 'Nosotros', url: '/nosotros', icon: Users },
   { key: 'certificado', title: 'Certificado', url: '/verificar-certificado', icon: Award },
@@ -30,9 +29,11 @@ const ALL_NAV_ITEMS = [
 
 export default function LeftSidebar({
   empresasHabilitado = true,
+  rutasHabilitado = true,
   categories = [],
 }: {
   empresasHabilitado?: boolean
+  rutasHabilitado?: boolean
   categories?: NavCategory[]
 }) {
   const pathname = usePathname()
@@ -50,6 +51,7 @@ export default function LeftSidebar({
 
   const navItems = ALL_NAV_ITEMS.filter(item => {
     if (item.key === 'empresas' && !empresasHabilitado) return false
+    if (item.key === 'rutas' && !rutasHabilitado) return false
 
     return true
   })
@@ -64,7 +66,11 @@ export default function LeftSidebar({
     setUserMenuOpen(o => !o)
   }
 
-  const handleNavWithCategories = (key: 'cursos' | 'diplomados' | 'programas', fallbackUrl: string, ref: RefObject<HTMLButtonElement | null>) => {
+  const handleNavWithCategories = (
+    key: 'cursos' | 'diplomados' | 'programas',
+    fallbackUrl: string,
+    ref: RefObject<HTMLButtonElement | null>
+  ) => {
     if (categories.length === 0) {
       router.push(fallbackUrl)
 
@@ -77,7 +83,7 @@ export default function LeftSidebar({
       setCategMenuPos({ top: rect.top, left: rect.right })
     }
 
-    setOpenPanel(p => p === key ? null : key)
+    setOpenPanel(p => (p === key ? null : key))
   }
 
   const handleLogout = async () => {
@@ -147,22 +153,8 @@ export default function LeftSidebar({
           zIndex: 40,
         }}
         onMouseEnter={() => setExpanded(true)}
-        onMouseLeave={() => setExpanded(false)}
-      >
-        {navItems.map(item => {
-          const active = isActive(item.url)
-            < aside
-          className = "fixed left-0 bottom-0 flex flex-col items-start py-6 gap-1 overflow-hidden shadow-xl transition-all duration-300 ease-in-out"
-          style = {{
-            top: 'var(--navbar-height)',
-              width: expanded ? 'var(--sidebar-width-expanded)' : 'var(--sidebar-width)',
-        backgroundColor: 'var(--web-dark, #025E44)',
-        borderRight: '1px solid rgba(255,255,255,0.1)',
-        zIndex: 40,
-      }}
-        onMouseEnter={() => setExpanded(true)}
         onMouseLeave={() => { setExpanded(false); setOpenPanel(null) }}
-    >
+      >
         {/* Categories flyout panel */}
         {openPanel && (
           <>
@@ -214,7 +206,13 @@ export default function LeftSidebar({
           const active = isActive(item.url)
 
           if (item.key === 'cursos' || item.key === 'diplomados' || item.key === 'programas') {
-            const ref = item.key === 'cursos' ? cursosButtonRef : item.key === 'diplomados' ? diplomadosButtonRef : programasButtonRef
+            const ref =
+              item.key === 'cursos'
+                ? cursosButtonRef
+                : item.key === 'diplomados'
+                  ? diplomadosButtonRef
+                  : programasButtonRef
+
             const isOpen = openPanel === item.key
 
             return (
@@ -242,15 +240,10 @@ export default function LeftSidebar({
 
           return (
             <Link
-              key={item.title}
+              key={item.key}
               href={item.url}
               className="no-underline flex items-center w-full px-4 transition-colors duration-200 relative"
-              style={{
-                height: '56px',
-                color: active ? 'var(--web-light, #BDD962)' : '#ffffff',
-                fontWeight: active ? 700 : 500,
-                backgroundColor: active ? 'rgba(255,255,255,0.05)' : 'transparent',
-              }}
+              style={navItemStyle(active)}
               onMouseEnter={e => {
                 if (!active) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.05)'
               }}
@@ -258,119 +251,13 @@ export default function LeftSidebar({
                 if (!active) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'
               }}
             >
-              {/* Active indicator bar */}
-              {active && (
-                <div
-                  className="absolute left-0 rounded-r-full"
-                  style={{ width: '4px', height: '32px', backgroundColor: 'var(--web-light, #BDD962)' }}
-                />
-              )}
-
-              {/* Icon container */}
-              <div
-                className="flex items-center justify-center rounded-xl transition-all flex-shrink-0"
-                style={{
-                  minWidth: '48px',
-                  height: '48px',
-                  backgroundColor: active ? 'var(--web-light, #BDD962)' : 'transparent',
-                  color: active ? '#0A0A0A' : 'inherit',
-                  boxShadow: active ? '0 4px 12px rgba(0,0,0,0.2)' : 'none',
-                }}
-              >
-                <item.icon style={{ width: '22px', height: '22px' }} />
-              </div>
-
-              {/* Label — visible when expanded */}
-              <span
-                className="ml-3 text-sm whitespace-nowrap overflow-hidden transition-all duration-300"
-                style={{
-                  fontFamily: 'Poppins, sans-serif',
-                  opacity: expanded ? 1 : 0,
-                  maxWidth: expanded ? '180px' : '0px',
-                  transition: 'opacity 0.2s, max-width 0.3s',
-                }}
-              >
-                {item.title}
-              </span>
+              <NavItemInterior item={item} active={active} />
             </Link>
           )
         })}
-        return (
-        <Link
-          key={item.title}
-          href={item.url}
-          className="no-underline flex items-center w-full px-4 transition-colors duration-200 relative"
-          style={navItemStyle(active)}
-          onMouseEnter={e => {
-            if (!active) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.05)'
-          }}
-          onMouseLeave={e => {
-            if (!active) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'
-          }}
-        >
-          <NavItemInterior item={item} active={active} />
-        </Link>
-        )
-      })}
 
         {/* Bottom: user or login */}
         <div className="mt-auto w-full" style={{ paddingBottom: '20px', position: 'relative' }}>
-
-          {/* Install PWA button — always visible while not installed */}
-          {canInstall && (
-            <div style={{ position: 'relative', padding: '0 12px', marginBottom: '8px' }}>
-              <button
-                onClick={() => hasNativePrompt ? install() : setShowInstallTip(t => !t)}
-                title="Instalar aplicación"
-                className="flex items-center w-full rounded-xl transition-all"
-                style={{ height: '44px', gap: '12px', backgroundColor: 'var(--web-light, #BDD962)', border: '1px solid transparent', cursor: 'pointer' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = '0.85' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = '1' }}
-              >
-                <div style={{ flexShrink: 0, minWidth: '30px', display: 'flex', justifyContent: 'center' }}>
-                  <MonitorSmartphone size={18} color="#0A0A0A" />
-                </div>
-                <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 700, color: '#0A0A0A', opacity: expanded ? 1 : 0, maxWidth: expanded ? '160px' : '0px', transition: 'opacity 0.2s, max-width 0.3s', whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                  Instalar App
-                </span>
-              </button>
-
-              {showInstallTip && !hasNativePrompt && (
-                <>
-                  <div style={{ position: 'fixed', inset: 0, zIndex: 49 }} onClick={() => setShowInstallTip(false)} />
-                  <div style={{ position: 'fixed', bottom: '80px', left: '72px', width: '280px', backgroundColor: '#ffffff', borderRadius: '18px', boxShadow: '0 16px 48px rgba(0,0,0,0.2)', border: '1px solid hsl(214,20%,88%)', zIndex: 50, overflow: 'hidden' }}>
-                    {/* Header */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 15px 10px', borderBottom: '1px solid hsl(214,20%,93%)' }}>
-                      <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: '#0A0A0A', margin: 0 }}>¿Cómo instalar la app?</p>
-                      <button onClick={() => setShowInstallTip(false)} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#94a3b8', padding: '2px', display: 'flex' }}>✕</button>
-                    </div>
-                    {/* Desktop */}
-                    <div style={{ padding: '11px 15px', borderBottom: '1px solid hsl(214,20%,93%)' }}>
-                      <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.72rem', fontWeight: 700, color: '#0A0A0A', margin: '0 0 6px 0' }}>🖥 Chrome / Edge (PC)</p>
-                      <div style={{ backgroundColor: '#f1f5f9', borderRadius: '8px', padding: '6px 9px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '5px' }}>
-                        <span style={{ fontFamily: 'monospace', fontSize: '0.65rem', color: '#64748b' }}>devrocket.org</span>
-                        <span style={{ backgroundColor: '#0A0A0A', color: '#fff', borderRadius: '5px', padding: '2px 7px', fontSize: '0.62rem', fontWeight: 600 }}>⊕ Instalar</span>
-                      </div>
-                      <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.7rem', color: '#64748b', margin: 0, lineHeight: 1.5 }}>
-                        Busca el ícono <strong>⊕</strong> o <strong>⬇</strong> en la barra de direcciones.
-                      </p>
-                    </div>
-                    {/* Mobile */}
-                    <div style={{ padding: '11px 15px' }}>
-                      <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.72rem', fontWeight: 700, color: '#0A0A0A', margin: '0 0 4px 0' }}>📱 En móvil</p>
-                      <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.7rem', color: '#64748b', margin: '0 0 3px 0', lineHeight: 1.5 }}>
-                        <strong>Android:</strong> menú <strong>⋮</strong> → <strong>&quot;Añadir a pantalla de inicio&quot;</strong>
-                      </p>
-                      <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.7rem', color: '#64748b', margin: 0, lineHeight: 1.5 }}>
-                        <strong>iOS Safari:</strong> <strong>Compartir ↑</strong> → <strong>&quot;Agregar a inicio&quot;</strong>
-                      </p>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-
           <div className="px-3">
             {/* User popup menu — rendered fixed to escape overflow:hidden on aside */}
             {session?.user && userMenuOpen && (
@@ -378,18 +265,20 @@ export default function LeftSidebar({
                 {/* Backdrop */}
                 <div style={{ position: 'fixed', inset: 0, zIndex: 49 }} onClick={() => setUserMenuOpen(false)} />
                 {/* Panel */}
-                <div style={{
-                  position: 'fixed',
-                  bottom: menuPos.bottom,
-                  left: menuPos.left,
-                  width: '240px',
-                  backgroundColor: '#ffffff',
-                  borderRadius: '16px',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
-                  border: '1px solid hsl(214,20%,91%)',
-                  zIndex: 50,
-                  overflow: 'hidden',
-                }}>
+                <div
+                  style={{
+                    position: 'fixed',
+                    bottom: menuPos.bottom,
+                    left: menuPos.left,
+                    width: '240px',
+                    backgroundColor: '#ffffff',
+                    borderRadius: '16px',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+                    border: '1px solid hsl(214,20%,91%)',
+                    zIndex: 50,
+                    overflow: 'hidden',
+                  }}
+                >
                   {/* Header */}
                   <div style={{ padding: '14px 16px', borderBottom: '1px solid hsl(214,20%,93%)', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <div style={{ flexShrink: 0, width: '38px', height: '38px', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'var(--web-primary, #25927F)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -416,7 +305,12 @@ export default function LeftSidebar({
                     {[
                       { label: 'Mi Perfil', icon: User, href: '/perfil' },
                       ...(user?.rol === 'ADMIN' ? [{ label: 'Panel de Administración', icon: LayoutDashboard, href: '/admin/dashboard' }] : []),
-                      ...(user?.rol === 'ESTUDIANTE' ? [{ label: 'Mis Cursos', icon: BookMarked, href: '/estudiante/mis-cursos' }] : []),
+                      ...(user?.rol === 'ESTUDIANTE'
+                        ? [
+                          { label: 'Mis Cursos', icon: BookMarked, href: '/estudiante/mis-cursos' },
+                          { label: 'Mis Diplomados', icon: Award, href: '/estudiante/mis-diplomados' },
+                        ]
+                        : []),
                     ].map(({ label, icon: Icon, href }) => (
                       <Link
                         key={href}
@@ -431,121 +325,101 @@ export default function LeftSidebar({
                         {label}
                       </Link>
                     ))}
-                    {/* Menu items */}
-                    <div style={{ padding: '6px' }}>
-                      {[
-                        { label: 'Mi Perfil', icon: User, href: '/perfil' },
-                        ...(user?.rol === 'ADMIN' ? [{ label: 'Panel de Administración', icon: LayoutDashboard, href: '/admin/dashboard' }] : []),
-                        ...(user?.rol === 'ESTUDIANTE' ? [
-                          { label: 'Mis Cursos', icon: BookMarked, href: '/estudiante/mis-cursos' },
-                          { label: 'Mis Diplomados', icon: Award, href: '/estudiante/mis-diplomados' }
-                        ] : []),
-                      ].map(({ label, icon: Icon, href }) => (
-                        <Link
-                          key={href}
-                          href={href}
-                          onClick={() => setUserMenuOpen(false)}
-                          className="no-underline flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors"
-                          style={{ color: '#374151', fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 600 }}
-                          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(var(--web-primary-rgb,37,146,127),0.07)' }}
-                          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent' }}
-                        >
-                          <Icon size={16} />
-                          {label}
-                        </Link>
-                      ))}
 
-                      {/* Logout */}
-                      <div style={{ borderTop: '1px solid hsl(214,20%,93%)', marginTop: '6px', paddingTop: '6px' }}>
-                        <button
-                          onClick={handleLogout}
-                          style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '12px', border: 'none', cursor: 'pointer', backgroundColor: '#fef2f2', color: '#dc2626', fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 700 }}
-                          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#fee2e2' }}
-                          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#fef2f2' }}
-                        >
-                          <LogOut size={16} />
-                          Cerrar Sesión
-                        </button>
-                      </div>
+                    {/* Logout */}
+                    <div style={{ borderTop: '1px solid hsl(214,20%,93%)', marginTop: '6px', paddingTop: '6px' }}>
+                      <button
+                        onClick={handleLogout}
+                        style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '12px', border: 'none', cursor: 'pointer', backgroundColor: '#fef2f2', color: '#dc2626', fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 700 }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#fee2e2' }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#fef2f2' }}
+                      >
+                        <LogOut size={16} />
+                        Cerrar Sesión
+                      </button>
                     </div>
                   </div>
-                </>
+                </div>
+              </>
             )}
 
-                {session?.user ? (
+            {session?.user ? (
 
-                  /* Logged in — show avatar + name, click opens menu */
-                  <button
-                    ref={userButtonRef}
-                    onClick={handleUserClick}
-                    className="flex items-center gap-3 rounded-xl px-3 py-3 w-full transition-colors"
-                    style={{ backgroundColor: userMenuOpen ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.1)' }}
-                    onMouseLeave={e => { if (!userMenuOpen) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.05)' }}
-                  >
-                    {/* Avatar */}
-                    <div style={{ flexShrink: 0, width: '36px', height: '36px', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'var(--web-primary, #25927F)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid rgba(255,255,255,0.2)' }}>
-                      {user?.avatar ? (
-                        <Image src={user.avatar} alt="avatar" width={36} height={36} style={{ objectFit: 'cover' }} />
-                      ) : (
-                        <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 800, color: '#fff' }}>
-                          {(user?.nombre?.[0] || session.user.name?.[0] || '?').toUpperCase()}
-                        </span>
-                      )}
-                    </div>
-                    {/* Name + email */}
-                    <div
-                      style={{
-                        overflow: 'hidden', textAlign: 'left',
-                        opacity: expanded ? 1 : 0,
-                        maxWidth: expanded ? '160px' : '0px',
-                        transition: 'opacity 0.2s, max-width 0.3s',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: '#ffffff', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {user?.nombre ? `${user.nombre} ${user.apellido || ''}`.trim() : session.user.name}
-                      </p>
-                      <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.65rem', color: 'rgba(255,255,255,0.45)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {session.user.email}
-                      </p>
-                    </div>
-                  </button>
-                ) : (
+              /* Logged in — show avatar + name, click opens menu */
+              <button
+                ref={userButtonRef}
+                onClick={handleUserClick}
+                className="flex items-center gap-3 rounded-xl px-3 py-3 w-full transition-colors"
+                style={{ backgroundColor: userMenuOpen ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.1)' }}
+                onMouseLeave={e => { if (!userMenuOpen) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.05)' }}
+              >
+                {/* Avatar */}
+                <div style={{ flexShrink: 0, width: '36px', height: '36px', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'var(--web-primary, #25927F)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid rgba(255,255,255,0.2)' }}>
+                  {user?.avatar ? (
+                    <Image src={user.avatar} alt="avatar" width={36} height={36} style={{ objectFit: 'cover' }} />
+                  ) : (
+                    <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 800, color: '#fff' }}>
+                      {(user?.nombre?.[0] || session.user.name?.[0] || '?').toUpperCase()}
+                    </span>
+                  )}
+                </div>
+                {/* Name + email */}
+                <div
+                  style={{
+                    overflow: 'hidden',
+                    textAlign: 'left',
+                    opacity: expanded ? 1 : 0,
+                    maxWidth: expanded ? '160px' : '0px',
+                    transition: 'opacity 0.2s, max-width 0.3s',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: '#ffffff', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {user?.nombre ? `${user.nombre} ${user.apellido || ''}`.trim() : session.user.name}
+                  </p>
+                  <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.65rem', color: 'rgba(255,255,255,0.45)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {session.user.email}
+                  </p>
+                </div>
+              </button>
+            ) : (
 
-                  /* Not logged in — show login + register */
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <Link
-                      href="/login"
-                      className="no-underline flex items-center w-full rounded-xl px-3 transition-all"
-                      style={{ height: '44px', gap: '12px', backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.12)' }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.06)' }}
-                    >
-                      <div style={{ flexShrink: 0, minWidth: '30px', display: 'flex', justifyContent: 'center' }}>
-                        <LogIn size={18} color="rgba(255,255,255,0.7)" />
-                      </div>
-                      <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 600, color: '#ffffff', opacity: expanded ? 1 : 0, maxWidth: expanded ? '160px' : '0px', transition: 'opacity 0.2s, max-width 0.3s', whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                        Iniciar Sesión
-                      </span>
-                    </Link>
-                    <Link
-                      href="/registrarse"
-                      className="no-underline flex items-center w-full rounded-xl px-3 transition-all"
-                      style={{ height: '44px', gap: '12px', backgroundColor: 'var(--web-light, #BDD962)', border: '1px solid transparent' }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--web-primary, #25927F)' }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--web-light, #BDD962)' }}
-                    >
-                      <div style={{ flexShrink: 0, minWidth: '30px', display: 'flex', justifyContent: 'center' }}>
-                        <UserPlus size={18} color="#0A0A0A" />
-                      </div>
-                      <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 700, color: '#0A0A0A', opacity: expanded ? 1 : 0, maxWidth: expanded ? '160px' : '0px', transition: 'opacity 0.2s, max-width 0.3s', whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                        Registrarse
-                      </span>
-                    </Link>
+              /* Not logged in — show login + register */
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Link
+                  href="/login"
+                  className="no-underline flex items-center w-full rounded-xl px-3 transition-all"
+                  style={{ height: '44px', gap: '12px', backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.12)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.06)' }}
+                >
+                  <div style={{ flexShrink: 0, minWidth: '30px', display: 'flex', justifyContent: 'center' }}>
+                    <LogIn size={18} color="rgba(255,255,255,0.7)" />
                   </div>
-                )}
+                  <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 600, color: '#ffffff', opacity: expanded ? 1 : 0, maxWidth: expanded ? '160px' : '0px', transition: 'opacity 0.2s, max-width 0.3s', whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                    Iniciar Sesión
+                  </span>
+                </Link>
+                <Link
+                  href="/registrarse"
+                  className="no-underline flex items-center w-full rounded-xl px-3 transition-all"
+                  style={{ height: '44px', gap: '12px', backgroundColor: 'var(--web-light, #BDD962)', border: '1px solid transparent' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--web-primary, #25927F)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--web-light, #BDD962)' }}
+                >
+                  <div style={{ flexShrink: 0, minWidth: '30px', display: 'flex', justifyContent: 'center' }}>
+                    <UserPlus size={18} color="#0A0A0A" />
+                  </div>
+                  <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', fontWeight: 700, color: '#0A0A0A', opacity: expanded ? 1 : 0, maxWidth: expanded ? '160px' : '0px', transition: 'opacity 0.2s, max-width 0.3s', whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                    Registrarse
+                  </span>
+                </Link>
               </div>
-          </aside>
-          )
+            )}
+          </div>
+        </div>
+      </aside>
+    </>
+  )
 }

@@ -12,6 +12,7 @@ import { puedeAccederCurso } from '@/utils/libs/subscription-access'
 
 const JWT_SECRET = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || 'dev-secret'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function fetchCourseForPlayer(slug: string, userId: string) {
   const examenesInclude = {
     where: { esta_publicado: true },

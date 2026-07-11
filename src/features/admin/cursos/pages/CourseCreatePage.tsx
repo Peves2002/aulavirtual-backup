@@ -36,12 +36,9 @@ import { crearCursoSchema, type CrearCursoDto } from '@/schemas/curso.schema'
 
 import MediaLibrary from '../components/MediaLibrary'
 import { CategoriaSubcategoriaSelect } from '../components/CategoriaSubcategoriaSelect'
-import { TipoProgramaSelect } from '../components/TipoProgramaSelect'
 
 import { useCreateCurso } from '../hooks/useCursos'
 import { useCategorias } from '@/features/admin/categorias/hooks/useCategorias'
-import type { TipoPrograma } from '@/utils/configs/tipoPrograma'
-import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
 
 interface CourseCreatePageProps {
   profesores: { id: string; nombre: string; apellido: string }[]
@@ -59,6 +56,7 @@ export const CourseCreatePage = ({ profesores, tipo = 'CURSO', basePath }: Cours
   const [activeTab, setActiveTab] = useState('1')
   const [openMedia, setOpenMedia] = useState(false)
   const [openBrochure, setOpenBrochure] = useState(false)
+  const [categoriaPadreId, setCategoriaPadreId] = useState('')
 
   const esDiplomado = tipo === 'DIPLOMADO'
 
@@ -82,7 +80,6 @@ export const CourseCreatePage = ({ profesores, tipo = 'CURSO', basePath }: Cours
     titulo: '',
     descripcion: '',
     categoria_id: null,
-    tipo: 'CURSO' as TipoPrograma,
     profesor_id: profesores.length > 0 ? profesores[0].id : '',
     tipo_emision: 'ASINCRONO',
     es_gratis: false,
@@ -145,8 +142,6 @@ export const CourseCreatePage = ({ profesores, tipo = 'CURSO', basePath }: Cours
         onSubmit={handleSubmit}
       >
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit: handleFormikSubmit, isSubmitting, setFieldValue }) => {
-          const tipoConfig = getTipoProgramaConfig(values.tipo)
-
           return (
             <form onSubmit={handleFormikSubmit}>
               <TabContext value={activeTab}>
@@ -197,24 +192,12 @@ export const CourseCreatePage = ({ profesores, tipo = 'CURSO', basePath }: Cours
                           />
                         </Grid>
 
-                        <TipoProgramaSelect
-                          value={values.tipo}
-                          onChange={tipo => setFieldValue('tipo', tipo)}
-                          disabled={isSubmitting}
-                        />
-
                         <CategoriaSubcategoriaSelect
                           categorias={categorias}
                           categoriaPadreId={categoriaPadreId}
-                          subcategoriaId={subcategoriaId}
                           onCategoriaPadreChange={padreId => {
                             setCategoriaPadreId(padreId)
-                            setSubcategoriaId('')
                             setFieldValue('categoria_id', padreId || null)
-                          }}
-                          onSubcategoriaChange={subId => {
-                            setSubcategoriaId(subId)
-                            setFieldValue('categoria_id', subId || categoriaPadreId || null)
                           }}
                           disabled={isSubmitting}
                         />

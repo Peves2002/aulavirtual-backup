@@ -25,23 +25,22 @@ import { useCategorias } from '@/features/admin/categorias/hooks/useCategorias'
 import type { Categoria } from '@/features/admin/categorias/entity/Categoria'
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 import { CategoriaSubcategoriaSelect } from '../CategoriaSubcategoriaSelect'
-import { TipoProgramaSelect } from '../TipoProgramaSelect'
 import type { TipoPrograma } from '@/utils/configs/tipoPrograma'
 
 function resolveCategoriaSelection(categoriaId: string | null | undefined, categorias: Categoria[]) {
-  if (!categoriaId) return { padreId: '', subId: '' }
+  if (!categoriaId) return ''
 
   const asParent = categorias.find(c => c.id === categoriaId)
 
-  if (asParent) return { padreId: categoriaId, subId: '' }
+  if (asParent) return categoriaId
 
   for (const cat of categorias) {
     const sub = cat.hijos?.find(h => h.id === categoriaId)
 
-    if (sub) return { padreId: cat.id, subId: categoriaId }
+    if (sub) return cat.id
   }
 
-  return { padreId: '', subId: '' }
+  return ''
 }
 
 interface TabInformacionProps {
@@ -59,13 +58,9 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
   const [openMedia, setOpenMedia] = useState(false)
   const [openBrochure, setOpenBrochure] = useState(false)
   const [categoriaPadreId, setCategoriaPadreId] = useState('')
-  const [subcategoriaId, setSubcategoriaId] = useState('')
 
   useEffect(() => {
-    const { padreId, subId } = resolveCategoriaSelection(curso.categoria_id, categorias)
-
-    setCategoriaPadreId(padreId)
-    setSubcategoriaId(subId)
+    setCategoriaPadreId(resolveCategoriaSelection(curso.categoria_id, categorias))
   }, [curso.categoria_id, categorias])
 
   const [form, setForm] = useState({
@@ -164,24 +159,14 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
           onChange={handleChange}
         />
       </Grid>
-      <TipoProgramaSelect
-        value={form.tipo}
-        onChange={tipo => setForm(prev => ({ ...prev, tipo }))}
-      />
-
       <CategoriaSubcategoriaSelect
         categorias={categorias}
         categoriaPadreId={categoriaPadreId}
-        subcategoriaId={subcategoriaId}
         onCategoriaPadreChange={padreId => {
           setCategoriaPadreId(padreId)
-          setSubcategoriaId('')
           setForm(prev => ({ ...prev, categoria_id: padreId || '' }))
         }}
-        onSubcategoriaChange={subId => {
-          setSubcategoriaId(subId)
-          setForm(prev => ({ ...prev, categoria_id: subId || categoriaPadreId || '' }))
-        }}
+        gridSize={12}
       />
 
       <Grid item xs={12} sm={6}>

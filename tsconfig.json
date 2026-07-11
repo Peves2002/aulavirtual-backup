@@ -69,6 +69,7 @@
   ],
   "exclude": [
     "node_modules",
-    "_soutrainingcenter_temp"
+    "_soutrainingcenter_temp",
+    "scratch"
   ]
 }

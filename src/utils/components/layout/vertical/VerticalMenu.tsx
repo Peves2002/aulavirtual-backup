@@ -42,35 +42,29 @@ const RenderExpandIcon = ({ open, transitionDuration }: RenderExpandIconProps) =
 )
 
 const VerticalMenu = ({ scrollMenu }: Props) => {
-  // Hooks
   const theme = useTheme()
   const verticalNavOptions = useVerticalNav()
   const { settings } = useSettings()
   const { isBreakpointReached } = useVerticalNav()
   const { data: session } = useSession()
 
-  // Vars
   const { transitionDuration } = verticalNavOptions
   const rol = session?.user?.rol
 
   const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
 
   return (
-    // eslint-disable-next-line lines-around-comment
-    /* Custom scrollbar instead of browser scroll, remove if you want browser scroll only */
     <ScrollWrapper
       {...(isBreakpointReached
         ? {
           className: 'bs-full overflow-y-auto overflow-x-hidden',
-          onScroll: container => scrollMenu(container, false)
+          onScroll: (container: any) => scrollMenu(container, false)
         }
         : {
           options: { wheelPropagation: false, suppressScrollX: true },
-          onScrollY: container => scrollMenu(container, true)
+          onScrollY: (container: any) => scrollMenu(container, true)
         })}
     >
-      {/* Incase you also want to scroll NavHeader to scroll with Vertical Menu, remove NavHeader from above and paste it below this comment */}
-      {/* Vertical Menu */}
       <Menu
         popoutMenuOffset={{ mainAxis: 23 }}
         menuItemStyles={menuItemStyles(verticalNavOptions, theme, settings)}
@@ -101,19 +95,18 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             <MenuItem href='/estudiante/mis-programas' icon={<i className='tabler-layout-grid' />}>
               Mis Programas
             </MenuItem>
-            {/* <MenuItem href='/estudiante/mis-simulacros' icon={<i className='tabler-clipboard-list' />}>
-              Mis Simulacros
-            </MenuItem> */}
             <MenuItem href='/estudiante/mis-certificados' icon={<i className='tabler-certificate' />}>
               Mis Certificados
             </MenuItem>
+            {isFeatureEnabled('calendario') && (
+              <MenuItem href='/estudiante/calendario' icon={<i className='tabler-calendar' />}>
+                Calendario
+              </MenuItem>
+            )}
             <Divider sx={{ my: 1 }} />
             <MenuItem href='/cursos' icon={<i className='tabler-search' />}>
               Explorar Cursos
             </MenuItem>
-            {/* <MenuItem href='/ebooks' icon={<i className='tabler-books' />}>
-              Explorar Ebooks
-            </MenuItem> */}
           </>
         )}
 
@@ -124,7 +117,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
               Usuarios
             </MenuItem>
             <MenuItem href='/admin/categorias' icon={<i className='tabler-category' />}>
-              Categorías
+              Categorias
             </MenuItem>
             <MenuItem href='/admin/cursos' icon={<i className='tabler-book' />}>
               Cursos
@@ -135,10 +128,6 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             <MenuItem href='/admin/programas' icon={<i className='tabler-layout-grid' />}>
               Programas
             </MenuItem>
-            {/* <MenuItem href='/admin/rutas' icon={<i className='tabler-route' />}>
-            {/* <MenuItem href='/admin/rutas' icon={<i className='tabler-route' />}>
-              Rutas Aprendizaje
-            </MenuItem>
             <MenuItem href='/admin/pedidos' icon={<i className='tabler-shopping-cart' />}>
               Pedidos
             </MenuItem>
@@ -148,10 +137,15 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             <MenuItem href='/admin/certificados' icon={<i className='tabler-certificate' />}>
               Certificados
             </MenuItem>
+            {isFeatureEnabled('calendario') && (
+              <MenuItem href='/admin/calendario' icon={<i className='tabler-calendar' />}>
+                Calendario
+              </MenuItem>
+            )}
             {isFeatureEnabled('suscripciones') && (
               <>
                 <MenuItem href='/admin/planes-suscripcion' icon={<i className='tabler-repeat' />}>
-                  Planes de Suscripción
+                  Planes de Suscripcion
                 </MenuItem>
                 <MenuItem href='/admin/suscripciones' icon={<i className='tabler-users-group' />}>
                   Suscripciones
@@ -162,7 +156,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
               Reclamaciones
             </MenuItem>
             <MenuItem href='/admin/configuracion' icon={<i className='tabler-settings' />}>
-              Configuración
+              Configuracion
             </MenuItem>
           </>
         )}
@@ -179,6 +173,11 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             <MenuItem href='/profesor/mis-programas' icon={<i className='tabler-layout-grid' />}>
               Mis Programas
             </MenuItem>
+            {isFeatureEnabled('calendario') && (
+              <MenuItem href='/profesor/calendario' icon={<i className='tabler-calendar' />}>
+                Calendario
+              </MenuItem>
+            )}
           </>
         )}
       </Menu>

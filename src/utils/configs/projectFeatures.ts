@@ -5,7 +5,7 @@
 export const PROJECT_FEATURES = {
   ebooks: false,
   suscripciones: false,
-  calendario: false,
+  calendario: true,
   simulacros: false,
   rutas: false,
 } as const

@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { Home, BookOpen, Users, Award, GraduationCap, Route, X, LayoutGrid, ChevronRight, BookMarked } from 'lucide-react'
+import { Home, BookOpen, Users, Award, GraduationCap, X, LayoutGrid, ChevronRight, BookMarked } from 'lucide-react'
 
 import type { NavCategory } from './LeftSidebar'
 
@@ -14,7 +14,6 @@ const ALL_NAV_ITEMS = [
   { key: 'cursos', title: 'Cursos', url: '/cursos', icon: BookOpen },
   { key: 'diplomados', title: 'Diplomados', url: '/diplomados', icon: GraduationCap },
   { key: 'programas', title: 'Programas de Perfeccionamiento', url: '/programas', icon: BookMarked },
-  { key: 'rutas', title: 'Rutas', url: '/rutas', icon: Route },
   { key: 'nosotros', title: 'Nosotros', url: '/nosotros', icon: Users },
   { key: 'certificado', title: 'Certificado', url: '/verificar-certificado', icon: Award },
 ]
@@ -29,7 +28,11 @@ export default function MobileBottomNav({
   const pathname = usePathname()
   const [openPanel, setOpenPanel] = useState<'cursos' | 'diplomados' | 'programas' | null>(null)
 
-  const navItems = ALL_NAV_ITEMS
+  const navItems = ALL_NAV_ITEMS.filter(item => {
+    if (item.key === 'rutas' && !rutasHabilitado) return false
+
+    return true
+  })
 
   const isActive = (url: string) => {
     if (url === '/') return pathname === '/'

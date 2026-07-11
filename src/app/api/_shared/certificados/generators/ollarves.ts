@@ -432,11 +432,11 @@ export const generarOllarves: GeneratorFn = async data => {
   if (logoSecundarioComp) {
     const dims = await resolveLogoDimensions(logoSecundarioBuf, 52, 14)
 
-    addImageSafe(logoSecundarioComp, p2Margin, 2, dims.w, dims.h, 'LOGO_P2')
+    addImageSafe(logoSecundarioComp, p2Margin, (headerH - dims.h) / 2, dims.w, dims.h, 'LOGO_P2')
   } else if (logoPrincipalComp) {
     const dims = await resolveLogoDimensions(logoPrincipalBuf, 52, 14)
 
-    addImageSafe(logoPrincipalComp, p2Margin, 2, dims.w, dims.h, 'LOGO_P2')
+    addImageSafe(logoPrincipalComp, p2Margin, (headerH - dims.h) / 2, dims.w, dims.h, 'LOGO_P2')
   } else {
     doc.setFontSize(11)
     doc.setFont('helvetica', 'bold')

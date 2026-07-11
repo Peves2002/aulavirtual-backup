@@ -42,8 +42,7 @@ import TablePaginationComponent from '@/utils/components/others/TablePaginationC
 import type { ThemeColor } from '@/@core/types'
 import { fuzzyFilter } from '@/utils/components/others/FuzzyFilter'
 import tableStyles from '@core/styles/table.module.css'
-import { useCursos, useReorderCursos } from '../hooks/useCursos'
-import type { TipoPrograma } from '@/utils/configs/tipoPrograma'
+import { useCursos } from '../hooks/useCursos'
 import { getTipoProgramaColor, getTipoProgramaLabel } from '@/utils/configs/tipoProgramaOptions'
 
 type EstadoColorMap = {
@@ -77,7 +76,6 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
   const [rowSelection, setRowSelection] = useState({})
   const [globalFilter, setGlobalFilter] = useState('')
   const [estadoFilter, setEstadoFilter] = useState<string>('all')
-  const [tipoFilter, setTipoFilter] = useState<'all' | TipoPrograma>('all')
   const [orderedCursos, setOrderedCursos] = useState<Curso[]>([])
 
   const [pagination, setPagination] = useState({
@@ -90,7 +88,7 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
     limit: pagination.pageSize.toString(),
     buscar: globalFilter,
     estado: estadoFilter === 'all' ? '' : estadoFilter,
-    ...(tipoFilter !== 'all' ? { tipo: tipoFilter } : {})
+    ...(tipo ? { tipo } : {})
   })
 
 
@@ -100,30 +98,6 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
   useEffect(() => {
     setOrderedCursos([...cursos])
   }, [cursos])
-
-  const isDragDisabled = globalFilter.trim().length > 0 || estadoFilter !== 'all' || tipoFilter !== 'all'
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  )
-
-  const handleDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event
-
-    if (!over || active.id === over.id) return
-
-    const oldIndex = orderedCursos.findIndex(c => c.id === active.id)
-    const newIndex = orderedCursos.findIndex(c => c.id === over.id)
-    const reordered = arrayMove(orderedCursos, oldIndex, newIndex)
-
-    setOrderedCursos(reordered)
-
-    const baseIndex = pagination.pageIndex * pagination.pageSize
-    const items = reordered.map((c, i) => ({ id: c.id, orden: baseIndex + i }))
-
-    await reorderMutation.mutateAsync({ items })
-  }
 
   const handleDeleteClick = (curso: Curso) => {
     setCursoToDelete(curso)
@@ -388,20 +362,6 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
             <MenuItem value='50'>50</MenuItem>
           </CustomTextField>
           <div className='flex flex-col sm:flex-row is-full sm:is-auto items-start sm:items-center gap-4'>
-            <CustomTextField
-              select
-              value={tipoFilter}
-              onChange={e => {
-                setTipoFilter(e.target.value as 'all' | TipoPrograma)
-                table.setPageIndex(0)
-              }}
-              className='is-full sm:is-[200px]'
-            >
-              <MenuItem value='all'>Todos los tipos</MenuItem>
-              <MenuItem value='CURSO'>Cursos</MenuItem>
-              <MenuItem value='DIPLOMADO'>Diplomados</MenuItem>
-              <MenuItem value='ESPECIALIZACION'>Especializaciones</MenuItem>
-            </CustomTextField>
             <CustomTextField
               select
               value={estadoFilter}

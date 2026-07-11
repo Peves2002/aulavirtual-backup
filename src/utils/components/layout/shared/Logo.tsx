@@ -97,7 +97,19 @@ const Logo = () => {
 
   return (
     <Link href='/' className='flex items-center'>
-      <img src={templateLogo} alt={`${templateName} Logo`} className='bs-[65px]' />
+      <img
+        src={templateLogo}
+        alt={`${templateName} Logo`}
+        className='bs-[65px]'
+        onError={e => {
+          const img = e.currentTarget
+
+          if (!img.dataset.fallbackApplied) {
+            img.dataset.fallbackApplied = 'true'
+            img.src = themeConfig.templateLogo
+          }
+        }}
+      />
       <div
         className={`flex flex-col ${montserrat.className}`}
         ref={logoTextRef}

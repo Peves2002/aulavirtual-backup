@@ -18,6 +18,7 @@ import MenuList from '@mui/material/MenuList'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
+import Button from '@mui/material/Button'
 
 // Hook Imports
 import { useSession, signOut } from 'next-auth/react'
@@ -35,17 +36,6 @@ const BadgeContentSpan = styled('span')({
   backgroundColor: 'var(--mui-palette-success-main)',
   boxShadow: '0 0 0 2px var(--mui-palette-background-paper)'
 })
-
-function getDashboardPath(rol?: string): string {
-  switch (rol) {
-    case 'ADMIN':
-      return '/admin/dashboard'
-    case 'PROFESOR':
-      return '/profesor/dashboard'
-    default:
-      return '/estudiante/dashboard'
-  }
-}
 
 const UserDropdown = () => {
   // States
@@ -76,7 +66,6 @@ const UserDropdown = () => {
     setOpen(false)
   }
 
-  const dashboardPath = getDashboardPath(data?.user?.rol)
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/login' })
@@ -185,7 +174,7 @@ const UserDropdown = () => {
                       color='error'
                       size='small'
                       endIcon={<i className='tabler-logout' />}
-                      onClick={handleUserLogout}
+                      onClick={handleLogout}
                       sx={{ '& .MuiButton-endIcon': { marginInlineStart: 1.5 } }}
                     >
                       Cerrar Sesión

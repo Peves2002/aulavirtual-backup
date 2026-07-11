@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, CircularProgress, Container, Stack, Typography } from '@mui/material'
+import { Box, CircularProgress, Container, Stack, Typography } from '@mui/material'
 
 import MyCoursesList from './MyCoursesList'
 import { useMisCursos } from '../hooks/useMisCursos'
@@ -21,7 +21,7 @@ export default function MisCursosPage() {
                 Gestiona tu aprendizaje y sigue tu progreso en cada curso.
               </Typography>
             </Box>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, justifyContent: { xs: 'stretch', sm: 'flex-end' } }}>
+            {/* <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, justifyContent: { xs: 'stretch', sm: 'flex-end' } }}>
               <Button
                 variant="outlined"
                 color="primary"
@@ -52,7 +52,7 @@ export default function MisCursosPage() {
               >
                 Explorar Cursos
               </Button>
-            </Box>
+            </Box> */}
           </Box>
 
           {isLoading ? (

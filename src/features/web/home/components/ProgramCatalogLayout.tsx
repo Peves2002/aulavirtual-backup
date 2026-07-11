@@ -12,6 +12,13 @@ type ProgramCatalogLayoutProps = {
   categories: { id: string; nombre: string; slug: string }[]
 }
 
+const CATALOG_TYPE_BY_TIPO: Record<TipoPrograma, 'curso' | 'diplomado' | 'programa' | 'especializacion'> = {
+  CURSO: 'curso',
+  DIPLOMADO: 'diplomado',
+  PROGRAMA: 'programa',
+  ESPECIALIZACION: 'especializacion'
+}
+
 export default function ProgramCatalogLayout({ tipo, courses, categories }: ProgramCatalogLayoutProps) {
   const config = getTipoProgramaConfig(tipo)
 
@@ -95,7 +102,7 @@ export default function ProgramCatalogLayout({ tipo, courses, categories }: Prog
         </Box>
       </Box>
 
-      <CourseCatalog courses={courses} categories={categories} tipo={tipo} />
+      <CourseCatalog courses={courses} categories={categories} type={CATALOG_TYPE_BY_TIPO[tipo]} />
     </Box>
   )
 }

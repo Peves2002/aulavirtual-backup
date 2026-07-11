@@ -9,7 +9,6 @@ import WebFooter from '@/utils/components/layout/web/WebFooter'
 import WebHeader from '@/utils/components/layout/web/WebHeader'
 import LeftSidebar from '@/utils/components/layout/web/LeftSidebar'
 import MobileBottomNav from '@/utils/components/layout/web/MobileBottomNav'
-import PWAInstalledToast from '@/features/web/home/components/PWAInstalledToast'
 
 const getCategorias = unstable_cache(
   () =>

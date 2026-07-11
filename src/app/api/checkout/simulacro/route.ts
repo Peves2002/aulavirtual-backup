@@ -172,10 +172,6 @@ export async function POST(request: Request) {
         customer: { email: auth.user.email || undefined }
       }
 
-      // TEMPORAL: diagnóstico para confirmar qué se envía a Izipay y qué responde.
-      console.log('[IZIPAY_SIM][DEBUG] appUrl:', appUrl, '| returnUrl:', returnUrl)
-      console.log('[IZIPAY_SIM][DEBUG] Payload CreatePaymentOrder:', JSON.stringify(orderPayload))
-
       const orderResponse = await fetch(`${endpoint}/api-payment/V4/Charge/CreatePaymentOrder`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: basicAuth },
@@ -183,8 +179,6 @@ export async function POST(request: Request) {
       })
 
       const orderData = await orderResponse.json()
-
-      console.log('[IZIPAY_SIM][DEBUG] Respuesta CreatePaymentOrder:', JSON.stringify(orderData))
 
       if (!orderResponse.ok || orderData.status !== 'SUCCESS') {
         console.error('[IZIPAY_SIM] Error creando orden de pago:', orderData)

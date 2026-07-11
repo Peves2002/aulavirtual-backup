@@ -7,15 +7,16 @@ export const TIPO_PROGRAMA_OPTIONS = (Object.keys(TIPO_PROGRAMA_CONFIG) as TipoP
 }))
 
 export function getTipoProgramaLabel(tipo?: string | null) {
-  if (tipo === 'DIPLOMADO' || tipo === 'ESPECIALIZACION' || tipo === 'CURSO') {
+  if (tipo === 'DIPLOMADO' || tipo === 'PROGRAMA' || tipo === 'ESPECIALIZACION' || tipo === 'CURSO') {
     return TIPO_PROGRAMA_CONFIG[tipo].label
   }
 
   return TIPO_PROGRAMA_CONFIG.CURSO.label
 }
 
-export function getTipoProgramaColor(tipo?: string | null): 'primary' | 'secondary' | 'warning' {
+export function getTipoProgramaColor(tipo?: string | null): 'primary' | 'secondary' | 'warning' | 'info' {
   if (tipo === 'DIPLOMADO') return 'secondary'
+  if (tipo === 'PROGRAMA') return 'info'
   if (tipo === 'ESPECIALIZACION') return 'warning'
 
   return 'primary'

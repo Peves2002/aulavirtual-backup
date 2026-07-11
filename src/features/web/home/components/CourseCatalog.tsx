@@ -23,8 +23,6 @@ import {
 
 import CourseList from './CourseList'
 import { useCart } from '../../cart/context/CartContext'
-import type { TipoPrograma } from '@/utils/configs/tipoPrograma'
-import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
 
 interface Category {
   id: string
@@ -35,12 +33,12 @@ interface Category {
 interface CourseCatalogProps {
   courses: any[]
   categories: Category[]
-  type?: 'curso' | 'diplomado' | 'programa'
+  type?: 'curso' | 'diplomado' | 'programa' | 'especializacion'
 }
 
 const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogProps) => {
-  const label = type === 'diplomado' ? 'diplomados' : type === 'programa' ? 'programas' : 'cursos'
-  const labelCapitalized = type === 'diplomado' ? 'Diplomados' : type === 'programa' ? 'Programas' : 'Cursos'
+  const label = type === 'diplomado' ? 'diplomados' : type === 'programa' ? 'programas' : type === 'especializacion' ? 'especializaciones' : 'cursos'
+  const labelCapitalized = type === 'diplomado' ? 'Diplomados' : type === 'programa' ? 'Programas' : type === 'especializacion' ? 'Especializaciones' : 'Cursos'
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [selectedLevel, setSelectedLevel] = useState('all')
@@ -119,7 +117,7 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
               Nuestros {labelCapitalized}
             </Typography>
             <Typography variant="h6" sx={{ color: '#475569', fontWeight: 500, maxWidth: 600, mx: 'auto' }}>
-              {config.catalogSectionSubtitle}
+              Encuentra el {label === 'cursos' ? 'curso' : label === 'diplomados' ? 'diplomado' : 'programa'} que impulse tu carrera profesional
             </Typography>
           </Box>
 
@@ -127,7 +125,7 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
             {/* Search Bar Premium */}
             <TextField
               fullWidth
-              placeholder={config.searchPlaceholder}
+              placeholder={`Buscar ${label}...`}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               sx={{ maxWidth: 800 }}

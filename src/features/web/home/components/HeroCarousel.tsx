@@ -7,6 +7,9 @@ import Link from 'next/link'
 
 import { ArrowRight } from 'lucide-react'
 
+import { useConfig } from '@/contexts/ConfigContext'
+import themeConfig from '@/utils/configs/themeConfig'
+
 const STATS = [
   { value: '+1,200', label: 'Estudiantes' },
   { value: '+80', label: 'Cursos' },
@@ -46,10 +49,10 @@ const SLIDES = [
 
 function VisualCamaras() {
   const logos = [
-    { src: '/images/camaras/C.C.%20AREQUIPA.webp', alt: 'Cámara de Comercio e Industria de Arequipa' },
-    { src: '/images/camaras/C.C.%20TACNA.webp', alt: 'Cámara de Comercio Industria y Producción de Tacna' },
-    { src: '/images/camaras/cc%20lima.webp', alt: 'CCL Cámara de Comercio Lima' },
-    { src: '/images/camaras/CC%20ICA.webp', alt: 'Cámara de Comercio Industria y Turismo de Ica' },
+    { src: '/images/camaras/cc-arequipa.webp', alt: 'Cámara de Comercio e Industria de Arequipa' },
+    { src: '/images/camaras/cc-tacna.webp', alt: 'Cámara de Comercio Industria y Producción de Tacna' },
+    { src: '/images/camaras/cc-lima.webp', alt: 'CCL Cámara de Comercio Lima' },
+    { src: '/images/camaras/cc-ica.webp', alt: 'Cámara de Comercio Industria y Turismo de Ica' },
   ]
 
   return (
@@ -89,6 +92,10 @@ function VisualImage({ src, alt, style }: { src: string; alt: string; style?: Re
 }
 
 export default function HeroCarousel() {
+  const configs = useConfig()
+  const templateLogo = configs.TEMPLATE_LOGO || themeConfig.templateLogo
+  const templateName = configs.TEMPLATE_NAME || themeConfig.templateName
+
   const [current, setCurrent] = useState(0)
   const [animating, setAnimating] = useState(false)
 
@@ -130,6 +137,21 @@ export default function HeroCarousel() {
             key={`left-${current}`}
             style={{ position: 'relative', zIndex: 2, animation: 'heroFadeIn 0.5s ease' }}
           >
+            {/* Logo de la plataforma */}
+            <img
+              src={templateLogo}
+              alt={`${templateName} Logo`}
+              style={{ height: '48px', width: 'auto', marginBottom: '1.5rem', objectFit: 'contain' }}
+              onError={e => {
+                const img = e.currentTarget
+
+                if (!img.dataset.fallbackApplied) {
+                  img.dataset.fallbackApplied = 'true'
+                  img.src = themeConfig.templateLogo
+                }
+              }}
+            />
+
             {/* Eyebrow */}
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'rgba(var(--web-light-rgb,189,217,98),0.15)', border: '1px solid rgba(var(--web-light-rgb,189,217,98),0.3)', borderRadius: '999px', padding: '0.375rem 1rem', marginBottom: '1.25rem' }}>
               <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--web-light, #BDD962)', animation: 'pulse 2s infinite' }} />
