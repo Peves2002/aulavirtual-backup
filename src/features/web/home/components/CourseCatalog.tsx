@@ -23,6 +23,8 @@ import {
 
 import CourseList from './CourseList'
 import { useCart } from '../../cart/context/CartContext'
+import type { TipoPrograma } from '@/utils/configs/tipoPrograma'
+import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
 
 interface Category {
   id: string
@@ -117,7 +119,7 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
               Nuestros {labelCapitalized}
             </Typography>
             <Typography variant="h6" sx={{ color: '#475569', fontWeight: 500, maxWidth: 600, mx: 'auto' }}>
-              Aprende de expertos y potencia tu carrera profesional con nuestra selección premium.
+              {config.catalogSectionSubtitle}
             </Typography>
           </Box>
 
@@ -125,7 +127,7 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
             {/* Search Bar Premium */}
             <TextField
               fullWidth
-              placeholder="Buscar por título o descripción..."
+              placeholder={config.searchPlaceholder}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               sx={{ maxWidth: 800 }}

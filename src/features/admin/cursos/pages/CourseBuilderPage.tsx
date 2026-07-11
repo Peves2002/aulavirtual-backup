@@ -26,7 +26,7 @@ import { TabDetallesPremium } from '../components/CourseBuilder/TabDetallesPremi
 import { TabComentarios } from '../components/CourseBuilder/TabComentarios'
 import { TabEvaluacion } from '../components/CourseBuilder/TabEvaluacion'
 import { TabValoraciones } from '../components/CourseBuilder/TabValoraciones'
-import { TabTrabajos } from '../components/CourseBuilder/TabTrabajos'
+import { TabRevisionActividades } from '../components/CourseBuilder/TabRevisionActividades'
 
 import { useCurso } from '../hooks/useCursos'
 
@@ -36,7 +36,7 @@ interface CourseBuilderPageProps {
     basePath?: string
 }
 
-export function CourseBuilderPage({ cursoId, profesores, basePath }: CourseBuilderPageProps) {
+export function CourseBuilderPage({ cursoId, profesores, basePath, listPath = '/admin/cursos' }: CourseBuilderPageProps) {
     const { data: curso, isLoading, refetch, isError } = useCurso(cursoId)
     const [activeTab, setActiveTab] = useState('1')
     const router = useRouter()
@@ -115,7 +115,7 @@ export function CourseBuilderPage({ cursoId, profesores, basePath }: CourseBuild
                         <Tab icon={<i className='tabler-settings' />} iconPosition='start' label='Configuración' value='3' />
                         <Tab icon={<i className='tabler-message' />} iconPosition='start' label='Comentarios' value='5' />
                         <Tab icon={<i className='tabler-star-filled' />} iconPosition='start' label='Valoraciones' value='7' />
-                        <Tab icon={<i className='tabler-file-analytics' />} iconPosition='start' label='Revisar Trabajos' value='8' />
+                        <Tab icon={<i className='tabler-file-check' />} iconPosition='start' label='Actividades' value='9' />
                     </TabList>
 
                     <TabPanel value='1' sx={{ p: 5 }}>
@@ -146,8 +146,8 @@ export function CourseBuilderPage({ cursoId, profesores, basePath }: CourseBuild
                         <TabValoraciones cursoId={curso.id} />
                     </TabPanel>
 
-                    <TabPanel value='8' sx={{ p: 5 }}>
-                        <TabTrabajos cursoId={curso.id} curso={curso} />
+                    <TabPanel value='9' sx={{ p: 5 }}>
+                        <TabRevisionActividades cursoId={curso.id} curso={curso} />
                     </TabPanel>
                 </Card>
             </TabContext>

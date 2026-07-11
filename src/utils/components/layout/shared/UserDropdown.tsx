@@ -18,10 +18,9 @@ import MenuList from '@mui/material/MenuList'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
-import Button from '@mui/material/Button'
 
 // Hook Imports
-import { signOut, useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 
 import UserAvatar from '@/utils/components/UserAvatar'
 
@@ -36,6 +35,17 @@ const BadgeContentSpan = styled('span')({
   backgroundColor: 'var(--mui-palette-success-main)',
   boxShadow: '0 0 0 2px var(--mui-palette-background-paper)'
 })
+
+function getDashboardPath(rol?: string): string {
+  switch (rol) {
+    case 'ADMIN':
+      return '/admin/dashboard'
+    case 'PROFESOR':
+      return '/profesor/dashboard'
+    default:
+      return '/estudiante/dashboard'
+  }
+}
 
 const UserDropdown = () => {
   // States
@@ -66,11 +76,10 @@ const UserDropdown = () => {
     setOpen(false)
   }
 
-  const handleUserLogout = async () => {
-    await signOut({ redirect: false })
+  const dashboardPath = getDashboardPath(data?.user?.rol)
 
-    router.push('/')
-    router.refresh()
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/login' })
   }
 
   return (
@@ -150,32 +159,39 @@ const UserDropdown = () => {
                       </div>
                     </>
                   )}
-                      {/* <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
+                  {/* <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
                     <i className='tabler-settings text-[22px]' />
                     <Typography color='text.primary'>Settings</Typography>
                   </MenuItem>
-                  <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
-                    <i className='tabler-currency-dollar text-[22px]' />
-                    <Typography color='text.primary'>Pricing</Typography>
+                  <Divider className='mlb-1' />
+                  <MenuItem
+                    className='mli-2 gap-3'
+                    onClick={() => {
+                      setOpen(false)
+                      handleLogout()
+                    }}
+                  >
+                    <i className='tabler-logout text-[22px]' />
+                    <Typography color='text.primary'>Cerrar Sesión</Typography>
                   </MenuItem>
                   <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
                     <i className='tabler-help-circle text-[22px]' />
                     <Typography color='text.primary'>FAQ</Typography>
                   </MenuItem> */}
-                      <div className='flex items-center plb-2 pli-3'>
-                        <Button
-                          fullWidth
-                          variant='contained'
-                          color='error'
-                          size='small'
-                          endIcon={<i className='tabler-logout' />}
-                          onClick={handleUserLogout}
-                          sx={{ '& .MuiButton-endIcon': { marginInlineStart: 1.5 } }}
-                        >
-                          Cerrar Sesión
-                        </Button>
-                      </div>
-                    </MenuList>
+                  <div className='flex items-center plb-2 pli-3'>
+                    <Button
+                      fullWidth
+                      variant='contained'
+                      color='error'
+                      size='small'
+                      endIcon={<i className='tabler-logout' />}
+                      onClick={handleUserLogout}
+                      sx={{ '& .MuiButton-endIcon': { marginInlineStart: 1.5 } }}
+                    >
+                      Cerrar Sesión
+                    </Button>
+                  </div>
+                </MenuList>
               </ClickAwayListener>
             </Paper>
           </Fade>

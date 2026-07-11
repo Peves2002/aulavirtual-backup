@@ -58,16 +58,16 @@ export async function GET(request: Request) {
       prisma.curso.findMany({
         where: cursoWhere,
         include: {
-          profesor: { select: { id: true, slug: true, nombre: true, apellido: true, avatar: true } },
+          profesor: { select: { id: true, nombre: true, apellido: true, avatar: true } },
           categoria: { select: { id: true, nombre: true, slug: true } },
           _count: { select: { modulos: true } }
         },
-        orderBy: { orden: 'asc' }
+        orderBy: { creado_en: 'desc' }
       }),
       prisma.categoria.findMany({
         where: { esta_activo: true },
         select: { id: true, nombre: true, slug: true },
-        orderBy: { orden: 'asc' }
+        orderBy: { nombre: 'asc' }
       })
     ])
 

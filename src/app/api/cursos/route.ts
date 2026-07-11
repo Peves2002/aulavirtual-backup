@@ -31,6 +31,10 @@ export async function GET(request: Request) {
 
     const where: any = {}
 
+    if (tipo) {
+      where.tipo = tipo
+    }
+
     if (estado) {
       where.estado = estado
     }
@@ -66,7 +70,7 @@ export async function GET(request: Request) {
         where,
         skip,
         take: limit,
-        orderBy: { orden: 'asc' },
+        orderBy: { creado_en: 'desc' },
         include: {
           profesor: {
             select: { id: true, nombre: true, apellido: true, avatar: true }

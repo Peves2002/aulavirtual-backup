@@ -103,7 +103,51 @@ export async function GET(request: Request, { params }: { params: { slug: string
 
     const { slug } = params
 
-    const course = await fetchCourseForPlayer(slug, user.id)
+    const course = await prisma.curso.findUnique({
+      where: { slug },
+      include: {
+        modulos: {
+          include: {
+            lecciones: {
+              include: {
+                progreso: {
+                  where: { usuario_id: user.id }
+                }
+              },
+              orderBy: { orden: 'asc' }
+            },
+            actividades: {
+              where: { esta_publicado: true },
+              orderBy: { orden: 'asc' },
+              include: {
+                entregas: {
+                  where: { usuario_id: user.id },
+                  take: 1
+                }
+              }
+            }
+          },
+          orderBy: { orden: 'asc' }
+        },
+        examenes: {
+          where: { esta_publicado: true },
+          select: {
+            id: true,
+            titulo: true,
+            tipo: true,
+            peso: true,
+            progreso_minimo: true,
+            orden: true,
+            modulo_id: true,
+            puntaje_aprobacion: true,
+            intentos_maximos: true,
+            esta_publicado: true,
+            fecha_inicio: true,
+            fecha_fin: true
+          }
+        }
+      }
+    })
 
     if (!course) {
       return ApiResponse.error(request, 'Curso no encontrado', 404)
@@ -192,35 +236,34 @@ export async function GET(request: Request, { params }: { params: { slug: string
             orden: l.orden,
             video_url: l.video_url,
             es_en_vivo: (l as any).es_en_vivo,
+            es_pdf: (l as any).es_pdf,
             fecha_programada: (l as any).fecha_programada,
             fecha_fin: (l as any).fecha_fin,
             enlace_reunion: (l as any).enlace_reunion,
-            completada: (l as any).progreso?.[0]?.esta_completado || false,
-            recursos: Array.isArray(l.recursos) ? l.recursos : [],
-            trabajo: (l as any).trabajo
-              ? {
-                  id: (l as any).trabajo.id,
-                  titulo: (l as any).trabajo.titulo,
-                  descripcion: (l as any).trabajo.descripcion,
-                  archivo_url: (l as any).trabajo.archivo_url,
-                  archivo_nombre: (l as any).trabajo.archivo_nombre,
-                  fecha_inicio: (l as any).trabajo.fecha_inicio,
-                  fecha_fin: (l as any).trabajo.fecha_fin,
-                  entrega: (l as any).trabajo.entregas[0]
-                    ? {
-                        id: (l as any).trabajo.entregas[0].id,
-                        archivo_url: (l as any).trabajo.entregas[0].archivo_url,
-                        archivo_nombre: (l as any).trabajo.entregas[0].archivo_nombre,
-                        comentario_estudiante: (l as any).trabajo.entregas[0].comentario_estudiante,
-                        nota: (l as any).trabajo.entregas[0].nota,
-                        comentario_docente: (l as any).trabajo.entregas[0].comentario_docente,
-                        creado_en: (l as any).trabajo.entregas[0].creado_en,
-                        actualizado_en: (l as any).trabajo.entregas[0].actualizado_en,
-                      }
-                    : null,
-                }
-              : null,
-          }))
+            completada: l.progreso[0]?.esta_completado || false,
+            recursos: Array.isArray(l.recursos) ? l.recursos : []
+          })),
+        actividades: m.actividades.map(a => ({
+          id: a.id,
+          titulo: a.titulo,
+          tipo: a.tipo,
+          orden: a.orden,
+          puntaje_maximo: a.puntaje_maximo,
+          fecha_inicio: a.fecha_inicio,
+          fecha_fin: a.fecha_fin,
+          entrega: a.entregas[0]
+            ? {
+                id: a.entregas[0].id,
+                archivo_url: a.entregas[0].archivo_url,
+                archivo_nombre: a.entregas[0].archivo_nombre,
+                comentario_estudiante: a.entregas[0].comentario_estudiante,
+                nota: a.entregas[0].nota,
+                comentario_docente: a.entregas[0].comentario_docente,
+                creado_en: a.entregas[0].creado_en,
+                actualizado_en: a.entregas[0].actualizado_en
+              }
+            : null
+        }))
       })),
       examenes: course.examenes.map(ex => ({
         ...ex,

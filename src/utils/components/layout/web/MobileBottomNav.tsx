@@ -29,11 +29,7 @@ export default function MobileBottomNav({
   const pathname = usePathname()
   const [openPanel, setOpenPanel] = useState<'cursos' | 'diplomados' | 'programas' | null>(null)
 
-  const navItems = ALL_NAV_ITEMS.filter(item => {
-    if (item.key === 'rutas' && !rutasHabilitado) return false
-
-    return true
-  })
+  const navItems = ALL_NAV_ITEMS
 
   const isActive = (url: string) => {
     if (url === '/') return pathname === '/'
