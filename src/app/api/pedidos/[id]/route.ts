@@ -105,7 +105,6 @@ export async function PATCH(request: Request, { params }: { params: { id: string
         }
       })
 
-      const cursosIds = pedidoAnterior.detalles.map(d => d.curso_id).filter((cid): cid is string => !!cid)
       const ebooksIds = pedidoAnterior.detalles.map(d => d.ebook_id).filter((eid): eid is string => !!eid)
 
       // Lógica de revocación si pasa de completado a otro estado
@@ -153,9 +152,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
               })
             )
           }
-        }
 
-        if (ebooksIds.length > 0) {
+          if (ebooksIds.length > 0) {
           await Promise.all(
             ebooksIds.map(eid =>
               tx.ebookAcceso.upsert({

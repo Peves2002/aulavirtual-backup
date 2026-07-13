@@ -1,22 +1,14 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
-import { TrendingUp, Briefcase, Target, ArrowRight, CheckCircle2, Users, BookOpen, Award } from 'lucide-react'
+import { Target, ArrowRight, Users, BookOpen, Award } from 'lucide-react'
 
 import prisma from '@/utils/libs/prisma'
-import { getConfigs } from '@/utils/libs/config'
 import HeroCarousel from '@/features/web/ace/HeroCarousel'
 import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
-import HeroInstallButton from '@/features/web/home/components/HeroInstallButton'
-import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
 import RutasSection from '@/features/web/home/components/RutasSection'
-import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
-import HeroVisual from '@/features/web/home/components/HeroVisual'
-import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
-import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
-import CompaniesSection from '@/features/web/home/components/CompaniesSection'
-import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
 import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
+import HomeVideosSection from '@/features/web/home/components/HomeVideosSection'
 import HomeCTAForm from '@/features/web/home/components/HomeCTAForm'
 
 export const metadata = {
@@ -26,7 +18,7 @@ export const metadata = {
 
 async function getFeaturedCourses() {
   try {
-    const [coursesRaw, rutasRaw, teachersRaw, configs, ebooksRaw] = await Promise.all([
+    const [coursesRaw, rutasRaw, ebooksRaw, videosRaw] = await Promise.all([
       // Cursos
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO' },
@@ -51,24 +43,6 @@ async function getFeaturedCourses() {
         take: 3,
       }),
 
-      // Profesores
-      prisma.usuario.findMany({
-        where: { rol: 'PROFESOR' },
-        select: {
-          id: true,
-          nombre: true,
-          apellido: true,
-          slug: true,
-          avatar: true,
-          cargo: true,
-          biografia: true,
-          _count: { select: { cursos_dictados: true } },
-        },
-        orderBy: { cursos_dictados: { _count: 'desc' } },
-        take: 8,
-      }),
-      getConfigs(),
-
       // Ebooks destacados
       prisma.ebook.findMany({
         where: { estado: 'PUBLICADO' },
@@ -80,6 +54,12 @@ async function getFeaturedCourses() {
         },
         orderBy: { creado_en: 'desc' },
         take: 5,
+      }),
+
+      // Videos destacados
+      prisma.video.findMany({
+        orderBy: { creado_en: 'desc' },
+        take: 6,
       }),
     ])
 
@@ -97,12 +77,6 @@ async function getFeaturedCourses() {
       cursos: r.cursos.map(c => ({ miniatura: c.curso.miniatura, titulo: c.curso.titulo })),
     }))
 
-    const heroTitle = configs.HOME_HERO_TITLE || 'Aprende sin límites,\ncrece sin fronteras'
-    const heroDescription = configs.HOME_HERO_DESCRIPTION || 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.'
-    let logos: { label: string; url: string }[] = []
-
-    try { logos = configs.HOME_LOGOS ? JSON.parse(configs.HOME_LOGOS) : [] } catch { logos = [] }
-
     const ebooks = ebooksRaw.map(e => ({
       ...e,
       precio: Number(e.precio),
@@ -112,24 +86,18 @@ async function getFeaturedCourses() {
     return {
       courses: JSON.parse(JSON.stringify(courses)),
       rutas: JSON.parse(JSON.stringify(rutas)),
-      teachers: JSON.parse(JSON.stringify(teachersRaw)),
       ebooks: JSON.parse(JSON.stringify(ebooks)),
-      heroTitle,
-      heroDescription,
-      logos,
+      videos: JSON.parse(JSON.stringify(videosRaw)),
     }
   } catch {
     return {
-      courses: [], rutas: [], teachers: [], ebooks: [],
-      heroTitle: 'Aprende sin límites,\ncrece sin fronteras',
-      heroDescription: 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.',
-      logos: [],
+      courses: [], rutas: [], ebooks: [], videos: [],
     }
   }
 }
 
 export default async function HomePage() {
-  const { courses, rutas, teachers, ebooks, heroTitle, heroDescription, logos } = await getFeaturedCourses()
+  const { courses, rutas, ebooks, videos } = await getFeaturedCourses()
 
   return (
     <>
@@ -245,6 +213,9 @@ export default async function HomePage() {
       {/* ── 4. EBOOKS DESTACADOS ────────────────────── */}
       <HomeEbooksSection ebooks={ebooks} />
 
+      {/* ── Videos destacados ───────────────────────── */}
+      <HomeVideosSection videos={videos} />
+
       {/* ── 5. CARACTERÍSTICAS DE CLASES ────────────── */}
       {/* <ClassFeaturesSection /> */}
 
@@ -307,65 +278,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── 6. VIDEOS YOUTUBE ── */}
-      <section className="py-24" style={{ background: 'var(--gradient-brand)' }}>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Encabezado */}
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
-            <div>
-              <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-full mb-3"
-                style={{ backgroundColor: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', color: '#fff' }}>
-                Canal oficial
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold text-white">Aprende con nuestros videos</h2>
-              <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.70)' }}>
-                Contenido ejecutivo gratuito directo de nuestro fundador.
-              </p>
-            </div>
-            <a
-              href="https://www.youtube.com/@manuelnietocourrejolles4757"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-opacity hover:opacity-85"
-              style={{ backgroundColor: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.30)', color: '#fff' }}
-            >
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.8 15.5V8.5l6.3 3.5-6.3 3.5z" />
-              </svg>
-              Ver más en YouTube
-            </a>
-          </div>
 
-          {/* Grid: video principal + 2 secundarios */}
-          <div className="grid lg:grid-cols-3 gap-4">
-            {/* Video principal */}
-            <div className="lg:col-span-2 rounded-2xl overflow-hidden shadow-2xl" style={{ aspectRatio: '16/9' }}>
-              <iframe
-                src="https://www.youtube.com/embed/Lu3AC0rQbWM"
-                title="Video principal ACE"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-              />
-            </div>
-
-            {/* Videos secundarios */}
-            <div className="flex flex-col gap-4">
-              {['xn2TjyV5jcI', 'phpbrQKAvI0'].map((id) => (
-                <div key={id} className="rounded-2xl overflow-hidden shadow-xl flex-1" style={{ aspectRatio: '16/9' }}>
-                  <iframe
-                    src={`https://www.youtube.com/embed/${id}`}
-                    title={`Video ${id}`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-full"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ── 7. CTA FINAL ── */}
       <HomeCTAForm />

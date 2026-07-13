@@ -113,6 +113,9 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             <MenuItem href='/ebooks' icon={<i className='tabler-books' />}>
               Explorar Ebooks
             </MenuItem>
+            <MenuItem href='/videos' icon={<i className='tabler-video' />}>
+              Explorar Videos
+            </MenuItem>
           </>
         )}
 
@@ -130,6 +133,9 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             </MenuItem>
             <MenuItem href='/admin/ebooks' icon={<i className='tabler-book-2' />}>
               Ebooks
+            </MenuItem>
+            <MenuItem href='/admin/videos' icon={<i className='tabler-video' />}>
+              Videos
             </MenuItem>
             {/*  <MenuItem href='/admin/simulacros' icon={<i className='tabler-clipboard-list' />}>
               Simulacros

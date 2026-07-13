@@ -684,6 +684,7 @@ enum Rol {
   ADMIN
   PROFESOR
   ESTUDIANTE
+  SUPERVISOR
 }
 
 enum EstadoCurso {
@@ -761,6 +762,7 @@ enum NivelCurso {
 enum TipoCurso {
   CURSO
   DIPLOMADO
+  ESPECIALIZACION
 }
 
 enum TipoDescuento {
@@ -1104,3 +1106,14 @@ model EntregaActividad {
   @@index([usuario_id])
   @@map("entregas_actividad")
 }
+
+model Video {
+  id             String   @id @default(uuid())
+  url            String
+  titulo         String?
+  creado_en      DateTime @default(now())
+  actualizado_en DateTime @updatedAt
+
+  @@map("videos")
+}
+

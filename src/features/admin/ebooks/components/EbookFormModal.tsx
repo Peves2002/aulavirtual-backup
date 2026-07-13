@@ -1,6 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { pdfjs } from 'react-pdf'
+
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js'
 
 import {
   Button,
@@ -12,6 +15,8 @@ import {
   FormControlLabel,
   InputAdornment,
   Divider,
+  IconButton,
+  Stack,
 } from '@mui/material'
 import { useForm, Controller } from 'react-hook-form'
 import Swal from 'sweetalert2'
@@ -76,20 +81,22 @@ export const EbookFormModal = ({ open, handleClose, ebook }: Props) => {
     },
   })
 
+  const [pdfFiles, setPdfFiles] = useState<{ nombre: string; url: string; paginas?: number }[]>([])
+  const [selectingPdfIndex, setSelectingPdfIndex] = useState<number | null>(null)
+
   const esGratis = watch('es_gratis')
   const miniatura = watch('miniatura')
-  const archivoPdf = watch('archivo_pdf')
 
-  // Cada página individual del PDF tiene /Type /Page (sin 's')
+  // Carga el PDF y cuenta el número real de páginas de forma exacta usando PDF.js
   const contarPaginasPdf = async (url: string): Promise<number> => {
     try {
-      const res = await fetch(url)
-      const buffer = await res.arrayBuffer()
-      const content = new TextDecoder('latin1').decode(buffer)
-      const matches = content.match(/\/Type\s*\/Page[^s]/g)
+      const loadingTask = (pdfjs as any).getDocument(url)
+      const pdf = await loadingTask.promise
 
-      return matches ? matches.length : 0
-    } catch {
+      return pdf.numPages
+    } catch (error) {
+      console.error('Error counting PDF pages:', error)
+
       return 0
     }
   }
@@ -116,6 +123,53 @@ export const EbookFormModal = ({ open, handleClose, ebook }: Props) => {
         idioma: ebook.idioma ?? 'Español',
       })
       setOpcionesAvanzadas(Boolean(ebook.editorial || ebook.anio_edicion || ebook.saga || (ebook.moneda && ebook.moneda !== 'PEN')))
+
+      let files: { nombre: string; url: string; paginas?: number }[] = []
+
+      if (ebook.archivo_pdf) {
+        try {
+          if (ebook.archivo_pdf.trim().startsWith('[')) {
+            files = JSON.parse(ebook.archivo_pdf)
+          } else {
+            files = [{ nombre: 'PDF Principal', url: ebook.archivo_pdf }]
+          }
+        } catch {
+          files = [{ nombre: 'PDF Principal', url: ebook.archivo_pdf }]
+        }
+      }
+
+      if (files.length === 0) {
+        files = [{ nombre: 'PDF Principal', url: '' }]
+      }
+
+      setPdfFiles(files)
+
+      // Automatically count pages for all loaded files that don't have it or have 0/empty pages
+      const loadPagesForFiles = async (currentFiles: typeof files) => {
+        let updated = false
+        const copy = [...currentFiles]
+
+        for (let i = 0; i < copy.length; i++) {
+          const file = copy[i]
+          if (file.url && (!file.paginas || file.paginas === 0)) {
+            const count = await contarPaginasPdf(file.url)
+            if (count > 0) {
+              copy[i] = { ...file, paginas: count }
+              updated = true
+            }
+          }
+        }
+
+        if (updated) {
+          setPdfFiles(copy)
+          const total = copy.reduce((sum, item) => sum + (item.paginas || 0), 0)
+          if (total > 0) {
+            setValue('paginas', total, { shouldValidate: true })
+          }
+        }
+      }
+
+      loadPagesForFiles(files)
     } else {
       reset({
         titulo: '',
@@ -137,16 +191,75 @@ export const EbookFormModal = ({ open, handleClose, ebook }: Props) => {
         idioma: 'Español',
       })
       setOpcionesAvanzadas(false)
+      setPdfFiles([{ nombre: 'PDF Principal', url: '' }])
     }
   }, [ebook, open, reset])
 
+  // Sync to react-hook-form value
+  useEffect(() => {
+    if (pdfFiles.length > 0) {
+      setValue('archivo_pdf', JSON.stringify(pdfFiles), { shouldValidate: true })
+    }
+  }, [pdfFiles, setValue])
+
+  const handleUpdatePdfFile = (index: number, key: 'nombre' | 'url' | 'paginas', value: any) => {
+    setPdfFiles(prev => {
+      const copy = [...prev]
+
+      copy[index] = { ...copy[index], [key]: value }
+
+      if (key === 'paginas') {
+        const total = copy.reduce((sum, item) => sum + (item.paginas || 0), 0)
+
+        if (total > 0) {
+          setValue('paginas', total, { shouldValidate: true })
+        }
+      }
+
+      return copy
+    })
+  }
+
+  const handleAddPdfFile = () => {
+    setPdfFiles(prev => [...prev, { nombre: `PDF Adicional ${prev.length + 1}`, url: '' }])
+  }
+
+  const handleRemovePdfFile = (index: number) => {
+    setPdfFiles(prev => {
+      const copy = prev.filter((_, i) => i !== index)
+      const total = copy.reduce((sum, item) => sum + (item.paginas || 0), 0)
+
+      if (total > 0) {
+        setValue('paginas', total, { shouldValidate: true })
+      } else {
+        setValue('paginas', undefined, { shouldValidate: true })
+      }
+
+      return copy
+    })
+  }
+
   const handleSelectPdf = async (url: string) => {
-    setValue('archivo_pdf', url, { shouldValidate: true })
-    setOpenPdfMedia(false)
+    if (selectingPdfIndex !== null) {
+      const count = await contarPaginasPdf(url)
 
-    const paginas = await contarPaginasPdf(url)
+      setPdfFiles(prev => {
+        const copy = [...prev]
 
-    if (paginas > 0) setValue('paginas', paginas)
+        copy[selectingPdfIndex] = { ...copy[selectingPdfIndex], url, paginas: count }
+
+        const total = copy.reduce((sum, item) => sum + (item.paginas || 0), 0)
+
+        if (total > 0) {
+          setValue('paginas', total, { shouldValidate: true })
+        }
+
+        return copy
+      })
+
+      setOpenPdfMedia(false)
+      setSelectingPdfIndex(null)
+    }
   }
 
   const onSubmit = async (values: CreateEbookDto) => {
@@ -265,31 +378,116 @@ export const EbookFormModal = ({ open, handleClose, ebook }: Props) => {
           <SectionHeader title='Contenido' subtitle='Archivo que verá el lector' />
 
           <Grid item xs={12}>
-            <Typography variant='subtitle2' mb={1}>Archivo PDF *</Typography>
+            <Typography variant='subtitle2' mb={2}>Archivos PDF *</Typography>
             <Controller
               name='archivo_pdf'
               control={control}
-              rules={{ required: 'El archivo PDF es requerido' }}
+              rules={{
+                validate: () => {
+                  const hasValid = pdfFiles.some(f => f.url.trim() !== '')
+
+                  return hasValid || 'Debe seleccionar al menos un archivo PDF válido'
+                }
+              }}
               render={({ fieldState }) => (
                 <Box
                   sx={{
-                    p: 2,
+                    p: fieldState.error ? 2 : 0,
                     borderRadius: 2,
-                    border: '1px solid',
-                    borderColor: fieldState.error ? 'error.main' : 'divider',
-                    bgcolor: 'action.hover',
+                    border: fieldState.error ? '1px solid' : 'none',
+                    borderColor: 'error.main',
                   }}
                 >
-                  <Box display='flex' gap={2} alignItems='center' flexWrap='wrap'>
-                    <Button variant='outlined' size='small' onClick={() => setOpenPdfMedia(true)}>
-                      {archivoPdf ? 'Cambiar PDF' : 'Seleccionar PDF'}
-                    </Button>
-                    {archivoPdf && (
-                      <Typography variant='caption' color='success.main'>
-                        PDF cargado: {archivoPdf.split('/').pop()}
-                      </Typography>
-                    )}
-                  </Box>
+                  <Stack spacing={3}>
+                    {pdfFiles.map((file, index) => (
+                      <Box
+                        key={index}
+                        sx={{
+                          p: 3,
+                          borderRadius: 2,
+                          border: '1px solid',
+                          borderColor: 'divider',
+                          bgcolor: 'action.hover',
+                        }}
+                      >
+                        <Grid container spacing={3} alignItems="center">
+                          <Grid item xs={12} sm={4}>
+                            <CustomTextField
+                              fullWidth
+                              label={`Nombre del PDF ${index + 1}`}
+                              value={file.nombre}
+                              onChange={e => handleUpdatePdfFile(index, 'nombre', e.target.value)}
+                              placeholder="Ej. PDF Principal, Capítulo 1"
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={4}>
+                            <Box display='flex' gap={2} alignItems='center' flexWrap='wrap'>
+                              <Button
+                                variant='outlined'
+                                size='small'
+                                onClick={() => {
+                                  setSelectingPdfIndex(index)
+                                  setOpenPdfMedia(true)
+                                }}
+                              >
+                                {file.url ? 'Cambiar PDF' : 'Seleccionar PDF'}
+                              </Button>
+                              {file.url && (
+                                <Typography
+                                  variant='caption'
+                                  color='success.main'
+                                  sx={{
+                                    maxWidth: 130,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    display: 'block'
+                                  }}
+                                  title={file.url.split('/').pop()}
+                                >
+                                  {file.url.split('/').pop()}
+                                </Typography>
+                              )}
+                            </Box>
+                          </Grid>
+                          <Grid item xs={12} sm={2}>
+                            <CustomTextField
+                              fullWidth
+                              type='number'
+                              label="Páginas"
+                              value={file.paginas ?? ''}
+                              onChange={e => {
+                                const val = e.target.value ? Number(e.target.value) : 0
+                                handleUpdatePdfFile(index, 'paginas', val)
+                              }}
+                              placeholder="0"
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={2} display="flex" justifyContent="flex-end">
+                            <IconButton
+                              color='error'
+                              disabled={pdfFiles.length === 1}
+                              onClick={() => handleRemovePdfFile(index)}
+                              size="small"
+                            >
+                              <i className="tabler-trash text-xl" />
+                            </IconButton>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    ))}
+                  </Stack>
+
+                  <Button
+                    variant='outlined'
+                    startIcon={<i className='tabler-plus' />}
+                    onClick={handleAddPdfFile}
+                    fullWidth
+                    sx={{ mt: 2, borderStyle: 'dashed' }}
+                  >
+                    Agregar otro archivo PDF
+                  </Button>
+
                   {fieldState.error && (
                     <Typography variant='caption' color='error.main' display='block' sx={{ mt: 1 }}>
                       {fieldState.error.message}

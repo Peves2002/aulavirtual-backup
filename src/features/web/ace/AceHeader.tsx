@@ -16,6 +16,7 @@ const nav = [
   { to: '/', label: 'Inicio' },
   { to: '/cursos', label: 'Cursos' },
   { to: '/ebooks', label: 'Ebooks' },
+  { to: '/videos', label: 'Videos' },
   { to: '/nosotros', label: 'Nosotros' },
   { to: '/contacto', label: 'Contacto' },
 ]

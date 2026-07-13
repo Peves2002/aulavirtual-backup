@@ -38,7 +38,54 @@ export async function GET(request: Request, { params }: { params: { id: string }
       return NextResponse.json({ error: 'No tienes acceso a este ebook' }, { status: 403 })
     }
 
-    const pdfPath = ebook.archivo_pdf
+    const { searchParams } = new URL(request.url)
+    const list = searchParams.get('list') === 'true'
+    const download = searchParams.get('download') === 'true'
+    const indexParam = searchParams.get('index')
+    const index = indexParam ? parseInt(indexParam, 10) : 0
+
+    if (list) {
+      let pdfList = [{ nombre: 'PDF Principal', url: ebook.archivo_pdf }]
+
+      if (ebook.archivo_pdf.trim().startsWith('[')) {
+        try {
+          const parsed = JSON.parse(ebook.archivo_pdf)
+
+          if (Array.isArray(parsed)) {
+            pdfList = parsed.map((item, idx) => ({
+              nombre: item.nombre || `Archivo PDF ${idx + 1}`,
+              url: item.url || '',
+            })).filter(f => f.url)
+          }
+        } catch {}
+      }
+
+      return NextResponse.json({ pdfs: pdfList })
+    }
+
+    let pdfPath = ebook.archivo_pdf
+    let fileName = `${ebook.titulo}.pdf`
+
+    if (ebook.archivo_pdf.trim().startsWith('[')) {
+      try {
+        const parsed = JSON.parse(ebook.archivo_pdf)
+
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const selected = parsed[index] || parsed[0]
+
+          pdfPath = selected.url || ''
+          if (selected.nombre) {
+            fileName = `${ebook.titulo} - ${selected.nombre}.pdf`
+          }
+        }
+      } catch (e) {
+        // Fallback to legacy string
+      }
+    }
+
+    if (!pdfPath) {
+      return NextResponse.json({ error: 'Archivo PDF no disponible' }, { status: 404 })
+    }
 
     let pdfBuffer: Buffer
 
@@ -60,7 +107,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': 'inline',
+        'Content-Disposition': download ? `attachment; filename="${encodeURIComponent(fileName)}"` : 'inline',
         'Content-Length': pdfBuffer.byteLength.toString(),
         'Cache-Control': 'private, no-store',
         'X-Content-Type-Options': 'nosniff',

@@ -33,7 +33,7 @@ const informacion = [
 
 export default function AceFooter() {
   return (
-    <footer className="border-t border-border bg-card/40 mt-16">
+    <footer className="border-t border-border bg-card/40">
       {/* Slogan banner */}
       <div className="border-b border-border/50 py-4 text-center px-4">
         <p className="text-sm text-muted-foreground italic">

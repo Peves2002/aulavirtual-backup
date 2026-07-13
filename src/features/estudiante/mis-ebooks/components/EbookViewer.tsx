@@ -9,6 +9,7 @@ import 'react-pdf/dist/esm/Page/TextLayer.css'
 
 import {
   Box,
+  Button,
   CircularProgress,
   IconButton,
   InputBase,
@@ -193,6 +194,10 @@ export const EbookViewer = ({ ebookId }: Props) => {
   const [savingAnnot, setSavingAnnot] = useState(false)
   const [pageInput, setPageInput] = useState('')
 
+  const [pdfList, setPdfList] = useState<{ nombre: string; url: string }[]>([])
+  const [selectedPdfIndex, setSelectedPdfIndex] = useState(0)
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+
   const pageWidth = Math.round(baseWidth * zoom)
   const ZOOM_STEP = 0.25
   const ZOOM_MIN = 0.5
@@ -203,8 +208,18 @@ export const EbookViewer = ({ ebookId }: Props) => {
   const pageRefs = useRef<Record<number, HTMLDivElement | null>>({})
 
   useEffect(() => {
-    setLoadingPdf(true); setErrorPdf(false); setPdfData(null)
-    fetch(`/api/estudiante/ebooks/${ebookId}/pdf`)
+    fetch(`/api/estudiante/ebooks/${ebookId}/pdf?list=true`)
+      .then(r => r.ok ? r.json() : { pdfs: [] })
+      .then(data => {
+        setPdfList(data.pdfs || [])
+        setSelectedPdfIndex(0)
+      })
+      .catch(() => {})
+  }, [ebookId])
+
+  useEffect(() => {
+    setLoadingPdf(true); setErrorPdf(false); setPdfData(null); setNumPages(0)
+    fetch(`/api/estudiante/ebooks/${ebookId}/pdf?index=${selectedPdfIndex}`)
       .then(r => {
         if (!r.ok) throw new Error()
 
@@ -212,7 +227,7 @@ export const EbookViewer = ({ ebookId }: Props) => {
       })
       .then(buf => { setPdfData({ data: buf }); setLoadingPdf(false) })
       .catch(() => { setLoadingPdf(false); setErrorPdf(true) })
-  }, [ebookId])
+  }, [ebookId, selectedPdfIndex])
 
   useEffect(() => {
     fetch(`/api/estudiante/ebooks/${ebookId}/anotaciones`)
@@ -297,10 +312,12 @@ export const EbookViewer = ({ ebookId }: Props) => {
     { type: 'underline' as ToolType, icon: 'tabler-underline', label: 'Subrayar' },
   ]
 
-  if (loadingPdf || errorPdf) {
+  const isInitialLoading = loadingPdf && pdfList.length === 0
+
+  if (isInitialLoading || errorPdf) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-        <Box sx={{ width: '100%', maxWidth: 760, height: 'calc(100vh - 220px)', minHeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 2, bgcolor: '#1a1a1a', borderRadius: 2 }}>
+        <Box sx={{ width: '100%', maxWidth: 1000, height: 'calc(100vh - 220px)', minHeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 2, bgcolor: '#1a1a1a', borderRadius: 2 }}>
           {loadingPdf
             ? <><CircularProgress sx={{ color: '#fff' }} /><Typography color='#aaa'>Cargando ebook...</Typography></>
             : <><i className='tabler-file-off' style={{ fontSize: '3rem', color: '#666' }} /><Typography color='#666'>No se pudo cargar el ebook.</Typography></>
@@ -312,10 +329,30 @@ export const EbookViewer = ({ ebookId }: Props) => {
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-      <Box ref={containerRef} sx={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: isFullscreen ? '100vw' : 760, height: isFullscreen ? '100vh' : 'calc(100vh - 220px)', minHeight: 400, bgcolor: '#1a1a1a', borderRadius: isFullscreen ? 0 : 2, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
+      <Box ref={containerRef} sx={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: isFullscreen ? '100vw' : 1000, height: isFullscreen ? '100vh' : 'calc(100vh - 220px)', minHeight: 400, bgcolor: '#1a1a1a', borderRadius: isFullscreen ? 0 : 2, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
 
         {/* Toolbar */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 2, py: 1, bgcolor: '#2a2a2a', borderBottom: '1px solid rgba(255,255,255,0.08)', flexShrink: 0, flexWrap: 'wrap' }}>
+          {pdfList.length > 1 && (
+            <>
+              <Tooltip title={sidebarOpen ? 'Ocultar archivos' : 'Mostrar archivos'} placement='bottom'>
+                <IconButton
+                  size='small'
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  sx={{
+                    color: sidebarOpen ? '#fff' : '#888',
+                    bgcolor: sidebarOpen ? 'rgba(255,255,255,0.1)' : 'transparent',
+                    borderRadius: '8px',
+                    '&:hover': { bgcolor: 'rgba(255,255,255,0.15)', color: '#fff' }
+                  }}
+                >
+                  <i className='tabler-menu-2' style={{ fontSize: '1.1rem' }} />
+                </IconButton>
+              </Tooltip>
+              <Box sx={{ width: '1px', height: 24, bgcolor: 'rgba(255,255,255,0.12)', mx: 0.5 }} />
+            </>
+          )}
+
           <Stack direction='row' spacing={0.5}>
             {toolConfig.map(t => (
               <Tooltip key={t.type} title={t.label} placement='bottom'>
@@ -339,6 +376,8 @@ export const EbookViewer = ({ ebookId }: Props) => {
           )}
 
           {savingAnnot && <CircularProgress size={14} sx={{ color: '#888', ml: 1 }} />}
+
+
 
           <Box sx={{ flex: 1 }} />
 
@@ -380,6 +419,34 @@ export const EbookViewer = ({ ebookId }: Props) => {
             <Typography sx={{ color: '#666', fontSize: '0.8rem' }}>/ {numPages || '—'}</Typography>
           </Stack>
 
+          <Tooltip title='Descargar PDF' placement='bottom'>
+            <Button
+              component='a'
+              href={`/api/estudiante/ebooks/${ebookId}/pdf?index=${selectedPdfIndex}&download=true`}
+              download
+              variant='contained'
+              size='small'
+              startIcon={<i className='tabler-download' style={{ fontSize: '1rem' }} />}
+              sx={{
+                bgcolor: 'var(--web-primary, #25927F)',
+                color: '#fff',
+                fontWeight: 600,
+                fontSize: '0.75rem',
+                textTransform: 'none',
+                height: 28,
+                px: 2.5,
+                borderRadius: '6px',
+                boxShadow: '0 2px 8px rgba(37, 146, 127, 0.3)',
+                '&:hover': {
+                  bgcolor: 'var(--web-primary-hover, #1d7465)',
+                  boxShadow: '0 4px 12px rgba(37, 146, 127, 0.4)',
+                }
+              }}
+            >
+              Descargar
+            </Button>
+          </Tooltip>
+
           <Tooltip title={isFullscreen ? 'Salir (Esc)' : 'Pantalla completa'} placement='bottom'>
             <IconButton size='small' onClick={toggleFullscreen} sx={{ color: '#888', '&:hover': { color: '#fff' } }}>
               <i className={isFullscreen ? 'tabler-arrows-minimize' : 'tabler-arrows-maximize'} style={{ fontSize: '1.1rem' }} />
@@ -395,31 +462,122 @@ export const EbookViewer = ({ ebookId }: Props) => {
           </Box>
         )}
 
-        {/* Área de lectura continua */}
-        <Box ref={wrapperRef} sx={{ flex: 1, overflowY: 'auto', overflowX: zoom > 1 ? 'auto' : 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2, bgcolor: '#1a1a1a' }}>
-          {pdfData && (
-            <Document
-              file={pdfData}
-              onLoadSuccess={({ numPages: n }) => setNumPages(n)}
-              loading={<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 400 }}><CircularProgress sx={{ color: '#fff' }} /></Box>}
+        {/* Área de lectura continua con Sidebar para PDFs */}
+        <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden', flexDirection: 'row' }}>
+          {/* Sidebar for PDFs (only visible if there are multiple PDFs and sidebarOpen is true) */}
+          {pdfList.length > 1 && sidebarOpen && (
+            <Box
+              sx={{
+                width: 220,
+                flexShrink: 0,
+                bgcolor: '#222222',
+                borderRight: '1px solid rgba(255,255,255,0.08)',
+                display: 'flex',
+                flexDirection: 'column',
+                overflowY: 'auto',
+                p: 2.5,
+                gap: 1,
+              }}
             >
-              {Array.from({ length: numPages }, (_, i) => i + 1).map(pageNum => (
-                <PageItem
-                  key={pageNum}
-                  pageNumber={pageNum}
-                  pageWidth={pageWidth}
-                  tool={tool}
-                  color={color}
-                  ebookId={ebookId}
-                  annotations={annotations}
-                  onAnnotationSaved={handleAnnotationSaved}
-                  onAnnotationDeleted={handleAnnotationDeleted}
-                  onVisible={handleVisible}
-                  pageRef={el => { pageRefs.current[pageNum] = el }}
-                />
-              ))}
-            </Document>
+              <Typography
+                variant="caption"
+                sx={{
+                  color: '#888888',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  mb: 1.5,
+                  fontFamily: 'Inter, sans-serif',
+                }}
+              >
+                Archivos PDF
+              </Typography>
+              {pdfList.map((pdf, idx) => {
+                const isActive = selectedPdfIndex === idx
+                return (
+                  <Box
+                    key={idx}
+                    onClick={() => setSelectedPdfIndex(idx)}
+                    sx={{
+                      p: 2,
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      bgcolor: isActive ? 'rgba(37, 146, 127, 0.15)' : 'transparent',
+                      border: isActive ? '1px solid rgba(37, 146, 127, 0.3)' : '1px solid transparent',
+                      transition: 'all 0.2s',
+                      '&:hover': {
+                        bgcolor: isActive ? 'rgba(37, 146, 127, 0.2)' : 'rgba(255,255,255,0.05)',
+                      },
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: isActive ? 600 : 400,
+                        fontSize: '0.82rem',
+                        lineHeight: 1.3,
+                        fontFamily: 'Inter, sans-serif',
+                        wordBreak: 'break-word',
+                        overflowWrap: 'anywhere',
+                        color: isActive ? '#ffffff' : '#b3b3b3',
+                      }}
+                    >
+                      {pdf.nombre}
+                    </Typography>
+                  </Box>
+                )
+              })}
+            </Box>
           )}
+
+          {/* Área de lectura continua */}
+          <Box
+            ref={wrapperRef}
+            sx={{
+              flex: 1,
+              overflowY: 'auto',
+              overflowX: zoom > 1 ? 'auto' : 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: loadingPdf ? 'center' : 'flex-start',
+              p: 2,
+              bgcolor: '#1a1a1a',
+              minHeight: 400,
+              position: 'relative',
+            }}
+          >
+            {loadingPdf && (
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 2, py: 10 }}>
+                <CircularProgress sx={{ color: 'var(--web-primary, #25927F)' }} />
+                <Typography sx={{ color: '#aaa', fontSize: '0.85rem' }}>Cargando archivo...</Typography>
+              </Box>
+            )}
+
+            {!loadingPdf && pdfData && (
+              <Document
+                file={pdfData}
+                onLoadSuccess={({ numPages: n }) => setNumPages(n)}
+                loading={<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 400 }}><CircularProgress sx={{ color: '#fff' }} /></Box>}
+              >
+                {Array.from({ length: numPages }, (_, i) => i + 1).map(pageNum => (
+                  <PageItem
+                    key={pageNum}
+                    pageNumber={pageNum}
+                    pageWidth={pageWidth}
+                    tool={tool}
+                    color={color}
+                    ebookId={ebookId}
+                    annotations={annotations}
+                    onAnnotationSaved={handleAnnotationSaved}
+                    onAnnotationDeleted={handleAnnotationDeleted}
+                    onVisible={handleVisible}
+                    pageRef={el => { pageRefs.current[pageNum] = el }}
+                  />
+                ))}
+              </Document>
+            )}
+          </Box>
         </Box>
       </Box>
     </Box>

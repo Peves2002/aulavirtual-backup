@@ -82,6 +82,7 @@ export default withAuth(
           path.startsWith('/register') ||
           path.startsWith('/cursos') ||
           path.startsWith('/ebooks') ||
+          path.startsWith('/videos') ||
           path.startsWith('/rutas') ||
           path.startsWith('/proyectos') ||
           path.startsWith('/mantenimiento') ||
