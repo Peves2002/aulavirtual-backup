@@ -27,7 +27,13 @@ export async function generateMetadata(): Promise<Metadata> {
     manifest: '/manifest.json',
     icons: {
       icon: logo,
-      apple: '/icons/apple-touch-icon.png'
+      shortcut: logo,
+      apple: '/icons/apple-touch-icon.png',
+    },
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: 'black-translucent',
+      title,
     },
     other: {
       'theme-color': themeColor,
@@ -84,8 +90,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const webPrimary = configs.PRIMARY_COLOR_MAIN || '#25927F'
   const webLight = configs.PRIMARY_COLOR_LIGHT || '#BDD962'
   const webDark = configs.PRIMARY_COLOR_DARK || '#025E44'
-  const webDarkDeep = darkenHex(webDark, 0.45)  // muy oscuro → reemplaza #012d22
-  const webDarkMid = darkenHex(webDark, 0.72)  // oscuro medio → reemplaza #0f4438
+  const webDarkDeep = darkenHex(webDark, 0.45)
+  const webDarkMid = darkenHex(webDark, 0.72)
 
   return (
     <html lang='es' suppressHydrationWarning className={`${plus_jakarta_sans.variable} ${plus_jakarta_sans.className}`}>

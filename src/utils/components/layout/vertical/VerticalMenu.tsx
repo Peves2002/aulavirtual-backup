@@ -17,6 +17,7 @@ import { Menu, MenuItem } from '@menu/vertical-menu'
 // Hook Imports
 import { useSettings } from '@core/hooks/useSettings'
 import useVerticalNav from '@menu/hooks/useVerticalNav'
+import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
 // Styled Component Imports
 import StyledVerticalNavExpandIcon from '@menu/styles/vertical/StyledVerticalNavExpandIcon'
@@ -107,6 +108,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             <MenuItem href='/estudiante/mis-certificados' icon={<i className='tabler-certificate' />}>
               Mis Certificados
             </MenuItem>
+            <Divider sx={{ my: 1 }} />
             <MenuItem href='/cursos' icon={<i className='tabler-search' />}>
               Explorar Cursos
             </MenuItem>
@@ -166,9 +168,11 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             <MenuItem href='/profesor/mis-cursos' icon={<i className='tabler-book' />}>
               Mis Cursos
             </MenuItem>
-            <MenuItem href='/profesor/calendario' icon={<i className='tabler-calendar' />}>
-              Calendario
-            </MenuItem>
+            {isFeatureEnabled('calendario') && (
+              <MenuItem href='/profesor/calendario' icon={<i className='tabler-calendar' />}>
+                Calendario
+              </MenuItem>
+            )}
           </>
         )}
       </Menu>

@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 
-import { MonitorSmartphone, X, Monitor, Smartphone } from 'lucide-react'
+import { MonitorSmartphone } from 'lucide-react'
 
 import { usePWAInstall } from '@/utils/hooks/usePWAInstall'
+import PWAInstallTip from '@/utils/components/shared/PWAInstallTip'
 
 export default function HeroInstallButton() {
   const { canInstall, hasNativePrompt, install } = usePWAInstall()

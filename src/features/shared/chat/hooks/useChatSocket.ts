@@ -2,8 +2,10 @@
 
 import { useEffect, useRef } from 'react'
 
-import type { Socket } from 'socket.io-client'
+// eslint-disable-next-line import/no-unresolved
 import { io } from 'socket.io-client'
+// eslint-disable-next-line import/no-unresolved
+import type { Socket } from 'socket.io-client'
 
 let socketInstance: Socket | null = null
 

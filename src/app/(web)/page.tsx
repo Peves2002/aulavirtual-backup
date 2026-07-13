@@ -19,8 +19,19 @@ export const metadata = {
 
 async function getHomeData() {
   try {
-    const [coursesRaw, rutasRaw, teachersRaw, configs, ebooksRaw] = await Promise.all([
-      // Cursos
+    const courseInclude = {
+      profesor: { select: { nombre: true, apellido: true, avatar: true } },
+      categoria: { select: { id: true, nombre: true } },
+      _count: { select: { modulos: true, inscripciones: true } }
+    }
+
+    const [coursesRaw, diplomadosRaw, especializacionesRaw, teachersRaw, configs, ebooksRaw] = await Promise.all([
+      prisma.curso.findMany({
+        where: { estado: 'PUBLICADO', tipo: 'CURSO' },
+        include: courseInclude,
+        orderBy: { creado_en: 'desc' },
+        take: 6
+      }),
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO' },
         include: {
@@ -31,17 +42,11 @@ async function getHomeData() {
         orderBy: [{ orden: 'asc' }, { creado_en: 'desc' }],
         take: 6,
       }),
-
-      // Rutas
-      prisma.rutaAprendizaje.findMany({
-        where: { esta_activo: true },
-        include: {
-          cursos: {
-            take: 4,
-            include: { curso: { select: { miniatura: true, titulo: true } } },
-          },
-        },
-        take: 3,
+      prisma.curso.findMany({
+        where: { estado: 'PUBLICADO', tipo: 'ESPECIALIZACION' },
+        include: courseInclude,
+        orderBy: { creado_en: 'desc' },
+        take: 6
       }),
 
       // Profesores
@@ -63,17 +68,19 @@ async function getHomeData() {
       getConfigs(),
 
       // Ebooks destacados
-      prisma.ebook.findMany({
-        where: { estado: 'PUBLICADO' },
-        select: {
-          id: true, titulo: true, slug: true, miniatura: true,
-          autor: true, precio: true, precio_falso: true, moneda: true,
-          es_gratis: true, paginas: true, genero: true,
-          categoria: { select: { nombre: true } },
-        },
-        orderBy: { creado_en: 'desc' },
-        take: 5,
-      }),
+      isFeatureEnabled('ebooks')
+        ? prisma.ebook.findMany({
+          where: { estado: 'PUBLICADO' },
+          select: {
+            id: true, titulo: true, slug: true, miniatura: true,
+            autor: true, precio: true, precio_falso: true, moneda: true,
+            es_gratis: true, paginas: true, genero: true,
+            categoria: { select: { nombre: true } },
+          },
+          orderBy: { creado_en: 'desc' },
+          take: 5,
+        })
+        : Promise.resolve([]),
     ])
 
     const courses = await Promise.all(
@@ -84,11 +91,21 @@ async function getHomeData() {
       })
     )
 
-    const rutas = rutasRaw.map(r => ({
-      ...r,
-      total_cursos: r.cursos.length,
-      cursos: r.cursos.map(c => ({ miniatura: c.curso.miniatura, titulo: c.curso.titulo })),
-    }))
+    const diplomados = await Promise.all(
+      diplomadosRaw.map(async course => {
+        const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
+
+        return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
+      })
+    )
+
+    const especializaciones = await Promise.all(
+      especializacionesRaw.map(async course => {
+        const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
+
+        return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
+      })
+    )
 
     const heroTitle = configs.HOME_HERO_TITLE || 'Aprende sin límites,\ncrece sin fronteras'
     const heroDescription = configs.HOME_HERO_DESCRIPTION || 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.'
@@ -104,7 +121,8 @@ async function getHomeData() {
 
     return {
       courses: JSON.parse(JSON.stringify(courses)),
-      rutas: JSON.parse(JSON.stringify(rutas)),
+      diplomados: JSON.parse(JSON.stringify(diplomados)),
+      especializaciones: JSON.parse(JSON.stringify(especializaciones)),
       teachers: JSON.parse(JSON.stringify(teachersRaw)),
       ebooks: JSON.parse(JSON.stringify(ebooks)),
       heroTitle,
@@ -113,7 +131,7 @@ async function getHomeData() {
     }
   } catch {
     return {
-      courses: [], rutas: [], teachers: [], ebooks: [],
+      courses: [], diplomados: [], especializaciones: [], teachers: [], ebooks: [],
       heroTitle: 'Aprende sin límites,\ncrece sin fronteras',
       heroDescription: 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.',
       logos: [],
@@ -204,6 +222,7 @@ export default async function HomePage() {
       {/* <ProfessorsCarousel teachers={teachers} /> */}
 
       {/* ── 7. EMPRESAS (B2B informativo) ───────────── */}
+      {/* <CompaniesSection /> */}
       {/* <CompaniesSection /> */}
 
       {/* ── 8. CTA AGENDAR REUNIÓN ──────────────────── */}

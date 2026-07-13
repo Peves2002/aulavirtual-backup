@@ -72,8 +72,7 @@ export const metadata = {
 export default async function CursosPage() {
   const session = await getAuthSession()
   const token = session?.user?.accessToken ?? null
-
-  const { courses, categories } = await getData(token)
+  const { courses, categories } = await getProgramCatalogData('CURSO', token)
 
   return (
     <div className="flex flex-col min-h-screen">
