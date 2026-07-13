@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 // Next Imports
 // import Img from 'next/image'
@@ -67,6 +67,7 @@ const SloganText = styled.span<LogoTextProps>`
 const Logo = () => {
   // Refs
   const logoTextRef = useRef<HTMLDivElement>(null)
+  const [mounted, setMounted] = useState(false)
 
   // Hooks
   const { isHovered, transitionDuration } = useVerticalNav()
@@ -76,9 +77,13 @@ const Logo = () => {
   // Vars
   const { layout } = settings
   
-  const templateLogo = configs.TEMPLATE_LOGO || themeConfig.templateLogo
-  const templateName = configs.TEMPLATE_NAME || themeConfig.templateName
-  const templateSlogan = configs.TEMPLATE_SLOGAN || themeConfig.templateSlogan
+  const templateLogo = mounted && configs.TEMPLATE_LOGO ? configs.TEMPLATE_LOGO : themeConfig.templateLogo
+  const templateName = mounted && configs.TEMPLATE_NAME ? configs.TEMPLATE_NAME : themeConfig.templateName
+  const templateSlogan = mounted && configs.TEMPLATE_SLOGAN ? configs.TEMPLATE_SLOGAN : themeConfig.templateSlogan
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     if (layout !== 'collapsed') {

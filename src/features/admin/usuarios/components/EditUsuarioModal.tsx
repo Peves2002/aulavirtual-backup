@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import {
   Box,
@@ -49,6 +49,18 @@ const EditUsuarioModal = ({ open, handleClose, usuarioId, onSuccess }: EditUsuar
   const editUsuarioMutation = useEditUsuario()
   const [showPassword, setShowPassword] = useState(false)
   const [openAvatarMedia, setOpenAvatarMedia] = useState(false)
+  const [rolesPersonalizados, setRolesPersonalizados] = useState<{ id: string; nombre: string }[]>([])
+
+  useEffect(() => {
+    fetch('/api/admin/roles')
+      .then(res => res.json())
+      .then(json => {
+        if (json.status || json.success) {
+          setRolesPersonalizados(json.result || json.data || [])
+        }
+      })
+      .catch(err => console.error('Error fetching custom roles:', err))
+  }, [])
 
   const handleSubmit = async (values: ActualizarUsuarioDto, { setSubmitting }: FormikHelpers<ActualizarUsuarioDto>) => {
     if (!usuarioId) return
@@ -85,16 +97,19 @@ const EditUsuarioModal = ({ open, handleClose, usuarioId, onSuccess }: EditUsuar
     )
   }
 
+
+
   if (!usuario) return null
 
   const initialValues: ActualizarUsuarioDto = {
     correo: usuario.correo,
     nombre: usuario.nombre,
     apellido: usuario.apellido,
-    numero_documento: usuario.numero_documento,
+    numero_documento: usuario.numero_documento || '',
     celular: usuario.celular || '',
     biografia: usuario.biografia || '',
     rol: usuario.rol,
+    rol_personalizado_id: usuario.rol_personalizado_id || '',
     esta_activo: usuario.esta_activo,
     contrasena: '',
     cargo: usuario.cargo || '',
@@ -389,9 +404,18 @@ const EditUsuarioModal = ({ open, handleClose, usuarioId, onSuccess }: EditUsuar
                         select
                         fullWidth
                         label='Rol de Usuario'
-                        name='rol'
-                        value={values.rol}
-                        onChange={handleChange}
+                        name='_virtual_rol'
+                        value={values.rol_personalizado_id ? `CUSTOM_${values.rol_personalizado_id}` : values.rol}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val.startsWith('CUSTOM_')) {
+                            setFieldValue('rol', Rol.ASESOR);
+                            setFieldValue('rol_personalizado_id', val.replace('CUSTOM_', ''));
+                          } else {
+                            setFieldValue('rol', val);
+                            setFieldValue('rol_personalizado_id', '');
+                          }
+                        }}
                         onBlur={handleBlur}
                         error={touched.rol && Boolean(errors.rol)}
                         helperText={touched.rol && errors.rol}
@@ -407,6 +431,11 @@ const EditUsuarioModal = ({ open, handleClose, usuarioId, onSuccess }: EditUsuar
                         <MenuItem value={Rol.ESTUDIANTE}>Estudiante</MenuItem>
                         <MenuItem value={Rol.PROFESOR}>Profesor</MenuItem>
                         <MenuItem value={Rol.ADMIN}>Administrador</MenuItem>
+                        {rolesPersonalizados.map(r => (
+                          <MenuItem key={r.id} value={`CUSTOM_${r.id}`}>
+                            {r.nombre}
+                          </MenuItem>
+                        ))}
                       </CustomTextField>
                     </Grid>
 

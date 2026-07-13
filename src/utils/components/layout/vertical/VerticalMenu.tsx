@@ -12,7 +12,8 @@ import { useSession } from 'next-auth/react'
 import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
 
 // Component Imports
-import { Menu, MenuItem } from '@menu/vertical-menu'
+import { Menu, MenuItem, SubMenu } from '@menu/vertical-menu'
+import { ComunidadCard } from './ComunidadCard'
 
 // Hook Imports
 import { useSettings } from '@core/hooks/useSettings'
@@ -58,16 +59,9 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
   return (
     // eslint-disable-next-line lines-around-comment
     /* Custom scrollbar instead of browser scroll, remove if you want browser scroll only */
-    <ScrollWrapper
-      {...(isBreakpointReached
-        ? {
-          className: 'bs-full overflow-y-auto overflow-x-hidden',
-          onScroll: container => scrollMenu(container, false)
-        }
-        : {
-          options: { wheelPropagation: false, suppressScrollX: true },
-          onScrollY: container => scrollMenu(container, true)
-        })}
+    <div
+      className='bs-full overflow-y-auto overflow-x-hidden'
+      onScroll={(e) => scrollMenu(e, false)}
     >
       {/* Incase you also want to scroll NavHeader to scroll with Vertical Menu, remove NavHeader from above and paste it below this comment */}
       {/* Vertical Menu */}
@@ -118,41 +112,76 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
           </>
         )}
 
-        {rol === 'ADMIN' && (
+        {(rol === 'ADMIN' || (session?.user?.permisos && session.user.permisos.length > 0) || (rol === 'ASESOR' && !session?.user?.rol_personalizado_nombre)) && (
           <>
             <Divider sx={{ my: 2 }} />
-            <MenuItem href='/admin/usuarios' icon={<i className='tabler-users' />}>
-              Usuarios
-            </MenuItem>
-            <MenuItem href='/admin/categorias' icon={<i className='tabler-category' />}>
-              Categorías
-            </MenuItem>
-            <MenuItem href='/admin/cursos' icon={<i className='tabler-book' />}>
-              Cursos
-            </MenuItem>
-            {isFeatureEnabled('ebooks') && (
+            
+            {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_INSCRIPCIONES') || (rol === 'ASESOR' && !session?.user?.rol_personalizado_nombre)) && (
+              <MenuItem href='/admin/inscripciones' icon={<i className='tabler-file-description' />}>
+                Inscripciones
+              </MenuItem>
+            )}
+            
+            {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_USUARIOS')) && (
+              <>
+                <MenuItem href='/admin/usuarios' icon={<i className='tabler-users' />}>
+                  Usuarios
+                </MenuItem>
+                <MenuItem href='/admin/roles' icon={<i className='tabler-shield-lock' />}>
+                  Roles y Permisos
+                </MenuItem>
+              </>
+            )}
+            
+            {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_CATEGORIAS')) && (
+              <MenuItem href='/admin/categorias' icon={<i className='tabler-category' />}>
+                Categorías
+              </MenuItem>
+            )}
+            
+            {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_CURSOS')) && (
+              <MenuItem href='/admin/cursos' icon={<i className='tabler-book' />}>
+                Cursos
+              </MenuItem>
+            )}
+            
+            {/* {isFeatureEnabled('ebooks') && (rol === 'ADMIN' || session?.user?.permisos?.includes('VER_EBOOKS')) && (
               <MenuItem href='/admin/ebooks' icon={<i className='tabler-book-2' />}>
                 Ebooks
               </MenuItem>
             )}
-            {isFeatureEnabled('simulacros') && (
+            
+            {isFeatureEnabled('simulacros') && (rol === 'ADMIN' || session?.user?.permisos?.includes('VER_SIMULACROS')) && (
               <MenuItem href='/admin/simulacros' icon={<i className='tabler-clipboard-list' />}>
                 Simulacros
               </MenuItem>
             )}
-            <MenuItem href='/admin/rutas' icon={<i className='tabler-route' />}>
-              Rutas Aprendizaje
-            </MenuItem>
-            <MenuItem href='/admin/pedidos' icon={<i className='tabler-shopping-cart' />}>
-              Pedidos
-            </MenuItem>
-            <MenuItem href='/admin/cupones' icon={<i className='tabler-ticket' />}>
-              Cupones
-            </MenuItem>
-            <MenuItem href='/admin/certificados' icon={<i className='tabler-certificate' />}>
-              Certificados
-            </MenuItem>
-            {isFeatureEnabled('suscripciones') && (
+            
+            {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_RUTAS')) && (
+              <MenuItem href='/admin/rutas' icon={<i className='tabler-route' />}>
+                Rutas Aprendizaje
+              </MenuItem>
+            )} */}
+            
+            {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_PEDIDOS') || (rol === 'ASESOR' && !session?.user?.rol_personalizado_nombre)) && (
+              <MenuItem href='/admin/pedidos' icon={<i className='tabler-shopping-cart' />}>
+                Pedidos
+              </MenuItem>
+            )}
+            
+            {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_CUPONES')) && (
+              <MenuItem href='/admin/cupones' icon={<i className='tabler-ticket' />}>
+                Cupones
+              </MenuItem>
+            )}
+            
+            {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_CERTIFICADOS')) && (
+              <MenuItem href='/admin/certificados' icon={<i className='tabler-certificate' />}>
+                Certificados
+              </MenuItem>
+            )}
+            
+            {/* {isFeatureEnabled('suscripciones') && (rol === 'ADMIN' || session?.user?.permisos?.includes('VER_SUSCRIPCIONES')) && (
               <>
                 <MenuItem href='/admin/planes-suscripcion' icon={<i className='tabler-repeat' />}>
                   Planes de Suscripción
@@ -161,13 +190,34 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
                   Suscripciones
                 </MenuItem>
               </>
+            )} */}
+            
+            {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_RECLAMACIONES') || (rol === 'ASESOR' && !session?.user?.rol_personalizado_nombre)) && (
+              <MenuItem href='/admin/reclamaciones' icon={<i className='tabler-book-2' />}>
+                Reclamaciones
+              </MenuItem>
             )}
-            <MenuItem href='/admin/reclamaciones' icon={<i className='tabler-book-2' />}>
-              Reclamaciones
-            </MenuItem>
-            <MenuItem href='/admin/configuracion' icon={<i className='tabler-settings' />}>
-              Configuración
-            </MenuItem>
+            
+            {(rol === 'ADMIN' || session?.user?.permisos?.includes('EDITAR_CONTENIDO_WEB') || session?.user?.permisos?.includes('VER_CARRUSEL')) && (
+              <SubMenu label='Edición Web' icon={<i className='tabler-world-edit' />}>
+                {(rol === 'ADMIN' || session?.user?.permisos?.includes('EDITAR_CONTENIDO_WEB')) && (
+                  <>
+                    <MenuItem href='/admin/edicion-web'>Páginas Principales</MenuItem>
+                    <MenuItem href='/admin/edicion-web/blogs'>Blogs</MenuItem>
+                    <MenuItem href='/admin/edicion-web/noticias'>Noticias</MenuItem>
+                  </>
+                )}
+                {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_CARRUSEL')) && (
+                  <MenuItem href='/admin/carrousel'>Carrusel Portada</MenuItem>
+                )}
+              </SubMenu>
+            )}
+            
+            {/* {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_CONFIGURACION')) && (
+              <MenuItem href='/admin/configuracion' icon={<i className='tabler-settings-2' />}>
+                Configuración Sistema
+              </MenuItem>
+            )} */}
           </>
         )}
 
@@ -185,7 +235,8 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
           </>
         )}
       </Menu>
-    </ScrollWrapper>
+      <ComunidadCard />
+    </div>
   )
 }
 

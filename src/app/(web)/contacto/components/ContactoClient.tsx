@@ -10,13 +10,15 @@ import { useConfig } from '@/contexts/ConfigContext'
 export function ContactList() {
   const configs = useConfig()
   const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
+  const ubicacion = configs.CONTACTO_UBICACION || 'Arequipa, Perú'
+  const email = configs.CONTACTO_EMAIL || 'arm.confiabilidad@gmail.com'
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>
       {[
-        { icon: MapPin, title: 'Ubicación', info: 'Arequipa, Perú' },
+        { icon: MapPin, title: 'Ubicación', info: ubicacion },
         { icon: Phone, title: 'WhatsApp', info: `+${waNumber}`, href: `https://wa.me/${waNumber}` },
-        { icon: Mail, title: 'Email', info: 'arm.confiabilidad@gmail.com', href: 'mailto:arm.confiabilidad@gmail.com' },
+        { icon: Mail, title: 'Email', info: email, href: `mailto:${email}` },
       ].map((item, i) => (
         <ScrollReveal key={i} delay={i * 0.1}>
           <div
@@ -33,7 +35,7 @@ export function ContactList() {
               const el = e.currentTarget
 
               el.style.transform = 'translateY(-4px)'
-              el.style.boxShadow = '0 12px 32px rgba(var(--web-primary-rgb, 37, 146, 127),0.12)'
+              el.style.boxShadow = '0 12px 32px rgba(8, 71, 155, 0.12)'
             }}
             onMouseLeave={e => {
               const el = e.currentTarget
@@ -42,14 +44,14 @@ export function ContactList() {
               el.style.boxShadow = '0 2px 12px rgba(0,0,0,0.05)'
             }}
           >
-            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', borderRadius: '16px', backgroundColor: 'rgba(var(--web-primary-rgb, 37, 146, 127), 0.1)', marginBottom: '1.25rem' }}>
-              <item.icon style={{ width: '28px', height: '28px', color: 'var(--web-primary, #25927F)' }} />
+            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', borderRadius: '16px', backgroundColor: 'rgba(8, 71, 155, 0.08)', marginBottom: '1.25rem' }}>
+              <item.icon style={{ width: '28px', height: '28px', color: 'var(--web-primary, #08479b)' }} />
             </div>
             <h3 style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
               {item.title}
             </h3>
             {item.href ? (
-              <a href={item.href} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', fontWeight: 600, color: 'var(--web-dark, #025E44)', textDecoration: 'none' }}>
+              <a href={item.href} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', fontWeight: 600, color: 'var(--web-dark, #06316b)', textDecoration: 'none' }}>
                 {item.info}
               </a>
             ) : (
@@ -77,11 +79,11 @@ export function ContactActions() {
           rel="noopener noreferrer"
           style={{
             display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.875rem 2rem', borderRadius: '9999px',
-            backgroundColor: 'var(--web-primary, #25927F)', color: '#ffffff', fontFamily: 'Poppins, sans-serif',
+            backgroundColor: 'var(--web-primary, #08479b)', color: '#ffffff', fontFamily: 'Poppins, sans-serif',
             fontSize: '0.9375rem', fontWeight: 700, textDecoration: 'none', transition: 'background-color 0.2s',
           }}
-          onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--web-dark, #025E44)' }}
-          onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'var(--web-primary, #25927F)' }}
+          onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--web-dark, #06316b)' }}
+          onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'var(--web-primary, #08479b)' }}
         >
           <Phone size={18} />
           Enviar WhatsApp
@@ -90,16 +92,16 @@ export function ContactActions() {
           href="/"
           style={{
             display: 'inline-flex', alignItems: 'center', padding: '0.875rem 2rem', borderRadius: '9999px',
-            border: '2px solid var(--web-primary, #25927F)', color: 'var(--web-primary, #25927F)',
+            border: '2px solid var(--web-primary, #08479b)', color: 'var(--web-primary, #08479b)',
             fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', fontWeight: 700, textDecoration: 'none', transition: 'all 0.2s',
           }}
           onMouseEnter={e => {
-            e.currentTarget.style.backgroundColor = 'var(--web-primary, #25927F)'
+            e.currentTarget.style.backgroundColor = 'var(--web-primary, #08479b)'
             e.currentTarget.style.color = '#ffffff'
           }}
           onMouseLeave={e => {
             e.currentTarget.style.backgroundColor = 'transparent'
-            e.currentTarget.style.color = 'var(--web-primary, #25927F)'
+            e.currentTarget.style.color = 'var(--web-primary, #08479b)'
           }}
         >
           Volver al inicio

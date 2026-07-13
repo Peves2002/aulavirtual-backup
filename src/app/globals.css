@@ -18,16 +18,15 @@
   --drawer-z-index: var(--mui-zIndex-drawer);
   --backdrop-color: rgb(var(--mui-mainColorChannels-light) / 0.5);
 
-  /* IPG Design System */
-  --color-1: 170 60% 36%;   /* Primary Teal #25927F */
-  --color-2: 75 63% 62%;    /* Lime Green #BDD962 */
-  --color-3: 167 96% 19%;   /* Deep Teal #025E44 */
-  --color-4: 152 50% 46%;   /* Sage Green #3AB079 */
+  --color-1: 215 90% 32%;   /* Celeste #08479b */
+  --color-2: 49 97% 54%;    /* Amarillo #fcd116 */
+  --color-3: 215 90% 24%;   /* Dark Celeste #06316b */
+  --color-4: 215 90% 65%;   /* Light Celeste #5993e3 */
   --color-5: 0 0% 4%;       /* Almost Black #0A0A0A */
 
-  --ipg-primary: var(--web-primary, #25927F);
-  --ipg-primary-dark: var(--web-dark, #025E44);
-  --ipg-primary-light: var(--web-light, #BDD962);
+  --ipg-primary: var(--web-primary, #08479b);
+  --ipg-primary-dark: var(--web-dark, #06316b);
+  --ipg-primary-light: var(--web-light, #fcd116);
   --ipg-black: #0A0A0A;
   --ipg-muted: #f1f5f4;
 

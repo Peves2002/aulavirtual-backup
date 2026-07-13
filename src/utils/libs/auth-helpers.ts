@@ -22,6 +22,8 @@ type AuthUser = {
   avatar?: string | null
   numero_documento: string
   esta_activo: boolean
+  permisos?: string[]
+  rol_personalizado_nombre?: string | null
 }
 
 /**
@@ -136,7 +138,7 @@ export async function requireRole(request: Request, allowedRoles: Rol[]) {
  * Verifica si el usuario es administrador
  */
 export async function requireAdmin(request: Request) {
-  return requireRole(request, [Rol.ADMIN])
+  return requireRole(request, [Rol.ADMIN, Rol.ASESOR])
 }
 
 /**
@@ -144,4 +146,30 @@ export async function requireAdmin(request: Request) {
  */
 export async function requireProfesorOrAdmin(request: Request) {
   return requireRole(request, [Rol.ADMIN, Rol.PROFESOR])
+}
+
+/**
+ * Verifica si el usuario tiene un permiso específico
+ */
+export async function requirePermission(request: Request, permissionCode: string) {
+  const session = await getAuthSession()
+  if (!session) {
+    return {
+      authorized: false as const,
+      error: ApiResponse.error(request, 'No autorizado. Debes iniciar sesión.', 401)
+    }
+  }
+
+  const { hasPermission } = await import('@/utils/libs/permissions')
+  if (!hasPermission(session, permissionCode)) {
+    return {
+      authorized: false as const,
+      error: ApiResponse.error(request, 'No tienes permisos para realizar esta acción.', 403)
+    }
+  }
+
+  return {
+    authorized: true as const,
+    user: session.user as AuthUser
+  }
 }

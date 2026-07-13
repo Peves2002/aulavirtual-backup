@@ -31,9 +31,10 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
 
           const { correo, contrasena } = validacion.data
 
-          // Buscar usuario
+          // Buscar usuario con rol personalizado
           const usuario = await prisma.usuario.findUnique({
-            where: { correo }
+            where: { correo },
+            include: { rol_personalizado: true }
           })
 
           if (!usuario) {
@@ -64,8 +65,10 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
             rol: usuario.rol,
             avatar: usuario.avatar,
             numero_documento: usuario.numero_documento,
-            esta_activo: usuario.esta_activo
-          } as User
+            esta_activo: usuario.esta_activo,
+            permisos: usuario.rol_personalizado?.permisos || [],
+            rol_personalizado_nombre: usuario.rol_personalizado?.nombre || null
+          } as any
         } catch (error) {
           console.error('Error en authorize:', error)
 
@@ -182,6 +185,8 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
           token.picture = token.avatar
           token.numero_documento = user.numero_documento
           token.esta_activo = user.esta_activo
+          token.permisos = (user as any).permisos || []
+          token.rol_personalizado_nombre = (user as any).rol_personalizado_nombre || null
 
           // Generar un JWT real firmado (mismo payload que /api/auth/login)
           token.accessToken = sign(
@@ -193,7 +198,9 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
               avatar: token.avatar,
               image: token.avatar,
               numero_documento: user.numero_documento,
-              esta_activo: user.esta_activo
+              esta_activo: user.esta_activo,
+              permisos: token.permisos,
+              rol_personalizado_nombre: token.rol_personalizado_nombre
             },
             JWT_SECRET,
             { expiresIn: '30d' }
@@ -205,12 +212,22 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
           try {
             const usuarioActualizado = await prisma.usuario.findUnique({
               where: { id: token.id as string },
-              select: { nombre: true, apellido: true, avatar: true, rol: true, numero_documento: true, esta_activo: true }
+              select: {
+                nombre: true,
+                apellido: true,
+                avatar: true,
+                rol: true,
+                numero_documento: true,
+                esta_activo: true,
+                rol_personalizado: true
+              }
             })
 
             if (usuarioActualizado) {
               const nuevoAvatar = usuarioActualizado.avatar
               const nuevoNombre = `${usuarioActualizado.nombre} ${usuarioActualizado.apellido}`
+              const nuevosPermisos = usuarioActualizado.rol_personalizado?.permisos || []
+              const nuevoRolPersonalizadoNombre = usuarioActualizado.rol_personalizado?.nombre || null
 
               token.avatar = nuevoAvatar
               token.image = nuevoAvatar
@@ -219,6 +236,8 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
               token.rol = usuarioActualizado.rol
               token.numero_documento = usuarioActualizado.numero_documento || ''
               token.esta_activo = usuarioActualizado.esta_activo
+              token.permisos = nuevosPermisos
+              token.rol_personalizado_nombre = nuevoRolPersonalizadoNombre
 
               // Regenerar el accessToken con los datos frescos
               token.accessToken = sign(
@@ -230,7 +249,9 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
                   avatar: nuevoAvatar,
                   image: nuevoAvatar,
                   numero_documento: usuarioActualizado.numero_documento,
-                  esta_activo: usuarioActualizado.esta_activo
+                  esta_activo: usuarioActualizado.esta_activo,
+                  permisos: nuevosPermisos,
+                  rol_personalizado_nombre: nuevoRolPersonalizadoNombre
                 },
                 JWT_SECRET,
                 { expiresIn: '30d' }
@@ -252,6 +273,8 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
           session.user.numero_documento = token.numero_documento as string
           session.user.esta_activo = token.esta_activo as boolean
           session.user.accessToken = token.accessToken as string
+          session.user.permisos = token.permisos as string[] || []
+          session.user.rol_personalizado_nombre = token.rol_personalizado_nombre as string | null
         }
 
         return session
@@ -280,6 +303,8 @@ declare module 'next-auth' {
     avatar?: string | null
     numero_documento?: string
     esta_activo?: boolean
+    permisos?: string[]
+    rol_personalizado_nombre?: string | null
   }
 
   interface Session {
@@ -293,6 +318,8 @@ declare module 'next-auth' {
       numero_documento: string
       esta_activo: boolean
       accessToken?: string
+      permisos?: string[]
+      rol_personalizado_nombre?: string | null
     }
   }
 }
@@ -305,5 +332,7 @@ declare module 'next-auth/jwt' {
     numero_documento?: string
     esta_activo?: boolean
     accessToken?: string
+    permisos?: string[]
+    rol_personalizado_nombre?: string | null
   }
 }

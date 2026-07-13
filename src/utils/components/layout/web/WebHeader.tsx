@@ -49,7 +49,7 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
             <Button
               onClick={() => openLogin()}
               size="small"
-              sx={{ fontWeight: 700, fontSize: '0.7rem', color: '#02115C', fontFamily: 'Inter, sans-serif' }}
+              sx={{ fontWeight: 700, fontSize: '0.7rem', color: '#02115C', fontFamily: 'var(--font-manrope), sans-serif' }}
             >
               Iniciar Sesión
             </Button>
@@ -58,7 +58,7 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
               variant="contained"
               size="small"
               sx={{
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: 'var(--font-manrope), sans-serif',
                 fontWeight: 700,
                 fontSize: '0.7rem',
                 borderRadius: '8px',

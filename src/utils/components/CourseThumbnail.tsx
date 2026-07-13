@@ -142,11 +142,11 @@ const CourseThumbnail = ({
       </Box>
 
       {/* Capa de Imagen (Encima) */}
-      {computedThumbnail && !imgError && (
+      {computedThumbnail && (
         <Box
           component="img"
           key={`${computedThumbnail}_${retryCount}`}
-          src={computedThumbnail}
+          src={imgError ? '/images/cursos.jpg' : computedThumbnail}
           alt={title}
           onError={handleImageError}
           sx={{

@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
+import { useSnackbar } from 'notistack'
+
 import {
   Avatar,
   Box,
@@ -13,7 +15,8 @@ import {
   MenuItem,
   TablePagination,
   Tooltip,
-  Typography
+  Typography,
+  Switch
 } from '@mui/material'
 import {
   createColumnHelper,
@@ -59,7 +62,7 @@ import TablePaginationComponent from '@/utils/components/others/TablePaginationC
 import type { ThemeColor } from '@/@core/types'
 import { fuzzyFilter } from '@/utils/components/others/FuzzyFilter'
 import tableStyles from '@core/styles/table.module.css'
-import { useCursos, useReorderCursos } from '../hooks/useCursos'
+import { useCursos, useReorderCursos, useEditCurso } from '../hooks/useCursos'
 import type { TipoPrograma } from '@/utils/configs/tipoPrograma'
 import { getTipoProgramaColor, getTipoProgramaLabel } from '@/utils/configs/tipoProgramaOptions'
 
@@ -125,6 +128,8 @@ function SortableRow({
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function CursosPage({ initialDataCursos }: CursosPageProps) {
+  const { enqueueSnackbar } = useSnackbar()
+  const editMutation = useEditCurso()
   const [cursoToDelete, setCursoToDelete] = useState<Curso | null>(null)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [openStudentsModal, setOpenStudentsModal] = useState(false)
@@ -311,6 +316,32 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
             variant='tonal'
             label={estadoLabel[row.original.estado] || row.original.estado}
             color={estadoObj[row.original.estado] || 'default'}
+            size='small'
+          />
+        )
+      }),
+      columnHelper.accessor('es_destacado', {
+        header: 'Destacado',
+        cell: ({ row }) => (
+          <Switch
+            checked={row.original.es_destacado ?? false}
+            onChange={async (e) => {
+              try {
+                await editMutation.mutateAsync({
+                  id: row.original.id,
+                  data: { es_destacado: e.target.checked }
+                })
+                enqueueSnackbar(
+                  e.target.checked
+                    ? 'Curso marcado como destacado'
+                    : 'Curso quitado de destacados',
+                  { variant: 'success' }
+                )
+              } catch (error: any) {
+                enqueueSnackbar(error?.message || 'Error al actualizar destacado', { variant: 'error' })
+              }
+            }}
+            disabled={editMutation.isPending}
             size='small'
           />
         )

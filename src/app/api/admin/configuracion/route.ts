@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { ApiResponse } from '@/utils/libs/apiResponse'
-import { requireAuth } from '@/utils/libs/auth-helpers'
+import { requireAdmin } from '@/utils/libs/auth-helpers'
 import { handleApiError } from '@/utils/libs/validation'
 import prisma from '@/utils/libs/prisma'
 
@@ -11,10 +11,10 @@ import prisma from '@/utils/libs/prisma'
  */
 export async function GET(request: Request) {
   try {
-    const auth = await requireAuth(request)
+    const auth = await requireAdmin(request)
 
-    if (!auth.authorized || auth.user.rol !== 'ADMIN') {
-      return ApiResponse.error(request, 'No tienes permisos para realizar esta acción', 403)
+    if (!auth.authorized) {
+      return auth.error
     }
 
     const configuraciones = await prisma.configuracion.findMany({
@@ -33,10 +33,10 @@ export async function GET(request: Request) {
  */
 export async function POST(request: Request) {
   try {
-    const auth = await requireAuth(request)
+    const auth = await requireAdmin(request)
 
-    if (!auth.authorized || auth.user.rol !== 'ADMIN') {
-      return ApiResponse.error(request, 'No tienes permisos para realizar esta acción', 403)
+    if (!auth.authorized) {
+      return auth.error
     }
 
     const { configuraciones } = await request.json()

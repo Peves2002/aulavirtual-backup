@@ -45,6 +45,12 @@ export async function GET(request: Request, { params }: { params: { id: string }
         cargo: true,
         firma: true,
         rol: true,
+        rol_personalizado_id: true,
+        rol_personalizado: {
+          select: {
+            nombre: true
+          }
+        },
         esta_activo: true,
         creado_en: true,
         actualizado_en: true,
@@ -143,9 +149,16 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       }
     }
 
-    // Hash de la contraseña si existe
+    // Si el número de documento viene vacío, convertirlo a null para evitar colisiones unique
+    if (data.numero_documento === '') {
+      data.numero_documento = null
+    }
+
+    // Hash de la contraseña si existe, si viene vacía no actualizarla
     if (data.contrasena) {
       data.contrasena = await bcrypt.hash(data.contrasena, 10)
+    } else {
+      delete data.contrasena
     }
 
     // Actualizar usuario
@@ -164,6 +177,12 @@ export async function PATCH(request: Request, { params }: { params: { id: string
         cargo: true,
         firma: true,
         rol: true,
+        rol_personalizado_id: true,
+        rol_personalizado: {
+          select: {
+            nombre: true
+          }
+        },
         esta_activo: true,
         actualizado_en: true
       }

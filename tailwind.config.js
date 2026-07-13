@@ -10,13 +10,13 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#25927F',
+          DEFAULT: '#08479b',
           foreground: '#ffffff',
-          dark: '#025E44',
-          light: '#BDD962',
+          dark: '#06316b',
+          light: '#fcd116',
         },
         secondary: {
-          DEFAULT: '#BDD962',
+          DEFAULT: '#fcd116',
           foreground: '#0A0A0A',
         },
         muted: {
@@ -41,9 +41,9 @@ module.exports = {
         adph: {
           navy: '#1B3A6B',
           'navy-deep': '#13294D',
-          teal: '#3BA8C5',
-          'teal-glow': '#7FD1E5',
-          'teal-dark': '#0083B0',
+          teal: '#08479b',
+          'teal-glow': '#5993e3',
+          'teal-dark': '#06316b',
           graylux: '#8C9198',
         },
       },
@@ -52,15 +52,16 @@ module.exports = {
         sans: ['Poppins', 'sans-serif'],
         body: ['Poppins', 'sans-serif'],
         adph: ['var(--adph-font)', 'Plus Jakarta Sans', 'Inter', 'sans-serif'],
+        manrope: ['var(--font-manrope)', 'Manrope', 'sans-serif'],
       },
       backgroundImage: {
         'adph-gradient-hero': 'linear-gradient(135deg, rgba(19,41,77,0.92), rgba(27,58,107,0.55) 60%, rgba(27,58,107,0.15))',
         'adph-gradient-navy': 'linear-gradient(135deg, #13294D, #1B3A6B)',
-        'adph-gradient-teal': 'linear-gradient(135deg, #3BA8C5, #7FD1E5)',
+        'adph-gradient-teal': 'linear-gradient(135deg, #08479b, #5993e3)',
       },
       boxShadow: {
         'adph-elegant': '0 20px 60px -20px rgba(27,58,107,0.35)',
-        'adph-glow': '0 10px 40px -10px rgba(59,168,197,0.5)',
+        'adph-glow': '0 10px 40px -10px rgba(8,71,155,0.5)',
       },
     }
   }

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { MapPin, Phone, Mail, ChevronRight, GraduationCap, Laptop, Sparkles } from 'lucide-react'
+import { MapPin, Phone, Mail, ChevronRight, GraduationCap, Laptop, Sparkles, FileText } from 'lucide-react'
 
 type IconProps = React.SVGProps<SVGSVGElement>
 
@@ -30,7 +30,6 @@ const TikTokIcon = (props: IconProps) => (
   </svg>
 )
 
-// Links actualizados a las rutas de aulavirtual
 const PROGRAMAS_LINKS = [
   { label: 'Cursos de Especialización', href: '/programas' },
   { label: 'Diplomados Ejecutivos', href: '/diplomados' },
@@ -44,25 +43,34 @@ const SOLUCIONES_LINKS = [
   { label: 'Entrenamiento Digital', href: '/entrenamiento-digital' },
   { label: 'Empresas B2B', href: '/empresas' },
   { label: 'Sobre Nosotros', href: '/nosotros' },
+  { label: 'Noticias Destacadas', href: '/noticias' },
+]
+
+const LEGAL_LINKS = [
+  { label: 'Libro de Reclamaciones', href: '/libro-de-reclamaciones' },
+  { label: 'Políticas de Privacidad', href: '/politica-de-privacidad' },
+  { label: 'Términos y Condiciones', href: '/terminos-y-condiciones' },
+  { label: 'Políticas de Reembolso', href: '/politica-de-cambios-y-devoluciones' },
+  { label: 'Becas / Bienestar Estudiantil', href: '/bienestar-estudiantil' }
 ]
 
 export default function AdphFooter({ platformName = 'ADPH Group' }: { platformName?: string }) {
   return (
     <footer className="bg-[#070D19] text-white pt-24 pb-12 overflow-hidden relative">
       {/* Decorative gradient glowing top border */}
-      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#3BA8C5] to-transparent" />
+      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#08479b] to-transparent" />
 
       {/* Background blurs for a premium dark vibe */}
-      <div className="absolute -top-24 -left-24 w-80 h-80 rounded-full pointer-events-none" style={{ backgroundColor: 'rgba(59, 168, 197, 0.05)', filter: 'blur(100px)' }} />
+      <div className="absolute -top-24 -left-24 w-80 h-80 rounded-full pointer-events-none" style={{ backgroundColor: 'rgba(8, 71, 155, 0.05)', filter: 'blur(100px)' }} />
       <div className="absolute -bottom-24 -right-24 w-80 h-80 rounded-full pointer-events-none" style={{ backgroundColor: 'rgba(99, 102, 241, 0.05)', filter: 'blur(100px)' }} />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-16">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-10 relative z-10">
+        {/* Adjusted to 12-column grid layout for optimal spacing and to prevent contact info wrapping */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
 
-          {/* Brand Column */}
-          <div className="space-y-8 lg:col-span-2">
+          {/* Brand Column - Spans 3/12 */}
+          <div className="space-y-8 lg:col-span-3">
             <Link href="/" className="inline-block">
-              {/* Coloca el logo en public/adph/Logo_ADPH.png */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/adph/Logo_ADPH.png"
@@ -70,8 +78,8 @@ export default function AdphFooter({ platformName = 'ADPH Group' }: { platformNa
                 className="h-12 w-auto brightness-0 invert"
               />
             </Link>
-            <p className="text-slate-400 text-sm lg:text-base leading-relaxed max-w-sm font-medium">
-              Líderes en Gestión Humana y Salud Ocupacional, transformando el potencial organizacional a través de soluciones académicas y tecnológicas estratégicas.
+            <p className="text-slate-400 text-sm leading-relaxed font-medium">
+              Líderes en gestión humana, salud ocupacional y desarrollo organizacional, transformando el potencial de profesionales y empresas en Latinoamérica.
             </p>
             <div className="flex gap-3">
               {[
@@ -86,7 +94,7 @@ export default function AdphFooter({ platformName = 'ADPH Group' }: { platformNa
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 bg-white/5 border border-white/5 hover:bg-[#3BA8C5] hover:border-[#3BA8C5] hover:text-white hover:-translate-y-1 transition-all duration-300 shadow-sm"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 bg-white/5 border border-white/5 hover:bg-[#08479b] hover:border-[#08479b] hover:text-white hover:-translate-y-1 transition-all duration-300 shadow-sm"
                 >
                   <Icon className="w-5 h-5" />
                 </a>
@@ -94,19 +102,19 @@ export default function AdphFooter({ platformName = 'ADPH Group' }: { platformNa
             </div>
           </div>
 
-          {/* Programas Académicos Column */}
-          <div>
-            <h4 className="text-sm font-extrabold uppercase tracking-widest text-white mb-8 flex items-center gap-2">
-              <GraduationCap className="w-4 h-4 text-[#3BA8C5]" /> Programas
+          {/* Programas Column - Spans 2/12 */}
+          <div className="lg:col-span-2">
+            <h4 className="text-sm font-extrabold uppercase tracking-widest text-white mb-8 flex items-center gap-2 font-manrope">
+              <GraduationCap className="w-4 h-4 text-[#08479b]" /> Programas
             </h4>
             <ul className="space-y-4">
               {PROGRAMAS_LINKS.map((item) => (
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="text-slate-400 hover:text-[#3BA8C5] flex items-center gap-1 text-sm font-semibold transition-all group"
+                    className="text-slate-400 hover:text-[#08479b] flex items-center gap-1 text-sm font-semibold transition-all group"
                   >
-                    <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[#3BA8C5] flex-shrink-0" />
+                    <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[#08479b] flex-shrink-0" />
                     <span>{item.label}</span>
                   </Link>
                 </li>
@@ -114,19 +122,19 @@ export default function AdphFooter({ platformName = 'ADPH Group' }: { platformNa
             </ul>
           </div>
 
-          {/* Soluciones Column */}
-          <div>
-            <h4 className="text-sm font-extrabold uppercase tracking-widest text-white mb-8 flex items-center gap-2">
-              <Laptop className="w-4 h-4 text-[#3BA8C5]" /> Soluciones
+          {/* Soluciones Column - Spans 2/12 */}
+          <div className="lg:col-span-2">
+            <h4 className="text-sm font-extrabold uppercase tracking-widest text-white mb-8 flex items-center gap-2 font-manrope">
+              <Laptop className="w-4 h-4 text-[#08479b]" /> Soluciones
             </h4>
             <ul className="space-y-4">
               {SOLUCIONES_LINKS.map((item) => (
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="text-slate-400 hover:text-[#3BA8C5] flex items-center gap-1 text-sm font-semibold transition-all group"
+                    className="text-slate-400 hover:text-[#08479b] flex items-center gap-1 text-sm font-semibold transition-all group"
                   >
-                    <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[#3BA8C5] flex-shrink-0" />
+                    <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[#08479b] flex-shrink-0" />
                     <span>{item.label}</span>
                   </Link>
                 </li>
@@ -134,14 +142,34 @@ export default function AdphFooter({ platformName = 'ADPH Group' }: { platformNa
             </ul>
           </div>
 
-          {/* Contacto Column */}
-          <div>
-            <h4 className="text-sm font-extrabold uppercase tracking-widest text-white mb-8 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#3BA8C5]" /> Contacto
+          {/* Enlaces Legales/Interés Column - Spans 2/12 */}
+          <div className="lg:col-span-2">
+            <h4 className="text-sm font-extrabold uppercase tracking-widest text-white mb-8 flex items-center gap-2 font-manrope">
+              <FileText className="w-4 h-4 text-[#08479b]" /> Enlaces
+            </h4>
+            <ul className="space-y-4">
+              {LEGAL_LINKS.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="text-slate-400 hover:text-[#08479b] flex items-center gap-1 text-sm font-semibold transition-all group"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[#08479b] flex-shrink-0" />
+                    <span>{item.label}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contacto Column - Spans 3/12 (Ensures no email cutting) */}
+          <div className="lg:col-span-3">
+            <h4 className="text-sm font-extrabold uppercase tracking-widest text-white mb-8 flex items-center gap-2 font-manrope">
+              <Sparkles className="w-4 h-4 text-[#08479b]" /> Contacto
             </h4>
             <ul className="space-y-6">
               <li className="flex gap-3">
-                <div className="w-9 h-9 flex items-center justify-center flex-shrink-0 text-[#3BA8C5]" style={{ borderRadius: '0.75rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div className="w-9 h-9 flex items-center justify-center flex-shrink-0 text-[#08479b]" style={{ borderRadius: '0.5rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
                   <MapPin className="w-4 h-4" />
                 </div>
                 <span className="text-slate-400 text-xs lg:text-sm font-semibold leading-relaxed">
@@ -149,18 +177,18 @@ export default function AdphFooter({ platformName = 'ADPH Group' }: { platformNa
                 </span>
               </li>
               <li className="flex gap-3">
-                <div className="w-9 h-9 flex items-center justify-center flex-shrink-0 text-[#3BA8C5]" style={{ borderRadius: '0.75rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div className="w-9 h-9 flex items-center justify-center flex-shrink-0 text-[#08479b]" style={{ borderRadius: '0.5rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
                   <Phone className="w-4 h-4" />
                 </div>
-                <a href="tel:+51924943982" className="text-slate-400 text-xs lg:text-sm font-semibold hover:text-[#3BA8C5] transition-colors leading-relaxed">
+                <a href="tel:+51924943982" className="text-slate-400 text-xs lg:text-sm font-semibold hover:text-[#08479b] transition-colors leading-relaxed">
                   +51 924 943 982
                 </a>
               </li>
               <li className="flex gap-3">
-                <div className="w-9 h-9 flex items-center justify-center flex-shrink-0 text-[#3BA8C5]" style={{ borderRadius: '0.75rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div className="w-9 h-9 flex items-center justify-center flex-shrink-0 text-[#08479b]" style={{ borderRadius: '0.5rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
                   <Mail className="w-4 h-4" />
                 </div>
-                <a href="mailto:informes@adphgroup.com" className="text-slate-400 text-xs lg:text-sm font-semibold hover:text-[#3BA8C5] transition-colors break-all leading-relaxed">
+                <a href="mailto:informes@adphgroup.com" className="text-slate-400 text-xs lg:text-sm font-semibold hover:text-[#08479b] transition-colors break-all leading-relaxed font-manrope">
                   informes@adphgroup.com
                 </a>
               </li>
@@ -170,7 +198,7 @@ export default function AdphFooter({ platformName = 'ADPH Group' }: { platformNa
         </div>
 
         {/* Premium Bottom Copyright and Legal Bar */}
-        <div className="mt-20 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-slate-500 uppercase tracking-[0.25em] font-extrabold" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.6rem' }}>
+        <div className="mt-20 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-slate-500 uppercase tracking-[0.25em] font-extrabold font-manrope" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.6rem' }}>
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-6">
             <span>© {new Date().getFullYear()} {platformName} SAC</span>
             <span className="hidden md:block w-1.5 h-1.5 rounded-full bg-slate-700" />

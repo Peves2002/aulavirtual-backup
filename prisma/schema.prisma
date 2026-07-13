@@ -19,6 +19,8 @@ model Usuario {
   biografia               String?
   celular                 String?
   rol                     Rol                    @default(ESTUDIANTE)
+  rol_personalizado_id    String?
+  rol_personalizado       RolPersonalizado?      @relation(fields: [rol_personalizado_id], references: [id], onDelete: SetNull)
   esta_activo             Boolean                @default(true)
   creado_en               DateTime               @default(now())
   actualizado_en          DateTime               @updatedAt
@@ -167,12 +169,16 @@ model Curso {
   actualizado_en       DateTime          @updatedAt
   profesor_id          String
   categoria_id         String?
+  escuela              String?
   nivel                NivelCurso?
   tipo                 TipoCurso         @default(CURSO)
   beneficios           Json?             @default("[]")
   incluye              Json?             @default("[]")
   metodologia          Json?             @default("[]")
   objetivos            Json?             @default("[]")
+  perfil_estudiante    String?
+  salidas_profesionales Json?             @default("[]")
+  testimonios          Json?             @default("[]")
   fecha_inicio         DateTime?
   fecha_fin            DateTime?
   vigencia_meses       Int?
@@ -192,6 +198,7 @@ model Curso {
   cupones              CuponCurso[]
   valoraciones         ValoracionCurso[]
   planes               CursoEnPlan[]
+  es_destacado         Boolean           @default(false)
 
   @@index([profesor_id])
   @@index([categoria_id])
@@ -687,6 +694,7 @@ enum Rol {
   ADMIN
   PROFESOR
   ESTUDIANTE
+  ASESOR
 }
 
 enum EstadoCurso {
@@ -1150,3 +1158,59 @@ model EntregaActividad {
   @@index([usuario_id])
   @@map("entregas_actividad")
 }
+
+model LeadPortada {
+  id                 String   @id @default(uuid())
+  nombres            String
+  apellidos          String
+  dni                String
+  celular            String
+  email              String
+  escuela            String?
+  modalidad          String?
+  aceptaDatos        Boolean
+  autorizaPublicidad Boolean
+  pais               String?
+  ciudad             String?
+  profesion          String?
+  detalle            String?  @db.Text
+  creado_en          DateTime @default(now())
+
+  @@map("leads_portada")
+}
+
+model HeroSlide {
+  id             String   @id @default(uuid())
+  titulo         String
+  subtitulo      String?
+  imagen_url     String
+  boton_texto    String   @default("Más información")
+  boton_url      String
+  orden          Int      @default(0)
+  esta_activo    Boolean  @default(true)
+  creado_en      DateTime @default(now())
+  actualizado_en DateTime @updatedAt
+
+  @@map("hero_slides")
+}
+
+model NewsletterSuscriptor {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  creado_en DateTime @default(now())
+
+  @@map("newsletter_suscriptores")
+}
+
+model RolPersonalizado {
+  id             String    @id @default(uuid())
+  nombre         String    @unique
+  descripcion    String?
+  permisos       String[]  // Ej. ["VER_CURSOS", "VER_PEDIDOS"]
+  creado_en      DateTime  @default(now())
+  actualizado_en DateTime  @updatedAt
+  usuarios       Usuario[]
+
+  @@map("roles_personalizados")
+}
+

@@ -37,6 +37,7 @@ import { sanitizeDatetimeInput } from '@/utils/functions/sanitizeDatetime'
 import MediaLibrary from '../components/MediaLibrary'
 import { CategoriaSubcategoriaSelect } from '../components/CategoriaSubcategoriaSelect'
 import { TipoProgramaSelect } from '../components/TipoProgramaSelect'
+import { EscuelaSelect } from '../components/EscuelaSelect'
 
 import { useCreateCurso } from '../hooks/useCursos'
 import { useCategorias } from '@/features/admin/categorias/hooks/useCategorias'
@@ -64,10 +65,12 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
     titulo: '',
     descripcion: '',
     categoria_id: null,
+    escuela: null,
     tipo: 'CURSO' as TipoPrograma,
     profesor_id: profesores.length > 0 ? profesores[0].id : '',
     tipo_emision: 'ASINCRONO',
     es_gratis: false,
+    es_destacado: false,
     precio: 0,
     precio_falso: 0,
     moneda: 'PEN',
@@ -187,6 +190,12 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
                       <TipoProgramaSelect
                         value={values.tipo}
                         onChange={tipo => setFieldValue('tipo', tipo)}
+                        disabled={isSubmitting}
+                      />
+
+                      <EscuelaSelect
+                        value={values.escuela}
+                        onChange={escuela => setFieldValue('escuela', escuela)}
                         disabled={isSubmitting}
                       />
 
@@ -336,6 +345,26 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
                             </CustomTextField>
                           </Box>
                         )}
+                      </Grid>
+
+                      <Grid item xs={12}><Divider /></Grid>
+
+                      {/* Destacado */}
+                      <Grid item xs={12}>
+                        <Typography variant='h6' sx={{ mb: 1 }}>Destacado en Home</Typography>
+                        <Typography variant='body2' color='text.secondary' sx={{ mb: 2 }}>
+                          Muestra este curso en la sección &quot;Programas en convocatoria&quot; de la página de inicio pública.
+                        </Typography>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={values.es_destacado}
+                              onChange={e => setFieldValue('es_destacado', e.target.checked)}
+                              disabled={isSubmitting}
+                            />
+                          }
+                          label={values.es_destacado ? 'Curso destacado (visible en el Home)' : 'Curso normal (no visible en el Home)'}
+                        />
                       </Grid>
 
                       <Grid item xs={12}><Divider /></Grid>

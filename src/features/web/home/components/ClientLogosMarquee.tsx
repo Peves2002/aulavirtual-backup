@@ -27,7 +27,8 @@ export default function ClientLogosMarquee({ logos: logosFromProps }: Props) {
   const activeLogos: LogoItem[] =
     logosFromProps && logosFromProps.length > 0 ? logosFromProps : DEFAULT_LOGOS
 
-  const track = [...activeLogos, ...activeLogos, ...activeLogos]
+  const isMarquee = activeLogos.length > 5
+  const track = isMarquee ? [...activeLogos, ...activeLogos, ...activeLogos] : activeLogos
   const rowRef = useRef<HTMLDivElement>(null)
 
   const pauseAnimation = () => {
@@ -102,13 +103,15 @@ export default function ClientLogosMarquee({ logos: logosFromProps }: Props) {
         {/* Track */}
         <div
           ref={rowRef}
-          onMouseEnter={pauseAnimation}
-          onMouseLeave={resumeAnimation}
+          onMouseEnter={isMarquee ? pauseAnimation : undefined}
+          onMouseLeave={isMarquee ? resumeAnimation : undefined}
           style={{
             display: 'flex',
             gap: '1.25rem',
-            width: 'max-content',
-            animation: 'marqueeScroll 40s linear infinite',
+            width: isMarquee ? 'max-content' : '100%',
+            justifyContent: isMarquee ? 'flex-start' : 'center',
+            flexWrap: isMarquee ? 'nowrap' : 'wrap',
+            animation: isMarquee ? 'marqueeScroll 40s linear infinite' : 'none',
           }}
         >
           {track.map((logo, i) => (

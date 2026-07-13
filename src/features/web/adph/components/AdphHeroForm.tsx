@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { ESCUELAS } from '@/features/web/adph/data/escuelas'
 
 interface AdphHeroFormProps {
   title: React.ReactNode
@@ -15,19 +16,18 @@ export default function AdphHeroForm({
   subtitle,
   backgroundImage,
   defaultSchool = '',
-  formTitle = 'REGÍSTRATE A NUESTRO VIVE DPA',
+  formTitle = 'SOLICITA INFORMACIÓN',
 }: AdphHeroFormProps) {
   const [formData, setFormData] = useState({
     nombres: '',
     apellidos: '',
-    dni: '',
     celular: '',
     email: '',
     escuela: defaultSchool,
-    modalidad: '',
-    estudios: '',
-    aceptaDatos: false,
-    autorizaPublicidad: false,
+    pais: '',
+    ciudad: '',
+    profesion: '',
+    detalle: '',
   })
 
   const [submitted, setSubmitted] = useState(false)
@@ -39,27 +39,52 @@ export default function AdphHeroForm({
   }, [defaultSchool])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const value = e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value
+    const { name, type } = e.target
+    const value = type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value
 
-    setFormData(prev => ({ ...prev, [e.target.name]: value }))
+    if ((name === 'nombres' || name === 'apellidos') && typeof value === 'string') {
+      if (value !== '' && !/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/.test(value)) return
+    }
+
+    if (name === 'celular' && typeof value === 'string') {
+      if (value !== '' && !/^\d+$/.test(value)) return
+    }
+
+    setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
-    // TODO: conectar a la API de contacto/lead del proyecto
-    console.log('Formulario enviado', formData)
-    setSubmitted(true)
-    setTimeout(() => setSubmitted(false), 5000)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitError('')
+
+    try {
+      const res = await fetch('/api/web/leads-portada', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+
+      if (!res.ok) throw new Error('Error enviando el formulario')
+      
+      setSubmitted(true)
+      setTimeout(() => setSubmitted(false), 30000)
+    } catch (error) {
+      console.error('Submit error:', error)
+      setSubmitError('Hubo un problema enviando tus datos. Por favor, intenta de nuevo.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const inputClass =
-    'w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm px-4 py-3 focus:outline-none focus:border-[#3BA8C5] focus:ring-1 focus:ring-[#3BA8C5] transition-colors'
-
-  const labelClass = 'text-xs font-bold text-slate-700 uppercase tracking-wide'
+    'w-full bg-white/90 border border-white/20 text-slate-800 placeholder-slate-500 text-[15px] px-5 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-[#3BA8C5] transition-all'
 
   return (
-    <section className="relative w-full overflow-hidden bg-slate-900" style={{ borderRadius: 0 }}>
+    <section className="relative w-full min-h-screen overflow-hidden bg-slate-900 flex items-center">
       {/* Background Image & Dark Overlay */}
       <div className="absolute inset-0 z-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -68,10 +93,10 @@ export default function AdphHeroForm({
           alt="Hero Background"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(2,8,25,0.9) 0%, rgba(2,8,25,0.8) 50%, rgba(2,8,25,0.4) 100%)' }} />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
 
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 lg:px-10 pt-32 pb-24 lg:pt-40 lg:pb-32 flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 lg:px-10 py-24 flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
 
         {/* Left Texts */}
         <div className="flex-1 text-left space-y-6">
@@ -84,90 +109,70 @@ export default function AdphHeroForm({
         </div>
 
         {/* Right Form Box */}
-        <div
-          className="w-full lg:w-[480px] bg-white shadow-2xl p-8 lg:p-10 relative"
-          style={{ borderRadius: 0 }}
-        >
-          {/* Top accent line */}
-          <div className="absolute top-0 inset-x-0 h-1.5" style={{ background: 'linear-gradient(to right, #3BA8C5, #00B4DB)' }} />
-
-          <div className="mb-6">
-            <h3 className="text-slate-900 font-black text-xl lg:text-2xl tracking-tight uppercase">{formTitle}</h3>
-            <p className="text-slate-500 text-sm font-semibold mt-1">Completa tus datos y un asesor se comunicará contigo.</p>
+        <div className="w-full max-w-[420px] bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] p-8 lg:p-10 rounded-[2rem] relative">
+          <div className="mb-6 text-center">
+            <h3 className="text-white font-black text-xl lg:text-2xl tracking-tight uppercase mb-2 drop-shadow-md">{formTitle}</h3>
+            <p className="text-slate-200 text-sm font-semibold mt-1 leading-snug">Completa tus datos y un asesor se comunicará contigo.</p>
           </div>
 
           {submitted ? (
-            <div className="py-12 text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-[#3BA8C5] flex items-center justify-center mx-auto">
+            <div className="py-12 text-center space-y-5">
+              <div className="w-12 h-12 rounded-full bg-[#3BA8C5] flex items-center justify-center mx-auto shadow-[0_0_15px_rgba(59,168,197,0.5)]">
                 <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <p className="text-slate-900 font-bold text-lg">¡Registro recibido!</p>
-              <p className="text-slate-500 text-sm font-semibold">Un asesor se pondrá en contacto contigo pronto.</p>
+              <p className="text-white font-bold text-lg">¡Registro recibido!</p>
+              <p className="text-slate-200 text-sm font-semibold">Un asesor se pondrá en contacto contigo pronto.</p>
+              
+              {formData.escuela && (
+                <div className="pt-6 border-t border-white/10 mt-6">
+                  <p className="text-sm text-slate-300 mb-3 font-medium">Mientras tanto, puedes descargar nuestro brochure:</p>
+                  <a
+                    href={`/brochures/${ESCUELAS.find(e => e.name === formData.escuela)?.id || formData.escuela
+                      .toLowerCase()
+                      .normalize('NFD')
+                      .replace(/[\u0300-\u036f]/g, '')
+                      .replace(/[\s_]+/g, '-')
+                      .replace(/[^\w-]+/g, '')}.pdf`}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 w-full text-white font-extrabold text-[14px] uppercase tracking-wider py-3 rounded-full transition-all hover:opacity-90 hover:shadow-lg hover:-translate-y-0.5"
+                    style={{ background: 'linear-gradient(to right, #0F4438, #186b58)' }}
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Descargar Brochure
+                  </a>
+                </div>
+              )}
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className={labelClass}>Nombres</label>
-                  <input
-                    type="text"
-                    name="nombres"
-                    required
-                    value={formData.nombres}
-                    onChange={handleChange}
-                    className={inputClass}
-                    placeholder="Tus nombres"
-                    style={{ borderRadius: 0 }}
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className={labelClass}>Apellidos</label>
-                  <input
-                    type="text"
-                    name="apellidos"
-                    required
-                    value={formData.apellidos}
-                    onChange={handleChange}
-                    className={inputClass}
-                    placeholder="Tus apellidos"
-                    style={{ borderRadius: 0 }}
-                  />
-                </div>
+              <div className="grid grid-cols-2 gap-3">
+                <input
+                  type="text"
+                  name="nombres"
+                  required
+                  value={formData.nombres}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="Nombres"
+                />
+                <input
+                  type="text"
+                  name="apellidos"
+                  required
+                  value={formData.apellidos}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="Apellidos"
+                />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className={labelClass}>DNI</label>
-                  <input
-                    type="text"
-                    name="dni"
-                    required
-                    value={formData.dni}
-                    onChange={handleChange}
-                    className={inputClass}
-                    placeholder="Nro. de documento"
-                    style={{ borderRadius: 0 }}
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className={labelClass}>Celular</label>
-                  <input
-                    type="tel"
-                    name="celular"
-                    required
-                    value={formData.celular}
-                    onChange={handleChange}
-                    className={inputClass}
-                    placeholder="Tu celular"
-                    style={{ borderRadius: 0 }}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className={labelClass}>Email</label>
+              <div className="grid grid-cols-1 gap-3">
                 <input
                   type="email"
                   name="email"
@@ -175,107 +180,85 @@ export default function AdphHeroForm({
                   value={formData.email}
                   onChange={handleChange}
                   className={inputClass}
-                  placeholder="correo@ejemplo.com"
-                  style={{ borderRadius: 0 }}
+                  placeholder="Email"
+                />
+                <input
+                  type="tel"
+                  name="celular"
+                  required
+                  value={formData.celular}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="WhatsApp"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className={labelClass}>Escuela de interés</label>
-                <select
-                  name="escuela"
+              <select
+                name="escuela"
+                required
+                value={formData.escuela}
+                onChange={handleChange}
+                className={`${inputClass} appearance-none`}
+              >
+                <option value="" disabled>Escuela de interés</option>
+                {ESCUELAS.map((esc) => (
+                  <option key={esc.id} value={esc.name}>
+                    {esc.name}
+                  </option>
+                ))}
+              </select>
+
+              <div className="grid grid-cols-2 gap-3">
+                <input
+                  type="text"
+                  name="pais"
                   required
-                  value={formData.escuela}
+                  value={formData.pais}
                   onChange={handleChange}
-                  className={`${inputClass} appearance-none`}
-                  style={{ borderRadius: 0 }}
-                >
-                  <option value="" disabled>Selecciona una escuela</option>
-                  <option value="Escuela de Psicología Organizacional">Escuela de Psicología Organizacional</option>
-                  <option value="Escuela de Liderazgo y Capital Humano">Escuela de Liderazgo y Capital Humano</option>
-                  <option value="Escuela de Psicología Ocupacional y SST">Escuela de Psicología Ocupacional y SST</option>
-                  <option value="Centro de Aprendizaje Experiencial">Centro de Aprendizaje Experiencial</option>
-                </select>
+                  className={inputClass}
+                  placeholder="País"
+                />
+                <input
+                  type="text"
+                  name="ciudad"
+                  required
+                  value={formData.ciudad}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="Ciudad"
+                />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className={labelClass}>Modalidad</label>
-                  <select
-                    name="modalidad"
-                    required
-                    value={formData.modalidad}
-                    onChange={handleChange}
-                    className={`${inputClass} appearance-none`}
-                    style={{ borderRadius: 0 }}
-                  >
-                    <option value="" disabled>Seleccione</option>
-                    <option value="Online">Online</option>
-                    <option value="Presencial">Presencial</option>
-                    <option value="Híbrido">Híbrido</option>
-                  </select>
-                </div>
-                <div className="space-y-1.5">
-                  <label className={labelClass}>Estudios</label>
-                  <select
-                    name="estudios"
-                    required
-                    value={formData.estudios}
-                    onChange={handleChange}
-                    className={`${inputClass} appearance-none`}
-                    style={{ borderRadius: 0 }}
-                  >
-                    <option value="" disabled>Seleccione</option>
-                    <option value="Secundaria">Secundaria</option>
-                    <option value="Técnico">Técnico</option>
-                    <option value="Universitario">Universitario</option>
-                    <option value="Postgrado">Postgrado</option>
-                  </select>
-                </div>
-              </div>
+              <input
+                type="text"
+                name="profesion"
+                required
+                value={formData.profesion}
+                onChange={handleChange}
+                className={inputClass}
+                placeholder="Profesión"
+              />
 
-              {/* Checkboxes */}
-              <div className="space-y-3 pt-2">
-                <label className="flex items-start gap-3 cursor-pointer group">
-                  <input
-                    type="checkbox"
-                    name="aceptaDatos"
-                    required
-                    checked={formData.aceptaDatos}
-                    onChange={handleChange}
-                    className="w-4 h-4 border-slate-300 text-[#3BA8C5] focus:ring-[#3BA8C5] cursor-pointer mt-0.5 flex-shrink-0"
-                    style={{ borderRadius: 0 }}
-                  />
-                  <span className="text-xs text-slate-600 font-semibold leading-snug group-hover:text-slate-800 transition-colors">
-                    Acepto las{' '}
-                    <a href="/terminos-y-condiciones" className="text-[#3BA8C5] hover:underline">
-                      condiciones de tratamiento de datos personales
-                    </a>.
-                  </span>
-                </label>
-
-                <label className="flex items-start gap-3 cursor-pointer group">
-                  <input
-                    type="checkbox"
-                    name="autorizaPublicidad"
-                    checked={formData.autorizaPublicidad}
-                    onChange={handleChange}
-                    className="w-4 h-4 border-slate-300 text-[#3BA8C5] focus:ring-[#3BA8C5] cursor-pointer mt-0.5 flex-shrink-0"
-                    style={{ borderRadius: 0 }}
-                  />
-                  <span className="text-xs text-slate-600 font-semibold leading-snug group-hover:text-slate-800 transition-colors">
-                    Autorizo el uso de mis datos para fines publicitarios e informativos.
-                  </span>
-                </label>
-              </div>
+              <textarea
+                name="detalle"
+                required
+                value={formData.detalle}
+                onChange={handleChange as unknown as React.ChangeEventHandler<HTMLTextAreaElement>}
+                className={`${inputClass.replace('rounded-full', 'rounded-2xl')} resize-none h-24`}
+                placeholder="Detalla tu solicitud"
+              ></textarea>
 
               <div className="pt-4">
+                {submitError && (
+                  <p className="text-red-400 text-sm mb-3 font-semibold text-center">{submitError}</p>
+                )}
                 <button
                   type="submit"
-                  className="w-full text-white font-extrabold text-sm uppercase tracking-widest py-4 transition-colors hover:opacity-90"
-                  style={{ background: 'linear-gradient(to right, #3BA8C5, #00B4DB)', borderRadius: 0 }}
+                  disabled={isSubmitting}
+                  className="w-full text-white font-extrabold text-[15px] uppercase tracking-widest py-3.5 rounded-full transition-all hover:opacity-90 hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ background: 'linear-gradient(to right, #3BA8C5, #00B4DB)' }}
                 >
-                  Enviar Solicitud
+                  {isSubmitting ? 'Enviando...' : 'Enviar Solicitud'}
                 </button>
               </div>
             </form>

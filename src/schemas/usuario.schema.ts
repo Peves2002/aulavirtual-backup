@@ -27,11 +27,14 @@ export const crearUsuarioSchema = z.object({
   numero_documento: z
     .string()
     .trim()
-    .regex(/^\d{8}$/, 'El DNI debe tener exactamente 8 dígitos'),
+    .min(4, 'El documento debe tener al menos 4 caracteres')
+    .max(20, 'El documento no puede exceder 20 caracteres')
+    .optional()
+    .or(z.literal('')),
   celular: z
     .string()
     .trim()
-    .regex(/^9\d{8}$/, 'El celular debe tener 9 dígitos y comenzar con 9')
+    .max(15, 'El celular no puede exceder 15 caracteres')
     .optional()
     .or(z.literal('')),
   rol: z
@@ -63,6 +66,12 @@ export const crearUsuarioSchema = z.object({
     .trim()
     .optional()
     .or(z.literal('')),
+  rol_personalizado_id: z
+    .string()
+    .trim()
+    .optional()
+    .nullable()
+    .or(z.literal('')),
 })
 
 export type CrearUsuarioDto = z.infer<typeof crearUsuarioSchema>
@@ -91,12 +100,14 @@ export const actualizarUsuarioSchema = z.object({
   numero_documento: z
     .string()
     .trim()
-    .regex(/^\d{8}$/, 'El DNI debe tener exactamente 8 dígitos')
-    .optional(),
+    .min(4, 'El documento debe tener al menos 4 caracteres')
+    .max(20, 'El documento no puede exceder 20 caracteres')
+    .optional()
+    .or(z.literal('')),
   celular: z
     .string()
     .trim()
-    .regex(/^9\d{8}$/, 'El celular debe tener 9 dígitos y comenzar con 9')
+    .max(15, 'El celular no puede exceder 15 caracteres')
     .optional()
     .or(z.literal('')),
   rol: z
@@ -118,7 +129,8 @@ export const actualizarUsuarioSchema = z.object({
     .string()
     .trim()
     .min(8, 'La contraseña debe tener al menos 8 caracteres')
-    .optional(),
+    .optional()
+    .or(z.literal('')),
   cargo: z
     .string()
     .trim()
@@ -129,6 +141,12 @@ export const actualizarUsuarioSchema = z.object({
     .string()
     .trim()
     .optional()
+    .or(z.literal('')),
+  rol_personalizado_id: z
+    .string()
+    .trim()
+    .optional()
+    .nullable()
     .or(z.literal('')),
 })
 

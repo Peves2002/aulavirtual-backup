@@ -25,7 +25,7 @@ function teacherHref(t: Teacher) {
 }
 
 const AVATAR_COLORS = [
-  'var(--web-primary, #25927F)', 'var(--web-dark, #025E44)', '#3AB079', '#0f4438',
+  '#3BA8C5', '#1B3A6B', '#7FD1E5', '#0f4438',
   '#1a73e8', '#d93025', '#e37400', '#6d4c41', '#4527a0', '#00838f',
 ]
 
@@ -119,8 +119,8 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                     const el = e.currentTarget as HTMLAnchorElement
 
                     el.style.transform = 'translateY(-6px)'
-                    el.style.boxShadow = '0 12px 36px rgba(var(--web-primary-rgb, 37, 146, 127),0.13)'
-                    el.style.borderColor = 'var(--web-primary, #25927F)'
+                    el.style.boxShadow = '0 12px 36px rgba(59, 168, 197,0.13)'
+                    el.style.borderColor = '#3BA8C5'
                   }}
                   onMouseLeave={e => {
                     const el = e.currentTarget as HTMLAnchorElement
@@ -227,9 +227,9 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                       onMouseEnter={e => {
                         const el = e.currentTarget as HTMLAnchorElement
 
-                        el.style.borderColor = 'var(--web-primary, #25927F)'
-                        el.style.color = 'var(--web-primary, #25927F)'
-                        el.style.backgroundColor = 'rgba(var(--web-primary-rgb, 37, 146, 127),0.05)'
+                        el.style.borderColor = '#3BA8C5'
+                        el.style.color = '#3BA8C5'
+                        el.style.backgroundColor = 'rgba(59, 168, 197,0.05)'
                       }}
                       onMouseLeave={e => {
                         const el = e.currentTarget as HTMLAnchorElement
@@ -263,7 +263,7 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                   height: '40px',
                   borderRadius: '50%',
                   backgroundColor: '#ffffff',
-                  border: `1.5px solid ${current === 0 ? '#e2e8f0' : 'var(--web-primary, #25927F)'}`,
+                  border: `1.5px solid ${current === 0 ? '#e2e8f0' : '#3BA8C5'}`,
                   cursor: current === 0 ? 'not-allowed' : 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -273,7 +273,7 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                   zIndex: 2,
                 }}
               >
-                <ChevronLeft size={18} color={current === 0 ? '#cbd5e1' : 'var(--web-primary, #25927F)'} />
+                <ChevronLeft size={18} color={current === 0 ? '#cbd5e1' : '#3BA8C5'} />
               </button>
               <button
                 onClick={next}
@@ -287,7 +287,7 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                   height: '40px',
                   borderRadius: '50%',
                   backgroundColor: '#ffffff',
-                  border: `1.5px solid ${current >= maxStart ? '#e2e8f0' : 'var(--web-primary, #25927F)'}`,
+                  border: `1.5px solid ${current >= maxStart ? '#e2e8f0' : '#3BA8C5'}`,
                   cursor: current >= maxStart ? 'not-allowed' : 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -297,7 +297,7 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                   zIndex: 2,
                 }}
               >
-                <ChevronRight size={18} color={current >= maxStart ? '#cbd5e1' : 'var(--web-primary, #25927F)'} />
+                <ChevronRight size={18} color={current >= maxStart ? '#cbd5e1' : '#3BA8C5'} />
               </button>
             </>
           )}
@@ -314,7 +314,7 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                   width: di === activeDot ? '28px' : '8px',
                   height: '8px',
                   borderRadius: '999px',
-                  backgroundColor: di === activeDot ? 'var(--web-primary, #25927F)' : '#cbd5e1',
+                  backgroundColor: di === activeDot ? '#3BA8C5' : '#cbd5e1',
                   border: 'none',
                   cursor: 'pointer',
                   padding: 0,

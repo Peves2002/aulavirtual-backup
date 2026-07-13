@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import { getConfigs } from '@/utils/libs/config'
+import BlogGrid from '@/features/web/blog/components/BlogGrid'
 
 import { ArrowRight, BookOpen, Calendar, Clock } from 'lucide-react'
 
@@ -44,7 +46,18 @@ const ARTICLES = [
   },
 ]
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const configs = await getConfigs()
+  let dynamicBlogs = ARTICLES
+  const dbBlogsStr = configs.WEB_BLOGS
+  if (dbBlogsStr?.trim()) {
+    try {
+      dynamicBlogs = JSON.parse(dbBlogsStr)
+    } catch (e) {
+      console.error('Error parsing dynamic blogs in blog page:', e)
+    }
+  }
+
   return (
     <>
       {/* 1. HERO */}
@@ -67,54 +80,7 @@ export default function BlogPage() {
       {/* 2. GRID DE ARTÍCULOS */}
       <section className="py-24 bg-[#FBFCFD] border-b border-slate-100">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {ARTICLES.map(art => (
-              <article
-                key={art.id}
-                className="bg-white border border-slate-200 hover:shadow-lg transition-all duration-300 rounded-none overflow-hidden group flex flex-col"
-              >
-                <div className="aspect-[16/10] w-full overflow-hidden relative">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={art.image}
-                    alt={art.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 text-[10px] font-bold text-slate-900 uppercase tracking-wider rounded-none">
-                    {art.category}
-                  </div>
-                </div>
-                <div className="p-8 flex flex-col flex-grow">
-                  <div className="flex items-center gap-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-3">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3 text-[#3BA8C5]" /> {art.date}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-[#3BA8C5]" /> {art.readTime}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-black text-slate-900 mb-3 leading-tight group-hover:text-[#3BA8C5] transition-colors">
-                    {art.title}
-                  </h3>
-                  <p className="text-sm text-slate-600 font-semibold leading-relaxed mb-6 flex-grow">{art.desc}</p>
-                  <div className="mt-auto pt-6 border-t border-slate-100 flex items-center justify-between gap-4">
-                    <div>
-                      <span className="text-slate-800 text-[11px] font-extrabold block leading-tight">{art.author}</span>
-                      <span className="text-slate-400 text-[9px] font-bold uppercase tracking-wider block mt-0.5">
-                        {art.role}
-                      </span>
-                    </div>
-                    <Link
-                      href="/contacto"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#3BA8C5] uppercase tracking-widest hover:text-[#0083B0] transition-colors flex-shrink-0"
-                    >
-                      Leer <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+          <BlogGrid blogs={dynamicBlogs} />
         </div>
       </section>
 

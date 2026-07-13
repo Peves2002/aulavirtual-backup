@@ -26,6 +26,7 @@ import type { Categoria } from '@/features/admin/categorias/entity/Categoria'
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 import { CategoriaSubcategoriaSelect } from '../CategoriaSubcategoriaSelect'
 import { TipoProgramaSelect } from '../TipoProgramaSelect'
+import { EscuelaSelect } from '../EscuelaSelect'
 import type { TipoPrograma } from '@/utils/configs/tipoPrograma'
 
 function resolveCategoriaSelection(categoriaId: string | null | undefined, categorias: Categoria[]) {
@@ -72,6 +73,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
     titulo: curso.titulo,
     descripcion: curso.descripcion || '',
     categoria_id: curso.categoria_id || '',
+    escuela: curso.escuela || '',
     tipo: (curso.tipo || 'CURSO') as TipoPrograma,
     profesor_id: curso.profesor_id,
     tipo_emision: curso.tipo_emision,
@@ -97,6 +99,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
           titulo: form.titulo,
           descripcion: form.descripcion?.trim() || null,
           categoria_id: form.categoria_id || null,
+          escuela: form.escuela || null,
           tipo: form.tipo,
           profesor_id: form.profesor_id,
           tipo_emision: form.tipo_emision as 'SINCRONO' | 'ASINCRONO' | 'MIXTO',
@@ -167,6 +170,11 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
       <TipoProgramaSelect
         value={form.tipo}
         onChange={tipo => setForm(prev => ({ ...prev, tipo }))}
+      />
+
+      <EscuelaSelect
+        value={form.escuela}
+        onChange={escuela => setForm(prev => ({ ...prev, escuela: escuela || '' }))}
       />
 
       <CategoriaSubcategoriaSelect

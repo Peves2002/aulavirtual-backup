@@ -11,12 +11,14 @@ export const crearCursoSchema = z.object({
     .max(200, 'El título no puede exceder 200 caracteres'),
   descripcion: z.string().trim().max(5000, 'La descripción no puede exceder 5000 caracteres').optional(),
   categoria_id: z.string().uuid('ID de categoría inválido').optional().nullable(),
+  escuela: z.string().optional().nullable(),
   tipo: z.enum(['CURSO', 'DIPLOMADO', 'ESPECIALIZACION']).default('CURSO'),
   profesor_id: z.string().uuid('ID de profesor inválido'),
   tipo_emision: z.enum(['SINCRONO', 'ASINCRONO', 'MIXTO']).default('ASINCRONO'),
 
   // Paso 2: Configuración y precio (opcional al crear)
   es_gratis: z.boolean().default(false),
+  es_destacado: z.boolean().optional().default(false),
   precio: z.coerce.number().min(0, 'El precio no puede ser negativo').default(0),
   precio_falso: z.coerce.number().min(0, 'El precio falso no puede ser negativo').default(0),
   moneda: z.string().max(3).default('PEN'),
@@ -47,11 +49,13 @@ export const actualizarCursoSchema = z.object({
     .optional(),
   descripcion: z.string().trim().max(5000, 'La descripción no puede exceder 5000 caracteres').optional().nullable(),
   categoria_id: z.string().uuid('ID de categoría inválido').optional().nullable(),
+  escuela: z.string().optional().nullable(),
   tipo: z.enum(['CURSO', 'DIPLOMADO', 'ESPECIALIZACION']).optional(),
   profesor_id: z.string().uuid('ID de profesor inválido').optional(),
   tipo_emision: z.enum(['SINCRONO', 'ASINCRONO', 'MIXTO']).optional(),
   nivel: z.enum(['BASICO', 'INTERMEDIO', 'AVANZADO']).optional().nullable(),
   es_gratis: z.boolean().optional(),
+  es_destacado: z.boolean().optional(),
   es_privado: z.boolean().optional(),
   completar_automatico: z.boolean().optional(),
   precio_certificado: z.coerce.number().min(0).optional().nullable(),
@@ -69,7 +73,10 @@ export const actualizarCursoSchema = z.object({
   objetivos: z.array(z.string()).optional(),
   metodologia: z.array(z.any()).optional(),
   beneficios: z.array(z.any()).optional(),
-  incluye: z.array(z.any()).optional()
+  incluye: z.array(z.any()).optional(),
+  perfil_estudiante: z.string().optional().nullable(),
+  salidas_profesionales: z.array(z.any()).optional(),
+  testimonios: z.array(z.any()).optional()
 })
 
 export type ActualizarCursoDto = z.infer<typeof actualizarCursoSchema>

@@ -16,15 +16,14 @@ import {
   MenuItem,
   IconButton,
   Tooltip,
-  Divider,
-  Badge,
-  Fab
+  Divider
 } from '@mui/material'
 
 import CourseList from './CourseList'
 import { useCart } from '../../cart/context/CartContext'
 import type { TipoPrograma } from '@/utils/configs/tipoPrograma'
 import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
+import { ESCUELAS, cleanSchoolName } from '@/features/web/adph/data/escuelas'
 
 interface Category {
   id: string
@@ -42,22 +41,31 @@ const CourseCatalog = ({ courses, categories, tipo = 'CURSO' }: CourseCatalogPro
   const config = getTipoProgramaConfig(tipo)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedEscuela, setSelectedEscuela] = useState('all')
   const [selectedLevel, setSelectedLevel] = useState('all')
   const [selectedPrice, setSelectedPrice] = useState('all')
   const [selectedModality, setSelectedModality] = useState('all')
   const [sortBy, setSortBy] = useState('recent')
-  const { itemCount, setIsCartDrawerOpen } = useCart()
+
+  useCart()
 
   const searchParams = useSearchParams()
 
   // Sincronizar selectedCategory con la URL
   useEffect(() => {
     const catId = searchParams.get('categoria')
+    const escId = searchParams.get('escuela')
 
     if (catId) {
       setSelectedCategory(catId)
     } else {
       setSelectedCategory('all')
+    }
+
+    if (escId) {
+      setSelectedEscuela(escId)
+    } else {
+      setSelectedEscuela('all')
     }
   }, [searchParams])
 
@@ -67,6 +75,9 @@ const CourseCatalog = ({ courses, categories, tipo = 'CURSO' }: CourseCatalogPro
         (course.descripcion && course.descripcion.toLowerCase().includes(searchTerm.toLowerCase()))
 
       const matchesCategory = selectedCategory === 'all' || course.categoria?.slug === selectedCategory
+      
+      const matchesEscuela = selectedEscuela === 'all' ||
+        cleanSchoolName(course.escuela) === cleanSchoolName(ESCUELAS.find(e => e.id === selectedEscuela)?.name)
 
       const matchesLevel = selectedLevel === 'all' ||
         (selectedLevel === 'none' ? !course.nivel : course.nivel === selectedLevel)
@@ -76,7 +87,7 @@ const CourseCatalog = ({ courses, categories, tipo = 'CURSO' }: CourseCatalogPro
 
       const matchesModality = selectedModality === 'all' || course.tipo_emision === selectedModality
 
-      return matchesSearch && matchesCategory && matchesLevel && matchesPrice && matchesModality
+      return matchesSearch && matchesCategory && matchesEscuela && matchesLevel && matchesPrice && matchesModality
     })
 
     // Aplicar ordenamiento
@@ -89,11 +100,12 @@ const CourseCatalog = ({ courses, categories, tipo = 'CURSO' }: CourseCatalogPro
 
       return 0
     })
-  }, [courses, searchTerm, selectedCategory, selectedLevel, selectedPrice, selectedModality, sortBy])
+  }, [courses, searchTerm, selectedCategory, selectedEscuela, selectedLevel, selectedPrice, selectedModality, sortBy])
 
   const clearFilters = () => {
     setSearchTerm('')
     setSelectedCategory('all')
+    setSelectedEscuela('all')
     setSelectedLevel('all')
     setSelectedPrice('all')
     setSelectedModality('all')
@@ -102,6 +114,7 @@ const CourseCatalog = ({ courses, categories, tipo = 'CURSO' }: CourseCatalogPro
 
   const hasFilters = searchTerm !== '' ||
     selectedCategory !== 'all' ||
+    selectedEscuela !== 'all' ||
     selectedLevel !== 'all' ||
     selectedPrice !== 'all' ||
     selectedModality !== 'all' ||
@@ -190,6 +203,37 @@ const CourseCatalog = ({ courses, categories, tipo = 'CURSO' }: CourseCatalogPro
                 scrollbarWidth: 'none',
                 '&::-webkit-scrollbar': { display: 'none' }
               }}>
+                {/* Escuela */}
+                <TextField
+                  select
+                  size="small"
+                  value={selectedEscuela}
+                  onChange={(e) => setSelectedEscuela(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <i className="tabler-building-bank" style={{ color: selectedEscuela !== 'all' ? 'var(--mui-palette-primary-main)' : '#64748b' }} />
+                      </InputAdornment>
+                    ),
+                    sx: {
+                      borderRadius: '16px',
+                      border: '1.5px solid',
+                      borderColor: selectedEscuela !== 'all' ? 'var(--mui-palette-primary-main)' : 'transparent',
+                      '& fieldset': { border: 'none' },
+                      bgcolor: selectedEscuela !== 'all' ? 'primary.50' : '#f8fafc',
+                      color: selectedEscuela !== 'all' ? 'primary.main' : 'inherit',
+                      fontWeight: 700,
+                      transition: 'all 0.2s ease'
+                    }
+                  }}
+                  sx={{ minWidth: 170, flexShrink: 0 }}
+                >
+                  <MenuItem value="all">Todas las Escuelas</MenuItem>
+                  {ESCUELAS.map((esc) => (
+                    <MenuItem key={esc.id} value={esc.id}>{esc.name}</MenuItem>
+                  ))}
+                </TextField>
+
                 {/* Categoría */}
                 <TextField
                   select
@@ -396,26 +440,6 @@ const CourseCatalog = ({ courses, categories, tipo = 'CURSO' }: CourseCatalogPro
         </Stack>
       </Container>
 
-      {/* Carrito Flotante */}
-      <Fab
-        color="primary"
-        aria-label="cart"
-        onClick={() => setIsCartDrawerOpen(true)}
-        sx={{
-          position: 'fixed',
-          bottom: 32,
-          right: 32,
-          boxShadow: '0 8px 32px rgba(var(--mui-palette-primary-mainChannel) / 0.4)',
-          height: 70,
-          width: 70,
-          '&:hover': { transform: 'scale(1.1)' },
-          transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-        }}
-      >
-        <Badge badgeContent={itemCount} color="error" sx={{ '& .MuiBadge-badge': { fontSize: '0.9rem', height: 24, minWidth: 24, borderRadius: 12, fontWeight: 800 } }}>
-          <i className="tabler-shopping-cart" style={{ fontSize: '2rem' }} />
-        </Badge>
-      </Fab>
     </Box>
   )
 }

@@ -1,10 +1,19 @@
 import Link from 'next/link'
+import fs from 'fs'
+import path from 'path'
 
-import { ArrowRight, ChevronRight, BookOpen, Quote, Building2 } from 'lucide-react'
+import { ArrowRight, ChevronRight, BookOpen, Quote, Building2, Calendar } from 'lucide-react'
 
-import AdphHeroForm from '@/features/web/adph/components/AdphHeroForm'
+import prisma from '@/utils/libs/prisma'
+import { getConfigs } from '@/utils/libs/config'
+import AdphHeroCarousel from '@/features/web/adph/components/AdphHeroCarousel'
+import AdphEscuelasCarousel from '@/features/web/adph/components/AdphEscuelasCarousel'
+import TestimoniosCarousel from '@/features/web/adph/components/TestimoniosCarousel'
+import FadeIn from '@/utils/components/animations/FadeIn'
 import { ESCUELAS } from '@/features/web/adph/data/escuelas'
 import { PROGRAMAS } from '@/features/web/adph/data/programas'
+import AdphNewsletter from '@/features/web/adph/components/AdphNewsletter'
+import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
 
 const TESTIMONIOS = [
   { id: 1, name: 'María Fernández', role: 'Gerente de RRHH en TechLatam', quote: 'Los programas de ADPH me dieron las herramientas prácticas que necesitaba para reestructurar todo nuestro departamento. Excelente nivel.', image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=150&q=80' },
@@ -18,198 +27,445 @@ const BLOGS = [
   { id: 3, title: 'Gamificación: El secreto del aprendizaje corporativo', date: '20 Nov, 2023', image: 'https://images.unsplash.com/photo-1586528116311-ad8ed7c80a30?w=400&q=80' },
 ]
 
-export default function HomePage() {
+const NOTICIAS = [
+  { id: 1, tag: 'TENDENCIAS', title: 'ADPH Group presenta el estudio de Clima Laboral 2026', date: 'Julio 05, 2026', image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&q=80' },
+  { id: 2, tag: 'INNOVACIÓN', title: 'Nuevas metodologías experienciales en alianza internacional', date: 'Junio 28, 2026', image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&q=80' }
+]
+
+
+export default async function HomePage() {
+  // Query configurations to apply dynamic school images
+  const configs = await getConfigs()
+  const dynamicEscuelas = ESCUELAS.map(esc => {
+    const configKeyPrefix = `ESCUELA_${esc.id.toUpperCase().replace(/-/g, '_')}`
+    const dbImage = configs[`${configKeyPrefix}_IMAGE`]
+    const dbHeroBg = configs[`${configKeyPrefix}_HEROBG`]
+
+    return {
+      ...esc,
+      image: dbImage?.trim() ? dbImage : esc.image,
+      heroBg: dbHeroBg?.trim() ? dbHeroBg : esc.heroBg
+    }
+  })
+
+  // Load dynamic testimonials
+  let dynamicTestimonios: any[] = TESTIMONIOS
+  const dbTestimoniosStr = configs['WEB_TESTIMONIOS']
+  if (dbTestimoniosStr?.trim()) {
+    try {
+      dynamicTestimonios = JSON.parse(dbTestimoniosStr)
+    } catch (e) {
+      console.error('Error parsing dynamic testimonials:', e)
+    }
+  }
+
+  // Load dynamic blogs
+  let dynamicBlogs: any[] = BLOGS
+  const dbBlogsStr = configs['WEB_BLOGS']
+  if (dbBlogsStr?.trim()) {
+    try {
+      dynamicBlogs = JSON.parse(dbBlogsStr)
+    } catch (e) {
+      console.error('Error parsing dynamic blogs:', e)
+    }
+  }
+
+  // Load dynamic news
+  let dynamicNoticias: any[] = NOTICIAS
+  const dbNoticiasStr = configs['WEB_NOTICIAS']
+  if (dbNoticiasStr?.trim()) {
+    try {
+      dynamicNoticias = JSON.parse(dbNoticiasStr)
+    } catch (e) {
+      console.error('Error parsing dynamic news:', e)
+    }
+  }
+
+  // Load dynamic logos
+  let dynamicLogos: any[] = []
+  const dbLogosStr = configs['HOME_LOGOS']
+  if (dbLogosStr?.trim()) {
+    try {
+      dynamicLogos = JSON.parse(dbLogosStr)
+    } catch (e) {
+      console.error('Error parsing dynamic logos:', e)
+    }
+  }
+
+  // Dynamic section texts with fallbacks
+  const homeEscuelasTitle = configs['HOME_ESCUELAS_TITLE']?.trim() || 'Escuelas Especializadas'
+  const homeProgramasTitle = configs['HOME_PROGRAMAS_TITLE']?.trim() || 'Programas en convocatoria'
+  const homeNosotrosTitle = configs['HOME_NOSOTROS_TITLE']?.trim() || 'Expertos en formación ejecutiva'
+  const homeNosotrosDesc = configs['HOME_NOSOTROS_DESC']?.trim() || 'ADPH Group is an executive education leader dedicated to transforming talent for organizations across Latin America. Through high-level training, first-class faculty, and actionable methodologies, we deliver tangible business outcomes.'
+  const homeNosotrosVideoUrl = configs['HOME_NOSOTROS_VIDEO_URL']?.trim() || 'https://www.youtube.com/embed/ZUZif1Ll9u4'
+  const homeCorpTitle = configs['HOME_CORP_TITLE']?.trim() || 'Soluciones Corporativas'
+  const homeCorpDesc = configs['HOME_CORP_DESC']?.trim() || 'Diseñamos programas a medida para potenciar el talento de tu organización: capacitación in-company, consultoría y tecnología de gestión humana.'
+
+  // Query featured courses from Database
+  let cursosDestacados: any[] = []
+
+  try {
+    cursosDestacados = await prisma.curso.findMany({
+      where: {
+        estado: 'PUBLICADO',
+        es_destacado: true
+      },
+      take: 6,
+      orderBy: {
+        creado_en: 'desc'
+      },
+      include: {
+        categoria: true
+      }
+    })
+
+    // Fallback: if no courses are marked as featured, load the latest 6 published courses
+    if (cursosDestacados.length === 0) {
+      cursosDestacados = await prisma.curso.findMany({
+        where: {
+          estado: 'PUBLICADO'
+        },
+        take: 6,
+        orderBy: {
+          creado_en: 'desc'
+        },
+        include: {
+          categoria: true
+        }
+      })
+    }
+  } catch (err) {
+    console.error('Error fetching courses from database:', err)
+  }
+
+  // Map to display structure
+  const FALLBACK_IMAGES = [
+    '/images/cursos/evaluacion-y-gestion-del-clima-laboral.png',
+    '/images/especializaciones/curso-especializado-diseno-de-tableros-de-mando-para-la-gestion-de-recursos-humanos.png',
+    '/images/cursos/creacion-de-equipos-de-alto-rendimiento-con-scrum.jpg',
+    '/images/especializaciones/especializacion-en-psicologia-ocupacional.png',
+    '/images/talleres/taller-investigacion-del-clima-laboral-con-bloques-de-lego.jpeg',
+    '/images/cursos/planes-de-desarrollo-y-capacitacion-del-talento-humano.jpg'
+  ]
+
+  const displayProgramas = cursosDestacados.map((c, index) => {
+    let finalImage = '/images/cursos.jpg'
+    if (c.miniatura && typeof c.miniatura === 'string' && c.miniatura.trim() !== '') {
+      const cleanPath = c.miniatura.startsWith('/') ? c.miniatura : `/${c.miniatura}`
+      const fullPath = path.join(process.cwd(), 'public', cleanPath)
+      if (fs.existsSync(fullPath)) {
+        finalImage = cleanPath
+      } else {
+        finalImage = FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]
+      }
+    } else {
+      finalImage = FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]
+    }
+
+    return {
+      id: c.id,
+      title: c.titulo,
+      image: finalImage,
+      category: c.categoria?.nombre || (c.tipo === 'DIPLOMADO' ? 'Diplomado' : c.tipo === 'ESPECIALIZACION' ? 'Especialización' : 'Curso'),
+      duration: c.duracion || 'Variable',
+      slug: c.slug
+    }
+  })
+
   return (
     <>
-      {/* 2. PORTADA INICIAL (HeroForm) */}
-      <AdphHeroForm
-        title={<>Desarrolla tu potencial <br />con ADPH Group</>}
-        subtitle="Educación ejecutiva especializada para líderes que buscan transformar la cultura y productividad de sus organizaciones."
-        backgroundImage="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
-        formTitle="REGÍSTRATE A NUESTRO VIVE DPA"
-      />
+      {/* 2. PORTADA INICIAL (Dynamic Hero Carousel) */}
+      <AdphHeroCarousel />
 
       {/* 3. SECCIÓN 'ESCUELAS' */}
-      <section className="py-24 bg-white border-b border-slate-100">
+      <section className="py-24 bg-[#F4F7FC] border-b border-slate-200/60 overflow-hidden relative" id="escuelas">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
-          <div className="mb-16">
-            <span className="text-[#3BA8C5] font-extrabold text-xs uppercase tracking-widest block mb-4">Nuestra Oferta Académica</span>
-            <h2 className="text-slate-900 font-black text-3xl md:text-4xl tracking-tight">Escuelas Especializadas</h2>
-            <div className="w-16 h-1.5 bg-[#3BA8C5] mt-6"></div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {ESCUELAS.map(escuela => (
-              <div key={escuela.id} className="group cursor-pointer bg-slate-50 border border-slate-200 hover:shadow-xl transition-all duration-300 flex flex-col h-full rounded-none">
-                <div className="h-48 overflow-hidden relative">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={escuela.image} alt={escuela.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors" />
-                </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-lg font-black text-slate-900 mb-2 leading-tight">{escuela.name}</h3>
-                  <p className="text-sm text-slate-600 font-semibold line-clamp-3 mb-6 flex-grow">{escuela.desc}</p>
-                  <Link href={`/escuelas/${escuela.id}`} className="inline-flex items-center gap-1.5 text-xs font-bold text-[#3BA8C5] uppercase tracking-widest hover:text-[#0083B0] transition-colors mt-auto">
-                    Conocer más <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
+          <FadeIn>
+            <div className="mb-16 text-center md:text-left">
+              <div 
+                className="text-slate-900 font-black text-3xl md:text-5xl tracking-tight font-manrope [&>p]:m-0"
+                dangerouslySetInnerHTML={{ __html: homeEscuelasTitle }}
+              />
+              <div className="w-16 h-1.5 bg-[#08479b] mt-6 md:mx-0 mx-auto rounded-full"></div>
+            </div>
+          </FadeIn>
         </div>
+
+        {/* Schools 3x2 Grid */}
+        <FadeIn delay={0.2}>
+          <AdphEscuelasCarousel escuelas={dynamicEscuelas} />
+        </FadeIn>
       </section>
 
-      {/* 4. SECCIÓN 'PROGRAMAS RECIENTES' */}
-      <section className="py-24 bg-[#FBFCFD] border-b border-slate-100">
+      {/* 4. SECCIÓN 'PROGRAMAS EN CONVOCATORIA' */}
+      <section className="py-24 bg-[#08479b] border-b border-slate-100 relative">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
-          <div className="mb-16 text-center">
-            <h2 className="text-slate-900 font-black text-3xl md:text-4xl tracking-tight">Programas Recientes</h2>
-            <div className="w-16 h-1.5 bg-[#3BA8C5] mx-auto mt-6"></div>
-          </div>
+          <FadeIn>
+            <div className="mb-16 text-center">
+              <div 
+                className="text-white font-black text-3xl md:text-5xl tracking-tight font-manrope [&>p]:m-0"
+                dangerouslySetInnerHTML={{ __html: homeProgramasTitle }}
+              />
+              <div className="w-16 h-1.5 bg-[#fcd116] mx-auto mt-6 rounded-full"></div>
+            </div>
+          </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {PROGRAMAS.map(prog => (
-              <div key={prog.id} className="bg-white border border-slate-200 hover:shadow-lg transition-all duration-300 rounded-none overflow-hidden group flex flex-col">
-                <div className="h-56 relative overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={prog.image} alt={prog.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 text-[10px] font-bold text-slate-900 uppercase tracking-wider rounded-none">
-                    {prog.category}
+            {displayProgramas.map((prog, index) => (
+              <FadeIn key={prog.id} delay={index * 0.1}>
+                <div className="bg-white border border-slate-100 hover:border-slate-200 shadow-sm hover:shadow-[0_20px_50px_rgba(0,0,0,0.15)] transition-all duration-500 hover:-translate-y-1.5 rounded-xl overflow-hidden group flex flex-col h-full">
+                  <div className="h-56 relative overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={prog.image} alt={prog.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div className="absolute top-4 left-4 bg-slate-950/40 backdrop-blur-md border border-white/20 px-4 py-1.5 text-[10px] font-bold text-white uppercase tracking-wider rounded-md shadow-sm font-manrope">
+                      {prog.category}
+                    </div>
+                  </div>
+                  <div className="p-8 flex flex-col flex-grow">
+                    <span className="text-[10px] font-bold text-[#08479b] uppercase tracking-widest mb-3 flex items-center gap-1.5 bg-[#08479b]/10 self-start px-3 py-1 rounded-md font-manrope">
+                      <BookOpen className="w-3.5 h-3.5" /> {prog.duration}
+                    </span>
+                    <h3 className="text-xl font-black text-slate-900 leading-snug mb-4 group-hover:text-[#08479b] transition-colors font-manrope">{prog.title}</h3>
+                    <div className="mt-auto pt-6 border-t border-slate-100">
+                      <Link href={`/programas/${prog.slug}`} className="text-sm font-bold text-slate-600 group-hover:text-[#08479b] inline-flex items-center gap-2 transition-colors font-manrope">
+                        Ver detalle <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
-                <div className="p-8 flex flex-col flex-grow">
-                  <span className="text-[10px] font-extrabold text-[#3BA8C5] uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                    <BookOpen className="w-3.5 h-3.5" /> {prog.duration}
-                  </span>
-                  <h3 className="text-xl font-black text-slate-900 leading-tight mb-4">{prog.title}</h3>
-                  <div className="mt-auto pt-6 border-t border-slate-100">
-                    <Link href={`/programas`} className="text-sm font-bold text-slate-700 hover:text-[#3BA8C5] inline-flex items-center gap-2 transition-colors">
-                      Ver detalle <ChevronRight className="w-4 h-4" />
-                    </Link>
-                  </div>
-                </div>
-              </div>
+              </FadeIn>
             ))}
           </div>
 
-          <div className="mt-16 text-center">
-            <Link href="/programas" className="inline-flex items-center justify-center bg-slate-900 hover:bg-[#3BA8C5] text-white font-extrabold text-xs uppercase tracking-widest px-8 py-4 rounded-none transition-colors shadow-lg">
-              Ver más Programas
-            </Link>
-          </div>
+          <FadeIn delay={0.4}>
+            <div className="mt-16 text-center">
+              <Link href="/programas" className="inline-flex items-center justify-center bg-[#fcd116] hover:bg-white text-slate-950 hover:text-[#08479b] font-extrabold text-sm md:text-base uppercase tracking-widest px-8 md:px-10 py-4 md:py-5 rounded-md transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 font-manrope">
+                Ver todos los Programas
+              </Link>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* 5. SECCIÓN 'SOLUCIONES CORPORATIVAS' */}
       <section className="py-32 bg-slate-900 border-b border-slate-800 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+        {/* Abstract Blobs */}
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#08479b]/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[#06316b]/15 rounded-full blur-[120px] mix-blend-screen pointer-events-none translate-x-1/3 translate-y-1/3" />
+        
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+        
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10 relative z-10 text-center">
-          <span className="text-[#3BA8C5] font-extrabold text-xs uppercase tracking-widest block mb-4">Empresas B2B</span>
-          <h2 className="text-white font-black text-3xl md:text-5xl tracking-tight mb-6">Soluciones Corporativas</h2>
-          <p className="max-w-2xl mx-auto text-slate-300 font-semibold leading-relaxed mb-10">
-            Diseñamos programas a medida para potenciar el talento de tu organización: capacitación in-company, consultoría y tecnología de gestión humana.
-          </p>
-          <Link
-            href="/empresas"
-            className="inline-flex items-center gap-2 bg-[#3BA8C5] hover:bg-[#0083B0] text-white font-extrabold text-xs uppercase tracking-widest px-8 py-4 rounded-none transition-colors shadow-lg"
-          >
-            <Building2 className="w-4 h-4" /> Conocer Soluciones Corporativas
-          </Link>
+          <FadeIn>
+            <div 
+              className="text-white font-black text-4xl md:text-6xl tracking-tight mb-8 drop-shadow-lg font-manrope [&>p]:m-0"
+              dangerouslySetInnerHTML={{ __html: homeCorpTitle }}
+            />
+            <div 
+              className="max-w-2xl mx-auto text-slate-300 font-medium text-lg leading-relaxed mb-12"
+              dangerouslySetInnerHTML={{ __html: homeCorpDesc }}
+            />
+            <Link
+              href="/empresas"
+              className="inline-flex items-center justify-center gap-2.5 bg-[#08479b] hover:bg-[#06316b] text-white font-extrabold text-sm md:text-base uppercase tracking-widest px-8 md:px-10 py-4 md:py-5 rounded-md transition-all duration-300 shadow-[0_0_30px_rgba(8,71,155,0.4)] hover:shadow-[0_0_40px_rgba(8,71,155,0.6)] hover:-translate-y-1 font-manrope"
+            >
+              <Building2 className="w-5 h-5" /> Explorar Soluciones Corporativas
+            </Link>
+          </FadeIn>
         </div>
       </section>
 
-      {/* 6. SECCIÓN 'NOSOTROS' */}
-      <section className="py-24 bg-white border-b border-slate-100 overflow-hidden">
+      {/* 5.5. MARQUESINA DE LOGOS DE CLIENTES */}
+      {dynamicLogos.length > 0 ? (
+        <ClientLogosMarquee logos={dynamicLogos} />
+      ) : (
+        <ClientLogosMarquee />
+      )}
+
+      {/* 6. SECCIÓN 'SOBRE NOSOTROS' (Two-column layout with editable video) */}
+      <section className="py-24 bg-white border-b border-slate-100 overflow-hidden" id="sobre-nosotros">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-6">
-              <span className="text-[#3BA8C5] font-extrabold text-xs uppercase tracking-widest block">Sobre Nosotros</span>
-              <h2 className="text-slate-900 font-black text-3xl md:text-4xl tracking-tight">Expertos en formación ejecutiva</h2>
-              <p className="text-slate-600 text-base md:text-lg font-semibold leading-relaxed">
-                ADPH Group es una institución líder dedicada a transformar el talento de los profesionales de Latinoamérica. Mediante programas de alta exigencia, una plana docente de primer nivel y metodologías centradas en la acción, garantizamos un aprendizaje orientado a resultados corporativos tangibles.
-              </p>
-              <div className="pt-4">
-                <Link href="/nosotros" className="inline-flex items-center gap-2 text-[#3BA8C5] font-extrabold uppercase text-xs tracking-widest hover:text-[#0083B0] transition-colors">
-                  Conoce nuestra historia <ArrowRight className="w-4 h-4" />
-                </Link>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            
+            {/* Left Column: Text Content */}
+            <FadeIn>
+              <div className="space-y-6 text-left">
+
+                <div 
+                  className="text-slate-900 font-black text-4xl sm:text-5xl tracking-tight leading-tight font-manrope [&>p]:m-0"
+                  dangerouslySetInnerHTML={{ __html: homeNosotrosTitle }}
+                />
+                <div 
+                  className="text-slate-600 text-base md:text-lg font-medium leading-relaxed font-manrope"
+                  dangerouslySetInnerHTML={{ __html: homeNosotrosDesc }}
+                />
+                <div className="pt-4 font-manrope">
+                  <Link 
+                    href="/nosotros" 
+                    className="group inline-flex items-center gap-4 text-xs font-black uppercase tracking-widest text-slate-900 font-manrope"
+                  >
+                    <span className="w-10 h-10 rounded-full bg-[#08479b]/10 text-[#08479b] flex items-center justify-center group-hover:bg-[#08479b] group-hover:text-white transition-all duration-300 shadow-sm shrink-0">
+                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                    CONOCE NUESTRA HISTORIA
+                  </Link>
+                </div>
               </div>
-            </div>
-            <div className="relative">
-              <div className="aspect-[4/3] w-full overflow-hidden border border-slate-100 shadow-xl rounded-none">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80" alt="Nosotros ADPH Group" className="w-full h-full object-cover" />
+            </FadeIn>
+
+            {/* Right Column: Editable Video Card */}
+            <FadeIn delay={0.2}>
+              <div className="relative">
+                {/* Background glow decoration */}
+                <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#08479b]/5 rounded-full blur-[80px] pointer-events-none -translate-y-10 translate-x-10" />
+                
+                <div className="relative z-10 w-full aspect-[4/3] rounded-none overflow-hidden shadow-lg bg-slate-950">
+                  {/* YouTube Iframe - URL can be edited using the NOSOTROS_VIDEO_URL constant at the top of the file */}
+                  <iframe 
+                    src={homeNosotrosVideoUrl} 
+                    title="Presentación ADPH Group"
+                    className="w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
               </div>
-              <div className="absolute -bottom-6 -left-6 w-32 h-32 z-0 rounded-none -rotate-6" style={{ backgroundColor: 'rgba(59,168,197,0.1)', border: '1px solid rgba(59,168,197,0.2)' }}></div>
-            </div>
+            </FadeIn>
+
           </div>
         </div>
       </section>
 
       {/* 7. SECCIÓN 'TESTIMONIOS' */}
-      <section className="py-24 bg-slate-50 border-b border-slate-100">
+      <section className="py-24 bg-[#08479b] border-b border-slate-100">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
-          <div className="mb-16 text-center">
-            <h2 className="text-slate-900 font-black text-3xl md:text-4xl tracking-tight">Lo que dicen nuestros alumnos</h2>
-            <div className="w-16 h-1.5 bg-[#3BA8C5] mx-auto mt-6"></div>
-          </div>
+          <FadeIn>
+            <div className="mb-16 text-center">
+              <h2 className="text-white font-black text-3xl md:text-5xl tracking-tight font-manrope">Lo que dicen nuestros alumnos</h2>
+              <div className="w-16 h-1.5 bg-[#fcd116] mx-auto mt-6 rounded-full"></div>
+            </div>
+          </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {TESTIMONIOS.map(testimonio => (
-              <div key={testimonio.id} className="bg-white p-8 border border-slate-200 rounded-none relative flex flex-col shadow-sm hover:shadow-md transition-shadow">
-                <Quote className="absolute top-6 right-6 w-10 h-10 text-slate-100" />
-                <p className="text-slate-600 font-semibold text-sm leading-relaxed mb-8 flex-grow relative z-10 italic">
-                  &quot;{testimonio.quote}&quot;
-                </p>
-                <div className="flex items-center gap-4 mt-auto">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={testimonio.image} alt={testimonio.name} className="w-12 h-12 rounded-full object-cover border border-slate-200" />
-                  <div>
-                    <h4 className="text-slate-900 font-bold text-sm leading-tight">{testimonio.name}</h4>
-                    <span className="text-slate-500 text-xs font-semibold">{testimonio.role}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <TestimoniosCarousel testimonios={dynamicTestimonios} />
         </div>
       </section>
 
-      {/* 8. SECCIÓN 'BLOGS' */}
+      {/* 8. SECCIÓN 'BLOG - TARJETAS HORIZONTALES' */}
       <section className="py-24 bg-white border-b border-slate-100">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
-            <div>
-              <span className="text-[#3BA8C5] font-extrabold text-xs uppercase tracking-widest block mb-4">Actualidad</span>
-              <h2 className="text-slate-900 font-black text-3xl tracking-tight">Nuestro Blog</h2>
-              <div className="w-16 h-1.5 bg-[#3BA8C5] mt-4"></div>
-            </div>
-            <Link href="/blog" className="inline-flex text-xs font-extrabold uppercase tracking-widest text-[#3BA8C5] hover:text-[#0083B0] items-center gap-2 transition-colors">
-              Ver todos los artículos <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {BLOGS.map(blog => (
-              <div key={blog.id} className="group cursor-pointer flex flex-col">
-                <div className="h-56 overflow-hidden rounded-none mb-6 border border-slate-100">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={blog.image} alt={blog.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                </div>
-                <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-2">{blog.date}</span>
-                <h3 className="text-lg font-black text-slate-900 group-hover:text-[#3BA8C5] transition-colors leading-tight">{blog.title}</h3>
+          <FadeIn>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+              <div>
+                <h2 className="text-slate-900 font-black text-3xl md:text-5xl tracking-tight font-manrope">Últimos Artículos</h2>
+                <div className="w-16 h-1.5 bg-[#08479b] mt-6 rounded-full"></div>
               </div>
+              <Link href="/blog" className="group inline-flex items-center gap-3 text-slate-900 font-extrabold uppercase text-xs tracking-widest hover:text-[#08479b] transition-colors font-manrope">
+                <span className="bg-white shadow-sm border border-slate-200 rounded-md p-3 group-hover:shadow-md transition-all">
+                  <ArrowRight className="w-4 h-4 text-[#08479b]" />
+                </span>
+                Ver todos los artículos
+              </Link>
+            </div>
+          </FadeIn>
+
+          {/* 2-Column Horizontal Blog Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {dynamicBlogs.slice(0, 3).map((blog, index) => (
+              <FadeIn key={blog.id} delay={index * 0.1}>
+                <div className="group flex flex-col md:flex-row bg-white rounded-xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 overflow-hidden h-full">
+                  <div className="md:w-2/5 h-52 md:h-auto relative overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={blog.image} alt={blog.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-[#08479b]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay"></div>
+                  </div>
+                  <div className="p-6 md:w-3/5 flex flex-col justify-between flex-grow">
+                    <div className="space-y-3">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{blog.date}</span>
+                      <h3 className="text-lg font-black text-slate-900 group-hover:text-[#08479b] transition-colors leading-tight font-manrope line-clamp-2">{blog.title}</h3>
+                      <p className="text-slate-500 text-xs font-medium leading-relaxed line-clamp-3">
+                        Explora a fondo las mejores estrategias de formación ejecutiva y metodologías aplicadas para liderar con éxito en las organizaciones modernas.
+                      </p>
+                    </div>
+                    <div className="pt-4 flex items-center justify-between border-t border-slate-100 mt-6 font-manrope">
+                      <span className="text-[10px] text-slate-400 font-bold">Por: {blog.author || 'Académico ADPH'}</span>
+                      <Link
+                        href={blog.enlaceExterno || '/blog'}
+                        target={blog.enlaceExterno ? '_blank' : undefined}
+                        rel={blog.enlaceExterno ? 'noopener noreferrer' : undefined}
+                        className="text-xs font-bold text-[#08479b] hover:underline inline-flex items-center gap-1"
+                      >
+                        Leer artículo <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </FadeIn>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 9. CTA FINAL ADPH */}
-      <AdphHeroForm
-        title={<>Inicia tu proceso de <br /><span style={{ color: '#3BA8C5' }}>Admisión</span></>}
-        subtitle="Únete a nuestra exclusiva red de profesionales. Completa el formulario y un asesor académico se pondrá en contacto contigo a la brevedad."
-        backgroundImage="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1920&q=80"
-        formTitle="REGÍSTRATE A NUESTRO PROGRAMA"
-      />
+      {/* 9. SECCIÓN 'NOTICIAS' (Centered grid of featured news) */}
+      <section className="py-24 bg-[#08479b] border-b border-slate-100">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
+          <FadeIn>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+              <div>
+                <h2 className="text-white font-black text-3xl md:text-5xl tracking-tight font-manrope">Noticias Destacadas</h2>
+                <div className="w-16 h-1.5 bg-[#fcd116] mx-auto mt-6 rounded-full"></div>
+              </div>
+              <Link 
+                href="/noticias" 
+                className="group flex items-center gap-3 text-xs font-extrabold uppercase tracking-widest text-white hover:text-[#fcd116] transition-colors font-manrope"
+              >
+                <span className="bg-[#06316b]/50 border border-white/10 rounded-md p-3 group-hover:shadow-md transition-all">
+                  <ArrowRight className="w-4 h-4 text-[#fcd116]" />
+                </span>
+                Ver todas las noticias
+              </Link>
+            </div>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-[1440px] mx-auto">
+            {dynamicNoticias.map((news, index) => {
+              const targetUrl = news.url && news.url.startsWith('http') ? news.url : `/noticias/${news.id}`
+
+              return (
+                <FadeIn key={news.id} delay={index * 0.15}>
+                  <div className="group bg-white border border-slate-200 rounded-none overflow-hidden flex flex-col h-full shadow-sm hover:shadow-md transition-all duration-300">
+                    <div className="h-60 relative overflow-hidden bg-slate-100">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={news.image} alt={news.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102" />
+                      <div className="absolute top-4 left-4 bg-[#08479b] text-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-none">
+                        {news.tag}
+                      </div>
+                    </div>
+                    <div className="p-6 flex flex-col flex-grow justify-between bg-white">
+                      <div className="space-y-2">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{news.date}</span>
+                        <h4 className="text-lg font-black text-slate-900 group-hover:text-[#08479b] transition-colors leading-snug font-manrope">
+                          {news.title}
+                        </h4>
+                      </div>
+                      <Link 
+                        href={news.enlaceExterno || targetUrl}
+                        target={news.enlaceExterno ? '_blank' : undefined}
+                        rel={news.enlaceExterno ? 'noopener noreferrer' : undefined}
+                        className="text-xs font-bold text-[#08479b] hover:underline mt-6 inline-flex items-center gap-1.5 font-manrope self-start"
+                      >
+                        Leer noticia <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </FadeIn>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 10. NEWSLETTER CAPTURE (Newsletter component right before Footer) */}
+      <AdphNewsletter />
     </>
   )
 }

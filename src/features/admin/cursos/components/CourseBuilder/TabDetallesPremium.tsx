@@ -84,7 +84,14 @@ export function TabDetallesPremium({ curso, onSuccess }: any) {
     (curso.incluye || []).map((item: any, i: number) => ({ ...item, id: `inc-${Math.random()}-${i}` }))
   )
 
+  const [salidasProfesionales, setSalidasProfesionales] = useState<any[]>(
+    (curso.salidas_profesionales || []).map((text: string, i: number) => ({ id: `salida-${Math.random()}-${i}`, text }))
+  )
+
+  const [perfilEstudiante, setPerfilEstudiante] = useState(curso.perfil_estudiante || '')
+
   const [newObjetivo, setNewObjetivo] = useState('')
+  const [newSalida, setNewSalida] = useState('')
 
   // Sensores para DND
   const sensors = useSensors(
@@ -125,13 +132,17 @@ export function TabDetallesPremium({ curso, onSuccess }: any) {
         return newItem
       })
 
+      const cleanSalidas = salidasProfesionales.map((s: any) => s.text)
+
       await editMutation.mutateAsync({
         id: curso.id,
         data: {
           objetivos: cleanObjetivos,
           metodologia: cleanMetodologia,
           beneficios: cleanBeneficios,
-          incluye: cleanIncluye
+          incluye: cleanIncluye,
+          perfil_estudiante: perfilEstudiante,
+          salidas_profesionales: cleanSalidas
         }
       })
 
@@ -195,6 +206,27 @@ export function TabDetallesPremium({ curso, onSuccess }: any) {
     const newIndex = incluye.findIndex(i => i.id === over.id)
 
     setIncluye(prev => arrayMove(prev, oldIndex, newIndex))
+  }
+
+  const handleSalidasDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (!over || active.id === over.id) return
+
+    const oldIndex = salidasProfesionales.findIndex((s: any) => s.id === active.id)
+    const newIndex = salidasProfesionales.findIndex((s: any) => s.id === over.id)
+
+    setSalidasProfesionales((prev: any) => arrayMove(prev, oldIndex, newIndex))
+  }
+
+  const addSalida = () => {
+    if (!newSalida.trim()) return
+    setSalidasProfesionales((prev: any) => [...prev, { id: `salida-${Math.random()}`, text: newSalida.trim() }])
+    setNewSalida('')
+  }
+
+  const removeSalida = (id: string) => {
+    setSalidasProfesionales((prev: any) => prev.filter((s: any) => s.id !== id))
   }
 
   return (
@@ -339,6 +371,59 @@ export function TabDetallesPremium({ curso, onSuccess }: any) {
                 </Grid>
               ))}
             </Grid>
+          </SortableContext>
+        </DndContext>
+      </Grid>
+
+      {/* Perfil del Participante */}
+      <Grid item xs={12}><Divider /></Grid>
+      <Grid item xs={12}>
+        <Typography variant='h6' sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+          <i className='tabler-user' /> Perfil del Estudiante (¿A quién va dirigido?)
+        </Typography>
+        <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
+          Describe brevemente quién debería tomar este programa y qué requisitos o perfil se busca.
+        </Typography>
+        <CustomTextField
+          fullWidth
+          multiline
+          rows={4}
+          placeholder='Ej: Profesionales de Recursos Humanos que buscan especializarse...'
+          value={perfilEstudiante}
+          onChange={e => setPerfilEstudiante(e.target.value)}
+        />
+      </Grid>
+
+      {/* Salidas Profesionales */}
+      <Grid item xs={12}><Divider /></Grid>
+      <Grid item xs={12}>
+        <Typography variant='h6' sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+          <i className='tabler-briefcase' /> Salidas Profesionales
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+          <CustomTextField
+            fullWidth
+            placeholder='Ej: Gerente de Recursos Humanos...'
+            value={newSalida}
+            onChange={e => setNewSalida(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && addSalida()}
+          />
+          <Tooltip title="Añadir salida profesional">
+            <Button variant='tonal' onClick={addSalida} startIcon={<i className='tabler-plus' />}>
+              Añadir
+            </Button>
+          </Tooltip>
+        </Box>
+
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleSalidasDragEnd}>
+          <SortableContext items={salidasProfesionales.map((s: any) => s.id)} strategy={verticalListSortingStrategy}>
+            <Stack spacing={2}>
+              {salidasProfesionales.map((salida: any) => (
+                <SortableItem key={salida.id} id={salida.id}>
+                  <ObjectiveCard text={salida.text} onRemove={() => removeSalida(salida.id)} />
+                </SortableItem>
+              ))}
+            </Stack>
           </SortableContext>
         </DndContext>
       </Grid>

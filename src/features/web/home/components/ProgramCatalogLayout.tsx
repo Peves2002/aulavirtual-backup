@@ -10,22 +10,24 @@ type ProgramCatalogLayoutProps = {
   tipo: TipoPrograma
   courses: any[]
   categories: { id: string; nombre: string; slug: string }[]
+  hideHero?: boolean
 }
 
-export default function ProgramCatalogLayout({ tipo, courses, categories }: ProgramCatalogLayoutProps) {
+export default function ProgramCatalogLayout({ tipo, courses, categories, hideHero = false }: ProgramCatalogLayoutProps) {
   const config = getTipoProgramaConfig(tipo)
 
   return (
     <Box sx={{ flexGrow: 1, bgcolor: 'background.default' }}>
-      <Box
-        sx={{
-          background: 'linear-gradient(135deg, #13294D 0%, #1B3A6B 100%)',
-          py: { xs: 5, md: 7 },
-          px: { xs: 3, md: 6 },
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-      >
+      {!hideHero && (
+        <Box
+          sx={{
+            background: 'linear-gradient(135deg, #13294D 0%, #1B3A6B 100%)',
+            py: { xs: 5, md: 7 },
+            px: { xs: 3, md: 6 },
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+        >
         <Box sx={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', backgroundColor: 'rgba(59,168,197,0.10)', pointerEvents: 'none' }} />
         <Box sx={{ position: 'absolute', bottom: -60, right: 80, width: 300, height: 300, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.03)', pointerEvents: 'none' }} />
 
@@ -93,7 +95,8 @@ export default function ProgramCatalogLayout({ tipo, courses, categories }: Prog
             ))}
           </Box>
         </Box>
-      </Box>
+        </Box>
+      )}
 
       <CourseCatalog courses={courses} categories={categories} tipo={tipo} />
     </Box>

@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 
 import CompaniesSection from '@/features/web/home/components/CompaniesSection'
 import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
-import { getConfig } from '@/utils/libs/config'
+import { getConfig, getConfigs } from '@/utils/libs/config'
 
 export const metadata = {
   title: 'Soluciones Corporativas - ADPH Group',
@@ -14,17 +14,24 @@ export default async function EmpresasPage() {
 
   if (habilitado !== 'true') notFound()
 
+  const configs = await getConfigs()
+  const heroTitle = configs['EMPRESAS_HERO_TITLE']?.trim() || 'Lleva a tu equipo al siguiente nivel'
+  const heroDesc = configs['EMPRESAS_HERO_DESC']?.trim() || 'Descubre nuestras soluciones corporativas diseñadas para potenciar las habilidades de tus colaboradores y aumentar la competitividad técnica de tu empresa en el mercado actual.'
+
+  const heroBg = configs['EMPRESAS_HERO_IMAGE']?.trim()
+  const heroStyle = {
+    background: heroBg ? `url(${heroBg}) center/cover no-repeat` : 'linear-gradient(135deg, #13294D 0%, #1B3A6B 45%, #1B3A6B 100%)',
+    padding: '6rem 1.5rem 5rem',
+    position: 'relative' as any,
+    overflow: 'hidden',
+  };
+
   return (
     <>
       {/* ── 1. HERO EMPRESAS ─────────────────────── */}
-      <section
-        style={{
-          background: 'linear-gradient(135deg, #13294D 0%, #1B3A6B 45%, #1B3A6B 100%)',
-          padding: '6rem 1.5rem 5rem',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
+      <section style={{ ...heroStyle }}>
+        {/* Overlay si hay imagen */}
+        {heroBg && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(19, 41, 77, 0.85)' }} />}
         {/* Grid pattern */}
         <div
           aria-hidden
@@ -67,7 +74,7 @@ export default async function EmpresasPage() {
               </span>
             </div>
 
-            <h1
+            <div
               style={{
                 fontFamily: 'Poppins, sans-serif',
                 fontSize: 'clamp(2rem, 5vw, 3.5rem)',
@@ -76,11 +83,11 @@ export default async function EmpresasPage() {
                 letterSpacing: '-0.025em',
                 lineHeight: 1.15,
               }}
-            >
-              Lleva a tu equipo al <span style={{ color: '#3BA8C5' }}>siguiente nivel</span>
-            </h1>
+              className="[&>p]:m-0"
+              dangerouslySetInnerHTML={{ __html: heroTitle }}
+            />
 
-            <p
+            <div
               style={{
                 fontFamily: 'Poppins, sans-serif',
                 fontSize: '1.125rem',
@@ -88,9 +95,8 @@ export default async function EmpresasPage() {
                 lineHeight: 1.75,
                 marginBottom: '1rem',
               }}
-            >
-              Descubre nuestras soluciones corporativas diseñadas para potenciar las habilidades de tus colaboradores y aumentar la competitividad técnica de tu empresa en el mercado actual.
-            </p>
+              dangerouslySetInnerHTML={{ __html: heroDesc }}
+            />
           </div>
         </div>
       </section>

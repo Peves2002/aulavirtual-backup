@@ -78,6 +78,12 @@ export async function GET(request: Request) {
           cargo: true,
           firma: true,
           rol: true,
+          rol_personalizado_id: true,
+          rol_personalizado: {
+            select: {
+              nombre: true
+            }
+          },
           esta_activo: true,
           creado_en: true,
           actualizado_en: true
@@ -122,7 +128,7 @@ export async function POST(request: Request) {
       return validation.error
     }
 
-    const { correo, contrasena, nombre, apellido, numero_documento, celular, rol, biografia, avatar, cargo, firma } =
+    const { correo, contrasena, nombre, apellido, numero_documento, celular, rol, biografia, avatar, cargo, firma, rol_personalizado_id } =
       validation.data
 
     // Verificar si el correo ya existe
@@ -172,6 +178,7 @@ export async function POST(request: Request) {
         numero_documento,
         celular: celular || null,
         rol: rol || 'ESTUDIANTE',
+        rol_personalizado_id: rol_personalizado_id || null,
         biografia: biografia || null,
         avatar: avatar || null,
         cargo: cargo || null,

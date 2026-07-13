@@ -1,0 +1,123 @@
+const SERVICES_DATA = {
+  educacion: [
+    {
+      id: "diplomado-talento",
+      title: "Diplomado en Gestión del Talento Humano",
+      desc: "Estrategias modernas para liderar y desarrollar el capital humano en entornos cambiantes.",
+      duration: "16 semanas",
+      modality: "Online en vivo",
+      image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80",
+      modules: [
+        "Evolución de la Gestión Humana",
+        "Atracción y Selección de Talento",
+        "Capacitación y Desarrollo",
+        "Compensaciones y Beneficios",
+        "Cultura y Clima Organizacional"
+      ],
+      instructors: [
+        { name: "Mag. Roberto Castillo", role: "Director RRHH", image: "https://i.pravatar.cc/150?u=roberto" }
+      ]
+    },
+    {
+      id: "certificacion-psicologia",
+      title: "Certificación en Psicología Ocupacional",
+      desc: "Herramientas clínicas aplicadas al entorno laboral para promover el bienestar y la salud mental.",
+      duration: "10 semanas",
+      modality: "Semipresencial",
+      image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80",
+      modules: [
+        "Fundamentos de Salud Ocupacional",
+        "Evaluación Psicológica Laboral",
+        "Prevención de Patologías Laborales",
+        "Promoción del Bienestar en el Trabajo"
+      ],
+      instructors: [
+        { name: "Dra. Elena Martínez", role: "Psicóloga Organizacional", image: "https://i.pravatar.cc/150?u=elena" }
+      ]
+    },
+    {
+      id: "especializacion-competencias",
+      title: "Especialización en Evaluación por Competencias",
+      desc: "Metodologías avanzadas para diseñar y aplicar procesos de evaluación efectivos y objetivos.",
+      duration: "12 semanas",
+      modality: "Online en vivo",
+      image: "https://images.unsplash.com/photo-1454165833762-d5d88e9218df?auto=format&fit=crop&w=800&q=80",
+      modules: [
+        "Modelos de Competencias",
+        "Entrevistas por Incidentes Críticos",
+        "Assessment Center Moderno",
+        "Gestión del Desempeño"
+      ],
+      instructors: [
+        { name: "Mag. Sofía Luna", role: "Experta en Evaluación", image: "https://i.pravatar.cc/150?u=sofia" }
+      ]
+    },
+    {
+      id: "certificacion-lego",
+      title: "Certificación LEGO® Serious Play aplicado a RRHH",
+      desc: "Metodología experiencial líder para facilitar la resolución de problemas y la toma de decisiones en equipos.",
+      duration: "6 semanas",
+      modality: "Presencial Intensivo",
+      image: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=800&q=80",
+      modules: [
+        "Core Process y Técnicas de Aplicación",
+        "Ventanas de Identidad y Estrategia Real",
+        "Facilitación de Talleres de Alto Impacto",
+        "Integración en Procesos de RRHH"
+      ],
+      instructors: [
+        { name: "Mag. Javier Prado", role: "Facilitador Gold Certified", image: "https://i.pravatar.cc/150?u=javier" }
+      ]
+    },
+    {
+      id: "curso-riesgo-psicosocial",
+      title: "Curso: Factores de Riesgo Psicosocial",
+      desc: "Identificación, evaluación y gestión de riesgos según la normativa vigente de seguridad y salud.",
+      duration: "4 semanas",
+      modality: "Online",
+      image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80",
+      modules: [
+        "Normativa Legal Peruana",
+        "Metodología de Identificación",
+        "Plan de Monitoreo Psicosocial",
+        "Implementación de Medidas de Control"
+      ],
+      instructors: [
+        { name: "Ing. Carlos Ruiz", role: "Auditor ISO 45001", image: "https://i.pravatar.cc/150?u=carlos" }
+      ]
+    },
+    {
+      id: "diplomado-seguridad",
+      title: "Diplomado en Seguridad y Salud en el Trabajo",
+      desc: "Formación integral para el cumplimiento de la Ley 29783 y estándares internacionales.",
+      duration: "14 semanas",
+      modality: "Online en vivo",
+      image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=800&q=80",
+      modules: [
+        "Sistema de Gestión de SST",
+        "IPERC Continuo y Mapa de Riesgos",
+        "Salud Ocupacional y Vigilancia Médica",
+        "Auditorías y Fiscalización SUNAFIL",
+        "Cultura de Seguridad y Liderazgo"
+      ],
+      instructors: [
+        { name: "Dr. Alberto Varela", role: "Especialista en SST", image: "https://i.pravatar.cc/150?u=alberto" }
+      ]
+    }
+  ],
+  consultoria: [
+    { id: "in-house", title: "Capacitaciones In House", desc: "Entrenamiento diseñado exclusivamente para las necesidades de tu equipo." },
+    { id: "evaluaciones", title: "Evaluaciones Ocupacionales", desc: "Diagnóstico preciso del perfil y salud laboral de tus colaboradores." },
+    { id: "clima", title: "Evaluación de Clima Laboral", desc: "Mide y mejora el ambiente de trabajo en tu organización." },
+    { id: "desempeno", title: "Evaluación de Desempeño", desc: "Sistemas modernos para potenciar la productividad y el feedback." },
+    { id: "asesoria", title: "Asesoría en Gestión del Talento", desc: "Consultoría estratégica para optimizar tus procesos de RRHH." }
+  ],
+  hrcorex: [
+    { id: "seleccion", title: "Plataforma de Selección", desc: "Software avanzado para digitalizar y optimizar tus procesos de reclutamiento." },
+    { id: "evaluacion-online", title: "Plataforma de Evaluación", desc: "Herramienta digital para evaluaciones psicométricas y técnicas." },
+    { id: "tests", title: "Test Psicológicos", desc: "Batería completa de pruebas psicológicas validadas científicamente." }
+  ]
+};
+export {
+  SERVICES_DATA as S
+};

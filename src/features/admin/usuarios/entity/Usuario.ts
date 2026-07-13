@@ -12,6 +12,7 @@ export interface Usuario {
   cargo: string | null
   firma: string | null
   rol: Rol
+  rol_personalizado_id: string | null
   esta_activo: boolean
   creado_en: string
   actualizado_en: string

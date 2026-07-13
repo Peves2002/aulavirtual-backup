@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
 import prisma from '@/utils/libs/prisma'
+import { getConfigs } from '@/utils/libs/config'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
 import { MisionVisionSection, ValoresSection } from '@/features/web/nosotros/components/NosotrosInteractive'
@@ -36,18 +37,43 @@ async function getTeachers() {
 
 export default async function NosotrosPage() {
   const teachers = await getTeachers()
+  const configs = await getConfigs()
+
+  const heroTitle = configs['NOSOTROS_HERO_TITLE']?.trim() || 'Somos calidad y responsabilidad a tu servicio'
+  const heroDesc = configs['NOSOTROS_HERO_DESC']?.trim() || 'Somos una plataforma educativa especializada en la formación profesional de alto impacto. Ofrecemos cursos diseñados por expertos del sector, con certificaciones reconocidas que impulsan tu desarrollo profesional y el de tu equipo.'
+
+  const misionTitle = configs['NOSOTROS_MISION_TITLE']?.trim() || undefined
+  const misionText = configs['NOSOTROS_MISION_TEXT']?.trim() || undefined
+  const visionTitle = configs['NOSOTROS_VISION_TITLE']?.trim() || undefined
+  const visionText = configs['NOSOTROS_VISION_TEXT']?.trim() || undefined
+
+  let dynamicValores: { title: string; desc: string }[] | undefined = undefined
+  const dbValoresStr = configs['NOSOTROS_VALORES']
+  if (dbValoresStr?.trim()) {
+    try { dynamicValores = JSON.parse(dbValoresStr) } catch { /* fallback */ }
+  }
+
+  const stats = [
+    { emoji: '\uD83D\uDC69\u200D\uD83C\uDF93', value: configs['NOSOTROS_STAT_1_VALUE']?.trim() || '+1,200', label: configs['NOSOTROS_STAT_1_LABEL']?.trim() || 'Estudiantes formados' },
+    { emoji: '\uD83D\uDCDA', value: configs['NOSOTROS_STAT_2_VALUE']?.trim() || '+80', label: configs['NOSOTROS_STAT_2_LABEL']?.trim() || 'Cursos disponibles' },
+    { emoji: '\uD83D\uDC68\u200D\uD83C\uDFEB', value: configs['NOSOTROS_STAT_3_VALUE']?.trim() || '+30', label: configs['NOSOTROS_STAT_3_LABEL']?.trim() || 'Docentes expertos' },
+    { emoji: '\uD83C\uDFC6', value: configs['NOSOTROS_STAT_4_VALUE']?.trim() || '98%', label: configs['NOSOTROS_STAT_4_LABEL']?.trim() || 'Tasa de satisfacción' },
+  ]
+
+  const heroBg = configs['NOSOTROS_HERO_IMAGE']?.trim()
+  const heroStyle = {
+    background: heroBg ? `url(${heroBg}) center/cover no-repeat` : 'linear-gradient(135deg, #13294D 0%, #1B3A6B 45%, #1B3A6B 100%)',
+    padding: '6rem 1.5rem 5rem',
+    position: 'relative' as any,
+    overflow: 'hidden',
+  };
 
   return (
     <>
       {/* ── 1. HERO SOBRE NOSOTROS ─────────────────────── */}
-      <section
-        style={{
-          background: 'linear-gradient(135deg, #13294D 0%, #1B3A6B 45%, #1B3A6B 100%)',
-          padding: '6rem 1.5rem 5rem',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
+      <section style={{ ...heroStyle }}>
+        {/* Overlay si hay imagen */}
+        {heroBg && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(19, 41, 77, 0.85)' }} />}
         {/* Grid pattern */}
         <div
           aria-hidden
@@ -98,12 +124,7 @@ export default async function NosotrosPage() {
 
                 {/* Stats 2×2 */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  {[
-                    { emoji: '👩‍🎓', value: '+1,200', label: 'Estudiantes formados' },
-                    { emoji: '📚', value: '+80', label: 'Cursos disponibles' },
-                    { emoji: '👨‍🏫', value: '+30', label: 'Docentes expertos' },
-                    { emoji: '🏆', value: '98%', label: 'Tasa de satisfacción' },
-                  ].map((s, i) => (
+                  {stats.map((s, i) => (
                     <div
                       key={i}
                       style={{
@@ -164,7 +185,7 @@ export default async function NosotrosPage() {
                   </span>
                 </div>
 
-                <h1
+                <div
                   style={{
                     fontFamily: 'Poppins, sans-serif',
                     fontSize: 'clamp(1.875rem, 4vw, 2.75rem)',
@@ -174,13 +195,11 @@ export default async function NosotrosPage() {
                     lineHeight: 1.15,
                     marginBottom: '1.25rem',
                   }}
-                >
-                  Somos calidad y{' '}
-                  <span style={{ color: '#3BA8C5' }}>responsabilidad</span>{' '}
-                  a tu servicio
-                </h1>
+                  className="[&>p]:m-0"
+                  dangerouslySetInnerHTML={{ __html: heroTitle }}
+                />
 
-                <p
+                <div
                   style={{
                     fontFamily: 'Poppins, sans-serif',
                     fontSize: '1rem',
@@ -189,11 +208,8 @@ export default async function NosotrosPage() {
                     maxWidth: '480px',
                     marginBottom: '2.5rem',
                   }}
-                >
-                  Somos una plataforma educativa especializada en la formación profesional de alto impacto.
-                  Ofrecemos cursos diseñados por expertos del sector, con certificaciones reconocidas
-                  que impulsan tu desarrollo profesional y el de tu equipo.
-                </p>
+                  dangerouslySetInnerHTML={{ __html: heroDesc }}
+                />
 
                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                   <Link
@@ -287,10 +303,15 @@ export default async function NosotrosPage() {
       </section> */}
 
       {/* ── 3. MISIÓN / VISIÓN (client component) ─────── */}
-      <MisionVisionSection />
+      <MisionVisionSection
+        misionTitle={misionTitle}
+        misionText={misionText}
+        visionTitle={visionTitle}
+        visionText={visionText}
+      />
 
       {/* ── 4. VALORES (client component) ─────────────── */}
-      <ValoresSection />
+      <ValoresSection valores={dynamicValores} />
 
       {/* ── 5. PROFESORES ─────────────────────────────── */}
       <ProfessorsCarousel teachers={JSON.parse(JSON.stringify(teachers))} />

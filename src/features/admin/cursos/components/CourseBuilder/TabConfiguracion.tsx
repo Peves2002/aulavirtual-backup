@@ -33,6 +33,7 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
 
     const [esGratis, setEsGratis] = useState(curso.es_gratis)
     const [esPrivado, setEsPrivado] = useState(curso.es_privado ?? false)
+    const [esDestacado, setEsDestacado] = useState(curso.es_destacado ?? false)
     const [completarAutomatico, setCompletarAutomatico] = useState(curso.completar_automatico ?? false)
     const [precio, setPrecio] = useState(curso.precio)
     const [precioFalso, setPrecioFalso] = useState(curso.precio_falso)
@@ -66,6 +67,17 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
             await editMutation.mutateAsync({ id: curso.id, data: { es_privado: valor } })
             setEsPrivado(valor)
             enqueueSnackbar(valor ? 'Curso marcado como privado' : 'Curso marcado como público', { variant: 'success' })
+            onSuccess()
+        } catch (error: any) {
+            enqueueSnackbar(error?.message || 'Error', { variant: 'error' })
+        }
+    }
+
+    const handleSaveDestacado = async (valor: boolean) => {
+        try {
+            await editMutation.mutateAsync({ id: curso.id, data: { es_destacado: valor } })
+            setEsDestacado(valor)
+            enqueueSnackbar(valor ? 'Curso marcado como destacado' : 'Curso quitado de destacados', { variant: 'success' })
             onSuccess()
         } catch (error: any) {
             enqueueSnackbar(error?.message || 'Error', { variant: 'error' })
@@ -211,6 +223,26 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
                         />
                     }
                     label={esPrivado ? 'Curso privado (no visible en catálogo)' : 'Curso público (visible en catálogo)'}
+                />
+            </Grid>
+
+            <Grid item xs={12}><Divider /></Grid>
+
+            {/* Destacado en Home */}
+            <Grid item xs={12}>
+                <Typography variant='h6' sx={{ mb: 1 }}>Destacado en Home</Typography>
+                <Typography variant='body2' color='text.secondary' sx={{ mb: 2 }}>
+                    Muestra este curso en la sección &quot;Programas en convocatoria&quot; de la página de inicio pública.
+                </Typography>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={esDestacado}
+                            onChange={e => handleSaveDestacado(e.target.checked)}
+                            disabled={editMutation.isPending}
+                        />
+                    }
+                    label={esDestacado ? 'Curso destacado (visible en el Home)' : 'Curso normal (no visible en el Home)'}
                 />
             </Grid>
 

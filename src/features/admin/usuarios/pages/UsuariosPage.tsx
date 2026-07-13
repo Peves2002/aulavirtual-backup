@@ -55,13 +55,15 @@ const usuarioStatusObj: UsuarioStatusType = {
 const rolStatusObj: UsuarioStatusType = {
   ADMIN: 'error',
   PROFESOR: 'warning',
-  ESTUDIANTE: 'info'
+  ESTUDIANTE: 'info',
+  ASESOR: 'success'
 }
 
 const rolLabels: { [key in Rol]: string } = {
   ADMIN: 'Administrador',
   PROFESOR: 'Profesor',
-  ESTUDIANTE: 'Estudiante'
+  ESTUDIANTE: 'Estudiante',
+  ASESOR: 'Asesor'
 }
 
 const columnHelper = createColumnHelper<Usuario>()
@@ -184,15 +186,29 @@ export function UsuariosPage({ initialDataUsuarios, initialTotal = 0 }: Usuarios
       }),
       columnHelper.accessor('rol', {
         header: 'Rol',
-        cell: ({ row }) => (
-          <Chip
-            variant='tonal'
-            className='capitalize'
-            label={rolLabels[row.original.rol]}
-            color={rolStatusObj[row.original.rol]}
-            size='small'
-          />
-        )
+        cell: ({ row }) => {
+          const customRoleName = (row.original as any).rol_personalizado?.nombre
+          return (
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'flex-start' }}>
+              <Chip
+                variant='tonal'
+                className='capitalize'
+                label={rolLabels[row.original.rol]}
+                color={rolStatusObj[row.original.rol]}
+                size='small'
+              />
+              {customRoleName && (
+                <Chip
+                  variant='outlined'
+                  label={customRoleName}
+                  color='info'
+                  size='small'
+                  sx={{ fontSize: '0.7rem', height: 18 }}
+                />
+              )}
+            </Box>
+          )
+        }
       }),
       columnHelper.accessor('esta_activo', {
         header: 'Estado',

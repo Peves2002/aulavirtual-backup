@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { Box, Button, Grid, MenuItem, styled, Typography, InputAdornment, IconButton } from '@mui/material'
 import { Formik, type FormikHelpers } from 'formik'
@@ -32,6 +32,18 @@ const CreateUsuarioModal = ({ open, handleClose, onSuccess }: CreateUsuarioModal
   const { enqueueSnackbar } = useSnackbar()
   const createUsuarioMutation = useCreateUsuario()
   const [showPassword, setShowPassword] = useState(false)
+  const [rolesPersonalizados, setRolesPersonalizados] = useState<{ id: string; nombre: string }[]>([])
+
+  useEffect(() => {
+    fetch('/api/admin/roles')
+      .then(res => res.json())
+      .then(json => {
+        if (json.status || json.success) {
+          setRolesPersonalizados(json.result || json.data || [])
+        }
+      })
+      .catch(err => console.error('Error fetching custom roles:', err))
+  }, [])
 
   const initialValues: CrearUsuarioDto = {
     correo: '',
@@ -44,7 +56,8 @@ const CreateUsuarioModal = ({ open, handleClose, onSuccess }: CreateUsuarioModal
     rol: Rol.ESTUDIANTE,
     esta_activo: true,
     cargo: '',
-    firma: ''
+    firma: '',
+    rol_personalizado_id: ''
   }
 
   const handleSubmit = async (values: CrearUsuarioDto, { setSubmitting, resetForm }: FormikHelpers<CrearUsuarioDto>) => {
@@ -272,9 +285,18 @@ const CreateUsuarioModal = ({ open, handleClose, onSuccess }: CreateUsuarioModal
                     select
                     fullWidth
                     label='Rol de Usuario'
-                    name='rol'
-                    value={values.rol}
-                    onChange={handleChange}
+                    name='_virtual_rol'
+                    value={values.rol_personalizado_id ? `CUSTOM_${values.rol_personalizado_id}` : values.rol}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val.startsWith('CUSTOM_')) {
+                        setFieldValue('rol', Rol.ASESOR);
+                        setFieldValue('rol_personalizado_id', val.replace('CUSTOM_', ''));
+                      } else {
+                        setFieldValue('rol', val);
+                        setFieldValue('rol_personalizado_id', '');
+                      }
+                    }}
                     onBlur={handleBlur}
                     error={touched.rol && Boolean(errors.rol)}
                     helperText={touched.rol && errors.rol}
@@ -290,6 +312,11 @@ const CreateUsuarioModal = ({ open, handleClose, onSuccess }: CreateUsuarioModal
                     <MenuItem value={Rol.ESTUDIANTE}>Estudiante</MenuItem>
                     <MenuItem value={Rol.PROFESOR}>Profesor</MenuItem>
                     <MenuItem value={Rol.ADMIN}>Administrador</MenuItem>
+                    {rolesPersonalizados.map(r => (
+                      <MenuItem key={r.id} value={`CUSTOM_${r.id}`}>
+                        {r.nombre}
+                      </MenuItem>
+                    ))}
                   </CustomTextField>
                 </Grid>
 

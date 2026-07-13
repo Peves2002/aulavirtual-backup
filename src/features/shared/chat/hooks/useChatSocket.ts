@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 
 // eslint-disable-next-line import/no-unresolved
-import { io } from 'socket.io-client'
+import { io, type Socket } from 'socket.io-client'
 
 let socketInstance: Socket | null = null
 

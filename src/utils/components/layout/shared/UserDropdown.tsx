@@ -36,15 +36,17 @@ const BadgeContentSpan = styled('span')({
   boxShadow: '0 0 0 2px var(--mui-palette-background-paper)'
 })
 
-function getDashboardPath(rol?: string): string {
-  switch (rol) {
-    case 'ADMIN':
-      return '/admin/dashboard'
-    case 'PROFESOR':
-      return '/profesor/dashboard'
-    default:
-      return '/estudiante/dashboard'
+function getDashboardPath(rol?: string, hasCustomPermissions?: boolean): string {
+  if (rol === 'ADMIN' || (rol === 'ASESOR' && hasCustomPermissions)) {
+    return '/admin/dashboard'
   }
+  if (rol === 'PROFESOR') {
+    return '/profesor/dashboard'
+  }
+  if (rol === 'ASESOR') {
+    return '/admin/dashboard' // Por defecto mandarlos al panel admin
+  }
+  return '/estudiante/dashboard'
 }
 
 const UserDropdown = () => {
@@ -76,7 +78,7 @@ const UserDropdown = () => {
     setOpen(false)
   }
 
-  const dashboardPath = getDashboardPath(data?.user?.rol)
+  const dashboardPath = getDashboardPath(data?.user?.rol, (data?.user as any)?.permisos?.length > 0)
 
   const handleLogout = async () => {
     setOpen(false)

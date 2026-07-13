@@ -96,6 +96,7 @@ export interface Curso {
   nivel: 'BASICO' | 'INTERMEDIO' | 'AVANZADO'
   estado: 'BORRADOR' | 'PUBLICADO' | 'ARCHIVADO'
   es_gratis: boolean
+  es_destacado?: boolean
   es_privado: boolean
   completar_automatico: boolean
   precio_certificado: number | null
@@ -108,6 +109,7 @@ export interface Curso {
   profesor: CursoProfesor
   categoria_id: string | null
   categoria: CursoCategoria | null
+  escuela: string | null
   modulos: CursoModulo[]
   orden: number
   brochure: string | null

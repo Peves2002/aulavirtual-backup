@@ -73,6 +73,7 @@
     "react-hook-form": "^7.71.1",
     "react-pdf": "^6.2.2",
     "react-perfect-scrollbar": "1.5.8",
+    "react-quill": "^2.0.0",
     "react-toastify": "10.0.4",
     "react-use": "17.5.0",
     "server-only": "0.0.1",

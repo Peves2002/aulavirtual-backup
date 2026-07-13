@@ -1,0 +1,262 @@
+import { jsxs, jsx } from "react/jsx-runtime";
+import { N as Navbar, F as Footer, W as WhatsAppFloat } from "./WhatsAppFloat-DPBGHJnq.js";
+import { Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import { Cpu, ArrowRight, Zap, ShieldCheck, Sparkles, CheckCircle2, Lock } from "lucide-react";
+import "react";
+const PRODUCTS = [{
+  id: "seleccion",
+  title: "CoreX Recruiter",
+  category: "Reclutamiento & ATS",
+  desc: "Digitaliza y acelera tu proceso de selección de personal. Publica convocatorias, gestiona candidatos y filtra perfiles automáticamente.",
+  image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80",
+  features: ["Publicación multiposting en bolsas de empleo.", "Filtros de candidatos asistidos por inteligencia artificial.", "Embudo de selección Kanban altamente interactivo."]
+}, {
+  id: "evaluacion-online",
+  title: "CoreX Assessment",
+  category: "Evaluaciones en Línea",
+  desc: "Plataforma de pruebas técnicas y de competencias diseñada para medir habilidades con máxima precisión y seguridad.",
+  image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80",
+  features: ["Biblioteca de pruebas técnicas listas para aplicar.", "Reportes automáticos de adecuación al puesto.", "Algoritmos de monitoreo seguro y protección anti-plagio."]
+}, {
+  id: "tests",
+  title: "CoreX Testing",
+  category: "Batería Psicométrica",
+  desc: "Acceso digital a una amplia biblioteca de test psicológicos y de personalidad científicamente validados.",
+  image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80",
+  features: ["Evaluación profunda de perfil conductual y cognitivo.", "Generación inmediata de informes descriptivos en PDF.", "Pruebas estandarizadas y adaptadas al entorno regional."]
+}, {
+  id: "salud-ocupacional",
+  title: "CoreX Ocupacional",
+  category: "Salud & Vigilancia Médica",
+  desc: "Módulo integrado para la programación, control y seguimiento digital de las aptitudes ocupacionales e historial de tu personal.",
+  image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80",
+  features: ["Monitoreo continuo de fichas médicas anuales.", "Alertas automáticas de vencimiento de certificados médicos.", "Cumplimiento garantizado ante auditorías de SUNAFIL."]
+}, {
+  id: "analytics-clima",
+  title: "CoreX Analytics",
+  category: "Clima & Desempeño 360°",
+  desc: "Cuadros de mando interactivos y herramientas de encuestas para medir el desempeño, el clima laboral y predecir la rotación.",
+  image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
+  features: ["Evaluaciones de desempeño 180° y 360° en pocos clics.", "Encuestas de clima laboral rápidas y anónimas.", "Dashboards analíticos con insights predictivos de talento."]
+}];
+const existsInServices = (id) => {
+  return ["seleccion", "evaluacion-online", "tests"].includes(id);
+};
+function HRCoreXPage() {
+  return /* @__PURE__ */ jsxs("main", { className: "min-h-screen bg-white text-slate-800 overflow-x-hidden font-sans", children: [
+    /* @__PURE__ */ jsx(Navbar, {}),
+    /* @__PURE__ */ jsxs("div", { className: "pt-24 lg:pt-28 bg-gradient-to-b from-slate-50 via-white to-white relative overflow-hidden", children: [
+      /* @__PURE__ */ jsx("div", { className: "absolute top-1/4 left-1/3 w-[600px] h-[600px] bg-teal/5 rounded-full blur-[140px] pointer-events-none" }),
+      /* @__PURE__ */ jsx("div", { className: "absolute -top-48 -right-48 w-[500px] h-[500px] bg-[#00B4DB]/5 rounded-full blur-[120px] pointer-events-none" }),
+      /* @__PURE__ */ jsx("section", { className: "py-20 lg:py-28 max-w-7xl mx-auto px-6 lg:px-10 relative z-10", children: /* @__PURE__ */ jsxs("div", { className: "grid lg:grid-cols-12 gap-12 lg:gap-16 items-center", children: [
+        /* @__PURE__ */ jsxs("div", { className: "lg:col-span-7 text-left space-y-6", children: [
+          /* @__PURE__ */ jsxs(motion.div, { initial: {
+            opacity: 0,
+            y: 20
+          }, whileInView: {
+            opacity: 1,
+            y: 0
+          }, viewport: {
+            once: false,
+            amount: 0
+          }, transition: {
+            duration: 0.5
+          }, className: "inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal/10 border border-teal/20 text-teal text-[11px] font-extrabold uppercase tracking-widest", children: [
+            /* @__PURE__ */ jsx(Cpu, { className: "w-3.5 h-3.5" }),
+            "HR CoreX Plataforma Cloud"
+          ] }),
+          /* @__PURE__ */ jsxs(motion.h1, { initial: {
+            opacity: 0,
+            y: 25
+          }, whileInView: {
+            opacity: 1,
+            y: 0
+          }, viewport: {
+            once: false,
+            amount: 0
+          }, transition: {
+            duration: 0.6,
+            delay: 0.1
+          }, className: "text-slate-900 font-black leading-[1.08] text-4xl md:text-5xl lg:text-6xl tracking-tight", children: [
+            "Transformamos el Futuro de la",
+            " ",
+            /* @__PURE__ */ jsx("span", { className: "text-transparent bg-clip-text bg-gradient-to-r from-teal to-[#0083B0]", children: "Gestión Humana." })
+          ] }),
+          /* @__PURE__ */ jsx(motion.p, { initial: {
+            opacity: 0,
+            y: 25
+          }, whileInView: {
+            opacity: 1,
+            y: 0
+          }, viewport: {
+            once: false,
+            amount: 0
+          }, transition: {
+            duration: 0.6,
+            delay: 0.2
+          }, className: "text-slate-600 text-base md:text-lg lg:text-xl font-medium max-w-2xl leading-relaxed", children: "Nuestra suite integral de software modular está diseñada para automatizar, medir y potenciar cada fase del ciclo de vida del talento en las organizaciones más exigentes de Latinoamérica." }),
+          /* @__PURE__ */ jsxs(motion.div, { initial: {
+            opacity: 0,
+            y: 25
+          }, whileInView: {
+            opacity: 1,
+            y: 0
+          }, viewport: {
+            once: false,
+            amount: 0
+          }, transition: {
+            duration: 0.6,
+            delay: 0.3
+          }, className: "flex flex-wrap gap-4 items-center pt-2", children: [
+            /* @__PURE__ */ jsxs("a", { href: "#productos", className: "rounded-xl bg-teal hover:bg-teal-glow text-white font-extrabold px-8 py-4 transition-all hover:shadow-glow hover:-translate-y-0.5 flex items-center gap-2 text-xs uppercase tracking-wider", children: [
+              "Ver Software ",
+              /* @__PURE__ */ jsx(ArrowRight, { className: "w-4 h-4" })
+            ] }),
+            /* @__PURE__ */ jsx(Link, { to: "/contacto", className: "rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-8 py-4 transition-all hover:-translate-y-0.5 text-xs uppercase tracking-wider", children: "Solicitar Demo" })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "lg:col-span-5 relative", children: /* @__PURE__ */ jsx(motion.div, { initial: {
+          opacity: 0,
+          scale: 0.93
+        }, whileInView: {
+          opacity: 1,
+          scale: 1
+        }, viewport: {
+          once: false,
+          amount: 0
+        }, transition: {
+          duration: 0.8,
+          ease: "easeOut"
+        }, className: "relative bg-slate-100/50 p-3 rounded-[2.5rem] border border-slate-200/60 shadow-xl overflow-hidden", children: /* @__PURE__ */ jsxs("div", { className: "bg-white rounded-[2rem] p-6 shadow-inner space-y-6", children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between border-b border-slate-100 pb-4", children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+              /* @__PURE__ */ jsx("div", { className: "w-3 h-3 rounded-full bg-red-400" }),
+              /* @__PURE__ */ jsx("div", { className: "w-3 h-3 rounded-full bg-yellow-400" }),
+              /* @__PURE__ */ jsx("div", { className: "w-3 h-3 rounded-full bg-green-400" })
+            ] }),
+            /* @__PURE__ */ jsx("span", { className: "text-[10px] font-extrabold text-slate-400 tracking-widest uppercase", children: "HR CoreX Dashboard" })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 gap-4", children: [
+            /* @__PURE__ */ jsxs("div", { className: "bg-slate-50 p-4 rounded-2xl border border-slate-100 text-left", children: [
+              /* @__PURE__ */ jsx("span", { className: "text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1", children: "Candidatos Evaluados" }),
+              /* @__PURE__ */ jsx("span", { className: "text-2xl font-black text-slate-800", children: "1,482" }),
+              /* @__PURE__ */ jsx("span", { className: "text-[9px] font-bold text-green-500 block mt-1", children: "+12.4% este mes" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "bg-slate-50 p-4 rounded-2xl border border-slate-100 text-left", children: [
+              /* @__PURE__ */ jsx("span", { className: "text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1", children: "Aptitud Promedio" }),
+              /* @__PURE__ */ jsx("span", { className: "text-2xl font-black text-slate-800", children: "87.5%" }),
+              /* @__PURE__ */ jsx("span", { className: "text-[9px] font-bold text-teal block mt-1", children: "Nivel Alto Estratégico" })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-3", children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+              /* @__PURE__ */ jsx("span", { className: "text-[10px] font-bold text-slate-400 uppercase tracking-wider", children: "Desempeño Organizacional" }),
+              /* @__PURE__ */ jsx("span", { className: "text-[9px] font-extrabold text-teal uppercase", children: "Tiempo Real" })
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: "h-20 flex items-end justify-between gap-1 pt-2", children: [40, 60, 45, 80, 55, 95, 70, 85, 100].map((h, idx) => /* @__PURE__ */ jsx(motion.div, { initial: {
+              height: 0
+            }, whileInView: {
+              height: `${h}%`
+            }, viewport: {
+              once: false
+            }, transition: {
+              duration: 1,
+              delay: idx * 0.05
+            }, className: `w-full rounded-t-md bg-gradient-to-t ${idx === 8 ? "from-teal to-teal-glow" : "from-slate-200 to-slate-300"}` }, idx)) })
+          ] })
+        ] }) }) })
+      ] }) })
+    ] }),
+    /* @__PURE__ */ jsx("section", { className: "bg-slate-50 py-12 border-y border-slate-100", children: /* @__PURE__ */ jsx("div", { className: "max-w-7xl mx-auto px-6 lg:px-10", children: /* @__PURE__ */ jsx("div", { className: "grid md:grid-cols-3 gap-8", children: [{
+      icon: Zap,
+      title: "Automatización Inteligente",
+      desc: "Reduce hasta un 65% de tareas operativas y acelera la contratación."
+    }, {
+      icon: ShieldCheck,
+      title: "Seguridad y Cumplimiento",
+      desc: "Fichas y datos protegidos bajo altos estándares de confidencialidad."
+    }, {
+      icon: Sparkles,
+      title: "Adopción sin Esfuerzo",
+      desc: "Plataformas sumamente intuitivas y adaptables a cualquier dispositivo."
+    }].map((item, idx) => /* @__PURE__ */ jsxs(motion.div, { initial: {
+      opacity: 0,
+      y: 15
+    }, whileInView: {
+      opacity: 1,
+      y: 0
+    }, viewport: {
+      once: false,
+      amount: 0
+    }, transition: {
+      duration: 0.5,
+      delay: idx * 0.1
+    }, className: "flex items-start gap-4 text-left", children: [
+      /* @__PURE__ */ jsx("div", { className: "w-10 h-10 rounded-xl bg-teal/10 flex items-center justify-center text-teal flex-shrink-0", children: /* @__PURE__ */ jsx(item.icon, { className: "w-5 h-5" }) }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("h4", { className: "text-slate-800 font-bold text-sm uppercase tracking-wider mb-1", children: item.title }),
+        /* @__PURE__ */ jsx("p", { className: "text-slate-500 text-xs md:text-sm leading-relaxed", children: item.desc })
+      ] })
+    ] }, item.title)) }) }) }),
+    /* @__PURE__ */ jsx("section", { id: "productos", className: "py-24 bg-white relative", children: /* @__PURE__ */ jsxs("div", { className: "max-w-7xl mx-auto px-6 lg:px-10 relative z-10", children: [
+      /* @__PURE__ */ jsxs("div", { className: "max-w-3xl mx-auto text-center mb-20 space-y-4", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-teal font-extrabold text-xs uppercase tracking-[0.2em] block", children: "Nuestra Suite Tecnológica" }),
+        /* @__PURE__ */ jsx("h2", { className: "text-slate-900 font-black text-3xl md:text-4xl lg:text-5xl tracking-tight", children: "Software Corporativo a la Medida de tu Talento" }),
+        /* @__PURE__ */ jsx("p", { className: "text-slate-500 text-sm md:text-base leading-relaxed", children: "Explora las diferentes plataformas integradas dentro de nuestro ecosistema HR CoreX. Elige los módulos que tu organización necesita para escalar al siguiente nivel." })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "grid md:grid-cols-2 lg:grid-cols-3 gap-8", children: PRODUCTS.map((p, idx) => /* @__PURE__ */ jsxs(motion.div, { initial: {
+        opacity: 0,
+        y: 30
+      }, whileInView: {
+        opacity: 1,
+        y: 0
+      }, viewport: {
+        once: false,
+        amount: 0.1
+      }, transition: {
+        duration: 0.6,
+        delay: idx * 0.1
+      }, whileHover: {
+        y: -8,
+        boxShadow: "0 20px 40px rgba(0, 128, 128, 0.06)"
+      }, className: "bg-white rounded-[2rem] border border-slate-100 p-6 flex flex-col justify-between text-left transition-all duration-300 relative group overflow-hidden", children: [
+        /* @__PURE__ */ jsx("div", { className: "absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-teal to-teal-glow rounded-t-[2rem] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center" }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsxs("div", { className: "relative aspect-video w-full rounded-2xl overflow-hidden mb-6 border border-slate-100 shadow-sm group-hover:shadow-md transition-all duration-500", children: [
+            /* @__PURE__ */ jsx("img", { src: p.image, alt: p.title, className: "w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" }),
+            /* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" })
+          ] }),
+          /* @__PURE__ */ jsx("span", { className: "text-[10px] font-extrabold text-teal uppercase tracking-widest block mb-2", children: p.category }),
+          /* @__PURE__ */ jsx("h3", { className: "text-slate-900 text-xl font-bold mb-3 group-hover:text-teal transition-colors", children: p.title }),
+          /* @__PURE__ */ jsx("p", { className: "text-slate-500 text-xs md:text-sm leading-relaxed mb-6 font-medium", children: p.desc }),
+          /* @__PURE__ */ jsx("ul", { className: "space-y-2.5 border-t border-slate-100 pt-5 mb-8", children: p.features.map((f, fIdx) => /* @__PURE__ */ jsxs("li", { className: "flex items-start gap-2.5", children: [
+            /* @__PURE__ */ jsx(CheckCircle2, { className: "w-4 h-4 text-teal/80 mt-0.5 flex-shrink-0" }),
+            /* @__PURE__ */ jsx("span", { className: "text-slate-600 text-xs font-medium leading-normal", children: f })
+          ] }, fIdx)) })
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "pt-2", children: /* @__PURE__ */ jsxs(Link, { to: existsInServices(p.id) ? `/hrcorex/${p.id}` : "/contacto", className: "inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:text-teal-glow transition-colors uppercase tracking-wider group/btn", children: [
+          "Ver detalles ",
+          /* @__PURE__ */ jsx(ArrowRight, { className: "w-3.5 h-3.5 translate-x-0 group-hover/btn:translate-x-1 transition-transform duration-300" })
+        ] }) })
+      ] }, p.id)) })
+    ] }) }),
+    /* @__PURE__ */ jsxs("section", { className: "bg-slate-50 py-20 border-t border-slate-100 text-center relative overflow-hidden", children: [
+      /* @__PURE__ */ jsx("div", { className: "absolute bottom-0 left-0 w-64 h-64 bg-teal/5 rounded-full blur-[100px] pointer-events-none" }),
+      /* @__PURE__ */ jsxs("div", { className: "max-w-4xl mx-auto px-6 relative z-10 space-y-6", children: [
+        /* @__PURE__ */ jsx("div", { className: "w-12 h-12 rounded-2xl bg-teal/10 flex items-center justify-center mx-auto text-teal", children: /* @__PURE__ */ jsx(Lock, { className: "w-6 h-6" }) }),
+        /* @__PURE__ */ jsx("h2", { className: "text-slate-950 font-black text-3xl md:text-4xl tracking-tight", children: "¿Listo para Digitalizar tu Organización?" }),
+        /* @__PURE__ */ jsx("p", { className: "text-slate-600 text-sm md:text-base font-medium max-w-xl mx-auto leading-relaxed", children: "Nuestros consultores de tecnología están listos para brindarte un recorrido guiado por nuestra suite de plataformas. Descubre cómo HR CoreX puede integrarse en tu equipo." }),
+        /* @__PURE__ */ jsxs("div", { className: "pt-4 flex flex-wrap gap-4 justify-center", children: [
+          /* @__PURE__ */ jsx(Link, { to: "/contacto", className: "rounded-xl bg-teal hover:bg-teal-glow text-white font-extrabold px-8 py-4 transition-all hover:shadow-glow hover:-translate-y-0.5 text-xs uppercase tracking-wider", children: "Solicitar una Demo Gratis" }),
+          /* @__PURE__ */ jsx("a", { href: "https://wa.me/51924943982", target: "_blank", rel: "noopener noreferrer", className: "rounded-xl bg-white border border-slate-200 text-slate-800 font-bold px-8 py-4 transition-all hover:-translate-y-0.5 text-xs uppercase tracking-wider bg-white/80 hover:bg-white", children: "Hablar con Soporte" })
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx(Footer, {}),
+    /* @__PURE__ */ jsx(WhatsAppFloat, {})
+  ] });
+}
+export {
+  HRCoreXPage as component
+};

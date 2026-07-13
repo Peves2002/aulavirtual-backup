@@ -9,9 +9,9 @@ const colorSchemes = (skin: Skin): Theme['colorSchemes'] => {
     light: {
       palette: {
         primary: {
-          main: '#25927F',
-          light: '#BDD962',
-          dark: '#025E44',
+          main: '#08479b',
+          light: '#5993e3',
+          dark: '#06316b',
           lighterOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.08)',
           lightOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.16)',
           mainOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.24)',
@@ -161,9 +161,9 @@ const colorSchemes = (skin: Skin): Theme['colorSchemes'] => {
     dark: {
       palette: {
         primary: {
-          main: '#25927F',
-          light: '#BDD962',
-          dark: '#025E44',
+          main: '#08479b',
+          light: '#5993e3',
+          dark: '#06316b',
           lighterOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.08)',
           lightOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.16)',
           mainOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.24)',
