@@ -79,7 +79,7 @@ const UserDropdown = () => {
   const dashboardPath = getDashboardPath(data?.user?.rol)
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: '/login' })
+    await signOut({ callbackUrl: '/' })
   }
 
   return (

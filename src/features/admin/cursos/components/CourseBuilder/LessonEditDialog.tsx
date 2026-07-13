@@ -299,10 +299,10 @@ export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
                       <i className='tabler-file-type-pdf text-xl text-error' />
                       <Box sx={{ flex: 1, minWidth: 0 }}>
-                        <Typography variant='body2' fontWeight={600} noWrap>{(videoUrlEnlace || videoUrlPrivado)Enlace.split('/').pop()}</Typography>
-                        <Typography variant='caption' color='text.secondary' noWrap>{videoUrlEnlace || videoUrlPrivadoEnlace}</Typography>
+                        <Typography variant='body2' fontWeight={600} noWrap>{videoUrlEnlace.split('/').pop()}</Typography>
+                        <Typography variant='caption' color='text.secondary' noWrap>{videoUrlEnlace}</Typography>
                       </Box>
-                      <IconButton size='small' color='error' onClick={() => { setVideoUrlEnlace(''); setVideoUrlPrivadoEnlace(''); }}>
+                      <IconButton size='small' color='error' onClick={() => { setVideoUrlEnlace(''); }}>
                         <i className='tabler-trash text-base' />
                       </IconButton>
                     </Box>
@@ -335,8 +335,8 @@ export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }
 
 
                           // Si cambia a enlace, limpiar video privado en stream
-                          if (source === 'enlace' && videoUrlPrivadoPrivado.includes('/api/videos/stream/')) {
-                            setVideoUrlEnlacePrivado('')
+                          if (source === 'enlace' && videoUrlPrivado.includes('/api/videos/stream/')) {
+                            setVideoUrlPrivado('')
                           }
                         }}
                         fullWidth

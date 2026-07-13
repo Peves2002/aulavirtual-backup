@@ -36,7 +36,6 @@ import { crearCursoSchema, type CrearCursoDto } from '@/schemas/curso.schema'
 import { sanitizeDatetimeInput } from '@/utils/functions/sanitizeDatetime'
 import MediaLibrary from '../components/MediaLibrary'
 import { CategoriaSubcategoriaSelect } from '../components/CategoriaSubcategoriaSelect'
-import { TipoProgramaSelect } from '../components/TipoProgramaSelect'
 
 import { useCreateCurso } from '../hooks/useCursos'
 import { useCategorias } from '@/features/admin/categorias/hooks/useCategorias'
@@ -184,12 +183,6 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
                         />
                       </Grid>
 
-                      <TipoProgramaSelect
-                        value={values.tipo}
-                        onChange={tipo => setFieldValue('tipo', tipo)}
-                        disabled={isSubmitting}
-                      />
-
                       <CategoriaSubcategoriaSelect
                         categorias={categorias}
                         categoriaPadreId={categoriaPadreId}
@@ -204,6 +197,7 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
                           setFieldValue('categoria_id', subId || categoriaPadreId || null)
                         }}
                         disabled={isSubmitting}
+                        hideSubcategoria
                       />
 
                       <Grid item xs={12} sm={6}>

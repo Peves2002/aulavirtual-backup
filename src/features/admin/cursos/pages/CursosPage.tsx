@@ -61,7 +61,6 @@ import { fuzzyFilter } from '@/utils/components/others/FuzzyFilter'
 import tableStyles from '@core/styles/table.module.css'
 import { useCursos, useReorderCursos } from '../hooks/useCursos'
 import type { TipoPrograma } from '@/utils/configs/tipoPrograma'
-import { getTipoProgramaColor, getTipoProgramaLabel } from '@/utils/configs/tipoProgramaOptions'
 
 type EstadoColorMap = {
   [key: string]: ThemeColor
@@ -275,18 +274,6 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
             </Box>
           )
         }
-      }),
-      columnHelper.display({
-        id: 'tipo_programa',
-        header: 'Tipo',
-        cell: ({ row }) => (
-          <Chip
-            label={getTipoProgramaLabel(row.original.tipo)}
-            size='small'
-            variant='tonal'
-            color={getTipoProgramaColor(row.original.tipo)}
-          />
-        )
       }),
       columnHelper.display({
         id: 'categoria',

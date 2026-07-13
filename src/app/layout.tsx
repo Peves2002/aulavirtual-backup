@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth'
 import { Providers } from '@/components/Providers'
 import { getConfigs } from '@/utils/libs/config'
 import { getAuthOptions } from '@/utils/configs/auth'
+import { resolveFaviconUrl } from '@/utils/functions/syncFavicon'
 import { plus_jakarta_sans } from '@core/theme'
 
 import './globals.css'
@@ -14,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const configs = await getConfigs()
   const title = configs.TEMPLATE_NAME || 'Incuba Cocina'
   const slogan = configs.TEMPLATE_SLOGAN || 'Aprende cocina profesional online'
-  const logo = configs.TEMPLATE_LOGO || '/favicon.ico'
+  const logo = resolveFaviconUrl(configs)
   const themeColor = configs.PRIMARY_COLOR_MAIN || '#131FF2'
 
   return {

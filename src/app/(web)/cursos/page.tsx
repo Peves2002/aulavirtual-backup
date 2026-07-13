@@ -5,51 +5,8 @@ import { PageHero } from '@/components/site/PageHero'
 import { Catalog } from '@/components/site/Catalog'
 
 // Http Client
-import { AxiosWebCursos } from '@/features/web/cursos/http/axiosWebCursos'
 import { getAuthSession } from '@/utils/libs/auth-helpers'
-
-// Server Action / Data Fetching
-async function getData(token: string | null) {
-  try {
-    const axiosWebCursos = new AxiosWebCursos({
-      getAuthToken: () => token
-    })
-
-    const data = await axiosWebCursos.getCatalog()
-
-    // Serialización manual y mapeo a formato de Catalog
-    if (data.courses) {
-      data.courses = data.courses.map((c: any) => ({
-        id: c.id,
-        slug: c.slug,
-        title: c.titulo,
-        image: c.miniatura,
-        desc: c.resumen || c.descripcion || '',
-        price: c.precio ? Number(c.precio) : 0,
-        oldPrice: c.precio_oferta ? Number(c.precio_oferta) : null,
-        duration: c.duracion || 'Intensivo',
-        level: c.nivel === 'BASICO' ? 'Básico' : c.nivel === 'INTERMEDIO' ? 'Intermedio' : c.nivel === 'AVANZADO' ? 'Avanzado' : '',
-        category: c.categoria?.nombre || 'General',
-        creado_en: c.creado_en
-      }))
-    }
-
-    // Categorías como strings (para los tabs)
-    const uniqueCategories = ["Todos"]
-
-    if (data.categories) {
-      data.categories.forEach((cat: any) => {
-        uniqueCategories.push(cat.nombre)
-      })
-    }
-
-    return { courses: data.courses || [], categories: uniqueCategories }
-  } catch (error) {
-    console.error('Error fetching data in CursosPage via API:', error)
-
-    return { courses: [], categories: ["Todos"] }
-  }
-}
+import { getProgramCatalogData } from '@/features/web/cursos/getProgramCatalogData'
 
 export const metadata = {
   title: 'Cursos',

@@ -178,7 +178,11 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
                 e.currentTarget.style.transform = "none";
               }}
             >
-              <div className="relative h-[220px]" style={{ background: "#1a1b26" }}>
+              <Link
+                href={`/cursos/${c.slug || c.id}`}
+                className="relative h-[220px] block"
+                style={{ background: "#1a1b26" }}
+              >
                 {c.image ? (
                   <img
                     src={c.image}
@@ -205,7 +209,7 @@ export function Catalog({ courses = [], categories = [] }: { courses?: any[], ca
                 >
                   {c.level || "Básico"}
                 </span>
-              </div>
+              </Link>
 
               <div className="p-5 flex flex-col gap-3">
                 <span className="text-[11px] font-bold uppercase text-[#5A9020] bg-[#EAF7D0] px-2 py-1 rounded w-fit">

@@ -15,6 +15,7 @@ type CategoriaSubcategoriaSelectProps = {
   onSubcategoriaChange: (subId: string) => void
   disabled?: boolean
   gridSize?: number
+  hideSubcategoria?: boolean
 }
 
 export function CategoriaSubcategoriaSelect({
@@ -24,7 +25,8 @@ export function CategoriaSubcategoriaSelect({
   onCategoriaPadreChange,
   onSubcategoriaChange,
   disabled = false,
-  gridSize = 6
+  gridSize = 6,
+  hideSubcategoria = false
 }: CategoriaSubcategoriaSelectProps) {
   const subcategorias = useMemo(() => {
     const padre = categorias.find(c => c.id === categoriaPadreId)
@@ -58,24 +60,26 @@ export function CategoriaSubcategoriaSelect({
         </CustomTextField>
       </Grid>
 
-      <Grid item xs={12} sm={gridSize}>
-        <CustomTextField
-          select
-          fullWidth
-          label='Subcategoría'
-          value={subcategoriaId}
-          onChange={e => onSubcategoriaChange(e.target.value)}
-          disabled={disabled || !categoriaPadreId || subcategorias.length === 0}
-          helperText={subcategoriaHelper}
-        >
-          <MenuItem value=''>Sin subcategoría</MenuItem>
-          {subcategorias.map(sub => (
-            <MenuItem key={sub.id} value={sub.id}>
-              {sub.nombre}
-            </MenuItem>
-          ))}
-        </CustomTextField>
-      </Grid>
+      {!hideSubcategoria && (
+        <Grid item xs={12} sm={gridSize}>
+          <CustomTextField
+            select
+            fullWidth
+            label='Subcategoría'
+            value={subcategoriaId}
+            onChange={e => onSubcategoriaChange(e.target.value)}
+            disabled={disabled || !categoriaPadreId || subcategorias.length === 0}
+            helperText={subcategoriaHelper}
+          >
+            <MenuItem value=''>Sin subcategoría</MenuItem>
+            {subcategorias.map(sub => (
+              <MenuItem key={sub.id} value={sub.id}>
+                {sub.nombre}
+              </MenuItem>
+            ))}
+          </CustomTextField>
+        </Grid>
+      )}
     </>
   )
 }

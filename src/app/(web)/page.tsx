@@ -11,6 +11,7 @@ import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
+import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
 export const metadata = {
   title: 'Incuba Cocina - Escuela de Cocina y Emprendimiento',
@@ -29,7 +30,7 @@ async function getHomeData() {
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO', tipo: 'CURSO' },
         include: courseInclude,
-        orderBy: { creado_en: 'desc' },
+        orderBy: [{ orden: 'asc' }, { creado_en: 'desc' }],
         take: 6
       }),
       prisma.curso.findMany({
@@ -45,7 +46,7 @@ async function getHomeData() {
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO', tipo: 'ESPECIALIZACION' },
         include: courseInclude,
-        orderBy: { creado_en: 'desc' },
+        orderBy: [{ orden: 'asc' }, { creado_en: 'desc' }],
         take: 6
       }),
 
