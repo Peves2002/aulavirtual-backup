@@ -74,6 +74,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
           const selected = parsed[index] || parsed[0]
 
           pdfPath = selected.url || ''
+
           if (selected.nombre) {
             fileName = `${ebook.titulo} - ${selected.nombre}.pdf`
           }

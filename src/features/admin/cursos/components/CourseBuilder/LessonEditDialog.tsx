@@ -69,8 +69,7 @@ interface LessonEditDialogProps {
 export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }: LessonEditDialogProps) {
   const [title, setTitle] = useState('')
   const [duration, setDuration] = useState<number | string>('')
-  const [videoUrlEnlace, setVideoUrlEnlace] = useState('')
-  const [videoUrlPrivado, setVideoUrlPrivado] = useState('')
+  const [videoUrl, setVideoUrl] = useState('')
   const [videoSource, setVideoSource] = useState<'enlace' | 'privado'>('enlace')
   const [openMediaVideo, setOpenMediaVideo] = useState(false)
   const [esPdf, setEsPdf] = useState(false)
@@ -106,6 +105,7 @@ export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }
       const isPrivadoVideo = !!lessonData.video_url && lessonData.video_url.includes('/api/videos/stream/')
 
       setVideoSource(isPrivadoVideo ? 'privado' : 'enlace')
+      setVideoUrl(lessonData.video_url || '')
       setEsPdf(lessonData.es_pdf || false)
 
       setEsEnVivo(lessonData.es_en_vivo || false)
@@ -127,8 +127,7 @@ export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }
     } else {
       setTitle('')
       setDuration('')
-      setVideoUrlEnlace('')
-      setVideoUrlPrivado('')
+      setVideoUrl('')
       setVideoSource('enlace')
       setEsPdf(false)
       setEsEnVivo(false)
@@ -191,7 +190,7 @@ export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }
     onSave({
       titulo: title,
       duracion: duration ? Number(duration) : null,
-      video_url: (videoSource === 'enlace' ? videoUrlEnlace : videoUrlPrivado) || null,
+      video_url: videoUrl || null,
       es_en_vivo: esEnVivo,
       es_pdf: !esEnVivo && esPdf,
       fecha_programada: sanitizeDatetimeInput(fechaProgramada),
@@ -765,7 +764,7 @@ export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }
             open={openMediaVideo}
             onClose={() => setOpenMediaVideo(false)}
             onSelect={(url: string) => {
-              setVideoUrlPrivado(url)
+              setVideoUrl(url)
               setOpenMediaVideo(false)
             }}
             title='Seleccionar o Subir Video Privado'

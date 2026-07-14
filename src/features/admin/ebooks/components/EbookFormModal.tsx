@@ -1,10 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import { pdfjs } from 'react-pdf'
-
-pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js'
-
 import {
   Button,
   Grid,
@@ -27,6 +25,8 @@ import MediaLibrary from '@/features/admin/cursos/components/MediaLibrary'
 
 import type { Ebook, CreateEbookDto } from '../entity/Ebook'
 import { useCreateEbook, useUpdateEbook } from '../hooks/useEbooks'
+
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js'
 
 interface Props {
   open: boolean
@@ -151,8 +151,10 @@ export const EbookFormModal = ({ open, handleClose, ebook }: Props) => {
 
         for (let i = 0; i < copy.length; i++) {
           const file = copy[i]
+
           if (file.url && (!file.paginas || file.paginas === 0)) {
             const count = await contarPaginasPdf(file.url)
+
             if (count > 0) {
               copy[i] = { ...file, paginas: count }
               updated = true
@@ -163,6 +165,7 @@ export const EbookFormModal = ({ open, handleClose, ebook }: Props) => {
         if (updated) {
           setPdfFiles(copy)
           const total = copy.reduce((sum, item) => sum + (item.paginas || 0), 0)
+
           if (total > 0) {
             setValue('paginas', total, { shouldValidate: true })
           }
@@ -193,7 +196,7 @@ export const EbookFormModal = ({ open, handleClose, ebook }: Props) => {
       setOpcionesAvanzadas(false)
       setPdfFiles([{ nombre: 'PDF Principal', url: '' }])
     }
-  }, [ebook, open, reset])
+  }, [ebook, open, reset, setValue])
 
   // Sync to react-hook-form value
   useEffect(() => {
@@ -458,6 +461,7 @@ export const EbookFormModal = ({ open, handleClose, ebook }: Props) => {
                               value={file.paginas ?? ''}
                               onChange={e => {
                                 const val = e.target.value ? Number(e.target.value) : 0
+
                                 handleUpdatePdfFile(index, 'paginas', val)
                               }}
                               placeholder="0"

@@ -494,6 +494,7 @@ export const EbookViewer = ({ ebookId }: Props) => {
               </Typography>
               {pdfList.map((pdf, idx) => {
                 const isActive = selectedPdfIndex === idx
+
                 return (
                   <Box
                     key={idx}

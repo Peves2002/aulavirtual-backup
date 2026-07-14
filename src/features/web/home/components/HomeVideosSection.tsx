@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 
-import { Grid, Typography, Box } from '@mui/material'
 import { ArrowRight } from 'lucide-react'
 
 import { getYouTubeVideoId } from '@/features/admin/videos/utils/video'

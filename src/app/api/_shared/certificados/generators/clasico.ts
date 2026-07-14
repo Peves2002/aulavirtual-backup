@@ -188,6 +188,7 @@ export const generarClasico: GeneratorFn = async data => {
   doc.setFontSize(8)
   doc.setFont('helvetica', 'normal')
   doc.setTextColor(120, 120, 120)
+
   // doc.text(`Reg: ${codigoVerificacion}`, 18, pageHeight - 10)
 
   // 11. QR de verificación (debajo del encabezado, lado derecho)
