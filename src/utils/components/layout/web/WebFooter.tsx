@@ -116,6 +116,7 @@ const WebFooter = async ({ platformName = 'ACE Consulting PERÚ', rutasHabilitad
                 { label: 'Contacto', href: '/contacto' },
                 { label: 'Términos y Condiciones', href: '/terminos-y-condiciones' },
                 { label: 'Política de Devoluciones', href: '/politica-de-cambios-y-devoluciones' },
+                { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
                 { label: 'Libro de Reclamaciones', href: '/libro-de-reclamaciones' },
               ].map(link => (
                 <li key={link.label}>

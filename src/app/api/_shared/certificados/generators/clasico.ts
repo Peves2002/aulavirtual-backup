@@ -1,4 +1,4 @@
-import { fetchImageBuffer, compressImageForPdf, formatDateLong } from './utils'
+import { fetchImageBuffer, compressImageForPdf } from './utils'
 
 import type { GeneratorFn } from './types'
 
@@ -43,10 +43,7 @@ export const generarClasico: GeneratorFn = async data => {
   const pageWidth = doc.internal.pageSize.getWidth()
   const pageHeight = doc.internal.pageSize.getHeight()
 
-  // ── Helpers ──────────────────────────────────────────────────────────
-  const dpR = Math.round(pr * 0.52)
-  const dpG = Math.round(pg * 0.52)
-  const dpB = Math.round(pb * 0.52)
+
 
   const fechaFirmadaTxt = new Date(fechaEmisionVal).toLocaleDateString('es-PE', {
     day: 'numeric',
@@ -78,231 +75,129 @@ export const generarClasico: GeneratorFn = async data => {
     const nombreFirmante = `${user.nombre || ''} ${user.apellido || ''}`.trim()
 
     doc.setFontSize(12)
-    doc.setFont('helvetica', 'bold')
+    doc.setFont('times', 'bold')
     doc.setTextColor(25, 25, 25)
     doc.text(nombreFirmante, x, lineY + 7, { align: 'center' })
 
-    if (user.cargo) {
-      doc.setFontSize(12)
-      doc.setFont('helvetica', 'normal')
-      doc.setTextColor(80, 80, 80)
-      doc.text(user.cargo, x, lineY + 13, { align: 'center' })
-    }
+    doc.setFontSize(12)
+    doc.setFont('times', 'normal')
+    doc.setTextColor(80, 80, 80)
+
+    const cargoText = user.cargo || 'Director General'
+
+    doc.text(cargoText, x, lineY + 13, { align: 'center' })
+    doc.text('ACE Consulting PERÚ', x, lineY + 19, { align: 'center' })
   }
 
   // ── PÁGINA 1 ─────────────────────────────────────────────────────────
-  const panelW = 72
-  const contentW = pageWidth - panelW
-  const cx = contentW / 2
+  const cx = pageWidth / 2
 
-  doc.setFillColor(255, 255, 255)
-  doc.rect(0, 0, pageWidth, pageHeight, 'F')
+  // Background
+  const backgroundBuffer = await fetchImageBuffer('/images/certificados/border-ace.png')
 
-  // Gradiente del panel lateral
-  const gradStrips = 70
-
-  for (let i = 0; i < gradStrips; i++) {
-    const t = i / (gradStrips - 1)
-    const r = Math.round(pr + (255 - pr) * 0.12 - (pr + (255 - pr) * 0.12 - dpR) * t)
-    const g = Math.round(pg + (255 - pg) * 0.12 - (pg + (255 - pg) * 0.12 - dpG) * t)
-    const b = Math.round(pb + (255 - pb) * 0.12 - (pb + (255 - pb) * 0.12 - dpB) * t)
-
-    doc.setFillColor(Math.max(0, Math.min(255, r)), Math.max(0, Math.min(255, g)), Math.max(0, Math.min(255, b)))
-    doc.rect(contentW, (i / gradStrips) * pageHeight, panelW, pageHeight / gradStrips + 0.5, 'F')
-  }
-
-  // Ribbons diagonales
-  const ribR1 = Math.round(pr + (255 - pr) * 0.28)
-  const ribG1 = Math.round(pg + (255 - pg) * 0.28)
-  const ribB1 = Math.round(pb + (255 - pb) * 0.28)
-
-  doc.setFillColor(ribR1, ribG1, ribB1)
-  doc.lines(
-    [
-      [21, 22, 41, 68, 60, 96],
-      [0, 24],
-      [-19, -12, -39, -48, -60, -96],
-      [0, -24]
-    ],
-    237,
-    0,
-    [1, 1],
-    'F',
-    true
-  )
-
-  const ribR2 = Math.round(pr + (255 - pr) * 0.14)
-  const ribG2 = Math.round(pg + (255 - pg) * 0.14)
-  const ribB2 = Math.round(pb + (255 - pb) * 0.14)
-
-  doc.setFillColor(ribR2, ribG2, ribB2)
-  doc.lines(
-    [
-      [20, 18, 41, 62, 60, 88],
-      [0, 32],
-      [-19, -4, -39, -42, -60, -98],
-      [0, -22]
-    ],
-    237,
-    90,
-    [1, 1],
-    'F',
-    true
-  )
-
-  // QR
-  const qrSz = 30
-  const qrX0 = contentW + (panelW - qrSz) / 2
-  const qrY0 = pageHeight - qrSz - 24
-
-  doc.setFillColor(255, 255, 255)
-  doc.roundedRect(qrX0 - 3, qrY0 - 3, qrSz + 6, qrSz + 6, 2, 2, 'F')
-  doc.addImage(qrDataUrl, 'PNG', qrX0, qrY0, qrSz, qrSz)
-  doc.setFontSize(12)
-  doc.setTextColor(255, 255, 255)
-  doc.setFont('helvetica', 'normal')
-  doc.text('Escanea para verificar', contentW + panelW / 2, pageHeight - 16, { align: 'center' })
-
-  // Área de contenido izquierda (blanco encima)
-  doc.setFillColor(255, 255, 255)
-  doc.rect(0, 0, contentW, pageHeight, 'F')
-
-  // "CERTIFICADO" vertical
-  doc.setFontSize(55)
-  doc.setTextColor(Math.round(pr * 0.55), Math.round(pg * 0.55), Math.round(pb * 0.55))
-  doc.setFont('helvetica', 'bold')
-  doc.text('CERTIFICADO', contentW + panelW / 2 + 8, 148, { angle: 90 })
-
-  // ── Logo ──
-  let y = 10
-  const maxLogoH = 22
-  const maxLogoW = 60
-  let logoDisplayW = maxLogoH
-  let logoDisplayH = maxLogoH
-
-  if (logoBuffer) {
+  if (backgroundBuffer) {
     try {
-      const { default: sharp } = await import('sharp')
-      const meta = await sharp(logoBuffer).metadata()
-
-      if (meta.width && meta.height) {
-        const ratio = meta.width / meta.height
-
-        logoDisplayH = maxLogoH
-        logoDisplayW = Math.min(logoDisplayH * ratio, maxLogoW)
-        if (logoDisplayW === maxLogoW) logoDisplayH = maxLogoW / ratio
-      }
+      doc.addImage(backgroundBuffer, 'PNG', 0, 0, pageWidth, pageHeight)
     } catch {
-      /* default */
+      // Fallback
+      doc.setFillColor(252, 249, 240)
+      doc.rect(0, 0, pageWidth, pageHeight, 'F')
+      doc.setDrawColor(30, 120, 70)
+      doc.setLineWidth(2.5)
+      doc.rect(8, 8, pageWidth - 16, pageHeight - 16)
     }
+  } else {
+    // Fallback
+    doc.setFillColor(252, 249, 240)
+    doc.rect(0, 0, pageWidth, pageHeight, 'F')
+    doc.setDrawColor(30, 120, 70)
+    doc.setLineWidth(2.5)
+    doc.rect(8, 8, pageWidth - 16, pageHeight - 16)
   }
 
-  if (base64Logo) {
-    try {
-      const ext = logoUrl.split('.').pop()?.split('?')[0]?.toUpperCase() ?? 'PNG'
+  // 1. CERTIFICADO de APROBACIÓN
+  doc.setFontSize(26)
+  doc.setFont('times', 'bold')
+  doc.setTextColor(19, 48, 117)
+  doc.text('CERTIFICADO de APROBACIÓN', cx, 36, { align: 'center' })
 
-      doc.addImage(base64Logo, ext, cx - logoDisplayW / 2, y, logoDisplayW, logoDisplayH, 'LOGO')
-    } catch {
-      /* skip */
-    }
-  }
+  // 2. ACE Consulting PERÚ (nombre de institución)
+  doc.setFontSize(30)
+  doc.setFont('times', 'bold')
+  doc.setTextColor(20, 20, 20)
+  doc.text('ACE Consulting PERÚ', cx, 52, { align: 'center' })
 
-  y += logoDisplayH + 14
+  // 3. Asesoría y Capacitación Empresarial (slogan)
+  doc.setFontSize(16)
+  doc.setFont('times', 'bold')
+  doc.setTextColor(20, 20, 20)
+  doc.text('Asesoría y Capacitación Empresarial', cx, 63, { align: 'center' })
 
-  // Título, nombre, curso, descripción
-  doc.setFontSize(20)
-  doc.setTextColor(18, 18, 18)
-  doc.setFont('helvetica', 'bold')
-  doc.text('CERTIFICADO', cx, y, { align: 'center' })
-  y += 11
+  // 4. Otorga el presente a :
+  doc.setFontSize(13)
+  doc.setFont('times', 'italic')
+  doc.setTextColor(80, 80, 80)
+  doc.text('Otorga el presente a :', cx, 74, { align: 'center' })
 
-  doc.setFontSize(12)
-  doc.setTextColor(100, 100, 100)
-  doc.setFont('helvetica', 'normal')
-  doc.text('Otorgado a:', cx, y, { align: 'center' })
-  y += 11
+  // 5. Estudiante
+  doc.setFontSize(28)
+  doc.setFont('times', 'bold')
+  doc.setTextColor(20, 20, 20)
+  doc.text(nombreCompleto, cx, 91, { align: 'center' })
 
-  doc.setFontSize(20)
-  doc.setTextColor(pr, pg, pb)
-  doc.setFont('helvetica', 'bold')
-  doc.text(nombreCompleto.toUpperCase(), cx, y, { align: 'center' })
-  y += 11
-
-  doc.setFontSize(12)
-  doc.setTextColor(100, 100, 100)
-  doc.setFont('helvetica', 'normal')
-  doc.text('Por haber concluido y aprobado con éxito el curso de:', cx, y, { align: 'center' })
-  y += 10
-
-  doc.setFontSize(20)
-  doc.setTextColor(15, 15, 15)
-  doc.setFont('helvetica', 'bold')
-  const cursoLines = doc.splitTextToSize(cursoTitulo, contentW - 34)
-
-  doc.text(cursoLines, cx, y, { align: 'center' })
-  y += cursoLines.length * 7 + 6
-
-  doc.setFontSize(12)
-  doc.setFont('helvetica', 'normal')
-  doc.setTextColor(100, 100, 100)
-  const descripcionTxt = `Emitido por ${nombreInstitucion}, con una duración de ${cursoDuracion || '---'}, realizado desde el ${formatDateLong(fechaInicioVal)} hasta el ${formatDateLong(fechaFinVal)}.`
-  const descripcionLines = doc.splitTextToSize(descripcionTxt, contentW - 40)
-
-  doc.text(descripcionLines, cx, y, { align: 'center' })
-  y += descripcionLines.length * 6 + 4
-
-  const porcuantoLines = doc.splitTextToSize(
-    'Por cuanto: Para que conste y sea reconocido, se otorga el presente certificado en calidad de:',
-    contentW - 40
-  )
-
-  doc.text(porcuantoLines, cx, y, { align: 'center' })
-  y += porcuantoLines.length * 6 + 5
-
-  doc.setFontSize(14)
-  doc.setTextColor(pr, pg, pb)
-  doc.setFont('helvetica', 'bold')
-  doc.text('APROBADO', cx, y, { align: 'center' })
-  const aprobadoW = doc.getTextWidth('APROBADO')
-
-  doc.setDrawColor(pr, pg, pb)
+  // Subrayado del estudiante
+  doc.setDrawColor(60, 60, 60)
   doc.setLineWidth(0.4)
-  doc.line(cx - aprobadoW / 2 - 10, y - 1.5, cx - aprobadoW / 2 - 2, y - 1.5)
-  doc.line(cx + aprobadoW / 2 + 2, y - 1.5, cx + aprobadoW / 2 + 10, y - 1.5)
-  y += 8
+  doc.line(cx - 70, 96, cx + 70, 96)
 
-  doc.setFontSize(12)
-  doc.setTextColor(100, 100, 100)
-  doc.setFont('helvetica', 'normal')
-  doc.text(`Firmado, el ${fechaFirmadaTxt}.`, cx, y, { align: 'center' })
-  y += 12
+  // 6. Por haber completado...
+  doc.setFontSize(13)
+  doc.setFont('times', 'italic')
+  doc.setTextColor(80, 80, 80)
+  doc.text('Por haber completado satisfactoriamente el módulo :', cx, 108, { align: 'center' })
 
-  // Firmas
-  const hasGerente = gerenteGeneral !== null
+  // 7. Título del Curso
+  doc.setFontSize(22)
+  doc.setFont('times', 'bold')
+  doc.setTextColor(20, 20, 20)
+  const cursoLines = doc.splitTextToSize(cursoTitulo.toUpperCase(), pageWidth - 60)
 
-  if (hasGerente && mostrarFirmaDocente) {
-    await addSignatureBlock(cx - 54, y + 20, gerenteGeneral)
-    await addSignatureBlock(cx + 54, y + 20, profesorSnapshot)
-  } else if (hasGerente) {
-    await addSignatureBlock(cx, y + 20, gerenteGeneral)
-  } else if (mostrarFirmaDocente) {
-    await addSignatureBlock(cx, y + 20, profesorSnapshot)
+  doc.text(cursoLines, cx, 122, { align: 'center' })
+
+  // Subrayado del título
+  const lineY = 122 + (cursoLines.length * 7) + 2
+
+  doc.line(cx - 75, lineY, cx + 75, lineY)
+
+  // 8. Firma del Administrador (bottom-left)
+  const sigY = 162
+  const signee = gerenteGeneral || profesorSnapshot
+
+  if (signee) {
+    await addSignatureBlock(90, sigY, signee)
   }
 
-  // Footer página 1
-  doc.setFontSize(10)
-  doc.setTextColor(90, 90, 90)
+  // 9. Fecha (bottom-right)
+  doc.setFontSize(12)
+  doc.setFont('times', 'normal')
+  doc.setTextColor(20, 20, 20)
+  doc.text(`Lima, ${fechaFirmadaTxt}`, pageWidth - 72, sigY + 6, { align: 'right' })
+
+  // 10. Código de registro y vigencia discretos en la parte inferior externa
+  doc.setFontSize(8)
   doc.setFont('helvetica', 'normal')
-  doc.text(`Código de Registro: ${codigoVerificacion}`, 16, pageHeight - 12)
-  doc.text(`Fecha de Emisión: ${fechaFirmadaTxt}`, 16, pageHeight - 7)
-  doc.text(
-    `Vigencia de acceso: ${vigenciaHastaVal ? formatDateLong(vigenciaHastaVal) : 'sin caducidad'}`,
-    pageWidth - 80,
-    pageHeight - 7,
-    { align: 'right' }
-  )
+  doc.setTextColor(120, 120, 120)
+  doc.text(`Reg: ${codigoVerificacion}`, 18, pageHeight - 10)
 
   void previewFlag
+  void cursoDuracion
+  void fechaInicioVal
+  void fechaFinVal
+  void vigenciaHastaVal
+  void qrDataUrl
+  void mostrarFirmaDocente
+  void nombreInstitucion
+  void slogan
 
   // ── PÁGINA 2 ─────────────────────────────────────────────────────────
   doc.addPage()
@@ -354,17 +249,10 @@ export const generarClasico: GeneratorFn = async data => {
     }
   }
 
-  const logoRightEdge = margin + logoP2W + 4
 
-  doc.setFontSize(12)
-  doc.setFont('helvetica', 'bold')
-  doc.setTextColor(255, 255, 255)
-  doc.text(nombreInstitucion.toUpperCase(), logoRightEdge, 10)
-  doc.setFontSize(T.body)
-  doc.setFont('helvetica', 'normal')
-  doc.text(slogan, logoRightEdge, 16)
   doc.setFontSize(T.label)
   doc.setFont('helvetica', 'bold')
+  doc.setTextColor(255, 255, 255)
   doc.text(`Código: ${codigoVerificacion}`, pageWidth - margin, 9, { align: 'right' })
   doc.setFontSize(T.label)
   doc.setFont('helvetica', 'normal')

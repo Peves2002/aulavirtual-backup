@@ -94,9 +94,8 @@ export default function SimulacroPaymentForm({ simulacro }: SimulacroPaymentForm
   const [culqiSettings, setCulqiSettings] = useState<any>(null)
   const [isCulqiLoaded, setIsCulqiLoaded] = useState(false)
   const [formData, setFormData] = useState({ nombres: '', apellidos: '', correo: '' })
-  const [tipoComprobante, setTipoComprobante] = useState<'TICKET' | 'BOLETA' | 'FACTURA'>('TICKET')
-  const [numeroComprobante, setNumeroComprobante] = useState('')
-  const [comprobanteError, setComprobanteError] = useState<string | null>(null)
+  const tipoComprobante = 'TICKET'
+  const numeroComprobante = ''
 
   const isCulqiEnabled = configs.CULQI_ENABLED !== 'false'
   const isIzipayEnabled = configs.IZIPAY_ENABLED !== 'false'
@@ -149,24 +148,8 @@ export default function SimulacroPaymentForm({ simulacro }: SimulacroPaymentForm
   }, [culqiSettings])
 
   const validateComprobante = useCallback(() => {
-    if (configs.PEDIDOS_SOLICITAR_COMPROBANTE === 'false') return true
-
-    setComprobanteError(null)
-
-    if (tipoComprobante === 'FACTURA' && !/^\d{11}$/.test(numeroComprobante)) {
-      setComprobanteError('El RUC debe tener 11 dígitos')
-
-      return false
-    }
-
-    if (tipoComprobante === 'BOLETA' && !/^\d{8}$|^\d{11}$/.test(numeroComprobante)) {
-      setComprobanteError('El documento debe tener 8 u 11 dígitos')
-
-      return false
-    }
-
     return true
-  }, [configs.PEDIDOS_SOLICITAR_COMPROBANTE, tipoComprobante, numeroComprobante])
+  }, [])
 
   const handlePaymentSuccess = useCallback(() => {
     setPaymentSuccess(true)
@@ -420,31 +403,7 @@ export default function SimulacroPaymentForm({ simulacro }: SimulacroPaymentForm
             </Grid>
           </Box>
 
-          {/* Comprobante */}
-          {configs.PEDIDOS_SOLICITAR_COMPROBANTE !== 'false' && (
-            <Box>
-              <Stack direction='row' alignItems='center' spacing={1} sx={{ mb: 2 }}>
-                <Box sx={{ width: 28, height: 28, borderRadius: 1.5, bgcolor: 'primary.50', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <i className='tabler-file-invoice' style={{ fontSize: 15, color: 'var(--mui-palette-primary-main)' }} />
-                </Box>
-                <Typography variant='subtitle1' fontWeight={700}>Datos de Facturación (Opcional)</Typography>
-              </Stack>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={4}>
-                  <TextField select fullWidth size='small' label='Tipo' value={tipoComprobante} onChange={e => setTipoComprobante(e.target.value as any)} SelectProps={{ native: true }}>
-                    <option value='TICKET'>Ticket</option>
-                    <option value='BOLETA'>Boleta</option>
-                    <option value='FACTURA'>Factura</option>
-                  </TextField>
-                </Grid>
-                <Grid item xs={12} sm={8}>
-                  <TextField fullWidth size='small' label={tipoComprobante === 'FACTURA' ? 'RUC' : 'DNI/RUC'} value={numeroComprobante}
-                    onChange={e => setNumeroComprobante(e.target.value.replace(/\D/g, '').substring(0, 11))}
-                    error={!!comprobanteError} helperText={comprobanteError} />
-                </Grid>
-              </Grid>
-            </Box>
-          )}
+
 
           {/* Método de pago */}
           <Box>
