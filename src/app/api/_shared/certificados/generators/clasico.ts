@@ -1,4 +1,4 @@
-import { fetchImageBuffer, compressImageForPdf } from './utils'
+import { fetchImageBuffer, compressImageForPdf, resolveSignatureDimensions } from './utils'
 
 import type { GeneratorFn } from './types'
 
@@ -61,8 +61,9 @@ export const generarClasico: GeneratorFn = async data => {
 
         if (signatureBuffer) {
           const { buffer: compressed, jsPdfFormat } = await compressImageForPdf(signatureBuffer, { maxWidth: 300, format: 'png' })
+          const { w: sigW, h: sigH } = await resolveSignatureDimensions(signatureBuffer, 48, 30)
 
-          doc.addImage(compressed, jsPdfFormat, x - 17, lineY - 34, 34, 34)
+          doc.addImage(compressed, jsPdfFormat, x - sigW / 2, lineY - sigH, sigW, sigH)
         }
       } catch {
         /* skip */
@@ -187,32 +188,45 @@ export const generarClasico: GeneratorFn = async data => {
   doc.setFontSize(8)
   doc.setFont('helvetica', 'normal')
   doc.setTextColor(120, 120, 120)
-  doc.text(`Reg: ${codigoVerificacion}`, 18, pageHeight - 10)
+  // doc.text(`Reg: ${codigoVerificacion}`, 18, pageHeight - 10)
+
+  // 11. QR de verificación (debajo del encabezado, lado derecho)
+  const qrSz = 28
+  const qrX = pageWidth - qrSz - 40
+  const qrY = 54
+
+  doc.setFillColor(255, 255, 255)
+  doc.roundedRect(qrX - 2, qrY - 2, qrSz + 4, qrSz + 4, 1, 1, 'F')
+  doc.addImage(qrDataUrl, 'PNG', qrX, qrY, qrSz, qrSz)
 
   void previewFlag
   void cursoDuracion
   void fechaInicioVal
   void fechaFinVal
   void vigenciaHastaVal
-  void qrDataUrl
   void mostrarFirmaDocente
   void nombreInstitucion
   void slogan
 
   // ── PÁGINA 2 ─────────────────────────────────────────────────────────
   doc.addPage()
-  doc.setFillColor(255, 255, 255)
-  doc.rect(0, 0, pageWidth, pageHeight, 'F')
+
+  if (backgroundBuffer) {
+    try {
+      doc.addImage(backgroundBuffer, 'PNG', 0, 0, pageWidth, pageHeight)
+    } catch {
+      doc.setFillColor(255, 255, 255)
+      doc.rect(0, 0, pageWidth, pageHeight, 'F')
+    }
+  } else {
+    doc.setFillColor(255, 255, 255)
+    doc.rect(0, 0, pageWidth, pageHeight, 'F')
+  }
 
   const T = { sectionTitle: 9, label: 8, body: 8, small: 7, score: 22 }
-  const margin = 12
+  const margin = 32
 
-  // Banda superior
-  doc.setFillColor(pr, pg, pb)
-  doc.rect(0, 0, pageWidth, 18, 'F')
-
-  const bandH = 20
-  const maxLogoHP2 = bandH - 8
+  const maxLogoHP2 = 11
   const maxLogoWP2 = 40
   let logoP2W = maxLogoHP2
   let logoP2H = maxLogoHP2
@@ -243,7 +257,7 @@ export const generarClasico: GeneratorFn = async data => {
     try {
       const ext = logoUrl.split('.').pop()?.split('?')[0]?.toUpperCase() ?? 'PNG'
 
-      doc.addImage(base64Logo, ext, margin, (bandH - logoP2H) / 2, logoP2W, logoP2H, 'LOGO')
+      doc.addImage(base64Logo, ext, margin, 28, logoP2W, logoP2H, 'LOGO')
     } catch {
       /* skip */
     }
@@ -252,14 +266,15 @@ export const generarClasico: GeneratorFn = async data => {
 
   doc.setFontSize(T.label)
   doc.setFont('helvetica', 'bold')
-  doc.setTextColor(255, 255, 255)
-  doc.text(`Código: ${codigoVerificacion}`, pageWidth - margin, 9, { align: 'right' })
+  doc.setTextColor(pr, pg, pb)
+  doc.text(`Código: ${codigoVerificacion}`, pageWidth - margin, 30, { align: 'right' })
   doc.setFontSize(T.label)
   doc.setFont('helvetica', 'normal')
-  doc.text(`Fecha de emisión: ${fechaFirmadaTxt}`, pageWidth - margin, 15, { align: 'right' })
+  doc.setTextColor(80, 80, 80)
+  doc.text(`Fecha de emisión: ${fechaFirmadaTxt}`, pageWidth - margin, 35, { align: 'right' })
 
   // Zona A: Avatar + datos graduado
-  const zoneAY = 24
+  const zoneAY = 46
   const avatarSize = 22
   const avatarX = margin
 
@@ -365,7 +380,7 @@ export const generarClasico: GeneratorFn = async data => {
   const contentColW = (pageWidth - margin * 2 - contentColGap) / 2
   const contentColLeft = margin
   const contentColRight = margin + contentColW + contentColGap
-  const contentBottomLimit = pageHeight - 22
+  const contentBottomLimit = pageHeight - 36
 
   doc.setFillColor(pr, pg, pb)
   doc.roundedRect(margin, contenidoStartY, pageWidth - margin * 2, 8, 1, 1, 'F')
@@ -494,30 +509,33 @@ export const generarClasico: GeneratorFn = async data => {
   for (let pi = 0; pi < columnPages.length; pi++) {
     if (pi > 0) {
       doc.addPage()
-      doc.setFillColor(255, 255, 255)
-      doc.rect(0, 0, pageWidth, pageHeight, 'F')
-      doc.setFillColor(pr, pg, pb)
-      doc.rect(0, 0, pageWidth, 8, 'F')
+
+      if (backgroundBuffer) {
+        try {
+          doc.addImage(backgroundBuffer, 'PNG', 0, 0, pageWidth, pageHeight)
+        } catch {
+          doc.setFillColor(255, 255, 255)
+          doc.rect(0, 0, pageWidth, pageHeight, 'F')
+        }
+      } else {
+        doc.setFillColor(255, 255, 255)
+        doc.rect(0, 0, pageWidth, pageHeight, 'F')
+      }
+
       doc.setFontSize(T.small)
       doc.setFont('helvetica', 'bold')
-      doc.setTextColor(255, 255, 255)
-      doc.text('CONTENIDO DEL PROGRAMA ACADÉMICO (continuación)', margin, 5.5)
+      doc.setTextColor(pr, pg, pb)
+      doc.text('CONTENIDO DEL PROGRAMA ACADÉMICO (continuación)', margin, 30)
     }
 
-    const y0 = pi === 0 ? contentStartY : 14
+    const y0 = pi === 0 ? contentStartY : 40
 
     renderColumnSegment(columnPages[pi].left, contentColLeft, y0)
     renderColumnSegment(columnPages[pi].right, contentColRight, y0)
   }
 
   // ── Pie de página 2 ───────────────────────────────────────────────────
-  const footerTopY = pageHeight - 20
-
-  doc.setFillColor(245, 245, 245)
-  doc.rect(0, footerTopY, pageWidth, 20, 'F')
-  doc.setDrawColor(pr, pg, pb)
-  doc.setLineWidth(0.4)
-  doc.line(0, footerTopY, pageWidth, footerTopY)
+  const footerTopY = pageHeight - 32
 
   if (disclaimer) {
     const disclaimerLines = doc.splitTextToSize(disclaimer, pageWidth - margin * 2 - 60)

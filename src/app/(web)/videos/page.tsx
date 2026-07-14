@@ -29,7 +29,7 @@ export default async function VideosPage() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         {videos.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-2xl border border-border">
-            <i className="tabler-video-off text-5xl text-muted-foreground mb-4 block" />
+            <i className="tabler-video-off text-5xl text-muted-foreground mb-4 flex justify-center" />
             <Typography variant="h6" fontWeight={600} className="text-foreground">
               No hay videos disponibles por el momento
             </Typography>

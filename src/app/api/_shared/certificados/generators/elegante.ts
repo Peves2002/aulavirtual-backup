@@ -1,4 +1,4 @@
-import { fetchImageBuffer, formatDateLong, resolveLogoDimensions } from './utils'
+import { fetchImageBuffer, formatDateLong, resolveLogoDimensions, resolveSignatureDimensions } from './utils'
 
 import type { GeneratorFn } from './types'
 
@@ -65,8 +65,9 @@ export const generarElegante: GeneratorFn = async data => {
 
         if (buf) {
           const ext = user.firma.split('.').pop()?.split('?')[0]?.toLowerCase() ?? 'png'
+          const { w: sigW, h: sigH } = await resolveSignatureDimensions(buf, 44, 26)
 
-          doc.addImage(buf, ext.toUpperCase(), x - 16, lineY - 28, 32, 28)
+          doc.addImage(buf, ext.toUpperCase(), x - sigW / 2, lineY - sigH, sigW, sigH)
         }
       } catch {
         /* skip */

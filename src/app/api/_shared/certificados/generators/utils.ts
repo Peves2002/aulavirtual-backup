@@ -81,6 +81,38 @@ export async function compressImageForPdf(
 }
 
 /**
+ * Resuelve las dimensiones de una firma respetando su aspect ratio con Sharp,
+ * ajustándola dentro de un ancho/alto máximo (en mm) sin achatarla.
+ */
+export async function resolveSignatureDimensions(
+  signatureBuffer: Buffer | null,
+  maxW: number,
+  maxH: number
+): Promise<{ w: number; h: number }> {
+  if (!signatureBuffer) return { w: maxW, h: maxH }
+
+  try {
+    const { default: sharp } = await import('sharp')
+    const meta = await sharp(signatureBuffer).metadata()
+
+    if (meta.width && meta.height) {
+      const ratio = meta.width / meta.height
+      let w = maxW
+      let h = w / ratio
+
+      if (h > maxH) {
+        h = maxH
+        w = h * ratio
+      }
+
+      return { w, h }
+    }
+  } catch { /* default */ }
+
+  return { w: maxW, h: maxH }
+}
+
+/**
  * Resuelve las dimensiones del logo respetando aspect ratio con Sharp.
  * Devuelve { w, h } en mm.
  */

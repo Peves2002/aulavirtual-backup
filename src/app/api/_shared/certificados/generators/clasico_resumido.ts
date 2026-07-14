@@ -1,5 +1,5 @@
 import type { GeneratorFn } from './types'
-import { fetchImageBuffer } from './utils'
+import { fetchImageBuffer, resolveSignatureDimensions } from './utils'
 
 /**
  * Plantilla CLÁSICA RESUMIDA — Igual que Clásico, pero en la página 2
@@ -56,8 +56,9 @@ export const generarClasicoResumido: GeneratorFn = async data => {
 
         if (signatureBuffer) {
           const sigExt = user.firma.split('.').pop()?.split('?')[0]?.toLowerCase() ?? 'png'
+          const { w: sigW, h: sigH } = await resolveSignatureDimensions(signatureBuffer, 48, 30)
 
-          doc.addImage(signatureBuffer, sigExt.toUpperCase(), x - 17, lineY - 34, 34, 34)
+          doc.addImage(signatureBuffer, sigExt.toUpperCase(), x - sigW / 2, lineY - sigH, sigW, sigH)
         }
       } catch {
         /* skip */
@@ -182,7 +183,7 @@ export const generarClasicoResumido: GeneratorFn = async data => {
   doc.setFontSize(8)
   doc.setFont('helvetica', 'normal')
   doc.setTextColor(120, 120, 120)
-  doc.text(`Reg: ${codigoVerificacion}`, 18, pageHeight - 10)
+  // doc.text(`Reg: ${codigoVerificacion}`, 18, pageHeight - 10)
 
   void previewFlag
   void avatarBuffer
@@ -197,41 +198,23 @@ export const generarClasicoResumido: GeneratorFn = async data => {
 
   // ── PÁGINA 2 ─────────────────────────────────────────────────────────
   doc.addPage()
-  doc.setFillColor(255, 255, 255)
-  doc.rect(0, 0, pageWidth, pageHeight, 'F')
+
+  if (backgroundBuffer) {
+    try {
+      doc.addImage(backgroundBuffer, 'PNG', 0, 0, pageWidth, pageHeight)
+    } catch {
+      doc.setFillColor(255, 255, 255)
+      doc.rect(0, 0, pageWidth, pageHeight, 'F')
+    }
+  } else {
+    doc.setFillColor(255, 255, 255)
+    doc.rect(0, 0, pageWidth, pageHeight, 'F')
+  }
 
   const T = { label: 8, body: 9, small: 7 }
-  const margin = 16
+  const margin = 24
 
-  // Dibujar un marco ligero alrededor de la página (como en la referencia)
-  doc.setDrawColor(pr, pg, pb)
-  doc.setLineWidth(0.8)
-  doc.roundedRect(8, 8, pageWidth - 16, pageHeight - 16, 5, 5)
-
-  // Banda superior — esquinas redondeadas que siguen el marco (r=5, kappa=0.5523)
-  const bk = 0.5523
-  const br = 5
-
-  const bx = 8,
-    by = 8
-
-  const bRight = pageWidth - 8
-  const bandBottom = 24
-
-  doc.setFillColor(pr, pg, pb)
-  doc.path([
-    { op: 'm', c: [bx, by + br] },
-    { op: 'c', c: [bx, by + br - br * bk, bx + br - br * bk, by, bx + br, by] },
-    { op: 'l', c: [bRight - br, by] },
-    { op: 'c', c: [bRight - br + br * bk, by, bRight, by + br - br * bk, bRight, by + br] },
-    { op: 'l', c: [bRight, bandBottom] },
-    { op: 'l', c: [bx, bandBottom] },
-    { op: 'h', c: [] }
-  ])
-  doc.fill()
-
-  const bandH = 15.6 // 24 - 8.4
-  const maxLogoHP2 = bandH - 4
+  const maxLogoHP2 = 12
   const maxLogoWP2 = 40
   let logoP2W = maxLogoHP2
   let logoP2H = maxLogoHP2
@@ -262,7 +245,7 @@ export const generarClasicoResumido: GeneratorFn = async data => {
     try {
       const ext = logoUrl.split('.').pop()?.split('?')[0]?.toUpperCase() ?? 'PNG'
 
-      doc.addImage(base64Logo, ext, margin, 8.4 + (bandH - logoP2H) / 2, logoP2W, logoP2H)
+      doc.addImage(base64Logo, ext, margin, 16, logoP2W, logoP2H)
     } catch {
       /* skip */
     }
@@ -271,19 +254,20 @@ export const generarClasicoResumido: GeneratorFn = async data => {
 
   doc.setFontSize(T.label)
   doc.setFont('helvetica', 'bold')
-  doc.setTextColor(255, 255, 255)
-  doc.text(`Código: ${codigoVerificacion}`, pageWidth - margin, 13, { align: 'right' })
+  doc.setTextColor(pr, pg, pb)
+  doc.text(`Código: ${codigoVerificacion}`, pageWidth - margin, 20, { align: 'right' })
   doc.setFontSize(T.label)
   doc.setFont('helvetica', 'normal')
-  doc.text(`Fecha de emisión: ${fechaFirmadaTxt}`, pageWidth - margin, 19, { align: 'right' })
+  doc.setTextColor(80, 80, 80)
+  doc.text(`Fecha de emisión: ${fechaFirmadaTxt}`, pageWidth - margin, 25, { align: 'right' })
 
   // Contenido de módulos y lecciones a dos columnas
-  let currentY = 32
+  let currentY = 40
   const colGap = 12
   const colW = (pageWidth - margin * 2 - colGap) / 2
   const col1X = margin
   const col2X = margin + colW + colGap
-  const limitY = pageHeight - 20
+  const limitY = pageHeight - 24
 
   let currentColumn = 1
 
@@ -299,35 +283,31 @@ export const generarClasicoResumido: GeneratorFn = async data => {
     if (currentY + requiredSpace > limitY) {
       if (currentColumn === 1) {
         currentColumn = 2
-        currentY = 32
+        currentY = 40
       } else {
         // Nueva página si ambas columnas se llenaron (manteniendo el formato)
         doc.addPage()
-        doc.setFillColor(255, 255, 255)
-        doc.rect(0, 0, pageWidth, pageHeight, 'F')
-        doc.setDrawColor(pr, pg, pb)
-        doc.setLineWidth(0.8)
-        doc.roundedRect(8, 8, pageWidth - 16, pageHeight - 16, 5, 5)
 
-        // Header simplificado en página extra — esquinas redondeadas
-        doc.setFillColor(pr, pg, pb)
-        doc.path([
-          { op: 'm', c: [8, 8 + 5] },
-          { op: 'c', c: [8, 8 + 5 - 5 * 0.5523, 8 + 5 - 5 * 0.5523, 8, 8 + 5, 8] },
-          { op: 'l', c: [pageWidth - 13, 8] },
-          { op: 'c', c: [pageWidth - 13 + 5 * 0.5523, 8, pageWidth - 8, 8 + 5 - 5 * 0.5523, pageWidth - 8, 8 + 5] },
-          { op: 'l', c: [pageWidth - 8, 18] },
-          { op: 'l', c: [8, 18] },
-          { op: 'h', c: [] }
-        ])
-        doc.fill()
+        if (backgroundBuffer) {
+          try {
+            doc.addImage(backgroundBuffer, 'PNG', 0, 0, pageWidth, pageHeight)
+          } catch {
+            doc.setFillColor(255, 255, 255)
+            doc.rect(0, 0, pageWidth, pageHeight, 'F')
+          }
+        } else {
+          doc.setFillColor(255, 255, 255)
+          doc.rect(0, 0, pageWidth, pageHeight, 'F')
+        }
+
+        // Header simplificado en página extra
         doc.setFontSize(T.label)
         doc.setFont('helvetica', 'bold')
-        doc.setTextColor(255, 255, 255)
-        doc.text('CONTENIDO DEL PROGRAMA ACADÉMICO (continuación)', margin, 14.5)
+        doc.setTextColor(pr, pg, pb)
+        doc.text('CONTENIDO DEL PROGRAMA ACADÉMICO (continuación)', margin, 20)
 
         currentColumn = 1
-        currentY = 26
+        currentY = 34
       }
     }
 

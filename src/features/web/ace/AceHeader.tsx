@@ -153,13 +153,13 @@ export default function AceHeader() {
             <>
               <button
                 onClick={() => openLogin()}
-                className="px-4 py-2 rounded-md text-sm font-semibold border border-border text-foreground hover:bg-muted transition-colors"
+                className="px-4 py-2 rounded-md text-sm font-semibold border border-border text-foreground hover:bg-muted transition-colors cursor-pointer"
               >
                 Iniciar sesión
               </button>
               <button
                 onClick={() => openRegister()}
-                className="px-4 py-2 rounded-md text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-opacity shadow-[var(--shadow-glow)]"
+                className="px-4 py-2 rounded-md text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-opacity shadow-[var(--shadow-glow)] cursor-pointer"
               >
                 Registrarse
               </button>
@@ -220,13 +220,13 @@ export default function AceHeader() {
               <div className="flex gap-2 mt-3">
                 <button
                   onClick={() => { setOpen(false); openLogin() }}
-                  className="flex-1 px-3 py-2 rounded-md text-sm font-semibold border border-border text-foreground text-center hover:bg-muted"
+                  className="flex-1 px-3 py-2 rounded-md text-sm font-semibold border border-border text-foreground text-center hover:bg-muted cursor-pointer"
                 >
                   Iniciar sesión
                 </button>
                 <button
                   onClick={() => { setOpen(false); openRegister() }}
-                  className="flex-1 px-3 py-2 rounded-md text-sm font-semibold bg-primary text-primary-foreground text-center hover:opacity-90"
+                  className="flex-1 px-3 py-2 rounded-md text-sm font-semibold bg-primary text-primary-foreground text-center hover:opacity-90 cursor-pointer"
                 >
                   Registrarse
                 </button>

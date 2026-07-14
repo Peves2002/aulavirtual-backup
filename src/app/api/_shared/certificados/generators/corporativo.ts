@@ -1,5 +1,5 @@
 import type { GeneratorFn } from './types'
-import { fetchImageBuffer, formatDateLong, resolveLogoDimensions } from './utils'
+import { fetchImageBuffer, formatDateLong, resolveLogoDimensions, resolveSignatureDimensions } from './utils'
 
 /**
  * Plantilla CORPORATIVA — Diseño formal para empresas B2B.
@@ -62,8 +62,9 @@ export const generarCorporativo: GeneratorFn = async data => {
 
         if (buf) {
           const ext = user.firma.split('.').pop()?.split('?')[0]?.toLowerCase() ?? 'png'
+          const { w: sigW, h: sigH } = await resolveSignatureDimensions(buf, 46, 28)
 
-          doc.addImage(buf, ext.toUpperCase(), x - 17, lineY - 30, 34, 30)
+          doc.addImage(buf, ext.toUpperCase(), x - sigW / 2, lineY - sigH, sigW, sigH)
         }
       } catch {
         /* skip */
