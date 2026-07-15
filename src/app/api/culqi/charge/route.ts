@@ -53,51 +53,86 @@ export async function POST(request: Request) {
       )
     }
 
-    // Culqi espera el monto en céntimos (ej: 10.00 -> 1000)
-    const amountInCents = Math.round(Number(pedido.total) * 100)
-    const currency = pedido.moneda || 'PEN'
+    let culqiData: any
 
-    // 3. Crear el cargo en la API de Culqi v2
-    const culqiResponse = await fetch('https://api.culqi.com/v2/charges', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${privateKey}`
-      },
-      body: JSON.stringify({
-        amount: amountInCents,
-        currency_code: currency,
-        email: email || auth.user.email,
-        source_id: tokenId,
-        description: `Pedido #${pedido.numero_pedido} - Aula Virtual`,
-        antifraud_details: {
-          first_name: auth.user.nombre?.split(' ')[0] || auth.user.name?.split(' ')[0] || 'User',
-          last_name: auth.user.nombre?.split(' ').slice(1).join(' ') || auth.user.apellido || auth.user.name?.split(' ').slice(1).join(' ') || 'User',
-          email: auth.user.email || '',
-          address: 'Av. Principal 123',
-          address_city: 'Lima',
-          country_code: 'PE',
-          phone_number: '999999999'
-        },
-        metadata: {
-          pedido_id: pedido.id,
-          numero_pedido: pedido.numero_pedido,
-          usuario_id: auth.user.id,
-          plataforma: 'Aula Virtual'
-        }
+    if (tokenId === 'PAYMENT_SUCCESS') {
+      // El widget de Culqi Checkout se abrió con una Order (flujo usado por este checkout) y ya
+      // procesó el pago del lado de Culqi: no hay token de tarjeta que cobrar, solo se debe
+      // verificar el estado real de la orden antes de completar el pedido.
+      const culqiOrderId = pedido.token_pago
+
+      if (!culqiOrderId) {
+        return ApiResponse.error(request, 'No se encontró la orden de Culqi asociada a este pedido', 400)
+      }
+
+      const orderResponse = await fetch(`https://api.culqi.com/v2/orders/${culqiOrderId}`, {
+        headers: { Authorization: `Bearer ${privateKey}` }
       })
-    })
 
-    const culqiData = await culqiResponse.json()
+      const orderData = await orderResponse.json()
 
-    if (!culqiResponse.ok) {
-      console.error('[CULQI_CHARGE_ERROR]', culqiData)
+      if (!orderResponse.ok) {
+        console.error('[CULQI_ORDER_VERIFY_ERROR]', orderData)
 
-      return ApiResponse.error(
-        request,
-        culqiData.user_message || 'Error al procesar el cargo con Culqi',
-        culqiResponse.status
-      )
+        return ApiResponse.error(
+          request,
+          orderData.user_message || 'Error al verificar la orden con Culqi',
+          orderResponse.status
+        )
+      }
+
+      if (orderData.state !== 'paid') {
+        return ApiResponse.error(request, `El pago no pudo ser confirmado (estado: ${orderData.state})`, 400)
+      }
+
+      culqiData = orderData
+    } else {
+      // Flujo de token directo (checkout sin Order, ej. suscripciones)
+      const amountInCents = Math.round(Number(pedido.total) * 100)
+      const currency = pedido.moneda || 'PEN'
+
+      // 3. Crear el cargo en la API de Culqi v2
+      const culqiResponse = await fetch('https://api.culqi.com/v2/charges', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${privateKey}`
+        },
+        body: JSON.stringify({
+          amount: amountInCents,
+          currency_code: currency,
+          email: email || auth.user.email,
+          source_id: tokenId,
+          description: `Pedido #${pedido.numero_pedido} - Aula Virtual`,
+          antifraud_details: {
+            first_name: auth.user.nombre?.split(' ')[0] || auth.user.name?.split(' ')[0] || 'User',
+            last_name: auth.user.nombre?.split(' ').slice(1).join(' ') || auth.user.apellido || auth.user.name?.split(' ').slice(1).join(' ') || 'User',
+            email: auth.user.email || '',
+            address: 'Av. Principal 123',
+            address_city: 'Lima',
+            country_code: 'PE',
+            phone_number: '999999999'
+          },
+          metadata: {
+            pedido_id: pedido.id,
+            numero_pedido: pedido.numero_pedido,
+            usuario_id: auth.user.id,
+            plataforma: 'Aula Virtual'
+          }
+        })
+      })
+
+      culqiData = await culqiResponse.json()
+
+      if (!culqiResponse.ok) {
+        console.error('[CULQI_CHARGE_ERROR]', culqiData)
+
+        return ApiResponse.error(
+          request,
+          culqiData.user_message || 'Error al procesar el cargo con Culqi',
+          culqiResponse.status
+        )
+      }
     }
 
     // 4. Pago exitoso - Completar el pedido

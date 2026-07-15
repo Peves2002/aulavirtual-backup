@@ -380,6 +380,12 @@ export async function POST(request: Request) {
         return ApiResponse.error(request, culqiOrderData.user_message || 'Error al crear la orden en Culqi', 500)
       }
 
+      // Se persiste el id de la orden para poder verificar su estado luego (ver /api/culqi/charge)
+      await prisma.pedido.update({
+        where: { id: pedido.id },
+        data: { token_pago: culqiOrderData.id }
+      })
+
       return ApiResponse.success(
         request,
         {

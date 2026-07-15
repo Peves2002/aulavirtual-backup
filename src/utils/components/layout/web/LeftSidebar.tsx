@@ -9,15 +9,15 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { signOut, useSession } from 'next-auth/react'
 
-import { Home, BookOpen, Users, Award, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, MonitorSmartphone, GraduationCap, Layers, Map, ClipboardList, BookText, Repeat2 } from 'lucide-react'
+import { Home, BookOpen, Users, Award, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, Map, BookText } from 'lucide-react'
 
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import { usePWAInstall } from '@/utils/hooks/usePWAInstall'
-import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
 const ALL_NAV_ITEMS = [
   { title: 'Inicio', url: '/', icon: Home, key: 'inicio' },
   { title: 'Cursos', url: '/cursos', icon: BookOpen, key: 'cursos' },
+
   // { title: 'Diplomados', url: '/diplomados', icon: GraduationCap, key: 'diplomados' },
   // { title: 'Especializaciones', url: '/especializaciones', icon: Layers, key: 'especializaciones' },
   // ...(isFeatureEnabled('simulacros')
@@ -26,6 +26,7 @@ const ALL_NAV_ITEMS = [
   { title: 'Ebooks', url: '/ebooks', icon: BookText, key: 'ebooks' as const },
   { title: 'Rutas', url: '/rutas', icon: Map, key: 'rutas' as const },
   { title: 'Empresas', url: '/empresas', icon: Building2, key: 'empresas' },
+
   // { title: 'Suscripciones', url: '/suscripciones', icon: Repeat2, key: 'suscripciones' },
   { title: 'Nosotros', url: '/nosotros', icon: Users, key: 'nosotros' },
   { title: 'Certificado', url: '/verificar-certificado', icon: Award, key: 'certificado' },
@@ -44,7 +45,7 @@ export default function LeftSidebar({
   const { data: session } = useSession()
   const userButtonRef = useRef<HTMLButtonElement>(null)
   const { openLogin, openRegister } = useAuthModal()
-  const { canInstall, hasNativePrompt, install } = usePWAInstall()
+  const { canInstall, hasNativePrompt } = usePWAInstall()
   const [showInstallTip, setShowInstallTip] = useState(false)
 
   const navItems = ALL_NAV_ITEMS.filter(item => {
