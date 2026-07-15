@@ -381,7 +381,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
       const { pedidoId, culqiOrderId, rsaId, rsaPublicKey } = dataRaw.result
 
         ; (window as any)._currentPedidoId = pedidoId
-      setCulqiSettings({ currency: courses[0]?.moneda || 'PEN', amount: Math.round(displayTotal * 100), order: culqiOrderId, xculqirsaid: rsaId, rsapublickey: rsaPublicKey })
+      setCulqiSettings({ currency: (courses[0] || ebooks[0])?.moneda || 'PEN', amount: Math.round(displayTotal * 100), order: culqiOrderId, xculqirsaid: rsaId, rsapublickey: rsaPublicKey })
     } catch (error: any) {
       setPaymentError(error.message || 'Ocurrió un error inesperado')
     } finally {
@@ -570,7 +570,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
         <IzipayScript />
         <CulqiScript
           publicKey={configs.CULQI_PUBLIC_KEY || ''}
-          settings={culqiSettings || { currency: courses[0]?.moneda || 'PEN', amount: Math.round(displayTotal * 100) }}
+          settings={culqiSettings || { currency: (courses[0] || ebooks[0])?.moneda || 'PEN', amount: Math.round(displayTotal * 100) }}
           client={{ email: formData.correo }}
           options={{ lang: 'auto', installments: true, paymentMethods: { tarjeta: true, yape: true, billetera: true, bancaMovil: true, agente: true, cuotealo: true } }}
           onLoad={() => setIsCulqiLoaded(true)}
