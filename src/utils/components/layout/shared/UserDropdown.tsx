@@ -37,6 +37,17 @@ const BadgeContentSpan = styled('span')({
   boxShadow: '0 0 0 2px var(--mui-palette-background-paper)'
 })
 
+function getDashboardPath(rol?: string): string {
+  switch (rol) {
+    case 'ADMIN':
+      return '/admin/dashboard'
+    case 'PROFESOR':
+      return '/profesor/dashboard'
+    default:
+      return '/estudiante/dashboard'
+  }
+}
+
 const UserDropdown = () => {
   // States
   const [open, setOpen] = useState(false)
@@ -72,6 +83,8 @@ const UserDropdown = () => {
     router.push('/')
     router.refresh()
   }
+
+  const dashboardPath = getDashboardPath(data?.user?.rol)
 
   return (
     <>
@@ -126,36 +139,10 @@ const UserDropdown = () => {
                     <i className='tabler-user text-[22px]' />
                     <Typography color='text.primary'>Mi Perfil</Typography>
                   </MenuItem>
-                  {data?.user?.rol === 'ADMIN' && (
-                    <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/admin/dashboard')}>
-                      <i className='tabler-layout-dashboard text-[22px]' />
-                      <Typography color='text.primary'>Panel de Administración</Typography>
-                    </MenuItem>
-                  )}
-                  {data?.user?.rol === 'ESTUDIANTE' && (
-                    <div>
-                      <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/estudiante/mis-cursos')}>
-                        <i className='tabler-book text-[22px]' />
-                        <Typography color='text.primary'>Mis Cursos</Typography>
-                      </MenuItem>
-                      <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/cursos')}>
-                        <i className='tabler-search text-[20px]' />
-                        <Typography color='text.primary'>Explorar Cursos</Typography>
-                      </MenuItem>
-                    </div>
-                  )}
-                  {/* <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
-                    <i className='tabler-settings text-[22px]' />
-                    <Typography color='text.primary'>Settings</Typography>
+                  <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, dashboardPath)}>
+                    <i className='tabler-layout-dashboard text-[22px]' />
+                    <Typography color='text.primary'>Mi Panel</Typography>
                   </MenuItem>
-                  <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
-                    <i className='tabler-currency-dollar text-[22px]' />
-                    <Typography color='text.primary'>Pricing</Typography>
-                  </MenuItem>
-                  <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
-                    <i className='tabler-help-circle text-[22px]' />
-                    <Typography color='text.primary'>FAQ</Typography>
-                  </MenuItem> */}
                   <div className='flex items-center plb-2 pli-3'>
                     <Button
                       fullWidth

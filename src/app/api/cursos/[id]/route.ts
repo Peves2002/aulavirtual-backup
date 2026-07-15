@@ -63,8 +63,9 @@ const cursoInclude = {
           contenido: true,
           estado: true,
           es_en_vivo: true,
+          es_pdf: true,
           fecha_programada: true,
-          enlace_reunion: true
+          enlace_reunion: true,
         }
       },
       examenes: {
@@ -82,6 +83,19 @@ const cursoInclude = {
           limite_tiempo: true,
           modulo_id: true,
           _count: { select: { preguntas: true } }
+        }
+      },
+      actividades: {
+        orderBy: { orden: 'asc' as const },
+        select: {
+          id: true,
+          titulo: true,
+          tipo: true,
+          orden: true,
+          puntaje_maximo: true,
+          esta_publicado: true,
+          modulo_id: true,
+          _count: { select: { preguntas: true, entregas: true } }
         }
       }
     }

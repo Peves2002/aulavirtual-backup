@@ -14,6 +14,8 @@ import FinalCTASection from '@/features/web/home/components/FinalCTASection'
 import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
 import { getConfigs } from '@/utils/libs/config'
+import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
+import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
 export const metadata = {
   title: 'CEPAV - Capacitación Especializada para el Sector Turismo',
@@ -22,29 +24,30 @@ export const metadata = {
 
 async function getHomeData() {
   try {
-    const [coursesRaw, , , configs] = await Promise.all([
-      // Cursos
-      prisma.curso.findMany({
-        where: { estado: 'PUBLICADO' },
-        include: {
-          profesor: { select: { nombre: true, apellido: true, avatar: true } },
-          categoria: { select: { id: true, nombre: true } },
-          _count: { select: { modulos: true, inscripciones: true } },
-        },
-        orderBy: { creado_en: 'desc' },
-        take: 6,
-      }),
+    const courseInclude = {
+      profesor: { select: { nombre: true, apellido: true, avatar: true } },
+      categoria: { select: { id: true, nombre: true } },
+      _count: { select: { modulos: true, inscripciones: true } }
+    }
 
-      // Rutas
-      prisma.rutaAprendizaje.findMany({
-        where: { esta_activo: true },
-        include: {
-          cursos: {
-            take: 4,
-            include: { curso: { select: { miniatura: true, titulo: true } } },
-          },
-        },
-        take: 3,
+    const [coursesRaw, diplomadosRaw, especializacionesRaw, teachersRaw, configs, ebooksRaw] = await Promise.all([
+      prisma.curso.findMany({
+        where: { estado: 'PUBLICADO', tipo: 'CURSO' },
+        include: courseInclude,
+        orderBy: { creado_en: 'desc' },
+        take: 6
+      }),
+      prisma.curso.findMany({
+        where: { estado: 'PUBLICADO', tipo: 'DIPLOMADO' },
+        include: courseInclude,
+        orderBy: { creado_en: 'desc' },
+        take: 6
+      }),
+      prisma.curso.findMany({
+        where: { estado: 'PUBLICADO', tipo: 'ESPECIALIZACION' },
+        include: courseInclude,
+        orderBy: { creado_en: 'desc' },
+        take: 6
       }),
 
       // Profesores
@@ -64,10 +67,41 @@ async function getHomeData() {
         take: 8,
       }),
       getConfigs(),
+
+      // Ebooks destacados
+      isFeatureEnabled('ebooks')
+        ? prisma.ebook.findMany({
+          where: { estado: 'PUBLICADO' },
+          select: {
+            id: true, titulo: true, slug: true, miniatura: true,
+            autor: true, precio: true, precio_falso: true, moneda: true,
+            es_gratis: true, paginas: true, genero: true,
+            categoria: { select: { nombre: true } },
+          },
+          orderBy: { creado_en: 'desc' },
+          take: 5,
+        })
+        : Promise.resolve([]),
     ])
 
     const courses = await Promise.all(
       coursesRaw.map(async course => {
+        const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
+
+        return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
+      })
+    )
+
+    const diplomados = await Promise.all(
+      diplomadosRaw.map(async course => {
+        const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
+
+        return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
+      })
+    )
+
+    const especializaciones = await Promise.all(
+      especializacionesRaw.map(async course => {
         const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
 
         return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
@@ -80,26 +114,38 @@ async function getHomeData() {
 
     try { logos = configs.HOME_LOGOS ? JSON.parse(configs.HOME_LOGOS) : [] } catch { logos = [] }
 
+    const ebooks = ebooksRaw.map(e => ({
+      ...e,
+      precio: Number(e.precio),
+      precio_falso: Number(e.precio_falso),
+    }))
+
     return {
       courses: JSON.parse(JSON.stringify(courses)),
+      diplomados: JSON.parse(JSON.stringify(diplomados)),
+      especializaciones: JSON.parse(JSON.stringify(especializaciones)),
+      teachers: JSON.parse(JSON.stringify(teachersRaw)),
+      ebooks: JSON.parse(JSON.stringify(ebooks)),
       heroTitle,
       heroDescription,
       logos,
+      whatsappNumero: configs.WHATSAPP_NUMERO || '51906741327',
     }
   } catch {
     return {
-      courses: [],
+      courses: [], diplomados: [], especializaciones: [], teachers: [], ebooks: [],
       heroTitle: 'Aprende sin límites,\ncrece sin fronteras',
       heroDescription: 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.',
       logos: [],
+      whatsappNumero: '51906741327',
     }
   }
 }
 
 export default async function HomePage() {
-  const { courses, heroDescription, logos } = await getHomeData()
-  const WHATSAPP_NUMBER = '51906741327'
-  const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola, me gustaría solicitar información sobre capacitaciones para mi empresa.')}`
+  const { courses, heroDescription, logos, whatsappNumero } = await getHomeData()
+  const cursosConfig = getTipoProgramaConfig('CURSO')
+  const waLink = `https://wa.me/${whatsappNumero}?text=${encodeURIComponent('Hola, me gustaría más información sobre las capacitaciones para mi equipo.')}`
 
   return (
     <div className="is-home">
@@ -251,7 +297,12 @@ export default async function HomePage() {
           </div>
         </ScrollReveal>
         <ScrollReveal delay={0.1}>
-          <HomeCoursesSection courses={courses} />
+          <HomeCoursesSection
+            courses={courses}
+            catalogHref={cursosConfig.webPath}
+            emptyMessage={cursosConfig.emptyMessage}
+            viewLabel="Ver curso"
+          />
           <div className="flex justify-center mt-8 sm:hidden">
             <Link
               href="/cursos"

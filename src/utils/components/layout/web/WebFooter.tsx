@@ -8,6 +8,7 @@ import { Phone, Mail, MapPin, Facebook, Youtube } from 'lucide-react'
 
 import { getConfigs } from '@/utils/libs/config'
 import HydratedDate from '@/utils/components/HydratedDate'
+import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
 // Simple TikTok SVG icon (not in lucide-react)
 const TikTokIcon = ({ size = 16 }: { size?: number }) => (
@@ -31,12 +32,12 @@ const staticSocialLinks = [
 
 interface WebFooterProps {
   platformName?: string
-  rutasHabilitado?: boolean
 }
 
-const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true }: WebFooterProps) => {
+const WebFooter = async ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
   const configs = await getConfigs()
   const waNumber = configs.WHATSAPP_NUMERO || '51906741327'
+  const empresasHabilitado = configs.WEB_EMPRESAS_HABILITADO !== 'false'
 
   const socialLinks = [
     ...staticSocialLinks,
@@ -83,7 +84,10 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
               {([
                 { label: 'Cursos', href: '/cursos' },
-                ...(rutasHabilitado ? [{ label: 'Rutas', href: '/rutas' }] : []),
+                ...(isFeatureEnabled('ebooks') ? [{ label: 'Ebooks', href: '/ebooks' }] : []),
+                { label: 'Diplomados', href: '/diplomados' },
+                { label: 'Especializaciones', href: '/especializaciones' },
+                ...(isFeatureEnabled('rutas') ? [{ label: 'Rutas', href: '/rutas' }] : []),
               ] as { label: string; href: string }[]).map(link => (
                 <li key={link.label}>
                   <Link
@@ -107,13 +111,15 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
               Más Información
             </h4>
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
-              {[
+              {([
+                { label: 'Inicio', href: '/' },
                 { label: 'Nosotros', href: '/nosotros' },
+                ...(empresasHabilitado ? [{ label: 'Empresas', href: '/empresas' }] : []),
                 { label: 'Preguntas Frecuentes', href: '/preguntas-frecuentes' },
                 { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
                 { label: 'Términos y condiciones', href: '/terminos-y-condiciones' },
                 { label: 'Política de Devoluciones', href: '/politica-de-cambios-y-devoluciones' },
-              ].map(link => (
+              ] as { label: string; href: string }[]).map(link => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
@@ -203,7 +209,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
             </p>
           </div>
           <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>
-            Desarrollado con ❤️ por
+            Desarrollado por
             <Link
               href="https://flyup.pe"
               target="_blank"

@@ -11,6 +11,7 @@ export const crearCursoSchema = z.object({
     .max(200, 'El título no puede exceder 200 caracteres'),
   descripcion: z.string().trim().max(5000, 'La descripción no puede exceder 5000 caracteres').optional(),
   categoria_id: z.string().uuid('ID de categoría inválido').optional().nullable(),
+  tipo: z.enum(['CURSO', 'DIPLOMADO', 'ESPECIALIZACION']).default('CURSO'),
   profesor_id: z.string().uuid('ID de profesor inválido'),
   tipo_emision: z.enum(['SINCRONO', 'ASINCRONO', 'MIXTO']).default('ASINCRONO'),
 
@@ -29,7 +30,7 @@ export const crearCursoSchema = z.object({
   fecha_inicio: z.string().optional().nullable(),
   fecha_fin: z.string().optional().nullable(),
   vigencia_meses: z.coerce.number().int().positive().optional().nullable(),
-  nivel: z.enum(['BASICO', 'INTERMEDIO', 'AVANZADO']).default('BASICO')
+  nivel: z.enum(['BASICO', 'INTERMEDIO', 'AVANZADO']).optional().nullable()
 })
 
 export type CrearCursoDto = z.infer<typeof crearCursoSchema>
@@ -46,9 +47,10 @@ export const actualizarCursoSchema = z.object({
     .optional(),
   descripcion: z.string().trim().max(5000, 'La descripción no puede exceder 5000 caracteres').optional().nullable(),
   categoria_id: z.string().uuid('ID de categoría inválido').optional().nullable(),
+  tipo: z.enum(['CURSO', 'DIPLOMADO', 'ESPECIALIZACION']).optional(),
   profesor_id: z.string().uuid('ID de profesor inválido').optional(),
   tipo_emision: z.enum(['SINCRONO', 'ASINCRONO', 'MIXTO']).optional(),
-  nivel: z.enum(['BASICO', 'INTERMEDIO', 'AVANZADO']).optional(),
+  nivel: z.enum(['BASICO', 'INTERMEDIO', 'AVANZADO']).optional().nullable(),
   es_gratis: z.boolean().optional(),
   es_privado: z.boolean().optional(),
   completar_automatico: z.boolean().optional(),
@@ -90,6 +92,7 @@ export const listarCursosQuerySchema = z.object({
   buscar: z.string().optional(),
   estado: z.enum(['BORRADOR', 'PUBLICADO', 'ARCHIVADO', '']).optional(),
   categoria_id: z.string().uuid().optional(),
+  tipo: z.enum(['CURSO', 'DIPLOMADO', 'ESPECIALIZACION']).optional(),
   profesor_id: z.string().uuid().optional()
 })
 
