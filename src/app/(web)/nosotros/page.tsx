@@ -242,6 +242,22 @@ export default async function NosotrosPage() {
         </div>
       </section>
 
+      {/* ── HISTORIA HIGHLIGHT ────────────────────── */}
+      <section className="bg-white py-20 px-6 sm:px-10">
+        <div className="max-w-4xl mx-auto text-left">
+          <h2 className="text-3xl font-semibold mb-6 text-[#02115C] font-poppins">Nuestra Historia</h2>
+          <p className="text-base md:text-lg leading-relaxed text-gray-700 mb-6 font-inter">
+            Gridexa Energy nace con el propósito de contribuir al desarrollo del sector energético mediante soluciones integrales en consultoría, ingeniería, capacitación especializada y gestión de proyectos. La empresa fue creada para responder a las crecientes necesidades de profesionales, empresas e instituciones del sector eléctrico, brindando servicios de alto valor agregado basados en la innovación, la excelencia técnica y el cumplimiento de la normativa vigente.
+          </p>
+          <p className="text-base md:text-lg leading-relaxed text-gray-700 mb-8 font-inter">
+            Desde sus inicios, Gridexa Energy ha impulsado la formación de profesionales a través de cursos de especialización, diplomados y programas corporativos, además de desarrollar proyectos de consultoría, auditorías energéticas, estudios eléctricos y asesoría en mercados energéticos. Actualmente, la empresa fortalece su presencia mediante alianzas estratégicas con instituciones nacionales e internacionales, consolidándose como un referente en el desarrollo del conocimiento y las soluciones para el sector energético.
+          </p>
+          <div className="flex items-center gap-3 text-[#02115C] font-medium p-4 bg-gray-50 rounded-xl border border-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Junín - Huancayo - El Tambo - Jr. los Bosques 815 - El Tambo</span>
+          </div>
+        </div>
+      </section>
       {/* ── 2. BANNER ISO ─────────────────────────────── */}
       {/* <section
         style={{

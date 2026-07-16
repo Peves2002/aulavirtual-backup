@@ -55,12 +55,12 @@ export type Config = {
 }
 
 const themeConfig: Config = {
-  templateName: process.env.NEXT_PUBLIC_TEMPLATE_NAME || '',
+  templateName: process.env.NEXT_PUBLIC_TEMPLATE_NAME || 'GRIDEXA ENERGY ACADEMY',
   templateSlogan:
     process.env.NEXT_PUBLIC_TEMPLATE_SLOGAN !== undefined
       ? process.env.NEXT_PUBLIC_TEMPLATE_SLOGAN
-      : '',
-  templateLogo: process.env.NEXT_PUBLIC_TEMPLATE_LOGO || '/images/logo.png',
+      : 'El sector energético avanza, y nosotros avanzamos con él.',
+  templateLogo: process.env.NEXT_PUBLIC_TEMPLATE_LOGO || '/images/logo-gridexa.png',
   settingsCookieName: process.env.NEXT_PUBLIC_SETTINGS_COOKIE_NAME || 'arm',
   mode: 'light', // 'system', 'light', 'dark'
   skin: 'default', // 'default', 'bordered'

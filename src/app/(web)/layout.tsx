@@ -7,7 +7,6 @@ import { getConfigs } from '@/utils/libs/config'
 import prisma from '@/utils/libs/prisma'
 import WebFooter from '@/utils/components/layout/web/WebFooter'
 import WebHeader from '@/utils/components/layout/web/WebHeader'
-import LeftSidebar from '@/utils/components/layout/web/LeftSidebar'
 import MobileBottomNav from '@/utils/components/layout/web/MobileBottomNav'
 import PWAInstalledToast from '@/features/web/home/components/PWAInstalledToast'
 
@@ -32,15 +31,10 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <AuthModalProvider>
       <div className="web-layout min-h-screen bg-background flex flex-col">
-        <WebHeader initialCategories={categories} platformName={platformName} platformSlogan={platformSlogan} />
+        <WebHeader initialCategories={categories} platformName={platformName} platformSlogan={platformSlogan} empresasHabilitado={empresasHabilitado} />
         <div className="flex flex-1" style={{ paddingTop: 'var(--navbar-height)' }}>
-          {/* Sidebar: visible solo en sm+ */}
-          <div className="hidden sm:block">
-            <LeftSidebar empresasHabilitado={empresasHabilitado} />
-          </div>
           <main
-            className="flex-1 flex flex-col min-w-0 pb-16 sm:pb-0"
-            style={{ paddingLeft: 'var(--sidebar-width)' }}
+            className="flex-1 flex flex-col min-w-0 pb-16 sm:pb-0 w-full"
           >
             <div className="flex-1">
               {children}

@@ -268,6 +268,7 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
 
   return (
     <Dialog
+      disableScrollLock
       open={open}
       onClose={() => !isLoading && onClose()}
       maxWidth="sm"

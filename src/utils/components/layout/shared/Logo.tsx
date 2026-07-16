@@ -76,7 +76,7 @@ const Logo = () => {
   // Vars
   const { layout } = settings
   
-  const templateLogo = configs.TEMPLATE_LOGO || themeConfig.templateLogo
+  const templateLogo = '/images/logo-gridexa.png'
   const templateName = configs.TEMPLATE_NAME || themeConfig.templateName
   const templateSlogan = configs.TEMPLATE_SLOGAN || themeConfig.templateSlogan
 
@@ -98,29 +98,6 @@ const Logo = () => {
   return (
     <Link href='/' className='flex items-center'>
       <img src={templateLogo} alt={`${templateName} Logo`} className='bs-[46px]' />
-      <div
-        className={`flex flex-col ${montserrat.className}`}
-        ref={logoTextRef}
-      >
-        <LogoText
-          isHovered={isHovered}
-          isCollapsed={layout === 'collapsed'}
-          transitionDuration={transitionDuration}
-        >
-          {templateName.split('').map((char: string, index: number) => (
-            <span key={index}>{char}</span>
-          ))}
-        </LogoText>
-        {templateSlogan && (
-          <SloganText
-            isHovered={isHovered}
-            isCollapsed={layout === 'collapsed'}
-            transitionDuration={transitionDuration}
-          >
-            {templateSlogan}
-          </SloganText>
-        )}
-      </div>
     </Link>
   )
 }

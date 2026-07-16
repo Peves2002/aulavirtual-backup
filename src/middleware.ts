@@ -104,6 +104,9 @@ export default withAuth(
           path.startsWith('/empresas') ||
           path.startsWith('/politica-de-devoluciones') ||
           path.startsWith('/suscripciones') ||
+          path.startsWith('/servicios') ||
+          path.startsWith('/soluciones') ||
+          path.startsWith('/simulacros') ||
           path === '/'
         ) {
           return true

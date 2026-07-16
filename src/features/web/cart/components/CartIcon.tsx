@@ -5,7 +5,7 @@ import { IconButton, Badge, Tooltip } from '@mui/material'
 
 import { useCart } from '../context/CartContext'
 
-const CartIcon = () => {
+const CartIcon = ({ isTransparent = false }: { isTransparent?: boolean }) => {
     const { itemCount, setIsCartDrawerOpen } = useCart()
 
     return (
@@ -14,9 +14,9 @@ const CartIcon = () => {
                 color="inherit"
                 onClick={() => setIsCartDrawerOpen(true)}
                 sx={{
-                    bgcolor: 'primary.50',
-                    color: 'primary.main',
-                    '&:hover': { bgcolor: 'primary.100' },
+                    bgcolor: isTransparent ? 'rgba(255,255,255,0.15)' : 'primary.50',
+                    color: isTransparent ? '#ffffff' : 'primary.main',
+                    '&:hover': { bgcolor: isTransparent ? 'rgba(255,255,255,0.25)' : 'primary.100' },
                     borderRadius: '10px',
                     width: 44,
                     height: 44
