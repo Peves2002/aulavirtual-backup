@@ -52,7 +52,7 @@ export default function NosotrosPage() {
         {/* Historia */}
         <div className="grid md:grid-cols-2 gap-12 items-center mb-24">
           <div className="relative aspect-video md:aspect-square w-full bg-gray-100 rounded-3xl overflow-hidden border border-gray-200 flex items-center justify-center shadow-sm">
-            <img src="/images/servicios/simulacros/simulacro-antamina/1-p1083048.jpg" alt="Historia IFSEC Group" className="w-full h-full object-cover" />
+            <img src="/images/servicios/entrenamientos-vivenciales/1.png" alt="Historia IFSEC Group" className="w-full h-full object-cover" />
           </div>
           <div>
             <h2 className="text-3xl font-bold mb-6 text-[var(--web-dark)]" style={{ fontFamily: 'Poppins, sans-serif' }}>Nuestra Historia</h2>
