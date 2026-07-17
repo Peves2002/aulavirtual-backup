@@ -66,7 +66,7 @@ return {
         Nuestros Servicios
       </h1>
       <p className="text-center text-lg text-gray-600 max-w-3xl mx-auto mb-16">
-        Ofrecemos soluciones integrales y personalizadas para potenciar el desarrollo de tu empresa y equipo de trabajo, asegurando operaciones seguras y productivas.
+        Acompañamos a nuestros clientes con servicios de consultoría, gestión de riesgos, capacitación, respuesta a emergencias y remediación ambiental, garantizando seguridad, cumplimiento y continuidad operativa.
       </p>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

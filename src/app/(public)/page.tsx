@@ -8,6 +8,7 @@ import Link from 'next/link'
 
 import prisma from '@/utils/libs/prisma'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
+import HeroCarousel from '@/features/web/home/components/HeroCarousel'
 
 // Función para formatear de kebab-case a Sentence case (Modo oración)
 const toSentenceCase = (str: string) => {
@@ -85,6 +86,15 @@ return {
     take: 6,
   })
 
+  // Recopilar imágenes para el hero, omitiendo la imagen actual (la de andamios)
+  const currentHeroImage = '/images/servicios/entrenamientos-vivenciales/armado-de-andamios/whatsapp-image-2025-05-19-at-2.32.01-pm-1.jpeg'
+  const allImages = [
+    ...(servicios.map((s) => s.image).filter(Boolean) as string[]),
+    ...(cursos.map((c) => c.miniatura).filter(Boolean) as string[]),
+    '/images/operativa.jpg'
+  ]
+  const heroImages = Array.from(new Set(allImages)).filter(img => img !== currentHeroImage).slice(0, 5) // max 5 images for performance
+
   return (
     <div className="flex flex-col relative bg-[#f8fafc] overflow-hidden">
       
@@ -103,15 +113,15 @@ return {
               Operaciones de Alto Riesgo
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 leading-[1.1] tracking-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Líderes en <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--web-light)] to-[var(--web-primary)]">
-                Riesgos Críticos
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4 leading-[1.1] tracking-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
+              Lideres en gestión de <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--web-light)] to-[var(--web-primary)] text-2xl sm:text-3xl md:text-4xl">
+                Transporte de Materiales Peligrosos, Gestión de Riesgo y Entrenamientos Vivenciales
               </span>
             </h1>
 
             <p className="text-base md:text-lg text-gray-400 mb-6 leading-relaxed max-w-lg font-light">
-              Respuestas inmediatas y capacitación de élite bajo estándares internacionales. Garantizamos la máxima seguridad en tus operaciones desde el 2006.
+              Más de 19 años brindando soluciones integrales para minería, industria y transporte.
             </p>
 
             <div className="flex flex-wrap gap-4">
@@ -132,9 +142,9 @@ return {
           </div>
 
           <div className="relative w-full aspect-square max-h-[55vh] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group" style={{ isolation: 'isolate' }}>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#020817] via-transparent to-transparent z-10 opacity-80"></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--web-primary)]/20 to-transparent z-10 mix-blend-overlay"></div>
-            <img src="/images/servicios/entrenamientos-vivenciales/armado-de-andamios/whatsapp-image-2025-05-19-at-2.32.01-pm-1.jpeg" alt="Entrenamiento de Alto Riesgo" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#020817] via-transparent to-transparent z-10 opacity-80 pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--web-primary)]/20 to-transparent z-10 mix-blend-overlay pointer-events-none"></div>
+            <HeroCarousel images={heroImages} />
 
             <div className="absolute bottom-8 left-8 z-20 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-3xl shadow-xl max-w-xs transform -translate-x-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 delay-100">
               <div className="w-9 h-9 bg-[var(--web-primary)] rounded-full flex items-center justify-center mb-2">
@@ -156,27 +166,35 @@ return {
 
       {/* ── NOSOTROS (MODERN LIGHT) ── */}
       <section className="bg-[#fcfcfc] py-32 px-6 relative z-10">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
-          <div className="relative aspect-[4/3] w-full rounded-[2.5rem] overflow-hidden shadow-2xl flex items-center justify-center order-2 md:order-1 group">
-            {/* Decorative offset border */}
-            <div className="absolute inset-0 border-2 border-[var(--web-primary)]/20 rounded-[2.5rem] transform translate-x-4 translate-y-4 -z-10 group-hover:translate-x-6 group-hover:translate-y-6 transition-transform duration-500"></div>
-            <img src="/images/servicios/simulacros/simulacro-antamina/1-p1083048.jpg" alt="Nosotros IFSEC Group" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 rounded-[2.5rem] relative z-10" />
-          </div>
+        <div className="max-w-7xl mx-auto">
+          <div className="inline-block px-4 py-2 bg-gray-100 text-gray-600 rounded-full font-semibold text-xs mb-6 uppercase tracking-widest">Nuestra Historia</div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0f172a] mb-6 tracking-tight leading-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
+            Una historia construida sobre experiencia, compromiso y resultados.
+          </h2>
           
-          <div className="order-1 md:order-2">
-            <div className="inline-block px-4 py-2 bg-gray-100 text-gray-600 rounded-full font-semibold text-xs mb-6 uppercase tracking-widest">Nuestra Empresa</div>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-[#0f172a] mb-6 tracking-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
-              La excelencia operativa como estándar.
-            </h2>
-            <p className="text-lg text-gray-500 mb-8 leading-relaxed font-light">
-              Somos una compañía operativa reconocida internacionalmente, enfocada en brindar soluciones integrales en Seguridad, Operaciones, Respuesta a Emergencias y Proyectos de Gestión de Riesgos Químicos.
-            </p>
-            <Link href="/nosotros" className="inline-flex items-center justify-center text-[var(--web-primary)] font-bold gap-2 hover:gap-4 transition-all uppercase tracking-wide text-sm no-underline group">
-              Conoce nuestra historia 
-              <span className="w-8 h-8 rounded-full bg-[var(--web-primary)]/10 flex items-center justify-center text-[var(--web-primary)] group-hover:bg-[var(--web-primary)] group-hover:text-white transition-colors">
-                &rarr;
-              </span>
-            </Link>
+          <div className="text-gray-500 mb-8 leading-relaxed font-light text-sm md:text-base">
+            <div className="relative w-full md:w-1/2 lg:w-5/12 aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl group float-none md:float-left mb-8 md:mb-6 md:mr-12 mt-4 md:mt-6 lg:mr-14">
+              {/* Decorative offset border */}
+              <div className="absolute inset-0 border-2 border-[var(--web-primary)]/20 rounded-[2.5rem] transform translate-x-4 translate-y-4 -z-10 group-hover:translate-x-6 group-hover:translate-y-6 transition-transform duration-500"></div>
+              <img src="/images/operativa.jpg" alt="Nosotros IFSEC Group" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 rounded-[2.5rem] relative z-10" />
+            </div>
+
+            <div className="space-y-4">
+              <p>Nuestra historia se ha construido superando cada desafío y transformando la experiencia en soluciones que generan valor para nuestros clientes.</p>
+              <p>A lo largo de los años hemos evolucionado para brindar servicios integrales en seguridad operacional, gestión de riesgos, respuesta a emergencias y operaciones especializadas, manteniendo como pilares la excelencia, la innovación y la mejora continua.</p>
+              <p>Este compromiso nos ha permitido desarrollar programas de capacitación altamente especializados, con metodologías teórico-prácticas y entrenamientos vivenciales que fortalecen las competencias de los participantes.</p>
+              <p>Hoy hemos capacitado a más de 2,000 profesionales, contribuyendo al desarrollo de una cultura de seguridad, liderazgo y respuesta efectiva en organizaciones de diversos sectores productivos.</p>
+              <p>Desde nuestros inicios, hemos acompañado a organizaciones de los sectores minero, industrial y energético, brindando soluciones especializadas en gestión de riesgos, respuesta a emergencias, capacitación y servicios operativos. Cada proyecto ejecutado ha fortalecido nuestro propósito de contribuir a operaciones más seguras, eficientes y sostenibles.</p>
+            </div>
+            
+            <div className="mt-8 clear-both">
+              <Link href="/nosotros" className="inline-flex items-center justify-center text-[var(--web-primary)] font-bold gap-2 hover:gap-4 transition-all uppercase tracking-wide text-sm no-underline group">
+                Descubre nuestra trayectoria 
+                <span className="w-8 h-8 rounded-full bg-[var(--web-primary)]/10 flex items-center justify-center text-[var(--web-primary)] group-hover:bg-[var(--web-primary)] group-hover:text-white transition-colors">
+                  &rarr;
+                </span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -221,11 +239,11 @@ return {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <div className="inline-block px-4 py-2 bg-[var(--web-primary)]/10 text-[var(--web-primary)] rounded-full font-semibold text-xs mb-6 uppercase tracking-widest">#TheHazmatCompany</div>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-[#0f172a] mb-6 tracking-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Formación de <span className="text-[var(--web-primary)]">Alto Nivel</span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#0f172a] mb-6 tracking-tight leading-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
+              Capacitación y Entrenamiento Especializado para <span className="text-[var(--web-primary)]">Operaciones Críticas, de Alto Riesgo y Seguridad Operacional</span>
             </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto text-lg font-light">
-              Nuestras capacitaciones combinan experiencia real y buenas prácticas, transformándose en experiencias vivenciales que desarrollan competencias vitales para el trabajo de campo.
+            <p className="text-gray-500 max-w-3xl mx-auto text-lg font-light leading-relaxed">
+              Entrenamientos diseñados por especialistas con experiencia en operaciones mineras, transporte de materiales peligrosos, respuesta a emergencias y gestión de riesgos. Formación práctica orientada a la seguridad, productividad y cumplimiento normativo.
             </p>
           </div>
 
