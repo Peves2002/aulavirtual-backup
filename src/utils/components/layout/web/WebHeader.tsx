@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react'
 import Logo from '@components/layout/shared/Logo'
 import UserDropdown from '@components/layout/shared/UserDropdown'
 import CartIcon from '@/features/web/cart/components/CartIcon'
+import MobileMenuDrawer from '@/utils/components/layout/web/MobileMenuDrawer'
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import { useConfig } from '@/contexts/ConfigContext'
 
@@ -19,9 +20,10 @@ interface WebHeaderProps {
   initialCategories?: Category[]
   platformName?: string
   platformSlogan?: string
+  empresasHabilitado?: boolean
 }
 
-export default function WebHeader({ initialCategories = [], platformName = 'Aula Virtual', platformSlogan = 'Aprende sin límites' }: WebHeaderProps) {
+export default function WebHeader({ initialCategories = [], platformName = 'Aula Virtual', platformSlogan = 'Aprende sin límites', empresasHabilitado = true }: WebHeaderProps) {
   void initialCategories
   void platformName
   void platformSlogan
@@ -42,14 +44,23 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
       <div className="flex items-center gap-3">
 
         <CartIcon />
+        <MobileMenuDrawer empresasHabilitado={empresasHabilitado} />
         {session ? (
-          <UserDropdown />
+          <div className="hidden sm:flex items-center">
+            <UserDropdown />
+          </div>
         ) : (
           <>
             <Button
               onClick={() => openLogin()}
               size="small"
-              sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'var(--web-primary, #25927F)', fontFamily: 'Poppins, sans-serif' }}
+              sx={{
+                display: { xs: 'none', sm: 'inline-flex' },
+                fontWeight: 700,
+                fontSize: '0.75rem',
+                color: 'var(--web-primary, #25927F)',
+                fontFamily: 'Poppins, sans-serif'
+              }}
             >
               Iniciar Sesión
             </Button>
