@@ -29,6 +29,7 @@ export default function CartCheckoutPage() {
 
     const courseItems = cart.filter(item => item.type === 'CURSO' || !item.type)
     const ebookItems = cart.filter(item => item.type === 'EBOOK')
+    const rutaItems = cart.filter(item => item.type === 'RUTA')
 
     const courses = courseItems.map(item => ({
         id: item.id,
@@ -49,5 +50,14 @@ export default function CartCheckoutPage() {
         moneda: item.moneda || 'PEN',
     }))
 
-    return <CheckoutView courses={courses} ebooks={ebooks} />
+    const rutas = rutaItems.map(item => ({
+        id: item.id,
+        titulo: item.titulo,
+        slug: item.slug,
+        miniatura: item.miniatura,
+        precio: item.precio,
+        moneda: item.moneda || 'PEN',
+    }))
+
+    return <CheckoutView courses={courses} ebooks={ebooks} rutas={rutas} />
 }

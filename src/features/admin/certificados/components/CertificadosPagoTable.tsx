@@ -91,7 +91,7 @@ export function CertificadosPagoTable() {
                 )
             }),
             columnHelper.accessor('curso', {
-                header: 'Curso',
+                header: 'Programa',
                 cell: ({ row }) => (
                     <Box>
                         <Typography variant='body2'>{row.original.curso.titulo}</Typography>

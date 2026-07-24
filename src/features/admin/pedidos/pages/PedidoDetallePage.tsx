@@ -188,7 +188,7 @@ export function PedidoDetallePage() {
                         </TableCell>
                         <TableCell>
                           <Chip
-                            label={esEbook ? 'Ebook' : 'Curso'}
+                            label={esEbook ? 'Ebook' : 'Programa'}
                             size='small'
                             color={esEbook ? 'info' : 'default'}
                             variant='tonal'

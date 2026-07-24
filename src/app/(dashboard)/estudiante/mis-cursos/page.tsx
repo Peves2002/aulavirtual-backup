@@ -6,8 +6,8 @@ import { getAuthSession } from '@/utils/libs/auth-helpers'
 import MisCursosPage from '@/features/estudiante/mis-cursos/components/MisCursosPage'
 
 export const metadata: Metadata = {
-  title: 'Mis Cursos',
-  description: 'Cursos inscritos del estudiante'
+  title: 'Mis Programas',
+  description: 'Programas inscritos del estudiante'
 }
 
 export default async function MyCoursesPage() {

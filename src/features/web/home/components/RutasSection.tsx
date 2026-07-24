@@ -13,9 +13,7 @@ interface RutasSectionProps {
 }
 
 const RutasSection = ({ rutas, embedded = false }: RutasSectionProps) => {
-  if (!rutas || rutas.length === 0) return null
-
-  const grid = (
+  const grid = rutas && rutas.length > 0 ? (
     <Grid container spacing={4}>
       {rutas.map((ruta) => (
         <Grid item xs={12} sm={6} lg={4} key={ruta.id}>
@@ -23,6 +21,14 @@ const RutasSection = ({ rutas, embedded = false }: RutasSectionProps) => {
         </Grid>
       ))}
     </Grid>
+  ) : (
+    <Box sx={{ display: 'flex', height: 250, alignItems: 'center', justifyContent: 'center', borderRadius: 4, border: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
+      <Box sx={{ textAlign: 'center' }}>
+        <Typography variant="body1" color="text.secondary">
+          Próximamente tendremos nuevos paquetes disponibles.
+        </Typography>
+      </Box>
+    </Box>
   )
 
   if (embedded) return grid
@@ -41,10 +47,10 @@ const RutasSection = ({ rutas, embedded = false }: RutasSectionProps) => {
             variant="h3"
             sx={{ fontWeight: 900, color: '#1e293b', fontSize: { xs: '2rem', md: '2.5rem' } }}
           >
-            Rutas de Aprendizaje
+            Paquetes
           </Typography>
           <Typography variant="body1" sx={{ color: 'text.secondary', maxWidth: 600, mx: 'auto' }}>
-            Colecciones curadas de cursos diseñadas para llevarte de principiante a experto en una tecnología o rol específico.
+            Conjuntos de programas seleccionados para brindarte un acceso integral y potenciar tus habilidades en un área específica.
           </Typography>
         </Stack>
         {grid}

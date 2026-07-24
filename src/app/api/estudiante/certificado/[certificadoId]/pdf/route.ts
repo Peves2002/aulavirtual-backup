@@ -132,7 +132,7 @@ export async function GET(request: Request, { params }: { params: { certificadoI
     const generarPDF = getGenerator(plantilla)
     const pdfBuffer = await generarPDF(certData)
 
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(Buffer.from(pdfBuffer as ArrayBuffer), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',

@@ -281,7 +281,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
       where: { id }
     })
 
-    return ApiResponse.success(request, { message: 'Curso eliminado exitosamente' })
+    return ApiResponse.success(request, { message: 'Programa eliminado exitosamente' })
   } catch (error) {
     return handleApiError(error, request)
   }

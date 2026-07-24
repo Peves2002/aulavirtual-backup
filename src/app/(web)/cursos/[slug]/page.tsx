@@ -48,7 +48,7 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
 export async function generateMetadata({ params }: { params: { slug: string } }) {
     const course = await getCourseData(params.slug, null)
 
-    if (!course) return { title: 'Curso no encontrado' }
+    if (!course) return { title: 'Programa no encontrado' }
 
     return {
         title: `${course.titulo} | Aula Virtual`,

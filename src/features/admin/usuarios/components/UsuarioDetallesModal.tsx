@@ -38,7 +38,8 @@ interface UsuarioDetallesModalProps {
 const rolLabels: { [key in Rol]: string } = {
   ADMIN: 'Administrador',
   PROFESOR: 'Profesor',
-  ESTUDIANTE: 'Estudiante'
+  ESTUDIANTE: 'Estudiante',
+  ASESOR: 'Asesor'
 }
 
 interface CertConfirm {
@@ -120,7 +121,7 @@ const UsuarioDetallesModal = ({ open, handleClose, usuarioId }: UsuarioDetallesM
       <Tabs value={activeTab} onChange={handleTabChange} sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
         <Tab label='Perfil' />
         <Tab label='Inscripciones' disabled={usuario.rol === 'ADMIN'} />
-        <Tab label='Cursos Dictados' disabled={usuario.rol !== 'PROFESOR' && usuario.rol !== 'ADMIN'} />
+        <Tab label='Programas Dictados' disabled={usuario.rol !== 'PROFESOR' && usuario.rol !== 'ADMIN'} />
       </Tabs>
 
       <Box sx={{ minHeight: 300 }}>

@@ -101,7 +101,7 @@ export async function downloadHistorialNotasPdf(registros: HistorialNotaItem[], 
 
   const cols = [
     { label: 'Periodo', x: margin },
-    { label: 'Curso', x: margin + 28 },
+    { label: 'Programa', x: margin + 28 },
     { label: 'Promedio', x: margin + 120 },
     { label: 'Fecha', x: margin + 145 },
     { label: 'Docente', x: margin + 170 }

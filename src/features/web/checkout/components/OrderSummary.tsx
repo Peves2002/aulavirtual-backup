@@ -12,6 +12,7 @@ const FONT = 'Poppins, sans-serif'
 interface OrderSummaryProps {
     courses: CourseCheckoutItem[]
     ebooks: EbookCheckoutItem[]
+    rutas?: any[]
     appliedCoupon?: {
         codigo: string
         descuento: number
@@ -20,12 +21,16 @@ interface OrderSummaryProps {
     onCouponApplied: (data: any) => void
 }
 
-const OrderSummary = ({ courses, ebooks = [], appliedCoupon, onCouponApplied }: OrderSummaryProps) => {
-    const subtotal = [...courses, ...ebooks].reduce((acc, i) => acc + Number(i.precio), 0)
+const OrderSummary = ({ courses, ebooks = [], rutas = [], appliedCoupon, onCouponApplied }: OrderSummaryProps) => {
+    const subtotal = [...courses, ...ebooks, ...rutas].reduce((acc, i) => acc + Number(i.precio), 0)
     const total = appliedCoupon ? appliedCoupon.total : subtotal
     const descuento = appliedCoupon ? appliedCoupon.descuento : 0
-    const moneda = (courses[0] || ebooks[0])?.moneda || 'PEN'
-    const allItems = [...courses.map(c => ({ ...c, tipo: 'CURSO' as const })), ...ebooks.map(e => ({ ...e, tipo: 'EBOOK' as const }))]
+    const moneda = (courses[0] || ebooks[0] || rutas[0])?.moneda || 'PEN'
+    const allItems = [
+      ...courses.map(c => ({ ...c, tipo: 'CURSO' as const })),
+      ...ebooks.map(e => ({ ...e, tipo: 'EBOOK' as const })),
+      ...rutas.map(r => ({ ...r, tipo: 'RUTA' as const }))
+    ]
 
     return (
         <Paper
@@ -58,9 +63,9 @@ const OrderSummary = ({ courses, ebooks = [], appliedCoupon, onCouponApplied }: 
                                             {item.titulo}
                                         </Typography>
                                         <Chip
-                                            label={item.tipo === 'EBOOK' ? 'Ebook' : 'Curso'}
+                                            label={item.tipo === 'EBOOK' ? 'Ebook' : item.tipo === 'RUTA' ? 'Paquete' : 'Programa'}
                                             size='small'
-                                            color={item.tipo === 'EBOOK' ? 'info' : 'default'}
+                                            color={item.tipo === 'EBOOK' ? 'info' : item.tipo === 'RUTA' ? 'secondary' : 'default'}
                                             variant='tonal'
                                             sx={{ fontSize: '0.6rem', height: 16 }}
                                         />

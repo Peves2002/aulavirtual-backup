@@ -1,4 +1,5 @@
 import React from 'react'
+import { Sparkles } from 'lucide-react'
 
 import { Box } from '@mui/material'
 
@@ -13,87 +14,51 @@ type ProgramCatalogLayoutProps = {
 }
 
 export default function ProgramCatalogLayout({ tipo, courses, categories }: ProgramCatalogLayoutProps) {
-  const config = getTipoProgramaConfig(tipo)
+  const config = getTipoProgramaConfig(tipo) as any
 
   return (
     <Box sx={{ flexGrow: 1, bgcolor: 'background.default' }}>
-      <Box
-        sx={{
-          background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 100%)',
-          py: { xs: 5, md: 7 },
-          px: { xs: 3, md: 6 },
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-      >
-        <Box sx={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.06)', pointerEvents: 'none' }} />
-        <Box sx={{ position: 'absolute', bottom: -60, right: 80, width: 300, height: 300, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.03)', pointerEvents: 'none' }} />
+      {/* HERO */}
+      <section className="relative overflow-hidden bg-edu-pattern py-24 text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl animate-fade-up">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
+              <Sparkles className="h-3.5 w-3.5 text-brand-orange" />
+              Catálogo Completo
+            </span>
+            <h1 className="mt-6 font-display text-5xl font-extrabold leading-[0.95] text-balance sm:text-6xl lg:text-7xl">
+              Nuestros <span className="text-brand-orange">{config.labelPlural}</span>
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg text-white/80">
+              {config.catalogDescription || `Explora todos nuestros ${config.labelPlural.toLowerCase()} disponibles para tu formación profesional.`}
+            </p>
+            
+            <div className="mt-8 flex flex-wrap gap-2">
+              {[
+                { label: `${courses.length} ${config.labelPlural.toLowerCase()} disponibles`, icon: '📚' },
+                { label: `${categories.length} categorías`, icon: '🗂️' }
+              ].map(chip => (
+                <div
+                  key={chip.label}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-sm font-medium text-white"
+                >
+                  <span>{chip.icon}</span>
+                  {chip.label}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <Box sx={{ maxWidth: 1280, mx: 'auto', position: 'relative', zIndex: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-            <Box
-              component="a"
-              href="/"
-              sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.55)', textDecoration: 'none', '&:hover': { color: 'var(--web-light, #BDD962)' }, transition: 'color 0.2s' }}
-            >
-              Inicio
-            </Box>
-            <Box component="span" sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem' }}>/</Box>
-            <Box component="span" sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>
-              {config.labelPlural}
-            </Box>
-          </Box>
+      {/* COLOR STRIPE */}
+      <div className="grid h-3 grid-cols-4">
+        <div className="bg-brand-teal" />
+        <div className="bg-brand-navy" />
+        <div className="bg-brand-lime" />
+        <div className="bg-brand-orange" />
+      </div>
 
-          <Box
-            sx={{
-              fontFamily: 'Poppins, sans-serif',
-              fontSize: { xs: '1.75rem', md: '2.25rem' },
-              fontWeight: 800,
-              color: '#ffffff',
-              letterSpacing: '-0.02em',
-              mb: 1,
-              lineHeight: 1.2
-            }}
-            component="h1"
-          >
-            {config.catalogTitle}
-          </Box>
-          <Box
-            sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', color: 'rgba(255,255,255,0.7)', maxWidth: 520, lineHeight: 1.6 }}
-            component="p"
-          >
-            {config.catalogDescription}
-          </Box>
-
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, mt: 3 }}>
-            {[
-              { label: `${courses.length} ${config.labelPlural.toLowerCase()} disponibles`, icon: '📚' },
-              { label: `${categories.length} categorías`, icon: '🗂️' }
-            ].map(chip => (
-              <Box
-                key={chip.label}
-                sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 0.75,
-                  px: 2,
-                  py: 0.75,
-                  borderRadius: '999px',
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  fontFamily: 'Poppins, sans-serif',
-                  fontSize: '0.8125rem',
-                  color: '#ffffff',
-                  fontWeight: 500
-                }}
-              >
-                <span>{chip.icon}</span>
-                {chip.label}
-              </Box>
-            ))}
-          </Box>
-        </Box>
-      </Box>
 
       <CourseCatalog courses={courses} categories={categories} tipo={tipo} />
     </Box>

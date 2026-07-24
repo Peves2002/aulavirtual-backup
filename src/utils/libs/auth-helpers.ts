@@ -140,8 +140,15 @@ export async function requireAdmin(request: Request) {
 }
 
 /**
- * Verifica si el usuario es profesor o admin
+ * Verifica si el usuario es administrador o asesor
+ */
+export async function requireAdminOrAsesor(request: Request) {
+  return requireRole(request, [Rol.ADMIN, 'ASESOR' as Rol])
+}
+
+/**
+ * Verifica si el usuario es profesor, admin o asesor
  */
 export async function requireProfesorOrAdmin(request: Request) {
-  return requireRole(request, [Rol.ADMIN, Rol.PROFESOR])
+  return requireRole(request, [Rol.ADMIN, Rol.PROFESOR, 'ASESOR' as Rol])
 }

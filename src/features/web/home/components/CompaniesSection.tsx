@@ -32,7 +32,7 @@ const stats = [
 const benefits = [
   'Descuentos especiales por volumen de inscripciones',
   'Accesos personalizados para cada colaborador',
-  'Asesoría personalizada para elegir la ruta de aprendizaje ideal',
+  'Asesoría personalizada para elegir el paquete ideal',
   'Certificados válidos que respaldan las habilidades de tu equipo',
 ]
 

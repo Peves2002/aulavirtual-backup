@@ -7,7 +7,7 @@ import { getAuthSession } from '@/utils/libs/auth-helpers'
 import { AxiosUsuario } from '@/features/admin/usuarios/http/axiosUsuario'
 
 export const metadata: Metadata = {
-  title: 'Editor de Curso',
+  title: 'Editor de Programa',
   description: 'Edita el contenido y configuración del curso'
 }
 

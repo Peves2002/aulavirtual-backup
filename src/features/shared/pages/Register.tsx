@@ -19,6 +19,7 @@ import Divider from '@mui/material/Divider'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
 import Grid from '@mui/material/Grid'
+import MenuItem from '@mui/material/MenuItem'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -34,6 +35,7 @@ import { registerSchema, type RegisterDto } from '@/schemas/auth.schema'
 
 // Component Imports
 import CustomTextField from '@core/components/mui/TextField'
+import { ubigeoPeru, departamentos } from '@/utils/constants/ubigeo'
 
 // Config Imports
 
@@ -110,6 +112,8 @@ const Register = ({ mode }: { mode: SystemMode }) => {
   const {
     control,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors }
   } = useForm<RegisterDto>({
     resolver: zodResolver(registerSchema),
@@ -120,9 +124,13 @@ const Register = ({ mode }: { mode: SystemMode }) => {
       nombre: '',
       apellido: '',
       numero_documento: '',
-      celular: ''
+      celular: '',
+      departamento: '',
+      provincia: ''
     }
   })
+
+  const selectedDepartamento = watch('departamento')
 
   const onSubmit = async (data: RegisterDto) => {
     try {
@@ -309,6 +317,65 @@ const Register = ({ mode }: { mode: SystemMode }) => {
                       helperText={errors.celular?.message}
                       disabled={isLoading}
                     />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name='departamento'
+                  control={control}
+                  render={({ field }) => (
+                    <CustomTextField
+                      {...field}
+                      select
+                      fullWidth
+                      label='Departamento'
+                      error={!!errors.departamento}
+                      helperText={errors.departamento?.message}
+                      disabled={isLoading}
+                      onChange={(e) => {
+                        field.onChange(e)
+                        setValue('provincia', '', { shouldValidate: true })
+                      }}
+                    >
+                      <MenuItem value=''>
+                        <em>Seleccionar</em>
+                      </MenuItem>
+                      {departamentos.map((dep) => (
+                        <MenuItem key={dep} value={dep}>
+                          {dep}
+                        </MenuItem>
+                      ))}
+                    </CustomTextField>
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name='provincia'
+                  control={control}
+                  render={({ field }) => (
+                    <CustomTextField
+                      {...field}
+                      select
+                      fullWidth
+                      label='Provincia'
+                      error={!!errors.provincia}
+                      helperText={errors.provincia?.message}
+                      disabled={isLoading || !selectedDepartamento}
+                    >
+                      <MenuItem value=''>
+                        <em>Seleccionar</em>
+                      </MenuItem>
+                      {selectedDepartamento &&
+                        ubigeoPeru[selectedDepartamento]?.map((prov) => (
+                          <MenuItem key={prov} value={prov}>
+                            {prov}
+                          </MenuItem>
+                        ))}
+                    </CustomTextField>
                   )}
                 />
               </Grid>

@@ -15,7 +15,7 @@ export default function MisCursosPage() {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Box>
               <Typography variant="h4" sx={{ fontWeight: 900, mb: 1, color: 'text.primary' }}>
-                Mis <span style={{ color: 'var(--mui-palette-primary-main)' }}>Cursos</span>
+                Mis <span style={{ color: 'var(--mui-palette-primary-main)' }}>Programas</span>
               </Typography>
               <Typography variant="body1" color="text.secondary" sx={{ fontWeight: 500 }}>
                 Gestiona tu aprendizaje y sigue tu progreso en cada curso.
@@ -49,9 +49,7 @@ export default function MisCursosPage() {
                 sx={{ borderRadius: '10px' }}
                 startIcon={<i className="tabler-search" />}
                 href="/cursos"
-              >
-                Explorar Cursos
-              </Button>
+              >Explorar Programas</Button>
             </Box>
           </Box>
 

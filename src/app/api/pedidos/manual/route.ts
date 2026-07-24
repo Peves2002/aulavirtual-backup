@@ -5,7 +5,7 @@ import { crearPedidoManualSchema } from '@/schemas/pedido.schema'
 import { getConfigs } from '@/utils/libs/config'
 import { getOrderConfirmationTemplate } from '@/utils/libs/email-templates'
 import prisma from '@/utils/libs/prisma'
-import { requireAdmin } from '@/utils/libs/auth-helpers'
+import { requireAdminOrAsesor } from '@/utils/libs/auth-helpers'
 import { sendMail } from '@/utils/libs/mailer'
 
 /**
@@ -14,9 +14,9 @@ import { sendMail } from '@/utils/libs/mailer'
  */
 export async function POST(request: Request) {
   try {
-    // 1. Verificar que el usuario sea ADMIN
+    // 1. Verificar que el usuario sea ADMIN o ASESOR
 
-    const auth = await requireAdmin(request)
+    const auth = await requireAdminOrAsesor(request)
 
     if (!auth.authorized) {
       return auth.error
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     const {
       usuarios_ids,
       cursos_ids,
-      ebooks_ids,
+      rutas_ids,
       precio,
       estado,
       metodo_pago,
@@ -51,18 +51,18 @@ export async function POST(request: Request) {
         })
       : []
 
-    const ebooks = ebooks_ids.length
-      ? await prisma.ebook.findMany({
-          where: { id: { in: ebooks_ids } },
-          select: { id: true, titulo: true, moneda: true }
+    const rutas = rutas_ids && rutas_ids.length
+      ? await prisma.rutaAprendizaje.findMany({
+          where: { id: { in: rutas_ids } },
+          select: { id: true, titulo: true, moneda: true, cursos: true }
         })
       : []
 
-    if (cursos.length === 0 && ebooks.length === 0) {
-      return ApiResponse.error(request, 'No se encontraron los cursos/ebooks seleccionados', 404)
+    if (cursos.length === 0 && rutas.length === 0) {
+      return ApiResponse.error(request, 'No se encontraron los programas/paquetes seleccionados', 404)
     }
 
-    const firstCourseMoneda = cursos[0]?.moneda || ebooks[0]?.moneda || 'PEN'
+    const firstCourseMoneda = cursos[0]?.moneda || rutas[0]?.moneda || 'PEN'
 
     // 4. Procesar cada estudiante
     const resultados = []
@@ -78,22 +78,35 @@ export async function POST(request: Request) {
         continue
       }
 
-      // Filtrar cursos en los que NO está inscrito y ebooks a los que NO tiene acceso
-      const cursosParaInscribir = cursos.filter(c => !estudiante.inscripciones.some(ins => ins.curso_id === c.id))
-      const ebooksParaDar = ebooks.filter(e => !estudiante.ebook_accesos.some(acc => acc.ebook_id === e.id))
+      // Filtrar programas en los que NO está inscrito
+      let cursosParaInscribir = cursos.filter(c => !estudiante.inscripciones.some(ins => ins.curso_id === c.id))
 
-      if (cursosParaInscribir.length === 0 && ebooksParaDar.length === 0) {
+      // Obtener todos los cursos dentro de los paquetes comprados
+      const cursosAdicionales = []
+      for (const r of rutas) {
+        for (const cr of r.cursos) {
+          if (!estudiante.inscripciones.some(ins => ins.curso_id === cr.curso_id)) {
+            cursosAdicionales.push({ id: cr.curso_id })
+          }
+        }
+      }
+      
+      // Combinar y remover duplicados
+      const todosLosCursos = [...cursosParaInscribir, ...cursosAdicionales]
+      cursosParaInscribir = Array.from(new Map(todosLosCursos.map(c => [c.id, c])).values()) as any
+
+      if (cursosParaInscribir.length === 0 && rutas.length === 0) {
         resultados.push({
           usuario_id,
           nombre: `${estudiante.nombre} ${estudiante.apellido}`,
           status: 'skipped',
-          message: 'El estudiante ya tiene acceso a todos los cursos/ebooks seleccionados'
+          message: 'El estudiante ya tiene acceso a todos los programas seleccionados'
         })
         continue
       }
 
-      const totalItems = cursosParaInscribir.length + ebooksParaDar.length
-      const precioPorItem = precio / totalItems
+      const totalItems = (cursos_ids?.length || 0) + (rutas_ids?.length || 0)
+      const precioPorItem = totalItems > 0 ? precio / totalItems : 0
 
       try {
         // Crear Pedido, Inscripciones y Accesos a ebooks en una transacción por estudiante
@@ -111,7 +124,7 @@ export async function POST(request: Request) {
               pagado_en: estado === 'COMPLETADO' ? new Date() : null,
               detalles: {
                 create: [
-                  ...cursosParaInscribir.map(c => ({
+                  ...cursos.map(c => ({
                     tipo_item: 'CURSO',
                     curso_id: c.id,
                     precio_unitario: precioPorItem,
@@ -119,9 +132,9 @@ export async function POST(request: Request) {
                     total: precioPorItem,
                     cantidad: 1
                   })),
-                  ...ebooksParaDar.map(e => ({
-                    tipo_item: 'EBOOK',
-                    ebook_id: e.id,
+                  ...rutas.map(r => ({
+                    tipo_item: 'RUTA',
+                    ruta_id: r.id,
                     precio_unitario: precioPorItem,
                     subtotal: precioPorItem,
                     total: precioPorItem,
@@ -150,16 +163,7 @@ export async function POST(request: Request) {
               })
             )
 
-            await Promise.all(
-              ebooksParaDar.map(e =>
-                tx.ebookAcceso.create({
-                  data: {
-                    usuario_id: usuario_id,
-                    ebook_id: e.id
-                  }
-                })
-              )
-            )
+            // No hay Ebooks que procesar
           }
         })
 
@@ -171,7 +175,7 @@ export async function POST(request: Request) {
             orderBy: { creado_en: 'desc' },
             include: {
               detalles: {
-                include: { curso: { select: { titulo: true } }, ebook: { select: { titulo: true } } }
+                include: { curso: { select: { titulo: true } }, ruta: { select: { titulo: true } } }
               }
             }
           })
@@ -190,7 +194,7 @@ export async function POST(request: Request) {
               moneda: pedidoCompleto.moneda,
               metodoPago: metodo_pago || 'Manual',
               cursos: pedidoCompleto.detalles.map(d => ({
-                titulo: d.curso?.titulo ?? d.ebook?.titulo ?? '',
+                titulo: d.curso?.titulo ?? d.ruta?.titulo ?? '',
                 precio: Number(d.total)
               })),
               appUrl

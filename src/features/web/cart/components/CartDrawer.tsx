@@ -87,7 +87,7 @@ const CartDrawer = () => {
                                             <Box display='flex' alignItems='center' gap={0.75} flexWrap='wrap'>
                                                 <Typography fontWeight={700} noWrap sx={{ maxWidth: 180 }}>{item.titulo}</Typography>
                                                 <Chip
-                                                    label={item.type === 'EBOOK' ? 'Ebook' : 'Curso'}
+                                                    label={item.type === 'EBOOK' ? 'Ebook' : 'Programa'}
                                                     size='small'
                                                     color={item.type === 'EBOOK' ? 'info' : 'default'}
                                                     variant='tonal'

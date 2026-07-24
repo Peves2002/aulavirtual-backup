@@ -65,7 +65,7 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
         try {
             await editMutation.mutateAsync({ id: curso.id, data: { es_privado: valor } })
             setEsPrivado(valor)
-            enqueueSnackbar(valor ? 'Curso marcado como privado' : 'Curso marcado como público', { variant: 'success' })
+            enqueueSnackbar(valor ? 'Programa marcado como privado' : 'Programa marcado como público', { variant: 'success' })
             onSuccess()
         } catch (error: any) {
             enqueueSnackbar(error?.message || 'Error', { variant: 'error' })

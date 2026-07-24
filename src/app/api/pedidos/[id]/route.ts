@@ -4,7 +4,7 @@ import { handleApiError, validateRequest } from '@/utils/libs/validation'
 
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import prisma from '@/utils/libs/prisma'
-import { requireAdmin } from '@/utils/libs/auth-helpers'
+import { requireAdminOrAsesor } from '@/utils/libs/auth-helpers'
 import { updatePedidoSchema } from '@/schemas/pedido.schema'
 
 /**
@@ -13,7 +13,7 @@ import { updatePedidoSchema } from '@/schemas/pedido.schema'
  */
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
-    const auth = await requireAdmin(request)
+    const auth = await requireAdminOrAsesor(request)
 
     if (!auth.authorized) {
       return auth.error
@@ -51,7 +51,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
  */
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {
-    const auth = await requireAdmin(request)
+    const auth = await requireAdminOrAsesor(request)
 
     if (!auth.authorized) {
       return auth.error
@@ -189,7 +189,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
  */
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
-    const auth = await requireAdmin(request)
+    const auth = await requireAdminOrAsesor(request)
 
     if (!auth.authorized) {
       return auth.error

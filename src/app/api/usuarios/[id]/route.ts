@@ -44,6 +44,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
         biografia: true,
         cargo: true,
         firma: true,
+        departamento: true,
+        provincia: true,
         rol: true,
         esta_activo: true,
         creado_en: true,
@@ -163,6 +165,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
         biografia: true,
         cargo: true,
         firma: true,
+        departamento: true,
+        provincia: true,
         rol: true,
         esta_activo: true,
         actualizado_en: true

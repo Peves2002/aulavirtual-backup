@@ -29,6 +29,7 @@ const links = [
   { to: '/', label: 'Inicio' },
   { to: '/nosotros', label: 'Nosotros' },
   { to: '/cursos', label: 'Programas' },
+  { to: '/rutas', label: 'Paquetes' },
   { to: '/verificar-certificado', label: 'Certificado' },
   { to: '/contacto', label: 'Contacto' },
 ] as const

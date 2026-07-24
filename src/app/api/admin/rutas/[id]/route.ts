@@ -13,7 +13,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
   try {
     const auth = await requireAuth(request)
 
-    if (!auth.authorized || auth.user.rol !== 'ADMIN') return ApiResponse.error(request, 'No autorizado', 403)
+    if (!auth.authorized || !['ADMIN', 'ASESOR'].includes(auth.user.rol)) return ApiResponse.error(request, 'No autorizado', 403)
 
     const ruta = await prisma.rutaAprendizaje.findUnique({
       where: { id: params.id },
@@ -29,7 +29,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
       }
     })
 
-    if (!ruta) return ApiResponse.error(request, 'Ruta no encontrada', 404)
+    if (!ruta) return ApiResponse.error(request, 'Paquete no encontrado', 404)
 
     // Formateamos los cursos para que tengan la estructura esperada: { id, titulo, miniatura, orden }
     const formattedCursos = ruta.cursos.map(rc => ({
@@ -54,9 +54,9 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   try {
     const auth = await requireAuth(request)
 
-    if (!auth.authorized || auth.user.rol !== 'ADMIN') return ApiResponse.error(request, 'No autorizado', 403)
+    if (!auth.authorized || !['ADMIN', 'ASESOR'].includes(auth.user.rol)) return ApiResponse.error(request, 'No autorizado', 403)
 
-    const { titulo, slug, descripcion, miniatura, beneficios, esta_activo } = await request.json()
+    const { titulo, slug, descripcion, miniatura, beneficios, esta_activo, precio, precio_falso, moneda } = await request.json()
 
     await prisma.rutaAprendizaje.update({
       where: { id: params.id },
@@ -66,12 +66,15 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         descripcion,
         miniatura,
         beneficios,
+        precio: Number(precio) || 0,
+        precio_falso: Number(precio_falso) || 0,
+        moneda: moneda || 'PEN',
         esta_activo,
         actualizado_en: new Date()
       }
     })
 
-    return ApiResponse.success(request, { message: 'Ruta actualizada' })
+    return ApiResponse.success(request, { message: 'Paquete actualizado' })
   } catch (error) {
     return handleApiError(error, request)
   }
@@ -85,13 +88,13 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
   try {
     const auth = await requireAuth(request)
 
-    if (!auth.authorized || auth.user.rol !== 'ADMIN') return ApiResponse.error(request, 'No autorizado', 403)
+    if (!auth.authorized || !['ADMIN', 'ASESOR'].includes(auth.user.rol)) return ApiResponse.error(request, 'No autorizado', 403)
 
     await prisma.rutaAprendizaje.delete({
       where: { id: params.id }
     })
 
-    return ApiResponse.success(request, { message: 'Ruta eliminada' })
+    return ApiResponse.success(request, { message: 'Paquete eliminado' })
   } catch (error) {
     return handleApiError(error, request)
   }

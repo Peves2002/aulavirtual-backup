@@ -192,7 +192,7 @@ export function PedidoEditPage() {
                           <Stack direction='row' alignItems='center' spacing={1}>
                             <Typography variant='body2' fontWeight={600}>{titulo}</Typography>
                             <Chip
-                              label={esEbook ? 'Ebook' : 'Curso'}
+                              label={esEbook ? 'Ebook' : 'Programa'}
                               size='small'
                               color={esEbook ? 'info' : 'default'}
                               variant='tonal'

@@ -11,7 +11,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
   try {
     const auth = await requireAuth(request)
     
-    if (!auth.authorized || auth.user.rol !== 'ADMIN') return ApiResponse.error(request, 'No autorizado', 403)
+    if (!auth.authorized || !['ADMIN', 'ASESOR'].includes(auth.user.rol)) return ApiResponse.error(request, 'No autorizado', 403)
 
     const { cursos, secciones } = await request.json() // Array de cursos y array de secciones
 
@@ -37,7 +37,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       })
     ])
 
-    return ApiResponse.success(request, { message: 'Cursos de la ruta actualizados correctamente' })
+    return ApiResponse.success(request, { message: 'Programas del paquete actualizados correctamente' })
   } catch (error) {
     return handleApiError(error, request)
   }

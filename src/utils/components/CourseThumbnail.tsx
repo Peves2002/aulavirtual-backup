@@ -20,7 +20,7 @@ interface CourseThumbnailProps {
  */
 const CourseThumbnail = ({
   src,
-  title = 'Curso',
+  title = 'Programa',
   videoUrl,
   sx = {},
   aspectRatio = '16/9',

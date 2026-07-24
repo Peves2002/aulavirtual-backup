@@ -7,7 +7,7 @@ import { CourseCreatePage } from '@/features/admin/cursos/pages/CourseCreatePage
 
 
 export const metadata = {
-  title: 'Crear Nuevo Curso',
+  title: 'Crear Nuevo Programa',
   description: 'Configura un nuevo curso para el aula virtual'
 }
 

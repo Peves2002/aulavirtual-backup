@@ -102,7 +102,7 @@ export default function CompletionSummary({ cursoId }: CompletionSummaryProps) {
                     </Box>
 
                     <Typography variant='h4' sx={{ fontWeight: 800, mb: 2 }}>
-                        🎓 {esAprobado ? 'Curso Completado' : 'Curso No Completado'}
+                        🎓 {esAprobado ? 'Programa Completado' : 'Programa No Completado'}
                     </Typography>
 
                     <Typography variant='h3' sx={{ fontWeight: 800, mb: 1 }}>

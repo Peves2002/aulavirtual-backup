@@ -1,6 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+
+import { useCart } from '@/features/web/cart/context/CartContext'
 
 import {
   Container,
@@ -46,6 +49,9 @@ interface RutaDetailProps {
     slug: string
     descripcion?: string
     miniatura?: string
+    precio: number
+    precio_falso?: number
+    moneda?: string
     cursos: CursoEnRuta[]
     beneficios?: { title: string; desc: string; icon: string }[] | null
     secciones?: RutaSeccion[] | null
@@ -161,6 +167,30 @@ const CourseCard = ({ curso, index, total }: { curso: CursoEnRuta; index: number
 }
 
 const RutaDetail = ({ ruta }: RutaDetailProps) => {
+  const router = useRouter()
+  const { addToCart, isInCart, cart } = useCart()
+  
+  const handleAddToCart = () => {
+    addToCart({
+      id: ruta.id,
+      type: 'RUTA',
+      titulo: ruta.titulo,
+      slug: ruta.slug,
+      miniatura: ruta.miniatura,
+      precio: Number(ruta.precio),
+      moneda: ruta.moneda || 'PEN'
+    })
+  }
+
+  const handleBuyNow = () => {
+    if (!isInCart(ruta.id)) {
+      handleAddToCart()
+    }
+    router.push('/checkout')
+  }
+
+  const isAlreadyInCart = isInCart(ruta.id)
+
   return (
     <Box sx={{ pb: 10, bgcolor: '#f8fafc' }}>
       {/* New Premium Hero Section - Aligned with CourseDetail */}
@@ -235,7 +265,7 @@ const RutaDetail = ({ ruta }: RutaDetailProps) => {
                   fontWeight: 500
                 }}
               >
-                Rutas de Aprendizaje
+                Paquetes
               </Link>
               <Typography
                 sx={{
@@ -268,7 +298,7 @@ const RutaDetail = ({ ruta }: RutaDetailProps) => {
                   aspectRatio="16/9"
                 />
                 <Box sx={{ position: 'absolute', top: 20, right: 20 }}>
-                  <Chip label="RUTA DE APRENDIZAJE" color="primary" sx={{ fontWeight: 800, px: 1 }} />
+                  <Chip label="PAQUETE" color="primary" sx={{ fontWeight: 800, px: 1 }} />
                 </Box>
               </Box>
             </Grid>
@@ -296,7 +326,7 @@ const RutaDetail = ({ ruta }: RutaDetailProps) => {
                         <i className="tabler-book-2" style={{ fontSize: '1.4rem' }} />
                       </Avatar>
                       <Box>
-                        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 500 }} display="block">Cursos</Typography>
+                        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 500 }} display="block">Programas</Typography>
                         <Typography variant="body1" sx={{ fontWeight: 700, color: 'white', fontSize: '1.1rem' }}>{ruta.cursos.length} módulos</Typography>
                       </Box>
                     </Stack>
@@ -332,7 +362,7 @@ const RutaDetail = ({ ruta }: RutaDetailProps) => {
                     document.getElementById('cursos-ruta')?.scrollIntoView({ behavior: 'smooth' });
                   }}
                 >
-                  Ver cursos de la ruta
+                  Ver programas del paquete
                 </Button>
               </Stack>
             </Grid>
@@ -474,9 +504,42 @@ const RutaDetail = ({ ruta }: RutaDetailProps) => {
                 }
               }}>
                 <Box sx={{ position: 'relative', zIndex: 1 }}>
-                  <Typography variant="h5" sx={{ fontWeight: 900, mb: 3, color: 'primary.light' }}>¿Por qué seguir esta ruta?</Typography>
-                  <Typography variant="body1" sx={{ mb: 4, color: 'rgba(255,255,255,0.8)', lineHeight: 1.7 }}>
-                    Nuestras rutas están diseñadas por expertos para asegurar que el contenido sea progresivo y coherente. No pierda tiempo decidiendo qué aprender después.
+                  <Typography variant="h5" sx={{ fontWeight: 900, mb: 1, color: 'primary.light' }}>Adquiere este paquete</Typography>
+                  <Box sx={{ mb: 4, display: 'flex', alignItems: 'baseline', gap: 2 }}>
+                    <Typography variant="h3" sx={{ fontWeight: 900, color: 'white' }}>S/. {ruta.precio}</Typography>
+                    {ruta.precio_falso && ruta.precio_falso > 0 && (
+                      <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.5)', textDecoration: 'line-through' }}>
+                        S/. {ruta.precio_falso}
+                      </Typography>
+                    )}
+                  </Box>
+
+                  <Stack spacing={2} sx={{ mb: 4 }}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      size="large"
+                      onClick={handleBuyNow}
+                      sx={{ py: 1.5, borderRadius: '12px', fontWeight: 800, fontSize: '1.1rem' }}
+                    >
+                      Comprar Ahora
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="inherit"
+                      fullWidth
+                      size="large"
+                      onClick={handleAddToCart}
+                      disabled={isAlreadyInCart}
+                      sx={{ py: 1.5, borderRadius: '12px', fontWeight: 700, borderColor: 'rgba(255,255,255,0.2)' }}
+                    >
+                      {isAlreadyInCart ? 'Ya está en el carrito' : 'Añadir al carrito'}
+                    </Button>
+                  </Stack>
+
+                  <Typography variant="body2" sx={{ mb: 4, color: 'rgba(255,255,255,0.8)', lineHeight: 1.7 }}>
+                    Nuestros paquetes están diseñados por expertos para asegurar que el contenido sea progresivo y coherente. No pierda tiempo decidiendo qué aprender después.
                   </Typography>
                   <Stack spacing={3}>
                     {(ruta.beneficios && ruta.beneficios.length > 0 ? ruta.beneficios : DEFAULT_BENEFITS).slice(0, 3).map((item, i) => (

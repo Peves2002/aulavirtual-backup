@@ -290,9 +290,7 @@ const SuscripcionCard = ({ suscripcion }: SuscripcionCardProps) => {
 
             return (
               <>
-                <Typography variant='subtitle2' sx={{ fontWeight: 700, color: '#475569', mb: 2, textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
-                  Cursos incluidos:
-                </Typography>
+                <Typography variant='subtitle2' sx={{ fontWeight: 700, color: '#475569', mb: 2, textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.05em' }}>Programas incluidos:</Typography>
                 <Grid container spacing={1.5}>
                   {suscripcion.plan.cursos.map(c => (
                     <Grid item xs={12} sm={6} key={c.curso_id}>

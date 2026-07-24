@@ -158,7 +158,7 @@ export function CategoriasPage({ initialDataCategorias, initialTotal = 0 }: Cate
       }),
       columnHelper.display({
         id: 'cursos',
-        header: 'Cursos',
+        header: 'Programas',
         cell: ({ row }) => {
           const count = row.original._count.cursos
 

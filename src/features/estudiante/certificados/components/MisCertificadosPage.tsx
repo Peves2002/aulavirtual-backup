@@ -9,6 +9,7 @@ import {
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 
 import CustomTextField from '@core/components/mui/TextField'
 import { AxiosMisCertificados } from '../http/axiosMisCertificados'
@@ -30,16 +31,19 @@ function CertificadoCard({ cert }: { cert: MiCertificado }) {
     setDownloading(true)
 
     try {
-      const token = session?.user?.accessToken ?? null
-      const client = new AxiosMisCertificados({ getAuthToken: () => token })
-      const blob = await client.downloadPdf(cert.id)
-      const url = URL.createObjectURL(blob)
+      const res = await axios.get(`/api/estudiante/certificado/${cert.id}/pdf`, {
+        responseType: 'blob'
+      })
+
+      const url = window.URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }))
       const a = document.createElement('a')
 
       a.href = url
-      a.download = `certificado-${cert.codigo_verificacion}.pdf`
+      a.setAttribute('download', `certificado-${cert.codigo_verificacion}.pdf`)
+      document.body.appendChild(a)
       a.click()
-      URL.revokeObjectURL(url)
+      a.remove()
+      window.URL.revokeObjectURL(url)
     } catch {
       enqueueSnackbar('Error al descargar el certificado', { variant: 'error' })
     } finally {
@@ -165,10 +169,10 @@ function CertificadoCard({ cert }: { cert: MiCertificado }) {
               size="small"
               startIcon={<i className="tabler-download" />}
               onClick={handleDownload}
-              disabled={downloading}
+              disabled={downloading || cert.habilitado === false}
               sx={{ borderRadius: 2, fontWeight: 600, fontSize: '0.78rem' }}
             >
-              {downloading ? 'Descargando...' : 'Descargar PDF'}
+              {downloading ? 'Descargando...' : cert.habilitado === false ? 'Inhabilitado' : 'Descargar PDF'}
             </Button>
             <Tooltip title="Verificar certificado">
               <Button

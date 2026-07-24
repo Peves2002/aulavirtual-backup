@@ -39,6 +39,7 @@ const BadgeContentSpan = styled('span')({
 function getDashboardPath(rol?: string): string {
   switch (rol) {
     case 'ADMIN':
+    case 'ASESOR':
       return '/admin/dashboard'
     case 'PROFESOR':
       return '/profesor/dashboard'

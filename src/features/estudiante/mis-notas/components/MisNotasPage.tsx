@@ -182,7 +182,7 @@ export default function MisNotasPage() {
             <Table size='small'>
               <TableHead>
                 <TableRow sx={{ bgcolor: '#f1f5f9' }}>
-                  {['Periodo', 'Curso', 'Grupo', 'Sección', 'Promedio', 'Fecha', 'Modalidad', 'Docente', 'Opciones'].map(
+                  {['Periodo', 'Programa', 'Grupo', 'Sección', 'Promedio', 'Fecha', 'Modalidad', 'Docente', 'Opciones'].map(
                     h => (
                       <TableCell key={h} sx={{ fontWeight: 700, fontSize: 12, whiteSpace: 'nowrap' }}>
                         {h}

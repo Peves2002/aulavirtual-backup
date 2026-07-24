@@ -47,6 +47,33 @@ export function usePedidos(query?: Record<string, any>, initialData?: Pedido[], 
 }
 
 /**
+ * Hook para obtener los pedidos agrupados por usuario
+ */
+export function usePedidosAgrupados(query?: Record<string, any>, initialData?: any[], initialTotal?: number) {
+  const axiosPedido = axiosPedidoFactory()
+
+  const isInitialQuery = !query || (
+    (query.page === '1' || !query.page) &&
+    (query.limit === '10' || !query.limit) &&
+    (!query.nombre) &&
+    (!query.departamento) &&
+    (!query.provincia)
+  )
+
+  return useQuery<{ agrupados: any[]; paginacion: any }, any>({
+    queryKey: [...QUERY_KEY.PEDIDOS, 'agrupados', query],
+    queryFn: async () => await axiosPedido.getAgrupados(query),
+    initialData: (isInitialQuery && initialData) ? {
+      agrupados: initialData,
+      paginacion: { total: initialTotal || initialData.length, page: 1, limit: 10 }
+    } : undefined,
+    placeholderData: keepPreviousData,
+    staleTime: 60_000,
+    retry: 1
+  })
+}
+
+/**
  * Hook para crear un pedido manual
  */
 export function useCreatePedidoManual() {

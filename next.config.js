@@ -71,9 +71,7 @@ const nextConfig = {
     ]
   },
   async redirects() {
-    return [
-      { source: '/rutas/:path*', destination: '/', permanent: false },
-    ]
+    return []
   },
   async headers() {
     return [
@@ -114,3 +112,4 @@ module.exports = withPWA({
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
 })(nextConfig)
+// trigger reload

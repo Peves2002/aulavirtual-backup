@@ -15,7 +15,8 @@ import {
     CircularProgress,
     Stack,
     Grid,
-    Divider
+    Divider,
+    MenuItem
 } from '@mui/material'
 import { signIn } from 'next-auth/react'
 import { useForm, Controller } from 'react-hook-form'
@@ -25,6 +26,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema, type LoginDto, registerSchema, type RegisterDto } from '@/schemas/auth.schema'
 import CustomTextField from '@core/components/mui/TextField'
 import Logo from '@components/layout/shared/Logo'
+import { ubigeoPeru, departamentos } from '@/utils/constants/ubigeo'
 
 interface AuthDialogProps {
     open: boolean
@@ -46,7 +48,7 @@ const AuthDialog = ({ open, onClose, initialMode = 'login' }: AuthDialogProps) =
         reset: resetLogin
     } = useForm<LoginDto>({
         resolver: zodResolver(loginSchema),
-        defaultValues: { correo: '', contrasena: '' }
+        defaultValues: { numero_documento: '', contrasena: '' }
     })
 
     // Form logic for Register
@@ -54,7 +56,9 @@ const AuthDialog = ({ open, onClose, initialMode = 'login' }: AuthDialogProps) =
         control: registerControl,
         handleSubmit: handleRegisterSubmit,
         formState: { errors: registerErrors },
-        reset: resetRegister
+        reset: resetRegister,
+        watch: watchRegister,
+        setValue: setRegisterValue
     } = useForm<RegisterDto>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
@@ -64,9 +68,13 @@ const AuthDialog = ({ open, onClose, initialMode = 'login' }: AuthDialogProps) =
             nombre: '',
             apellido: '',
             numero_documento: '',
-            celular: ''
+            celular: '',
+            departamento: '',
+            provincia: ''
         }
     })
+
+    const selectedDepartamento = watchRegister('departamento')
 
 
     const onLoginSubmit = async (data: LoginDto) => {
@@ -76,12 +84,12 @@ const AuthDialog = ({ open, onClose, initialMode = 'login' }: AuthDialogProps) =
 
             const result = await signIn('credentials', {
                 redirect: false,
-                correo: data.correo,
+                numero_documento: data.numero_documento,
                 contrasena: data.contrasena
             })
 
             if (result?.error) {
-                setError('Correo o contraseña incorrectos')
+                setError('DNI o contraseña incorrectos')
             } else if (result?.ok) {
                 onClose()
                 router.refresh()
@@ -115,7 +123,7 @@ const AuthDialog = ({ open, onClose, initialMode = 'login' }: AuthDialogProps) =
             // After success register, try to login automatically
             const loginResult = await signIn('credentials', {
                 redirect: false,
-                correo: data.correo,
+                numero_documento: data.numero_documento,
                 contrasena: data.contrasena
             })
 
@@ -167,16 +175,16 @@ const AuthDialog = ({ open, onClose, initialMode = 'login' }: AuthDialogProps) =
                     <form onSubmit={handleLoginSubmit(onLoginSubmit)}>
                         <Stack spacing={4}>
                             <Controller
-                                name="correo"
+                                name="numero_documento"
                                 control={loginControl}
                                 render={({ field }) => (
                                     <CustomTextField
                                         {...field}
                                         fullWidth
-                                        label="Correo electrónico"
-                                        placeholder="juan.perez@email.com"
-                                        error={!!loginErrors.correo}
-                                        helperText={loginErrors.correo?.message}
+                                        label="DNI"
+                                        placeholder="12345678"
+                                        error={!!loginErrors.numero_documento}
+                                        helperText={loginErrors.numero_documento?.message}
                                         disabled={isLoading}
                                     />
                                 )}
@@ -265,6 +273,63 @@ const AuthDialog = ({ open, onClose, initialMode = 'login' }: AuthDialogProps) =
                                     control={registerControl}
                                     render={({ field }) => (
                                         <CustomTextField {...field} fullWidth label="Confirmar" type="password" error={!!registerErrors.confirmarContrasena} helperText={registerErrors.confirmarContrasena?.message} disabled={isLoading} />
+                                    )}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Controller
+                                    name="departamento"
+                                    control={registerControl}
+                                    render={({ field }) => (
+                                        <CustomTextField
+                                            {...field}
+                                            select
+                                            fullWidth
+                                            label="Departamento"
+                                            error={!!registerErrors.departamento}
+                                            helperText={registerErrors.departamento?.message}
+                                            disabled={isLoading}
+                                            onChange={(e) => {
+                                                field.onChange(e)
+                                                setRegisterValue('provincia', '', { shouldValidate: true })
+                                            }}
+                                        >
+                                            <MenuItem value="">
+                                                <em>Seleccionar</em>
+                                            </MenuItem>
+                                            {departamentos.map((dep) => (
+                                                <MenuItem key={dep} value={dep}>
+                                                    {dep}
+                                                </MenuItem>
+                                            ))}
+                                        </CustomTextField>
+                                    )}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Controller
+                                    name="provincia"
+                                    control={registerControl}
+                                    render={({ field }) => (
+                                        <CustomTextField
+                                            {...field}
+                                            select
+                                            fullWidth
+                                            label="Provincia"
+                                            error={!!registerErrors.provincia}
+                                            helperText={registerErrors.provincia?.message}
+                                            disabled={isLoading || !selectedDepartamento}
+                                        >
+                                            <MenuItem value="">
+                                                <em>Seleccionar</em>
+                                            </MenuItem>
+                                            {selectedDepartamento &&
+                                                ubigeoPeru[selectedDepartamento]?.map((prov) => (
+                                                    <MenuItem key={prov} value={prov}>
+                                                        {prov}
+                                                    </MenuItem>
+                                                ))}
+                                        </CustomTextField>
                                     )}
                                 />
                             </Grid>

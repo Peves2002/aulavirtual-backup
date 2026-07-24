@@ -16,6 +16,7 @@ export interface MiCertificado {
   codigo_verificacion: string
   emitido_en: string
   curso: CertificadoCurso
+  habilitado: boolean
 }
 
 export interface MisCertificadosResponse {

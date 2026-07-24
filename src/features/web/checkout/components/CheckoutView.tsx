@@ -37,19 +37,29 @@ export interface EbookCheckoutItem {
     moneda: string
 }
 
+export interface RutaCheckoutItem {
+    id: string
+    titulo: string
+    slug: string
+    miniatura?: string
+    precio: number
+    moneda: string
+}
+
 interface CheckoutViewProps {
     courses: CourseCheckoutItem[]
     ebooks: EbookCheckoutItem[]
+    rutas?: RutaCheckoutItem[]
 }
 
-const CheckoutView = ({ courses, ebooks }: CheckoutViewProps) => {
+const CheckoutView = ({ courses, ebooks, rutas = [] }: CheckoutViewProps) => {
     const [appliedCoupon, setAppliedCoupon] = useState<CouponData | null>(null)
 
     const hasOnlyEbooks = courses.length === 0 && ebooks.length > 0
 
     const breadcrumbBack = hasOnlyEbooks
         ? { label: 'Ebooks', href: '/ebooks' }
-        : { label: 'Cursos', href: courses[0] ? `/cursos/${courses[0].slug}` : '/cursos' }
+        : { label: 'Programas', href: courses[0] ? `/cursos/${courses[0].slug}` : '/cursos' }
 
     return (
         <Box sx={{ bgcolor: '#f8fafc', minHeight: 'calc(100vh - 64px)', fontFamily: FONT }}>
@@ -102,6 +112,7 @@ const CheckoutView = ({ courses, ebooks }: CheckoutViewProps) => {
                         <OrderSummary
                             courses={courses}
                             ebooks={ebooks}
+                            rutas={rutas}
                             appliedCoupon={appliedCoupon}
                             onCouponApplied={setAppliedCoupon}
                         />
@@ -111,6 +122,7 @@ const CheckoutView = ({ courses, ebooks }: CheckoutViewProps) => {
                         <PaymentForm
                             courses={courses}
                             ebooks={ebooks}
+                            rutas={rutas}
                             appliedCouponCode={appliedCoupon?.codigo}
                             finalTotal={appliedCoupon ? appliedCoupon.total : undefined}
                         />

@@ -31,7 +31,7 @@ export async function GET(request: Request, { params }: { params: { slug: string
       }
     })
 
-    if (!ruta) return ApiResponse.error(request, 'Ruta no encontrada', 404)
+    if (!ruta) return ApiResponse.error(request, 'Paquete no encontrado', 404)
 
     const formattedCursos = ruta.cursos.map(rc => ({
       ...rc.curso,

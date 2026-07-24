@@ -82,7 +82,7 @@ export const RutasPage = ({ initialData }: RutasPageProps) => {
 
         Swal.fire({
           title: '¡Eliminado!',
-          text: 'Ruta eliminada correctamente',
+          text: 'Paquete eliminado correctamente',
           icon: 'success',
           toast: true,
           position: 'top-end',
@@ -90,7 +90,7 @@ export const RutasPage = ({ initialData }: RutasPageProps) => {
           timer: 3000
         })
       } catch (err) {
-        Swal.fire({ title: 'Error', text: 'Error al eliminar la ruta', icon: 'error' })
+        Swal.fire({ title: 'Error', text: 'Error al eliminar el paquete', icon: 'error' })
       }
     }
   }, [deleteRuta])
@@ -98,7 +98,7 @@ export const RutasPage = ({ initialData }: RutasPageProps) => {
   const columns = useMemo<ColumnDef<Ruta, any>[]>(
     () => [
       columnHelper.accessor('titulo', {
-        header: 'Ruta de Aprendizaje',
+        header: 'Paquete',
         cell: ({ row }) => (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
             <Avatar
@@ -116,7 +116,7 @@ export const RutasPage = ({ initialData }: RutasPageProps) => {
         )
       }),
       columnHelper.accessor('total_cursos' as any, {
-        header: 'Cursos',
+        header: 'Programas',
         cell: ({ row }) => (
           <Chip
             variant='tonal'
@@ -142,12 +142,12 @@ export const RutasPage = ({ initialData }: RutasPageProps) => {
         header: () => <div className='w-full text-right'>Acciones</div>,
         cell: ({ row }) => (
           <div className='flex items-center justify-end w-full gap-1'>
-            <Tooltip title='Gestionar Cursos'>
+            <Tooltip title='Gestionar paquete'>
               <IconButton onClick={() => handleManageCursos(row.original)}>
-                <i className='tabler-list-numbers text-[22px] text-primary' />
+                <i className='tabler-box text-[22px] text-primary' />
               </IconButton>
             </Tooltip>
-            <Tooltip title='Editar Ruta'>
+            <Tooltip title='Editar Paquete'>
               <IconButton onClick={() => handleEdit(row.original)}>
                 <i className='tabler-edit text-[22px] text-textSecondary' />
               </IconButton>
@@ -186,7 +186,7 @@ export const RutasPage = ({ initialData }: RutasPageProps) => {
   return (
     <>
       <Card>
-        <CardHeader title='Gestión de Rutas de Aprendizaje' className='pbe-4' />
+        <CardHeader title='Gestión de Paquetes' className='pbe-4' />
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -202,7 +202,7 @@ export const RutasPage = ({ initialData }: RutasPageProps) => {
             <DebouncedInput
               value={globalFilter ?? ''}
               onChange={value => setGlobalFilter(String(value))}
-              placeholder='Buscar ruta'
+              placeholder='Buscar paquete'
               className='is-full sm:is-auto'
             />
             <Button
@@ -214,7 +214,7 @@ export const RutasPage = ({ initialData }: RutasPageProps) => {
               }}
               className='is-full sm:is-auto'
             >
-              Nueva Ruta
+              Nuevo Paquete
             </Button>
           </div>
         </div>
@@ -222,7 +222,7 @@ export const RutasPage = ({ initialData }: RutasPageProps) => {
         <div className='overflow-x-auto relative min-h-[200px]'>
           {isLoading && (
             <div className='absolute inset-0 bg-white/50 z-10 flex items-center justify-center'>
-              <Typography variant='body2'>Cargando rutas...</Typography>
+              <Typography variant='body2'>Cargando paquetes...</Typography>
             </div>
           )}
           <table className={tableStyles.table}>
@@ -241,7 +241,7 @@ export const RutasPage = ({ initialData }: RutasPageProps) => {
               {table.getFilteredRowModel().rows.length === 0 ? (
                 <tr>
                   <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    No hay rutas definidas
+                    No hay paquetes definidos
                   </td>
                 </tr>
               ) : (

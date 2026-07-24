@@ -56,7 +56,8 @@ export default async function VerificarCertificadoPage({ params }: Props) {
         usuario: {
           select: {
             nombre: true,
-            apellido: true
+            apellido: true,
+            esta_activo: true
           }
         }
       }
@@ -68,7 +69,7 @@ export default async function VerificarCertificadoPage({ params }: Props) {
   const templateName = configs.TEMPLATE_NAME
   const logoUrl = configs.TEMPLATE_LOGO
 
-  if (!certificado) {
+  if (!certificado || !certificado.usuario.esta_activo) {
     return (
       <Container maxWidth="sm" sx={{ py: 12 }}>
         <Paper

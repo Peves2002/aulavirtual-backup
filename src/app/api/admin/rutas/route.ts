@@ -13,7 +13,7 @@ export async function GET(request: Request) {
   try {
     const auth = await requireAuth(request)
 
-    if (!auth.authorized || auth.user.rol !== 'ADMIN') {
+    if (!auth.authorized || !['ADMIN', 'ASESOR'].includes(auth.user.rol)) {
       return ApiResponse.error(request, 'No tienes permisos para realizar esta acción', 403)
     }
 
@@ -45,11 +45,11 @@ export async function POST(request: Request) {
   try {
     const auth = await requireAuth(request)
 
-    if (!auth.authorized || auth.user.rol !== 'ADMIN') {
+    if (!auth.authorized || !['ADMIN', 'ASESOR'].includes(auth.user.rol)) {
       return ApiResponse.error(request, 'No tienes permisos para realizar esta acción', 403)
     }
 
-    const { titulo, slug, descripcion, miniatura, beneficios, esta_activo } = await request.json()
+    const { titulo, slug, descripcion, miniatura, beneficios, esta_activo, precio, precio_falso, moneda } = await request.json()
 
     if (!titulo || !slug) {
       return ApiResponse.error(request, 'El título y el slug son requeridos', 400)
@@ -62,14 +62,17 @@ export async function POST(request: Request) {
         descripcion,
         miniatura,
         beneficios: beneficios || [],
+        precio: Number(precio) || 0,
+        precio_falso: Number(precio_falso) || 0,
+        moneda: moneda || 'PEN',
         esta_activo: esta_activo ?? true
       }
     })
 
-    return ApiResponse.success(request, { id: ruta.id, message: 'Ruta creada correctamente' })
+    return ApiResponse.success(request, { id: ruta.id, message: 'Paquete creado correctamente' })
   } catch (error: any) {
     if (error.code === 'P2002') {
-      return ApiResponse.error(request, 'Ya existe una ruta con ese slug', 400)
+      return ApiResponse.error(request, 'Ya existe un paquete con ese slug', 400)
     }
 
     return handleApiError(error, request)

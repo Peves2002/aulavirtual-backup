@@ -29,6 +29,9 @@ export interface Ruta {
   beneficios?: Benefit[]
   secciones?: RutaSeccion[]
   esta_activo: boolean
+  precio: number
+  precio_falso: number
+  moneda: string
   creado_en: string
   actualizado_en: string
   total_cursos?: number
@@ -42,5 +45,8 @@ export interface CreateRutaDto {
   miniatura: string
   beneficios?: Benefit[]
   secciones?: RutaSeccion[]
+  precio: number
+  precio_falso: number
+  moneda: string
   esta_activo: boolean
 }

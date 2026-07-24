@@ -168,9 +168,7 @@ export default function CursosEnProgreso({ cursos, loading }: Props) {
             size='small'
             startIcon={<i className='tabler-search' />}
             sx={{ borderRadius: '10px', fontWeight: 700, textTransform: 'none' }}
-          >
-            Cursos
-          </Button>
+          >Programas</Button>
           <Button
             variant='outlined'
             href='/diplomados'

@@ -16,7 +16,8 @@ import {
   Stack,
   Grid,
   Divider,
-  InputAdornment
+  InputAdornment,
+  MenuItem
 } from '@mui/material'
 import { signIn, useSession } from 'next-auth/react'
 import { useForm, Controller } from 'react-hook-form'
@@ -25,6 +26,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema, type LoginDto, registerSchema, type RegisterDto, forgotPasswordSchema, type ForgotPasswordDto, resetPasswordSchema, type ResetPasswordDto } from '@/schemas/auth.schema'
 import CustomTextField from '@core/components/mui/TextField'
 import GoogleButton from './GoogleButton'
+import { ubigeoPeru, departamentos } from '@/utils/constants/ubigeo'
 
 export type Mode = 'login' | 'register' | 'forgot-password' | 'reset-password'
 
@@ -49,7 +51,7 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
 
   const loginForm = useForm<LoginDto>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { correo: 'alumno@gmail.com', contrasena: 'Alumno123@' }
+    defaultValues: { numero_documento: '12345678', contrasena: 'Alumno123@' }
   })
 
   const registerForm = useForm<RegisterDto>({
@@ -61,9 +63,13 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
       numero_documento: '',
       celular: '',
       contrasena: '',
-      confirmarContrasena: ''
+      confirmarContrasena: '',
+      departamento: '',
+      provincia: ''
     }
   })
+
+  const selectedDepartamento = registerForm.watch('departamento')
 
   const forgotForm = useForm<ForgotPasswordDto>({
     resolver: zodResolver(forgotPasswordSchema),
@@ -111,13 +117,13 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
 
       const result = await signIn('credentials', {
         redirect: false,
-        correo: data.correo,
+        numero_documento: data.numero_documento,
         contrasena: data.contrasena
       })
 
       if (result?.error) {
         if (result.error === 'CredentialsSignin') {
-          setError('Correo o contraseña incorrectos')
+          setError('DNI o contraseña incorrectos')
         } else if (result.error.includes('desactivada')) {
           setError('Tu cuenta ha sido desactivada. Contacta al administrador.')
         } else {
@@ -161,7 +167,7 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
       // Auto-login tras registro exitoso
       const loginResult = await signIn('credentials', {
         redirect: false,
-        correo: data.correo,
+        numero_documento: data.numero_documento,
         contrasena: data.contrasena
       })
 
@@ -172,7 +178,7 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
         onSwitchMode('login')
         setRegisterSuccess(false)
         setError('')
-        loginForm.setValue('correo', data.correo)
+        loginForm.setValue('numero_documento', data.numero_documento)
       }
     } catch {
       setError('Ocurrió un error al registrar el usuario')
@@ -317,7 +323,7 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
 
         {mode === 'login' && (
           <Alert severity="info" sx={{ mb: 2, fontSize: '0.8rem' }}>
-            <strong>Cuenta de prueba:</strong> alumno@gmail.com &nbsp;|&nbsp; <strong>Contraseña:</strong> Alumno123@
+            <strong>Cuenta de prueba:</strong> 12345678 &nbsp;|&nbsp; <strong>Contraseña:</strong> Alumno123@
           </Alert>
         )}
 
@@ -325,17 +331,17 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
           <form key="login-form" onSubmit={loginForm.handleSubmit(onLoginSubmit)}>
             <Stack spacing={3}>
               <Controller
-                name="correo"
+                name="numero_documento"
                 control={loginForm.control}
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
-                    label="Correo electrónico"
-                    placeholder="correo@ejemplo.com"
-                    type="email"
-                    error={!!loginForm.formState.errors.correo}
-                    helperText={loginForm.formState.errors.correo?.message}
+                    label="DNI"
+                    placeholder="12345678"
+                    type="text"
+                    error={!!loginForm.formState.errors.numero_documento}
+                    helperText={loginForm.formState.errors.numero_documento?.message}
                     disabled={isLoading}
                   />
                 )}
@@ -473,6 +479,63 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
                       helperText={registerForm.formState.errors.celular?.message}
                       disabled={isLoading}
                     />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name="departamento"
+                  control={registerForm.control}
+                  render={({ field }) => (
+                    <CustomTextField
+                      {...field}
+                      select
+                      fullWidth
+                      label="Departamento"
+                      error={!!registerForm.formState.errors.departamento}
+                      helperText={registerForm.formState.errors.departamento?.message}
+                      disabled={isLoading}
+                      onChange={(e) => {
+                        field.onChange(e)
+                        registerForm.setValue('provincia', '', { shouldValidate: true })
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Seleccionar</em>
+                      </MenuItem>
+                      {departamentos.map((dep) => (
+                        <MenuItem key={dep} value={dep}>
+                          {dep}
+                        </MenuItem>
+                      ))}
+                    </CustomTextField>
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name="provincia"
+                  control={registerForm.control}
+                  render={({ field }) => (
+                    <CustomTextField
+                      {...field}
+                      select
+                      fullWidth
+                      label="Provincia"
+                      error={!!registerForm.formState.errors.provincia}
+                      helperText={registerForm.formState.errors.provincia?.message}
+                      disabled={isLoading || !selectedDepartamento}
+                    >
+                      <MenuItem value="">
+                        <em>Seleccionar</em>
+                      </MenuItem>
+                      {selectedDepartamento &&
+                        ubigeoPeru[selectedDepartamento]?.map((prov) => (
+                          <MenuItem key={prov} value={prov}>
+                            {prov}
+                          </MenuItem>
+                        ))}
+                    </CustomTextField>
                   )}
                 />
               </Grid>

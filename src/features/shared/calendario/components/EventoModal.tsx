@@ -7,8 +7,8 @@ import AppModal from '@/utils/components/AppModal'
 const TIPO_CONFIG: Record<string, { label: string; icon: string; color: string }> = {
   CLASE_VIVO:   { label: 'Clase en Vivo',    icon: 'tabler-video',      color: '#1565C0' },
   EXAMEN:       { label: 'Examen',            icon: 'tabler-file-text',  color: '#C62828' },
-  CURSO_INICIO: { label: 'Inicio de Curso',   icon: 'tabler-book-open',  color: '#2E7D32' },
-  CURSO_FIN:    { label: 'Fin de Curso',      icon: 'tabler-flag',       color: '#E65100' }
+  CURSO_INICIO: { label: 'Inicio de Programa',   icon: 'tabler-book-open',  color: '#2E7D32' },
+  CURSO_FIN:    { label: 'Fin de Programa',      icon: 'tabler-flag',       color: '#E65100' }
 }
 
 type Props = {
@@ -70,7 +70,7 @@ export function EventoModal({ open, handleClose, basePath = '/estudiante/aprende
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
         <i className='tabler-book text-lg text-textSecondary' />
         <Box>
-          <Typography variant='caption' color='text.secondary'>Curso</Typography>
+          <Typography variant='caption' color='text.secondary'>Programa</Typography>
           <Typography variant='body2' fontWeight={600}>{curso}</Typography>
         </Box>
       </Box>

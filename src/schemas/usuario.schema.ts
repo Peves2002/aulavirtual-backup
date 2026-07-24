@@ -34,6 +34,14 @@ export const crearUsuarioSchema = z.object({
     .regex(/^9\d{8}$/, 'El celular debe tener 9 dígitos y comenzar con 9')
     .optional()
     .or(z.literal('')),
+  departamento: z
+    .string()
+    .trim()
+    .min(1, 'El departamento es requerido'),
+  provincia: z
+    .string()
+    .trim()
+    .min(1, 'La provincia es requerida'),
   rol: z
     .nativeEnum(Rol)
     .optional()
@@ -97,6 +105,16 @@ export const actualizarUsuarioSchema = z.object({
     .string()
     .trim()
     .regex(/^9\d{8}$/, 'El celular debe tener 9 dígitos y comenzar con 9')
+    .optional()
+    .or(z.literal('')),
+  departamento: z
+    .string()
+    .trim()
+    .optional()
+    .or(z.literal('')),
+  provincia: z
+    .string()
+    .trim()
     .optional()
     .or(z.literal('')),
   rol: z

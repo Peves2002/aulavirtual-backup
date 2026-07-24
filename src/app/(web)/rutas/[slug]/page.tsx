@@ -16,6 +16,8 @@ export default async function RutaDetailPage({ params }: { params: { slug: strin
     // Serializar Decimal a Number para Client Components
     const serializedRuta = {
       ...ruta,
+      precio: ruta.precio ? Number(ruta.precio) : 0,
+      precio_falso: ruta.precio_falso ? Number(ruta.precio_falso) : 0,
       cursos: ruta.cursos.map((c: any) => ({
         ...c,
         precio: c.precio ? Number(c.precio) : 0,
@@ -37,13 +39,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   try {
     const ruta = await axiosRuta.getBySlug(params.slug)
 
-    if (!ruta) return { title: 'Ruta no encontrada' }
+    if (!ruta) return { title: 'Paquete no encontrado' }
 
     return {
       title: `${ruta.titulo} | Aula Virtual`,
-      description: ruta.descripcion || 'Detalles de la ruta de aprendizaje en nuestra plataforma EdTech.'
+      description: ruta.descripcion || 'Detalles del paquete en nuestra plataforma EdTech.'
     }
   } catch {
-    return { title: 'Ruta no encontrada' }
+    return { title: 'Paquete no encontrado' }
   }
 }

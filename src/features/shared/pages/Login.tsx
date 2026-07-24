@@ -108,7 +108,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
   } = useForm<LoginDto>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      correo: '',
+      numero_documento: '',
       contrasena: ''
     }
   })
@@ -122,7 +122,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
 
       const result = await signIn('credentials', {
         redirect: false,
-        correo: data.correo,
+        numero_documento: data.numero_documento,
         contrasena: data.contrasena
       })
 
@@ -131,7 +131,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
         console.error('❌ Error en login:', result.error)
 
         if (result.error === 'CredentialsSignin') {
-          setError('Correo o contraseña incorrectos')
+          setError('DNI o contraseña incorrectos')
         } else if (result.error.includes('desactivada')) {
           setError('Tu cuenta ha sido desactivada. Contacta al administrador.')
         } else {
@@ -250,18 +250,18 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
             className='flex flex-col gap-5'
           >
             <Controller
-              name='correo'
+              name='numero_documento'
               control={control}
               render={({ field }) => (
                 <CustomTextField
                   {...field}
                   autoFocus
                   fullWidth
-                  label='Correo electrónico'
-                  placeholder='correo@ejemplo.com'
-                  type='email'
-                  error={!!errors.correo}
-                  helperText={errors.correo?.message}
+                  label='DNI'
+                  placeholder='12345678'
+                  type='text'
+                  error={!!errors.numero_documento}
+                  helperText={errors.numero_documento?.message}
                   disabled={isLoading}
                 />
               )}

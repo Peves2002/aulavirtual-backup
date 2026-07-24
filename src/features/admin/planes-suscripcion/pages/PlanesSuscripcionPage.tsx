@@ -122,7 +122,7 @@ export function PlanesSuscripcionPage({ initialData, cursosInitialData }: Planes
     }),
     columnHelper.display({
       id: 'cursos',
-      header: 'Cursos',
+      header: 'Programas',
       cell: ({ row }) => (
         <Typography color='text.secondary'>
           {row.original._count?.cursos ?? row.original.cursos?.length ?? 0} curso(s)

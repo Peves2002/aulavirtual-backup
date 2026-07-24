@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import prisma from '@/utils/libs/prisma'
 import { validateRequest, handleApiError } from '@/utils/libs/validation'
-import { requireAdmin } from '@/utils/libs/auth-helpers'
+import { requireAdminOrAsesor } from '@/utils/libs/auth-helpers'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { listarPedidosQuerySchema } from '@/schemas/pedido.schema'
 
@@ -12,7 +12,7 @@ import { listarPedidosQuerySchema } from '@/schemas/pedido.schema'
  */
 export async function GET(request: Request) {
   try {
-    const auth = await requireAdmin(request)
+    const auth = await requireAdminOrAsesor(request)
 
     if (!auth.authorized) {
       return auth.error
@@ -27,9 +27,13 @@ export async function GET(request: Request) {
       return validation.error
     }
 
-    const { page, limit, estado, buscar, nro_pedido, nombre } = validation.data
+    const { page, limit, estado, buscar, nro_pedido, nombre, departamento, provincia, mes, anio, usuario_id } = validation.data
 
     const where: any = {}
+    
+    if (usuario_id) {
+      where.usuario_id = usuario_id
+    }
     
     // Si el estado no es 'TODOS', aplicamos el filtro. 
     if (estado && estado !== 'TODOS') {
@@ -64,6 +68,46 @@ export async function GET(request: Request) {
       }
     }
 
+    if (departamento) {
+      where.usuario = { ...where.usuario, departamento }
+    }
+
+    if (provincia) {
+      where.usuario = { ...where.usuario, provincia }
+    }
+
+    if (anio) {
+      const yearInt = parseInt(anio)
+
+      if (!isNaN(yearInt)) {
+        if (mes) {
+          const monthInt = parseInt(mes)
+
+          if (!isNaN(monthInt)) {
+            const startDate = new Date(yearInt, monthInt - 1, 1)
+            const endDate = new Date(yearInt, monthInt, 1)
+
+            where.creado_en = { gte: startDate, lt: endDate }
+          }
+        } else {
+          const startDate = new Date(yearInt, 0, 1)
+          const endDate = new Date(yearInt + 1, 0, 1)
+
+          where.creado_en = { gte: startDate, lt: endDate }
+        }
+      }
+    } else if (mes) {
+      const yearInt = new Date().getFullYear()
+      const monthInt = parseInt(mes)
+
+      if (!isNaN(monthInt)) {
+        const startDate = new Date(yearInt, monthInt - 1, 1)
+        const endDate = new Date(yearInt, monthInt, 1)
+
+        where.creado_en = { gte: startDate, lt: endDate }
+      }
+    }
+
     const skip = (page - 1) * limit
 
     const [pedidos, total] = await Promise.all([
@@ -78,7 +122,9 @@ export async function GET(request: Request) {
               id: true,
               nombre: true,
               apellido: true,
-              correo: true
+              correo: true,
+              departamento: true,
+              provincia: true
             }
           },
           cupon: {

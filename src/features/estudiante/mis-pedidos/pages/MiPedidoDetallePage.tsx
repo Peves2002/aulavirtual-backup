@@ -91,7 +91,7 @@ export function MiPedidoDetallePage() {
             <Typography variant="h6" gutterBottom>Resumen de Total</Typography>
             <Paper variant="outlined" sx={{ p: 4, bgcolor: 'action.hover' }}>
               <div className="flex justify-between mb-2">
-                <Typography color="text.secondary">Subtotal Cursos:</Typography>
+                <Typography color="text.secondary">Subtotal Programas:</Typography>
                 <Typography>{pedido.moneda} {Number(pedido.total).toFixed(2)}</Typography>
               </div>
               {pedido.cupon && (
@@ -155,12 +155,12 @@ export function MiPedidoDetallePage() {
 
           {/* Tabla de cursos comprados */}
           <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>Cursos Comprados (Detalle)</Typography>
+            <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>Programas Comprados (Detalle)</Typography>
             <TableContainer component={Paper} variant="outlined">
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Curso</TableCell>
+                    <TableCell>Programa</TableCell>
                     <TableCell align="right">Precio Original</TableCell>
                     <TableCell align="right">Subtotal Pagado</TableCell>
                   </TableRow>

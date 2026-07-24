@@ -49,6 +49,9 @@ export const RutaDialog = ({ open, onClose, ruta }: RutaDialogProps) => {
       descripcion: '',
       miniatura: '',
       beneficios: DEFAULT_BENEFITS,
+      precio: 0,
+      precio_falso: 0,
+      moneda: 'PEN',
       esta_activo: true
     }
   })
@@ -66,6 +69,9 @@ export const RutaDialog = ({ open, onClose, ruta }: RutaDialogProps) => {
         descripcion: ruta.descripcion || '',
         miniatura: ruta.miniatura || '',
         beneficios: (ruta.beneficios && ruta.beneficios.length > 0) ? (ruta.beneficios as Benefit[]) : DEFAULT_BENEFITS,
+        precio: ruta.precio || 0,
+        precio_falso: ruta.precio_falso || 0,
+        moneda: ruta.moneda || 'PEN',
         esta_activo: ruta.esta_activo
       })
     } else {
@@ -75,6 +81,9 @@ export const RutaDialog = ({ open, onClose, ruta }: RutaDialogProps) => {
         descripcion: '',
         miniatura: '',
         beneficios: DEFAULT_BENEFITS,
+        precio: 0,
+        precio_falso: 0,
+        moneda: 'PEN',
         esta_activo: true
       })
     }
@@ -85,16 +94,16 @@ export const RutaDialog = ({ open, onClose, ruta }: RutaDialogProps) => {
       if (ruta) {
         await updateRuta.mutateAsync({ id: ruta.id, payload: data })
 
-        Swal.fire({ title: '¡Éxito!', text: 'Ruta actualizada correctamente', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 })
+        Swal.fire({ title: '¡Éxito!', text: 'Paquete actualizado correctamente', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 })
       } else {
         await createRuta.mutateAsync(data)
 
-        Swal.fire({ title: '¡Éxito!', text: 'Ruta creada correctamente', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 })
+        Swal.fire({ title: '¡Éxito!', text: 'Paquete creado correctamente', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 })
       }
 
       onClose()
     } catch (err: any) {
-      Swal.fire({ title: 'Error', text: err.response?.data?.message || 'Error al guardar la ruta', icon: 'error' })
+      Swal.fire({ title: 'Error', text: err.response?.data?.message || 'Error al guardar el paquete', icon: 'error' })
     }
   }
 
@@ -117,7 +126,7 @@ export const RutaDialog = ({ open, onClose, ruta }: RutaDialogProps) => {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth='sm'>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>{ruta ? 'Editar Ruta de Aprendizaje' : 'Nueva Ruta de Aprendizaje'}</DialogTitle>
+        <DialogTitle>{ruta ? 'Editar Paquete' : 'Nuevo Paquete'}</DialogTitle>
         <DialogContent>
           <Grid container spacing={4} sx={{ mt: 1 }}>
             <Grid item xs={12}>
@@ -138,23 +147,7 @@ export const RutaDialog = ({ open, onClose, ruta }: RutaDialogProps) => {
                 )}
               />
             </Grid>
-            <Grid item xs={12}>
-              <Controller
-                name='slug'
-                control={control}
-                rules={{ required: 'El slug es requerido' }}
-                render={({ field, fieldState }) => (
-                  <CustomTextField
-                    {...field}
-                    fullWidth
-                    label='Slug'
-                    placeholder='ej-especialista-backend'
-                    error={!!fieldState.error}
-                    helperText={fieldState.error?.message}
-                  />
-                )}
-              />
-            </Grid>
+
             <Grid item xs={12}>
               <Controller
                 name='descripcion'
@@ -166,7 +159,7 @@ export const RutaDialog = ({ open, onClose, ruta }: RutaDialogProps) => {
                     multiline
                     rows={3}
                     label='Descripción'
-                    placeholder='Describe el objetivo de esta ruta...'
+                    placeholder='Describe el objetivo de este paquete...'
                   />
                 )}
               />
@@ -251,12 +244,47 @@ export const RutaDialog = ({ open, onClose, ruta }: RutaDialogProps) => {
                 )}
               />
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name='precio'
+                control={control}
+                rules={{ required: 'Precio requerido', min: { value: 0, message: 'Min 0' } }}
+                render={({ field, fieldState }) => (
+                  <CustomTextField
+                    {...field}
+                    fullWidth
+                    type="number"
+                    label='Precio (Cobrado)'
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                    InputProps={{ inputProps: { min: 0, step: '0.01' } }}
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name='precio_falso'
+                control={control}
+                render={({ field, fieldState }) => (
+                  <CustomTextField
+                    {...field}
+                    fullWidth
+                    type="number"
+                    label='Precio Regular (Tachado)'
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                    InputProps={{ inputProps: { min: 0, step: '0.01' } }}
+                  />
+                )}
+              />
+            </Grid>
 
             {/* Beneficios Section */}
             <Grid item xs={12}>
               <Typography variant='h6' sx={{ mb: 2, mt: 4, fontWeight: 700 }}>Beneficios (4 Tarjetas)</Typography>
               <Typography variant='caption' sx={{ mb: 4, display: 'block', color: 'text.secondary' }}>
-                Configura los 4 puntos clave que se muestran en el detalle de la ruta.
+                Configura los 4 puntos clave que se muestran en el detalle del paquete.
               </Typography>
               
               <Grid container spacing={4}>
@@ -332,7 +360,7 @@ export const RutaDialog = ({ open, onClose, ruta }: RutaDialogProps) => {
         <DialogActions>
           <Button onClick={onClose} color='secondary'>Cancelar</Button>
           <Button type='submit' variant='contained' disabled={createRuta.isPending || updateRuta.isPending}>
-            {ruta ? 'Actualizar' : 'Crear Ruta'}
+            {ruta ? 'Actualizar' : 'Crear Paquete'}
           </Button>
         </DialogActions>
       </form>

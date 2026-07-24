@@ -17,7 +17,7 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
     Credentials({
       name: 'Credentials',
       credentials: {
-        correo: { label: 'Correo', type: 'email' },
+        numero_documento: { label: 'DNI', type: 'text' },
         contrasena: { label: 'Contraseña', type: 'password' }
       },
       async authorize(credentials) {
@@ -29,11 +29,11 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
             return null
           }
 
-          const { correo, contrasena } = validacion.data
+          const { numero_documento, contrasena } = validacion.data
 
           // Buscar usuario
           const usuario = await prisma.usuario.findUnique({
-            where: { correo }
+            where: { numero_documento }
           })
 
           if (!usuario) {

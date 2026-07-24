@@ -240,7 +240,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
           <Box sx={{ mb: 5, display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
             {[
               { label: 'Inicio', href: '/' },
-              { label: 'Cursos', href: '/cursos' },
+              { label: 'Programas', href: '/cursos' },
               ...(course.categoria ? [{ label: course.categoria.nombre, href: null }] : []),
             ].map((item, i) => (
               <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -285,7 +285,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                   {course.es_comprado ? (
                     <Chip
                       icon={<i className="tabler-circle-check-filled" style={{ fontSize: '1rem', color: '#0A0A0A' }} />}
-                      label="Tu Curso"
+                      label="Tu Programa"
                       sx={{ fontFamily: FONT, fontWeight: 800, fontSize: '0.75rem', bgcolor: 'var(--web-light, #BDD962)', color: '#0A0A0A', borderRadius: '8px' }}
                     />
                   ) : (

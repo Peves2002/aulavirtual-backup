@@ -97,7 +97,7 @@ export async function sendOrderConfirmationEmail(pedidoId: string) {
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;">
             <thead>
               <tr>
-                <th style="text-align: left; padding-bottom: 10px; border-bottom: 2px solid #eee; color: #888; font-size: 12px; text-transform: uppercase;">Curso</th>
+                <th style="text-align: left; padding-bottom: 10px; border-bottom: 2px solid #eee; color: #888; font-size: 12px; text-transform: uppercase;">Programa</th>
                 <th style="text-align: right; padding-bottom: 10px; border-bottom: 2px solid #eee; color: #888; font-size: 12px; text-transform: uppercase;">Precio</th>
               </tr>
             </thead>

@@ -24,6 +24,10 @@ export default withAuth(
         return NextResponse.redirect(new URL('/admin/dashboard', req.url), { status: 302 })
       }
 
+      if (rol === 'ASESOR') {
+        return NextResponse.redirect(new URL('/admin/pedidos', req.url), { status: 302 })
+      }
+
       if (rol === Rol.PROFESOR) {
         return NextResponse.redirect(new URL('/profesor/dashboard', req.url), { status: 302 })
       }
@@ -39,6 +43,10 @@ export default withAuth(
         return NextResponse.redirect(new URL('/admin/dashboard', req.url), { status: 302 })
       }
 
+      if (rol === 'ASESOR') {
+        return NextResponse.redirect(new URL('/admin/pedidos', req.url), { status: 302 })
+      }
+
       if (rol === Rol.PROFESOR) {
         return NextResponse.redirect(new URL('/profesor/dashboard', req.url), { status: 302 })
       }
@@ -49,9 +57,30 @@ export default withAuth(
     // Verificar acceso a rutas según rol
     const rol = token?.rol as Rol
 
-    // Rutas de admin - solo ADMIN
-    if (path.startsWith('/admin') && rol !== Rol.ADMIN) {
-      return NextResponse.redirect(new URL('/unauthorized', req.url), { status: 302 })
+    console.log('[Middleware] path:', path, 'rol:', rol)
+
+    // Rutas de admin - ADMIN completo, ASESOR restringido
+    if (path.startsWith('/admin')) {
+      // Redirigir /admin a su respectivo inicio
+      if (path === '/admin') {
+        if (rol === 'ASESOR') {
+          return NextResponse.redirect(new URL('/admin/pedidos', req.url), { status: 302 })
+        }
+        return NextResponse.redirect(new URL('/admin/dashboard', req.url), { status: 302 })
+      }
+
+      if (rol === 'ASESOR') {
+        const allowedPaths = ['/admin/cursos', '/admin/pedidos', '/admin/rutas']
+        const isAllowed = allowedPaths.some(p => path === p || path.startsWith(`${p}/`))
+        
+        if (!isAllowed) {
+          console.log('[Middleware] ASESOR bloqueado en', path)
+          return NextResponse.redirect(new URL('/unauthorized', req.url), { status: 302 })
+        }
+      } else if (rol !== Rol.ADMIN) {
+        console.log('[Middleware] No admin bloqueado en', path)
+        return NextResponse.redirect(new URL('/unauthorized', req.url), { status: 302 })
+      }
     }
 
     // Rutas de profesor - solo PROFESOR o ADMIN

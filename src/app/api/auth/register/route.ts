@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       return validation.error
     }
 
-    const { correo, contrasena, nombre, apellido, numero_documento, celular } = validation.data
+    const { correo, contrasena, nombre, apellido, numero_documento, celular, departamento, provincia } = validation.data
 
     // Verificar si el correo ya existe
     const correoExistente = await prisma.usuario.findUnique({
@@ -78,6 +78,8 @@ export async function POST(request: Request) {
         apellido,
         numero_documento,
         celular: celular || null,
+        departamento,
+        provincia,
         slug,
         rol: 'ESTUDIANTE' // Por defecto siempre ESTUDIANTE en registro público
       },
@@ -88,6 +90,8 @@ export async function POST(request: Request) {
         apellido: true,
         numero_documento: true,
         celular: true,
+        departamento: true,
+        provincia: true,
         rol: true,
         esta_activo: true,
         creado_en: true

@@ -13,7 +13,7 @@ import CertificadosRecientes from './CertificadosRecientes'
 const KPI_CONFIG = [
   {
     key: 'totalInscritos' as const,
-    label: 'Cursos inscritos',
+    label: 'Programas inscritos',
     icon: 'tabler-books',
     color: '#3b82f6',
     bgColor: '#eff6ff'

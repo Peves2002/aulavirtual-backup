@@ -9,7 +9,7 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { signOut, useSession } from 'next-auth/react'
 
-import { Home, BookOpen, Users, Award, Map, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, MonitorSmartphone, GraduationCap, Layers } from 'lucide-react'
+import { Home, BookOpen, Users, Award, Package, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, MonitorSmartphone, GraduationCap, Layers, ClipboardList, BookText, Repeat2 } from 'lucide-react'
 
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import { usePWAInstall } from '@/utils/hooks/usePWAInstall'
@@ -17,7 +17,7 @@ import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
 const ALL_NAV_ITEMS = [
   { title: 'Inicio', url: '/', icon: Home, key: 'inicio' },
-  { title: 'Cursos', url: '/cursos', icon: BookOpen, key: 'cursos' },
+  { title: 'Programas', url: '/cursos', icon: BookOpen, key: 'cursos' },
   { title: 'Diplomados', url: '/diplomados', icon: GraduationCap, key: 'diplomados' },
   { title: 'Especializaciones', url: '/especializaciones', icon: Layers, key: 'especializaciones' },
   ...(isFeatureEnabled('simulacros')
@@ -27,7 +27,7 @@ const ALL_NAV_ITEMS = [
     ? [{ title: 'Ebooks', url: '/ebooks', icon: BookText, key: 'ebooks' as const }]
     : []),
   ...(isFeatureEnabled('rutas')
-    ? [{ title: 'Rutas', url: '/rutas', icon: Map, key: 'rutas' as const }]
+    ? [{ title: 'Paquetes', url: '/rutas', icon: Package, key: 'rutas' as const }]
     : []),
   { title: 'Empresas', url: '/empresas', icon: Building2, key: 'empresas' },
   ...(isFeatureEnabled('suscripciones')
@@ -261,7 +261,7 @@ export default function LeftSidebar({
                     {[
                       { label: 'Mi Perfil', icon: User, href: '/perfil' },
                       ...(user?.rol === 'ADMIN' ? [{ label: 'Panel de Administración', icon: LayoutDashboard, href: '/admin/dashboard' }] : []),
-                      ...(user?.rol === 'ESTUDIANTE' ? [{ label: 'Mis Cursos', icon: BookMarked, href: '/estudiante/mis-cursos' }] : []),
+                      ...(user?.rol === 'ESTUDIANTE' ? [{ label: 'Mis Programas', icon: BookMarked, href: '/estudiante/mis-cursos' }] : []),
                     ].map(({ label, icon: Icon, href }) => (
                       <Link
                         key={href}

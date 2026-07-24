@@ -58,7 +58,7 @@ export async function enviarEmailSuscripcionActiva(datos: DatosSuscripcion) {
     </div>
 
     ${cursos.length > 0 ? `
-    <p style="color:#475569;font-size:14px;font-weight:600;margin:16px 0 4px;">Cursos incluidos:</p>
+    <p style="color:#475569;font-size:14px;font-weight:600;margin:16px 0 4px;">Programas incluidos:</p>
     ${cursosHtml}
     ` : ''}
 

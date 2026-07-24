@@ -61,7 +61,7 @@ export function DashboardView({ initialData }: DashboardViewProps) {
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
         <StatCard 
-          title='Cursos' 
+          title='Programas' 
           value={resumen.cursos} 
           icon='tabler-book' 
           color='warning' 
@@ -108,7 +108,7 @@ export function DashboardView({ initialData }: DashboardViewProps) {
       <Grid item xs={12} md={4}>
         <Card sx={{ height: '100%' }}>
           <Box p={5}>
-            <Typography variant='h6' fontWeight={600} gutterBottom>Cursos más Vendidos</Typography>
+            <Typography variant='h6' fontWeight={600} gutterBottom>Programas más Vendidos</Typography>
             <Box mt={4} display='flex' flexDirection='column' gap={4}>
               {cursosPopulares.map((c: any) => (
                 <Box key={c.id} display='flex' alignItems='center' gap={3}>

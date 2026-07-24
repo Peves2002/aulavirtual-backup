@@ -63,9 +63,9 @@ export const generarClasico: GeneratorFn = async data => {
         const signatureBuffer = await fetchImageBuffer(user.firma)
 
         if (signatureBuffer) {
-          const { buffer: compressed, jsPdfFormat } = await compressImageForPdf(signatureBuffer, { maxWidth: 300, format: 'png' })
-
-          doc.addImage(compressed, jsPdfFormat, x - 17, lineY - 34, 34, 34)
+          const { buffer: compressed, jsPdfFormat, mimeType } = await compressImageForPdf(signatureBuffer, { maxWidth: 300, format: 'png' })
+          const base64Sig = `data:${mimeType};base64,${compressed.toString('base64')}`
+          doc.addImage(base64Sig, jsPdfFormat, x - 17, lineY - 34, 34, 34)
         }
       } catch {
         /* skip */
@@ -199,9 +199,8 @@ export const generarClasico: GeneratorFn = async data => {
 
   if (base64Logo) {
     try {
-      const ext = logoUrl.split('.').pop()?.split('?')[0]?.toUpperCase() ?? 'PNG'
-
-      doc.addImage(base64Logo, ext, cx - logoDisplayW / 2, y, logoDisplayW, logoDisplayH, 'LOGO')
+      const actualFormat = base64Logo.startsWith('data:image/jpeg') ? 'JPEG' : 'PNG'
+      doc.addImage(base64Logo, actualFormat, cx - logoDisplayW / 2, y, logoDisplayW, logoDisplayH, 'LOGO')
     } catch {
       /* skip */
     }
@@ -346,9 +345,8 @@ export const generarClasico: GeneratorFn = async data => {
 
   if (base64Logo) {
     try {
-      const ext = logoUrl.split('.').pop()?.split('?')[0]?.toUpperCase() ?? 'PNG'
-
-      doc.addImage(base64Logo, ext, margin, (bandH - logoP2H) / 2, logoP2W, logoP2H, 'LOGO')
+      const actualFormat = base64Logo.startsWith('data:image/jpeg') ? 'JPEG' : 'PNG'
+      doc.addImage(base64Logo, actualFormat, margin, (bandH - logoP2H) / 2, logoP2W, logoP2H, 'LOGO')
     } catch {
       /* skip */
     }

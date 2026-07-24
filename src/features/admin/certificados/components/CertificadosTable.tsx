@@ -131,7 +131,7 @@ export function CertificadosTable({ initialData }: CertificadosTableProps) {
         )
       }),
       columnHelper.accessor('curso', {
-        header: 'Curso',
+        header: 'Programa',
         cell: ({ row }) => <Typography color='text.primary'>{row.original.curso.titulo}</Typography>
       }),
       columnHelper.accessor('codigo_verificacion', {

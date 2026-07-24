@@ -18,6 +18,8 @@ model Usuario {
   avatar                  String?
   biografia               String?
   celular                 String?
+  departamento            String?
+  provincia               String?
   rol                     Rol                    @default(ESTUDIANTE)
   esta_activo             Boolean                @default(true)
   creado_en               DateTime               @default(now())
@@ -330,15 +332,18 @@ model DetallePedido {
   curso_id        String?
   ebook_id        String?
   simulacro_id    String?
+  ruta_id         String?
   curso           Curso?     @relation(fields: [curso_id], references: [id])
   ebook           Ebook?     @relation(fields: [ebook_id], references: [id])
   simulacro       Simulacro? @relation(fields: [simulacro_id], references: [id])
+  ruta            RutaAprendizaje? @relation(fields: [ruta_id], references: [id])
   pedido          Pedido     @relation(fields: [pedido_id], references: [id], onDelete: Cascade)
 
   @@index([pedido_id])
   @@index([curso_id])
   @@index([ebook_id])
   @@index([simulacro_id])
+  @@index([ruta_id])
   @@map("detalles_pedido")
 }
 
@@ -630,12 +635,16 @@ model RutaAprendizaje {
   slug           String        @unique
   descripcion    String?
   miniatura      String?
+  precio         Decimal       @default(0) @db.Decimal(10, 2)
+  precio_falso   Decimal       @default(0) @db.Decimal(10, 2)
+  moneda         String        @default("PEN")
   esta_activo    Boolean       @default(true)
   creado_en      DateTime      @default(now())
   actualizado_en DateTime      @updatedAt
   beneficios     Json?         @default("[]")
   secciones      Json?         @default("[]")
   cursos         CursoEnRuta[]
+  detalles       DetallePedido[]
 
   @@map("rutas_aprendizaje")
 }
@@ -687,6 +696,7 @@ enum Rol {
   ADMIN
   PROFESOR
   ESTUDIANTE
+  ASESOR
 }
 
 enum EstadoCurso {

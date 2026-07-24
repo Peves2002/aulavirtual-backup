@@ -22,6 +22,7 @@ export async function POST(request: Request) {
     const {
       cursoIds = [],
       ebookIds = [],
+      rutaIds = [],
       codigoCupon,
       gateway = 'IZIPAY',
       metodoPagoManualId,
@@ -31,18 +32,22 @@ export async function POST(request: Request) {
 
     const hasCursos = Array.isArray(cursoIds) && cursoIds.length > 0
     const hasEbooks = Array.isArray(ebookIds) && ebookIds.length > 0
+    const hasRutas = Array.isArray(rutaIds) && rutaIds.length > 0
 
-    if (!hasCursos && !hasEbooks) {
+    if (!hasCursos && !hasEbooks && !hasRutas) {
       return ApiResponse.error(request, 'Se requiere al menos un artículo en el carrito', 400)
     }
 
-    // 1. Obtener cursos/ebooks y verificar accesos/inscripciones existentes en paralelo
-    const [cursos, ebooks, inscripcionesExistentes, accesosExistentes] = await Promise.all([
+    // 1. Obtener cursos/ebooks/rutas y verificar accesos/inscripciones existentes en paralelo
+    const [cursos, ebooks, rutas, inscripcionesExistentes, accesosExistentes] = await Promise.all([
       hasCursos
         ? prisma.curso.findMany({ where: { id: { in: cursoIds } } })
         : Promise.resolve([]),
       hasEbooks
         ? prisma.ebook.findMany({ where: { id: { in: ebookIds }, estado: 'PUBLICADO', es_gratis: false } })
+        : Promise.resolve([]),
+      hasRutas
+        ? prisma.rutaAprendizaje.findMany({ where: { id: { in: rutaIds }, esta_activo: true } })
         : Promise.resolve([]),
       hasCursos
         ? prisma.inscripcion.findMany({ where: { usuario_id: auth.user.id, curso_id: { in: cursoIds } } })
@@ -58,6 +63,10 @@ export async function POST(request: Request) {
 
     if (hasEbooks && ebooks.length === 0) {
       return ApiResponse.error(request, 'No se encontraron los ebooks seleccionados', 404)
+    }
+
+    if (hasRutas && rutas.length === 0) {
+      return ApiResponse.error(request, 'No se encontraron los paquetes seleccionados', 404)
     }
 
     if (inscripcionesExistentes.length > 0) {
@@ -79,7 +88,8 @@ export async function POST(request: Request) {
     // 2. Calcular totales
     const subtotalCursos = cursos.reduce((acc, c) => acc + Number(c.precio), 0)
     const subtotalEbooks = ebooks.reduce((acc, e) => acc + Number(e.precio), 0)
-    const subtotal = subtotalCursos + subtotalEbooks
+    const subtotalRutas = rutas.reduce((acc, r) => acc + Number(r.precio), 0)
+    const subtotal = subtotalCursos + subtotalEbooks + subtotalRutas
     let total = subtotal
     let cuponId = null
     let descuentoTotal = 0
@@ -124,7 +134,7 @@ export async function POST(request: Request) {
       }
     }
 
-    const moneda = (cursos[0] || ebooks[0])?.moneda || 'PEN'
+    const moneda = (cursos[0] || ebooks[0] || rutas[0])?.moneda || 'PEN'
 
     // 3. Crear el pedido con detalles de cursos (Prisma ORM)
     const pedido = await prisma.pedido.create({
@@ -169,10 +179,22 @@ export async function POST(request: Request) {
       `
     }
 
-    // 4. Construir lista de items para email (cursos + ebooks)
+    // 3.2. Añadir detalles de rutas via raw SQL
+    for (const ruta of rutas) {
+      const id = randomUUID()
+      const precioRuta = Number(ruta.precio)
+
+      await prisma.$executeRaw`
+        INSERT INTO detalles_pedido (id, tipo_item, cantidad, precio_unitario, descuento, subtotal, total, pedido_id, ruta_id)
+        VALUES (${id}, 'RUTA', 1, ${precioRuta}, 0, ${precioRuta}, ${precioRuta}, ${pedido.id}, ${ruta.id})
+      `
+    }
+
+    // 4. Construir lista de items para email (cursos + ebooks + rutas)
     const emailItems = [
       ...pedido.detalles.filter(d => d.curso != null).map(d => ({ titulo: d.curso!.titulo, precio: Number(d.total) })),
-      ...ebooks.map(e => ({ titulo: e.titulo, precio: Number(e.precio) }))
+      ...ebooks.map(e => ({ titulo: e.titulo, precio: Number(e.precio) })),
+      ...rutas.map(r => ({ titulo: r.titulo, precio: Number(r.precio) }))
     ]
 
     // 5. Enviar correo de confirmación
@@ -234,7 +256,8 @@ export async function POST(request: Request) {
           moneda: pedido.moneda,
           cursos: [
             ...pedido.detalles.filter(d => d.curso != null).map(d => d.curso!.titulo),
-            ...ebooks.map(e => e.titulo)
+            ...ebooks.map(e => e.titulo),
+            ...rutas.map(r => r.titulo)
           ]
         },
         201
@@ -422,6 +445,13 @@ export async function POST(request: Request) {
           title: e.titulo,
           quantity: 1,
           unit_price: Number(e.precio),
+          currency_id: moneda
+        })),
+        ...rutas.map(r => ({
+          id: r.id,
+          title: r.titulo,
+          quantity: 1,
+          unit_price: Number(r.precio),
           currency_id: moneda
         }))
       ]

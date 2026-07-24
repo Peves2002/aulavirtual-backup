@@ -110,7 +110,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
           nivel: (form.nivel || null) as 'BASICO' | 'INTERMEDIO' | 'AVANZADO' | null
         }
       })
-      enqueueSnackbar('Curso actualizado exitosamente', { variant: 'success' })
+      enqueueSnackbar('Programa actualizado exitosamente', { variant: 'success' })
       onSuccess()
     } catch (error: any) {
       enqueueSnackbar(error?.message || 'Error al actualizar', { variant: 'error' })
@@ -123,7 +123,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
         <Tooltip title='Haz clic para copiar el ID' placement='top-start' arrow>
           <CustomTextField
             fullWidth
-            label='ID del Curso'
+            label='ID del Programa'
             value={curso.id}
             inputProps={{ readOnly: true }}
             onClick={() => navigator.clipboard.writeText(curso.id)}
@@ -202,7 +202,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
         <CustomTextField
           select
           fullWidth
-          label='Nivel del Curso'
+          label='Nivel del Programa'
           name='nivel'
           value={form.nivel}
           onChange={handleChange}

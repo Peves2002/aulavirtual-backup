@@ -78,12 +78,14 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         renderExpandedMenuItemIcon={{ icon: <i className='tabler-circle text-xs' /> }}
         menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
       >
-        <MenuItem
-          href={rol === 'ADMIN' ? '/admin/dashboard' : (rol === 'PROFESOR' ? '/profesor/dashboard' : '/estudiante/dashboard')}
-          icon={<i className='tabler-smart-home' />}
-        >
-          Dashboard
-        </MenuItem>
+        {rol !== 'ASESOR' && (
+          <MenuItem
+            href={rol === 'ADMIN' ? '/admin/dashboard' : (rol === 'PROFESOR' ? '/profesor/dashboard' : '/estudiante/dashboard')}
+            icon={<i className='tabler-smart-home' />}
+          >
+            Dashboard
+          </MenuItem>
+        )}
 
         {rol === 'ESTUDIANTE' && (
           <>
@@ -91,7 +93,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
               Mis Pedidos
             </MenuItem>
             <MenuItem href='/estudiante/mis-cursos' icon={<i className='tabler-book' />}>
-              Mis Cursos
+              Mis Programas
             </MenuItem>
             <MenuItem href='/estudiante/mis-notas' icon={<i className='tabler-file-description' />}>
               Mis Notas
@@ -113,7 +115,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             </MenuItem>
             <Divider sx={{ my: 1 }} />
             <MenuItem href='/cursos' icon={<i className='tabler-search' />}>
-              Explorar Cursos
+              Explorar Programas
             </MenuItem>
             {/* <MenuItem href='/ebooks' icon={<i className='tabler-books' />}>
               Explorar Ebooks
@@ -121,56 +123,66 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
           </>
         )}
 
-        {rol === 'ADMIN' && (
+        {(rol === 'ADMIN' || rol === 'ASESOR') && (
           <>
             <Divider sx={{ my: 2 }} />
-            <MenuItem href='/admin/usuarios' icon={<i className='tabler-users' />}>
-              Usuarios
-            </MenuItem>
-            <MenuItem href='/admin/categorias' icon={<i className='tabler-category' />}>
-              Categorías
-            </MenuItem>
+            {rol === 'ADMIN' && (
+              <>
+                <MenuItem href='/admin/usuarios' icon={<i className='tabler-users' />}>
+                  Usuarios
+                </MenuItem>
+                <MenuItem href='/admin/categorias' icon={<i className='tabler-category' />}>
+                  Categorías
+                </MenuItem>
+              </>
+            )}
             <MenuItem href='/admin/cursos' icon={<i className='tabler-book' />}>
-              Cursos
+              Programas
             </MenuItem>
-            {isFeatureEnabled('ebooks') && (
+            {rol === 'ADMIN' && isFeatureEnabled('ebooks') && (
               <MenuItem href='/admin/ebooks' icon={<i className='tabler-book-2' />}>
                 Ebooks
               </MenuItem>
             )}
-            {isFeatureEnabled('simulacros') && (
+            {rol === 'ADMIN' && isFeatureEnabled('simulacros') && (
               <MenuItem href='/admin/simulacros' icon={<i className='tabler-clipboard-list' />}>
                 Simulacros
               </MenuItem>
             )}
-            <MenuItem href='/admin/rutas' icon={<i className='tabler-route' />}>
-              Rutas Aprendizaje
-            </MenuItem>
+            {(rol === 'ADMIN' || rol === 'ASESOR') && (
+              <MenuItem href='/admin/rutas' icon={<i className='tabler-package' />}>
+                Paquetes
+              </MenuItem>
+            )}
             <MenuItem href='/admin/pedidos' icon={<i className='tabler-shopping-cart' />}>
               Pedidos
             </MenuItem>
-            <MenuItem href='/admin/cupones' icon={<i className='tabler-ticket' />}>
-              Cupones
-            </MenuItem>
-            <MenuItem href='/admin/certificados' icon={<i className='tabler-certificate' />}>
-              Certificados
-            </MenuItem>
-            {isFeatureEnabled('suscripciones') && (
+            {rol === 'ADMIN' && (
               <>
-                <MenuItem href='/admin/planes-suscripcion' icon={<i className='tabler-repeat' />}>
-                  Planes de Suscripción
+                <MenuItem href='/admin/cupones' icon={<i className='tabler-ticket' />}>
+                  Cupones
                 </MenuItem>
-                <MenuItem href='/admin/suscripciones' icon={<i className='tabler-users-group' />}>
-                  Suscripciones
+                <MenuItem href='/admin/certificados' icon={<i className='tabler-certificate' />}>
+                  Certificados
+                </MenuItem>
+                {isFeatureEnabled('suscripciones') && (
+                  <>
+                    <MenuItem href='/admin/planes-suscripcion' icon={<i className='tabler-repeat' />}>
+                      Planes de Suscripción
+                    </MenuItem>
+                    <MenuItem href='/admin/suscripciones' icon={<i className='tabler-users-group' />}>
+                      Suscripciones
+                    </MenuItem>
+                  </>
+                )}
+                <MenuItem href='/admin/reclamaciones' icon={<i className='tabler-book-2' />}>
+                  Reclamaciones
+                </MenuItem>
+                <MenuItem href='/admin/configuracion' icon={<i className='tabler-settings' />}>
+                  Configuración
                 </MenuItem>
               </>
             )}
-            <MenuItem href='/admin/reclamaciones' icon={<i className='tabler-book-2' />}>
-              Reclamaciones
-            </MenuItem>
-            <MenuItem href='/admin/configuracion' icon={<i className='tabler-settings' />}>
-              Configuración
-            </MenuItem>
           </>
         )}
 
@@ -178,7 +190,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
           <>
             <Divider sx={{ my: 2 }} />
             <MenuItem href='/profesor/mis-cursos' icon={<i className='tabler-book' />}>
-              Mis Cursos
+              Mis Programas
             </MenuItem>
             {isFeatureEnabled('calendario') && (
               <MenuItem href='/profesor/calendario' icon={<i className='tabler-calendar' />}>

@@ -28,11 +28,12 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
       }
     })
 
-    // Fetch raw detalles to get simulacro_id (Prisma client may not know about this column yet)
+    // Fetch raw detalles to get simulacro_id and ruta_id
     const detallesRaw: any[] = await prisma.$queryRaw`
-      SELECT id, curso_id, simulacro_id FROM detalles_pedido WHERE pedido_id = ${pedidoId}`
+      SELECT id, curso_id, simulacro_id, ruta_id FROM detalles_pedido WHERE pedido_id = ${pedidoId}`
 
     const simulacroDetallesMap = new Map(detallesRaw.map(d => [d.id, d.simulacro_id]))
+    const rutaIds = detallesRaw.filter(d => d.ruta_id).map(d => d.ruta_id)
 
     if (!pedidoInit) throw new Error(`Pedido ${pedidoId} no encontrado.`)
 
@@ -57,6 +58,20 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
     // 2. Transacción de Base de Datos
     const result = await prisma.$transaction(
       async tx => {
+        // Obtener los cursos de las rutas compradas
+        const cursosRuta = []
+        if (rutaIds.length > 0) {
+          const rutasConCursos = await tx.rutaAprendizaje.findMany({
+            where: { id: { in: rutaIds } },
+            include: { cursos: true }
+          })
+          
+          for (const ruta of rutasConCursos) {
+            for (const cr of ruta.cursos) {
+              cursosRuta.push(cr.curso_id)
+            }
+          }
+        }
         // a) Actualizar pedido
         const pedidoActualizado = await tx.pedido.update({
           where: { id: pedidoId },
@@ -79,28 +94,40 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
 
         // c) Crear inscripciones activas (cursos y simulacros)
         const inscripciones = []
+        const cursosAInscribir = new Set<string>()
 
+        // Añadir cursos de detalles directos
         for (const detalle of pedidoInit.detalles) {
-          if (detalle.curso_id) {
-            const ins = await tx.inscripcion.upsert({
-              where: {
-                usuario_id_curso_id: {
-                  usuario_id: pedidoInit.usuario_id,
-                  curso_id: detalle.curso_id
-                }
-              },
-              update: { estado: 'ACTIVO', pedido_id: pedidoId },
-              create: {
+          if (detalle.curso_id) cursosAInscribir.add(detalle.curso_id)
+        }
+        
+        // Añadir cursos de rutas compradas
+        for (const cursoId of cursosRuta) {
+          cursosAInscribir.add(cursoId)
+        }
+
+        for (const cursoId of cursosAInscribir) {
+          const ins = await tx.inscripcion.upsert({
+            where: {
+              usuario_id_curso_id: {
                 usuario_id: pedidoInit.usuario_id,
-                curso_id: detalle.curso_id,
-                pedido_id: pedidoId,
-                estado: 'ACTIVO'
+                curso_id: cursoId
               }
-            })
+            },
+            update: { estado: 'ACTIVO', pedido_id: pedidoId },
+            create: {
+              usuario_id: pedidoInit.usuario_id,
+              curso_id: cursoId,
+              pedido_id: pedidoId,
+              estado: 'ACTIVO'
+            }
+          })
 
-            inscripciones.push(ins)
-          }
+          inscripciones.push(ins)
+        }
 
+        // Manejar simulacros
+        for (const detalle of pedidoInit.detalles) {
           const simulacroIdFromMap = simulacroDetallesMap.get(detalle.id)
 
           if (simulacroIdFromMap) {

@@ -67,6 +67,12 @@ interface PaymentFormProps {
     precio: number
     moneda: string
   }[]
+  rutas: {
+    id: string
+    titulo: string
+    precio: number
+    moneda: string
+  }[]
   appliedCouponCode?: string
   finalTotal?: number
 }
@@ -154,7 +160,7 @@ const CopyRow = ({ label, value, onCopy }: { label: string; value: string; onCop
   </Box>
 )
 
-const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: PaymentFormProps) => {
+const PaymentForm = ({ courses, ebooks = [], rutas = [], appliedCouponCode, finalTotal }: PaymentFormProps) => {
   const { data: session } = useSession()
   const router = useRouter()
   const { clearCart } = useCart()
@@ -192,9 +198,9 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
   const [numeroComprobante, setNumeroComprobante] = useState('')
   const [comprobanteError, setComprobanteError] = useState<string | null>(null)
 
-  const subtotal = [...courses, ...ebooks].reduce((acc, i) => acc + Number(i.precio), 0)
+  const subtotal = [...courses, ...ebooks, ...rutas].reduce((acc, i) => acc + Number(i.precio), 0)
   const displayTotal = finalTotal !== undefined ? finalTotal : subtotal
-  const currencySymbol = (courses[0] || ebooks[0])?.moneda === 'USD' ? '$' : 'S/'
+  const currencySymbol = (courses[0] || ebooks[0] || rutas[0])?.moneda === 'USD' ? '$' : 'S/'
 
   useEffect(() => {
     if (session?.user) {
@@ -239,12 +245,12 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
     setPaymentSuccess(true)
     clearCart()
 
-    const dest = courses.length === 0 && ebooks.length > 0
+    const dest = courses.length === 0 && ebooks.length > 0 && rutas.length === 0
       ? '/estudiante/mis-ebooks'
       : '/estudiante/mis-cursos'
 
     setTimeout(() => router.push(dest), 2000)
-  }, [router, clearCart, courses.length, ebooks.length])
+  }, [router, clearCart, courses.length, ebooks.length, rutas.length])
 
   const validateComprobante = useCallback(() => {
     if (configs.PEDIDOS_SOLICITAR_COMPROBANTE === 'false') return true
@@ -335,6 +341,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
         body: JSON.stringify({
           cursoIds: courses.map(c => c.id),
           ebookIds: ebooks.map(e => e.id),
+          rutaIds: rutas.map(r => r.id),
           codigoCupon: appliedCouponCode,
           gateway: 'IZIPAY',
           tipoComprobante,
@@ -386,6 +393,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
         body: JSON.stringify({
           cursoIds: courses.map(c => c.id),
           ebookIds: ebooks.map(e => e.id),
+          rutaIds: rutas.map(r => r.id),
           codigoCupon: appliedCouponCode,
           gateway: 'CULQI',
           tipoComprobante,
@@ -446,6 +454,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
         body: JSON.stringify({
           cursoIds: courses.map(c => c.id),
           ebookIds: ebooks.map(e => e.id),
+          rutaIds: rutas.map(r => r.id),
           codigoCupon: appliedCouponCode,
           gateway: 'MANUAL',
           metodoPagoManualId: selectedMetodoManualId,
@@ -535,6 +544,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
         body: JSON.stringify({
           cursoIds: courses.map(c => c.id),
           ebookIds: ebooks.map(e => e.id),
+          rutaIds: rutas.map(r => r.id),
           codigoCupon: appliedCouponCode,
           gateway: 'MERCADOPAGO',
           tipoComprobante,
@@ -1110,9 +1120,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
               {/* Resumen del pedido */}
               {confirmedOrder && (
                 <Box sx={{ mb: 2.5, p: 2.5, borderRadius: 2, bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider' }}>
-                  <Typography variant='subtitle2' fontWeight={700} sx={{ mb: 1.5, color: 'text.secondary', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: 0.8 }}>
-                    Cursos adquiridos
-                  </Typography>
+                  <Typography variant='subtitle2' fontWeight={700} sx={{ mb: 1.5, color: 'text.secondary', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: 0.8 }}>Programas adquiridos</Typography>
                   <Stack spacing={1}>
                     {confirmedOrder.cursos.map((curso, i) => (
                       <Stack key={i} direction='row' alignItems='flex-start' spacing={1.25}>

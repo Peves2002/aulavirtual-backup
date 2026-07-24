@@ -26,21 +26,21 @@ import { crearPedidoManualSchema, type CrearPedidoManualDto } from '@/schemas/pe
 import { useCreatePedidoManual } from '../hooks/usePedidos'
 import { useUsuarios } from '@/features/admin/usuarios/hooks/useUsuarios'
 import { useCursos } from '@/features/admin/cursos/hooks/useCursos'
-import { useAdminEbooks } from '@/features/admin/ebooks/hooks/useEbooks'
+import { useRutas } from '@/features/admin/rutas/hooks/useRutas'
 
 export function ManualPedidoForm() {
     const router = useRouter()
     const { enqueueSnackbar } = useSnackbar()
-    const [selectedCoursePrice, setSelectedCoursePrice] = useState<number>(0)
-    const [selectedEbookPrice, setSelectedEbookPrice] = useState<number>(0)
+    const [productoType, setProductoType] = useState<'PROGRAMA' | 'PAQUETE'>('PROGRAMA')
+    const [selectedItemsPrice, setSelectedItemsPrice] = useState<number>(0)
 
     const { data: usuariosData, isLoading: isLoadingUsuarios } = useUsuarios({ limit: '1000' })
     const { data: cursosData, isLoading: isLoadingCursos } = useCursos()
-    const { data: ebooksData, isLoading: isLoadingEbooks } = useAdminEbooks({ estado: 'PUBLICADO' })
+    const { data: rutasData, isLoading: isLoadingRutas } = useRutas()
 
     const usuarios = (usuariosData?.usuarios || []).filter(u => u.rol === 'ESTUDIANTE')
     const cursos = (cursosData?.cursos || []).filter(c => c.estado === 'PUBLICADO')
-    const ebooks = ebooksData || []
+    const rutas = (rutasData || []).filter(r => r.esta_activo)
 
     const {
         control,
@@ -52,7 +52,7 @@ export function ManualPedidoForm() {
         defaultValues: {
             usuarios_ids: [],
             cursos_ids: [],
-            ebooks_ids: [],
+            rutas_ids: [],
             estado: 'COMPLETADO' as const,
             metodo_pago: MetodoPago.TRANSFERENCIA,
             precio: 0,
@@ -117,6 +117,26 @@ export function ManualPedidoForm() {
                         </Grid>
 
                         <Grid item xs={12} md={6}>
+                            <CustomTextField
+                                select
+                                fullWidth
+                                label='Tipo de Producto'
+                                value={productoType}
+                                onChange={(e) => {
+                                    setProductoType(e.target.value as any)
+                                    setValue('cursos_ids', [])
+                                    setValue('rutas_ids', [])
+                                    setValue('precio', 0)
+                                    setSelectedItemsPrice(0)
+                                }}
+                            >
+                                <MenuItem value='PROGRAMA'>Programa</MenuItem>
+                                <MenuItem value='PAQUETE'>Paquete</MenuItem>
+                            </CustomTextField>
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                        {productoType === 'PROGRAMA' && (
                             <Controller
                                 name='cursos_ids'
                                 control={control}
@@ -133,16 +153,16 @@ export function ManualPedidoForm() {
 
                                             const totalPrice = newValue.reduce((acc, curr) => acc + Number(curr.precio), 0)
 
-                                            setValue('precio', totalPrice + selectedEbookPrice)
-                                            setSelectedCoursePrice(totalPrice)
+                                            setValue('precio', totalPrice)
+                                            setSelectedItemsPrice(totalPrice)
                                         }}
                                         renderInput={(params) => (
                                             <CustomTextField
                                                 {...params}
-                                                label='Seleccionar Cursos'
-                                                placeholder='Busca cursos activos'
-                                                error={!!errors.cursos_ids}
-                                                helperText={(errors.cursos_ids as any)?.message}
+                                                label={productoType === 'PROGRAMA' ? 'Seleccionar Programas' : 'Seleccionar Paquetes'}
+                                                placeholder={productoType === 'PROGRAMA' ? 'Busca programas activos' : 'Busca paquetes activos'}
+                                                error={!!errors.cursos_ids || !!errors.rutas_ids}
+                                                helperText={(errors.cursos_ids as any)?.message || (errors.rutas_ids as any)?.message}
                                                 InputProps={{
                                                     ...params.InputProps,
                                                     endAdornment: (
@@ -157,40 +177,39 @@ export function ManualPedidoForm() {
                                     />
                                 )}
                             />
-                        </Grid>
-
-                        <Grid item xs={12} md={6}>
+                        )}
+                        {productoType === 'PAQUETE' && (
                             <Controller
-                                name='ebooks_ids'
+                                name='rutas_ids'
                                 control={control}
                                 render={({ field: { value, onChange } }) => (
                                     <Autocomplete
                                         fullWidth
                                         multiple
-                                        options={ebooks}
+                                        options={rutas}
                                         getOptionLabel={(option) => option.titulo}
-                                        loading={isLoadingEbooks}
-                                        value={ebooks.filter((e) => value.includes(e.id))}
+                                        loading={isLoadingRutas}
+                                        value={rutas.filter((r) => (value || []).includes(r.id))}
                                         onChange={(_, newValue) => {
-                                            onChange(newValue.map(e => e.id))
+                                            onChange(newValue.map(r => r.id))
 
                                             const totalPrice = newValue.reduce((acc, curr) => acc + Number(curr.precio), 0)
 
-                                            setValue('precio', selectedCoursePrice + totalPrice)
-                                            setSelectedEbookPrice(totalPrice)
+                                            setValue('precio', totalPrice)
+                                            setSelectedItemsPrice(totalPrice)
                                         }}
                                         renderInput={(params) => (
                                             <CustomTextField
                                                 {...params}
-                                                label='Seleccionar Ebooks'
-                                                placeholder='Busca ebooks publicados'
-                                                error={!!errors.ebooks_ids}
-                                                helperText={(errors.ebooks_ids as any)?.message}
+                                                label='Seleccionar Paquetes'
+                                                placeholder='Busca paquetes activos'
+                                                error={!!errors.rutas_ids}
+                                                helperText={(errors.rutas_ids as any)?.message}
                                                 InputProps={{
                                                     ...params.InputProps,
                                                     endAdornment: (
                                                         <Fragment>
-                                                            {isLoadingEbooks ? <CircularProgress color="inherit" size={20} /> : null}
+                                                            {isLoadingRutas ? <CircularProgress color="inherit" size={20} /> : null}
                                                             {params.InputProps.endAdornment}
                                                         </Fragment>
                                                     ),
@@ -200,6 +219,7 @@ export function ManualPedidoForm() {
                                     />
                                 )}
                             />
+                        )}
                         </Grid>
 
                         <Grid item xs={12} md={4}>
@@ -214,7 +234,7 @@ export function ManualPedidoForm() {
                                         label='Precio del Pedido'
                                         placeholder='0.00'
                                         error={!!errors.precio}
-                                        helperText={errors.precio ? errors.precio.message : `Precio total sugerido: ${selectedCoursePrice + selectedEbookPrice}`}
+                                        helperText={errors.precio ? errors.precio.message : `Precio total sugerido: ${selectedItemsPrice}`}
                                         InputProps={{
                                             startAdornment: <Typography sx={{ mr: 2, color: 'text.secondary' }}>PEN</Typography>
                                         }}

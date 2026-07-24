@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import prisma from '@/utils/libs/prisma'
 import { ApiResponse } from '@/utils/libs/apiResponse'
-import { requireAdmin } from '@/utils/libs/auth-helpers'
+import { requireAdminOrAsesor } from '@/utils/libs/auth-helpers'
 import { handleApiError } from '@/utils/libs/validation'
 import { completeOrder } from '@/utils/libs/order-service'
 
@@ -12,7 +12,7 @@ import { completeOrder } from '@/utils/libs/order-service'
  */
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   try {
-    const auth = await requireAdmin(request)
+    const auth = await requireAdminOrAsesor(request)
 
     if (!auth.authorized) return auth.error
 

@@ -42,16 +42,16 @@ export async function POST(request: Request) {
       return ApiResponse.validationError(request, validacion.error.flatten().fieldErrors as Record<string, string[]>)
     }
 
-    const { correo, contrasena } = validacion.data
+    const { numero_documento, contrasena } = validacion.data
 
     // Buscar usuario
     const usuario = await prisma.usuario.findUnique({
-      where: { correo }
+      where: { numero_documento }
     })
 
     // 🔐 SEGURIDAD: Mensaje genérico para no revelar si el correo existe
     if (!usuario) {
-      return ApiResponse.error(request, 'Correo o contraseña incorrectos', 401)
+      return ApiResponse.error(request, 'DNI o contraseña incorrectos', 401)
     }
 
     // Verificar si está activo
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
     const contrasenaValida = await bcrypt.compare(contrasena, usuario.contrasena as string)
 
     if (!contrasenaValida) {
-      return ApiResponse.error(request, 'Correo o contraseña incorrectos', 401)
+      return ApiResponse.error(request, 'DNI o contraseña incorrectos', 401)
     }
 
     // Generar JWT con expiración corta (8h en lugar de 7d)

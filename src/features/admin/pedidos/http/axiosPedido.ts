@@ -43,6 +43,24 @@ export class AxiosPedido extends AxiosInternalHttpClient {
     }
   }
 
+  async getAgrupados(query?: Record<string, string | number | boolean | undefined | null>): Promise<{ agrupados: any[]; paginacion: any }> {
+    try {
+      const cleanQuery = query 
+        ? Object.fromEntries(Object.entries(query).filter(([, v]) => v !== undefined && v !== null && v !== ''))
+        : {}
+
+      const queryString = Object.keys(cleanQuery).length > 0 
+        ? '?' + new URLSearchParams(cleanQuery as any).toString() 
+        : ''
+
+      const payload = await this.iGet<{ agrupados: any[]; paginacion: any }>(`/agrupados${queryString}`)
+
+      return payload || { agrupados: [], paginacion: {} }
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
   async createManual(pedido: CrearPedidoManualDto): Promise<{ message: string; data: any }> {
     try {
       const payload = await this.iPost<{ message: string; data: any }>('/manual', pedido)

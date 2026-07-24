@@ -1,13 +1,13 @@
 export const dynamic = 'force-dynamic'
 
 import prisma from '@/utils/libs/prisma'
-import { requireAdmin } from '@/utils/libs/auth-helpers'
+import { requireAdminOrAsesor } from '@/utils/libs/auth-helpers'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { handleApiError } from '@/utils/libs/validation'
 
 export async function GET(request: Request) {
   try {
-    const auth = await requireAdmin(request)
+    const auth = await requireAdminOrAsesor(request)
 
     if (!auth.authorized) return auth.error
 

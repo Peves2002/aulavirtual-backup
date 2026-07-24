@@ -14,6 +14,7 @@ import { Rol } from '@prisma/client'
 import AppModal from '@/utils/components/AppModal'
 import CustomTextField from '@core/components/mui/TextField'
 import { crearUsuarioSchema, type CrearUsuarioDto } from '@/schemas/usuario.schema'
+import { departamentos, ubigeoPeru } from '@/utils/constants/ubigeo'
 
 import { useCreateUsuario } from '../hooks/useUsuarios'
 import SignatureUpload from './SignatureUpload'
@@ -41,6 +42,8 @@ const CreateUsuarioModal = ({ open, handleClose, onSuccess }: CreateUsuarioModal
     numero_documento: '',
     celular: '',
     biografia: '',
+    departamento: '',
+    provincia: '',
     rol: Rol.ESTUDIANTE,
     esta_activo: true,
     cargo: '',
@@ -156,6 +159,58 @@ const CreateUsuarioModal = ({ open, handleClose, onSuccess }: CreateUsuarioModal
                       )
                     }}
                   />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <CustomTextField
+                    select
+                    fullWidth
+                    label='Departamento'
+                    name='departamento'
+                    value={values.departamento}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setFieldValue('provincia', '');
+                    }}
+                    onBlur={handleBlur}
+                    error={touched.departamento && Boolean(errors.departamento)}
+                    helperText={touched.departamento && errors.departamento}
+                    disabled={isSubmitting}
+                  >
+                    <MenuItem value="">
+                      <em>Seleccionar</em>
+                    </MenuItem>
+                    {departamentos.map((dep) => (
+                      <MenuItem key={dep} value={dep}>
+                        {dep}
+                      </MenuItem>
+                    ))}
+                  </CustomTextField>
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <CustomTextField
+                    select
+                    fullWidth
+                    label='Provincia'
+                    name='provincia'
+                    value={values.provincia}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.provincia && Boolean(errors.provincia)}
+                    helperText={touched.provincia && errors.provincia}
+                    disabled={isSubmitting || !values.departamento}
+                  >
+                    <MenuItem value="">
+                      <em>Seleccionar</em>
+                    </MenuItem>
+                    {values.departamento &&
+                      ubigeoPeru[values.departamento as keyof typeof ubigeoPeru]?.map((prov) => (
+                        <MenuItem key={prov} value={prov}>
+                          {prov}
+                        </MenuItem>
+                      ))}
+                  </CustomTextField>
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
@@ -289,6 +344,7 @@ const CreateUsuarioModal = ({ open, handleClose, onSuccess }: CreateUsuarioModal
                   >
                     <MenuItem value={Rol.ESTUDIANTE}>Estudiante</MenuItem>
                     <MenuItem value={Rol.PROFESOR}>Profesor</MenuItem>
+                    <MenuItem value={'ASESOR' as any}>Asesor</MenuItem>
                     <MenuItem value={Rol.ADMIN}>Administrador</MenuItem>
                   </CustomTextField>
                 </Grid>

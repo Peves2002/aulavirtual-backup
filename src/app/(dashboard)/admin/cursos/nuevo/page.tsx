@@ -7,7 +7,7 @@ import { getAuthSession } from '@/utils/libs/auth-helpers'
 import { AxiosUsuario } from '@/features/admin/usuarios/http/axiosUsuario'
 
 export const metadata: Metadata = {
-  title: 'Crear Nuevo Curso',
+  title: 'Crear Nuevo Programa',
   description: 'Configura un nuevo curso para el aula virtual'
 }
 

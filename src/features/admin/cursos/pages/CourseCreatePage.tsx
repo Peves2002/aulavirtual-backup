@@ -439,7 +439,7 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
                       </Grid>
 
                       <Grid item xs={12} sm={6}>
-                        <Typography variant='subtitle2' sx={{ mb: 2 }}>Brochure del Curso (PDF)</Typography>
+                        <Typography variant='subtitle2' sx={{ mb: 2 }}>Brochure del Programa (PDF)</Typography>
                         {values.brochure ? (
                           <Box sx={{ p: 4, borderRadius: 2, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>

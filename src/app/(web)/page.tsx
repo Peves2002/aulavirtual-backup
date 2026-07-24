@@ -14,6 +14,7 @@ import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
 import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
+import RutasSection from '@/features/web/home/components/RutasSection'
 
 export const metadata = {
   title: 'Aula Virtual — Despierta tu talento, impulsa tu futuro',
@@ -41,7 +42,7 @@ async function getHomeData() {
       _count: { select: { modulos: true, inscripciones: true } }
     }
 
-    const [coursesRaw, diplomadosRaw, especializacionesRaw, teachersRaw, configs, ebooksRaw] = await Promise.all([
+    const [coursesRaw, diplomadosRaw, especializacionesRaw, teachersRaw, configs, ebooksRaw, rutasRaw] = await Promise.all([
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO', tipo: 'CURSO' },
         include: courseInclude,
@@ -93,6 +94,28 @@ async function getHomeData() {
           take: 5,
         })
         : Promise.resolve([]),
+        
+      // Rutas (Paquetes) destacados
+      isFeatureEnabled('rutas')
+        ? prisma.rutaAprendizaje.findMany({
+            where: { esta_activo: true },
+            include: {
+              cursos: {
+                orderBy: { orden: 'asc' },
+                include: {
+                  curso: {
+                    select: {
+                      id: true, titulo: true, miniatura: true, slug: true, precio: true, moneda: true, es_gratis: true
+                    }
+                  }
+                }
+              },
+              _count: { select: { cursos: true } }
+            },
+            orderBy: { creado_en: 'desc' },
+            take: 3
+          })
+        : Promise.resolve([]),
     ])
 
     const courses = await Promise.all(
@@ -129,19 +152,26 @@ async function getHomeData() {
       precio_falso: Number(e.precio_falso),
     }))
 
+    const rutas = rutasRaw ? rutasRaw.map((ruta: any) => ({
+      ...ruta,
+      total_cursos: ruta._count.cursos,
+      cursos: ruta.cursos.map((rc: any) => rc.curso)
+    })) : []
+
     return {
       courses: JSON.parse(JSON.stringify(courses)),
       diplomados: JSON.parse(JSON.stringify(diplomados)),
       especializaciones: JSON.parse(JSON.stringify(especializaciones)),
       teachers: JSON.parse(JSON.stringify(teachersRaw)),
       ebooks: JSON.parse(JSON.stringify(ebooks)),
+      rutas: JSON.parse(JSON.stringify(rutas)),
       heroImg,
       waLink,
       logos: [],
     }
   } catch {
     return {
-      courses: [], diplomados: [], especializaciones: [], teachers: [], ebooks: [],
+      courses: [], diplomados: [], especializaciones: [], teachers: [], ebooks: [], rutas: [],
       heroImg: '/images/pagina/banner.png',
       waLink: '#',
       logos: [],
@@ -150,7 +180,7 @@ async function getHomeData() {
 }
 
 export default async function HomePage() {
-  const { courses, ebooks, heroImg, waLink, logos } = await getHomeData()
+  const { courses, ebooks, rutas, heroImg, waLink, logos } = await getHomeData()
 
   return (
     <>
@@ -385,6 +415,11 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── PAQUETES (RUTAS) ─────────────────────────── */}
+      {isFeatureEnabled('rutas') && (
+        <RutasSection rutas={rutas} />
+      )}
 
       {/* ── 2. LOGO MARQUEE ─────────────────────────── */}
       <ClientLogosMarquee logos={logos} />

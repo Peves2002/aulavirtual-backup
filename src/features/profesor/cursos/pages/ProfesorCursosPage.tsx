@@ -135,7 +135,7 @@ const ProfesorCursosPage = () => {
                 cell: () => null
             }),
             columnHelper.accessor('miniatura', {
-                header: 'Curso',
+                header: 'Programa',
                 cell: ({ row }) => (
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                         <CourseThumbnail
@@ -237,9 +237,7 @@ const ProfesorCursosPage = () => {
         <Box>
             <Box sx={{ mb: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
-                    <Typography variant='h4' sx={{ mb: 1, fontWeight: 700 }}>
-                        Mis Cursos
-                    </Typography>
+                    <Typography variant='h4' sx={{ mb: 1, fontWeight: 700 }}>Mis Programas</Typography>
                     <Typography variant='body2' color='text.secondary'>
                         Gestiona el contenido y revisa el progreso de tus estudiantes.
                     </Typography>

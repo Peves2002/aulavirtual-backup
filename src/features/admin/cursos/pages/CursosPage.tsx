@@ -208,7 +208,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
         )
       }),
       columnHelper.accessor('titulo', {
-        header: 'Curso',
+        header: 'Programa',
         cell: ({ row }) => (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, maxWidth: 300 }}>
             <CourseThumbnail
@@ -433,7 +433,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
   return (
     <>
       <Card>
-        <CardHeader title='Gestión de Cursos' className='pbe-4' />
+        <CardHeader title='Gestión de Programas' className='pbe-4' />
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -456,7 +456,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
               className='is-full sm:is-[200px]'
             >
               <MenuItem value='all'>Todos los tipos</MenuItem>
-              <MenuItem value='CURSO'>Cursos</MenuItem>
+              <MenuItem value='CURSO'>Programas</MenuItem>
               <MenuItem value='DIPLOMADO'>Diplomados</MenuItem>
               <MenuItem value='ESPECIALIZACION'>Especializaciones</MenuItem>
             </CustomTextField>
@@ -489,9 +489,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
               href='/admin/cursos/nuevo'
               component='a'
               className='is-full sm:is-auto'
-            >
-              Nuevo Curso
-            </Button>
+            >Nuevo Programa</Button>
           </div>
         </div>
 

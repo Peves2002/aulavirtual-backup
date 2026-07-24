@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState, useCallback } from 'react'
+import { useMemo, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 
@@ -9,7 +9,6 @@ import { getSession } from 'next-auth/react'
 import {
   Card,
   CardHeader,
-  Chip,
   Typography,
   Box,
   TablePagination,
@@ -17,8 +16,8 @@ import {
   MenuItem,
   IconButton,
   Tooltip,
-  Stack,
-  CircularProgress
+  CircularProgress,
+  Grid
 } from '@mui/material'
 import { toast } from 'react-toastify'
 import {
@@ -37,45 +36,61 @@ import type { ColumnDef } from '@tanstack/react-table'
 import tableStyles from '@core/styles/table.module.css'
 
 import CustomTextField from '@core/components/mui/TextField'
-
-
-import type { ThemeColor } from '@/@core/types'
-import type { Pedido } from '../entity/Pedido'
 import { getDetalleInfo } from '../entity/Pedido'
-import { usePedidos, useDeletePedido } from '../hooks/usePedidos'
+
+import { usePedidosAgrupados } from '../hooks/usePedidos'
 import { AxiosPedido } from '../http/axiosPedido'
 import TablePaginationComponent from '@/utils/components/others/TablePaginationComponent'
-import HydratedDate from '@/utils/components/HydratedDate'
-import { DebouncedInput } from '@/utils/components/others/DebouncedInput'
-import CustomAlertDialog from '@/components/CustomAlertDialog'
+import { ubigeoPeru, departamentos } from '@/utils/constants/ubigeo'
 
-type StatusType = {
-  [key: string]: ThemeColor
+interface UsuarioAgrupado {
+  usuario_id: string
+  nombre: string
+  apellido: string
+  correo: string
+  departamento: string | null
+  provincia: string | null
+  total_pagado: number
+  moneda: string
+  cantidad_pedidos_pagados: number
 }
 
-const statusObj: StatusType = {
-  PENDIENTE: 'warning',
-  PROCESANDO: 'info',
-  COMPLETADO: 'success',
-  CANCELADO: 'secondary',
-  REEMBOLSADO: 'error'
-}
-
-const columnHelper = createColumnHelper<Pedido>()
+const columnHelper = createColumnHelper<UsuarioAgrupado>()
 
 interface PedidosPageProps {
-  initialData?: Pedido[]
+  initialData?: any[]
   initialTotal?: number
 }
 
 export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps) {
   const router = useRouter()
-  const [estadoFiltro, setEstadoFiltro] = useState('TODOS')
-  const [nroPedido, setNroPedido] = useState('')
+  // Filtros aplicados a la consulta
   const [nombre, setNombre] = useState('')
+  const [departamentoFiltro, setDepartamentoFiltro] = useState('')
+  const [provinciaFiltro, setProvinciaFiltro] = useState('')
 
-  const { mutateAsync: deletePedido, isPending: isDeleting } = useDeletePedido()
-  const [deleteInfo, setDeleteInfo] = useState<{ open: boolean, id: string | null }>({ open: false, id: null })
+  // Estados locales para los inputs
+  const [nombreInput, setNombreInput] = useState('')
+  const [departamentoInput, setDepartamentoInput] = useState('')
+  const [provinciaInput, setProvinciaInput] = useState('')
+
+  const handleBuscar = () => {
+    setNombre(nombreInput)
+    setDepartamentoFiltro(departamentoInput)
+    setProvinciaFiltro(provinciaInput)
+    table.setPageIndex(0)
+  }
+
+  const handleLimpiar = () => {
+    setNombreInput('')
+    setDepartamentoInput('')
+    setProvinciaInput('')
+    setNombre('')
+    setDepartamentoFiltro('')
+    setProvinciaFiltro('')
+    table.setPageIndex(0)
+  }
+
   const [isExporting, setIsExporting] = useState(false)
 
   const handleExportarExcel = async () => {
@@ -85,17 +100,26 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
       const session = await getSession()
       const token = session?.user?.accessToken ?? null
       const axiosPedido = new AxiosPedido({ getAuthToken: () => token })
-      const res = await axiosPedido.getAll({ estado: estadoFiltro, nro_pedido: nroPedido, nombre, limit: '5000' })
-      const todos: Pedido[] = res?.pedidos ?? []
+      
+      // Para exportar más detallado, traemos los pedidos individuales que coincidan con estos filtros
+      const res = await axiosPedido.getAll({ 
+        nombre, 
+        departamento: departamentoFiltro,
+        provincia: provinciaFiltro,
+        limit: '5000' 
+      })
+      const todos = res?.pedidos ?? []
 
       const filas = todos.map(p => ({
         '# Pedido': `#${String(p.numero_pedido).padStart(6, '0')}`,
         Estudiante: `${p.usuario?.nombre ?? ''} ${p.usuario?.apellido ?? ''}`.trim(),
         Correo: p.usuario?.correo ?? '',
+        Departamento: (p.usuario as any)?.departamento ?? '-',
+        Provincia: (p.usuario as any)?.provincia ?? '-',
         'Ítem(s)': p.detalles?.map(d => {
           const { titulo, esEbook } = getDetalleInfo(d)
 
-          return esEbook ? `${titulo} (Ebook)` : titulo
+          return esEbook ? `${titulo} (Paquete)` : titulo
         }).join(' | ') ?? '',
         Total: `${p.moneda} ${Number(p.total).toFixed(2)}`,
         Cupón: p.cupon?.codigo ?? '',
@@ -107,8 +131,8 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
       const ws = XLSX.utils.json_to_sheet(filas)
       const wb = XLSX.utils.book_new()
 
-      XLSX.utils.book_append_sheet(wb, ws, 'Pedidos')
-      XLSX.writeFile(wb, `pedidos_${new Date().toISOString().slice(0, 10)}.xlsx`)
+      XLSX.utils.book_append_sheet(wb, ws, 'Pedidos (Detallado)')
+      XLSX.writeFile(wb, `pedidos_detallado_${new Date().toISOString().slice(0, 10)}.xlsx`)
     } catch {
       toast.error('Error al exportar los pedidos')
     } finally {
@@ -116,29 +140,16 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
     }
   }
 
-  const handleDelete = useCallback(async () => {
-    if (!deleteInfo.id) return
-
-    try {
-      await deletePedido(deleteInfo.id)
-      toast.success('Pedido eliminado correctamente')
-      setDeleteInfo({ open: false, id: null })
-      router.refresh() // Refresca los datos del servidor (initialData)
-    } catch (error: any) {
-      toast.error(error.message || 'Error al eliminar pedido')
-    }
-  }, [deletePedido, deleteInfo.id, router])
-
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10
   })
 
-  const { data: pedidosData, isFetching, isPlaceholderData } = usePedidos(
+  const { data: agrupadosData, isFetching, isPlaceholderData } = usePedidosAgrupados(
     {
-      estado: estadoFiltro,
-      nro_pedido: nroPedido,
-      nombre: nombre,
+      nombre,
+      departamento: departamentoFiltro,
+      provincia: provinciaFiltro,
       page: String(pagination.pageIndex + 1),
       limit: String(pagination.pageSize)
     },
@@ -146,141 +157,56 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
     initialTotal
   )
 
-  const pedidos = useMemo(() => {
-    if (pedidosData?.pedidos) return pedidosData.pedidos
+  const agrupados = useMemo(() => {
+    if (agrupadosData?.agrupados) return agrupadosData.agrupados
 
     if (pagination.pageIndex === 0 && initialData) return initialData
 
     return []
-  }, [pedidosData, initialData, pagination.pageIndex])
+  }, [agrupadosData, initialData, pagination.pageIndex])
 
   const total = useMemo(() => {
-    if (pedidosData?.paginacion?.total !== undefined) return pedidosData.paginacion.total
+    if (agrupadosData?.paginacion?.total !== undefined) return agrupadosData.paginacion.total
 
     if (pagination.pageIndex === 0) return initialTotal
 
     return 0
-  }, [pedidosData, initialTotal, pagination.pageIndex])
+  }, [agrupadosData, initialTotal, pagination.pageIndex])
 
-  const columns = useMemo<ColumnDef<Pedido, any>[]>(
+  const columns = useMemo<ColumnDef<UsuarioAgrupado, any>[]>(
     () => [
-      columnHelper.accessor('numero_pedido', {
-        header: '# Pedido',
-        cell: ({ row }) => (
-          <Typography color='text.primary' className='font-medium'>
-            #{String(row.original.numero_pedido).padStart(6, '0')}
-          </Typography>
-        )
-      }),
-      columnHelper.accessor('usuario', {
+      columnHelper.accessor('nombre', {
         header: 'Estudiante',
         cell: ({ row }) => (
           <div className='flex flex-col'>
             <Typography color='text.primary' className='font-medium'>
-              {row.original.usuario?.nombre} {row.original.usuario?.apellido}
+              {row.original.nombre} {row.original.apellido}
             </Typography>
             <Typography variant='caption' color='text.secondary'>
-              {row.original.usuario?.correo}
+              {row.original.correo}
             </Typography>
           </div>
         )
       }),
-      columnHelper.accessor('detalles', {
-        header: 'Ítem(s)',
+      columnHelper.accessor('departamento', {
+        id: 'ubicacion',
+        header: 'Ubicación',
         cell: ({ row }) => (
-          <div className='flex flex-col gap-1'>
-            {row.original.detalles?.map((detalle, index) => {
-              const { titulo, esEbook } = getDetalleInfo(detalle)
-
-              return (
-                <div key={index} className='flex items-center gap-2'>
-                  <Typography variant='body2' color='text.primary'>
-                    {titulo}
-                  </Typography>
-                  <Chip
-                    label={esEbook ? 'Ebook' : 'Curso'}
-                    size='small'
-                    color={esEbook ? 'info' : 'default'}
-                    variant='tonal'
-                    sx={{ height: 20, fontSize: '0.65rem' }}
-                  />
-                </div>
-              )
-            })}
+          <div className='flex flex-col'>
+            <Typography color='text.primary' className='font-medium capitalize'>
+              {row.original.departamento?.toLowerCase() || '-'}
+            </Typography>
+            <Typography variant='caption' color='text.secondary' className='capitalize'>
+              {row.original.provincia?.toLowerCase() || '-'}
+            </Typography>
           </div>
         )
       }),
-      columnHelper.accessor('total', {
-        header: 'Total',
+      columnHelper.accessor('total_pagado', {
+        header: 'Total Pagado',
         cell: ({ row }) => (
           <Typography color='text.primary' className='font-medium'>
-            {row.original.moneda} {Number(row.original.total).toFixed(2)}
-          </Typography>
-        )
-      }),
-      columnHelper.accessor('cupon', {
-        header: 'Descuento / Cupón',
-        cell: ({ row }) => (
-          <Typography variant='body2' color='text.secondary'>
-            {row.original.cupon?.codigo ? (
-              <Chip
-                label={row.original.cupon.codigo}
-                size='small'
-                variant='outlined'
-                color='primary'
-                sx={{ fontWeight: 600 }}
-              />
-            ) : (
-              '-'
-            )}
-          </Typography>
-        )
-      }),
-      columnHelper.accessor('metodo_pago', {
-        header: 'Método',
-        cell: ({ row }) => (
-          <Typography variant='body2' className='capitalize'>
-            {row.original.metodo_pago?.toLowerCase().replace('_', ' ') || '-'}
-          </Typography>
-        )
-      }),
-      columnHelper.accessor('estado', {
-        header: 'Estado',
-        cell: ({ row }) => (
-          <Stack direction='column' spacing={0.5} alignItems='flex-start'>
-            <Chip
-              variant='tonal'
-              label={row.original.estado}
-              color={statusObj[row.original.estado] || 'default'}
-              size='small'
-              className='font-medium'
-            />
-            {(row.original as any).comprobante_url && row.original.estado === 'PENDIENTE' && (
-              <Chip
-                icon={<i className='tabler-photo' style={{ fontSize: 12 }} />}
-                label='Voucher adjunto'
-                size='small'
-                color='info'
-                variant='outlined'
-                sx={{ fontSize: 10, height: 20 }}
-              />
-            )}
-          </Stack>
-        )
-      }),
-      columnHelper.accessor('creado_en', {
-        header: 'Fecha',
-        cell: ({ row }) => (
-          <Typography variant='body2'>
-            <HydratedDate
-              date={row.original.creado_en}
-              format="date"
-              options={{
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-              }}
-            />
+            {row.original.moneda} {Number(row.original.total_pagado).toFixed(2)}
           </Typography>
         )
       }),
@@ -289,19 +215,9 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
         header: () => <div className='w-full text-right'>Acciones</div>,
         cell: ({ row }) => (
           <div className='flex items-center justify-end w-full gap-1'>
-            <Tooltip title='Ver Detalle'>
-              <IconButton onClick={() => router.push(`/admin/pedidos/detalle/${row.original.id}`)}>
-                <i className='tabler-eye text-[22px] text-primary' />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title='Editar'>
-              <IconButton onClick={() => router.push(`/admin/pedidos/editar/${row.original.id}`)}>
-                <i className='tabler-edit text-[22px] text-textSecondary' />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title='Eliminar'>
-              <IconButton onClick={() => setDeleteInfo({ open: true, id: row.original.id })}>
-                <i className='tabler-trash text-[22px] text-error' />
+            <Tooltip title='Inspeccionar pedidos del estudiante'>
+              <IconButton onClick={() => router.push(`/admin/pedidos/usuario/${row.original.usuario_id}`)}>
+                <i className='tabler-search text-[22px] text-primary' />
               </IconButton>
             </Tooltip>
           </div>
@@ -312,7 +228,7 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
   )
 
   const table = useReactTable({
-    data: pedidos,
+    data: agrupados,
     columns,
     state: {
       pagination
@@ -324,65 +240,98 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
     rowCount: total
   })
 
-
-
   return (
     <Card>
       <CardHeader title='Gestión de Pedidos' className='pbe-4' />
-      <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
-        <CustomTextField
-          select
-          value={table.getState().pagination.pageSize}
-          onChange={e => table.setPageSize(Number(e.target.value))}
-          className='is-[70px]'
-        >
-          <MenuItem value='10'>10</MenuItem>
-          <MenuItem value='25'>25</MenuItem>
-          <MenuItem value='50'>50</MenuItem>
-        </CustomTextField>
-        <div className='flex flex-wrap items-center gap-4 is-full sm:is-auto'>
+      <Grid container spacing={4} className='p-6 border-bs' alignItems="flex-end">
+        {/* Fila 1 */}
+        <Grid item xs={12} sm={4} md={1}>
           <CustomTextField
             select
-            value={estadoFiltro}
-            onChange={e => {
-              setEstadoFiltro(e.target.value)
-              table.setPageIndex(0)
-            }}
-            className='is-full sm:is-[180px]'
+            fullWidth
+            label="Mostrar"
+            value={table.getState().pagination.pageSize}
+            onChange={e => table.setPageSize(Number(e.target.value))}
           >
-            <MenuItem value='TODOS'>Todos los estados</MenuItem>
-            <MenuItem value='COMPLETADO'>Pagados (Completados)</MenuItem>
-            <MenuItem value='PENDIENTE'>Pendientes</MenuItem>
-            <MenuItem value='CANCELADO'>Cancelados</MenuItem>
+            <MenuItem value='10'>10</MenuItem>
+            <MenuItem value='25'>25</MenuItem>
+            <MenuItem value='50'>50</MenuItem>
           </CustomTextField>
+        </Grid>
 
-          <DebouncedInput
-            value={nroPedido}
-            onChange={val => {
-              setNroPedido(String(val))
-              table.setPageIndex(0)
-            }}
-            placeholder='Buscar # Pedido'
-            className='is-full sm:is-[160px]'
+        <Grid item xs={12} sm={8} md={2}>
+          <CustomTextField
+            fullWidth
+            value={nombreInput}
+            onChange={e => setNombreInput(e.target.value)}
+            label='Estudiante'
+            placeholder='Buscar nombre o correo...'
           />
+        </Grid>
 
-          <DebouncedInput
-            value={nombre}
-            onChange={val => {
-              setNombre(String(val))
-              table.setPageIndex(0)
+        <Grid item xs={12} sm={6} md={2}>
+          <CustomTextField
+            select
+            fullWidth
+            label="Departamento"
+            value={departamentoInput}
+            onChange={e => {
+              setDepartamentoInput(e.target.value)
+              setProvinciaInput('')
             }}
-            placeholder='Buscar Estudiante...'
-            className='is-full sm:is-[200px]'
-          />
+          >
+            <MenuItem value=''>Todos</MenuItem>
+            {departamentos.map(dep => <MenuItem key={dep} value={dep}>{dep}</MenuItem>)}
+          </CustomTextField>
+        </Grid>
 
+        <Grid item xs={12} sm={6} md={2}>
+          <CustomTextField
+            select
+            fullWidth
+            label="Provincia"
+            value={provinciaInput}
+            onChange={e => setProvinciaInput(e.target.value)}
+            disabled={!departamentoInput}
+          >
+            <MenuItem value=''>Todas</MenuItem>
+            {departamentoInput && ubigeoPeru[departamentoInput]?.map(prov => (
+              <MenuItem key={prov} value={prov}>{prov}</MenuItem>
+            ))}
+          </CustomTextField>
+        </Grid>
+
+        <Grid item xs={12} md={5}>
+          <Typography variant='body2' sx={{ mb: 1, visibility: 'hidden' }}>
+            Acciones
+          </Typography>
+          <Box display="flex" gap={2}>
+            <Button
+              variant='contained'
+              color='primary'
+              startIcon={<i className='tabler-search' />}
+              onClick={handleBuscar}
+            >
+              Buscar
+            </Button>
+            <Button
+              variant='tonal'
+              color='secondary'
+              startIcon={<i className='tabler-trash' />}
+              onClick={handleLimpiar}
+            >
+              Limpiar
+            </Button>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12} display="flex" justifyContent={{ xs: 'center', sm: 'flex-end' }} gap={2} flexWrap="wrap">
           <Button
             variant='contained'
             color='success'
             startIcon={isExporting ? <CircularProgress size={16} color='inherit' /> : <i className='tabler-file-spreadsheet' />}
             onClick={handleExportarExcel}
             disabled={isExporting}
-            className='is-full sm:is-auto'
           >
             {isExporting ? 'Exportando...' : 'Exportar Excel'}
           </Button>
@@ -390,12 +339,11 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
             variant='contained'
             startIcon={<i className='tabler-plus' />}
             onClick={() => router.push('/admin/pedidos/nuevo')}
-            className='is-full sm:is-auto'
           >
             Nuevo Pedido
           </Button>
-        </div>
-      </div>
+        </Grid>
+      </Grid>
 
       <div className='overflow-x-auto relative'>
         {(isFetching && !isPlaceholderData) && (
@@ -445,7 +393,7 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
             {table.getCoreRowModel().rows.length === 0 ? (
               <tr>
                 <td colSpan={columns.length} className='text-center p-6'>
-                  No se encontraron pedidos
+                  No se encontraron estudiantes
                 </td>
               </tr>
             ) : (
@@ -466,17 +414,6 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
         rowsPerPage={table.getState().pagination.pageSize}
         page={table.getState().pagination.pageIndex}
         onPageChange={(_, page) => table.setPageIndex(page)}
-      />
-
-      <CustomAlertDialog
-        open={deleteInfo.open}
-        title="Eliminar Pedido"
-        description="¿Estás seguro de que deseas eliminar este pedido permanentemente y revocar sus inscripciones asociadas?"
-        confirmText="Eliminar"
-        onConfirm={handleDelete}
-        onClose={() => setDeleteInfo({ open: false, id: null })}
-        loading={isDeleting}
-        color="error"
       />
     </Card>
   )

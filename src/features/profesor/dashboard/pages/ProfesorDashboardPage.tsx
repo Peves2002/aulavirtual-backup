@@ -40,7 +40,7 @@ const ProfesorDashboardPage = () => {
                                 </Avatar>
                                 <Box>
                                     <Typography variant="h4" sx={{ fontWeight: 800 }}>{totalCursos}</Typography>
-                                    <Typography variant="body2" color="text.secondary">Total de Cursos</Typography>
+                                    <Typography variant="body2" color="text.secondary">Total de Programas</Typography>
                                 </Box>
                             </Stack>
                         </CardContent>
@@ -72,7 +72,7 @@ const ProfesorDashboardPage = () => {
                                 </Avatar>
                                 <Box>
                                     <Typography variant="h4" sx={{ fontWeight: 800 }}>{cursosPublicados}</Typography>
-                                    <Typography variant="body2" color="text.secondary">Cursos Publicados</Typography>
+                                    <Typography variant="body2" color="text.secondary">Programas Publicados</Typography>
                                 </Box>
                             </Stack>
                         </CardContent>

@@ -57,7 +57,7 @@ const DeleteCursoModal = ({ open, handleClose, curso, onSuccess }: DeleteCursoMo
     try {
       await deleteCursoMutation.mutateAsync(curso.id)
 
-      enqueueSnackbar('Curso eliminado exitosamente', { variant: 'success' })
+      enqueueSnackbar('Programa eliminado exitosamente', { variant: 'success' })
       setConfirmed(false)
       handleClose()
       onSuccess?.()
@@ -142,7 +142,7 @@ const DeleteCursoModal = ({ open, handleClose, curso, onSuccess }: DeleteCursoMo
             disabled={noBorrador || !confirmed || deleteCursoMutation.isPending}
             startIcon={<Icon icon='mdi:delete' />}
           >
-            {deleteCursoMutation.isPending ? 'Eliminando...' : 'Eliminar Curso'}
+            {deleteCursoMutation.isPending ? 'Eliminando...' : 'Eliminar Programa'}
           </Button>
         </Box>
       </ContentWrapper>

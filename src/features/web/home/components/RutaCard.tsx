@@ -24,6 +24,8 @@ interface RutaCardProps {
   miniatura?: string
   total_cursos: number
   cursos: any[]
+  precio?: any
+  moneda?: string
 }
 
 const StyledCard = styled(Card)(() => ({
@@ -49,6 +51,10 @@ const StyledCard = styled(Card)(() => ({
       backgroundColor: 'var(--web-primary, #25927F)',
       color: '#ffffff',
       borderColor: 'var(--web-primary, #25927F)'
+    },
+    '& .price-chip': {
+      backgroundColor: 'rgba(var(--web-primary-rgb, 37, 146, 127), 0.1)',
+      color: 'var(--web-primary, #25927F)'
     }
   }
 }))
@@ -59,8 +65,12 @@ const RutaCard = ({
   descripcion,
   miniatura,
   total_cursos,
-  cursos
+  cursos,
+  precio,
+  moneda
 }: RutaCardProps) => {
+  const isFree = !precio || Number(precio) === 0
+  const displayPrice = isFree ? 'Gratis' : `${moneda === 'USD' ? '$' : 'S/'} ${Number(precio).toFixed(2)}`
   return (
     <Link href={`/rutas/${slug}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
     <StyledCard>
@@ -82,7 +92,7 @@ const RutaCard = ({
 
         {/* Badge superior */}
         <Chip
-          label="RUTA DE APRENDIZAJE"
+          label="PAQUETE"
           sx={{
             position: 'absolute',
             top: 16,
@@ -157,34 +167,56 @@ const RutaCard = ({
             lineHeight: 1.6
           }}
         >
-          {descripcion || 'Sigue esta ruta estructurada para dominar esta especialidad desde cero hasta un nivel avanzado.'}
+          {descripcion || 'Sigue este paquete estructurado para dominar esta especialidad desde cero hasta un nivel avanzado.'}
         </Typography>
 
-        <Button
-          className="card-btn"
-          variant="outlined"
-          fullWidth
-          sx={{
-            borderRadius: '14px',
-            py: 1.5,
-            fontFamily: 'Poppins, sans-serif',
-            fontWeight: 700,
-            textTransform: 'none',
-            fontSize: '0.95rem',
-            borderWidth: '2px',
-            borderColor: '#e2e8f0',
-            color: '#334155',
-            transition: 'all 0.3s ease',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 1,
-            pointerEvents: 'none', /* Click is handled by the Card itself */
-          }}
-        >
-          Ver Ruta completa
-          <ArrowRight className="arrow-icon" size={18} style={{ transition: 'transform 0.3s ease' }} />
-        </Button>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Box
+            className="price-chip"
+            sx={{
+              px: 2,
+              py: 1.5,
+              borderRadius: '14px',
+              fontFamily: 'Poppins, sans-serif',
+              fontWeight: 800,
+              fontSize: '0.95rem',
+              color: '#475569',
+              bgcolor: '#f1f5f9',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '2px solid transparent'
+            }}
+          >
+            {displayPrice}
+          </Box>
+          <Button
+            className="card-btn"
+            variant="outlined"
+            sx={{
+              flexGrow: 1,
+              borderRadius: '14px',
+              py: 1.5,
+              fontFamily: 'Poppins, sans-serif',
+              fontWeight: 700,
+              textTransform: 'none',
+              fontSize: '0.95rem',
+              borderWidth: '2px',
+              borderColor: '#e2e8f0',
+              color: '#334155',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 1,
+              pointerEvents: 'none', /* Click is handled by the Card itself */
+            }}
+          >
+            Ver detalles
+            <ArrowRight className="arrow-icon" size={18} style={{ transition: 'transform 0.3s ease' }} />
+          </Button>
+        </Box>
       </CardContent>
     </StyledCard>
     </Link>

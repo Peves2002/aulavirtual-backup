@@ -26,7 +26,7 @@ export default function RutasCatalog({ initialRutas }: RutasCatalogProps) {
         <TextField
           fullWidth
           variant="outlined"
-          placeholder="Buscar rutas de aprendizaje..."
+          placeholder="Buscar paquetes..."
           value={search}
           onChange={e => setSearch(e.target.value)}
           sx={{
@@ -61,7 +61,7 @@ export default function RutasCatalog({ initialRutas }: RutasCatalogProps) {
       ) : (
         <Box sx={{ textAlign: 'center', py: 10 }}>
           <Typography variant="h5" color="text.secondary">
-            {search ? 'No se encontraron rutas que coincidan con tu búsqueda.' : 'Próximamente tendremos nuevas rutas para ti.'}
+            {search ? 'No se encontraron paquetes que coincidan con tu búsqueda.' : 'Próximamente tendremos nuevos paquetes para ti.'}
           </Typography>
         </Box>
       )}

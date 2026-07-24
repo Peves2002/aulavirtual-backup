@@ -4,11 +4,10 @@ import { z } from 'zod'
  * Schema para login
  */
 export const loginSchema = z.object({
-  correo: z
+  numero_documento: z
     .string()
     .trim()
-    .min(1, 'El correo es requerido')
-    .email('Correo electrónico inválido'),
+    .regex(/^\d{8}$/, 'El DNI debe tener exactamente 8 dígitos'),
   contrasena: z
     .string()
     .trim()
@@ -58,7 +57,15 @@ export const registerSchema = z
       .trim()
       .regex(/^9\d{8}$/, 'El celular debe tener 9 dígitos y comenzar con 9')
       .optional()
-      .or(z.literal(''))
+      .or(z.literal('')),
+    departamento: z
+      .string()
+      .trim()
+      .min(1, 'Selecciona un departamento'),
+    provincia: z
+      .string()
+      .trim()
+      .min(1, 'Selecciona una provincia')
   })
   .refine((data) => data.contrasena === data.confirmarContrasena, {
     message: 'Las contraseñas no coinciden',

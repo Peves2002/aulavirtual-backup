@@ -5,7 +5,7 @@ import type { ReactNode } from 'react'
 
 export interface CartItem {
     id: string
-    type: 'CURSO' | 'EBOOK'
+    type: 'CURSO' | 'EBOOK' | 'SIMULACRO' | 'RUTA'
     titulo: string
     slug: string
     miniatura?: string
