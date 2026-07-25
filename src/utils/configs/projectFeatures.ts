@@ -3,7 +3,7 @@
  * Cambiar a `true` para habilitar un módulo en menús y secciones públicas.
  */
 export const PROJECT_FEATURES = {
-  ebooks: false,
+  ebooks: true,
   suscripciones: false,
   calendario: false,
   simulacros: false,

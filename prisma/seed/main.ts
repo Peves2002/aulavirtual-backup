@@ -874,51 +874,6 @@ async function main() {
 
   console.log('✅ Cupones creados')
 
-  // ─── INSCRIPCIÓN DE PRUEBA ───────────────────────────────────────────────────
-  const estudiante = await prisma.usuario.findUnique({ where: { correo: 'alumno@gmail.com' } })
-
-  const cursosInscripcionAlumno = await prisma.curso.findMany({
-    where: {
-      slug: { in: ['costos-presupuestos-obra-s10', 'valorizacion-liquidacion-obras-contrata'] }
-    }
-  })
-
-  if (estudiante) {
-    for (const curso of cursosInscripcionAlumno) {
-      await prisma.inscripcion.upsert({
-        where: {
-          usuario_id_curso_id: {
-            usuario_id: estudiante.id,
-            curso_id: curso.id
-          }
-        },
-        update: {},
-        create: {
-          usuario_id: estudiante.id,
-          curso_id: curso.id,
-          estado: 'ACTIVO'
-        }
-      })
-
-      await prisma.progresoCurso.upsert({
-        where: {
-          usuario_id_curso_id: {
-            usuario_id: estudiante.id,
-            curso_id: curso.id
-          }
-        },
-        update: {},
-        create: {
-          usuario_id: estudiante.id,
-          curso_id: curso.id,
-          porcentaje_progreso: 0
-        }
-      })
-    }
-
-    console.log('✅ Alumno inscrito en: Costos y Presupuestos de Obra, Valorización y Liquidación de Obras')
-  }
-
   // ─── SIMULACROS ──────────────────────────────────────────────────────────────
 
   const simulacros = [
