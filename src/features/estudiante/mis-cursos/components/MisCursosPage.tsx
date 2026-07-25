@@ -40,7 +40,7 @@ export default function MisCursosPage() {
                 startIcon={<i className="tabler-school" />}
                 href="/especializaciones"
               >
-                Especializaciones
+                Programas
               </Button>
               <Button
                 variant="contained"

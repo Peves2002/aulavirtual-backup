@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 import { Heart, Lightbulb, Users, TrendingUp, ShieldCheck } from 'lucide-react'
 
 import { eyebrow, sectionH2, sectionDesc, cardTitle, cardBody } from '@/features/web/home/components/typography'
@@ -94,27 +96,13 @@ function MisionCard() {
       <div
         style={{
           height: '200px',
-          background: 'linear-gradient(135deg, var(--web-dark, #025E44) 0%, var(--web-primary, #25927F) 60%, #3AB079 100%)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
+          backgroundColor: '#025E44',
         }}
       >
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-        <div
-          style={{
-            width: '80px', height: '80px', borderRadius: '24px',
-            backgroundColor: 'rgba(255,255,255,0.15)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            backdropFilter: 'blur(8px)',
-            border: '2px solid rgba(255,255,255,0.2)',
-            position: 'relative', zIndex: 1,
-          }}
-        >
-          <span style={{ fontSize: '2.5rem' }}>🎯</span>
-        </div>
+        <Image src="/images/equipo/mision.png" alt="Misión" fill style={{ objectFit: 'cover', opacity: 0.85 }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.5), transparent)' }} />
       </div>
       <div style={{ padding: '1.75rem 2rem 2rem' }}>
         <h3 style={{ ...cardTitle, fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--web-dark, #025E44)' }}>
@@ -155,27 +143,13 @@ function VisionCard() {
       <div
         style={{
           height: '200px',
-          background: 'linear-gradient(135deg, #0A0A0A 0%, #1a2e20 60%, var(--web-dark, #025E44) 100%)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
+          backgroundColor: '#0A0A0A',
         }}
       >
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(var(--web-light-rgb, 189, 217, 98),0.06) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-        <div
-          style={{
-            width: '80px', height: '80px', borderRadius: '24px',
-            backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.12)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            backdropFilter: 'blur(8px)',
-            border: '2px solid rgba(var(--web-light-rgb, 189, 217, 98),0.25)',
-            position: 'relative', zIndex: 1,
-          }}
-        >
-          <span style={{ fontSize: '2.5rem' }}>🔭</span>
-        </div>
+        <Image src="/images/equipo/vision.png" alt="Visión" fill style={{ objectFit: 'cover', opacity: 0.85 }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.5), transparent)' }} />
       </div>
       <div style={{ padding: '1.75rem 2rem 2rem' }}>
         <h3 style={{ ...cardTitle, fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--web-dark, #025E44)' }}>

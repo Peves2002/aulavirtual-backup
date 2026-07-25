@@ -74,10 +74,10 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
   // Vars
   const darkImg = '/images/pages/auth-mask-dark.png'
   const lightImg = '/images/pages/auth-mask-light.png'
-  const darkIllustration = '/images/illustrations/auth/v2-login-dark.png'
-  const lightIllustration = '/images/illustrations/auth/v2-login-light.png'
-  const borderedDarkIllustration = '/images/illustrations/auth/v2-login-dark-border.png'
-  const borderedLightIllustration = '/images/illustrations/auth/v2-login-light-border.png'
+  const darkIllustration = '/images/equipo/middle.png'
+  const lightIllustration = '/images/equipo/middle.png'
+  const borderedDarkIllustration = '/images/equipo/middle.png'
+  const borderedLightIllustration = '/images/equipo/middle.png'
 
   // Hooks
   const { settings } = useSettings()
@@ -169,41 +169,20 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
   const handleGoogleLogin = async () => {
     try {
       setIsLoading(true)
-      const result = await signIn('google', { redirect: false })
+      
+      const urlParams = new URLSearchParams(window.location.search)
+      let callbackUrl = urlParams.get('callbackUrl')
 
-      if (result?.url) {
-        const width = 500
-        const height = 600
-        const left = window.screenX + (window.outerWidth - width) / 2
-        const top = window.screenY + (window.outerHeight - height) / 2
-
-        const popup = window.open(
-          result.url,
-          'google-login',
-          `width=${width},height=${height},left=${left},top=${top}`
-        )
-
-        const checkPopup = setInterval(() => {
-          if (!popup || popup.closed) {
-            clearInterval(checkPopup)
-
-            const urlParams = new URLSearchParams(window.location.search)
-            let callbackUrl = urlParams.get('callbackUrl')
-
-            if (callbackUrl && !callbackUrl.startsWith(window.location.origin) && callbackUrl.startsWith('http')) {
-              callbackUrl = '/dashboard'
-            }
-
-            window.location.href = callbackUrl || '/dashboard'
-          }
-        }, 1000)
-      } else {
-        setError('No se pudo obtener la URL de autenticación de Google.')
+      if (callbackUrl && !callbackUrl.startsWith(window.location.origin) && callbackUrl.startsWith('http')) {
+        callbackUrl = '/dashboard'
       }
+
+      await signIn('google', {
+        callbackUrl: callbackUrl || '/dashboard'
+      })
     } catch (err) {
       console.error('Error al iniciar login con Google:', err)
       setError('Ocurrió un error al conectar con Google.')
-    } finally {
       setIsLoading(false)
     }
   }
@@ -212,7 +191,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
     <div className='flex justify-center min-bs-[100dvh]'>
       <div
         className={classnames(
-          'flex items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden',
+          'flex items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden bg-white',
           {
             'border-ie': settings.skin === 'bordered'
           }

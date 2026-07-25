@@ -187,7 +187,7 @@ export default function CursosEnProgreso({ cursos, loading }: Props) {
             startIcon={<i className='tabler-school' />}
             sx={{ borderRadius: '10px', fontWeight: 700, textTransform: 'none' }}
           >
-            Especializaciones
+            Programas
           </Button>
         </Box>
       </Box>

@@ -17,33 +17,16 @@ type CategoryData = {
   total: number
 }
 
-// Iconos aleatorios según un hash del id (para darles personalidad)
-const ICONS = [Layers, GraduationCap, Compass, BookOpen, Star, Code, Target, BookMarked, Brain]
+const CATEGORY_STYLES: Record<string, { img: string, background: string }> = {
+  'docencia': { img: '/images/iconos/Docencia.png', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' },
+  'psicologia': { img: '/images/iconos/Psicologia.png', background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)' },
+  'salud': { img: '/images/iconos/Salud.png', background: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)' },
+  'ingenieria': { img: '/images/iconos/Ingenieria.png', background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' },
+  'gestion-publica': { img: '/images/iconos/gestion_publica.png', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }
+}
 
-// Gradientes vibrantes (glassmorphism/modernos)
-const GRADIENTS = [
-  'linear-gradient(135deg, #10b981 0%, #059669 100%)', // Emerald
-  'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', // Blue
-  'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', // Amber
-  'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)', // Violet
-  'linear-gradient(135deg, #ec4899 0%, #db2777 100%)', // Pink
-  'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)', // Cyan
-  'linear-gradient(135deg, #f43f5e 0%, #e11d48 100%)', // Rose
-  'linear-gradient(135deg, #84cc16 0%, #65a30d 100%)', // Lime
-]
-
-function getStylesForId(id: string) {
-  let hash = 0
-
-  for (let i = 0; i < id.length; i++) {
-    hash = id.charCodeAt(i) + ((hash << 5) - hash)
-  }
-
-  const positiveHash = Math.abs(hash)
-  const Icon = ICONS[positiveHash % ICONS.length]
-  const background = GRADIENTS[positiveHash % GRADIENTS.length]
-
-  return { Icon, background }
+function getStylesForId(slug: string) {
+  return CATEGORY_STYLES[slug] || CATEGORY_STYLES['docencia']
 }
 
 
@@ -99,11 +82,9 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
             style={{
               display: 'flex',
               gap: '1.5rem',
-              overflowX: 'auto',
-              scrollSnapType: 'x mandatory',
-              scrollbarWidth: 'none', // Oculta barra en Firefox
-              msOverflowStyle: 'none', // Oculta barra en IE/Edge
-              justifyContent: isFew ? 'center' : 'flex-start',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              paddingTop: '1rem',
               paddingBottom: '2rem', // espacio para sombras
             }}
             className="hidden-scroll pb-4" // Asumiendo que usamos alguna clase o el style de arriba
@@ -117,15 +98,14 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
             `}} />
 
             {categorias.map(cat => {
-              const { Icon, background } = getStylesForId(cat.id)
+              const { img, background } = getStylesForId(cat.slug)
 
               return (
                 <div
                   key={cat.id}
                   style={{
-                    minWidth: 'clamp(280px, 80vw, 320px)',
-                    flexShrink: 0,
-                    scrollSnapAlign: 'start',
+                    width: '320px',
+                    maxWidth: '100%',
                     display: 'flex',
                     flexDirection: 'column'
                   }}
@@ -216,7 +196,7 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
                         transition: 'transform 0.3s ease'
                       }}
                     >
-                      <Icon size={28} strokeWidth={1.5} />
+                      <img src={img} alt={cat.nombre} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '16px' }} />
                     </div>
 
                     <h3
@@ -285,61 +265,6 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
             })}
           </div>
 
-          {/* Botones Flotantes de Navegación (Solo PC) */}
-          {!isFew && (
-            <>
-              <button
-                onClick={() => scrollByAmount('left')}
-                style={{
-                  position: 'absolute',
-                  left: -20,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '50%',
-                  backgroundColor: '#ffffff',
-                  border: `1.5px solid ${!canScrollLeft ? '#e2e8f0' : 'var(--web-primary, #25927F)'}`,
-                  cursor: !canScrollLeft ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
-                  transition: 'all 0.2s',
-                  zIndex: 10,
-                  opacity: !canScrollLeft ? 0 : 1,
-                  pointerEvents: !canScrollLeft ? 'none' : 'auto'
-                }}
-              >
-                <ChevronLeft size={20} color={'var(--web-primary, #25927F)'} />
-              </button>
-              <button
-                onClick={() => scrollByAmount('right')}
-                style={{
-                  position: 'absolute',
-                  right: -20,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '50%',
-                  backgroundColor: '#ffffff',
-                  border: `1.5px solid ${!canScrollRight ? '#e2e8f0' : 'var(--web-primary, #25927F)'}`,
-                  cursor: !canScrollRight ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
-                  transition: 'all 0.2s',
-                  zIndex: 10,
-                  opacity: !canScrollRight ? 0 : 1, // Desaparece si no puede ir más adelante
-                  pointerEvents: !canScrollRight ? 'none' : 'auto'
-                }}
-              >
-                <ChevronRight size={20} color={'var(--web-primary, #25927F)'} />
-              </button>
-            </>
-          )}
 
         </div>
       </div>

@@ -33,9 +33,9 @@ const SLIDES = [
   },
   {
     eyebrow: 'Plataforma educativa online',
-    title: 'Confianza y Calidad,',
-    titleAccent: 'Somos Grupo Ollarves',
-    description: 'Accede a cursos especializados, rutas de aprendizaje y certificaciones diseñadas para impulsar tu carrera profesional.',
+    title: 'Tu Éxito Profesional Comienza con una',
+    titleAccent: 'Doble Certificación',
+    description: 'Especialízate con programas avalados por universidades y respaldados por los colegios profesionales más importantes del Perú.',
     visual: 'portada3' as const,
   },
   {
@@ -135,22 +135,8 @@ export default function HeroCarousel() {
           {/* Izquierda: texto (igual para todos) */}
           <div
             key={`left-${current}`}
-            style={{ position: 'relative', zIndex: 2, animation: 'heroFadeIn 0.5s ease' }}
+            style={{ position: 'relative', zIndex: 2, animation: 'heroFadeIn 0.5s ease', maxWidth: '560px' }}
           >
-            {/* Logo de la plataforma */}
-            <img
-              src={templateLogo}
-              alt={`${templateName} Logo`}
-              style={{ height: '48px', width: 'auto', marginBottom: '1.5rem', objectFit: 'contain' }}
-              onError={e => {
-                const img = e.currentTarget
-
-                if (!img.dataset.fallbackApplied) {
-                  img.dataset.fallbackApplied = 'true'
-                  img.src = themeConfig.templateLogo
-                }
-              }}
-            />
 
             {/* Eyebrow */}
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'rgba(var(--web-light-rgb,189,217,98),0.15)', border: '1px solid rgba(var(--web-light-rgb,189,217,98),0.3)', borderRadius: '999px', padding: '0.375rem 1rem', marginBottom: '1.25rem' }}>
@@ -217,7 +203,7 @@ export default function HeroCarousel() {
       {slide.visual === 'portada3' && (
         <div key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
           <VisualImage
-            src="/images/portada3.webp"
+            src="/images/3.png"
             alt="Grupo Ollarves equipo"
             style={{ right: '16%', width: '44%', height: '100%' }}
           />
@@ -226,7 +212,7 @@ export default function HeroCarousel() {
       {slide.visual === 'portada4' && (
         <div key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
           <VisualImage
-            src="/images/portada4.webp"
+            src="/images/4.png"
             alt="Presencia nacional"
             style={{ left: '50%', transform: 'translateX(-18%)', width: '52%', top: '3rem' }}
           />

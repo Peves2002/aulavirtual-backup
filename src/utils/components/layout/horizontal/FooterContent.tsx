@@ -23,12 +23,7 @@ const FooterContent = () => {
       className={classnames(horizontalLayoutClasses.footerContent, 'flex items-center justify-between flex-wrap gap-4')}
     >
       <p>
-        <span className='text-textSecondary'>{`© `}<HydratedDate date={new Date()} format="year" />{`, Desarrollado con `}</span>
-        <span>{`❤️`}</span>
-        <span className='text-textSecondary'>{` by `}</span>
-        <Link href='https://fly-software.lovable.app/' target='_blank' className='text-primary uppercase'>
-          Fly
-        </Link>
+        <span className='text-textSecondary'>{`© `}<HydratedDate date={new Date()} format="year" />{` AGENDA 2050 PERÚ`}</span>
       </p>
       {/* {!isBreakpointReached && (
         <div className='flex items-center gap-4'>

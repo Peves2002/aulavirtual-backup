@@ -8,33 +8,33 @@ import { X, ChevronLeft, ChevronRight, Briefcase } from 'lucide-react'
 
 const FOTOS = [
   {
-    src: '/images/equipo/jpg/IMG_4077.jpg',
-    area: 'Corporativo',
+    src: '/images/equipo/Administración.png',
+    area: 'Administración',
     descripcion: 'Equipo comprometido con la excelencia y el desarrollo estratégico de nuestra institución.',
   },
   {
-    src: '/images/equipo/jpg/IMG_4100.jpg',
-    area: 'Corporativo',
+    src: '/images/equipo/Contabilidad.png',
+    area: 'Contabilidad',
     descripcion: 'Profesionales dedicados a brindar soluciones educativas de alto impacto para nuestros estudiantes.',
   },
   {
-    src: '/images/equipo/jpg/IMG_4425.jpg',
-    area: 'Corporativo',
+    src: '/images/equipo/Dirección Comercial.png',
+    area: 'Dirección Comercial',
     descripcion: 'Talento humano que impulsa cada día la visión y misión de nuestra organización educativa.',
   },
   {
-    src: '/images/equipo/jpg/IMG_4435.jpg',
-    area: 'Corporativo',
+    src: '/images/equipo/Marketing.png',
+    area: 'Marketing',
     descripcion: 'Colaboradores que hacen posible la transformación educativa y el crecimiento de nuestra comunidad.',
   },
   {
-    src: '/images/equipo/jpg/IMG_4444.jpg',
-    area: 'Corporativo',
+    src: '/images/equipo/Recursos Humanos.png',
+    area: 'Recursos Humanos',
     descripcion: 'Líderes comprometidos con la calidad, la innovación y el futuro de la educación en el país.',
   },
   {
-    src: '/images/equipo/jpg/IMG_4431.jpg',
-    area: 'Corporativo',
+    src: '/images/equipo/Área Legal.png',
+    area: 'Área Legal',
     descripcion: 'Profesionales que fortalecen nuestra cultura organizacional y el bienestar de nuestra comunidad.',
   },
 ]

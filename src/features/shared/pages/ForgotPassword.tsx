@@ -64,8 +64,8 @@ const ForgotPassword = ({ mode }: { mode: SystemMode }) => {
   // Vars
   const darkImg = '/images/pages/auth-mask-dark.png'
   const lightImg = '/images/pages/auth-mask-light.png'
-  const darkIllustration = '/images/illustrations/auth/v2-login-dark.png'
-  const lightIllustration = '/images/illustrations/auth/v2-login-light.png'
+  const darkIllustration = '/images/equipo/middle.png'
+  const lightIllustration = '/images/equipo/middle.png'
 
   // Hooks
   const router = useRouter()
@@ -116,7 +116,7 @@ const ForgotPassword = ({ mode }: { mode: SystemMode }) => {
     <div className='flex justify-center min-bs-[100dvh]'>
       <div
         className={classnames(
-          'flex items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden',
+          'flex items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden bg-white',
           {
             'border-ie': settings.skin === 'bordered'
           }
