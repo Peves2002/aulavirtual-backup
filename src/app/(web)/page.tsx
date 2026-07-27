@@ -1,11 +1,12 @@
 import Link from 'next/link'
+
 import { ArrowRight, CheckCircle, CheckCircle2 } from 'lucide-react'
+
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
 import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
 import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
-import HeroInstallButton from '@/features/web/home/components/HeroInstallButton'
 import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
@@ -48,6 +49,7 @@ async function getHomeData() {
         orderBy: { creado_en: 'desc' },
         take: 6
       }),
+
       // Profesores
       prisma.usuario.findMany({
         where: { rol: 'PROFESOR' },
@@ -65,6 +67,7 @@ async function getHomeData() {
         take: 8,
       }),
       getConfigs(),
+
       // Ebooks destacados
       isFeatureEnabled('ebooks')
         ? prisma.ebook.findMany({
@@ -84,6 +87,7 @@ async function getHomeData() {
     const courses = await Promise.all(
       coursesRaw.map(async course => {
         const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
+
         return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
       })
     )
@@ -91,6 +95,7 @@ async function getHomeData() {
     const diplomados = await Promise.all(
       diplomadosRaw.map(async course => {
         const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
+
         return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
       })
     )
@@ -98,6 +103,7 @@ async function getHomeData() {
     const especializaciones = await Promise.all(
       especializacionesRaw.map(async course => {
         const leccionesCount = await prisma.leccion.count({ where: { modulo: { curso_id: course.id } } })
+
         return { ...course, _count: { ...course._count, lecciones: leccionesCount } }
       })
     )
@@ -135,7 +141,7 @@ async function getHomeData() {
 }
 
 export default async function HomePage() {
-  const { courses, diplomados, especializaciones, teachers, ebooks, heroTitle, heroDescription, logos } = await getHomeData()
+  const { courses, diplomados, especializaciones, teachers, ebooks, logos } = await getHomeData()
   const cursosConfig = getTipoProgramaConfig('CURSO')
   const diplomadosConfig = getTipoProgramaConfig('DIPLOMADO')
   const especializacionesConfig = getTipoProgramaConfig('ESPECIALIZACION')

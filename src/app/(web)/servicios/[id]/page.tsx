@@ -1,7 +1,10 @@
 import React from 'react'
+
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+
 import { ArrowLeft, CheckCircle2 } from 'lucide-react'
+
 import { SERVICIOS } from '@/utils/data/servicios'
 
 export const metadata = {

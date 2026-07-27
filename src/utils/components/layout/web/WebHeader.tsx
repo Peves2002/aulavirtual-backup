@@ -1,9 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
+import { usePathname } from 'next/navigation'
+
 import { Button } from '@mui/material'
 import { useSession } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
 
 import Logo from '@components/layout/shared/Logo'
 import UserDropdown from '@components/layout/shared/UserDropdown'
@@ -41,8 +43,10 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
   useEffect(() => {
     if (!isHome) return
     const handleScroll = () => setIsScrolled(window.scrollY > 50)
+
     window.addEventListener('scroll', handleScroll)
     handleScroll()
+
     return () => window.removeEventListener('scroll', handleScroll)
   }, [isHome])
 

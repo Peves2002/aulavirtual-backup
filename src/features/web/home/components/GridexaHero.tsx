@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+
 import Image from 'next/image'
 
 const HERO_IMAGES = [
@@ -16,6 +17,7 @@ export default function GridexaHero() {
     const iv = setInterval(() => {
       setCurrentIdx((prev) => (prev + 1) % HERO_IMAGES.length)
     }, 5000)
+
     return () => clearInterval(iv)
   }, [])
 

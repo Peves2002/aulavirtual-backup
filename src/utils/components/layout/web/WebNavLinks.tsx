@@ -1,8 +1,10 @@
 'use client'
 
 import React from 'react'
+
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+
 import { Home, BookOpen, Users, Award, Map, Building2, BookText, ClipboardList, Repeat2 } from 'lucide-react'
 
 import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
@@ -39,11 +41,13 @@ export default function WebNavLinks({
 
   const navItems = ALL_NAV_ITEMS.filter(item => {
     if (item.key === 'empresas' && !empresasHabilitado) return false
+
     return true
   })
 
   const isActive = (url: string) => {
     if (url === '/') return pathname === '/'
+
     return pathname.startsWith(url)
   }
 
@@ -51,6 +55,7 @@ export default function WebNavLinks({
     <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
       {navItems.map(item => {
         const active = isActive(item.url)
+
           return (
             <Link
               key={item.title}
