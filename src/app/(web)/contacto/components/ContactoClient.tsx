@@ -14,9 +14,9 @@ export function ContactList() {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>
       {[
-        { icon: MapPin, title: 'Ubicación', info: 'Arequipa, Perú' },
+        { icon: MapPin, title: 'Ubicación', info: 'Junin - Huancayo - El tambo - jr.los bosques 815' },
         { icon: Phone, title: 'WhatsApp', info: `+${waNumber}`, href: `https://wa.me/${waNumber}` },
-        { icon: Mail, title: 'Email', info: 'arm.confiabilidad@gmail.com', href: 'mailto:arm.confiabilidad@gmail.com' },
+        { icon: Mail, title: 'Email', info: 'ejecutivo.comercial@gridexae.com', href: 'mailto:ejecutivo.comercial@gridexae.com' },
       ].map((item, i) => (
         <ScrollReveal key={i} delay={i * 0.1}>
           <div
