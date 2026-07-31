@@ -35,13 +35,17 @@ import RichTextEditor from '@/utils/components/RichTextEditor'
 
 const toYouTubeEmbed = (url: string): string => {
   if (!url) return ''
+
   try {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
     const match = url.match(regExp)
+
     if (match && match[2].length === 11) {
       return `https://www.youtube.com/embed/${match[2]}`
     }
-    return url
+
+    
+return url
   } catch {
     return url
   }
@@ -157,13 +161,15 @@ export function EdicionWebView({ initialData }: EdicionWebViewProps) {
   // ── Inicializar config desde BD ──────────────────────────────────────────────
   const initialMapped = (initialData || []).reduce((acc: { [key: string]: string }, curr: Configuracion) => {
     acc[curr.clave] = curr.valor
-    return acc
+    
+return acc
   }, {})
 
   const [config, setConfig] = useState<{ [key: string]: string }>({
     // Home — Hero
     HOME_HERO_TITLE: '',
     HOME_HERO_DESCRIPTION: '',
+
     // Home — Secciones
     HOME_ESCUELAS_TITLE: 'Escuelas Especializadas',
     HOME_PROGRAMAS_TITLE: 'Programas en convocatoria',
@@ -173,6 +179,7 @@ export function EdicionWebView({ initialData }: EdicionWebViewProps) {
     HOME_CORP_TITLE: 'Soluciones Corporativas',
     HOME_CORP_DESC: '',
     HOME_LOGOS: '[]',
+
     // Nosotros
     NOSOTROS_HERO_TITLE: 'Somos calidad y responsabilidad a tu servicio',
     NOSOTROS_HERO_DESC: '',
@@ -184,15 +191,18 @@ export function EdicionWebView({ initialData }: EdicionWebViewProps) {
     NOSOTROS_STAT_3_LABEL: 'Docentes expertos',
     NOSOTROS_STAT_4_VALUE: '98%',
     NOSOTROS_STAT_4_LABEL: 'Tasa de satisfacción',
+
     // Contacto
     CONTACTO_HERO_TITLE: 'Ponte en Contacto',
     CONTACTO_HERO_DESC: '',
     CONTACTO_HERO_EYEBROW: 'Estamos aquí para ayudarte',
     CONTACTO_UBICACION: 'Arequipa, Perú',
     CONTACTO_EMAIL: '',
+
     // Empresas
     EMPRESAS_HERO_TITLE: 'Lleva a tu equipo al siguiente nivel',
     EMPRESAS_HERO_DESC: '',
+
     // Consultoría
     CONSULTORIA_HERO_TITLE: 'Consultoría Estratégica en RRHH',
     CONSULTORIA_HERO_DESC: '',
@@ -200,12 +210,14 @@ export function EdicionWebView({ initialData }: EdicionWebViewProps) {
     CONSULTORIA_SEC2_DESC: '',
     CONSULTORIA_SEC3_TITLE: 'Tecnología Inteligente para RRHH',
     CONSULTORIA_SEC3_DESC: '',
+
     // Nosotros — Misión / Visión
     NOSOTROS_MISION_TITLE: 'Nuestra Misión',
     NOSOTROS_MISION_TEXT: '',
     NOSOTROS_VISION_TITLE: 'Nuestra Visión',
     NOSOTROS_VISION_TEXT: '',
     NOSOTROS_VALORES: '[]',
+
     // Blogs y Noticias
     WEB_BLOGS: '[]',
     WEB_NOTICIAS: '[]',
@@ -224,22 +236,31 @@ export function EdicionWebView({ initialData }: EdicionWebViewProps) {
 
   const handleRemoveLogo = (index: number) => {
     const updated = logosArray.filter((_, i) => i !== index)
+
     handleInputChange('HOME_LOGOS', JSON.stringify(updated))
   }
 
   // ── Guardar ─────────────────────────────────────────────────────────────────
   const handleSave = async () => {
     setSaving(true)
+
     try {
       const payload = Object.entries(config).map(([clave, valor]) => {
         const item = initialData?.find(d => d.clave === clave)
-        return { clave, valor, descripcion: item?.descripcion || '' }
+
+        
+return { clave, valor, descripcion: item?.descripcion || '' }
       })
+
       const getAuthToken = async () => {
         const s = await getSession()
-        return s?.user?.accessToken ?? null
+
+        
+return s?.user?.accessToken ?? null
       }
+
       const axiosConfig = new AxiosConfiguracion({ getAuthToken })
+
       await axiosConfig.save(payload)
       enqueueSnackbar('Contenido web actualizado correctamente.', { variant: 'success' })
     } catch (err) {
@@ -403,6 +424,7 @@ export function EdicionWebView({ initialData }: EdicionWebViewProps) {
               onClose={() => setOpenLogoMedia(false)}
               onSelect={(url) => {
                 const nuevo = { label: pendingLogoLabel.trim() || 'Logo', url }
+
                 handleInputChange('HOME_LOGOS', JSON.stringify([...logosArray, nuevo]))
                 setPendingLogoLabel('')
                 setOpenLogoMedia(false)
@@ -606,7 +628,9 @@ export function EdicionWebView({ initialData }: EdicionWebViewProps) {
             <Grid container spacing={2}>
               {CONSULTORIA_SERVICIOS.map(s => {
                 const key = `CONSULTORIA_SVC_${s.id.toUpperCase()}_IMAGE`
-                return (
+
+                
+return (
                   <Grid item xs={12} sm={6} md={4} key={s.id}>
                     <Paper variant='outlined' sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column', gap: 1 }}>
                       <Typography variant='caption' fontWeight={700}>{s.title}</Typography>
@@ -646,7 +670,9 @@ export function EdicionWebView({ initialData }: EdicionWebViewProps) {
             <Grid container spacing={2}>
               {HRCOREX_SERVICIOS.map(s => {
                 const key = `HRCOREX_SVC_${s.id.toUpperCase()}_IMAGE`
-                return (
+
+                
+return (
                   <Grid item xs={12} sm={6} md={4} key={s.id}>
                     <Paper variant='outlined' sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column', gap: 1 }}>
                       <Typography variant='caption' fontWeight={700}>{s.title}</Typography>
@@ -1005,6 +1031,7 @@ export function EdicionWebView({ initialData }: EdicionWebViewProps) {
             handleInputChange(mediaSelectTarget.key, url)
             enqueueSnackbar('Imagen seleccionada — recuerda guardar los cambios', { variant: 'info' })
           }
+
           setMediaSelectTarget(null)
         }}
         title='Seleccionar Imagen'

@@ -430,7 +430,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
         )
       })
     ],
-    [pagination]
+    [pagination, editMutation, enqueueSnackbar]
   )
 
   const table = useReactTable({

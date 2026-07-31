@@ -1,8 +1,10 @@
 // Next Imports
 import React from 'react'
-import type { Metadata } from 'next'
 
 import { notFound } from 'next/navigation'
+
+import type { Metadata } from 'next'
+
 
 import { Box } from '@mui/material'
 

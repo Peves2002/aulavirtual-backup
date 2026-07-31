@@ -1,8 +1,13 @@
-import { notFound, redirect } from 'next/navigation'
+﻿import { notFound, redirect } from 'next/navigation'
+
 
 import prisma from '@/utils/libs/prisma'
 import { getAuthSession } from '@/utils/libs/auth-helpers'
 import CheckoutView from '@/features/web/checkout/components/CheckoutView'
+
+
+
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata() {
   return {

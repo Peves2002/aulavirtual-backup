@@ -1,8 +1,13 @@
-import { notFound } from 'next/navigation'
+﻿import { notFound } from 'next/navigation'
+
 
 import prisma from '@/utils/libs/prisma'
 import { getAuthSession } from '@/utils/libs/auth-helpers'
 import SimulacroDetailView from '@/features/web/simulacros/components/SimulacroDetailView'
+
+
+
+export const dynamic = 'force-dynamic'
 
 async function getData(slug: string, userId?: string) {
   const simulacro = await prisma.simulacro.findUnique({ where: { slug } })

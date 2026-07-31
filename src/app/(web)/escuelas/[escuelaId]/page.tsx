@@ -1,12 +1,18 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
+
 
 import { Play, ChevronRight, GraduationCap, Award, Briefcase, Users, Star, CheckCircle } from 'lucide-react'
+
 
 import AdphHeroForm from '@/features/web/adph/components/AdphHeroForm'
 import { ESCUELAS, getEscuela } from '@/features/web/adph/data/escuelas'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import { getConfigs } from '@/utils/libs/config'
 import prisma from '@/utils/libs/prisma'
+
+
+
+export const dynamic = 'force-dynamic'
 
 export function generateStaticParams() {
   return ESCUELAS.map(e => ({ escuelaId: e.id }))
@@ -104,7 +110,7 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
                   <span className="text-[#08479b]">retos del mañana</span>
                 </h3>
                 <div className="text-slate-600 text-lg leading-relaxed space-y-6 text-justify">
-                  <div dangerouslySetInnerHTML={{ __html: escuela.about }} />
+                  <div dangerouslySetInnerHTML={{ __html: escuela.about ?? '' }} />
                   <p>
                     Nuestra metodología combina el rigor académico con la aplicación práctica 
                     en entornos reales de negocio, preparándote para destacar en el mercado actual.

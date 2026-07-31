@@ -1,4 +1,4 @@
-import React from 'react'
+﻿import React from 'react'
 
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -24,7 +24,10 @@ interface Props {
   params: { slug: string }
 }
 
+
 export const dynamic = 'force-dynamic'
+
+
 
 async function getDocente(slug: string) {
   const docente = await prisma.usuario.findFirst({

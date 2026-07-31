@@ -16,6 +16,7 @@ export default async function ContactoPage() {
   const heroEyebrow = configs['CONTACTO_HERO_EYEBROW']?.trim() || 'Estamos aquí para ayudarte'
 
   const heroBg = configs['CONTACTO_HERO_IMAGE']?.trim()
+
   const heroStyle = {
     background: heroBg ? `url(${heroBg}) center/cover no-repeat` : 'linear-gradient(135deg, #13294D 0%, #1B3A6B 45%, #1B3A6B 100%)',
     padding: '6rem 1.5rem 5rem',

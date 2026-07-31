@@ -153,6 +153,7 @@ export async function requireProfesorOrAdmin(request: Request) {
  */
 export async function requirePermission(request: Request, permissionCode: string) {
   const session = await getAuthSession()
+
   if (!session) {
     return {
       authorized: false as const,
@@ -161,6 +162,7 @@ export async function requirePermission(request: Request, permissionCode: string
   }
 
   const { hasPermission } = await import('@/utils/libs/permissions')
+
   if (!hasPermission(session, permissionCode)) {
     return {
       authorized: false as const,

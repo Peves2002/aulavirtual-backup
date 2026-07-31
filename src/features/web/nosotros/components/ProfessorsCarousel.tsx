@@ -1,9 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import Link from 'next/link'
 import Image from 'next/image'
+
 import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
+
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 
 type Teacher = {
@@ -32,12 +35,14 @@ function useVisible() {
   useEffect(() => {
     const update = () => {
       const w = window.innerWidth
+
       setVisible(w < 640 ? 1 : w < 900 ? 2 : w < 1200 ? 3 : 4)
     }
 
     update()
     window.addEventListener('resize', update)
-    return () => window.removeEventListener('resize', update)
+    
+return () => window.removeEventListener('resize', update)
   }, [])
 
   return visible

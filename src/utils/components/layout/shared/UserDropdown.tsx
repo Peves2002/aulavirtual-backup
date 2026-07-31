@@ -40,13 +40,17 @@ function getDashboardPath(rol?: string, hasCustomPermissions?: boolean): string 
   if (rol === 'ADMIN' || (rol === 'ASESOR' && hasCustomPermissions)) {
     return '/admin/dashboard'
   }
+
   if (rol === 'PROFESOR') {
     return '/profesor/dashboard'
   }
+
   if (rol === 'ASESOR') {
     return '/admin/dashboard' // Por defecto mandarlos al panel admin
   }
-  return '/estudiante/dashboard'
+
+  
+return '/estudiante/dashboard'
 }
 
 const UserDropdown = () => {

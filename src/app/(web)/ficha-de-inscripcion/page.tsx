@@ -1,5 +1,8 @@
-import prisma from '@/utils/libs/prisma'
+﻿import prisma from '@/utils/libs/prisma'
 import FichaInscripcionForm from './FichaInscripcionForm'
+
+export const dynamic = 'force-dynamic'
+
 
 export const metadata = {
   title: 'Ficha de Inscripción Oficial - ADPH Group',
@@ -23,7 +26,8 @@ export default async function FichaInscripcionPage() {
 
   const config = settings.reduce((acc, curr) => {
     acc[curr.clave] = curr.valor
-    return acc
+    
+return acc
   }, {} as Record<string, string>)
 
   return <FichaInscripcionForm config={config} />

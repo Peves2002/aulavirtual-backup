@@ -1,7 +1,9 @@
 'use client'
 
 import { useMemo } from 'react'
+
 import dynamic from 'next/dynamic'
+
 import { Box, Typography } from '@mui/material'
 
 // Importar react-quill dinámicamente sin SSR para evitar errores de "document is not defined"
@@ -90,6 +92,7 @@ export default function RichTextEditor({
         '.ql-editor': {
           minHeight: minHeight
         },
+
         // Estilos básicos para adaptar al tema
         '.ql-stroke': {
           stroke: 'currentColor'

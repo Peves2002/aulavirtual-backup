@@ -1,10 +1,16 @@
-import { notFound } from 'next/navigation'
+﻿import { notFound } from 'next/navigation'
+
 
 import { Container, Box } from '@mui/material'
+
 
 import prisma from '@/utils/libs/prisma'
 import { getConfig } from '@/utils/libs/config'
 import RutasCatalog from '@/features/web/rutas/components/RutasCatalog'
+
+
+
+export const dynamic = 'force-dynamic'
 
 async function getRutas() {
   try {

@@ -69,17 +69,15 @@ export default function InscripcionesClientPage({ inscripciones }: Inscripciones
 
   // Obtener listas únicas para los selectores
   const escuelasUnicas = useMemo(() => {
-    const escuelas = inscripciones.map(i => i.escuela).filter(Boolean)
+    const escuelas = inscripciones.map(i => i.escuela).filter((e): e is string => !!e)
 
-    
-return Array.from(new Set(escuelas)).sort()
+    return Array.from(new Set(escuelas)).sort()
   }, [inscripciones])
 
   const modalidadesUnicas = useMemo(() => {
-    const modalidades = inscripciones.map(i => i.modalidad).filter(Boolean)
+    const modalidades = inscripciones.map(i => i.modalidad).filter((m): m is string => !!m)
 
-    
-return Array.from(new Set(modalidades)).sort()
+    return Array.from(new Set(modalidades)).sort()
   }, [inscripciones])
 
   // Filtrado de datos

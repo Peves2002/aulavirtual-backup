@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
+
 
 interface NavItem {
   id: string
@@ -33,7 +33,8 @@ export default function ProgramStickyNav({ visibleSections }: Props = {}) {
     if (item.id === 'plan-de-estudios' && visibleSections?.planEstudios === false) return false
     if (item.id === 'por-que' && visibleSections?.porQue === false) return false
     if (item.id === 'perfil' && visibleSections?.perfil === false) return false
-    return true
+    
+return true
   })
 
   useEffect(() => {
@@ -52,10 +53,13 @@ export default function ProgramStickyNav({ visibleSections }: Props = {}) {
         
         if (section) {
           const rect = section.getBoundingClientRect()
+
+
           // Ignorar 'admision' en desktop porque es sticky y siempre estaría activo
           if (item.id === 'admision' && window.innerWidth >= 1024) {
             continue
           }
+
           if (rect.top <= scrollPosition) {
             setActiveSection(item.id)
             break
@@ -65,14 +69,17 @@ export default function ProgramStickyNav({ visibleSections }: Props = {}) {
     }
 
     window.addEventListener('scroll', handleScroll)
+
     // Run once on mount
     handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    
+return () => window.removeEventListener('scroll', handleScroll)
+  }, [NAV_ITEMS])
 
   const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault()
     const element = document.getElementById(id)
+
     if (element) {
       window.scrollTo({
         top: element.offsetTop - 100, // Account for sticky nav height

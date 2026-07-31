@@ -1,4 +1,8 @@
+﻿
+
 export const dynamic = 'force-dynamic'
+
+
 
 import { Box, Typography } from '@mui/material'
 

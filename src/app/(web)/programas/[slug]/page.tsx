@@ -1,18 +1,27 @@
-import { redirect } from 'next/navigation'
+﻿import { redirect } from 'next/navigation'
 import Link from 'next/link'
+
+
 import { Calendar, Clock, Languages, MonitorPlay, Users, Hourglass, ArrowRight, Check, Play, BookOpen, Presentation, Code, Briefcase, ChevronRight, Award } from 'lucide-react'
+
+
 import prisma from '@/utils/libs/prisma'
 import AccordionModules from './components/AccordionModules'
 import AdvancedSpecializationsTabs from './components/AdvancedSpecializationsTabs'
-import ProgramStickyNav from './components/ProgramStickyNav'
 import CourseScholarships from '@/features/web/courses/components/CourseScholarships'
 import CourseFAQ from '@/features/web/courses/components/CourseFAQ'
 import CourseRelatedPrograms from '@/features/web/courses/components/CourseRelatedPrograms'
 
+
+
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const curso = await prisma.curso.findUnique({ where: { slug: params.slug } })
+
   if (!curso) return { title: 'Programa no encontrado' }
-  return {
+  
+return {
     title: `${curso.titulo} | ADPH Group`,
     description: curso.descripcion || 'Especialízate con nuestro programa.'
   }
@@ -37,7 +46,7 @@ export default async function ProgramPage({ params }: { params: { slug: string }
   }
 
   const beneficios = Array.isArray(curso.beneficios) ? curso.beneficios as any[] : []
-  const objetivos = Array.isArray(curso.objetivos) ? curso.objetivos as string[] : []
+
 
   return (
     <div className="bg-white min-h-screen font-sans text-slate-800 pb-24">

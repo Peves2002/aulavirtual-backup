@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import {
   Box,
   Button,
@@ -17,6 +18,7 @@ import {
   Chip
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
+
 import MediaLibrary from '../../cursos/components/MediaLibrary'
 
 interface Noticia {
@@ -73,8 +75,10 @@ export default function NoticiasSettings({ config, onInputChange }: NoticiasSett
   const noticiasList: Noticia[] = (() => {
     try {
       const dataStr = config.WEB_NOTICIAS
+
       if (!dataStr) return DEFAULT_NOTICIAS
-      return JSON.parse(dataStr)
+      
+return JSON.parse(dataStr)
     } catch {
       return DEFAULT_NOTICIAS
     }
@@ -87,6 +91,7 @@ export default function NoticiasSettings({ config, onInputChange }: NoticiasSett
     const today = new Date()
     const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' }
     const formattedDate = today.toLocaleDateString('es-ES', options)
+
     setFormDate(formattedDate)
     setFormImage('')
     setFormUrl('/blog')
@@ -110,10 +115,12 @@ export default function NoticiasSettings({ config, onInputChange }: NoticiasSett
   const handleSave = () => {
     if (!formTitle.trim() || !formTag.trim() || !formDate.trim()) {
       enqueueSnackbar('Título, Categoría/Etiqueta y Fecha son obligatorios', { variant: 'warning' })
-      return
+      
+return
     }
 
     let newList: Noticia[]
+
     if (editingItem) {
       // Edit
       newList = noticiasList.map(n =>
@@ -143,6 +150,7 @@ export default function NoticiasSettings({ config, onInputChange }: NoticiasSett
         enlaceExterno: formEnlaceExterno,
         imagenesSecundarias: formImagenesSecundarias
       }
+
       newList = [...noticiasList, newItem]
       enqueueSnackbar('Noticia añadida — recuerda guardar cambios generales', { variant: 'info' })
     }
@@ -153,6 +161,7 @@ export default function NoticiasSettings({ config, onInputChange }: NoticiasSett
 
   const handleDelete = (id: string) => {
     const newList = noticiasList.filter(n => n.id !== id)
+
     onInputChange('WEB_NOTICIAS', JSON.stringify(newList))
     enqueueSnackbar('Noticia eliminada — recuerda guardar cambios generales', { variant: 'info' })
   }
@@ -398,9 +407,11 @@ export default function NoticiasSettings({ config, onInputChange }: NoticiasSett
             enqueueSnackbar('Imagen secundaria añadida', { variant: 'success' })
           } else {
             const idx = mediaTarget.index
+
             setFormImagenesSecundarias(prev => prev.map((item, i) => i === idx ? url : item))
             enqueueSnackbar('Imagen secundaria actualizada', { variant: 'success' })
           }
+
           setOpenMedia(false)
         }}
         title='Seleccionar Imagen'

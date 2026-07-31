@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import { Box, Paper, Button, Stack, Typography } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { getSession } from 'next-auth/react'
@@ -19,7 +20,8 @@ export function BlogsClient({ initialData }: Props) {
 
   const initialMapped = (initialData || []).reduce((acc: { [key: string]: string }, curr: Configuracion) => {
     acc[curr.clave] = curr.valor
-    return acc
+    
+return acc
   }, {})
 
   const [config, setConfig] = useState<{ [key: string]: string }>({
@@ -33,16 +35,24 @@ export function BlogsClient({ initialData }: Props) {
 
   const handleSave = async () => {
     setSaving(true)
+
     try {
       const payload = Object.entries(config).map(([clave, valor]) => {
         const item = initialData?.find(d => d.clave === clave)
-        return { clave, valor, descripcion: item?.descripcion || '' }
+
+        
+return { clave, valor, descripcion: item?.descripcion || '' }
       })
+
       const getAuthToken = async () => {
         const s = await getSession()
-        return s?.user?.accessToken ?? null
+
+        
+return s?.user?.accessToken ?? null
       }
+
       const axiosConfig = new AxiosConfiguracion({ getAuthToken })
+
       await axiosConfig.save(payload)
       enqueueSnackbar('Blogs actualizados correctamente.', { variant: 'success' })
     } catch (err) {

@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, Calendar, BookOpen } from 'lucide-react'
+
+import { ArrowLeft, Calendar } from 'lucide-react'
+
 import { getConfigs } from '@/utils/libs/config'
 import FadeIn from '@/utils/components/animations/FadeIn'
 import NoticiaGallery from '@/utils/components/NoticiaGallery'
@@ -38,13 +40,17 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   const configs = await getConfigs()
   let noticias = DEFAULT_NOTICIAS
   const dbNoticiasStr = configs['WEB_NOTICIAS']
+
   if (dbNoticiasStr?.trim()) {
     try {
       noticias = JSON.parse(dbNoticiasStr)
     } catch {}
   }
+
   const news = noticias.find(n => n.id === params.id)
-  return {
+
+  
+return {
     title: `${news ? news.title : 'Noticia'} | ADPH Group`,
     description: 'Actualidad y desarrollo organizacional en Latinoamérica.'
   }
@@ -55,6 +61,7 @@ export default async function NoticiaDetailPage({ params }: { params: { id: stri
   
   let noticias = DEFAULT_NOTICIAS
   const dbNoticiasStr = configs['WEB_NOTICIAS']
+
   if (dbNoticiasStr?.trim()) {
     try {
       noticias = JSON.parse(dbNoticiasStr)

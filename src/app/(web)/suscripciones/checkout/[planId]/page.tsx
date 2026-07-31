@@ -1,8 +1,13 @@
-import { notFound } from 'next/navigation'
+﻿import { notFound } from 'next/navigation'
+
 
 import { SuscripcionCheckoutView } from '@/features/web/suscripciones/components/SuscripcionCheckoutView'
 import type { PlanPublico } from '@/features/estudiante/suscripciones/entity/Suscripcion'
 import prisma from '@/utils/libs/prisma'
+
+
+
+export const dynamic = 'force-dynamic'
 
 async function getPlan(planId: string): Promise<PlanPublico | null> {
   try {

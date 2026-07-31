@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { redirect } from 'next/navigation'
+
 import { Box } from '@mui/material'
 
 import { BlogsClient } from '@/features/admin/edicion-web/components/BlogsClient'
@@ -14,12 +15,15 @@ export const metadata = {
 
 export default async function Page() {
   const session = await getAuthSession()
+
   if (!session) redirect('/login')
 
   const canAccess = session.user?.rol === 'ADMIN' || hasPermission(session, 'EDITAR_CONTENIDO_WEB')
+
   if (!canAccess) redirect('/admin/dashboard')
 
   let initialData: any[] = []
+
   try {
     initialData = await prisma.configuracion.findMany({ where: { clave: 'WEB_BLOGS' } })
   } catch (error) {

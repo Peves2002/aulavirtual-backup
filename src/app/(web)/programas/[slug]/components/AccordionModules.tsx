@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import { Plus, Minus, PlayCircle, FileText } from 'lucide-react'
 
 export default function AccordionModules({ modulos }: { modulos: any[] }) {
@@ -10,7 +11,9 @@ export default function AccordionModules({ modulos }: { modulos: any[] }) {
     <div className="space-y-0 border-t border-gray-300">
       {modulos.map((modulo, idx) => {
         const isOpen = openIndex === idx
-        return (
+
+        
+return (
           <div key={modulo.id} className="border-b border-gray-300 bg-white overflow-hidden transition-all">
             <button
               onClick={() => setOpenIndex(isOpen ? null : idx)}
@@ -30,7 +33,7 @@ export default function AccordionModules({ modulos }: { modulos: any[] }) {
               <div className="pb-6 pt-2">
                 {modulo.lecciones && modulo.lecciones.length > 0 ? (
                   <ul className="space-y-3">
-                    {modulo.lecciones.map((leccion: any, lIdx: number) => (
+                    {modulo.lecciones.map((leccion: any) => (
                       <li key={leccion.id} className="flex flex-col sm:flex-row sm:items-center gap-2 p-2 rounded-lg hover:bg-slate-50">
                         <div className="flex items-center gap-3">
                           {leccion.es_pdf ? (

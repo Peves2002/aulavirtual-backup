@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 
 import { Box, Typography, Button, Skeleton } from '@mui/material'
+
 import useVerticalNav from '@menu/hooks/useVerticalNav'
 
 // ─── Icono por tipo de comunidad ───────────────────────────────────────────────

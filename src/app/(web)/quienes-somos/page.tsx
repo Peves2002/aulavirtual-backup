@@ -1,4 +1,5 @@
 import React from 'react'
+
 import type { Metadata } from 'next'
 import { Box } from '@mui/material'
 import { PlayCircle, Target, Eye, Gem } from 'lucide-react'
@@ -47,7 +48,7 @@ export default function QuienesSomosPage() {
 
         <div className="text-gray-600 space-y-6 text-[14px] leading-relaxed max-w-5xl mx-auto mb-12" style={{ fontFamily: 'Poppins, sans-serif' }}>
           <p>
-            <span className="font-bold text-[#289EA4]">«SELAH»</span> es una Asociación Civil sin fines de lucro patrocinada por la <span className="font-semibold text-[#289EA4]">Congregación Católica "Los Siervos de Cristo Pobre"</span>, y auspiciada por diversas Universidades e Instituciones que luchan por un tratamiento más humano a las personas, ya sea en el ámbito personal, familiar y empresarial.
+            <span className="font-bold text-[#289EA4]">«SELAH»</span> es una Asociación Civil sin fines de lucro patrocinada por la <span className="font-semibold text-[#289EA4]">Congregación Católica &quot;Los Siervos de Cristo Pobre&quot;</span>, y auspiciada por diversas Universidades e Instituciones que luchan por un tratamiento más humano a las personas, ya sea en el ámbito personal, familiar y empresarial.
           </p>
 
           <p>

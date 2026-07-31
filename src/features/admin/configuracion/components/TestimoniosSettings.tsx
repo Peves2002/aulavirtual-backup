@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import {
   Box,
   Button,
@@ -16,6 +17,7 @@ import {
   Grid
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
+
 import MediaLibrary from '../../cursos/components/MediaLibrary'
 
 interface Testimonio {
@@ -75,8 +77,10 @@ export default function TestimoniosSettings({ config, onInputChange }: Testimoni
   const testimoniosList: Testimonio[] = (() => {
     try {
       const dataStr = config.WEB_TESTIMONIOS
+
       if (!dataStr) return DEFAULT_TESTIMONIOS
-      return JSON.parse(dataStr)
+      
+return JSON.parse(dataStr)
     } catch {
       return DEFAULT_TESTIMONIOS
     }
@@ -105,10 +109,12 @@ export default function TestimoniosSettings({ config, onInputChange }: Testimoni
   const handleSave = () => {
     if (!formName.trim() || !formRole.trim() || !formQuote.trim()) {
       enqueueSnackbar('Nombre, Cargo y Comentario son obligatorios', { variant: 'warning' })
-      return
+      
+return
     }
 
     let newList: Testimonio[]
+
     if (editingItem) {
       // Edit
       newList = testimoniosList.map(t =>
@@ -127,6 +133,7 @@ export default function TestimoniosSettings({ config, onInputChange }: Testimoni
         quote: formQuote,
         image: formImage || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&q=80'
       }
+
       newList = [...testimoniosList, newItem]
       enqueueSnackbar('Testimonio añadido — recuerda guardar cambios generales', { variant: 'info' })
     }
@@ -137,6 +144,7 @@ export default function TestimoniosSettings({ config, onInputChange }: Testimoni
 
   const handleDelete = (id: string) => {
     const newList = testimoniosList.filter(t => t.id !== id)
+
     onInputChange('WEB_TESTIMONIOS', JSON.stringify(newList))
     enqueueSnackbar('Testimonio eliminado — recuerda guardar cambios generales', { variant: 'info' })
   }

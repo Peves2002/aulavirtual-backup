@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+
 import { ArrowLeft, Facebook, Linkedin, Twitter } from 'lucide-react'
+
 import { getConfigs } from '@/utils/libs/config'
 
 interface Blog {
@@ -170,13 +172,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const configs = await getConfigs()
   let blogs = ARTICLES
   const dbBlogsStr = configs.WEB_BLOGS
+
   if (dbBlogsStr?.trim()) {
     try {
       // Si la base de datos no tiene el mock, podemos mergear o simplemente usar dbBlogs si es que el usuario los guardó
       const parsed = JSON.parse(dbBlogsStr)
+
       if (parsed.length > 0) {
         // En un caso real priorizamos BD, pero por motivos de demo aseguramos que esté el mock
         const hasMock = parsed.find((b: any) => b.id === 'pad-articulo-prueba')
+
         if (!hasMock) {
           blogs = [ARTICLES[0], ...parsed]
         } else {
@@ -185,8 +190,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       }
     } catch {}
   }
+
   const blog = blogs.find((b) => b.id === params.slug)
-  return {
+
+  
+return {
     title: `${blog ? blog.title : 'Artículo'} | ADPH Group`,
     description: blog ? blog.desc.substring(0, 150) : 'Artículo del blog de ADPH Group.',
   }
@@ -200,8 +208,10 @@ export default async function BlogDetailPage({ params }: { params: { slug: strin
   if (dbBlogsStr?.trim()) {
     try {
       const parsed = JSON.parse(dbBlogsStr)
+
       if (parsed.length > 0) {
         const hasMock = parsed.find((b: any) => b.id === 'pad-articulo-prueba')
+
         if (!hasMock) {
           blogs = [ARTICLES[0], ...parsed]
         } else {
@@ -327,7 +337,8 @@ export default async function BlogDetailPage({ params }: { params: { slug: strin
             <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed space-y-6">
               {blog.desc.split('\n').map((paragraph, idx) => {
                 if (!paragraph.trim()) return null
-                return (
+                
+return (
                   <p key={idx} className="text-[17px] md:text-[18px]">
                     {paragraph}
                   </p>

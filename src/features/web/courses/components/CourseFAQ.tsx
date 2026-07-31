@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import { useState } from 'react'
 
 import { Box, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 
@@ -35,7 +35,7 @@ export default function CourseFAQ({
   title = 'Preguntas frecuentes',
   faqs
 }: CourseFAQProps) {
-  const [expanded, setExpanded] = React.useState<string | false>(false)
+  const [expanded, setExpanded] = useState<string | false>(false)
   const data = faqs && faqs.length > 0 ? faqs : defaultFaqs
 
   return (

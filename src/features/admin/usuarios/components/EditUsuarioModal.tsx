@@ -408,6 +408,7 @@ const EditUsuarioModal = ({ open, handleClose, usuarioId, onSuccess }: EditUsuar
                         value={values.rol_personalizado_id ? `CUSTOM_${values.rol_personalizado_id}` : values.rol}
                         onChange={(e) => {
                           const val = e.target.value;
+
                           if (val.startsWith('CUSTOM_')) {
                             setFieldValue('rol', Rol.ASESOR);
                             setFieldValue('rol_personalizado_id', val.replace('CUSTOM_', ''));

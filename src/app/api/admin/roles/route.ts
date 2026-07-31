@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+
 import prisma from '@/utils/libs/prisma'
 import { requirePermission } from '@/utils/libs/auth-helpers'
 import { ApiResponse } from '@/utils/libs/apiResponse'
@@ -13,6 +13,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   try {
     const auth = await requirePermission(request, 'VER_USUARIOS')
+
     if (!auth.authorized) {
       return auth.error
     }
@@ -39,6 +40,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const auth = await requirePermission(request, 'VER_USUARIOS')
+
     if (!auth.authorized) {
       return auth.error
     }

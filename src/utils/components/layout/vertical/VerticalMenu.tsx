@@ -5,7 +5,6 @@ import { useTheme } from '@mui/material/styles'
 import { Divider } from '@mui/material'
 
 // Third-party Imports
-import PerfectScrollbar from 'react-perfect-scrollbar'
 import { useSession } from 'next-auth/react'
 
 // Type Imports
@@ -47,15 +46,14 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
   const theme = useTheme()
   const verticalNavOptions = useVerticalNav()
   const { settings } = useSettings()
-  const { isBreakpointReached } = useVerticalNav()
+
   const { data: session } = useSession()
 
   // Vars
   const { transitionDuration } = verticalNavOptions
   const rol = session?.user?.rol
 
-  const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
-
+  
   return (
     // eslint-disable-next-line lines-around-comment
     /* Custom scrollbar instead of browser scroll, remove if you want browser scroll only */

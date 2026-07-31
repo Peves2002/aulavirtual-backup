@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+
 import {
   Box,
   Typography,
@@ -20,7 +21,7 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  FormControlLabel,
+  
   Checkbox,
   Grid,
   Chip,
@@ -29,6 +30,7 @@ import {
   Stack
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
+
 import { PERMISOS, type PermisoDef } from '@/utils/libs/permissions'
 
 interface RolPersonalizado {
@@ -60,12 +62,14 @@ export default function RolesView() {
   const [submitting, setSubmitting] = useState(false)
 
   // Fetch roles
-  const fetchRoles = async () => {
+  const fetchRoles = useCallback(async () => {
     try {
       setLoading(true)
       const res = await fetch('/api/admin/roles')
+
       if (res.ok) {
         const json = await res.json()
+
         setRoles(json.result || json.data || [])
       } else {
         enqueueSnackbar('Error al obtener la lista de roles', { variant: 'error' })
@@ -76,11 +80,11 @@ export default function RolesView() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [enqueueSnackbar])
 
   useEffect(() => {
     fetchRoles()
-  }, [])
+  }, [fetchRoles])
 
   // Open modal for creation
   const handleOpenCreate = () => {
@@ -120,11 +124,13 @@ export default function RolesView() {
   const handleSubmit = async () => {
     if (!formName.trim()) {
       enqueueSnackbar('El nombre del rol es requerido', { variant: 'warning' })
-      return
+      
+return
     }
 
     try {
       setSubmitting(true)
+
       const payload = {
         nombre: formName.trim(),
         descripcion: formDesc.trim(),
@@ -149,6 +155,7 @@ export default function RolesView() {
         fetchRoles()
       } else {
         const errorData = await res.json()
+
         enqueueSnackbar(errorData.message || 'Error al guardar el rol', { variant: 'error' })
       }
     } catch (e) {
@@ -165,6 +172,7 @@ export default function RolesView() {
 
     try {
       setSubmitting(true)
+
       const res = await fetch(`/api/admin/roles/${roleToDelete.id}`, {
         method: 'DELETE'
       })
@@ -253,7 +261,9 @@ export default function RolesView() {
                         ) : (
                           role.permisos.map((code) => {
                             const name = PERMISOS.find(p => p.code === code)?.name || code
-                            return (
+
+                            
+return (
                               <Chip key={code} label={name} size='small' color='info' variant='outlined' />
                             )
                           })
@@ -351,7 +361,9 @@ export default function RolesView() {
               <Grid container spacing={2}>
                 {PERMISOS.map((perm: PermisoDef) => {
                   const isChecked = formPerms.includes(perm.code)
-                  return (
+
+                  
+return (
                     <Grid item xs={12} sm={6} key={perm.code}>
                       <Paper
                         variant='outlined'

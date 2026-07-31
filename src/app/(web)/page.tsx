@@ -1,10 +1,16 @@
-import type { Metadata } from 'next'
-
-import Link from 'next/link'
+﻿
 import fs from 'fs'
 import path from 'path'
 
-import { ArrowRight, ChevronRight, BookOpen, Quote, Building2, Calendar } from 'lucide-react'
+
+import Link from 'next/link'
+
+
+import type { Metadata } from 'next'
+
+
+import { ArrowRight, ChevronRight, BookOpen, Building2 } from 'lucide-react'
+
 
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
@@ -13,9 +19,14 @@ import AdphEscuelasCarousel from '@/features/web/adph/components/AdphEscuelasCar
 import TestimoniosCarousel from '@/features/web/adph/components/TestimoniosCarousel'
 import FadeIn from '@/utils/components/animations/FadeIn'
 import { ESCUELAS } from '@/features/web/adph/data/escuelas'
-import { PROGRAMAS } from '@/features/web/adph/data/programas'
+
+
 import AdphNewsletter from '@/features/web/adph/components/AdphNewsletter'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
+
+
+
+export const dynamic = 'force-dynamic'
 
 // ── SEO: Metadata dinámica desde el panel admin ──────────────────────────────
 export async function generateMetadata(): Promise<Metadata> {
@@ -75,6 +86,7 @@ const NOTICIAS = [
 export default async function HomePage() {
   // Query configurations to apply dynamic school images
   const configs = await getConfigs()
+
   const dynamicEscuelas = ESCUELAS.map(esc => {
     const configKeyPrefix = `ESCUELA_${esc.id.toUpperCase().replace(/-/g, '_')}`
     const dbImage = configs[`${configKeyPrefix}_IMAGE`]
@@ -90,6 +102,7 @@ export default async function HomePage() {
   // Load dynamic testimonials
   let dynamicTestimonios: any[] = TESTIMONIOS
   const dbTestimoniosStr = configs['WEB_TESTIMONIOS']
+
   if (dbTestimoniosStr?.trim()) {
     try {
       dynamicTestimonios = JSON.parse(dbTestimoniosStr)
@@ -101,6 +114,7 @@ export default async function HomePage() {
   // Load dynamic blogs
   let dynamicBlogs: any[] = BLOGS
   const dbBlogsStr = configs['WEB_BLOGS']
+
   if (dbBlogsStr?.trim()) {
     try {
       dynamicBlogs = JSON.parse(dbBlogsStr)
@@ -112,6 +126,7 @@ export default async function HomePage() {
   // Load dynamic news
   let dynamicNoticias: any[] = NOTICIAS
   const dbNoticiasStr = configs['WEB_NOTICIAS']
+
   if (dbNoticiasStr?.trim()) {
     try {
       dynamicNoticias = JSON.parse(dbNoticiasStr)
@@ -123,6 +138,7 @@ export default async function HomePage() {
   // Load dynamic logos
   let dynamicLogos: any[] = []
   const dbLogosStr = configs['HOME_LOGOS']
+
   if (dbLogosStr?.trim()) {
     try {
       dynamicLogos = JSON.parse(dbLogosStr)
@@ -189,9 +205,11 @@ export default async function HomePage() {
 
   const displayProgramas = cursosDestacados.map((c, index) => {
     let finalImage = '/images/cursos.jpg'
+
     if (c.miniatura && typeof c.miniatura === 'string' && c.miniatura.trim() !== '') {
       const cleanPath = c.miniatura.startsWith('/') ? c.miniatura : `/${c.miniatura}`
       const fullPath = path.join(process.cwd(), 'public', cleanPath)
+
       if (fs.existsSync(fullPath)) {
         finalImage = cleanPath
       } else {

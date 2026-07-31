@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import Link from 'next/link'
+
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const IMAGES = [
@@ -17,7 +19,9 @@ export default function HeroCarousel() {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % IMAGES.length)
     }, 6000)
-    return () => clearInterval(timer)
+
+    
+return () => clearInterval(timer)
   }, [])
 
   const next = () => setCurrent((prev) => (prev + 1) % IMAGES.length)

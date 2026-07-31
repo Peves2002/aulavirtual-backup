@@ -1,4 +1,4 @@
-﻿import type { MetadataRoute } from 'next'
+import type { MetadataRoute } from 'next'
 
 import { getConfigs } from '@/utils/libs/config'
 
@@ -21,6 +21,6 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
         ],
       },
     ],
-    sitemap: ${siteUrl}/sitemap.xml,
+    sitemap: `${siteUrl}/sitemap.xml`,
   }
 }

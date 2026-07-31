@@ -1,4 +1,5 @@
 import Link from 'next/link'
+
 import { Box, Typography, Button } from '@mui/material'
 
 export const metadata = {

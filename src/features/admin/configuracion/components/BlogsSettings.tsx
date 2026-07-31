@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import {
   Box,
   Button,
@@ -17,6 +18,7 @@ import {
   Chip
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
+
 import MediaLibrary from '../../cursos/components/MediaLibrary'
 import RichTextEditor from '@/utils/components/RichTextEditor'
 
@@ -104,8 +106,10 @@ export default function BlogsSettings({ config, onInputChange }: BlogsSettingsPr
   const blogsList: Blog[] = (() => {
     try {
       const dataStr = config.WEB_BLOGS
+
       if (!dataStr) return DEFAULT_BLOGS
-      return JSON.parse(dataStr)
+      
+return JSON.parse(dataStr)
     } catch {
       return DEFAULT_BLOGS
     }
@@ -116,15 +120,19 @@ export default function BlogsSettings({ config, onInputChange }: BlogsSettingsPr
     setFormTitle('')
     setFormCategory('')
     setFormReadTime('5 min lectura')
+
     // Get formatted current date in Spanish like "08 de Julio, 2026"
     const today = new Date()
     const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' }
     const formattedDate = today.toLocaleDateString('es-ES', options).replace(/ de /g, ' de ')
+
     // capitalize month
     const words = formattedDate.split(' ')
+
     if (words.length > 2) {
       words[2] = words[2].charAt(0).toUpperCase() + words[2].slice(1)
     }
+
     setFormDate(words.join(' '))
 
     setFormDesc('')
@@ -158,7 +166,8 @@ export default function BlogsSettings({ config, onInputChange }: BlogsSettingsPr
   const handleSave = () => {
     if (!formTitle.trim() || !formCategory.trim() || !formDesc.trim() || !formAuthor.trim()) {
       enqueueSnackbar('Título, Categoría, Descripción y Autor son obligatorios', { variant: 'warning' })
-      return
+      
+return
     }
 
     const parsedTags = formTagsInput
@@ -167,6 +176,7 @@ export default function BlogsSettings({ config, onInputChange }: BlogsSettingsPr
       .filter(t => t.length > 0)
 
     let newList: Blog[]
+
     if (editingItem) {
       // Edit
       newList = blogsList.map(b =>
@@ -215,6 +225,7 @@ export default function BlogsSettings({ config, onInputChange }: BlogsSettingsPr
         imagenesSecundarias: formImagenesSecundarias,
         contentHtml: formContentHtml
       }
+
       newList = [...blogsList, newItem]
       enqueueSnackbar('Artículo de blog añadido — recuerda guardar cambios generales', { variant: 'info' })
     }
@@ -225,6 +236,7 @@ export default function BlogsSettings({ config, onInputChange }: BlogsSettingsPr
 
   const handleDelete = (id: string) => {
     const newList = blogsList.filter(b => b.id !== id)
+
     onInputChange('WEB_BLOGS', JSON.stringify(newList))
     enqueueSnackbar('Artículo de blog eliminado — recuerda guardar cambios generales', { variant: 'info' })
   }
@@ -548,9 +560,11 @@ export default function BlogsSettings({ config, onInputChange }: BlogsSettingsPr
             enqueueSnackbar('Imagen secundaria añadida', { variant: 'success' })
           } else {
             const idx = mediaTarget.index
+
             setFormImagenesSecundarias(prev => prev.map((item, i) => i === idx ? url : item))
             enqueueSnackbar('Imagen secundaria actualizada', { variant: 'success' })
           }
+
           setOpenMedia(false)
         }}
         title='Seleccionar Imagen'

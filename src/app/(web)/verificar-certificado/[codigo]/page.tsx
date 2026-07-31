@@ -1,4 +1,4 @@
-import React from 'react'
+﻿import React from 'react'
 
 import Link from 'next/link'
 
@@ -34,7 +34,10 @@ interface Props {
   }
 }
 
+
 export const dynamic = 'force-dynamic'
+
+
 
 /**
  * Página pública de verificación de certificados

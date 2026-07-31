@@ -117,7 +117,8 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
 
   const initialMapped = (initialData || []).reduce((acc: { [key: string]: string }, curr: Configuracion) => {
     acc[curr.clave] = curr.valor
-    return acc
+    
+return acc
   }, {})
 
   const [config, setConfig] = useState<{ [key: string]: string }>({
@@ -132,12 +133,14 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     PRIMARY_COLOR_DARK: '#9196F2',
     WHATSAPP_NUMERO: '',
     WHATSAPP_NUMERO_EMPRESAS: '',
+
     // Comunidad (Sidebar)
     COMUNIDAD_HABILITADO: 'true',
     COMUNIDAD_TEXTO: '¡Únete a nuestra comunidad!',
     COMUNIDAD_DESCRIPCION: 'Conecta con otros estudiantes',
     COMUNIDAD_URL: '',
     COMUNIDAD_TIPO: 'otro',
+
     // Pagos
     PAYPAL_ENABLED: 'true',
     PAYPAL_CLIENT_ID: '',
@@ -155,16 +158,19 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     PAGO_MANUAL_WHATSAPP_NUMERO: '',
     MP_ENABLED: 'true',
     MP_PUBLIC_KEY: '',
+
     // Comportamiento
     PEDIDOS_SOLICITAR_COMPROBANTE: 'true',
     COMENTARIOS_REQUIERE_APROBACION: 'false',
     chat_entre_alumnos: 'false',
     WEB_EMPRESAS_HABILITADO: 'true',
+
     // Ficha de Inscripcion
     INSCRIPCION_CONTACTO_DIRECCION: 'Av. Javier Prado Este 560, Oficina 2302 San Isidro',
     INSCRIPCION_CONTACTO_EMAIL: 'informes@adphgroup.com',
     INSCRIPCION_CONTACTO_TELEFONO: '(01) 7073571',
     INSCRIPCION_IMPORTANTE_TEXTO: '1. La información consignada en su ficha de inscripción...\n2. Los datos consignados serán utilizados...\n3. ADPH Group – Executive Education se reserva el derecho...\n4. ADPH Group se reserva el derecho de reprogramar las fechas...',
+
     // Certificados
     CERTIFICADO_INSTITUTION_NAME: '',
     CERTIFICADO_SLOGAN: '',
@@ -172,6 +178,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     CERTIFICADO_GERENTE_GENERAL_ID: '',
     CERTIFICADO_PLANTILLA: 'clasico',
     CERTIFICADO_MOSTRAR_FIRMA_DOCENTE: 'true',
+
     // SEO
     SEO_SITE_URL: '',
     SEO_OG_IMAGE: '',
@@ -202,16 +209,24 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
 
   const handleSave = async () => {
     setSaving(true)
+
     try {
       const payload = Object.entries(config).map(([clave, valor]) => {
         const item = initialData?.find(d => d.clave === clave)
-        return { clave, valor, descripcion: item?.descripcion || '' }
+
+        
+return { clave, valor, descripcion: item?.descripcion || '' }
       })
+
       const getAuthToken = async () => {
         const s = await getSession()
-        return s?.user?.accessToken ?? null
+
+        
+return s?.user?.accessToken ?? null
       }
+
       const axiosConfig = new AxiosConfiguracion({ getAuthToken })
+
       await axiosConfig.save(payload)
       enqueueSnackbar('Configuración actualizada. Si cambiaste el favicon, recarga la pestaña (Ctrl+F5).', { variant: 'success' })
     } catch (err) {
@@ -635,6 +650,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
         </Stack>
       )
     },
+
     // ── Ficha de Inscripción ───────────────────────────────────────────────────────
     {
       label: 'Ficha de Inscripción',
@@ -694,6 +710,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
         </Stack>
       )
     },
+
     // ── Pestaña SEO ────────────────────────────────────────────────────────────────
     {
       label: 'SEO',
@@ -970,6 +987,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
             handleInputChange(imagePicker.key, url)
             enqueueSnackbar('Imagen actualizada — recuerda guardar', { variant: 'info' })
           }
+
           setImagePicker(null)
         }}
         title={imagePicker?.title || 'Seleccionar Imagen'}

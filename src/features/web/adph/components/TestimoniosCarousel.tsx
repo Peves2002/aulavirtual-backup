@@ -1,7 +1,9 @@
 'use client'
 
 import { useRef } from 'react'
+
 import { Quote, ChevronLeft, ChevronRight } from 'lucide-react'
+
 import FadeIn from '@/utils/components/animations/FadeIn'
 
 interface Testimonio {
@@ -55,8 +57,10 @@ export default function TestimoniosCarousel({ testimonios }: TestimoniosCarousel
   const handlePrev = () => {
     if (scrollRef.current) {
       const card = scrollRef.current.querySelector('.testimonios-card-wrapper')
+
       if (card) {
         const isAtStart = scrollRef.current.scrollLeft <= 10
+
         if (isAtStart) {
           // Wrap to end
           scrollRef.current.scrollTo({ left: scrollRef.current.scrollWidth, behavior: 'smooth' })
@@ -71,8 +75,10 @@ export default function TestimoniosCarousel({ testimonios }: TestimoniosCarousel
   const handleNext = () => {
     if (scrollRef.current) {
       const card = scrollRef.current.querySelector('.testimonios-card-wrapper')
+
       if (card) {
         const isAtEnd = scrollRef.current.scrollLeft + scrollRef.current.clientWidth >= scrollRef.current.scrollWidth - 15
+
         if (isAtEnd) {
           // Wrap to start
           scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' })

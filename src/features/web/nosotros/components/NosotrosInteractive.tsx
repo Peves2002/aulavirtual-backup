@@ -1,6 +1,7 @@
 'use client'
 
 import { Heart, Lightbulb, Users, TrendingUp, ShieldCheck } from 'lucide-react'
+
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 
 const DEFAULT_VALORES = [

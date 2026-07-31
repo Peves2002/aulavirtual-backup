@@ -19,6 +19,7 @@ export default async function EmpresasPage() {
   const heroDesc = configs['EMPRESAS_HERO_DESC']?.trim() || 'Descubre nuestras soluciones corporativas diseñadas para potenciar las habilidades de tus colaboradores y aumentar la competitividad técnica de tu empresa en el mercado actual.'
 
   const heroBg = configs['EMPRESAS_HERO_IMAGE']?.trim()
+
   const heroStyle = {
     background: heroBg ? `url(${heroBg}) center/cover no-repeat` : 'linear-gradient(135deg, #13294D 0%, #1B3A6B 45%, #1B3A6B 100%)',
     padding: '6rem 1.5rem 5rem',

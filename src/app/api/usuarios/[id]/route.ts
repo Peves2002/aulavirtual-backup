@@ -150,9 +150,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     }
 
     // Si el número de documento viene vacío, convertirlo a null para evitar colisiones unique
-    if (data.numero_documento === '') {
-      data.numero_documento = null
-    }
+    const numeroDocumentoFinal: string | null | undefined =
+      data.numero_documento === '' ? null : data.numero_documento
 
     // Hash de la contraseña si existe, si viene vacía no actualizarla
     if (data.contrasena) {
@@ -164,7 +163,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     // Actualizar usuario
     const usuarioActualizado = await prisma.usuario.update({
       where: { id },
-      data,
+      data: { ...data, numero_documento: numeroDocumentoFinal },
       select: {
         id: true,
         correo: true,

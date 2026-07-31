@@ -1,7 +1,9 @@
+import Link from 'next/link'
+
 import type { Metadata } from 'next'
 
-import Link from 'next/link'
-import { ArrowRight, Calendar, BookOpen } from 'lucide-react'
+import { ArrowRight,  BookOpen } from 'lucide-react'
+
 import { getConfigs } from '@/utils/libs/config'
 import FadeIn from '@/utils/components/animations/FadeIn'
 
@@ -31,7 +33,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 
-const DEFAULT_NOTICIAS = [
+interface Noticia {
+  id: string
+  tag: string
+  title: string
+  date: string
+  image: string
+  url: string
+  enlaceExterno?: string
+}
+
+const DEFAULT_NOTICIAS: Noticia[] = [
   {
     id: '1',
     tag: 'TENDENCIAS',
@@ -53,8 +65,9 @@ const DEFAULT_NOTICIAS = [
 export default async function NoticiasPage() {
   const configs = await getConfigs()
   
-  let dynamicNoticias = DEFAULT_NOTICIAS
+  let dynamicNoticias: Noticia[] = DEFAULT_NOTICIAS
   const dbNoticiasStr = configs['WEB_NOTICIAS']
+
   if (dbNoticiasStr?.trim()) {
     try {
       dynamicNoticias = JSON.parse(dbNoticiasStr)

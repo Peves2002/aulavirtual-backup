@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { ESCUELAS } from '@/features/web/adph/data/escuelas'
 
 interface AdphHeroFormProps {

@@ -76,7 +76,47 @@ export const actualizarCursoSchema = z.object({
   incluye: z.array(z.any()).optional(),
   perfil_estudiante: z.string().optional().nullable(),
   salidas_profesionales: z.array(z.any()).optional(),
-  testimonios: z.array(z.any()).optional()
+  testimonios: z.array(z.any()).optional(),
+
+  // Flags de visibilidad de secciones
+  mostrar_beneficios: z.boolean().optional(),
+  mostrar_metodologia: z.boolean().optional(),
+  mostrar_objetivos: z.boolean().optional(),
+  mostrar_salidas: z.boolean().optional(),
+  mostrar_perfil: z.boolean().optional(),
+  mostrar_incluye: z.boolean().optional(),
+  mostrar_admision: z.boolean().optional(),
+  mostrar_becas: z.boolean().optional(),
+  mostrar_certificaciones: z.boolean().optional(),
+  mostrar_director: z.boolean().optional(),
+  mostrar_empresas: z.boolean().optional(),
+  mostrar_faqs: z.boolean().optional(),
+  mostrar_herramientas: z.boolean().optional(),
+  mostrar_por_que_estudiar: z.boolean().optional(),
+  mostrar_por_que_nosotros: z.boolean().optional(),
+  mostrar_rankings: z.boolean().optional(),
+  mostrar_relacionados: z.boolean().optional(),
+  mostrar_acompanamiento: z.boolean().optional(),
+
+  // Campos de contenido premium
+  director: z.string().optional().nullable(),
+  por_que_estudiar: z.string().optional().nullable(),
+  por_que_nosotros: z.string().optional().nullable(),
+  proceso_admision: z.string().optional().nullable(),
+  titulo_admision: z.string().optional().nullable(),
+  requisitos_admision: z.string().optional().nullable(),
+  ayudas_becas: z.string().optional().nullable(),
+  certificaciones: z.array(z.any()).optional(),
+  titulo_certificaciones: z.string().optional().nullable(),
+  herramientas: z.array(z.any()).optional(),
+  acompanamiento: z.string().optional().nullable(),
+  empresas_alumnos: z.array(z.any()).optional(),
+  rankings: z.array(z.any()).optional(),
+  faqs: z.array(z.any()).optional(),
+  programas_relacionados: z.array(z.any()).optional(),
+  titulo_programa: z.string().optional().nullable(),
+  titulo_plan_estudios: z.string().optional().nullable(),
+  titulo_salidas: z.string().optional().nullable()
 })
 
 export type ActualizarCursoDto = z.infer<typeof actualizarCursoSchema>

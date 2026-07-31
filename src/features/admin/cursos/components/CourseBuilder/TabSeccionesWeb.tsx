@@ -1,8 +1,10 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Grid, Typography, Box, Button, Divider, Stack, IconButton, Card, FormControlLabel, Switch, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
+
+import { Grid, Typography, Box, Button, Divider, Stack, IconButton, Card, FormControlLabel, Switch } from '@mui/material'
 import { useSnackbar } from 'notistack'
+
 import CustomTextField from '@core/components/mui/TextField'
 import { useEditCurso } from '../../hooks/useCursos'
 
@@ -58,10 +60,13 @@ export function TabSeccionesWeb({ curso, onSuccess }: any) {
         id: curso.id,
         data: {
           ...toggles,
+
           // @ts-ignore
           faqs, certificaciones, herramientas, ayudas_becas: becas, programas_relacionados: programasRelacionados,
+
           // @ts-ignore
           rankings, empresas_alumnos: empresas, acompanamiento, por_que_estudiar: porQueEstudiar, proceso_admision: procesoAdmision,
+
           // @ts-ignore
           director, por_que_nosotros: { texto: porQueNosotros },
           titulo_programa: tituloPrograma,
@@ -81,11 +86,14 @@ export function TabSeccionesWeb({ curso, onSuccess }: any) {
   // GENERIC HELPERS
   const addItem = (setter: any, defaultObj: any) => setter((prev: any) => [...prev, defaultObj])
   const removeItem = (setter: any, index: number) => setter((prev: any) => prev.filter((_: any, i: number) => i !== index))
+
   const updateItem = (setter: any, index: number, field: string, value: any) => {
     setter((prev: any) => {
       const arr = [...prev]
+
       arr[index] = { ...arr[index], [field]: value }
-      return arr
+      
+return arr
     })
   }
 
@@ -104,7 +112,7 @@ export function TabSeccionesWeb({ curso, onSuccess }: any) {
         <Typography variant='h6' sx={{ mb: 2 }}>Títulos Personalizados de Secciones</Typography>
         <Card sx={{ p: 3 }}>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            Deja en blanco para usar los textos por defecto (Ej: "Plan de estudios"). El título de programa reemplaza al texto principal introductorio.
+            Deja en blanco para usar los textos por defecto (Ej: &quot;Plan de estudios&quot;). El título de programa reemplaza al texto principal introductorio.
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12}>

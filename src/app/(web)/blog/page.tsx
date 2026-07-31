@@ -1,8 +1,10 @@
 import Link from 'next/link'
+
+import {  BookOpen,   } from 'lucide-react'
+
 import { getConfigs } from '@/utils/libs/config'
 import BlogGrid from '@/features/web/blog/components/BlogGrid'
 
-import { ArrowRight, BookOpen, Calendar, Clock } from 'lucide-react'
 
 export const metadata = {
   title: 'Nuestro Blog | Artículos y Tendencias de RRHH | ADPH Group',
@@ -65,11 +67,14 @@ export default async function BlogPage() {
   const configs = await getConfigs()
   let dynamicBlogs = ARTICLES
   const dbBlogsStr = configs.WEB_BLOGS
+
   if (dbBlogsStr?.trim()) {
     try {
       const parsed = JSON.parse(dbBlogsStr)
+
       if (parsed.length > 0) {
         const hasMock = parsed.find((b: any) => b.id === 'pad-articulo-prueba')
+
         if (!hasMock) {
           dynamicBlogs = [ARTICLES[0], ...parsed]
         } else {

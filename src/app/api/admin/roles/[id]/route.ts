@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+
 import prisma from '@/utils/libs/prisma'
 import { requirePermission } from '@/utils/libs/auth-helpers'
 import { ApiResponse } from '@/utils/libs/apiResponse'
@@ -11,6 +11,7 @@ import { handleApiError } from '@/utils/libs/validation'
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
     const auth = await requirePermission(request, 'VER_USUARIOS')
+
     if (!auth.authorized) {
       return auth.error
     }
@@ -38,6 +39,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
     const auth = await requirePermission(request, 'VER_USUARIOS')
+
     if (!auth.authorized) {
       return auth.error
     }
@@ -59,6 +61,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       const nameConflict = await prisma.rolPersonalizado.findUnique({
         where: { nombre }
       })
+
       if (nameConflict) {
         return ApiResponse.error(request, 'Ya existe otro rol con este nombre', 409)
       }
@@ -86,6 +89,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
     const auth = await requirePermission(request, 'VER_USUARIOS')
+
     if (!auth.authorized) {
       return auth.error
     }

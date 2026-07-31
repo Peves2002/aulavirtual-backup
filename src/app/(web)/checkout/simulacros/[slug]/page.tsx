@@ -1,7 +1,12 @@
-import { notFound, redirect } from 'next/navigation'
+﻿import { notFound, redirect } from 'next/navigation'
+
 
 import prisma from '@/utils/libs/prisma'
 import SimulacroCheckoutView from '@/features/web/checkout/components/SimulacroCheckoutView'
+
+
+
+export const dynamic = 'force-dynamic'
 
 async function getSimulacroData(slug: string) {
   try {

@@ -188,7 +188,9 @@ export function UsuariosPage({ initialDataUsuarios, initialTotal = 0 }: Usuarios
         header: 'Rol',
         cell: ({ row }) => {
           const customRoleName = (row.original as any).rol_personalizado?.nombre
-          return (
+
+          
+return (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'flex-start' }}>
               <Chip
                 variant='tonal'

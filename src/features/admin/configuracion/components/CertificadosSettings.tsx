@@ -75,9 +75,11 @@ interface CertificadosSettingsProps {
 
 export default function CertificadosSettings({ config, onInputChange }: CertificadosSettingsProps) {
   const { data: usuariosData, isLoading } = useUsuarios({ limit: '1000' })
+
   const candidatos = (usuariosData?.usuarios || []).filter(
     (u: any) => u.rol === Rol.ADMIN || u.rol === Rol.PROFESOR
   )
+
   const plantillaActiva = config.CERTIFICADO_PLANTILLA || 'clasico'
 
   return (

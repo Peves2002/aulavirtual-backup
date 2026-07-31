@@ -1,4 +1,5 @@
 import React from 'react'
+
 import type { Metadata } from 'next'
 import { Box } from '@mui/material'
 import { PlayCircle } from 'lucide-react'
@@ -51,7 +52,7 @@ export default function HistoriaPage() {
           </p>
 
           <p>
-            Somos los gestores de la <span className="font-bold text-[#289EA4]">"LEY 29768 - LEY QUE REGULA EL ESTABLECIMIENTO Y EJERCICIO DE LOS CENTROS DE ATENCIÓN, PARA DEPENDIENTES QUE OPERAN BAJO LA MODALIDAD DE COMUNIDADES TERAPÉUTICAS. PROMULGADA EL 23/07/2011"</span>, presentada al Congreso de la República en el mes de Febrero del 2011.
+            Somos los gestores de la <span className="font-bold text-[#289EA4]">&quot;LEY 29768 - LEY QUE REGULA EL ESTABLECIMIENTO Y EJERCICIO DE LOS CENTROS DE ATENCIÓN, PARA DEPENDIENTES QUE OPERAN BAJO LA MODALIDAD DE COMUNIDADES TERAPÉUTICAS. PROMULGADA EL 23/07/2011&quot;</span>, presentada al Congreso de la República en el mes de Febrero del 2011.
           </p>
 
           <p>

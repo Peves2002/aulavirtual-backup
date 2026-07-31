@@ -1,14 +1,22 @@
+﻿import Link from 'next/link'
+
+
 import type { Metadata } from 'next'
 
-import Link from 'next/link'
+
 
 import { ArrowRight } from 'lucide-react'
+
 
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
 import { MisionVisionSection, ValoresSection } from '@/features/web/nosotros/components/NosotrosInteractive'
+
+
+
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(): Promise<Metadata> {
   const configs = await getConfigs()
@@ -72,6 +80,7 @@ export default async function NosotrosPage() {
 
   let dynamicValores: { title: string; desc: string }[] | undefined = undefined
   const dbValoresStr = configs['NOSOTROS_VALORES']
+
   if (dbValoresStr?.trim()) {
     try { dynamicValores = JSON.parse(dbValoresStr) } catch { /* fallback */ }
   }
@@ -84,12 +93,8 @@ export default async function NosotrosPage() {
   ]
 
   const heroBg = configs['NOSOTROS_HERO_IMAGE']?.trim()
-  const heroStyle = {
-    background: heroBg ? `url(${heroBg}) center/cover no-repeat` : 'linear-gradient(135deg, #13294D 0%, #1B3A6B 45%, #1B3A6B 100%)',
-    padding: '6rem 1.5rem 5rem',
-    position: 'relative' as any,
-    overflow: 'hidden',
-  };
+
+  
 
   return (
     <>

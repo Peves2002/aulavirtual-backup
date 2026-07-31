@@ -21,7 +21,8 @@ function getRequiredPermission(path: string): string | null {
   if (path.startsWith('/admin/carrousel')) return 'VER_CARRUSEL'
   if (path.startsWith('/admin/edicion-web')) return 'EDITAR_CONTENIDO_WEB'
   if (path.startsWith('/admin/configuracion')) return 'VER_CONFIGURACION'
-  return null
+  
+return null
 }
 
 export default withAuth(
@@ -102,7 +103,9 @@ export default withAuth(
       if (rol === Rol.ADMIN || rol === Rol.PROFESOR) {
         return NextResponse.next()
       }
-      return NextResponse.redirect(new URL('/unauthorized', req.url), { status: 302 })
+
+      
+return NextResponse.redirect(new URL('/unauthorized', req.url), { status: 302 })
     }
 
     // Rutas de estudiante - solo ESTUDIANTE, ASESOR o ADMIN (y PROFESOR para ver el reproductor)

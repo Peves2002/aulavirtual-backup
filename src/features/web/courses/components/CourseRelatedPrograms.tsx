@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+
 import { Box, Typography, Grid, Card, CardMedia, CardContent, Container } from '@mui/material'
 
 const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif"
