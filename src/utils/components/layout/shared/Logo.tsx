@@ -35,7 +35,7 @@ type LogoTextProps = {
 }
 
 const LogoText = styled.span<LogoTextProps>`
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   line-height: 1;
   font-weight: 700;
   letter-spacing: 0.2px;
@@ -51,7 +51,7 @@ const LogoText = styled.span<LogoTextProps>`
 `
 
 const SloganText = styled.span<LogoTextProps>`
-  font-size: 0.55rem;
+  font-size: 0.65rem;
   line-height: 1.5;
   font-weight: 400;
   color: var(--mui-palette-primary-main);
@@ -102,7 +102,7 @@ const Logo = () => {
 
   return (
     <Link href='/' className='flex items-center'>
-      <img src={templateLogo} alt={`${templateName} Logo`} className='bs-[46px]' />
+      <img src={templateLogo} alt={`${templateName} Logo`} className='bs-[56px]' />
       <div
         className={`flex flex-col ${montserrat.className}`}
         ref={logoTextRef}

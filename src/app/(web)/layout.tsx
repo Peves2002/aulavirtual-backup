@@ -44,7 +44,7 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthModalProvider>
-      <div className={`web-layout min-h-screen bg-[#FBFCFD] text-slate-800 flex flex-col font-adph overflow-x-hidden ${plusJakarta.variable} ${manrope.variable}`}>
+      <div className={`web-layout min-h-screen bg-[#FBFCFD] text-slate-800 flex flex-col font-adph ${plusJakarta.variable} ${manrope.variable}`}>
         {/* Navbar ADPH */}
         <AdphNavbar />
 

@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+
 import Link from 'next/link'
 
 import { ArrowRight } from 'lucide-react'
@@ -8,10 +10,31 @@ import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
 import { MisionVisionSection, ValoresSection } from '@/features/web/nosotros/components/NosotrosInteractive'
 
-export const metadata = {
-  title: 'Nosotros - ADPH Group',
-  description: 'Conoce quiénes somos, nuestra misión, visión y los valores que guían nuestra plataforma educativa.',
+export async function generateMetadata(): Promise<Metadata> {
+  const configs = await getConfigs()
+  const siteName = configs.TEMPLATE_NAME?.trim() || 'ADPH Group'
+  const desc = configs.SEO_NOSOTROS_DESC?.trim() || 'Conoce quiénes somos, nuestra misión, visión y los valores que guían nuestra plataforma educativa de alto impacto.'
+  const ogImage = configs.SEO_OG_IMAGE?.trim() || ''
+  const siteUrl = configs.SEO_SITE_URL?.trim() || ''
+  const title = `Nosotros | ${siteName}`
+
+  return {
+    title,
+    description: desc,
+    openGraph: {
+      title,
+      description: desc,
+      type: 'website',
+      locale: 'es_PE',
+      siteName,
+      ...(siteUrl ? { url: `${siteUrl}/nosotros` } : {}),
+      ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630, alt: title }] } : {}),
+    },
+    twitter: { card: 'summary_large_image', title, description: desc, ...(ogImage ? { images: [ogImage] } : {}) },
+    ...(siteUrl ? { alternates: { canonical: `${siteUrl}/nosotros` } } : {}),
+  }
 }
+
 
 async function getTeachers() {
   try {
@@ -71,190 +94,62 @@ export default async function NosotrosPage() {
   return (
     <>
       {/* ── 1. HERO SOBRE NOSOTROS ─────────────────────── */}
-      <section style={{ ...heroStyle }}>
-        {/* Overlay si hay imagen */}
-        {heroBg && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(19, 41, 77, 0.85)' }} />}
-        {/* Grid pattern */}
-        <div
-          aria-hidden
-          style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
-        />
-        {/* Glow */}
-        <div aria-hidden style={{ position: 'absolute', top: '-20%', right: '-10%', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,168,197,0.22) 0%, transparent 65%)', pointerEvents: 'none' }} />
-
-        <div style={{ maxWidth: '1280px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '3.5rem',
-              alignItems: 'center',
-            }}
-          >
-            {/* Left: stats visual */}
-            <ScrollReveal direction="left">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-
-                {/* Card principal */}
-                <div
-                  style={{
-                    borderRadius: '20px',
-                    background: 'rgba(255,255,255,0.07)',
-                    border: '1.5px solid rgba(255,255,255,0.12)',
-                    backdropFilter: 'blur(16px)',
-                    padding: '1.5rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '1rem',
-                  }}
-                >
-                  <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'linear-gradient(135deg,#1B3A6B,#3BA8C5)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '1.75rem' }}>
-                    🎓
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.6875rem', color: 'rgba(255,255,255,0.4)', fontWeight: 500, marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Plataforma educativa</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', fontWeight: 800, color: '#ffffff', lineHeight: 1.2 }}>Formación profesional</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: '#3BA8C5', fontWeight: 600 }}>especializada y certificada</div>
-                  </div>
-                </div>
-
-                {/* Stats 2×2 */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  {stats.map((s, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        borderRadius: '16px',
-                        background: 'rgba(255,255,255,0.06)',
-                        border: '1.5px solid rgba(255,255,255,0.09)',
-                        backdropFilter: 'blur(12px)',
-                        padding: '1.125rem 1.25rem',
-                      }}
-                    >
-                      <span style={{ fontSize: '1.375rem' }}>{s.emoji}</span>
-                      <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.375rem', fontWeight: 800, color: '#3BA8C5', lineHeight: 1, marginTop: '0.5rem' }}>{s.value}</div>
-                      <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '3px', lineHeight: 1.3 }}>{s.label}</div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Certificado badge */}
-                <div
-                  style={{
-                    borderRadius: '16px',
-                    background: 'linear-gradient(135deg, rgba(59,168,197,0.12) 0%, rgba(27,58,107,0.12) 100%)',
-                    border: '1.5px solid rgba(59,168,197,0.25)',
-                    padding: '1rem 1.25rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.875rem',
-                  }}
-                >
-                  <div style={{ fontSize: '1.75rem', flexShrink: 0 }}>📜</div>
-                  <div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', fontWeight: 700, color: '#3BA8C5', lineHeight: 1 }}>Certificados con validez empresarial</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '4px' }}>Reconocidos por las principales empresas del sector</div>
-                  </div>
-                </div>
-
+      {/* ── 1. HERO SOBRE NOSOTROS ─────────────────────── */}
+      <section className="relative min-h-[70vh] lg:min-h-screen pt-[72px] lg:pt-[80px] pb-24 flex flex-col justify-start overflow-hidden bg-[#08479b]">
+        {heroBg && (
+          <div className="absolute inset-0 z-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={heroBg} alt="Nosotros" className="w-full h-full object-cover opacity-20" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#08479b] via-[#08479b]/80 to-[#08479b]"></div>
+          </div>
+        )}
+        <div className="w-full max-w-[1440px] mx-auto px-6 lg:px-10 relative z-10 flex flex-col items-center">
+          <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
+            <ScrollReveal>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-bold tracking-widest uppercase mb-8 mx-auto">
+                <span className="w-2 h-2 rounded-full bg-[#fcd116]"></span>
+                Sobre nosotros
               </div>
-            </ScrollReveal>
-
-            {/* Right: text */}
-            <ScrollReveal direction="right" delay={0.1}>
-              <div>
-                <div
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    backgroundColor: 'rgba(59,168,197,0.12)',
-                    border: '1px solid rgba(59,168,197,0.25)',
-                    borderRadius: '999px',
-                    padding: '0.375rem 1rem',
-                    marginBottom: '1.5rem',
-                  }}
+              <h1 
+                className="text-white font-black text-4xl md:text-6xl lg:text-7xl leading-[1.1] mb-6 [&>p]:m-0 mx-auto"
+                dangerouslySetInnerHTML={{ __html: heroTitle }}
+              />
+              <div 
+                className="text-white/80 text-lg md:text-xl leading-relaxed mb-10 max-w-2xl mx-auto"
+                dangerouslySetInnerHTML={{ __html: heroDesc }}
+              />
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
+                <Link
+                  href="/programas"
+                  className="bg-[#fcd116] hover:bg-white text-slate-900 px-8 py-4 rounded-full font-bold inline-flex justify-center items-center gap-2 transition-all hover:shadow-xl w-full sm:w-auto"
                 >
-                  <div style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#3BA8C5', boxShadow: '0 0 6px #3BA8C5' }} />
-                  <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: '#3BA8C5', fontWeight: 600 }}>
-                    Sobre nosotros
-                  </span>
-                </div>
-
-                <div
-                  style={{
-                    fontFamily: 'Poppins, sans-serif',
-                    fontSize: 'clamp(1.875rem, 4vw, 2.75rem)',
-                    fontWeight: 800,
-                    color: '#ffffff',
-                    letterSpacing: '-0.025em',
-                    lineHeight: 1.15,
-                    marginBottom: '1.25rem',
-                  }}
-                  className="[&>p]:m-0"
-                  dangerouslySetInnerHTML={{ __html: heroTitle }}
-                />
-
-                <div
-                  style={{
-                    fontFamily: 'Poppins, sans-serif',
-                    fontSize: '1rem',
-                    color: 'rgba(255,255,255,0.65)',
-                    lineHeight: 1.75,
-                    maxWidth: '480px',
-                    marginBottom: '2.5rem',
-                  }}
-                  dangerouslySetInnerHTML={{ __html: heroDesc }}
-                />
-
-                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                  <Link
-                    href="/programas"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                      padding: '0.875rem 1.75rem',
-                      borderRadius: '12px',
-                      backgroundColor: '#3BA8C5',
-                      color: '#ffffff',
-                      fontFamily: 'Poppins, sans-serif',
-                      fontWeight: 700,
-                      fontSize: '0.9375rem',
-                      textDecoration: 'none',
-                      boxShadow: '0 4px 20px rgba(59,168,197,0.35)',
-                    }}
-                  >
-                    Ver cursos <ArrowRight size={18} />
-                  </Link>
-                  <Link
-                    href="/contacto"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                      padding: '0.875rem 1.75rem',
-                      borderRadius: '12px',
-                      backgroundColor: 'rgba(255,255,255,0.08)',
-                      color: '#ffffff',
-                      fontFamily: 'Poppins, sans-serif',
-                      fontWeight: 600,
-                      fontSize: '0.9375rem',
-                      textDecoration: 'none',
-                      border: '1.5px solid rgba(255,255,255,0.18)',
-                      backdropFilter: 'blur(8px)',
-                    }}
-                  >
-                    Trabaja con nosotros
-                  </Link>
-                </div>
+                  Ver programas <ArrowRight className="w-5 h-5" />
+                </Link>
+                <Link
+                  href="/contacto"
+                  className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-full font-bold inline-flex justify-center items-center gap-2 transition-all w-full sm:w-auto"
+                >
+                  Trabaja con nosotros
+                </Link>
               </div>
             </ScrollReveal>
           </div>
+        </div>
+      </section>
+
+      {/* 2. Highlights Bar (Stats) */}
+      <section className="bg-slate-900 border-b border-white/10 relative z-20 -mt-6 lg:-mt-10 mx-6 lg:mx-10 rounded-2xl shadow-2xl">
+        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+          {stats.map((s, i) => (
+            <div key={i} className="p-4 md:p-6 flex items-center gap-4">
+              <span className="text-3xl">{s.emoji}</span>
+              <div>
+                <p className="text-white/50 text-[10px] font-bold uppercase tracking-wider mb-1">{s.label}</p>
+                <p className="text-white text-base md:text-lg font-black leading-tight">{s.value}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 

@@ -81,7 +81,7 @@ const errorInputClass =
 const labelClass = 'text-xs font-extrabold text-slate-500 uppercase tracking-widest flex items-center gap-1.5'
 const sectionTitleClass = 'text-[10px] font-extrabold text-[#3BA8C5] uppercase tracking-[0.2em] block border-b border-slate-100 pb-2'
 
-export default function FichaInscripcionForm() {
+export default function FichaInscripcionForm({ config = {} }: { config?: Record<string, string> }) {
   const [formData, setFormData] = useState<FormState>(initialState)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [captchaChecked, setCaptchaChecked] = useState(false)
@@ -219,7 +219,7 @@ export default function FichaInscripcionForm() {
                           Dirección
                         </span>
                         <span className="text-slate-700 text-xs md:text-sm font-bold leading-normal">
-                          Av. Javier Prado Este 560, Oficina 2302 San Isidro
+                          {config.INSCRIPCION_CONTACTO_DIRECCION || 'Av. Javier Prado Este 560, Oficina 2302 San Isidro'}
                         </span>
                       </div>
                     </div>
@@ -235,8 +235,8 @@ export default function FichaInscripcionForm() {
                         <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-0.5">
                           E-mail
                         </span>
-                        <a href="mailto:informes@adphgroup.com" className="text-[#3BA8C5] hover:underline text-xs md:text-sm font-bold block">
-                          informes@adphgroup.com
+                        <a href={`mailto:${config.INSCRIPCION_CONTACTO_EMAIL || 'informes@adphgroup.com'}`} className="text-[#3BA8C5] hover:underline text-xs md:text-sm font-bold block">
+                          {config.INSCRIPCION_CONTACTO_EMAIL || 'informes@adphgroup.com'}
                         </a>
                       </div>
                     </div>
@@ -252,8 +252,8 @@ export default function FichaInscripcionForm() {
                         <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-0.5">
                           Teléfono
                         </span>
-                        <a href="tel:+51017073571" className="text-slate-700 hover:text-[#3BA8C5] font-bold text-xs md:text-sm block">
-                          (01) 7073571
+                        <a href={`tel:${config.INSCRIPCION_CONTACTO_TELEFONO || '(01) 7073571'}`} className="text-slate-700 hover:text-[#3BA8C5] font-bold text-xs md:text-sm block">
+                          {config.INSCRIPCION_CONTACTO_TELEFONO || '(01) 7073571'}
                         </a>
                       </div>
                     </div>
@@ -265,29 +265,35 @@ export default function FichaInscripcionForm() {
                   <h3 className="text-amber-800 font-black text-lg uppercase tracking-wider flex items-center gap-2 border-b border-amber-200 pb-3">
                     <AlertCircle className="w-5 h-5 text-amber-600" /> Importante:
                   </h3>
-
-                  <ol className="list-decimal pl-4 space-y-3.5 text-xs text-amber-900/80 font-semibold leading-relaxed">
-                    <li>
-                      La información consignada en su ficha de inscripción y demás documentación presentada en este
-                      proceso tendrá la naturaleza de declaración jurada, siendo responsabilidad del participante
-                      cualquier error o modificación que no se comunique oportunamente al área de ventas o al
-                      Coordinador Académico.
-                    </li>
-                    <li>
-                      Los datos consignados serán utilizados para la certificación académica registrada en la
-                      presente ficha de inscripción.
-                    </li>
-                    <li>
-                      ADPH Group – Executive Education se reserva el derecho de las devoluciones de pagos por reserva
-                      de vacante, matrículas, cuotas entre otros y/o aplicar las penalidades o sanciones que
-                      considere pertinentes ante el incumplimiento de compromisos de pago o retiro voluntario por
-                      parte del participante.
-                    </li>
-                    <li>
-                      ADPH Group se reserva el derecho de reprogramar las fechas de inicio en caso no se complete el
-                      cupo requerido para iniciar el programa.
-                    </li>
-                  </ol>
+                  {config.INSCRIPCION_IMPORTANTE_TEXTO ? (
+                    <div 
+                      className="space-y-3.5 text-xs text-amber-900/80 font-semibold leading-relaxed [&>ol]:list-decimal [&>ol]:pl-4 [&>ul]:list-disc [&>ul]:pl-4"
+                      dangerouslySetInnerHTML={{ __html: config.INSCRIPCION_IMPORTANTE_TEXTO.replace(/\n/g, '<br />') }}
+                    />
+                  ) : (
+                    <ol className="list-decimal pl-4 space-y-3.5 text-xs text-amber-900/80 font-semibold leading-relaxed">
+                      <li>
+                        La información consignada en su ficha de inscripción y demás documentación presentada en este
+                        proceso tendrá la naturaleza de declaración jurada, siendo responsabilidad del participante
+                        cualquier error o modificación que no se comunique oportunamente al área de ventas o al
+                        Coordinador Académico.
+                      </li>
+                      <li>
+                        Los datos consignados serán utilizados para la certificación académica registrada en la
+                        presente ficha de inscripción.
+                      </li>
+                      <li>
+                        ADPH Group – Executive Education se reserva el derecho de las devoluciones de pagos por reserva
+                        de vacante, matrículas, cuotas entre otros y/o aplicar las penalidades o sanciones que
+                        considere pertinentes ante el incumplimiento de compromisos de pago o retiro voluntario por
+                        parte del participante.
+                      </li>
+                      <li>
+                        ADPH Group se reserva el derecho de reprogramar las fechas de inicio en caso no se complete el
+                        cupo requerido para iniciar el programa.
+                      </li>
+                    </ol>
+                  )}
                 </div>
               </div>
 

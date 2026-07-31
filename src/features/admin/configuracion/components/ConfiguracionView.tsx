@@ -160,6 +160,11 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     COMENTARIOS_REQUIERE_APROBACION: 'false',
     chat_entre_alumnos: 'false',
     WEB_EMPRESAS_HABILITADO: 'true',
+    // Ficha de Inscripcion
+    INSCRIPCION_CONTACTO_DIRECCION: 'Av. Javier Prado Este 560, Oficina 2302 San Isidro',
+    INSCRIPCION_CONTACTO_EMAIL: 'informes@adphgroup.com',
+    INSCRIPCION_CONTACTO_TELEFONO: '(01) 7073571',
+    INSCRIPCION_IMPORTANTE_TEXTO: '1. La información consignada en su ficha de inscripción...\n2. Los datos consignados serán utilizados...\n3. ADPH Group – Executive Education se reserva el derecho...\n4. ADPH Group se reserva el derecho de reprogramar las fechas...',
     // Certificados
     CERTIFICADO_INSTITUTION_NAME: '',
     CERTIFICADO_SLOGAN: '',
@@ -167,6 +172,19 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     CERTIFICADO_GERENTE_GENERAL_ID: '',
     CERTIFICADO_PLANTILLA: 'clasico',
     CERTIFICADO_MOSTRAR_FIRMA_DOCENTE: 'true',
+    // SEO
+    SEO_SITE_URL: '',
+    SEO_OG_IMAGE: '',
+    SEO_GOOGLE_VERIFICATION: '',
+    SEO_KEYWORDS: '',
+    SEO_HOME_TITLE: '',
+    SEO_HOME_DESC: '',
+    SEO_CURSOS_DESC: '',
+    SEO_PROGRAMAS_DESC: '',
+    SEO_DIPLOMADOS_DESC: '',
+    SEO_NOTICIAS_DESC: '',
+    SEO_NOSOTROS_DESC: '',
+    SEO_CONTACTO_DESC: '',
     ...initialMapped
   })
 
@@ -614,6 +632,250 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
               />
             </Paper>
           </Box>
+        </Stack>
+      )
+    },
+    // ── Ficha de Inscripción ───────────────────────────────────────────────────────
+    {
+      label: 'Ficha de Inscripción',
+      icon: 'tabler-file-invoice',
+      content: (
+        <Stack spacing={4}>
+          <Box>
+            <SectionLabel>Información de Contacto</SectionLabel>
+            <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
+              Estos datos de contacto aparecerán en el lateral de la página de Ficha de Inscripción.
+            </Typography>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={12}>
+                <TextField
+                  fullWidth
+                  label='Dirección'
+                  value={config.INSCRIPCION_CONTACTO_DIRECCION || ''}
+                  onChange={(e) => handleInputChange('INSCRIPCION_CONTACTO_DIRECCION', e.target.value)}
+                  InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-map-pin' /></InputAdornment> }}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label='E-mail de Contacto'
+                  value={config.INSCRIPCION_CONTACTO_EMAIL || ''}
+                  onChange={(e) => handleInputChange('INSCRIPCION_CONTACTO_EMAIL', e.target.value)}
+                  InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-mail' /></InputAdornment> }}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label='Teléfono'
+                  value={config.INSCRIPCION_CONTACTO_TELEFONO || ''}
+                  onChange={(e) => handleInputChange('INSCRIPCION_CONTACTO_TELEFONO', e.target.value)}
+                  InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-phone' /></InputAdornment> }}
+                />
+              </Grid>
+            </Grid>
+          </Box>
+          <Divider />
+          <Box>
+            <SectionLabel>Información Importante</SectionLabel>
+            <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
+              Puedes escribir los términos o advertencias que el estudiante debe leer antes de inscribirse. Puedes usar formato HTML básico (como &lt;ol&gt;&lt;li&gt;...&lt;/li&gt;&lt;/ol&gt;) o simplemente escribir con saltos de línea.
+            </Typography>
+            <TextField
+              fullWidth
+              multiline
+              minRows={6}
+              label='Texto / Advertencias Importantes'
+              value={config.INSCRIPCION_IMPORTANTE_TEXTO || ''}
+              onChange={(e) => handleInputChange('INSCRIPCION_IMPORTANTE_TEXTO', e.target.value)}
+            />
+          </Box>
+        </Stack>
+      )
+    },
+    // ── Pestaña SEO ────────────────────────────────────────────────────────────────
+    {
+      label: 'SEO',
+      icon: 'tabler-search',
+      content: (
+        <Stack spacing={4}>
+
+          {/* Configuración Global */}
+          <Box>
+            <SectionLabel>Configuración Global</SectionLabel>
+            <Box sx={{ p: 2, mb: 3, borderRadius: 2, bgcolor: 'info.lighter', border: '1px solid', borderColor: 'info.light' }}>
+              <Typography variant='body2' color='info.dark' sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <i className='tabler-info-circle' style={{ fontSize: 18 }} />
+                Estos valores afectan el posicionamiento en Google. Los campos vacíos usarán los valores por defecto del sistema.
+              </Typography>
+            </Box>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label='URL base del sitio'
+                  placeholder='https://adph.com'
+                  value={config.SEO_SITE_URL || ''}
+                  onChange={(e) => handleInputChange('SEO_SITE_URL', e.target.value)}
+                  helperText='Sin barra final. Se usa en sitemap.xml y etiquetas canonical.'
+                  InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-world' /></InputAdornment> }}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label='Google Search Console (verificación)'
+                  placeholder='Pega aquí el código de verificación de Google'
+                  value={config.SEO_GOOGLE_VERIFICATION || ''}
+                  onChange={(e) => handleInputChange('SEO_GOOGLE_VERIFICATION', e.target.value)}
+                  helperText='Se insertará como meta tag en el <head> de todas las páginas.'
+                  InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-brand-google' /></InputAdornment> }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label='Palabras clave globales (keywords)'
+                  placeholder='formación profesional, cursos, diplomados, ADPH Group, Perú'
+                  value={config.SEO_KEYWORDS || ''}
+                  onChange={(e) => handleInputChange('SEO_KEYWORDS', e.target.value)}
+                  helperText='Separadas por comas. Se aplican a todo el sitio como base.'
+                />
+              </Grid>
+              <Grid item xs={12} md={8}>
+                <TextField
+                  fullWidth
+                  label='Imagen Open Graph por defecto'
+                  placeholder='URL de imagen para redes sociales'
+                  value={config.SEO_OG_IMAGE || ''}
+                  onChange={(e) => handleInputChange('SEO_OG_IMAGE', e.target.value)}
+                  helperText='Imagen que aparece al compartir el sitio en WhatsApp, Facebook, LinkedIn. Recomendado: 1200×630 px.'
+                  InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-photo' /></InputAdornment> }}
+                />
+              </Grid>
+              <Grid item xs={12} md={4} sx={{ display: 'flex', alignItems: 'flex-start', pt: '6px !important' }}>
+                <Button
+                  variant='outlined'
+                  fullWidth
+                  startIcon={<i className='tabler-photo-up' />}
+                  onClick={() => setImagePicker({ key: 'SEO_OG_IMAGE', title: 'Imagen Open Graph' })}
+                  sx={{ height: 56 }}
+                >
+                  Subir imagen
+                </Button>
+              </Grid>
+              {config.SEO_OG_IMAGE && (
+                <Grid item xs={12}>
+                  <img src={config.SEO_OG_IMAGE} alt='OG Preview' style={{ maxWidth: 300, borderRadius: 8, border: '1px solid #e2e8f0' }} />
+                </Grid>
+              )}
+            </Grid>
+          </Box>
+
+          <Divider />
+
+          {/* Meta por Página */}
+          <Box>
+            <SectionLabel>Meta Description por Página</SectionLabel>
+            <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
+              Personaliza el texto que aparece en los resultados de Google para cada sección del sitio. Máximo 160 caracteres recomendado.
+            </Typography>
+            <Stack spacing={3}>
+
+              {/* Inicio */}
+              <Paper variant='outlined' sx={{ p: 3, borderRadius: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ width: 32, height: 32, borderRadius: 1.5, bgcolor: 'primary.lighter', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <i className='tabler-home' style={{ fontSize: 16, color: 'var(--mui-palette-primary-main)' }} />
+                  </Box>
+                  <Typography variant='subtitle2' fontWeight={700}>Página de Inicio</Typography>
+                  <Typography variant='caption' sx={{ ml: 'auto', color: 'text.disabled' }}>/ (home)</Typography>
+                </Box>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth size='small'
+                      label='Meta Title'
+                      placeholder={`${config.TEMPLATE_NAME || 'ADPH Group'} | Formación Profesional`}
+                      value={config.SEO_HOME_TITLE || ''}
+                      onChange={(e) => handleInputChange('SEO_HOME_TITLE', e.target.value)}
+                      inputProps={{ maxLength: 70 }}
+                      helperText={`${(config.SEO_HOME_TITLE || '').length}/70 caracteres`}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth size='small'
+                      label='Meta Description'
+                      placeholder='Formación profesional de alto impacto en Gestión Humana, Psicología Organizacional y más.'
+                      value={config.SEO_HOME_DESC || ''}
+                      onChange={(e) => handleInputChange('SEO_HOME_DESC', e.target.value)}
+                      multiline rows={2}
+                      inputProps={{ maxLength: 160 }}
+                      helperText={`${(config.SEO_HOME_DESC || '').length}/160 caracteres`}
+                    />
+                  </Grid>
+                </Grid>
+              </Paper>
+
+              {/* Cursos */}
+              {[
+                { key: 'SEO_CURSOS_DESC', label: 'Catálogo de Cursos', icon: 'tabler-book', path: '/cursos' },
+                { key: 'SEO_PROGRAMAS_DESC', label: 'Programas Ejecutivos', icon: 'tabler-certificate', path: '/programas' },
+                { key: 'SEO_DIPLOMADOS_DESC', label: 'Diplomados', icon: 'tabler-award', path: '/diplomados' },
+                { key: 'SEO_NOTICIAS_DESC', label: 'Noticias', icon: 'tabler-news', path: '/noticias' },
+                { key: 'SEO_NOSOTROS_DESC', label: 'Nosotros / Quiénes Somos', icon: 'tabler-users', path: '/nosotros' },
+                { key: 'SEO_CONTACTO_DESC', label: 'Contacto', icon: 'tabler-mail', path: '/contacto' },
+              ].map(({ key, label, icon, path }) => (
+                <Paper key={key} variant='outlined' sx={{ p: 3, borderRadius: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                    <Box sx={{ width: 32, height: 32, borderRadius: 1.5, bgcolor: 'primary.lighter', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <i className={icon} style={{ fontSize: 16, color: 'var(--mui-palette-primary-main)' }} />
+                    </Box>
+                    <Typography variant='subtitle2' fontWeight={700}>{label}</Typography>
+                    <Typography variant='caption' sx={{ ml: 'auto', color: 'text.disabled' }}>{path}</Typography>
+                  </Box>
+                  <TextField
+                    fullWidth size='small'
+                    label='Meta Description'
+                    placeholder={`Explora nuestros ${label.toLowerCase()} en ADPH Group...`}
+                    value={config[key] || ''}
+                    onChange={(e) => handleInputChange(key, e.target.value)}
+                    multiline rows={2}
+                    inputProps={{ maxLength: 160 }}
+                    helperText={`${(config[key] || '').length}/160 caracteres · La URL ${path} no cambia`}
+                  />
+                </Paper>
+              ))}
+
+            </Stack>
+          </Box>
+
+          <Divider />
+
+          {/* Preview Google */}
+          <Box>
+            <SectionLabel>Vista Previa en Google</SectionLabel>
+            <Typography variant='body2' color='text.secondary' sx={{ mb: 2 }}>
+              Así se verá la página de inicio en los resultados de búsqueda:
+            </Typography>
+            <Paper variant='outlined' sx={{ p: 3, borderRadius: 2, maxWidth: 600 }}>
+              <Typography variant='caption' sx={{ color: '#202124', fontFamily: 'Arial, sans-serif' }}>
+                {config.SEO_SITE_URL || 'https://adphgroup.com'} › inicio
+              </Typography>
+              <Typography
+                variant='subtitle1'
+                sx={{ color: '#1a0dab', fontFamily: 'Arial, sans-serif', fontWeight: 400, lineHeight: 1.3, cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
+              >
+                {config.SEO_HOME_TITLE || `${config.TEMPLATE_NAME || 'ADPH Group'} | ${config.TEMPLATE_SLOGAN || 'Formación Profesional'}`}
+              </Typography>
+              <Typography variant='body2' sx={{ color: '#4d5156', fontFamily: 'Arial, sans-serif', fontSize: '0.8125rem' }}>
+                {config.SEO_HOME_DESC || config.TEMPLATE_SLOGAN || 'Descripción de la página de inicio...'}
+              </Typography>
+            </Paper>
+          </Box>
+
         </Stack>
       )
     }

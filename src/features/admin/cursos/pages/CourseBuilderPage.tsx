@@ -23,6 +23,7 @@ import { TabInformacion } from '../components/CourseBuilder/TabInformacion'
 import { TabContenido } from '../components/CourseBuilder/TabContenido'
 import { TabConfiguracion } from '../components/CourseBuilder/TabConfiguracion'
 import { TabDetallesPremium } from '../components/CourseBuilder/TabDetallesPremium'
+import { TabSeccionesWeb } from '../components/CourseBuilder/TabSeccionesWeb'
 import { TabComentarios } from '../components/CourseBuilder/TabComentarios'
 import { TabEvaluacion } from '../components/CourseBuilder/TabEvaluacion'
 import { TabValoraciones } from '../components/CourseBuilder/TabValoraciones'
@@ -94,7 +95,8 @@ export function CourseBuilderPage({ cursoId, profesores, listPath = '/admin/curs
                     <TabList onChange={(_, val) => setActiveTab(val)} variant='scrollable'>
                         <Tab icon={<i className='tabler-info-circle' />} iconPosition='start' label='Información' value='1' />
                         <Tab icon={<i className='tabler-list-tree' />} iconPosition='start' label='Contenido' value='2' />
-                        <Tab icon={<i className='tabler-star' />} iconPosition='start' label='Detalles Premium' value='4' />
+                        <Tab icon={<i className='tabler-star' />} iconPosition='start' label='Landing Page (Ventas)' value='4' />
+                        <Tab icon={<i className='tabler-layout-bottombar' />} iconPosition='start' label='Secciones Landing' value='10' />
                         {/* <Tab icon={<i className='tabler-clipboard-check' />} iconPosition='start' label='Evaluación' value='6' /> */}
                         <Tab icon={<i className='tabler-settings' />} iconPosition='start' label='Configuración' value='3' />
                         <Tab icon={<i className='tabler-message' />} iconPosition='start' label='Comentarios' value='5' />
@@ -116,6 +118,10 @@ export function CourseBuilderPage({ cursoId, profesores, listPath = '/admin/curs
 
                     <TabPanel value='4' sx={{ p: 5 }}>
                         <TabDetallesPremium curso={curso} onSuccess={refetch} />
+                    </TabPanel>
+
+                    <TabPanel value='10' sx={{ p: 5 }}>
+                        <TabSeccionesWeb curso={curso} onSuccess={refetch} />
                     </TabPanel>
 
                     <TabPanel value='5' sx={{ p: 5 }}>

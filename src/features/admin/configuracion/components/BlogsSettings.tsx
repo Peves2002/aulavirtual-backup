@@ -18,6 +18,7 @@ import {
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import MediaLibrary from '../../cursos/components/MediaLibrary'
+import RichTextEditor from '@/utils/components/RichTextEditor'
 
 interface Blog {
   id: string
@@ -30,6 +31,7 @@ interface Blog {
   author: string
   role: string
   tags: string[]
+  contentHtml?: string
   enlaceExterno?: string
   imagenesSecundarias?: string[]
 }
@@ -96,6 +98,7 @@ export default function BlogsSettings({ config, onInputChange }: BlogsSettingsPr
   const [formTagsInput, setFormTagsInput] = useState('')
   const [formEnlaceExterno, setFormEnlaceExterno] = useState('')
   const [formImagenesSecundarias, setFormImagenesSecundarias] = useState<string[]>([])
+  const [formContentHtml, setFormContentHtml] = useState('')
   const [mediaTarget, setMediaTarget] = useState<'main' | { index: number } | 'new_secondary'>('main')
 
   const blogsList: Blog[] = (() => {
@@ -131,6 +134,7 @@ export default function BlogsSettings({ config, onInputChange }: BlogsSettingsPr
     setFormTagsInput('')
     setFormEnlaceExterno('')
     setFormImagenesSecundarias([])
+    setFormContentHtml('')
     setOpenModal(true)
   }
 
@@ -147,6 +151,7 @@ export default function BlogsSettings({ config, onInputChange }: BlogsSettingsPr
     setFormTagsInput((item.tags || []).join(', '))
     setFormEnlaceExterno(item.enlaceExterno || '')
     setFormImagenesSecundarias(item.imagenesSecundarias || [])
+    setFormContentHtml(item.contentHtml || '')
     setOpenModal(true)
   }
 
@@ -178,7 +183,8 @@ export default function BlogsSettings({ config, onInputChange }: BlogsSettingsPr
               role: formRole,
               tags: parsedTags,
               enlaceExterno: formEnlaceExterno,
-              imagenesSecundarias: formImagenesSecundarias
+              imagenesSecundarias: formImagenesSecundarias,
+              contentHtml: formContentHtml
             }
           : b
       )
@@ -206,7 +212,8 @@ export default function BlogsSettings({ config, onInputChange }: BlogsSettingsPr
         role: formRole,
         tags: parsedTags,
         enlaceExterno: formEnlaceExterno,
-        imagenesSecundarias: formImagenesSecundarias
+        imagenesSecundarias: formImagenesSecundarias,
+        contentHtml: formContentHtml
       }
       newList = [...blogsList, newItem]
       enqueueSnackbar('Artículo de blog añadido — recuerda guardar cambios generales', { variant: 'info' })
@@ -413,6 +420,15 @@ export default function BlogsSettings({ config, onInputChange }: BlogsSettingsPr
                 rows={3}
                 value={formDesc}
                 onChange={(e) => setFormDesc(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <RichTextEditor
+                label='Contenido Completo (HTML/Rich Text)'
+                value={formContentHtml}
+                onChange={(value) => setFormContentHtml(value)}
+                placeholder='Escribe el contenido completo aquí. Usa subtítulos, negritas y listas para organizar tu artículo.'
+                minHeight={250}
               />
             </Grid>
             

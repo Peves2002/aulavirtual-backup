@@ -8,7 +8,7 @@ interface NavItem {
   label: string
 }
 
-const NAV_ITEMS: NavItem[] = [
+const ALL_NAV_ITEMS: NavItem[] = [
   { id: 'presentacion', label: 'Presentación' },
   { id: 'plan-de-estudios', label: 'Plan de estudios' },
   { id: 'por-que', label: 'Razones para elegirnos' },
@@ -16,34 +16,57 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'admision', label: 'Admisión' }
 ]
 
-export default function ProgramStickyNav() {
+interface Props {
+  visibleSections?: {
+    planEstudios?: boolean
+    porQue?: boolean
+    perfil?: boolean
+  }
+}
+
+export default function ProgramStickyNav({ visibleSections }: Props = {}) {
   const [activeSection, setActiveSection] = useState<string>('presentacion')
   const [isSticky, setIsSticky] = useState(false)
 
+  // Filtrar los items en base a las opciones recibidas
+  const NAV_ITEMS = ALL_NAV_ITEMS.filter(item => {
+    if (item.id === 'plan-de-estudios' && visibleSections?.planEstudios === false) return false
+    if (item.id === 'por-que' && visibleSections?.porQue === false) return false
+    if (item.id === 'perfil' && visibleSections?.perfil === false) return false
+    return true
+  })
+
   useEffect(() => {
     const handleScroll = () => {
-      // Offset for the sticky bar to activate
       if (window.scrollY > 500) {
         setIsSticky(true)
       } else {
         setIsSticky(false)
       }
 
-      // Detect active section
-      const sections = NAV_ITEMS.map(item => document.getElementById(item.id))
-      
-      const scrollPosition = window.scrollY + 150 // Adjust for nav height
+      const scrollPosition = 150 // Adjust for nav height
 
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i]
-        if (section && section.offsetTop <= scrollPosition) {
-          setActiveSection(NAV_ITEMS[i].id)
-          break
+      for (let i = NAV_ITEMS.length - 1; i >= 0; i--) {
+        const item = NAV_ITEMS[i]
+        const section = document.getElementById(item.id)
+        
+        if (section) {
+          const rect = section.getBoundingClientRect()
+          // Ignorar 'admision' en desktop porque es sticky y siempre estaría activo
+          if (item.id === 'admision' && window.innerWidth >= 1024) {
+            continue
+          }
+          if (rect.top <= scrollPosition) {
+            setActiveSection(item.id)
+            break
+          }
         }
       }
     }
 
     window.addEventListener('scroll', handleScroll)
+    // Run once on mount
+    handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 

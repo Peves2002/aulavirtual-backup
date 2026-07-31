@@ -90,6 +90,14 @@ export function TabDetallesPremium({ curso, onSuccess }: any) {
 
   const [perfilEstudiante, setPerfilEstudiante] = useState(curso.perfil_estudiante || '')
 
+  // Flags de visualización
+  const [mostrarBeneficios, setMostrarBeneficios] = useState<boolean>(curso.mostrar_beneficios ?? true)
+  const [mostrarMetodologia, setMostrarMetodologia] = useState<boolean>(curso.mostrar_metodologia ?? true)
+  const [mostrarObjetivos, setMostrarObjetivos] = useState<boolean>(curso.mostrar_objetivos ?? true)
+  const [mostrarSalidas, setMostrarSalidas] = useState<boolean>(curso.mostrar_salidas ?? true)
+  const [mostrarPerfil, setMostrarPerfil] = useState<boolean>(curso.mostrar_perfil ?? true)
+  const [mostrarIncluye, setMostrarIncluye] = useState<boolean>(curso.mostrar_incluye ?? true)
+
   const [newObjetivo, setNewObjetivo] = useState('')
   const [newSalida, setNewSalida] = useState('')
 
@@ -142,7 +150,13 @@ export function TabDetallesPremium({ curso, onSuccess }: any) {
           beneficios: cleanBeneficios,
           incluye: cleanIncluye,
           perfil_estudiante: perfilEstudiante,
-          salidas_profesionales: cleanSalidas
+          salidas_profesionales: cleanSalidas,
+          mostrar_beneficios: mostrarBeneficios,
+          mostrar_metodologia: mostrarMetodologia,
+          mostrar_objetivos: mostrarObjetivos,
+          mostrar_salidas: mostrarSalidas,
+          mostrar_perfil: mostrarPerfil,
+          mostrar_incluye: mostrarIncluye
         }
       })
 
@@ -233,9 +247,15 @@ export function TabDetallesPremium({ curso, onSuccess }: any) {
     <Grid container spacing={6}>
       {/* Objetivos */}
       <Grid item xs={12}>
-        <Typography variant='h6' sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-          <i className='tabler-target' /> ¿Qué logrará el alumno? (Objetivos)
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+          <Typography variant='h6' sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <i className='tabler-target' /> El impacto en tu carrera (Objetivos)
+          </Typography>
+          <FormControlLabel
+            control={<Switch checked={mostrarObjetivos} onChange={e => setMostrarObjetivos(e.target.checked)} />}
+            label="Mostrar"
+          />
+        </Box>
         <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
           <CustomTextField
             fullWidth
@@ -267,9 +287,15 @@ export function TabDetallesPremium({ curso, onSuccess }: any) {
       {/* Metodología */}
       <Grid item xs={12}><Divider /></Grid>
       <Grid item xs={12}>
-        <Typography variant='h6' sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-          <i className='tabler-certificate' /> Metodología de Aprendizaje
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+          <Typography variant='h6' sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <i className='tabler-brain' /> Cómo aprenderás (Metodología)
+          </Typography>
+          <FormControlLabel
+            control={<Switch checked={mostrarMetodologia} onChange={e => setMostrarMetodologia(e.target.checked)} />}
+            label="Mostrar"
+          />
+        </Box>
         <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
           Define los pilares de tu enseñanza. Aparecerán como tarjetas en la página de detalle.
         </Typography>
@@ -331,9 +357,15 @@ export function TabDetallesPremium({ curso, onSuccess }: any) {
       {/* Beneficios / Highlights */}
       <Grid item xs={12}><Divider /></Grid>
       <Grid item xs={12}>
-        <Typography variant='h6' sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-          <i className='tabler-gift' /> Beneficios Destacados (Highlights)
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+          <Typography variant='h6' sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <i className='tabler-gift' /> Razones para elegirnos (Beneficios)
+          </Typography>
+          <FormControlLabel
+            control={<Switch checked={mostrarBeneficios} onChange={e => setMostrarBeneficios(e.target.checked)} />}
+            label="Mostrar"
+          />
+        </Box>
         <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
           Tarjetas superiores que resaltan características como &quot;Acceso 24/7&quot;, etc.
         </Typography>
@@ -378,9 +410,15 @@ export function TabDetallesPremium({ curso, onSuccess }: any) {
       {/* Perfil del Participante */}
       <Grid item xs={12}><Divider /></Grid>
       <Grid item xs={12}>
-        <Typography variant='h6' sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-          <i className='tabler-user' /> Perfil del Estudiante (¿A quién va dirigido?)
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+          <Typography variant='h6' sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <i className='tabler-user' /> Tu futuro profesional: Perfil (¿A quién va dirigido?)
+          </Typography>
+          <FormControlLabel
+            control={<Switch checked={mostrarPerfil} onChange={e => setMostrarPerfil(e.target.checked)} />}
+            label="Mostrar"
+          />
+        </Box>
         <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
           Describe brevemente quién debería tomar este programa y qué requisitos o perfil se busca.
         </Typography>
@@ -397,9 +435,15 @@ export function TabDetallesPremium({ curso, onSuccess }: any) {
       {/* Salidas Profesionales */}
       <Grid item xs={12}><Divider /></Grid>
       <Grid item xs={12}>
-        <Typography variant='h6' sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-          <i className='tabler-briefcase' /> Salidas Profesionales
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+          <Typography variant='h6' sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <i className='tabler-briefcase' /> Tu futuro profesional (Salidas)
+          </Typography>
+          <FormControlLabel
+            control={<Switch checked={mostrarSalidas} onChange={e => setMostrarSalidas(e.target.checked)} />}
+            label="Mostrar"
+          />
+        </Box>
         <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
           <CustomTextField
             fullWidth
@@ -431,9 +475,15 @@ export function TabDetallesPremium({ curso, onSuccess }: any) {
       {/* El programa incluye (Sidebar) */}
       <Grid item xs={12}><Divider /></Grid>
       <Grid item xs={12}>
-        <Typography variant='h6' sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-          <i className='tabler-checklist' /> El programa incluye (Sidebar)
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+          <Typography variant='h6' sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <i className='tabler-list-check' /> Qué incluye el programa
+          </Typography>
+          <FormControlLabel
+            control={<Switch checked={mostrarIncluye} onChange={e => setMostrarIncluye(e.target.checked)} />}
+            label="Mostrar"
+          />
+        </Box>
         <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
           Lista de verificación que aparece en el lateral del curso.
         </Typography>

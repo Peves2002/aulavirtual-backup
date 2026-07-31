@@ -48,19 +48,19 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
           <>
             <Button
               onClick={() => openLogin()}
-              size="small"
-              sx={{ fontWeight: 700, fontSize: '0.7rem', color: '#02115C', fontFamily: 'var(--font-manrope), sans-serif' }}
+              size="medium"
+              sx={{ fontWeight: 700, fontSize: '0.875rem', color: '#02115C', fontFamily: 'var(--font-manrope), sans-serif' }}
             >
               Iniciar Sesión
             </Button>
             <Button
               onClick={() => openRegister()}
               variant="contained"
-              size="small"
+              size="medium"
               sx={{
                 fontFamily: 'var(--font-manrope), sans-serif',
                 fontWeight: 700,
-                fontSize: '0.7rem',
+                fontSize: '0.875rem',
                 borderRadius: '8px',
                 backgroundColor: primaryColor,
                 display: { xs: 'none', sm: 'inline-flex' },

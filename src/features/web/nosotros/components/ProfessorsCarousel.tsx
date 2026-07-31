@@ -1,13 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-
 import Link from 'next/link'
 import Image from 'next/image'
-
 import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
-
-import { eyebrow, sectionH2, sectionDesc } from '@/features/web/home/components/typography'
+import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 
 type Teacher = {
   id: string
@@ -25,8 +22,8 @@ function teacherHref(t: Teacher) {
 }
 
 const AVATAR_COLORS = [
-  '#3BA8C5', '#1B3A6B', '#7FD1E5', '#0f4438',
-  '#1a73e8', '#d93025', '#e37400', '#6d4c41', '#4527a0', '#00838f',
+  '#08479b', '#1B3A6B', '#1268db', '#fcd116',
+  '#3BA8C5', '#1a73e8', '#d93025', '#e37400', '#6d4c41', '#4527a0',
 ]
 
 function useVisible() {
@@ -35,13 +32,11 @@ function useVisible() {
   useEffect(() => {
     const update = () => {
       const w = window.innerWidth
-
       setVisible(w < 640 ? 1 : w < 900 ? 2 : w < 1200 ? 3 : 4)
     }
 
     update()
     window.addEventListener('resize', update)
-
     return () => window.removeEventListener('resize', update)
   }, [])
 
@@ -67,104 +62,52 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
   if (total === 0) return null
 
   return (
-    <section style={{ backgroundColor: '#f8fafc', padding: '5rem 1.5rem', borderTop: '1px solid hsl(214,20%,92%)' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+    <section className="bg-slate-50 py-24 px-6 lg:px-10 border-t border-slate-100">
+      <div className="max-w-[1440px] mx-auto">
 
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <p style={{ ...eyebrow, display: 'block', textAlign: 'center' }}>
-            Nuestro equipo docente
-          </p>
-          <h2 style={{ ...sectionH2, textAlign: 'center', marginBottom: '0.75rem' }}>
-            Nuestros Profesores
-          </h2>
-          <p style={{ ...sectionDesc, textAlign: 'center', maxWidth: '520px', margin: '0 auto' }}>
-            Aprende de profesionales con amplia experiencia en el sector industrial y académico.
-          </p>
-        </div>
+        <ScrollReveal>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-[#08479b] font-bold text-sm tracking-widest uppercase mb-4">Nuestro equipo docente</h2>
+            <h3 className="text-slate-900 font-black text-3xl md:text-5xl mb-6">Nuestros Profesores</h3>
+            <p className="text-slate-600 text-lg leading-relaxed">
+              Aprende de profesionales con amplia experiencia en el sector industrial y académico, dispuestos a guiarte en tu camino al éxito.
+            </p>
+          </div>
+        </ScrollReveal>
 
         {/* Carousel */}
-        <div style={{ position: 'relative', padding: '0 3rem' }}>
+        <div className="relative px-0 md:px-12">
           {/* Cards */}
           <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: `repeat(${Math.min(visible, total)}, 1fr)`,
-              gap: '1.25rem',
-            }}
+            className="grid gap-6"
+            style={{ gridTemplateColumns: `repeat(${Math.min(visible, total)}, 1fr)` }}
           >
             {teachers.slice(current, current + visible).map((teacher, i) => {
               const initials = `${teacher.nombre[0]}${teacher.apellido[0]}`
               const color = AVATAR_COLORS[(current + i) % AVATAR_COLORS.length]
-
               const href = teacherHref(teacher)
 
               return (
                 <Link
                   key={teacher.id}
                   href={href}
-                  style={{
-                    backgroundColor: '#ffffff',
-                    borderRadius: '16px',
-                    overflow: 'hidden',
-                    border: '1.5px solid hsl(214,20%,91%)',
-                    boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
-                    transition: 'transform 0.3s, box-shadow 0.3s, border-color 0.3s',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    textDecoration: 'none',
-                    cursor: 'pointer',
-                  }}
-                  onMouseEnter={e => {
-                    const el = e.currentTarget as HTMLAnchorElement
-
-                    el.style.transform = 'translateY(-6px)'
-                    el.style.boxShadow = '0 12px 36px rgba(59, 168, 197,0.13)'
-                    el.style.borderColor = '#3BA8C5'
-                  }}
-                  onMouseLeave={e => {
-                    const el = e.currentTarget as HTMLAnchorElement
-
-                    el.style.transform = 'translateY(0)'
-                    el.style.boxShadow = '0 2px 12px rgba(0,0,0,0.05)'
-                    el.style.borderColor = 'hsl(214,20%,91%)'
-                  }}
+                  className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_40px_rgb(8,71,155,0.08)] hover:border-[#08479b]/20"
                 >
-                  {/* Photo — cuadrado perfecto con padding-top hack */}
-                  <div style={{ position: 'relative', width: '100%', paddingTop: '100%', backgroundColor: `${color}14`, overflow: 'hidden' }}>
+                  {/* Photo Area */}
+                  <div className="relative w-full pt-[100%] bg-slate-100 overflow-hidden">
                     {teacher.avatar ? (
                       <Image
                         src={teacher.avatar}
                         alt={`${teacher.nombre} ${teacher.apellido}`}
                         fill
-                        style={{ objectFit: 'cover', objectPosition: 'center top' }}
+                        className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                       />
                     ) : (
-                      <div
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
+                      <div className="absolute inset-0 flex items-center justify-center">
                         <div
-                          style={{
-                            width: '80px',
-                            height: '80px',
-                            borderRadius: '50%',
-                            backgroundColor: color,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontFamily: 'Poppins, sans-serif',
-                            fontSize: '1.75rem',
-                            fontWeight: 800,
-                            color: '#ffffff',
-                            border: '3px solid rgba(255,255,255,0.5)',
-                            boxShadow: `0 4px 20px ${color}44`,
-                          }}
+                          className="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-black text-white shadow-lg"
+                          style={{ backgroundColor: color, border: '4px solid rgba(255,255,255,0.5)' }}
                         >
                           {initials}
                         </div>
@@ -173,75 +116,21 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                   </div>
 
                   {/* Info */}
-                  <div style={{ padding: '1.25rem 1.25rem 1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    <h3
-                      style={{
-                        fontFamily: 'Poppins, sans-serif',
-                        fontSize: '0.9375rem',
-                        fontWeight: 700,
-                        color: '#0A0A0A',
-                        lineHeight: 1.35,
-                        marginBottom: '0.375rem',
-                      }}
-                    >
+                  <div className="p-6 md:p-8 flex flex-col flex-1 text-center">
+                    <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2 group-hover:text-[#08479b] transition-colors line-clamp-1">
                       {teacher.nombre} {teacher.apellido}
                     </h3>
 
                     {teacher.cargo && (
-                      <p
-                        style={{
-                          fontFamily: 'Poppins, sans-serif',
-                          fontSize: '0.8rem',
-                          color: '#64748b',
-                          lineHeight: 1.45,
-                          marginBottom: '1rem',
-                          flex: 1,
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                        } as React.CSSProperties}
-                      >
+                      <p className="text-slate-500 text-sm md:text-base leading-relaxed mb-6 flex-1 line-clamp-2">
                         {teacher.cargo}
                       </p>
                     )}
-                    <Link
-                      href={href}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '0.375rem',
-                        padding: '0.625rem 1rem',
-                        borderRadius: '999px',
-                        backgroundColor: 'transparent',
-                        color: '#0A0A0A',
-                        fontFamily: 'Poppins, sans-serif',
-                        fontSize: '0.8125rem',
-                        fontWeight: 600,
-                        textDecoration: 'none',
-                        border: '1.5px solid #d1d5db',
-                        transition: 'all 0.2s',
-                        marginTop: 'auto',
-                      }}
-                      onMouseEnter={e => {
-                        const el = e.currentTarget as HTMLAnchorElement
-
-                        el.style.borderColor = '#3BA8C5'
-                        el.style.color = '#3BA8C5'
-                        el.style.backgroundColor = 'rgba(59, 168, 197,0.05)'
-                      }}
-                      onMouseLeave={e => {
-                        const el = e.currentTarget as HTMLAnchorElement
-
-                        el.style.borderColor = '#d1d5db'
-                        el.style.color = '#0A0A0A'
-                        el.style.backgroundColor = 'transparent'
-                      }}
-                    >
-                      <ChevronDown size={14} />
-                      Ver más
-                    </Link>
+                    
+                    <div className="mt-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-slate-200 text-slate-700 font-semibold text-sm transition-colors group-hover:border-[#08479b]/20 group-hover:bg-[#08479b]/5 group-hover:text-[#08479b]">
+                      <ChevronDown className="w-4 h-4" />
+                      Ver perfil completo
+                    </div>
                   </div>
                 </Link>
               )
@@ -254,50 +143,16 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
               <button
                 onClick={prev}
                 disabled={current === 0}
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: '45%',
-                  transform: 'translateY(-50%)',
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  backgroundColor: '#ffffff',
-                  border: `1.5px solid ${current === 0 ? '#e2e8f0' : '#3BA8C5'}`,
-                  cursor: current === 0 ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                  transition: 'all 0.2s',
-                  zIndex: 2,
-                }}
+                className="absolute left-0 top-[40%] -translate-y-1/2 w-12 h-12 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center transition-all hover:bg-slate-50 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 z-10 hidden md:flex"
               >
-                <ChevronLeft size={18} color={current === 0 ? '#cbd5e1' : '#3BA8C5'} />
+                <ChevronLeft className="w-6 h-6 text-slate-700" />
               </button>
               <button
                 onClick={next}
                 disabled={current >= maxStart}
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  top: '45%',
-                  transform: 'translateY(-50%)',
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  backgroundColor: '#ffffff',
-                  border: `1.5px solid ${current >= maxStart ? '#e2e8f0' : '#3BA8C5'}`,
-                  cursor: current >= maxStart ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                  transition: 'all 0.2s',
-                  zIndex: 2,
-                }}
+                className="absolute right-0 top-[40%] -translate-y-1/2 w-12 h-12 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center transition-all hover:bg-slate-50 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 z-10 hidden md:flex"
               >
-                <ChevronRight size={18} color={current >= maxStart ? '#cbd5e1' : '#3BA8C5'} />
+                <ChevronRight className="w-6 h-6 text-slate-700" />
               </button>
             </>
           )}
@@ -305,21 +160,14 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
 
         {/* Dots */}
         {dots > 1 && (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginTop: '2rem' }}>
+          <div className="flex justify-center items-center gap-2 mt-12">
             {Array.from({ length: dots }).map((_, di) => (
               <button
                 key={di}
                 onClick={() => setCurrent(di * visible)}
-                style={{
-                  width: di === activeDot ? '28px' : '8px',
-                  height: '8px',
-                  borderRadius: '999px',
-                  backgroundColor: di === activeDot ? '#3BA8C5' : '#cbd5e1',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: 0,
-                  transition: 'all 0.3s',
-                }}
+                className={`h-2.5 rounded-full transition-all duration-300 ${
+                  di === activeDot ? 'w-8 bg-[#08479b]' : 'w-2.5 bg-slate-200 hover:bg-slate-300'
+                }`}
               />
             ))}
           </div>

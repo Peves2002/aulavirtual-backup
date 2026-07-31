@@ -1,57 +1,50 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown, PlayCircle, FileText, FileSpreadsheet } from 'lucide-react'
+import { Plus, Minus, PlayCircle, FileText } from 'lucide-react'
 
 export default function AccordionModules({ modulos }: { modulos: any[] }) {
-  const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-0 border-t border-gray-300">
       {modulos.map((modulo, idx) => {
         const isOpen = openIndex === idx
         return (
-          <div key={modulo.id} className="border border-slate-200 rounded-2xl bg-white overflow-hidden shadow-sm transition-all">
+          <div key={modulo.id} className="border-b border-gray-300 bg-white overflow-hidden transition-all">
             <button
               onClick={() => setOpenIndex(isOpen ? null : idx)}
-              className="w-full text-left px-6 py-5 flex items-center justify-between hover:bg-slate-50 transition-colors focus:outline-none"
+              className="w-full text-left py-6 flex items-center justify-between hover:bg-slate-50 transition-colors focus:outline-none"
             >
-              <div className="flex items-center gap-4 pr-4">
-                <div className="w-10 h-10 shrink-0 bg-[#08479b]/10 text-[#08479b] rounded-full flex items-center justify-center font-bold text-sm">
-                  {idx + 1}
-                </div>
-                <div>
-                  <h4 className="font-bold text-lg text-slate-900">{modulo.titulo}</h4>
-                  {modulo.descripcion && <p className="text-sm text-slate-500 mt-1 line-clamp-1">{modulo.descripcion}</p>}
-                </div>
+              <div className="pr-4 text-[18px] text-gray-800">
+                 Módulo {idx + 1}: {modulo.titulo}
               </div>
-              <ChevronDown className={`w-6 h-6 text-slate-400 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+              {isOpen ? (
+                 <Minus className="w-6 h-6 text-[#08479b] shrink-0" strokeWidth={2} />
+              ) : (
+                 <Plus className="w-6 h-6 text-[#08479b] shrink-0" strokeWidth={2} />
+              )}
             </button>
             
             <div className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
-              <div className="px-6 pb-6 pt-2 border-t border-slate-100">
+              <div className="pb-6 pt-2">
                 {modulo.lecciones && modulo.lecciones.length > 0 ? (
-                  <ul className="space-y-3 mt-4">
+                  <ul className="space-y-3">
                     {modulo.lecciones.map((leccion: any, lIdx: number) => (
-                      <li key={leccion.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-lg hover:bg-slate-50">
+                      <li key={leccion.id} className="flex flex-col sm:flex-row sm:items-center gap-2 p-2 rounded-lg hover:bg-slate-50">
                         <div className="flex items-center gap-3">
                           {leccion.es_pdf ? (
-                            <FileText className="w-5 h-5 text-red-500" />
+                            <FileText className="w-5 h-5 text-gray-400" />
                           ) : (
-                            <PlayCircle className="w-5 h-5 text-[#08479b]" />
+                            <PlayCircle className="w-5 h-5 text-gray-400" />
                           )}
-                          <span className="text-slate-700 font-medium">{leccion.titulo}</span>
+                          <span className="text-gray-600 font-medium text-[15px]">{leccion.titulo}</span>
                         </div>
-                        {leccion.duracion && (
-                          <span className="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-full whitespace-nowrap">
-                            {leccion.duracion} min
-                          </span>
-                        )}
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-slate-500 italic mt-4 text-sm">Contenido próximamente.</p>
+                  <p className="text-gray-500 italic mt-2 text-sm">Contenido próximamente.</p>
                 )}
               </div>
             </div>

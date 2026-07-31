@@ -1,8 +1,6 @@
 'use client'
 
 import { Heart, Lightbulb, Users, TrendingUp, ShieldCheck } from 'lucide-react'
-
-import { eyebrow, sectionH2, sectionDesc, cardTitle, cardBody } from '@/features/web/home/components/typography'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 
 const DEFAULT_VALORES = [
@@ -45,16 +43,16 @@ interface MisionVisionProps {
 
 export function MisionVisionSection({ misionTitle, misionText, visionTitle, visionText }: MisionVisionProps) {
   return (
-    <section style={{ backgroundColor: '#f8fafc', padding: '5rem 1.5rem' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+    <section className="bg-slate-50 py-20 px-6 lg:px-10">
+      <div className="max-w-[1440px] mx-auto">
         <ScrollReveal>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <p style={{ ...eyebrow, display: 'block', textAlign: 'center' }}>Quiénes somos</p>
-            <h2 style={{ ...sectionH2, textAlign: 'center' }}>Misión y Visión</h2>
+          <div className="text-center mb-16">
+            <h2 className="text-[#08479b] font-bold text-sm tracking-widest uppercase mb-4">Quiénes somos</h2>
+            <h3 className="text-slate-900 font-black text-3xl md:text-5xl">Misión y Visión</h3>
           </div>
         </ScrollReveal>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-5xl mx-auto">
           <ScrollReveal direction="left" delay={0.05}>
             <MisionCard title={misionTitle} text={misionText} />
           </ScrollReveal>
@@ -69,23 +67,21 @@ export function MisionVisionSection({ misionTitle, misionText, visionTitle, visi
 
 function MisionCard({ title, text }: { title?: string; text?: string }) {
   return (
-    <div
-      style={{ backgroundColor: '#ffffff', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.06)', border: '1.5px solid hsl(214,20%,91%)', transition: 'transform 0.3s, box-shadow 0.3s' }}
-      onMouseEnter={e => { const el = e.currentTarget as HTMLDivElement; el.style.transform = 'translateY(-6px)'; el.style.boxShadow = '0 16px 40px rgba(59, 168, 197,0.14)' }}
-      onMouseLeave={e => { const el = e.currentTarget as HTMLDivElement; el.style.transform = 'translateY(0)'; el.style.boxShadow = '0 4px 24px rgba(0,0,0,0.06)' }}
-    >
-      <div style={{ height: '200px', background: 'linear-gradient(135deg, #1B3A6B 0%, #3BA8C5 60%, #7FD1E5 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-        <div style={{ width: '80px', height: '80px', borderRadius: '24px', backgroundColor: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)', border: '2px solid rgba(255,255,255,0.2)', position: 'relative', zIndex: 1 }}>
-          <span style={{ fontSize: '2.5rem' }}>🎯</span>
+    <div className="group bg-white rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgb(8,71,155,0.1)] hover:border-[#08479b]/20">
+      <div className="h-[240px] bg-gradient-to-br from-[#08479b] to-[#1268db] flex items-center justify-center relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
+        {/* Icon Container */}
+        <div className="w-24 h-24 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center relative z-10 transition-transform duration-500 group-hover:scale-110">
+          <span className="text-5xl">🎯</span>
         </div>
       </div>
-      <div style={{ padding: '1.75rem 2rem 2rem' }}>
-        <h3 style={{ ...cardTitle, fontSize: '1.25rem', marginBottom: '1rem', color: '#1B3A6B' }}>
+      <div className="p-8 md:p-12 text-center md:text-left">
+        <h3 className="text-2xl font-black text-slate-900 mb-4 group-hover:text-[#08479b] transition-colors">
           {title || 'Nuestra Misión'}
         </h3>
         <div 
-          style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75 }}
+          className="text-slate-600 leading-relaxed text-lg [&>p]:m-0"
           dangerouslySetInnerHTML={{ __html: text || '<p>Brindar formación profesional de alta calidad, accesible y orientada al sector industrial, impulsando el desarrollo de competencias que generan valor real en las organizaciones y en la carrera de nuestros estudiantes.</p>' }}
         />
       </div>
@@ -95,23 +91,21 @@ function MisionCard({ title, text }: { title?: string; text?: string }) {
 
 function VisionCard({ title, text }: { title?: string; text?: string }) {
   return (
-    <div
-      style={{ backgroundColor: '#ffffff', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.06)', border: '1.5px solid hsl(214,20%,91%)', transition: 'transform 0.3s, box-shadow 0.3s' }}
-      onMouseEnter={e => { const el = e.currentTarget as HTMLDivElement; el.style.transform = 'translateY(-6px)'; el.style.boxShadow = '0 16px 40px rgba(127, 209, 229,0.18)' }}
-      onMouseLeave={e => { const el = e.currentTarget as HTMLDivElement; el.style.transform = 'translateY(0)'; el.style.boxShadow = '0 4px 24px rgba(0,0,0,0.06)' }}
-    >
-      <div style={{ height: '200px', background: 'linear-gradient(135deg, #0A0A0A 0%, #1a2e20 60%, #1B3A6B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(127, 209, 229,0.06) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-        <div style={{ width: '80px', height: '80px', borderRadius: '24px', backgroundColor: 'rgba(127, 209, 229,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)', border: '2px solid rgba(127, 209, 229,0.25)', position: 'relative', zIndex: 1 }}>
-          <span style={{ fontSize: '2.5rem' }}>🔭</span>
+    <div className="group bg-white rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgb(8,71,155,0.1)] hover:border-[#08479b]/20">
+      <div className="h-[240px] bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
+        {/* Icon Container */}
+        <div className="w-24 h-24 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center relative z-10 transition-transform duration-500 group-hover:scale-110">
+          <span className="text-5xl">🔭</span>
         </div>
       </div>
-      <div style={{ padding: '1.75rem 2rem 2rem' }}>
-        <h3 style={{ ...cardTitle, fontSize: '1.25rem', marginBottom: '1rem', color: '#3BA8C5' }}>
+      <div className="p-8 md:p-12 text-center md:text-left">
+        <h3 className="text-2xl font-black text-slate-900 mb-4 group-hover:text-[#08479b] transition-colors">
           {title || 'Nuestra Visión'}
         </h3>
         <div 
-          style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75 }}
+          className="text-slate-600 leading-relaxed text-lg [&>p]:m-0"
           dangerouslySetInnerHTML={{ __html: text || '<p>Ser la plataforma de referencia a nivel hispanoamericano en educación continua e In-House, destacando por nuestra innovación, excelencia académica y contribución al crecimiento competitivo del ecosistema corporativo.</p>' }}
         />
       </div>
@@ -135,21 +129,21 @@ export function ValoresSection({ valores }: ValoresSectionProps) {
     : DEFAULT_VALORES
 
   return (
-    <section style={{ backgroundColor: '#ffffff', padding: '5rem 1.5rem', borderTop: '1px solid hsl(214,20%,92%)' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+    <section className="bg-white py-24 px-6 lg:px-10 border-t border-slate-100">
+      <div className="max-w-[1440px] mx-auto">
         <ScrollReveal>
-          <div style={{ textAlign: 'center', maxWidth: '560px', margin: '0 auto 3.5rem' }}>
-            <p style={{ ...eyebrow, display: 'block', textAlign: 'center' }}>Lo que nos define</p>
-            <h2 style={{ ...sectionH2, textAlign: 'center' }}>Valores que nos identifican</h2>
-            <p style={{ ...sectionDesc, textAlign: 'center', marginTop: '0.75rem' }}>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-[#08479b] font-bold text-sm tracking-widest uppercase mb-4">Lo que nos define</h2>
+            <h3 className="text-slate-900 font-black text-3xl md:text-5xl mb-6">Valores que nos identifican</h3>
+            <p className="text-slate-600 text-lg leading-relaxed">
               &quot;La excelencia no es un acto, sino un hábito. Cada valor que practicamos a diario define quiénes somos y hacia dónde vamos.&quot;
             </p>
           </div>
         </ScrollReveal>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {activeValores.map((v, i) => (
-            <ScrollReveal key={i} delay={i * 0.06}>
+            <ScrollReveal key={i} delay={i * 0.1}>
               <ValorCard v={v} />
             </ScrollReveal>
           ))}
@@ -161,18 +155,16 @@ export function ValoresSection({ valores }: ValoresSectionProps) {
 
 function ValorCard({ v }: { v: { icon: typeof Heart; title: string; desc: string } }) {
   return (
-    <div
-      style={{ backgroundColor: '#f8fafc', borderRadius: '20px', padding: '2rem 1.5rem', border: '1.5px solid hsl(214,20%,92%)', textAlign: 'center', cursor: 'default', transition: 'transform 0.3s, box-shadow 0.3s, border-color 0.3s, background-color 0.3s' }}
-      onMouseEnter={e => { const el = e.currentTarget as HTMLDivElement; el.style.transform = 'translateY(-6px)'; el.style.boxShadow = '0 12px 36px rgba(59, 168, 197,0.12)'; el.style.borderColor = '#3BA8C5'; el.style.backgroundColor = '#ffffff' }}
-      onMouseLeave={e => { const el = e.currentTarget as HTMLDivElement; el.style.transform = 'translateY(0)'; el.style.boxShadow = 'none'; el.style.borderColor = 'hsl(214,20%,92%)'; el.style.backgroundColor = '#f8fafc' }}
-    >
-      <div style={{ width: '60px', height: '60px', borderRadius: '18px', backgroundColor: 'rgba(59, 168, 197,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', border: '1.5px solid rgba(59, 168, 197,0.2)' }}>
-        <v.icon size={28} color="#3BA8C5" />
+    <div className="group h-full bg-slate-50 rounded-[24px] p-8 border border-slate-200 text-center transition-all duration-300 hover:-translate-y-2 hover:bg-white hover:border-[#08479b]/30 hover:shadow-[0_12px_40px_rgb(8,71,155,0.08)] flex flex-col items-center">
+      <div className="w-16 h-16 rounded-2xl bg-[#08479b]/5 flex items-center justify-center mb-6 border border-[#08479b]/10 transition-colors duration-300 group-hover:bg-[#08479b]/10 group-hover:border-[#08479b]/20">
+        <v.icon className="w-8 h-8 text-[#08479b]" />
       </div>
-      <h3 style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', fontWeight: 700, color: '#0A0A0A', marginBottom: '0.625rem' }}>
+      <h3 className="text-xl font-bold text-slate-900 mb-4">
         {v.title}
       </h3>
-      <p style={{ ...cardBody, textAlign: 'center' }}>{v.desc}</p>
+      <p className="text-slate-600 leading-relaxed">
+        {v.desc}
+      </p>
     </div>
   )
 }

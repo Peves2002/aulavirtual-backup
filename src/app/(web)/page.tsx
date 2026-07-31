@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+
 import Link from 'next/link'
 import fs from 'fs'
 import path from 'path'
@@ -14,6 +16,43 @@ import { ESCUELAS } from '@/features/web/adph/data/escuelas'
 import { PROGRAMAS } from '@/features/web/adph/data/programas'
 import AdphNewsletter from '@/features/web/adph/components/AdphNewsletter'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
+
+// ── SEO: Metadata dinámica desde el panel admin ──────────────────────────────
+export async function generateMetadata(): Promise<Metadata> {
+  const configs = await getConfigs()
+  const siteName   = configs.TEMPLATE_NAME?.trim()   || 'ADPH Group'
+  const slogan     = configs.TEMPLATE_SLOGAN?.trim()  || 'Formación Profesional de Alto Impacto'
+  const seoTitle   = configs.SEO_HOME_TITLE?.trim()   || `${siteName} | ${slogan}`
+  const seoDesc    = configs.SEO_HOME_DESC?.trim()    || slogan
+  const seoKeywords = configs.SEO_KEYWORDS?.trim()    || ''
+  const ogImage    = configs.SEO_OG_IMAGE?.trim()     || ''
+  const siteUrl    = configs.SEO_SITE_URL?.trim()     || ''
+  const googleVerification = configs.SEO_GOOGLE_VERIFICATION?.trim() || ''
+
+  return {
+    title: seoTitle,
+    description: seoDesc,
+    keywords: seoKeywords || undefined,
+    ...(googleVerification ? { verification: { google: googleVerification } } : {}),
+    openGraph: {
+      title: seoTitle,
+      description: seoDesc,
+      type: 'website',
+      locale: 'es_PE',
+      siteName,
+      url: siteUrl || undefined,
+      ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630, alt: siteName }] } : {}),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: seoTitle,
+      description: seoDesc,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
+    alternates: siteUrl ? { canonical: siteUrl } : undefined,
+  }
+}
+
 
 const TESTIMONIOS = [
   { id: 1, name: 'María Fernández', role: 'Gerente de RRHH en TechLatam', quote: 'Los programas de ADPH me dieron las herramientas prácticas que necesitaba para reestructurar todo nuestro departamento. Excelente nivel.', image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=150&q=80' },
@@ -198,37 +237,90 @@ export default async function HomePage() {
       </section>
 
       {/* 4. SECCIÓN 'PROGRAMAS EN CONVOCATORIA' */}
-      <section className="py-24 bg-[#08479b] border-b border-slate-100 relative">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
+      <section
+        className="py-24 border-b border-blue-900 relative overflow-hidden"
+        style={{ background: 'linear-gradient(160deg, #06316b 0%, #08479b 45%, #0a56b8 100%)' }}
+      >
+        {/* Esferas decorativas de fondo */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <div
+            className="absolute -top-24 -left-24 w-96 h-96 rounded-full opacity-10"
+            style={{ background: 'radial-gradient(circle, #fcd116 0%, transparent 70%)' }}
+          />
+          <div
+            className="absolute -bottom-16 -right-16 w-80 h-80 rounded-full opacity-10"
+            style={{ background: 'radial-gradient(circle, #fcd116 0%, transparent 70%)' }}
+          />
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-5"
+            style={{ background: 'radial-gradient(circle, #ffffff 0%, transparent 70%)' }}
+          />
+        </div>
+
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 relative">
           <FadeIn>
             <div className="mb-16 text-center">
-              <div 
-                className="text-white font-black text-3xl md:text-5xl tracking-tight font-manrope [&>p]:m-0"
+              <div
+                className="text-white font-black text-3xl md:text-5xl tracking-tight font-manrope drop-shadow-lg [&>p]:m-0"
                 dangerouslySetInnerHTML={{ __html: homeProgramasTitle }}
               />
-              <div className="w-16 h-1.5 bg-[#fcd116] mx-auto mt-6 rounded-full"></div>
+              <div className="w-16 h-1.5 bg-[#fcd116] mx-auto mt-5 rounded-full shadow-[0_0_12px_rgba(252,209,22,0.7)]"></div>
             </div>
           </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {displayProgramas.map((prog, index) => (
               <FadeIn key={prog.id} delay={index * 0.1}>
-                <div className="bg-white border border-slate-100 hover:border-slate-200 shadow-sm hover:shadow-[0_20px_50px_rgba(0,0,0,0.15)] transition-all duration-500 hover:-translate-y-1.5 rounded-xl overflow-hidden group flex flex-col h-full">
+                <div
+                  className="overflow-hidden group flex flex-col h-full transition-all duration-500 hover:-translate-y-2 shadow-[0_10px_40px_rgba(0,0,0,0.25),0_2px_8px_rgba(0,0,0,0.15)] hover:shadow-[0_25px_60px_rgba(0,0,0,0.4),0_8px_20px_rgba(252,209,22,0.15)]"
+                  style={{ background: 'rgba(255,255,255,0.97)', borderRadius: '6px' }}
+                >
+                  {/* Imagen con overlay */}
                   <div className="h-56 relative overflow-hidden">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={prog.image} alt={prog.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                    <div className="absolute top-4 left-4 bg-slate-950/40 backdrop-blur-md border border-white/20 px-4 py-1.5 text-[10px] font-bold text-white uppercase tracking-wider rounded-md shadow-sm font-manrope">
+                    <img
+                      src={prog.image}
+                      alt={prog.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    {/* Overlay gradiente al hacer hover */}
+                    <div
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      style={{ background: 'linear-gradient(to top, rgba(6,49,107,0.55) 0%, transparent 60%)' }}
+                    />
+                    {/* Badge glassmorphism */}
+                    <div
+                      className="absolute top-4 left-4 text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider font-manrope"
+                      style={{
+                        background: 'rgba(6,49,107,0.8)',
+                        backdropFilter: 'blur(8px)',
+                        border: '1px solid rgba(255,255,255,0.2)',
+                        borderRadius: '4px',
+                        boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+                      }}
+                    >
                       {prog.category}
                     </div>
                   </div>
+
+                  {/* Línea dorada animada */}
+                  <div
+                    className="h-0.5 w-0 group-hover:w-full transition-all duration-500"
+                    style={{ background: 'linear-gradient(90deg, #fcd116, #08479b)' }}
+                  />
+
                   <div className="p-8 flex flex-col flex-grow">
                     <span className="text-[10px] font-bold text-[#08479b] uppercase tracking-widest mb-3 flex items-center gap-1.5 bg-[#08479b]/10 self-start px-3 py-1 rounded-md font-manrope">
                       <BookOpen className="w-3.5 h-3.5" /> {prog.duration}
                     </span>
                     <h3 className="text-xl font-black text-slate-900 leading-snug mb-4 group-hover:text-[#08479b] transition-colors font-manrope">{prog.title}</h3>
                     <div className="mt-auto pt-6 border-t border-slate-100">
-                      <Link href={`/programas/${prog.slug}`} className="text-sm font-bold text-slate-600 group-hover:text-[#08479b] inline-flex items-center gap-2 transition-colors font-manrope">
-                        Ver detalle <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                      <Link
+                        href={`/programas/${prog.slug}`}
+                        className="group/link text-sm font-bold text-slate-500 group-hover:text-[#08479b] inline-flex items-center gap-2 transition-colors font-manrope"
+                      >
+                        Ver detalle
+                        <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover/link:translate-x-1 text-[#08479b]" />
                       </Link>
                     </div>
                   </div>
@@ -239,7 +331,11 @@ export default async function HomePage() {
 
           <FadeIn delay={0.4}>
             <div className="mt-16 text-center">
-              <Link href="/programas" className="inline-flex items-center justify-center bg-[#fcd116] hover:bg-white text-slate-950 hover:text-[#08479b] font-extrabold text-sm md:text-base uppercase tracking-widest px-8 md:px-10 py-4 md:py-5 rounded-md transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 font-manrope">
+              <Link
+                href="/programas"
+                className="inline-flex items-center justify-center bg-[#fcd116] hover:bg-white text-slate-950 hover:text-[#08479b] font-extrabold text-sm md:text-base uppercase tracking-widest px-8 md:px-10 py-4 md:py-5 transition-all duration-300 shadow-[0_8px_30px_rgba(252,209,22,0.35)] hover:shadow-[0_12px_40px_rgba(252,209,22,0.5)] hover:-translate-y-1 font-manrope"
+                style={{ borderRadius: '4px' }}
+              >
                 Ver todos los Programas
               </Link>
             </div>
@@ -406,19 +502,43 @@ export default async function HomePage() {
       </section>
 
       {/* 9. SECCIÓN 'NOTICIAS' (Centered grid of featured news) */}
-      <section className="py-24 bg-[#08479b] border-b border-slate-100">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
+      <section
+        className="py-24 border-b border-blue-900"
+        style={{
+          background: 'linear-gradient(160deg, #06316b 0%, #08479b 45%, #0a56b8 100%)',
+        }}
+      >
+        {/* Partículas de fondo decorativas */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <div
+            className="absolute -top-20 -right-20 w-96 h-96 rounded-full opacity-10"
+            style={{ background: 'radial-gradient(circle, #fcd116 0%, transparent 70%)' }}
+          />
+          <div
+            className="absolute bottom-0 -left-10 w-72 h-72 rounded-full opacity-10"
+            style={{ background: 'radial-gradient(circle, #fcd116 0%, transparent 70%)' }}
+          />
+        </div>
+
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 relative">
           <FadeIn>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
               <div>
-                <h2 className="text-white font-black text-3xl md:text-5xl tracking-tight font-manrope">Noticias Destacadas</h2>
-                <div className="w-16 h-1.5 bg-[#fcd116] mx-auto mt-6 rounded-full"></div>
+                <h2 className="text-white font-black text-3xl md:text-5xl tracking-tight font-manrope drop-shadow-lg">Noticias Destacadas</h2>
+                <div className="w-16 h-1.5 bg-[#fcd116] mt-5 rounded-full shadow-[0_0_12px_rgba(252,209,22,0.7)]"></div>
               </div>
-              <Link 
-                href="/noticias" 
-                className="group flex items-center gap-3 text-xs font-extrabold uppercase tracking-widest text-white hover:text-[#fcd116] transition-colors font-manrope"
+              <Link
+                href="/noticias"
+                className="group flex items-center gap-3 text-xs font-extrabold uppercase tracking-widest text-white hover:text-[#fcd116] transition-all duration-300 font-manrope"
               >
-                <span className="bg-[#06316b]/50 border border-white/10 rounded-md p-3 group-hover:shadow-md transition-all">
+                <span
+                  className="flex items-center justify-center rounded-md p-3 transition-all duration-300 group-hover:scale-110"
+                  style={{
+                    background: 'rgba(255,255,255,0.08)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+                  }}
+                >
                   <ArrowRight className="w-4 h-4 text-[#fcd116]" />
                 </span>
                 Ver todas las noticias
@@ -432,14 +552,47 @@ export default async function HomePage() {
 
               return (
                 <FadeIn key={news.id} delay={index * 0.15}>
-                  <div className="group bg-white border border-slate-200 rounded-none overflow-hidden flex flex-col h-full shadow-sm hover:shadow-md transition-all duration-300">
+                  <div
+                    className="group overflow-hidden flex flex-col h-full transition-all duration-500 hover:-translate-y-2 shadow-[0_10px_40px_rgba(0,0,0,0.25),0_2px_8px_rgba(0,0,0,0.15)] hover:shadow-[0_25px_60px_rgba(0,0,0,0.4),0_8px_20px_rgba(252,209,22,0.15)]"
+                    style={{
+                      background: 'rgba(255,255,255,0.97)',
+                      borderRadius: '4px',
+                    }}
+                  >
+                    {/* Imagen con overlay gradiente */}
                     <div className="h-60 relative overflow-hidden bg-slate-100">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={news.image} alt={news.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102" />
-                      <div className="absolute top-4 left-4 bg-[#08479b] text-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-none">
+                      <img
+                        src={news.image}
+                        alt={news.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      {/* Overlay gradiente sobre imagen */}
+                      <div
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        style={{ background: 'linear-gradient(to top, rgba(6,49,107,0.5) 0%, transparent 60%)' }}
+                      />
+                      {/* Badge con glassmorphism */}
+                      <div
+                        className="absolute top-4 left-4 text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider"
+                        style={{
+                          background: 'rgba(8,71,155,0.85)',
+                          backdropFilter: 'blur(8px)',
+                          border: '1px solid rgba(255,255,255,0.2)',
+                          borderRadius: '3px',
+                          boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+                        }}
+                      >
                         {news.tag}
                       </div>
                     </div>
+
+                    {/* Línea decorativa animada */}
+                    <div
+                      className="h-0.5 w-0 group-hover:w-full transition-all duration-500"
+                      style={{ background: 'linear-gradient(90deg, #fcd116, #08479b)' }}
+                    />
+
                     <div className="p-6 flex flex-col flex-grow justify-between bg-white">
                       <div className="space-y-2">
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{news.date}</span>
@@ -447,13 +600,14 @@ export default async function HomePage() {
                           {news.title}
                         </h4>
                       </div>
-                      <Link 
+                      <Link
                         href={news.enlaceExterno || targetUrl}
                         target={news.enlaceExterno ? '_blank' : undefined}
                         rel={news.enlaceExterno ? 'noopener noreferrer' : undefined}
-                        className="text-xs font-bold text-[#08479b] hover:underline mt-6 inline-flex items-center gap-1.5 font-manrope self-start"
+                        className="group/link mt-6 inline-flex items-center gap-1.5 self-start font-manrope"
                       >
-                        Leer noticia <ArrowRight className="w-3.5 h-3.5" />
+                        <span className="text-xs font-bold text-[#08479b] group-hover/link:underline">Leer noticia</span>
+                        <ArrowRight className="w-3.5 h-3.5 text-[#08479b] transition-transform duration-300 group-hover/link:translate-x-1" />
                       </Link>
                     </div>
                   </div>

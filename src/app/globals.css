@@ -30,9 +30,9 @@
   --ipg-black: #0A0A0A;
   --ipg-muted: #f1f5f4;
 
-  --navbar-height: 88px;
-  --sidebar-width: 80px;
-  --sidebar-width-expanded: 260px;
+  --navbar-height: 100px;
+  --sidebar-width: 96px;
+  --sidebar-width-expanded: 280px;
 }
 
 @media (max-width: 639px) {

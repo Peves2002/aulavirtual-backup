@@ -40,6 +40,9 @@ import UserAvatar from '@/utils/components/UserAvatar'
 import PdfViewer from '@/features/estudiante/player/components/PdfViewer'
 import VideoPlayer from '@/features/estudiante/player/components/VideoPlayer'
 import { useAuthModal } from '@/contexts/AuthModalContext'
+import CourseScholarships from './CourseScholarships'
+import CourseFAQ from './CourseFAQ'
+import CourseRelatedPrograms from './CourseRelatedPrograms'
 
 
 interface Leccion {
@@ -567,6 +570,12 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                   </Paper>
                 )}
               </Box>
+
+              {/* Ayudas y Becas */}
+              <CourseScholarships />
+
+              {/* Preguntas Frecuentes */}
+              <CourseFAQ />
             </Stack>
           </Grid>
 
@@ -642,6 +651,9 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
 
         </Grid>
       </Container>
+
+      {/* Programas Relacionados */}
+      <CourseRelatedPrograms />
 
       {/* Dialog para la Vista Previa */}
       <Dialog

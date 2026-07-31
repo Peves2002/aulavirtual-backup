@@ -179,12 +179,48 @@ model Curso {
   perfil_estudiante    String?
   salidas_profesionales Json?             @default("[]")
   testimonios          Json?             @default("[]")
+  certificaciones      Json?             @default("[]")
+  herramientas         Json?             @default("[]")
+  por_que_estudiar     Json?             @default("[]")
+  director             Json?             @default("{}")
+  proceso_admision     Json?             @default("[]")
+  requisitos_admision  Json?             @default("[]")
+  ayudas_becas         Json?             @default("[]")
+  faqs                 Json?             @default("[]")
+  programas_relacionados Json?           @default("[]")
+  rankings             Json?             @default("[]")
+  empresas_alumnos     Json?             @default("[]")
+  acompanamiento       Json?             @default("[]")
+  por_que_nosotros     Json?             @default("{}")
+  mostrar_beneficios   Boolean           @default(true)
+  mostrar_incluye      Boolean           @default(true)
+  mostrar_metodologia  Boolean           @default(true)
+  mostrar_objetivos    Boolean           @default(true)
+  mostrar_salidas      Boolean           @default(true)
+  mostrar_perfil       Boolean           @default(true)
+  mostrar_certificaciones  Boolean       @default(true)
+  mostrar_herramientas     Boolean       @default(true)
+  mostrar_rankings         Boolean       @default(true)
+  mostrar_empresas         Boolean       @default(true)
+  mostrar_director         Boolean       @default(true)
+  mostrar_acompanamiento   Boolean       @default(true)
+  mostrar_admision         Boolean       @default(true)
+  mostrar_becas            Boolean       @default(true)
+  mostrar_faqs             Boolean       @default(true)
+  mostrar_relacionados     Boolean       @default(true)
+  mostrar_por_que_estudiar Boolean       @default(true)
+  mostrar_por_que_nosotros Boolean       @default(true)
   fecha_inicio         DateTime?
   fecha_fin            DateTime?
   vigencia_meses       Int?
   precio_oferta        Decimal?          @db.Decimal(10, 2)
   brochure             String?
   orden                Int               @default(0)
+  titulo_programa      String?
+  titulo_certificaciones String?
+  titulo_plan_estudios String?
+  titulo_salidas       String?
+  titulo_admision      String?
   certificados         Certificado[]
   categoria            Categoria?        @relation(fields: [categoria_id], references: [id])
   profesor             Usuario           @relation("ProfesorCursos", fields: [profesor_id], references: [id], onDelete: Cascade)
