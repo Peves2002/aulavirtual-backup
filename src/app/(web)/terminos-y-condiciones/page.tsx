@@ -78,7 +78,7 @@ export default function TerminosYCondicionesPage() {
 
           <Typography variant="h4">7. Contacto y Libro de Reclamaciones</Typography>
           <Typography paragraph>
-            Para consultas de soporte, envíe sus requerimientos a <strong>grupoollarvesmercadotecnia@gmail.com</strong> o comuníquese
+            Para consultas de soporte, envíe sus requerimientos a <strong>ollarvescapacitaciones@gmail.com</strong> o comuníquese
             al WhatsApp <strong>+51 944 270 957</strong>.
             De acuerdo a la legislación vigente de protección al consumidor peruano, mantenemos un{' '}
             <a href="/libro-de-reclamaciones" style={{ color: 'var(--web-dark, #025E44)', textDecoration: 'underline' }}>Libro de Reclamaciones a disposición pública</a>{' '}

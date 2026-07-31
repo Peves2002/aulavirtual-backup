@@ -21,6 +21,8 @@ import { useSnackbar } from 'notistack'
 
 import AppModal from '@/utils/components/AppModal'
 import CustomTextField from '@core/components/mui/TextField'
+import MediaLibrary from '@/features/admin/cursos/components/MediaLibrary'
+import CourseThumbnail from '@/utils/components/CourseThumbnail'
 import { actualizarCategoriaSchema, type ActualizarCategoriaDto } from '@/schemas/categoria.schema'
 import {
   useCategoria,
@@ -55,6 +57,7 @@ export const EditCategoriaModal = ({ open, handleClose, categoriaId, onSuccess }
   const [nuevoHijoNombre, setNuevoHijoNombre] = useState('')
   const [localHijos, setLocalHijos] = useState<CategoriaHijo[] | null>(null)
   const [ordenModificado, setOrdenModificado] = useState(false)
+  const [openMedia, setOpenMedia] = useState(false)
 
   // Hijos a mostrar: locales (si se reordenaron) o los del servidor
   const hijosActuales = localHijos ?? categoria?.hijos ?? []
@@ -190,6 +193,7 @@ export const EditCategoriaModal = ({ open, handleClose, categoriaId, onSuccess }
   const initialValues: ActualizarCategoriaDto = {
     nombre: categoria.nombre,
     descripcion: categoria.descripcion || '',
+    icono: categoria.icono || '',
     esta_activo: categoria.esta_activo
   }
 
@@ -259,12 +263,81 @@ export const EditCategoriaModal = ({ open, handleClose, categoriaId, onSuccess }
                     disabled={isSubmitting}
                     InputProps={{
                       startAdornment: (
-                        <InputAdornment position='start' sx={{ alignSelf: 'flex-start', mt: 1.5 }}>
-                          <i className='tabler-file-description text-xl text-textSecondary' />
+                        <InputAdornment position='start' sx={{ alignSelf: 'flex-start' }}>
+                          <i className='tabler-file-description text-xl text-textSecondary' style={{ marginTop: '22px' }} />
                         </InputAdornment>
                       )
                     }}
                   />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography variant='overline' color='text.disabled' sx={{ mb: 1, display: 'block' }}>
+                    Icono de la Categoría
+                  </Typography>
+                  {values.icono ? (
+                    <Box sx={{ position: 'relative', width: '100%', borderRadius: 2, overflow: 'hidden', mb: 2, bgcolor: '#f4f4f4', border: '1px solid', borderColor: 'divider', aspectRatio: '16/9' }}>
+                      <CourseThumbnail
+                        src={values.icono}
+                        title='Vista previa'
+                        variant='simple'
+                      />
+                      <Box sx={{ position: 'absolute', top: 4, right: 4, zIndex: 2 }}>
+                        <IconButton
+                          size='small'
+                          sx={{ bgcolor: 'background.paper', boxShadow: 1, '&:hover': { bgcolor: 'error.main', color: 'common.white' } }}
+                          onClick={() => handleChange({ target: { name: 'icono', value: '' } })}
+                        >
+                          <i className='tabler-trash text-sm' />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                  ) : (
+                    <Box
+                      onClick={() => setOpenMedia(true)}
+                      sx={{
+                        width: '100%',
+                        height: 120,
+                        borderRadius: 2,
+                        border: '1px dashed',
+                        borderColor: 'divider',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        bgcolor: 'action.hover',
+                        mb: 2,
+                        '&:hover': { borderColor: 'primary.main', bgcolor: 'primary.lightOpacity' }
+                      }}
+                    >
+                      <i className='tabler-photo-plus text-2xl text-textDisabled' />
+                      <Typography variant='caption' color='text.secondary' sx={{ mt: 1 }}>Click para seleccionar</Typography>
+                    </Box>
+                  )}
+
+                  <Button
+                    variant='outlined'
+                    size='small'
+                    fullWidth
+                    startIcon={<i className='tabler-photo' />}
+                    onClick={() => setOpenMedia(true)}
+                  >
+                    {values.icono ? 'Cambiar Icono' : 'Seleccionar Icono'}
+                  </Button>
+
+                  <MediaLibrary
+                    open={openMedia}
+                    onClose={() => setOpenMedia(false)}
+                    onSelect={(url) => {
+                      handleChange({ target: { name: 'icono', value: url } })
+                    }}
+                  />
+                  {touched.icono && errors.icono && (
+                    <Typography variant='caption' color='error' sx={{ display: 'block', mt: 1 }}>
+                      {errors.icono}
+                    </Typography>
+                  )}
                 </Grid>
 
                 <Grid item xs={12}>

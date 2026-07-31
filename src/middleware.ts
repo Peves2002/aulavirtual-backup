@@ -101,6 +101,7 @@ export default withAuth(
           path.startsWith('/verificar-certificado') ||
           path.startsWith('/unauthorized') ||
           path.startsWith('/assets') ||
+          path.startsWith('/images') ||
           path.startsWith('/empresas') ||
           path.startsWith('/politica-de-devoluciones') ||
           path.startsWith('/suscripciones') ||
@@ -126,6 +127,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public folder
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|manifest\\.json|sw\\.js|workbox-.*|pwa-init\\.js|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.svg|.*\\.mp4|.*\\.webm|.*\\.mkv|.*\\.gif).*)'
+    '/((?!api|_next/static|_next/image|favicon.ico|manifest\\.json|sw\\.js|workbox-.*|pwa-init\\.js|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.svg|.*\\.webp|.*\\.pdf|.*\\.mp4|.*\\.webm|.*\\.mkv|.*\\.gif).*)'
   ]
 }

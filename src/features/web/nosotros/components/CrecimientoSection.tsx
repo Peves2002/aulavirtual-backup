@@ -20,8 +20,8 @@ const MAX_VALUE = 1240
 
 const stats = [
   { icon: BookOpen, value: '48', label: 'Programas desarrollados' },
-  { icon: LayoutGrid, value: '6', label: 'Áreas especializadas' },
-  { icon: Users, value: '+2 800', label: 'Estudiantes capacitados' },
+  { icon: LayoutGrid, value: '50', label: 'Diplomados' },
+  { icon: Users, value: '+4 500', label: 'Estudiantes capacitados' },
 ]
 
 function CountUp({ target, started }: { target: number; started: boolean }) {

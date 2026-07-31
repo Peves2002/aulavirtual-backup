@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 
 import { Heart, Lightbulb, Users, TrendingUp, ShieldCheck } from 'lucide-react'
@@ -70,45 +71,59 @@ export function MisionVisionSection() {
 }
 
 function MisionCard() {
+  const [isHovered, setIsHovered] = useState(false)
+
   return (
     <div
       style={{
+        height: '380px',
         backgroundColor: '#ffffff',
         borderRadius: '20px',
         overflow: 'hidden',
-        boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
+        boxShadow: isHovered ? '0 16px 40px rgba(var(--web-primary-rgb, 37, 146, 127),0.14)' : '0 4px 24px rgba(0,0,0,0.06)',
         border: '1.5px solid hsl(214,20%,91%)',
-        transition: 'transform 0.3s, box-shadow 0.3s',
+        transition: 'all 0.4s ease',
+        transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column'
       }}
-      onMouseEnter={e => {
-        const el = e.currentTarget as HTMLDivElement
-
-        el.style.transform = 'translateY(-6px)'
-        el.style.boxShadow = '0 16px 40px rgba(var(--web-primary-rgb, 37, 146, 127),0.14)'
-      }}
-      onMouseLeave={e => {
-        const el = e.currentTarget as HTMLDivElement
-
-        el.style.transform = 'translateY(0)'
-        el.style.boxShadow = '0 4px 24px rgba(0,0,0,0.06)'
-      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <div
         style={{
-          height: '200px',
+          height: isHovered ? '160px' : '380px',
           position: 'relative',
           overflow: 'hidden',
           backgroundColor: '#025E44',
+          transition: 'height 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+          flexShrink: 0
         }}
       >
-        <Image src="/images/equipo/mision.png" alt="Misión" fill style={{ objectFit: 'cover', opacity: 0.85 }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.5), transparent)' }} />
+        <Image src="/images/equipo/mision.png" alt="Misión" fill style={{ objectFit: 'cover', objectPosition: 'top', opacity: 0.85 }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.2))' }} />
+        
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: isHovered ? 0 : 1, transition: 'opacity 0.3s ease' }}>
+          <h3 style={{ ...cardTitle, fontSize: '2rem', color: '#fff', letterSpacing: '1px' }}>
+            Nuestra Misión
+          </h3>
+        </div>
       </div>
-      <div style={{ padding: '1.75rem 2rem 2rem' }}>
+      <div style={{ 
+          padding: '2rem',
+          flexGrow: 1,
+          opacity: isHovered ? 1 : 0, 
+          transition: 'opacity 0.4s ease',
+          transitionDelay: isHovered ? '0.1s' : '0s',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center'
+      }}>
         <h3 style={{ ...cardTitle, fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--web-dark, #025E44)' }}>
           Nuestra Misión
         </h3>
-        <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
+        <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic', margin: 0 }}>
           &quot;Brindar asesoría integral y estratégica, proporcionando las herramientas metodológicas necesarias para garantizar la culminación exitosa de proyectos académicos bajo estándares internacionales.&quot;
         </p>
       </div>
@@ -117,45 +132,59 @@ function MisionCard() {
 }
 
 function VisionCard() {
+  const [isHovered, setIsHovered] = useState(false)
+
   return (
     <div
       style={{
+        height: '380px',
         backgroundColor: '#ffffff',
         borderRadius: '20px',
         overflow: 'hidden',
-        boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
+        boxShadow: isHovered ? '0 16px 40px rgba(var(--web-light-rgb, 189, 217, 98),0.18)' : '0 4px 24px rgba(0,0,0,0.06)',
         border: '1.5px solid hsl(214,20%,91%)',
-        transition: 'transform 0.3s, box-shadow 0.3s',
+        transition: 'all 0.4s ease',
+        transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column'
       }}
-      onMouseEnter={e => {
-        const el = e.currentTarget as HTMLDivElement
-
-        el.style.transform = 'translateY(-6px)'
-        el.style.boxShadow = '0 16px 40px rgba(var(--web-light-rgb, 189, 217, 98),0.18)'
-      }}
-      onMouseLeave={e => {
-        const el = e.currentTarget as HTMLDivElement
-
-        el.style.transform = 'translateY(0)'
-        el.style.boxShadow = '0 4px 24px rgba(0,0,0,0.06)'
-      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <div
         style={{
-          height: '200px',
+          height: isHovered ? '160px' : '380px',
           position: 'relative',
           overflow: 'hidden',
           backgroundColor: '#0A0A0A',
+          transition: 'height 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+          flexShrink: 0
         }}
       >
         <Image src="/images/equipo/vision.png" alt="Visión" fill style={{ objectFit: 'cover', opacity: 0.85 }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.5), transparent)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.2))' }} />
+        
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: isHovered ? 0 : 1, transition: 'opacity 0.3s ease' }}>
+          <h3 style={{ ...cardTitle, fontSize: '2rem', color: '#fff', letterSpacing: '1px' }}>
+            Nuestra Visión
+          </h3>
+        </div>
       </div>
-      <div style={{ padding: '1.75rem 2rem 2rem' }}>
+      <div style={{ 
+          padding: '2rem',
+          flexGrow: 1,
+          opacity: isHovered ? 1 : 0, 
+          transition: 'opacity 0.4s ease',
+          transitionDelay: isHovered ? '0.1s' : '0s',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center'
+      }}>
         <h3 style={{ ...cardTitle, fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--web-dark, #025E44)' }}>
           Nuestra Visión
         </h3>
-        <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
+        <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic', margin: 0 }}>
           &quot;Consolidarnos como la empresa líder en investigación académica a nivel de Sudamérica, liderando el mercado latinoamericano mediante la innovación y la excelencia en el desarrollo de tesis.&quot;
         </p>
       </div>

@@ -449,28 +449,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                 </Box>
               )}
 
-              {/* Metodología */}
-              <Box sx={{ bgcolor: '#fff', borderRadius: '20px', p: { xs: 3, md: 5 }, boxShadow: '0 4px 20px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
-                <Typography sx={{ fontFamily: FONT, fontWeight: 900, fontSize: '1.5rem', color: '#0A0A0A', textAlign: 'center', mb: 0.5 }}>
-                  Metodología de Aprendizaje
-                </Typography>
-                <Typography sx={{ fontFamily: FONT, fontSize: '0.9375rem', color: '#64748b', textAlign: 'center', mb: 4 }}>
-                  Basado en la experiencia del profesional
-                </Typography>
-                <Grid container spacing={2}>
-                  {(course.metodologia?.length ? course.metodologia : defaultMetodologia).map((m, i) => (
-                    <Grid item xs={12} md={4} key={i}>
-                      <Box sx={{ p: 3, bgcolor: '#f8fafc', borderRadius: '16px', border: '1px solid #f1f5f9', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 1.5 }}>
-                        <Avatar sx={{ bgcolor: 'rgba(var(--web-primary-rgb,37,146,127),0.1)', color: 'var(--web-primary, #25927F)', width: 60, height: 60 }}>
-                          <i className={m.icon?.startsWith('tabler-') ? m.icon : `tabler-${m.icon}`} style={{ fontSize: '2rem' }} />
-                        </Avatar>
-                        <Typography sx={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.9375rem', lineHeight: 1.3 }}>{m.title}</Typography>
-                        {m.desc && <Typography sx={{ fontFamily: FONT, fontSize: '0.8125rem', color: '#64748b' }}>{m.desc}</Typography>}
-                      </Box>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
+
 
               {/* Objetivos */}
               <Box>

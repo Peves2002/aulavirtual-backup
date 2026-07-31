@@ -95,7 +95,7 @@ export default function PoliticaPrivacidadPage() {
             al tratamiento de sus datos personales (derechos ARCO). Para ejercerlos, envíe su solicitud a:
           </Typography>
           <Typography paragraph>
-            <strong>Correo:</strong> grupoollarvesmercadotecnia@gmail.com<br />
+            <strong>Correo:</strong> ollarvescapacitaciones@gmail.com<br />
             <strong>WhatsApp:</strong> +51 944 270 957<br />
             <strong>Dirección:</strong> Octavio Muñoz Najar 128 - Segundo Piso, Arequipa, Perú
           </Typography>
@@ -125,7 +125,7 @@ export default function PoliticaPrivacidadPage() {
             <strong>GRUPO OLLARVES E.I.R.L.</strong><br />
             RUC: 20608467298<br />
             Octavio Muñoz Najar 128 - Segundo Piso, Arequipa, Perú<br />
-            Correo: grupoollarvesmercadotecnia@gmail.com<br />
+            Correo: ollarvescapacitaciones@gmail.com<br />
             WhatsApp: +51 944 270 957
           </Typography>
 

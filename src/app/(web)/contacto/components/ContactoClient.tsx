@@ -16,7 +16,7 @@ export function ContactList() {
       {[
         { icon: MapPin, title: 'Ubicación', info: 'Arequipa, Perú' },
         { icon: Phone, title: 'WhatsApp', info: `+${waNumber}`, href: `https://wa.me/${waNumber}` },
-        { icon: Mail, title: 'Email', info: 'arm.confiabilidad@gmail.com', href: 'mailto:arm.confiabilidad@gmail.com' },
+        { icon: Mail, title: 'Email', info: 'ollarvescapacitaciones@gmail.com', href: 'mailto:ollarvescapacitaciones@gmail.com' },
       ].map((item, i) => (
         <ScrollReveal key={i} delay={i * 0.1}>
           <div

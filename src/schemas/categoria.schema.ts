@@ -13,7 +13,8 @@ export const crearCategoriaSchema = z.object({
     .string()
     .trim()
     .max(500, 'La descripción no puede exceder 500 caracteres')
-    .optional()
+    .optional(),
+  icono: z.string().optional().nullable()
 })
 
 export type CrearCategoriaDto = z.infer<typeof crearCategoriaSchema>
@@ -31,7 +32,8 @@ export const crearSubcategoriaSchema = z.object({
     .string()
     .trim()
     .max(500, 'La descripción no puede exceder 500 caracteres')
-    .optional()
+    .optional(),
+  icono: z.string().optional().nullable()
 })
 
 export type CrearSubcategoriaDto = z.infer<typeof crearSubcategoriaSchema>
@@ -52,6 +54,7 @@ export const actualizarCategoriaSchema = z.object({
     .max(500, 'La descripción no puede exceder 500 caracteres')
     .optional()
     .nullable(),
+  icono: z.string().optional().nullable(),
   esta_activo: z.boolean().optional(),
   orden: z.number().int().min(0).optional()
 })

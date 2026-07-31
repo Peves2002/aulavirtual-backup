@@ -1,7 +1,8 @@
 'use client'
 
 
-import { Box, Button, Grid, styled, Typography, InputAdornment } from '@mui/material'
+import { useState } from 'react'
+import { Box, Button, Grid, styled, Typography, InputAdornment, IconButton } from '@mui/material'
 import { Formik, type FormikHelpers } from 'formik'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { useSnackbar } from 'notistack'
@@ -10,6 +11,8 @@ import AppModal from '@/utils/components/AppModal'
 import CustomTextField from '@core/components/mui/TextField'
 import { crearCategoriaSchema, type CrearCategoriaDto } from '@/schemas/categoria.schema'
 import { useCreateCategoria } from '../hooks/useCategorias'
+import MediaLibrary from '@/features/admin/cursos/components/MediaLibrary'
+import CourseThumbnail from '@/utils/components/CourseThumbnail'
 
 type CreateCategoriaModalProps = {
   open: boolean
@@ -24,10 +27,12 @@ const FormWrapper = styled(Box)(() => ({
 export const CreateCategoriaModal = ({ open, handleClose, onSuccess }: CreateCategoriaModalProps) => {
   const { enqueueSnackbar } = useSnackbar()
   const createCategoriaMutation = useCreateCategoria()
+  const [openMedia, setOpenMedia] = useState(false)
 
   const initialValues: CrearCategoriaDto = {
     nombre: '',
-    descripcion: ''
+    descripcion: '',
+    icono: ''
   }
 
   const handleSubmit = async (values: CrearCategoriaDto, { setSubmitting, resetForm }: FormikHelpers<CrearCategoriaDto>) => {
@@ -111,12 +116,81 @@ export const CreateCategoriaModal = ({ open, handleClose, onSuccess }: CreateCat
                     disabled={isSubmitting}
                     InputProps={{
                       startAdornment: (
-                        <InputAdornment position='start'>
-                          <i className='tabler-file-description text-xl text-textSecondary' />
+                        <InputAdornment position='start' sx={{ alignSelf: 'flex-start' }}>
+                          <i className='tabler-file-description text-xl text-textSecondary' style={{ marginTop: '22px' }} />
                         </InputAdornment>
                       )
                     }}
                   />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography variant='overline' color='text.disabled' sx={{ mb: 1, display: 'block' }}>
+                    Icono de la Categoría
+                  </Typography>
+                  {values.icono ? (
+                    <Box sx={{ position: 'relative', width: '100%', borderRadius: 2, overflow: 'hidden', mb: 2, bgcolor: '#f4f4f4', border: '1px solid', borderColor: 'divider', aspectRatio: '16/9' }}>
+                      <CourseThumbnail
+                        src={values.icono}
+                        title='Vista previa'
+                        variant='simple'
+                      />
+                      <Box sx={{ position: 'absolute', top: 4, right: 4, zIndex: 2 }}>
+                        <IconButton
+                          size='small'
+                          sx={{ bgcolor: 'background.paper', boxShadow: 1, '&:hover': { bgcolor: 'error.main', color: 'common.white' } }}
+                          onClick={() => handleChange({ target: { name: 'icono', value: '' } })}
+                        >
+                          <i className='tabler-trash text-sm' />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                  ) : (
+                    <Box
+                      onClick={() => setOpenMedia(true)}
+                      sx={{
+                        width: '100%',
+                        height: 120,
+                        borderRadius: 2,
+                        border: '1px dashed',
+                        borderColor: 'divider',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        bgcolor: 'action.hover',
+                        mb: 2,
+                        '&:hover': { borderColor: 'primary.main', bgcolor: 'primary.lightOpacity' }
+                      }}
+                    >
+                      <i className='tabler-photo-plus text-2xl text-textDisabled' />
+                      <Typography variant='caption' color='text.secondary' sx={{ mt: 1 }}>Click para seleccionar</Typography>
+                    </Box>
+                  )}
+
+                  <Button
+                    variant='outlined'
+                    size='small'
+                    fullWidth
+                    startIcon={<i className='tabler-photo' />}
+                    onClick={() => setOpenMedia(true)}
+                  >
+                    {values.icono ? 'Cambiar Icono' : 'Seleccionar Icono'}
+                  </Button>
+
+                  <MediaLibrary
+                    open={openMedia}
+                    onClose={() => setOpenMedia(false)}
+                    onSelect={(url) => {
+                      handleChange({ target: { name: 'icono', value: url } })
+                    }}
+                  />
+                  {touched.icono && errors.icono && (
+                    <Typography variant='caption' color='error' sx={{ display: 'block', mt: 1 }}>
+                      {errors.icono}
+                    </Typography>
+                  )}
                 </Grid>
               </Grid>
 

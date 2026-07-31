@@ -73,7 +73,7 @@ export default async function NosotrosPage() {
                   <div>
                     <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.6875rem', color: 'rgba(255,255,255,0.4)', fontWeight: 500, marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Plataforma educativa</div>
                     <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', fontWeight: 800, color: '#ffffff', lineHeight: 1.2 }}>Formación profesional</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>especializada y certificada</div>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>Certificación universitaria.</div>
                   </div>
                 </div>
 
@@ -167,7 +167,7 @@ export default async function NosotrosPage() {
                     marginBottom: '2.5rem',
                   }}
                 >
-                  Empresa con más de 10 años de experiencia en investigación, construcción y minería. En 2021 inició su expansión nacional abriendo sedes en las principales ciudades del Perú.
+                  Con más de 10 años de experiencia, OLLARVES impulsa el desarrollo profesional a través de programas de capacitación especializados. Ofrecemos cursos diseñados para fortalecer conocimientos y habilidades prácticas, brindando una formación de calidad que responde a las necesidades del mercado laboral en el Perú.
                 </p>
 
                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>

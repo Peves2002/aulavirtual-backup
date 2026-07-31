@@ -604,22 +604,20 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
             </Stack>
 
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label='Nombres'
-                  value={formData.nombres}
-                  onChange={e => setFormData(p => ({ ...p, nombres: e.target.value }))}
-                  disabled={!isGuest}
-                  size='small'
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label='Apellidos'
-                  value={formData.apellidos}
-                  onChange={e => setFormData(p => ({ ...p, apellidos: e.target.value }))}
+                  label='Nombres y Apellidos'
+                  value={`${formData.nombres} ${formData.apellidos}`.trim()}
+                  onChange={e => {
+                    const val = e.target.value
+                    const splitIdx = val.indexOf(' ')
+                    if (splitIdx === -1) {
+                      setFormData(p => ({ ...p, nombres: val, apellidos: '' }))
+                    } else {
+                      setFormData(p => ({ ...p, nombres: val.substring(0, splitIdx), apellidos: val.substring(splitIdx + 1) }))
+                    }
+                  }}
                   disabled={!isGuest}
                   size='small'
                 />
@@ -659,21 +657,19 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                     onChange={e => setTipoComprobante(e.target.value as any)}
                     SelectProps={{ native: true }}
                   >
-                    <option value='TICKET'>Ticket</option>
-                    <option value='BOLETA'>Boleta</option>
-                    <option value='FACTURA'>Factura</option>
+                    <option value='TICKET'>Comprobante</option>
                   </TextField>
                 </Grid>
                 <Grid item xs={12} sm={8}>
                   <TextField
                     fullWidth
                     size='small'
-                    label={tipoComprobante === 'FACTURA' ? 'RUC (11 dígitos)' : 'DNI/RUC (8 u 11 dígitos)'}
+                    label='DNI/RUC (8 u 11 dígitos)'
                     value={numeroComprobante}
                     onChange={e => setNumeroComprobante(e.target.value.replace(/\D/g, '').substring(0, 11))}
                     error={!!comprobanteError}
                     helperText={comprobanteError}
-                    placeholder={tipoComprobante === 'FACTURA' ? 'Ingrese RUC' : 'Ingrese documento'}
+                    placeholder='Ingrese documento'
                   />
                 </Grid>
               </Grid>

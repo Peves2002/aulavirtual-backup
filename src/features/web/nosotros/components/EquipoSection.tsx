@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import Image from 'next/image'
 
-import { X, ChevronLeft, ChevronRight, Briefcase } from 'lucide-react'
+import { Briefcase } from 'lucide-react'
 
 const FOTOS = [
   {
@@ -40,41 +40,10 @@ const FOTOS = [
 ]
 
 export default function EquipoSection() {
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-
-  const prev = () => setLightboxIndex(i => i !== null ? (i - 1 + FOTOS.length) % FOTOS.length : null)
-  const next = () => setLightboxIndex(i => i !== null ? (i + 1) % FOTOS.length : null)
 
   return (
     <section style={{ backgroundColor: '#f8fafc', padding: '5rem 1.5rem', borderTop: '1px solid hsl(214,20%,92%)' }}>
-
-      {/* Lightbox */}
-      {lightboxIndex !== null && (
-        <>
-          <div
-            onClick={() => setLightboxIndex(null)}
-            style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.9)', zIndex: 1300, backdropFilter: 'blur(6px)' }}
-          />
-          <div style={{ position: 'fixed', inset: 0, zIndex: 1301, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-            <button onClick={() => setLightboxIndex(null)} style={{ position: 'fixed', top: '1.25rem', right: '1.25rem', background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '10px', cursor: 'pointer', padding: '8px', color: '#fff', display: 'flex', alignItems: 'center', zIndex: 1302 }}>
-              <X size={22} />
-            </button>
-            <button onClick={e => { e.stopPropagation(); prev() }} style={{ position: 'fixed', left: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '10px', cursor: 'pointer', padding: '10px', color: '#fff', display: 'flex', zIndex: 1302 }}>
-              <ChevronLeft size={28} />
-            </button>
-            <div style={{ position: 'relative', width: '90vw', height: '85vh', maxWidth: '1000px' }}>
-              <Image src={FOTOS[lightboxIndex].src} alt={`Equipo ${lightboxIndex + 1}`} fill style={{ objectFit: 'contain' }} sizes="90vw" />
-            </div>
-            <button onClick={e => { e.stopPropagation(); next() }} style={{ position: 'fixed', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '10px', cursor: 'pointer', padding: '10px', color: '#fff', display: 'flex', zIndex: 1302 }}>
-              <ChevronRight size={28} />
-            </button>
-            <div style={{ position: 'fixed', bottom: '1.5rem', left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.5)', color: '#fff', fontFamily: 'Poppins, sans-serif', fontSize: '0.8rem', fontWeight: 600, padding: '4px 14px', borderRadius: '999px', zIndex: 1302 }}>
-              {lightboxIndex + 1} / {FOTOS.length}
-            </div>
-          </div>
-        </>
-      )}
 
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         {/* Header */}
@@ -95,7 +64,6 @@ export default function EquipoSection() {
           {FOTOS.map((foto, i) => (
             <div
               key={foto.src}
-              onClick={() => setLightboxIndex(i)}
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(null)}
               style={{
@@ -103,7 +71,6 @@ export default function EquipoSection() {
                 aspectRatio: '4/3',
                 borderRadius: '14px',
                 overflow: 'hidden',
-                cursor: 'pointer',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 transform: hoveredIndex === i ? 'scale(1.02)' : 'scale(1)',

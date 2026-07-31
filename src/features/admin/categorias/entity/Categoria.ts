@@ -2,7 +2,8 @@ export interface CategoriaHijo {
   id: string
   nombre: string
   slug: string
-  descripcion: string | null
+  descripcion?: string | null
+  icono?: string | null
   esta_activo: boolean
   orden: number
   creado_en: string

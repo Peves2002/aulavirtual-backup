@@ -66,6 +66,7 @@ model Categoria {
   nombre             String      @unique
   slug               String      @unique
   descripcion        String?
+  icono              String?
   categoria_padre_id String?
   esta_activo        Boolean     @default(true)
   creado_en          DateTime    @default(now())
@@ -154,6 +155,12 @@ model Curso {
   miniatura            String?
   video_presentacion   String?
   duracion             String?
+  numero_asesor        String?
+  landing_active       Boolean           @default(false)
+  landing_bg_image     String?
+  landing_flyer_image  String?
+  landing_timer        DateTime?
+  landing_wsp_link     String?
   tipo_emision         TipoEmision       @default(ASINCRONO)
   estado               EstadoCurso       @default(BORRADOR)
   es_gratis            Boolean           @default(false)

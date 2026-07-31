@@ -75,7 +75,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <Mail size={16} className="flex-shrink-0 mt-0.5" />
-                <span>grupoollarvesmercadotecnia@gmail.com</span>
+                <span>ollarvescapacitaciones@gmail.com</span>
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <MapPin size={16} className="flex-shrink-0 mt-0.5" />
