@@ -26,6 +26,12 @@ export default function PoliticaDePrivacidadPage() {
             con la <strong>Ley N° 29733, Ley de Protección de Datos Personales</strong>, y su reglamento.
           </Typography>
 
+          <Typography paragraph>
+            El responsable del tratamiento de sus datos personales es <strong>GRIDEXA ENERGY SAC</strong>
+            (&quot;GRIDEXA ENERGY ACADEMY&quot;), con RUC <strong>20615993167</strong>, con domicilio en{' '}
+            <strong>Jr. Paseo del Bosque 469, San Borja, Lima – Perú</strong>.
+          </Typography>
+
           <Divider sx={{ my: 4 }} />
 
           <Typography variant="h4">1. Información que Recopilamos</Typography>

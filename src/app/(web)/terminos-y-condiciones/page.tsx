@@ -26,6 +26,12 @@ export default function TerminosYCondicionesPage() {
             Le sugerimos leer esta página cuidadosamente antes de proceder con cualquier compra o inscripción.
           </Typography>
 
+          <Typography paragraph>
+            <strong>GRIDEXA ENERGY ACADEMY</strong> es una marca comercial de <strong>GRIDEXA ENERGY SAC</strong>,
+            con RUC <strong>20615993167</strong>, con domicilio en <strong>Jr. Paseo del Bosque 469, San Borja, Lima – Perú</strong>,
+            y actividad económica de <strong>Actividades de Consultoría de Gestión</strong>.
+          </Typography>
+
           <Divider sx={{ my: 4 }} />
 
           <Typography variant="h4">1. Generalidades de los Servicios</Typography>

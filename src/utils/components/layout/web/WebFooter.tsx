@@ -37,7 +37,7 @@ interface WebFooterProps {
 
 const WebFooter = async ({ platformName = 'GRIDEXA' }: WebFooterProps) => {
   const configs = await getConfigs()
-  const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
+  const waNumber = configs.WHATSAPP_NUMERO || '51936032964'
 
   const socialLinks = [
     ...staticSocialLinks,
@@ -60,7 +60,7 @@ const WebFooter = async ({ platformName = 'GRIDEXA' }: WebFooterProps) => {
             <ul className="space-y-3" style={{ opacity: 0.8 }}>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <Phone size={16} className="flex-shrink-0 mt-0.5" />
-                <span>+51 928 510 125</span>
+                <span>+51 936 032 964</span>
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <Mail size={16} className="flex-shrink-0 mt-0.5" />
@@ -68,7 +68,7 @@ const WebFooter = async ({ platformName = 'GRIDEXA' }: WebFooterProps) => {
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <MapPin size={16} className="flex-shrink-0 mt-0.5" />
-                <span>Junin - Huancayo - El tambo - jr.los bosques 815</span>
+                <span>Jr. Paseo del Bosque 469, San Borja, Lima – Perú</span>
               </li>
             </ul>
           </div>

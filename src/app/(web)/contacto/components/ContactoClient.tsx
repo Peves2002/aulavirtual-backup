@@ -9,12 +9,12 @@ import { useConfig } from '@/contexts/ConfigContext'
 
 export function ContactList() {
   const configs = useConfig()
-  const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
+  const waNumber = configs.WHATSAPP_NUMERO || '51936032964'
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>
       {[
-        { icon: MapPin, title: 'Ubicación', info: 'Junin - Huancayo - El tambo - jr.los bosques 815' },
+        { icon: MapPin, title: 'Ubicación', info: 'Jr. Paseo del Bosque 469, San Borja, Lima – Perú' },
         { icon: Phone, title: 'WhatsApp', info: `+${waNumber}`, href: `https://wa.me/${waNumber}` },
         { icon: Mail, title: 'Email', info: 'ejecutivo.comercial@gridexae.com', href: 'mailto:ejecutivo.comercial@gridexae.com' },
       ].map((item, i) => (
@@ -66,7 +66,7 @@ export function ContactList() {
 
 export function ContactActions() {
   const configs = useConfig()
-  const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
+  const waNumber = configs.WHATSAPP_NUMERO || '51936032964'
 
   return (
     <ScrollReveal>

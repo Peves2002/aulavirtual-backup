@@ -21,8 +21,8 @@ export default function PoliticaCambiosYDevolucionesPage() {
 
           <Typography paragraph>
             La presente política regula las condiciones de reembolso y cambios aplicables a los
-            servicios educativos ofrecidos por <strong>GRIDEXA ENERGY ACADEMY</strong>,
-            con RUC <strong>20615993167</strong>, con domicilio en Junin - Huancayo - El tambo - jr.los bosques 815 — a través de su Aula Virtual. Al adquirir cualquier curso,
+            servicios educativos ofrecidos por <strong>GRIDEXA ENERGY ACADEMY</strong>, marca comercial de <strong>GRIDEXA ENERGY SAC</strong>,
+            con RUC <strong>20615993167</strong>, con domicilio en Jr. Paseo del Bosque 469, San Borja, Lima – Perú — a través de su Aula Virtual. Al adquirir cualquier curso,
             el usuario declara haber leído y aceptado los términos aquí descritos.
           </Typography>
 
