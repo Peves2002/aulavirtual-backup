@@ -57,6 +57,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
 
   const [openMedia, setOpenMedia] = useState(false)
   const [openBrochure, setOpenBrochure] = useState(false)
+  const [openDocAdicional, setOpenDocAdicional] = useState(false)
   const [categoriaPadreId, setCategoriaPadreId] = useState('')
 
   useEffect(() => {
@@ -75,6 +76,8 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
     miniatura: curso.miniatura || '',
     video_presentacion: curso.video_presentacion || '',
     brochure: curso.brochure || '',
+    documento_adicional: curso.documento_adicional || '',
+    documento_adicional_titulo: curso.documento_adicional_titulo || '',
     fecha_inicio: curso.fecha_inicio ? toLocalDateInputValue(curso.fecha_inicio) : '',
     fecha_fin: curso.fecha_fin ? toLocalDateInputValue(curso.fecha_fin) : '',
     nivel: curso.nivel || ''
@@ -100,6 +103,8 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
           miniatura: form.miniatura || null,
           video_presentacion: form.video_presentacion || null,
           brochure: form.brochure || null,
+          documento_adicional: form.documento_adicional || null,
+          documento_adicional_titulo: form.documento_adicional_titulo || null,
           fecha_inicio: form.fecha_inicio ? sanitizeDatetimeInput(form.fecha_inicio) : null,
           fecha_fin: form.fecha_fin ? sanitizeDatetimeInput(form.fecha_fin) : null,
           nivel: (form.nivel || null) as 'BASICO' | 'INTERMEDIO' | 'AVANZADO' | null
@@ -347,7 +352,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
         />
       </Grid>
       <Grid item xs={12} sm={6}>
-        <Typography variant='subtitle2' sx={{ mb: 1 }}>Brochure (PDF)</Typography>
+        <Typography variant='subtitle2' sx={{ mb: 1 }}>Temario / Brochure (PDF)</Typography>
         {form.brochure ? (
           <Box sx={{ p: 3, borderRadius: 2, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -406,6 +411,81 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
           title="Seleccionar Brochure PDF"
           acceptType="OTRO"
         />
+
+        <Box sx={{ mt: 4 }}>
+          <Typography variant='subtitle2' sx={{ mb: 1 }}>Documento Adicional (PDF)</Typography>
+        <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 2.5, bgcolor: 'background.paper', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+          {form.documento_adicional ? (
+          <Box sx={{ p: 3, borderRadius: 2, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <i className='tabler-file-type-pdf text-3xl text-error' />
+              <Box>
+                <Typography variant='body2' fontWeight={600}>Archivo PDF adjunto</Typography>
+                <Typography variant='caption' color='text.secondary'>Click en Guardar para confirmar cambios</Typography>
+              </Box>
+            </Box>
+            <IconButton
+              size='small'
+              sx={{ bgcolor: 'action.hover' }}
+              onClick={() => setForm(prev => ({ ...prev, documento_adicional: '' }))}
+            >
+              <i className='tabler-trash text-error text-sm' />
+            </IconButton>
+          </Box>
+        ) : (
+          <Box
+            onClick={() => setOpenDocAdicional(true)}
+            sx={{
+              width: '100%',
+              height: 120,
+              borderRadius: 2,
+              border: '1px dashed',
+              borderColor: 'divider',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              bgcolor: 'action.hover',
+              mb: 2,
+              '&:hover': { borderColor: 'primary.main', bgcolor: 'primary.lightOpacity' }
+            }}
+          >
+            <i className='tabler-file-plus text-2xl text-textDisabled' />
+            <Typography variant='caption' color='text.secondary' sx={{ mt: 0.5 }}>Seleccionar documento PDF</Typography>
+          </Box>
+        )}
+
+        <Button
+          variant='outlined'
+          size='small'
+          fullWidth
+          startIcon={<i className='tabler-file-text' />}
+          onClick={() => setOpenDocAdicional(true)}
+          sx={{ mb: 2 }}
+        >
+          {form.documento_adicional ? 'Cambiar Documento' : 'Seleccionar Documento'}
+        </Button>
+
+        <CustomTextField
+          fullWidth
+          size='small'
+          label='Texto del botón (Opcional)'
+          placeholder='Ej. Descargar Plantilla'
+          value={form.documento_adicional_titulo || ''}
+          onChange={(e) => setForm(prev => ({ ...prev, documento_adicional_titulo: e.target.value }))}
+          helperText='Si dejas esto en blanco, dirá "Descargar Documento" por defecto'
+        />
+        </Box>
+
+        <MediaLibrary
+          open={openDocAdicional}
+          onClose={() => setOpenDocAdicional(false)}
+          onSelect={(url) => setForm(prev => ({ ...prev, documento_adicional: url }))}
+          title="Seleccionar Documento Adicional PDF"
+          acceptType="OTRO"
+        />
+        </Box>
       </Grid>
       <Grid item xs={12}>
         <CustomTextField

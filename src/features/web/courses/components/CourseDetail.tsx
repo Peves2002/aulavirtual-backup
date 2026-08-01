@@ -89,6 +89,8 @@ interface CourseDetailProps {
     beneficios?: any[]
     incluye?: any[]
     brochure?: string | null
+    documento_adicional?: string | null
+    documento_adicional_titulo?: string | null
   }
 }
 
@@ -168,19 +170,6 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
         : 'Próximamente'
     }
     : null
-
-  const defaultBeneficios = [
-    { title: 'Clase en vivo', desc: 'Clases 100% en vivo por Zoom.', icon: 'tabler-video' },
-    { title: 'Seguimiento personalizado', desc: 'Apoyo y soporte de la coordinadora.', icon: 'tabler-headset' },
-    { title: 'Plataforma virtual', desc: 'Acceso 24/7 durante el programa.', icon: 'tabler-device-laptop' },
-    { title: 'Certificado Opcional', desc: 'Solicítalo al finalizar el curso.', icon: 'tabler-certificate' },
-  ]
-
-  const defaultMetodologia = [
-    { title: 'Presentación de clase', icon: 'tabler-presentation' },
-    { title: 'Material de clases y adicionales', icon: 'tabler-folder' },
-    { title: 'Resolución de casos reales', icon: 'tabler-messages' },
-  ]
 
   const defaultObjetivos = [
     'Aplicar metodologías avanzadas para transformar procesos reales.',
@@ -408,26 +397,45 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
             </Grid>
           </Grid>
 
-          {/* Beneficios Cards */}
-          <Grid container spacing={2} sx={{ mt: 6 }}>
-            {(course.beneficios?.length ? course.beneficios : defaultBeneficios).map((item, i) => (
-              <Grid item xs={6} sm={6} md={3} key={i}>
-                <Box sx={{
-                  p: { xs: 2, md: 2.5 }, borderRadius: '16px', textAlign: 'center',
+          {/* Botones de Descarga */}
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mt: 6 }} flexWrap="wrap" useFlexGap>
+            <Button
+              variant="outlined"
+              component={course.brochure ? "a" : "button"}
+              href={course.brochure || undefined}
+              target={course.brochure ? "_blank" : undefined}
+              rel={course.brochure ? "noopener noreferrer" : undefined}
+              disabled={!course.brochure}
+              startIcon={<Download size={20} />}
+              sx={{
+                fontFamily: FONT, fontWeight: 700, fontSize: '1rem', borderRadius: '12px', py: 1.5, px: 3,
+                textTransform: 'none', borderColor: 'rgba(255,255,255,0.3)', color: 'white',
+                bgcolor: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(10px)',
+                '&:hover': { borderColor: 'var(--web-light, #BDD962)', bgcolor: 'rgba(255,255,255,0.1)', color: 'var(--web-light, #BDD962)' },
+                '&.Mui-disabled': { color: 'rgba(255,255,255,0.3)', borderColor: 'rgba(255,255,255,0.1)' }
+              }}
+            >
+              Descargar Temario
+            </Button>
+            {course.documento_adicional && (
+              <Button
+                variant="outlined"
+                component="a"
+                href={course.documento_adicional}
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<Download size={20} />}
+                sx={{
+                  fontFamily: FONT, fontWeight: 700, fontSize: '1rem', borderRadius: '12px', py: 1.5, px: 3,
+                  textTransform: 'none', borderColor: 'rgba(255,255,255,0.3)', color: 'white',
                   bgcolor: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  transition: 'background-color 0.2s',
-                  '&:hover': { bgcolor: 'rgba(255,255,255,0.09)' },
-                }}>
-                  <Box sx={{ width: 44, height: 44, borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'rgba(var(--web-light-rgb,189,217,98),0.12)', color: 'var(--web-light, #BDD962)', mx: 'auto', mb: 1.5 }}>
-                    <i className={item.icon?.startsWith('tabler-') ? item.icon : `tabler-${item.icon}`} style={{ fontSize: '1.375rem' }} />
-                  </Box>
-                  <Typography sx={{ fontFamily: FONT, fontWeight: 800, fontSize: { xs: '0.8rem', md: '0.9rem' }, color: '#fff', lineHeight: 1.3, mb: 0.5 }}>{item.title}</Typography>
-                  <Typography sx={{ fontFamily: FONT, fontSize: { xs: '0.7rem', md: '0.8125rem' }, color: 'rgba(255,255,255,0.6)', lineHeight: 1.4 }}>{item.desc}</Typography>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
+                  '&:hover': { borderColor: 'var(--web-light, #BDD962)', bgcolor: 'rgba(255,255,255,0.1)', color: 'var(--web-light, #BDD962)' },
+                }}
+              >
+                {course.documento_adicional_titulo || 'Descargar Documento'}
+              </Button>
+            )}
+          </Stack>
         </Container>
       </Box>
 

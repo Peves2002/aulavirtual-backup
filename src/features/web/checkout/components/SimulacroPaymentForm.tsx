@@ -387,10 +387,10 @@ export default function SimulacroPaymentForm({ simulacro }: SimulacroPaymentForm
             </Stack>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField fullWidth label='Nombres' value={formData.nombres} onChange={e => setFormData(p => ({ ...p, nombres: e.target.value }))} disabled={!isGuest} size='small' />
+                <TextField fullWidth label='Apellidos' value={formData.apellidos} onChange={e => setFormData(p => ({ ...p, apellidos: e.target.value }))} disabled={!isGuest} size='small' />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField fullWidth label='Apellidos' value={formData.apellidos} onChange={e => setFormData(p => ({ ...p, apellidos: e.target.value }))} disabled={!isGuest} size='small' />
+                <TextField fullWidth label='Nombres' value={formData.nombres} onChange={e => setFormData(p => ({ ...p, nombres: e.target.value }))} disabled={!isGuest} size='small' />
               </Grid>
               <Grid item xs={12}>
                 <TextField fullWidth label='Correo' value={formData.correo} onChange={e => setFormData(p => ({ ...p, correo: e.target.value }))} disabled={!isGuest} size='small'

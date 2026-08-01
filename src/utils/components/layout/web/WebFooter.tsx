@@ -7,7 +7,6 @@ import Image from 'next/image'
 import { Phone, Mail, MapPin, Facebook, Instagram } from 'lucide-react'
 
 import { getConfigs } from '@/utils/libs/config'
-import HydratedDate from '@/utils/components/HydratedDate'
 import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
 // Simple TikTok SVG icon (not in lucide-react)
@@ -42,11 +41,7 @@ const staticSocialLinks = [
   },
 ]
 
-interface WebFooterProps {
-  platformName?: string
-}
-
-const WebFooter = async ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
+const WebFooter = async () => {
   const configs = await getConfigs()
   const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
 
@@ -201,40 +196,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <p
-              style={{
-                fontFamily: 'Poppins, sans-serif',
-                fontSize: '0.8125rem',
-                color: 'rgba(255,255,255,0.5)',
-              }}
-            >
-              © <HydratedDate date={new Date()} format="year" /> {platformName}. Todos los derechos reservados.
-            </p>
-          </div>
-          <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>
-            Desarrollado por
-            <Link
-              href="https://flyup.pe"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="no-underline hover:opacity-80 inline-flex items-center align-middle"
-              style={{ color: 'var(--web-light, #BDD962)', fontWeight: 600 }}
-            >
-              <Image
-                src="/images/logo.svg"
-                alt="Fly Logo"
-                width={80}
-                height={25}
-                style={{ objectFit: 'contain' }}
-              />
-            </Link>
-          </p>
-        </div>
-      </div>
+
     </footer>
   )
 }

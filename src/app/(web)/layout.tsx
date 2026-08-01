@@ -45,7 +45,7 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
             <div className="flex-1">
               {children}
             </div>
-            <WebFooter platformName={platformName} />
+            <WebFooter />
           </main>
         </div>
         {/* Bottom nav: visible solo en mobile */}

@@ -79,10 +79,10 @@ const Register = ({ mode }: { mode: SystemMode }) => {
   // Vars
   const darkImg = '/images/pages/auth-mask-dark.png'
   const lightImg = '/images/pages/auth-mask-light.png'
-  const darkIllustration = '/images/equipo/middle.png'
-  const lightIllustration = '/images/equipo/middle.png'
-  const borderedDarkIllustration = '/images/equipo/middle.png'
-  const borderedLightIllustration = '/images/equipo/middle.png'
+  const darkIllustration = '/images/equipo/middle.webp'
+  const lightIllustration = '/images/equipo/middle.webp'
+  const borderedDarkIllustration = '/images/equipo/middle.webp'
+  const borderedLightIllustration = '/images/equipo/middle.webp'
 
   // Hooks
   const router = useRouter()
@@ -225,24 +225,6 @@ const Register = ({ mode }: { mode: SystemMode }) => {
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
                 <Controller
-                  name='nombre'
-                  control={control}
-                  render={({ field }) => (
-                    <CustomTextField
-                      {...field}
-                      fullWidth
-                      label='Nombre'
-                      placeholder='Juan'
-                      error={!!errors.nombre}
-                      helperText={errors.nombre?.message}
-                      disabled={isLoading}
-                    />
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <Controller
                   name='apellido'
                   control={control}
                   render={({ field }) => (
@@ -253,6 +235,24 @@ const Register = ({ mode }: { mode: SystemMode }) => {
                       placeholder='Pérez'
                       error={!!errors.apellido}
                       helperText={errors.apellido?.message}
+                      disabled={isLoading}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name='nombre'
+                  control={control}
+                  render={({ field }) => (
+                    <CustomTextField
+                      {...field}
+                      fullWidth
+                      label='Nombre'
+                      placeholder='Juan'
+                      error={!!errors.nombre}
+                      helperText={errors.nombre?.message}
                       disabled={isLoading}
                     />
                   )}

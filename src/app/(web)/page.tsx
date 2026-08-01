@@ -91,6 +91,7 @@ async function getHomeData() {
       id: c.id,
       nombre: c.nombre,
       slug: c.slug,
+      icono: c.icono,
       cursosCount: c.cursos.filter(cc => cc.tipo === 'CURSO').length,
       diplomadosCount: c.cursos.filter(cc => cc.tipo === 'DIPLOMADO').length,
       total: c.cursos.length,

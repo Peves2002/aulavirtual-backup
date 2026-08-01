@@ -408,23 +408,6 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <Controller
-                  name="nombre"
-                  control={registerForm.control}
-                  render={({ field }) => (
-                    <CustomTextField
-                      {...field}
-                      fullWidth
-                      label="Nombres"
-                      placeholder="Juan"
-                      error={!!registerForm.formState.errors.nombre}
-                      helperText={registerForm.formState.errors.nombre?.message}
-                      disabled={isLoading}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Controller
                   name="apellido"
                   control={registerForm.control}
                   render={({ field }) => (
@@ -435,6 +418,23 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
                       placeholder="Pérez"
                       error={!!registerForm.formState.errors.apellido}
                       helperText={registerForm.formState.errors.apellido?.message}
+                      disabled={isLoading}
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name="nombre"
+                  control={registerForm.control}
+                  render={({ field }) => (
+                    <CustomTextField
+                      {...field}
+                      fullWidth
+                      label="Nombres"
+                      placeholder="Juan"
+                      error={!!registerForm.formState.errors.nombre}
+                      helperText={registerForm.formState.errors.nombre?.message}
                       disabled={isLoading}
                     />
                   )}

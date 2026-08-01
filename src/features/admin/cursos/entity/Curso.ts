@@ -111,6 +111,8 @@ export interface Curso {
   modulos: CursoModulo[]
   orden: number
   brochure: string | null
+  documento_adicional: string | null
+  documento_adicional_titulo: string | null
   objetivos: string[]
   metodologia: any[]
   beneficios: any[]

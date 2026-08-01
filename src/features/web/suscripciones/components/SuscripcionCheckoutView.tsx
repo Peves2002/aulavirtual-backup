@@ -263,8 +263,8 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
                       Suscripción para
                     </Typography>
                     <Typography sx={{ fontFamily: FONT, fontSize: '0.9375rem', fontWeight: 700, color: '#0f172a', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
-                      {(session.user as any)?.nombre
-                        ? `${(session.user as any).nombre} ${(session.user as any).apellido || ''}`.trim()
+                      {(session.user as any)?.apellido || (session.user as any)?.nombre
+                        ? `${(session.user as any).apellido || ''} ${(session.user as any).nombre || ''}`.trim()
                         : session.user.name}
                     </Typography>
                     <Typography sx={{ fontFamily: FONT, fontSize: '0.8125rem', color: '#64748b', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>

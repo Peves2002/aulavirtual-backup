@@ -153,7 +153,7 @@ export const getWelcomeTemplate = (data: WelcomeEmailData) => {
 };
 
 export const getOTPTemplate = (data: OTPEmailData) => {
-  const { platformName, customerName, codigo, appUrl } = data;
+  const { customerName, codigo } = data;
   const primaryColor = '#25927F';
   const secondaryColor = '#f9f9f9';
 
@@ -184,11 +184,6 @@ export const getOTPTemplate = (data: OTPEmailData) => {
         </p>
       </div>
 
-      <!-- Footer -->
-      <div style="background-color: #f4f4f4; padding: 20px; text-align: center; border-top: 1px solid #eee;">
-        <p style="margin: 0; color: #999; font-size: 12px;">&copy; ${new Date().getFullYear()} ${platformName}.</p>
-        <p style="margin: 5px 0 0 0; color: #999; font-size: 12px;">${appUrl.replace(/https?:\/\//, '')}</p>
       </div>
-    </div>
   `;
 };

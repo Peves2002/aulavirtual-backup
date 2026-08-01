@@ -61,6 +61,8 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
             id: usuario.id,
             email: usuario.correo,
             name: `${usuario.nombre} ${usuario.apellido}`,
+            nombre: usuario.nombre,
+            apellido: usuario.apellido,
             rol: usuario.rol,
             avatar: usuario.avatar,
             numero_documento: usuario.numero_documento,
@@ -136,6 +138,8 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
               user.esta_activo = usuarioActualizado.esta_activo
               user.avatar = usuarioActualizado.avatar
               user.image = usuarioActualizado.avatar
+              user.nombre = usuarioExistente.nombre
+              user.apellido = usuarioExistente.apellido
 
               return true
             }
@@ -162,6 +166,8 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
             user.esta_activo = true
             user.avatar = nuevoUsuario.avatar
             user.image = nuevoUsuario.avatar
+            user.nombre = nuevoUsuario.nombre
+            user.apellido = nuevoUsuario.apellido
 
             return true
           } catch (error) {
@@ -182,6 +188,8 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
           token.picture = token.avatar
           token.numero_documento = user.numero_documento
           token.esta_activo = user.esta_activo
+          token.nombre = user.nombre
+          token.apellido = user.apellido
 
           // Generar un JWT real firmado (mismo payload que /api/auth/login)
           token.accessToken = sign(
@@ -189,6 +197,8 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
               id: user.id,
               email: user.email,
               name: user.name,
+              nombre: user.nombre,
+              apellido: user.apellido,
               rol: user.rol,
               avatar: token.avatar,
               image: token.avatar,
@@ -216,6 +226,8 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
               token.image = nuevoAvatar
               token.picture = nuevoAvatar
               token.name = nuevoNombre
+              token.nombre = usuarioActualizado.nombre
+              token.apellido = usuarioActualizado.apellido
               token.rol = usuarioActualizado.rol
               token.numero_documento = usuarioActualizado.numero_documento || ''
               token.esta_activo = usuarioActualizado.esta_activo
@@ -226,6 +238,8 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
                   id: token.id,
                   email: token.email,
                   name: nuevoNombre,
+                  nombre: usuarioActualizado.nombre,
+                  apellido: usuarioActualizado.apellido,
                   rol: usuarioActualizado.rol,
                   avatar: nuevoAvatar,
                   image: nuevoAvatar,
@@ -252,6 +266,8 @@ export const getAuthOptions = async (): Promise<NextAuthOptions> => {
           session.user.numero_documento = token.numero_documento as string
           session.user.esta_activo = token.esta_activo as boolean
           session.user.accessToken = token.accessToken as string
+          session.user.nombre = token.nombre as string
+          session.user.apellido = token.apellido as string
         }
 
         return session
@@ -280,6 +296,8 @@ declare module 'next-auth' {
     avatar?: string | null
     numero_documento?: string
     esta_activo?: boolean
+    nombre?: string
+    apellido?: string
   }
 
   interface Session {
@@ -293,6 +311,8 @@ declare module 'next-auth' {
       numero_documento: string
       esta_activo: boolean
       accessToken?: string
+      nombre?: string
+      apellido?: string
     }
   }
 }
@@ -305,5 +325,7 @@ declare module 'next-auth/jwt' {
     numero_documento?: string
     esta_activo?: boolean
     accessToken?: string
+    nombre?: string
+    apellido?: string
   }
 }

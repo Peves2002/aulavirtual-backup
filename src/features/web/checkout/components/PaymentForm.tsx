@@ -198,7 +198,25 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
     if (session?.user) {
       const user = session.user as any
 
-      setFormData({ nombres: user.nombre || user.name || '', apellidos: user.apellido || '', correo: user.email || '' })
+      let nombres = user.nombre || ''
+      let apellidos = user.apellido || ''
+
+      // Fallback para sesiones antiguas que solo tienen user.name
+      if (!nombres && !apellidos && user.name) {
+        const parts = user.name.split(' ')
+
+        if (parts.length > 2) {
+          nombres = parts.slice(0, 2).join(' ')
+          apellidos = parts.slice(2).join(' ')
+        } else if (parts.length > 1) {
+          nombres = parts[0]
+          apellidos = parts[1]
+        } else {
+          nombres = user.name
+        }
+      }
+
+      setFormData({ nombres, apellidos, correo: user.email || '' })
     }
   }, [session])
 
@@ -607,15 +625,16 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label='Nombres y Apellidos'
-                  value={`${formData.nombres} ${formData.apellidos}`.trim()}
+                  label='Apellidos y Nombres'
+                  value={`${formData.apellidos} ${formData.nombres}`.trim()}
                   onChange={e => {
                     const val = e.target.value
                     const splitIdx = val.indexOf(' ')
+
                     if (splitIdx === -1) {
-                      setFormData(p => ({ ...p, nombres: val, apellidos: '' }))
+                      setFormData(p => ({ ...p, apellidos: val, nombres: '' }))
                     } else {
-                      setFormData(p => ({ ...p, nombres: val.substring(0, splitIdx), apellidos: val.substring(splitIdx + 1) }))
+                      setFormData(p => ({ ...p, apellidos: val.substring(0, splitIdx), nombres: val.substring(splitIdx + 1) }))
                     }
                   }}
                   disabled={!isGuest}

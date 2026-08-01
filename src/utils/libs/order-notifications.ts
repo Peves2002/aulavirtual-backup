@@ -124,12 +124,6 @@ export async function sendOrderConfirmationEmail(pedidoId: string) {
           </div>
         </div>
 
-        <!-- Footer -->
-        <div style="background-color: #f4f4f4; padding: 20px; text-align: center; border-top: 1px solid #eee;">
-          <p style="margin: 0; color: #999; font-size: 12px;">&copy; ${new Date().getFullYear()} ${platformName}. Todos los derechos reservados.</p>
-          <p style="margin: 5px 0 0 0; color: #999; font-size: 12px;">${baseURL.replace(/https?:\/\//, '')}</p>
-          <p style="margin: 5px 0 0 0; color: #999; font-size: 12px;">Si tienes alguna duda, contáctanos a través de nuestro soporte.</p>
-        </div>
       </div>
     `
 

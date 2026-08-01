@@ -1,10 +1,9 @@
 'use client'
 
-import { useState } from 'react'
 
 import Link from 'next/link'
 
-import { ChevronLeft, ChevronRight, Layers, GraduationCap, Compass, BookOpen, Star, Code, Target, BookMarked, Brain } from 'lucide-react'
+
 
 import { eyebrow, sectionH2, sectionDesc } from '@/features/web/home/components/typography'
 
@@ -12,6 +11,7 @@ type CategoryData = {
   id: string
   nombre: string
   slug: string
+  icono?: string | null
   cursosCount: number
   diplomadosCount: number
   total: number
@@ -32,29 +32,8 @@ function getStylesForId(slug: string) {
 
 
 export default function CategoriesCarousel({ categorias }: { categorias: CategoryData[] }) {
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(true)
-
-  // Ocultamos las flechas si hay muy pocos y caben todos, o si estamos en los bordes
-  const checkScroll = (el: HTMLDivElement) => {
-    setCanScrollLeft(el.scrollLeft > 0)
-    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 5)
-  }
-
-  const scrollByAmount = (direction: 'left' | 'right') => {
-    const el = document.getElementById('categories-scroll-container')
-
-    if (el) {
-      const amount = el.clientWidth * 0.8
-
-      el.scrollBy({ left: direction === 'left' ? -amount : amount, behavior: 'smooth' })
-    }
-  }
 
   if (categorias.length === 0) return null
-
-  // Si son pocos, los centramos en escritorio
-  const isFew = categorias.length <= 3
 
   return (
     <section style={{ backgroundColor: '#ffffff', padding: '5rem 1.5rem', overflow: 'hidden' }}>
@@ -78,7 +57,6 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
 
           <div
             id="categories-scroll-container"
-            onScroll={(e) => checkScroll(e.currentTarget)}
             style={{
               display: 'flex',
               gap: '1.5rem',
@@ -196,7 +174,7 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
                         transition: 'transform 0.3s ease'
                       }}
                     >
-                      <img src={img} alt={cat.nombre} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '16px' }} />
+                      <img src={cat.icono || img} alt={cat.nombre} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '16px' }} />
                     </div>
 
                     <h3

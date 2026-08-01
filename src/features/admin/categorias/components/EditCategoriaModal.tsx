@@ -193,7 +193,7 @@ export const EditCategoriaModal = ({ open, handleClose, categoriaId, onSuccess }
   const initialValues: ActualizarCategoriaDto = {
     nombre: categoria.nombre,
     descripcion: categoria.descripcion || '',
-    icono: categoria.icono || '',
+    icono: (categoria as any).icono || '',
     esta_activo: categoria.esta_activo
   }
 

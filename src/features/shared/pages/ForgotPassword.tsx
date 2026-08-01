@@ -64,8 +64,8 @@ const ForgotPassword = ({ mode }: { mode: SystemMode }) => {
   // Vars
   const darkImg = '/images/pages/auth-mask-dark.png'
   const lightImg = '/images/pages/auth-mask-light.png'
-  const darkIllustration = '/images/equipo/middle.png'
-  const lightIllustration = '/images/equipo/middle.png'
+  const darkIllustration = '/images/equipo/middle.webp'
+  const lightIllustration = '/images/equipo/middle.webp'
 
   // Hooks
   const router = useRouter()

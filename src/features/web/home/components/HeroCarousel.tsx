@@ -7,8 +7,6 @@ import Link from 'next/link'
 
 import { ArrowRight } from 'lucide-react'
 
-import { useConfig } from '@/contexts/ConfigContext'
-import themeConfig from '@/utils/configs/themeConfig'
 
 const STATS = [
   { value: '+1,200', label: 'Estudiantes' },
@@ -92,10 +90,6 @@ function VisualImage({ src, alt, style }: { src: string; alt: string; style?: Re
 }
 
 export default function HeroCarousel() {
-  const configs = useConfig()
-  const templateLogo = configs.TEMPLATE_LOGO || themeConfig.templateLogo
-  const templateName = configs.TEMPLATE_NAME || themeConfig.templateName
-
   const [current, setCurrent] = useState(0)
   const [animating, setAnimating] = useState(false)
 

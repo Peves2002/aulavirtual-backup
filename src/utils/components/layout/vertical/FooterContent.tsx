@@ -1,12 +1,10 @@
 'use client'
 
-// Next Imports
-import Link from 'next/link'
+
 
 // Third-party Imports
 import classnames from 'classnames'
 
-import HydratedDate from '@/utils/components/HydratedDate'
 
 // Hook Imports
 
@@ -22,9 +20,7 @@ const FooterContent = () => {
     <div
       className={classnames(verticalLayoutClasses.footerContent, 'flex items-center justify-between flex-wrap gap-4')}
     >
-      <p>
-        <span className='text-textSecondary'>{`© `}<HydratedDate date={new Date()} format="year" />{` AGENDA 2050 PERÚ`}</span>
-      </p>
+
       {/* {!isBreakpointReached && (
         <div className='flex items-center gap-4'>
           <Link href='https://themeforest.net/licenses/standard' target='_blank' className='text-primary'>
