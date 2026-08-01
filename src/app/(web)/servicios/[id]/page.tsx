@@ -75,7 +75,7 @@ export default function ServicioDetailPage({ params }: PageProps) {
                 </p>
               </div>
               <a
-                href={`https://wa.me/51999999999?text=${encodeURIComponent(`Hola, quisiera cotizar el servicio: ${service.title}`)}`}
+                href={`https://wa.me/51936032964?text=${encodeURIComponent(`Hola, quisiera cotizar el servicio: ${service.title}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-shrink-0 bg-[#25D366] hover:bg-[#128C7E] text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"

@@ -56,7 +56,7 @@ export default function ServiciosPage() {
                 </p>
                 <div className="mt-6 flex flex-col sm:flex-row gap-3">
                   <a
-                    href={`https://wa.me/51999999999?text=${encodeURIComponent(`Hola, quisiera cotizar el servicio: ${srv.title}`)}`}
+                    href={`https://wa.me/51936032964?text=${encodeURIComponent(`Hola, quisiera cotizar el servicio: ${srv.title}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 bg-[#25D366] hover:bg-[#128C7E] text-white text-center py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm"

@@ -1,19 +1,15 @@
 'use client'
 
-import { useState } from 'react'
-
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { useSession } from 'next-auth/react'
 
 import { Drawer, Box, IconButton, Divider } from '@mui/material'
-import { X, User, LogIn, Download } from 'lucide-react'
+import { X, User, LogIn, UserPlus } from 'lucide-react'
 
 import Logo from '@/utils/components/layout/shared/Logo'
 import { useAuthModal } from '@/contexts/AuthModalContext'
-import { usePWAInstall } from '@/utils/hooks/usePWAInstall'
-import PWAInstallTip from '@/utils/components/shared/PWAInstallTip'
 import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
 const ALL_NAV_ITEMS = [
@@ -37,9 +33,7 @@ interface MobileNavDrawerProps {
 export default function MobileNavDrawer({ open, onClose, empresasHabilitado = true }: MobileNavDrawerProps) {
   const pathname = usePathname()
   const { data: session } = useSession()
-  const { openLogin } = useAuthModal()
-  const { canInstall, hasNativePrompt, install } = usePWAInstall()
-  const [showInstallTip, setShowInstallTip] = useState(false)
+  const { openLogin, openRegister } = useAuthModal()
 
   const navItems = ALL_NAV_ITEMS.filter(item => item.key !== 'empresas' || empresasHabilitado)
 
@@ -131,33 +125,27 @@ export default function MobileNavDrawer({ open, onClose, empresasHabilitado = tr
             </button>
           )}
 
-          {canInstall && (
-            <>
-              <button
-                onClick={() => (hasNativePrompt ? install() : setShowInstallTip(t => !t))}
-                className="flex items-center justify-center gap-2 cursor-pointer"
-                style={{
-                  height: '52px',
-                  borderRadius: '999px',
-                  border: 'none',
-                  backgroundColor: 'var(--web-light, #BDD962)',
-                  color: '#0A0A0A',
-                  fontFamily: 'Poppins, sans-serif',
-                  fontWeight: 700,
-                  fontSize: '1rem',
-                }}
-              >
-                <Download size={18} />
-                Instalar App
-              </button>
-
-              {showInstallTip && !hasNativePrompt && (
-                <PWAInstallTip
-                  onClose={() => setShowInstallTip(false)}
-                  style={{ position: 'absolute', bottom: 'calc(100% + 8px)', top: 'auto', left: 24, right: 24, width: 'auto' }}
-                />
-              )}
-            </>
+          {!session?.user && (
+            <button
+              onClick={() => {
+                onClose()
+                openRegister()
+              }}
+              className="flex items-center justify-center gap-2 cursor-pointer"
+              style={{
+                height: '52px',
+                borderRadius: '999px',
+                border: 'none',
+                backgroundColor: 'var(--web-primary, #25927F)',
+                color: '#ffffff',
+                fontFamily: 'Poppins, sans-serif',
+                fontWeight: 700,
+                fontSize: '1rem',
+              }}
+            >
+              <UserPlus size={18} />
+              Registrarse
+            </button>
           )}
         </Box>
       </Box>

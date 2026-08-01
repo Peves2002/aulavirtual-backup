@@ -43,6 +43,6 @@ export function getDefaultFaviconPath(): string {
   return FAVICON_PUBLIC_PATH
 }
 
-export function resolveFaviconUrl(_configs: Record<string, string>): string {
+export function resolveFaviconUrl(): string {
   return '/favicon.ico'
 }
