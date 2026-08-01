@@ -1212,3 +1212,15 @@ model EntregaActividad {
   @@index([usuario_id])
   @@map("entregas_actividad")
 }
+
+model Articulo {
+  id             String   @id @default(uuid())
+  titulo         String
+  descripcion    String?
+  imagen_portada String?
+  archivo_pdf    String
+  creado_en      DateTime @default(now())
+  actualizado_en DateTime @updatedAt
+
+  @@map("articulos")
+}

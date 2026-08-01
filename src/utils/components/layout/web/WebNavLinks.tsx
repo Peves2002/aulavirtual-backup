@@ -5,7 +5,7 @@ import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { Home, BookOpen, Users, Award, Map, Building2, BookText, ClipboardList, Repeat2 } from 'lucide-react'
+import { Home, BookOpen, Users, Award, Map, Building2, BookText, ClipboardList, Repeat2, Newspaper, Linkedin } from 'lucide-react'
 
 import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
@@ -13,6 +13,7 @@ const ALL_NAV_ITEMS = [
   { title: 'Inicio', url: '/', icon: Home, key: 'inicio' },
   { title: 'Servicios', url: '/servicios', icon: ClipboardList, key: 'servicios' },
   { title: 'Cursos', url: '/cursos', icon: BookOpen, key: 'cursos' },
+  { title: 'Artículos', url: '/articulos', icon: Newspaper, key: 'articulos' },
   ...(isFeatureEnabled('simulacros')
     ? [{ title: 'Simulacros', url: '/simulacros', icon: ClipboardList, key: 'simulacros' as const }]
     : []),
@@ -81,6 +82,28 @@ export default function WebNavLinks({
             </Link>
           )
         })}
+        
+        <a
+          href="https://www.linkedin.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center p-2 rounded-full transition-colors ml-1"
+          style={{
+            backgroundColor: 'transparent',
+            color: isTransparent ? 'rgba(255,255,255,0.9)' : '#6b7280',
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLElement).style.backgroundColor = isTransparent ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'
+            ;(e.currentTarget as HTMLElement).style.color = isTransparent ? '#ffffff' : '#4b5563'
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'
+            ;(e.currentTarget as HTMLElement).style.color = isTransparent ? 'rgba(255,255,255,0.9)' : '#6b7280'
+          }}
+          title="LinkedIn"
+        >
+          <Linkedin size={18} />
+        </a>
     </div>
   )
 }

@@ -108,6 +108,7 @@ export default withAuth(
           path.startsWith('/servicios') ||
           path.startsWith('/soluciones') ||
           path.startsWith('/simulacros') ||
+          path.startsWith('/articulos') ||
           path === '/'
         ) {
           return true
