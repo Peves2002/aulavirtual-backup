@@ -107,14 +107,14 @@ const CourseCard = ({
 
   // Color para el tipo de emisión
   const getTipoColor = (t?: string) => {
-    if (t === 'SINCRONO') return '#ef4444' // Rojo para Vivo
+    if (t === 'EN_VIVO') return '#ef4444' // Rojo para Vivo
 
     return '#3b82f6' // Azul para otros
   }
 
   // Lógica de fecha solicitada por el usuario
   const getDisplayDate = () => {
-    const dateToUse = (tipo_emision === 'SINCRONO' || tipo_emision === 'MIXTO')
+    const dateToUse = (tipo_emision === 'EN_VIVO' || tipo_emision === 'HIBRIDO')
       ? fecha_inicio
       : creado_en
 
@@ -154,7 +154,7 @@ const CourseCard = ({
         {/* Badges superiores */}
         <Box sx={{ position: 'absolute', top: 12, left: 12, zIndex: 2 }}>
           <Chip
-            label={tipo_emision === 'SINCRONO' ? 'Vivo' : 'Asíncrono'}
+            label={tipo_emision === 'EN_VIVO' ? 'Vivo' : 'Asíncrono'}
             sx={{
               bgcolor: getTipoColor(tipo_emision),
               color: 'white',

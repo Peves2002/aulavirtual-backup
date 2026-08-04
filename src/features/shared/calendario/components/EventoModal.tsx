@@ -42,7 +42,7 @@ function formatFecha(iso: string) {
 export function EventoModal({ open, handleClose, basePath = '/estudiante/aprender', evento }: Props) {
   if (!evento) return null
 
-  const { tipo, curso, cursoSlug, leccionId, enlace, descripcion, examenId, puntajeAprobacion } = evento.extendedProps
+  const { tipo, curso, cursoSlug, leccionId, descripcion, examenId, puntajeAprobacion } = evento.extendedProps
   const config = TIPO_CONFIG[tipo] ?? TIPO_CONFIG.CLASE_VIVO
 
   const cursohref = `${basePath}/${cursoSlug}`
@@ -140,16 +140,6 @@ export function EventoModal({ open, handleClose, basePath = '/estudiante/aprende
           >
             Ir a la lección
           </Button>
-          {enlace && (
-            <Button
-              fullWidth variant='outlined'
-              startIcon={<i className='tabler-video' />}
-              href={enlace} target='_blank' rel='noopener noreferrer'
-              sx={{ borderColor: '#1565C0', color: '#1565C0', '&:hover': { borderColor: '#0D47A1', bgcolor: '#1565C010' } }}
-            >
-              Unirse a Zoom / Meet
-            </Button>
-          )}
         </Box>
       )}
 

@@ -1,8 +1,8 @@
-﻿import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
 
-import { Calendar, Clock, Languages, MonitorPlay, Users, Hourglass, ArrowRight, Check, Play, BookOpen, Presentation, Code, Briefcase, ChevronRight, Award } from 'lucide-react'
+import { Calendar, Clock, Languages, MonitorPlay, Users, Hourglass, Check, Play, BookOpen, Presentation, Code, Briefcase, ChevronRight, Award } from 'lucide-react'
 
 
 import prisma from '@/utils/libs/prisma'
@@ -46,6 +46,188 @@ export default async function ProgramPage({ params }: { params: { slug: string }
   }
 
   const beneficios = Array.isArray(curso.beneficios) ? curso.beneficios as any[] : []
+
+  // Parse perfil_estudiante (perfil)
+  let perfilData: any;
+
+  try {
+    const parsed = JSON.parse(curso.perfil_estudiante || '');
+
+    if (parsed && typeof parsed === 'object') {
+      perfilData = {
+        titulo: parsed.titulo || '¿Es este programa para ti?',
+        descripcion: parsed.descripcion || '',
+        imagen: parsed.imagen || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop',
+        secciones: parsed.secciones || []
+      };
+    }
+  } catch (e) {}
+
+  if (!perfilData) {
+    perfilData = {
+      titulo: '¿Es este programa para ti?',
+      descripcion: 'Este curso está pensado para profesionales que quieren tomar decisiones estratégicas en empresas cada vez más digitales. Si te reconoces en varias de estas situaciones, probablemente estás en el momento adecuado para dar el siguiente paso.',
+      imagen: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop',
+      secciones: [
+        {
+          subtitulo: `Este ${curso.tipo.toLowerCase()} está pensado para profesionales que:`,
+          items: curso.perfil_estudiante ? curso.perfil_estudiante.split('\n').filter(Boolean) : [
+            'Lideran o participan en iniciativas de transformación o innovación en su empresa.',
+            'Quieren avanzar hacia roles estratégicos donde las decisiones se basen en datos, tecnología y visión de negocio.',
+            'Necesitan entender cómo aplicar herramientas de gestión en procesos o decisiones empresariales.',
+            'Provienen de áreas como negocio, ingeniería, tecnología, recursos humanos o administración.',
+            'Buscan consolidar su perfil directivo con una visión global de la empresa: estrategia, finanzas y operaciones.',
+            'Quieren fortalecer su capacidad de liderazgo para asumir mayores responsabilidades en su organización.'
+          ]
+        }
+      ]
+    };
+  }
+
+  // Parse por_que_estudiar
+  let porQueEstudiarData: any;
+
+  if (curso.por_que_estudiar && typeof curso.por_que_estudiar === 'object' && !Array.isArray(curso.por_que_estudiar)) {
+    const dataObj = curso.por_que_estudiar as any;
+
+    porQueEstudiarData = {
+      titulo: dataObj.titulo || `¿Por qué estudiar el ${curso.titulo}?`,
+      descripcion: dataObj.descripcion || '',
+      imagen: dataObj.imagen || 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1200&auto=format&fit=crop',
+      col1_titulo: dataObj.col1_titulo || 'Este programa te prepara para:',
+      col1_items: dataObj.col1_items || [],
+      col2_titulo: dataObj.col2_titulo || 'Aprenderás a trabajar con:',
+      col2_items: dataObj.col2_items || []
+    };
+  } else {
+    // Fallback: migrate old data if it is array
+    const legacyCol1: string[] = [];
+    const legacyCol2: string[] = [];
+
+    if (Array.isArray(curso.por_que_estudiar)) {
+      (curso.por_que_estudiar as any[]).forEach((item: any, i: number) => {
+        if (i % 2 === 0) {
+          legacyCol1.push(item.descripcion || item.titulo || item);
+        } else {
+          legacyCol2.push(item.descripcion || item.titulo || item);
+        }
+      });
+    }
+
+    porQueEstudiarData = {
+      titulo: `¿Por qué estudiar el ${curso.titulo}?`,
+      descripcion: 'Las empresas no necesitan más especialistas aislados, necesitan líderes capaces de entender el negocio completo y tomar decisiones estratégicas en entornos cada vez más complejos.\n\nEl MBA te prepara precisamente para eso. Combina visión global de empresa, aprendizaje práctico y conexión directa con el entorno empresarial para ayudarte a asumir mayores responsabilidades en tu carrera.\n\nAquí no solo estudias management, aprendes a liderar organizaciones, tomar decisiones estratégicas y transformar negocios en contextos reales.',
+      imagen: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1200&auto=format&fit=crop',
+      col1_titulo: 'Este programa te prepara para:',
+      col1_items: legacyCol1.length > 0 ? legacyCol1 : [
+        'Comprender cómo interactúan estrategia, marketing, finanzas y operaciones en la gestión empresarial.',
+        'Tomar decisiones estratégicas en entornos digitales, complejos y cambiantes.',
+        'Liderar equipos y proyectos con visión directiva.',
+        'Analizar mercados, modelos de negocio y oportunidades de crecimiento.',
+        'Avanzar hacia posiciones de mayor responsabilidad dentro de tu organización.'
+      ],
+      col2_titulo: 'Aprenderás a trabajar con:',
+      col2_items: legacyCol2.length > 0 ? legacyCol2 : [
+        'Herramientas de análisis y gestión empresarial basadas en datos.',
+        'Metodologías estratégicas utilizadas por empresas líderes.',
+        'Simulaciones empresariales y casos reales de negocio.',
+        'Proyectos aplicados desarrollados junto a profesionales del sector.',
+        'Inteligencia artificial aplicada a la toma de decisiones empresariales.'
+      ]
+    };
+  }
+
+  // Parse por_que_nosotros (¿Por qué ADPH Group?)
+  let porQueNosotrosData: any;
+
+  if (curso.por_que_nosotros && typeof curso.por_que_nosotros === 'object' && !Array.isArray(curso.por_que_nosotros) && (curso.por_que_nosotros as any).items) {
+    const pq = curso.por_que_nosotros as any;
+
+    porQueNosotrosData = {
+      titulo: pq.titulo || '¿Por qué ADPH Group?',
+      descripcion: pq.descripcion || '',
+      items: pq.items || [],
+      banner_texto: pq.banner_texto || ''
+    };
+  } else {
+    porQueNosotrosData = {
+      titulo: '¿Por qué ADPH Group?',
+      descripcion: (curso.por_que_nosotros as any)?.texto || 'ADPH Group es una institución que impulsa el progreso profesional a través de una formación conectada con la realidad empresarial. Nuestro enfoque combina rigor académico, visión global y una metodología diseñada para convertir el aprendizaje en impacto.',
+      items: [
+        { numero: '01', titulo: 'Aprendizaje aplicado', descripcion: 'Una metodología práctica basada en retos reales que prepara a los profesionales para tomar decisiones que transforman el negocio.' },
+        { numero: '02', titulo: 'Conexión con la industria', descripcion: 'Colaboración constante con empresas líderes en tecnología, consultoría e innovación.' },
+        { numero: '03', titulo: 'Ecosistema dinámico', descripcion: 'Uno de los hubs más dinámicos en digitalización, emprendimiento e innovación.' },
+        { numero: '04', titulo: 'Comunidad internacional', descripcion: 'Estudiantes y profesionales que amplían la mirada y enriquecen cada proyecto.' }
+      ],
+      banner_texto: '¡ADPH Group es una institución diseñada para profesionales que lideran, no que solo aprenden!'
+    };
+  }
+
+  // Parse advanced_specializations
+  let advancedSpecializationsData: any;
+
+  if (curso.advanced_specializations && typeof curso.advanced_specializations === 'object' && !Array.isArray(curso.advanced_specializations)) {
+    const adv = curso.advanced_specializations as any;
+
+    advancedSpecializationsData = {
+      titulo: adv.titulo || 'Advanced Specializations',
+      subtitulo: adv.subtitulo || 'Impulsa tu formación. Define tu camino.',
+      descripcion: adv.descripcion || '',
+      focos_titulo: adv.focos_titulo || 'Elige entre dos focos:',
+      foco_adph: adv.foco_adph || 'Aquí eliges tu camino. ADPH Group lo multiplica',
+      tab1_label: adv.tab1_label || 'Habilidades Transversales',
+      tab1_descripcion: adv.tab1_descripcion || '',
+      tab1_items: adv.tab1_items || [],
+      tab2_label: adv.tab2_label || 'Habilidades de Especialidad',
+      tab2_descripcion: adv.tab2_descripcion || '',
+      tab2_items: adv.tab2_items || []
+    };
+  } else {
+    advancedSpecializationsData = {
+      titulo: 'Advanced Specializations',
+      subtitulo: 'Impulsa tu formación. Define tu camino.',
+      descripcion: 'Las Advanced Specializations son especializaciones certificadas que te permiten personalizar tu programa e incorporar competencias profesionales que hoy marcan la diferencia en el mercado. Diseña un perfil flexible, conectado con las profesiones más demandadas.',
+      focos_titulo: 'Elige entre dos focos:',
+      foco_adph: 'Aquí eliges tu camino. ADPH Group lo multiplica',
+      tab1_label: 'Habilidades Transversales',
+      tab1_descripcion: 'Desarrolla el liderazgo que el mundo digital exige...',
+      tab1_items: ['IA & Machine Learning', 'Project Management & Agile', 'Emprendimiento', 'Innovation Strategy', 'Data-Driven Analytics', 'ESG & Sustainability'],
+      tab2_label: 'Habilidades de Especialidad',
+      tab2_descripcion: 'Pensadas para profundizar en áreas estratégicas...',
+      tab2_items: ['Digital Business Transformation', 'Product Management', 'Big Data Tools', 'DEI Strategy', 'International Markets', 'Fintech', 'Business Analytics', 'Marketing Digital Avanzado']
+    };
+  }
+
+  // Parse partners_institucionales
+  let partnersInstitucionalesData: any;
+
+  if (curso.partners_institucionales && typeof curso.partners_institucionales === 'object' && !Array.isArray(curso.partners_institucionales)) {
+    const part = curso.partners_institucionales as any;
+
+    partnersInstitucionalesData = {
+      titulo: part.titulo || 'Un valor añadido gracias a nuestros partners institucionales',
+      descripcion: part.descripcion || '',
+      partners: part.partners || []
+    };
+  } else {
+    partnersInstitucionalesData = {
+      titulo: 'Un valor añadido gracias a nuestros partners institucionales',
+      descripcion: 'Como partner oficial, tus especializaciones se imparten con una orientación real al ecosistema tecnológico y empresarial de la región, reforzando tu visibilidad profesional y tu conexión con el sector.',
+      partners: [
+        { nombre: 'ADPH Group', logo: 'https://via.placeholder.com/150x50/ffffff/08479b?text=ADPH+Group' },
+        { nombre: 'Tech Partner', logo: 'https://via.placeholder.com/150x50/ffffff/08479b?text=Tech+Partner' }
+      ]
+    };
+  }
+
+  // Parse requisitos_admision
+  const requisitosData = Array.isArray(curso.requisitos_admision)
+    ? (curso.requisitos_admision as string[])
+    : [
+        'Título universitario oficial o equivalente.',
+        'Experiencia profesional relevante.',
+        'Carta de motivación y CV actualizado.'
+      ];
 
 
   return (
@@ -98,7 +280,7 @@ export default async function ProgramPage({ params }: { params: { slug: string }
       </section>
 
       {/* 2. SUBMENU BAR (Blue) */}
-      <div className="bg-[#08479b] w-full text-white text-[13px] md:text-[15px] font-bold flex overflow-x-auto whitespace-nowrap sticky z-40 shadow-md" style={{ top: 'var(--adph-navbar-height, 80px)' }}>
+      <div className="bg-[#08479b] w-full text-white text-[13px] md:text-[15px] font-bold flex overflow-x-auto whitespace-nowrap sticky z-40 shadow-md" style={{ top: 'var(--adph-navbar-height, 110px)' }}>
         <div className="max-w-[1200px] w-full mx-auto px-6 lg:px-10 flex gap-6 md:gap-10 py-5">
           <Link href="#programa" className="hover:text-[#fcd116] transition-colors">Programa</Link>
           <Link href="#certificaciones" className="hover:text-[#fcd116] transition-colors">Certificaciones y Herramientas</Link>
@@ -122,10 +304,18 @@ export default async function ProgramPage({ params }: { params: { slug: string }
         <div>
           
           {/* Availability Banner */}
-          <div className="flex bg-[#08479b] text-white p-4 rounded text-sm font-bold mb-10 shadow-sm">
-            <div className="flex-1 flex items-center gap-2"> <Users className="w-5 h-5 text-[#fcd116]"/> 75% de plazas reservadas</div>
-            <div className="flex-1 flex items-center gap-2 justify-end"> <Hourglass className="w-5 h-5 text-[#fcd116]"/> 6 plazas disponibles</div>
-          </div>
+          {(curso as any).mostrar_banner_disponibilidad !== false && (
+            <div className="flex bg-[#08479b] text-white p-4 rounded text-sm font-bold mb-10 shadow-sm">
+              <div className="flex-1 flex items-center gap-2"> 
+                <Users className="w-5 h-5 text-[#fcd116]"/> 
+                {((curso as any).banner_disponibilidad?.texto_izquierdo) || '75% de plazas reservadas'}
+              </div>
+              <div className="flex-1 flex items-center gap-2 justify-end"> 
+                <Hourglass className="w-5 h-5 text-[#fcd116]"/> 
+                {((curso as any).banner_disponibilidad?.texto_derecho) || '6 plazas disponibles'}
+              </div>
+            </div>
+          )}
           
           {/* Main Description */}
           <div id="programa" className="text-[15px] text-gray-700 space-y-6 mb-16 leading-relaxed whitespace-pre-wrap scroll-mt-40">
@@ -166,34 +356,34 @@ export default async function ProgramPage({ params }: { params: { slug: string }
           {/* ¿Es este programa para ti? (Matches Image 2 exactly) */}
           {(curso as any).mostrar_perfil && (
             <div className="mb-24">
-              <h2 className="text-3xl lg:text-4xl font-normal text-gray-800 mb-8 tracking-tight">¿Es este programa para ti?</h2>
-              <p className="text-[15px] text-gray-600 mb-12 leading-relaxed">
-                Este {curso.tipo} está pensado para profesionales que quieren tomar decisiones estratégicas en empresas cada vez más digitales. Si te reconoces en varias de estas situaciones, probablemente estás en el momento adecuado para dar el siguiente paso.
-              </p>
+              <h2 className="text-3xl lg:text-4xl font-normal text-gray-800 mb-8 tracking-tight">{perfilData.titulo}</h2>
+              {perfilData.descripcion && (
+                <p className="text-[15px] text-gray-600 mb-12 leading-relaxed whitespace-pre-line">
+                  {perfilData.descripcion}
+                </p>
+              )}
               
               <div className="flex flex-col md:flex-row gap-10">
                 <div className="w-full md:w-5/12 bg-gray-100 rounded overflow-hidden aspect-[4/5] relative">
                    {/* Professional Image */}
-                   <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop" alt="Profesional" className="absolute inset-0 w-full h-full object-cover" />
+                   <img src={perfilData.imagen} alt="Profesional" className="absolute inset-0 w-full h-full object-cover" />
                 </div>
-                <div className="w-full md:w-7/12 flex flex-col justify-start pt-4">
-                  <h3 className="text-xl font-bold text-gray-900 mb-8 leading-tight">Este {curso.tipo} está pensado para profesionales que:</h3>
-                  
-                  <ul className="space-y-6">
-                    {(curso.perfil_estudiante ? curso.perfil_estudiante.split('\n').filter(Boolean) : [
-                      'Lideran o participan en iniciativas de transformación o innovación en su empresa.',
-                      'Quieren avanzar hacia roles estratégicos donde las decisiones se basen en datos, tecnología y visión de negocio.',
-                      'Necesitan entender cómo aplicar herramientas de gestión en procesos o decisiones empresariales.',
-                      'Provienen de áreas como negocio, ingeniería, tecnología, recursos humanos o administración.',
-                      'Buscan consolidar su perfil directivo con una visión global de la empresa: estrategia, finanzas y operaciones.',
-                      'Quieren fortalecer su capacidad de liderazgo para asumir mayores responsabilidades en su organización.'
-                    ]).map((text: string, i: number) => (
-                       <li key={i} className="flex gap-4 items-start">
-                          <Check className="w-5 h-5 text-[#08479b] shrink-0 mt-0.5" strokeWidth={2.5} />
-                          <span className="text-[15px] text-gray-600 leading-relaxed">{text}</span>
-                       </li>
-                    ))}
-                  </ul>
+                <div className="w-full md:w-7/12 flex flex-col justify-start pt-4 gap-8">
+                  {(perfilData.secciones || []).map((sec: any, sIdx: number) => (
+                    <div key={sIdx} className="space-y-6">
+                      {sec.subtitulo && (
+                        <h3 className="text-xl font-bold text-gray-900 leading-tight">{sec.subtitulo}</h3>
+                      )}
+                      <ul className="space-y-4">
+                        {(sec.items || []).map((text: string, i: number) => (
+                           <li key={i} className="flex gap-4 items-start">
+                              <Check className="w-5 h-5 text-[#08479b] shrink-0 mt-0.5" strokeWidth={2.5} />
+                              <span className="text-[15px] text-gray-600 leading-relaxed">{text}</span>
+                           </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -202,66 +392,76 @@ export default async function ProgramPage({ params }: { params: { slug: string }
           {/* ¿Por qué estudiar aquí? */}
           {(curso as any).mostrar_por_que_estudiar && (
             <div className="mb-24">
-              <h2 className="text-3xl lg:text-4xl font-normal text-gray-800 mb-8 tracking-tight">¿Por qué estudiar el {curso.titulo}?</h2>
+              <h2 className="text-3xl lg:text-4xl font-normal text-gray-800 mb-8 tracking-tight">{porQueEstudiarData.titulo}</h2>
               
-              <div className="w-full aspect-[21/9] bg-gray-200 mb-12 rounded overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1200&auto=format&fit=crop" alt="Clase" className="w-full h-full object-cover" />
-              </div>
+              {porQueEstudiarData.descripcion && (
+                <div className="space-y-6 text-[15px] text-gray-600 mb-12 leading-relaxed">
+                  {porQueEstudiarData.descripcion.split('\n').filter(Boolean).map((pText: string, pIdx: number) => (
+                    <p key={pIdx}>{pText}</p>
+                  ))}
+                </div>
+              )}
 
-              <div className="grid md:grid-cols-2 gap-12">
-                {((curso as any).por_que_estudiar?.length ? (curso as any).por_que_estudiar : [
-                  { titulo: 'Visión Global', descripcion: 'Comprender cómo interactúan estrategia, marketing, finanzas y operaciones.' },
-                  { titulo: 'Toma de Decisiones', descripcion: 'Tomar decisiones estratégicas en entornos digitales, complejos y cambiantes.' },
-                  { titulo: 'Liderazgo', descripcion: 'Liderar equipos y proyectos con visión directiva.' },
-                  { titulo: 'Crecimiento', descripcion: 'Avanzar hacia posiciones de mayor responsabilidad dentro de tu organización.' }
-                ]).map((item: any, i: number) => (
-                  <div key={i} className="mb-8">
-                    <h3 className="text-[22px] font-normal text-gray-800 mb-4">{item.titulo}</h3>
-                    <div className="flex gap-4 items-start">
-                       <Check className="w-5 h-5 text-[#08479b] shrink-0 mt-0.5" strokeWidth={2.5} />
-                       <span className="text-[15px] text-gray-600 leading-relaxed">{item.descripcion}</span>
-                    </div>
-                  </div>
-                ))}
+              {porQueEstudiarData.imagen && (
+                <div className="w-full aspect-[21/9] bg-gray-200 mb-16 rounded overflow-hidden">
+                    <img src={porQueEstudiarData.imagen} alt="Clase" className="w-full h-full object-cover" />
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                {/* Columna 1 */}
+                <div>
+                   <h3 className="text-2xl font-bold text-gray-900 mb-6">{porQueEstudiarData.col1_titulo}</h3>
+                   <ul className="space-y-4">
+                      {(porQueEstudiarData.col1_items || []).map((item: string, i: number) => (
+                         <li key={i} className="flex gap-4 items-start">
+                            <Check className="w-5 h-5 text-[#08479b] shrink-0 mt-0.5" strokeWidth={2.5} />
+                            <span className="text-[15px] text-gray-600 leading-relaxed">{item}</span>
+                         </li>
+                      ))}
+                   </ul>
+                </div>
+
+                {/* Columna 2 */}
+                <div>
+                   <h3 className="text-2xl font-bold text-gray-900 mb-6">{porQueEstudiarData.col2_titulo}</h3>
+                   <ul className="space-y-4">
+                      {(porQueEstudiarData.col2_items || []).map((item: string, i: number) => (
+                         <li key={i} className="flex gap-4 items-start">
+                            <Check className="w-5 h-5 text-[#08479b] shrink-0 mt-0.5" strokeWidth={2.5} />
+                            <span className="text-[15px] text-gray-600 leading-relaxed">{item}</span>
+                         </li>
+                      ))}
+                   </ul>
+                </div>
               </div>
             </div>
           )}
-
-          {/* ¿Por qué ADPH Group? (Matches Image 3 exactly) */}
           {/* ¿Por qué ADPH Group? */}
           {(curso as any).mostrar_por_que_nosotros && (
             <div className="mb-24">
-              <h2 className="text-3xl lg:text-4xl font-normal text-gray-800 mb-8 tracking-tight">¿Por qué ADPH Group?</h2>
-              <p className="text-[15px] text-gray-600 mb-14 leading-relaxed">
-                 {(curso as any).por_que_nosotros?.texto || 'ADPH Group es una institución que impulsa el progreso profesional a través de una formación conectada con la realidad empresarial. Nuestro enfoque combina rigor académico, visión global y una metodología diseñada para convertir el aprendizaje en impacto.'}
-              </p>
+              <h2 className="text-3xl lg:text-4xl font-normal text-gray-800 mb-8 tracking-tight">{porQueNosotrosData.titulo}</h2>
+              {porQueNosotrosData.descripcion && (
+                <p className="text-[15px] text-gray-600 mb-14 leading-relaxed">
+                  {porQueNosotrosData.descripcion}
+                </p>
+              )}
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
-                 <div>
-                    <div className="text-[54px] font-bold text-[#08479b] mb-4 leading-none tracking-tighter">01</div>
-                    <h4 className="font-bold text-[15px] text-gray-900 mb-3">Aprendizaje aplicado</h4>
-                    <p className="text-[14px] text-gray-600 leading-relaxed">Una metodología práctica basada en retos reales que prepara a los profesionales para tomar decisiones que transforman el negocio.</p>
-                 </div>
-                 <div>
-                    <div className="text-[54px] font-bold text-[#08479b] mb-4 leading-none tracking-tighter">02</div>
-                    <h4 className="font-bold text-[15px] text-gray-900 mb-3">Conexión con la industria</h4>
-                    <p className="text-[14px] text-gray-600 leading-relaxed">Colaboración constante con empresas líderes en tecnología, consultoría e innovación.</p>
-                 </div>
-                 <div>
-                    <div className="text-[54px] font-bold text-[#08479b] mb-4 leading-none tracking-tighter">03</div>
-                    <h4 className="font-bold text-[15px] text-gray-900 mb-3">Ecosistema dinámico</h4>
-                    <p className="text-[14px] text-gray-600 leading-relaxed">Uno de los hubs más dinámicos en digitalización, emprendimiento e innovación.</p>
-                 </div>
-                 <div>
-                    <div className="text-[54px] font-bold text-[#08479b] mb-4 leading-none tracking-tighter">04</div>
-                    <h4 className="font-bold text-[15px] text-gray-900 mb-3">Comunidad internacional</h4>
-                    <p className="text-[14px] text-gray-600 leading-relaxed">Estudiantes y profesionales que amplían la mirada y enriquecen cada proyecto.</p>
-                 </div>
+                 {(porQueNosotrosData.items || []).map((item: any, idx: number) => (
+                   <div key={idx}>
+                      <div className="text-[54px] font-bold text-[#08479b] mb-4 leading-none tracking-tighter">{item.numero}</div>
+                      <h4 className="font-bold text-[15px] text-gray-900 mb-3">{item.titulo}</h4>
+                      <p className="text-[14px] text-gray-600 leading-relaxed">{item.descripcion}</p>
+                   </div>
+                 ))}
               </div>
 
-              <div className="bg-[#08479b] text-white p-8 mt-16 text-center font-bold text-xl md:text-2xl tracking-tight shadow-md">
-                 ¡ADPH Group es una institución diseñada para profesionales que lideran, no que solo aprenden!
-              </div>
+              {porQueNosotrosData.banner_texto && (
+                <div className="bg-[#08479b] text-white p-8 mt-16 text-center font-bold text-xl md:text-2xl tracking-tight shadow-md">
+                   {porQueNosotrosData.banner_texto}
+                </div>
+              )}
             </div>
           )}
 
@@ -396,28 +596,49 @@ export default async function ProgramPage({ params }: { params: { slug: string }
           </div>
 
           {/* Advanced Specializations */}
-          <div className="bg-[#f4f5f7] -mx-6 lg:-mx-10 px-6 lg:px-10 py-16 mb-24 border-t border-b border-gray-200">
-             <h2 className="text-3xl lg:text-4xl font-normal text-gray-800 mb-10 tracking-tight">Advanced Specializations</h2>
-             <h4 className="font-bold text-[18px] text-gray-900 mb-4">Impulsa tu formación. Define tu camino.</h4>
-             <p className="text-[15px] text-gray-600 mb-8 leading-relaxed">Las Advanced Specializations son especializaciones certificadas que te permiten personalizar tu programa e incorporar competencias profesionales que hoy marcan la diferencia en el mercado. Diseña un perfil flexible, conectado con las profesiones más demandadas.</p>
-             <p className="text-[14px] text-gray-600 mb-6">Elige entre dos focos:</p>
-             <h5 className="font-bold text-[14px] text-gray-900 mb-8">Aquí eliges tu camino. ADPH Group lo multiplica</h5>
+          {(curso as any).mostrar_advanced_specializations && (
+            <div className="bg-[#f4f5f7] -mx-6 lg:-mx-10 px-6 lg:px-10 py-16 mb-24 border-t border-b border-gray-200">
+               <h2 className="text-3xl lg:text-4xl font-normal text-gray-800 mb-10 tracking-tight">{advancedSpecializationsData.titulo}</h2>
+               {advancedSpecializationsData.subtitulo && (
+                 <h4 className="font-bold text-[18px] text-gray-900 mb-4">{advancedSpecializationsData.subtitulo}</h4>
+               )}
+               {advancedSpecializationsData.descripcion && (
+                 <p className="text-[15px] text-gray-600 mb-8 leading-relaxed">{advancedSpecializationsData.descripcion}</p>
+               )}
+               {advancedSpecializationsData.focos_titulo && (
+                 <p className="text-[14px] text-gray-600 mb-6">{advancedSpecializationsData.focos_titulo}</p>
+               )}
+               {advancedSpecializationsData.foco_adph && (
+                 <h5 className="font-bold text-[14px] text-gray-900 mb-8">{advancedSpecializationsData.foco_adph}</h5>
+               )}
 
-             <AdvancedSpecializationsTabs />
-          </div>
+               <AdvancedSpecializationsTabs data={advancedSpecializationsData} />
+            </div>
+          )}
 
           {/* Valor Añadido */}
-          <div className="mb-24 flex flex-col md:flex-row gap-12 items-center">
-             <div className="flex-1">
-                <h2 className="text-3xl lg:text-4xl font-normal text-gray-800 mb-6 tracking-tight leading-tight">Un valor añadido gracias a nuestros partners institucionales</h2>
-                <p className="text-[15px] text-gray-600 leading-relaxed">Como partner oficial, tus especializaciones se imparten con una orientación real al ecosistema tecnológico y empresarial de la región, reforzando tu visibilidad profesional y tu conexión con el sector.</p>
-             </div>
-             <div className="w-full md:w-1/3 flex items-center justify-center gap-6">
-                <div className="h-16 flex items-center"><img src="https://via.placeholder.com/150x50/ffffff/08479b?text=ADPH+Group" alt="ADPH" className="max-h-full border border-gray-200 p-2" /></div>
-                <div className="h-12 w-[1px] bg-gray-300"></div>
-                <div className="h-16 flex items-center"><img src="https://via.placeholder.com/150x50/ffffff/08479b?text=Tech+Partner" alt="Partner" className="max-h-full border border-gray-200 p-2" /></div>
-             </div>
-          </div>
+          {(curso as any).mostrar_partners_institucionales && (
+            <div className="mb-24 flex flex-col md:flex-row gap-12 items-center">
+               <div className="flex-1">
+                  <h2 className="text-3xl lg:text-4xl font-normal text-gray-800 mb-6 tracking-tight leading-tight">{partnersInstitucionalesData.titulo}</h2>
+                  {partnersInstitucionalesData.descripcion && (
+                    <p className="text-[15px] text-gray-600 leading-relaxed">{partnersInstitucionalesData.descripcion}</p>
+                  )}
+               </div>
+               {partnersInstitucionalesData.partners && partnersInstitucionalesData.partners.length > 0 && (
+                 <div className="w-full md:w-1/3 flex flex-wrap items-center justify-center gap-6">
+                    {partnersInstitucionalesData.partners.map((partner: any, idx: number) => (
+                      <div key={idx} className="flex items-center gap-6">
+                        {idx > 0 && <div className="h-12 w-[1px] bg-gray-300 hidden md:block"></div>}
+                        <div className="h-16 flex items-center">
+                          <img src={partner.logo} alt={partner.nombre} className="max-h-full border border-gray-200 p-2" />
+                        </div>
+                      </div>
+                    ))}
+                 </div>
+               )}
+            </div>
+          )}
 
           {/* Rankings y Acreditaciones */}
           {(curso as any).mostrar_rankings && (
@@ -560,18 +781,14 @@ export default async function ProgramPage({ params }: { params: { slug: string }
                  {/* Requisitos */}
                  <div className="mb-24">
                     <h3 className="text-2xl font-bold text-gray-900 mb-8">Requisitos</h3>
-                    <div className="space-y-8">
-                       <div>
-                          <h4 className="font-bold text-[15px] text-gray-900 mb-1">Normativa y procedimiento general de acceso</h4>
-                          <p className="text-[14px] text-gray-600 mb-2">La Normativa y procedimiento de acceso a los programas queda detallada en el siguiente enlace:</p>
-                          <a href="#" className="text-[#08479b] font-bold text-[14px] flex items-center gap-1 hover:underline">Más información <ArrowRight className="w-4 h-4" /></a>
-                       </div>
-                       <div>
-                          <h4 className="font-bold text-[15px] text-gray-900 mb-1">Criterios y procedimiento de admisión a la titulación</h4>
-                          <p className="text-[14px] text-gray-600 mb-2">Los requisitos generales de acceso y admisión a este programa están establecidos en la Normativa de acceso, admisión y matrícula:</p>
-                          <a href="#" className="text-[#08479b] font-bold text-[14px] flex items-center gap-1 hover:underline">Más información <ArrowRight className="w-4 h-4" /></a>
-                       </div>
-                    </div>
+                    <ul className="space-y-4">
+                       {requisitosData.map((req: string, idx: number) => (
+                          <li key={idx} className="flex gap-4 items-start">
+                             <Check className="w-5 h-5 text-[#08479b] shrink-0 mt-0.5" strokeWidth={2.5} />
+                             <span className="text-[15px] text-gray-600 leading-relaxed">{req}</span>
+                          </li>
+                       ))}
+                    </ul>
                  </div>
                </>
              )}
@@ -598,80 +815,99 @@ export default async function ProgramPage({ params }: { params: { slug: string }
           </div>
 
           <div className="sticky top-[160px] bg-[#f4f5f7] p-8 shadow-lg border border-gray-100 z-20">
-            <h3 className="text-2xl font-normal mb-3 text-center text-gray-800 tracking-tight">Solicita información</h3>
-            <p className="text-[13px] text-center text-gray-600 mb-8 px-2">
-              Un asesor académico <b>contactará contigo</b> en un plazo máximo de <b>24 horas.</b>
-            </p>
-            
-            <form className="space-y-4">
-              <div className="bg-white border border-gray-300 relative">
-                <select className="w-full p-3 text-[14px] text-gray-600 bg-transparent focus:outline-none appearance-none cursor-pointer">
-                  <option value="" disabled selected>Especialidad *</option>
-                  <option>{curso.categoria?.nombre || 'Especialización'}</option>
-                </select>
-                <div className="absolute right-3 top-4 pointer-events-none text-gray-400 text-xs">▼</div>
-              </div>
-              
-              <div className="text-[12px] font-bold text-[#08479b] cursor-pointer flex items-center gap-1 pl-1">
-                 ▶ Más
-              </div>
+            {(curso as any).codigo_embeber ? (
+              <div dangerouslySetInnerHTML={{ __html: (curso as any).codigo_embeber }} />
+            ) : (curso as any).estado_venta === 'ASINCRONICO' ? (
+              <>
+                 <h3 className="text-2xl font-normal mb-3 text-center text-gray-800 tracking-tight">Cómpralo ahora</h3>
+                 <p className="text-[13px] text-center text-gray-600 mb-8 px-2">
+                   Accede inmediatamente a todo el contenido del programa asincrónico.
+                 </p>
+                 <Link 
+                    href={`/checkout/${curso.id}`}
+                    className="w-full bg-[#fcd116] hover:bg-yellow-400 text-slate-900 font-bold py-4 text-[13px] tracking-wide uppercase transition-colors flex justify-center items-center shadow-md"
+                  >
+                    Comprar en Asincrónico
+                  </Link>
+              </>
+            ) : (
+              <>
+                <h3 className="text-2xl font-normal mb-3 text-center text-gray-800 tracking-tight">Solicita información</h3>
+                <p className="text-[13px] text-center text-gray-600 mb-8 px-2">
+                  Un asesor académico <b>contactará contigo</b> en un plazo máximo de <b>24 horas.</b>
+                </p>
+                
+                <form className="space-y-4">
+                  <div className="bg-white border border-gray-300 relative">
+                    <select className="w-full p-3 text-[14px] text-gray-600 bg-transparent focus:outline-none appearance-none cursor-pointer">
+                      <option value="" disabled selected>Especialidad *</option>
+                      <option>{curso.categoria?.nombre || 'Especialización'}</option>
+                    </select>
+                    <div className="absolute right-3 top-4 pointer-events-none text-gray-400 text-xs">▼</div>
+                  </div>
+                  
+                  <div className="text-[12px] font-bold text-[#08479b] cursor-pointer flex items-center gap-1 pl-1">
+                     ▶ Más
+                  </div>
 
-              <div>
-                <input type="text" placeholder="Nombre y apellidos *" className="w-full bg-white border border-gray-300 p-3 text-[14px] text-gray-600 focus:outline-none placeholder-gray-400" />
-              </div>
+                  <div>
+                    <input type="text" placeholder="Nombre y apellidos *" className="w-full bg-white border border-gray-300 p-3 text-[14px] text-gray-600 focus:outline-none placeholder-gray-400" />
+                  </div>
 
-              <div>
-                <input type="email" placeholder="Email *" className="w-full bg-white border border-gray-300 p-3 text-[14px] text-gray-600 focus:outline-none placeholder-gray-400" />
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white border border-gray-300 relative">
-                  <select className="w-full p-3 text-[14px] text-gray-600 bg-transparent focus:outline-none appearance-none cursor-pointer">
-                    <option value="" disabled selected>Edad *</option>
-                    <option>18 - 25</option>
-                    <option>26 - 35</option>
-                    <option>36+</option>
-                  </select>
-                  <div className="absolute right-3 top-4 pointer-events-none text-gray-400 text-xs">▼</div>
-                </div>
-                <div className="bg-white border border-gray-300 relative">
-                  <select className="w-full p-3 text-[14px] text-gray-600 bg-transparent focus:outline-none appearance-none cursor-pointer">
-                    <option value="" disabled selected>País *</option>
-                    <option>Perú</option>
-                    <option>Colombia</option>
-                    <option>México</option>
-                  </select>
-                  <div className="absolute right-3 top-4 pointer-events-none text-gray-400 text-xs">▼</div>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4 pb-2">
-                <div>
-                  <input type="text" placeholder="Teléfono *" className="w-full bg-white border border-gray-300 p-3 text-[14px] text-gray-600 focus:outline-none placeholder-gray-400" />
-                </div>
-                <div className="bg-white border border-gray-300 relative">
-                  <select className="w-full p-3 text-[14px] text-gray-600 bg-transparent focus:outline-none appearance-none cursor-pointer">
-                    <option value="" disabled selected>Nivel de estudios</option>
-                    <option>Bachiller</option>
-                    <option>Titulado</option>
-                  </select>
-                  <div className="absolute right-3 top-4 pointer-events-none text-gray-400 text-xs">▼</div>
-                </div>
-              </div>
+                  <div>
+                    <input type="email" placeholder="Email *" className="w-full bg-white border border-gray-300 p-3 text-[14px] text-gray-600 focus:outline-none placeholder-gray-400" />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-white border border-gray-300 relative">
+                      <select className="w-full p-3 text-[14px] text-gray-600 bg-transparent focus:outline-none appearance-none cursor-pointer">
+                        <option value="" disabled selected>Edad *</option>
+                        <option>18 - 25</option>
+                        <option>26 - 35</option>
+                        <option>36+</option>
+                      </select>
+                      <div className="absolute right-3 top-4 pointer-events-none text-gray-400 text-xs">▼</div>
+                    </div>
+                    <div className="bg-white border border-gray-300 relative">
+                      <select className="w-full p-3 text-[14px] text-gray-600 bg-transparent focus:outline-none appearance-none cursor-pointer">
+                        <option value="" disabled selected>País *</option>
+                        <option>Perú</option>
+                        <option>Colombia</option>
+                        <option>México</option>
+                      </select>
+                      <div className="absolute right-3 top-4 pointer-events-none text-gray-400 text-xs">▼</div>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4 pb-2">
+                    <div>
+                      <input type="text" placeholder="Teléfono *" className="w-full bg-white border border-gray-300 p-3 text-[14px] text-gray-600 focus:outline-none placeholder-gray-400" />
+                    </div>
+                    <div className="bg-white border border-gray-300 relative">
+                      <select className="w-full p-3 text-[14px] text-gray-600 bg-transparent focus:outline-none appearance-none cursor-pointer">
+                        <option value="" disabled selected>Nivel de estudios</option>
+                        <option>Bachiller</option>
+                        <option>Titulado</option>
+                      </select>
+                      <div className="absolute right-3 top-4 pointer-events-none text-gray-400 text-xs">▼</div>
+                    </div>
+                  </div>
 
-              <div className="text-[10px] text-gray-400 text-justify leading-tight mb-4 h-12 overflow-y-auto pr-2">
-                 ADPH Institución Superior tratará sus datos personales para contactarle e informarle del programa seleccionado de cara a las próximas convocatorias del mismo, pudiendo ejercer sus derechos de privacidad en cualquier momento.
-              </div>
+                  <div className="text-[10px] text-gray-400 text-justify leading-tight mb-4 h-12 overflow-y-auto pr-2">
+                     ADPH Institución Superior tratará sus datos personales para contactarle e informarle del programa seleccionado de cara a las próximas convocatorias del mismo, pudiendo ejercer sus derechos de privacidad en cualquier momento.
+                  </div>
 
-              <a 
-                href={`https://wa.me/51959436827?text=${encodeURIComponent('Hola, quisiera solicitar información sobre el programa: ' + curso.titulo)}`}
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="w-full bg-[#fcd116] hover:bg-yellow-400 text-slate-900 font-bold py-4 text-[13px] tracking-wide uppercase transition-colors flex justify-center items-center shadow-md"
-              >
-                Solicitar Información
-              </a>
-            </form>
+                  <a 
+                    href={`https://wa.me/51959436827?text=${encodeURIComponent('Hola, quisiera solicitar información sobre el programa: ' + curso.titulo)}`}
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="w-full bg-[#fcd116] hover:bg-yellow-400 text-slate-900 font-bold py-4 text-[13px] tracking-wide uppercase transition-colors flex justify-center items-center shadow-md"
+                  >
+                    Solicitar Información
+                  </a>
+                </form>
+              </>
+            )}
           </div>
         </div>
 

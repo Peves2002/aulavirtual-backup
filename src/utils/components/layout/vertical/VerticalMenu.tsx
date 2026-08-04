@@ -131,6 +131,12 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
               </>
             )}
             
+            {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_LEADS')) && (
+              <MenuItem href='/admin/leads' icon={<i className='tabler-forms' />}>
+                Registros de Eventos
+              </MenuItem>
+            )}
+            
             {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_CATEGORIAS')) && (
               <MenuItem href='/admin/categorias' icon={<i className='tabler-category' />}>
                 Categorías

@@ -48,7 +48,7 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
         {/* Navbar ADPH */}
         <AdphNavbar />
 
-        <main className="flex-1 flex flex-col min-w-0" style={{ paddingTop: 'var(--adph-navbar-height, 80px)' }}>
+        <main className="flex-1 flex flex-col min-w-0" style={{ paddingTop: 'var(--adph-navbar-height, 110px)' }}>
           <div className="flex-1">
             {children}
           </div>

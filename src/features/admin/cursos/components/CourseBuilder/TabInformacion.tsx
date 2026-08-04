@@ -102,7 +102,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
           escuela: form.escuela || null,
           tipo: form.tipo,
           profesor_id: form.profesor_id,
-          tipo_emision: form.tipo_emision as 'SINCRONO' | 'ASINCRONO' | 'MIXTO',
+          tipo_emision: form.tipo_emision as 'EN_VIVO' | 'ASINCRONO' | 'HIBRIDO',
           duracion: form.duracion || null,
           codigo: form.codigo?.trim().toUpperCase() || null,
           miniatura: form.miniatura || null,
@@ -233,24 +233,24 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
             Asíncrono
           </Button>
           <Button
-            variant={form.tipo_emision === 'SINCRONO' ? 'contained' : 'outlined'}
+            variant={form.tipo_emision === 'EN_VIVO' ? 'contained' : 'outlined'}
             size='small'
-            onClick={() => setForm(prev => ({ ...prev, tipo_emision: 'SINCRONO' }))}
+            onClick={() => setForm(prev => ({ ...prev, tipo_emision: 'EN_VIVO' }))}
             startIcon={<i className='tabler-live-photo' />}
           >
             Síncrono
           </Button>
           <Button
-            variant={form.tipo_emision === 'MIXTO' ? 'contained' : 'outlined'}
+            variant={form.tipo_emision === 'HIBRIDO' ? 'contained' : 'outlined'}
             size='small'
-            onClick={() => setForm(prev => ({ ...prev, tipo_emision: 'MIXTO' }))}
+            onClick={() => setForm(prev => ({ ...prev, tipo_emision: 'HIBRIDO' }))}
             startIcon={<i className='tabler-arrows-split' />}
           >
             Mixto
           </Button>
         </Box>
       </Grid>
-      {(form.tipo_emision === 'SINCRONO' || form.tipo_emision === 'MIXTO') && (
+      {(form.tipo_emision === 'EN_VIVO' || form.tipo_emision === 'HIBRIDO') && (
         <>
           <Grid item xs={12} sm={6}>
             <CustomTextField

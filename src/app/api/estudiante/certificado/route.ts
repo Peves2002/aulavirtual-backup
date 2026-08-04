@@ -223,7 +223,7 @@ export async function POST(request: Request) {
         firma: cursoData.profesor.firma
       },
       fechas: {
-        inicio_curso: cursoData.tipo_emision === 'SINCRONO' ? cursoData.fecha_inicio : inscripcion.inscrito_en,
+        inicio_curso: cursoData.tipo_emision === 'EN_VIVO' ? cursoData.fecha_inicio : inscripcion.inscrito_en,
         culminacion: inscripcion.completado_en || new Date(),
         emision: new Date()
       }

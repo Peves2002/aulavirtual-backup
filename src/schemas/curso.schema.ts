@@ -14,7 +14,7 @@ export const crearCursoSchema = z.object({
   escuela: z.string().optional().nullable(),
   tipo: z.enum(['CURSO', 'DIPLOMADO', 'ESPECIALIZACION']).default('CURSO'),
   profesor_id: z.string().uuid('ID de profesor inválido'),
-  tipo_emision: z.enum(['SINCRONO', 'ASINCRONO', 'MIXTO']).default('ASINCRONO'),
+  tipo_emision: z.enum(['EN_VIVO', 'ASINCRONO', 'HIBRIDO']).default('ASINCRONO'),
 
   // Paso 2: Configuración y precio (opcional al crear)
   es_gratis: z.boolean().default(false),
@@ -32,7 +32,9 @@ export const crearCursoSchema = z.object({
   fecha_inicio: z.string().optional().nullable(),
   fecha_fin: z.string().optional().nullable(),
   vigencia_meses: z.coerce.number().int().positive().optional().nullable(),
-  nivel: z.enum(['BASICO', 'INTERMEDIO', 'AVANZADO']).optional().nullable()
+  nivel: z.enum(['BASICO', 'INTERMEDIO', 'AVANZADO']).optional().nullable(),
+  estado_venta: z.enum(['ASINCRONICO', 'EN_CONVOCATORIA']).optional(),
+  codigo_embeber: z.string().optional().nullable()
 })
 
 export type CrearCursoDto = z.infer<typeof crearCursoSchema>
@@ -52,7 +54,7 @@ export const actualizarCursoSchema = z.object({
   escuela: z.string().optional().nullable(),
   tipo: z.enum(['CURSO', 'DIPLOMADO', 'ESPECIALIZACION']).optional(),
   profesor_id: z.string().uuid('ID de profesor inválido').optional(),
-  tipo_emision: z.enum(['SINCRONO', 'ASINCRONO', 'MIXTO']).optional(),
+  tipo_emision: z.enum(['EN_VIVO', 'ASINCRONO', 'HIBRIDO']).optional(),
   nivel: z.enum(['BASICO', 'INTERMEDIO', 'AVANZADO']).optional().nullable(),
   es_gratis: z.boolean().optional(),
   es_destacado: z.boolean().optional(),
@@ -70,6 +72,7 @@ export const actualizarCursoSchema = z.object({
   fecha_inicio: z.string().optional().nullable(),
   fecha_fin: z.string().optional().nullable(),
   vigencia_meses: z.coerce.number().int().positive().optional().nullable(),
+
   objetivos: z.array(z.string()).optional(),
   metodologia: z.array(z.any()).optional(),
   beneficios: z.array(z.any()).optional(),
@@ -97,24 +100,32 @@ export const actualizarCursoSchema = z.object({
   mostrar_rankings: z.boolean().optional(),
   mostrar_relacionados: z.boolean().optional(),
   mostrar_acompanamiento: z.boolean().optional(),
+  mostrar_advanced_specializations: z.boolean().optional(),
+  mostrar_partners_institucionales: z.boolean().optional(),
 
   // Campos de contenido premium
-  director: z.string().optional().nullable(),
-  por_que_estudiar: z.string().optional().nullable(),
-  por_que_nosotros: z.string().optional().nullable(),
-  proceso_admision: z.string().optional().nullable(),
+  director: z.any().optional().nullable(),
+  por_que_estudiar: z.any().optional().nullable(),
+  por_que_nosotros: z.any().optional().nullable(),
+  proceso_admision: z.any().optional().nullable(),
+  banner_disponibilidad: z.any().optional().nullable(),
+  mostrar_banner_disponibilidad: z.boolean().optional(),
+  advanced_specializations: z.any().optional().nullable(),
+  partners_institucionales: z.any().optional().nullable(),
   titulo_admision: z.string().optional().nullable(),
-  requisitos_admision: z.string().optional().nullable(),
-  ayudas_becas: z.string().optional().nullable(),
+  requisitos_admision: z.any().optional().nullable(),
+  ayudas_becas: z.any().optional().nullable(),
   certificaciones: z.array(z.any()).optional(),
   titulo_certificaciones: z.string().optional().nullable(),
   herramientas: z.array(z.any()).optional(),
-  acompanamiento: z.string().optional().nullable(),
+  acompanamiento: z.any().optional().nullable(),
   empresas_alumnos: z.array(z.any()).optional(),
   rankings: z.array(z.any()).optional(),
   faqs: z.array(z.any()).optional(),
   programas_relacionados: z.array(z.any()).optional(),
   titulo_programa: z.string().optional().nullable(),
+  estado_venta: z.enum(['ASINCRONICO', 'EN_CONVOCATORIA']).optional(),
+  codigo_embeber: z.string().optional().nullable(),
   titulo_plan_estudios: z.string().optional().nullable(),
   titulo_salidas: z.string().optional().nullable()
 })

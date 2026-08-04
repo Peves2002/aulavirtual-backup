@@ -1,10 +1,9 @@
-import Link from 'next/link'
+export const dynamic = 'force-dynamic'
 
-import {  BookOpen,   } from 'lucide-react'
+import { BookOpen } from 'lucide-react'
 
 import { getConfigs } from '@/utils/libs/config'
 import BlogGrid from '@/features/web/blog/components/BlogGrid'
-
 
 export const metadata = {
   title: 'Nuestro Blog | Artículos y Tendencias de RRHH | ADPH Group',
@@ -63,28 +62,100 @@ const ARTICLES = [
   },
 ]
 
+import prisma from '@/utils/libs/prisma'
+
+function parseSpanishDate(dateStr: string): Date {
+  if (!dateStr) return new Date(0)
+  
+  const clean = dateStr.toLowerCase().replace(/ de /g, ' ').replace(/,/g, '').trim()
+  const parts = clean.split(/\s+/)
+  
+  if (parts.length === 3) {
+    const day = parseInt(parts[0], 10)
+    const monthStr = parts[1]
+    const year = parseInt(parts[2], 10)
+    
+    const months: Record<string, number> = {
+      enero: 0, febrero: 1, marzo: 2, abril: 3, mayo: 4, junio: 5,
+      julio: 6, agosto: 7, septiembre: 8, octubre: 9, noviembre: 10, diciembre: 11
+    }
+    
+    const month = months[monthStr]
+
+    if (month !== undefined && !isNaN(day) && !isNaN(year)) {
+      return new Date(year, month, day)
+    }
+  }
+  
+  const parsed = new Date(dateStr)
+
+  return isNaN(parsed.getTime()) ? new Date(0) : parsed
+}
+
 export default async function BlogPage() {
   const configs = await getConfigs()
-  let dynamicBlogs = ARTICLES
+  
+  // 1. Consultar todos los artículos de tipo BLOG de la base de datos
+  const dbBlogs = await prisma.articulo.findMany({
+    where: { 
+      tipo: 'BLOG',
+      estado: 'PUBLICADO' 
+    },
+    orderBy: { fecha_publicacion: 'desc' },
+    include: { categorias: true }
+  })
+ 
+  const mappedDbBlogs = dbBlogs.map(b => ({
+    id: b.slug,
+    title: b.titulo,
+    category: b.categorias?.[0]?.nombre || 'Actualidad',
+    readTime: '5 min lectura',
+    date: new Date(b.fecha_publicacion).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }),
+    desc: b.resumen || '',
+    image: b.miniatura || 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80',
+    author: b.autor || 'Académico ADPH',
+    role: 'Autor',
+    tags: [],
+    fechaOriginal: b.fecha_publicacion
+  }))
+ 
+  // 2. Cargar blogs de la configuración (Gestión de Blogs)
+  let mappedConfigBlogs: any[] = []
   const dbBlogsStr = configs.WEB_BLOGS
 
   if (dbBlogsStr?.trim()) {
     try {
       const parsed = JSON.parse(dbBlogsStr)
 
-      if (parsed.length > 0) {
-        const hasMock = parsed.find((b: any) => b.id === 'pad-articulo-prueba')
-
-        if (!hasMock) {
-          dynamicBlogs = [ARTICLES[0], ...parsed]
-        } else {
-          dynamicBlogs = parsed
-        }
+      if (parsed && parsed.length > 0) {
+        mappedConfigBlogs = parsed.map((b: any) => ({
+          id: b.id,
+          title: b.title,
+          category: b.category || 'General',
+          readTime: b.readTime || '5 min lectura',
+          date: b.date || 'Actualidad',
+          desc: b.desc || '',
+          image: b.image || 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80',
+          author: b.author || 'Académico ADPH',
+          role: b.role || 'Autor',
+          tags: b.tags || [],
+          fechaOriginal: b.date ? parseSpanishDate(b.date) : new Date(0)
+        }))
       }
     } catch (e) {
-      console.error('Error parsing dynamic blogs in blog page:', e)
+      console.error('Error parsing config blogs in blog index:', e)
     }
   }
+ 
+  // Combinar y ordenar por fecha descendente
+  const allBlogs = [...mappedDbBlogs, ...mappedConfigBlogs].sort((a, b) => {
+    const timeA = a.fechaOriginal instanceof Date && !isNaN(a.fechaOriginal.getTime()) ? a.fechaOriginal.getTime() : 0
+    const timeB = b.fechaOriginal instanceof Date && !isNaN(b.fechaOriginal.getTime()) ? b.fechaOriginal.getTime() : 0
+
+    return timeB - timeA
+  })
+ 
+  const dynamicBlogs = allBlogs.length > 0 ? [ARTICLES[0], ...allBlogs] : ARTICLES
 
   return (
     <>
@@ -112,41 +183,6 @@ export default async function BlogPage() {
         </div>
       </section>
 
-      {/* 3. NEWSLETTER */}
-      <section className="py-24 bg-slate-900 relative overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-            backgroundSize: '40px 40px',
-          }}
-        ></div>
-        <div className="max-w-2xl mx-auto px-6 relative z-10 text-center">
-          <span className="text-[#3BA8C5] font-extrabold text-xs uppercase tracking-widest block mb-4">
-            Newsletter Informativa
-          </span>
-          <h2 className="text-white font-black text-3xl tracking-tight mb-6">
-            Mantente al día con las mejores prácticas
-          </h2>
-          <p className="text-slate-300 text-sm md:text-base font-semibold max-w-xl mx-auto leading-relaxed mb-10">
-            Suscríbete para recibir mensualmente nuestras últimas publicaciones, tendencias del sector y herramientas
-            prácticas de gestión.
-          </p>
-          <div className="flex flex-wrap gap-3 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Ingresa tu correo profesional"
-              className="flex-1 bg-white/5 border border-white/10 text-white placeholder:text-slate-400 px-4 py-3.5 text-sm focus:outline-none focus:border-[#3BA8C5] focus:ring-1 focus:ring-[#3BA8C5] transition-colors rounded-none"
-            />
-            <Link
-              href="/contacto"
-              className="inline-flex items-center justify-center bg-[#3BA8C5] hover:bg-[#0083B0] text-white font-extrabold px-6 py-3.5 transition-colors text-xs uppercase tracking-widest rounded-none"
-            >
-              Suscribirme
-            </Link>
-          </div>
-        </div>
-      </section>
     </>
   )
 }

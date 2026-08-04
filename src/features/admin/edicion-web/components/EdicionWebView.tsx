@@ -789,6 +789,8 @@ return (
 
             const cardImageUrl = config[cardImageKey] || esc.image
             const heroBgUrl = config[heroBgKey] || esc.heroBg
+            const ctaLabelKey = `${keyPrefix}_CTA_LABEL`
+            const ctaUrlKey   = `${keyPrefix}_CTA_URL`
 
             // Areas and certs: stored as JSON array or newline-separated string
             const areasVal = config[areasKey] ?? (esc.areas || []).join('\n')
@@ -837,6 +839,31 @@ return (
                     helperText='Este texto aparece en la sección de Presentación dentro de la página de la escuela'
                   />
 
+                  {/* Botón CTA */}
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} md={5}>
+                      <TextField
+                        size='small' fullWidth
+                        label='Texto del Botón'
+                        value={config[ctaLabelKey] || ''}
+                        onChange={(e) => handleInputChange(ctaLabelKey, e.target.value)}
+                        placeholder='Ver Programas'
+                        InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-cursor-text' style={{ fontSize: 16 }} /></InputAdornment> }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={7}>
+                      <TextField
+                        size='small' fullWidth
+                        label='Enlace del Botón (URL)'
+                        value={config[ctaUrlKey] || ''}
+                        onChange={(e) => handleInputChange(ctaUrlKey, e.target.value)}
+                        placeholder='#programas  ó  /programas/mi-programa'
+                        helperText='Puede ser un ancla (#programas), una ruta interna (/programas/...) o una URL externa'
+                        InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-link' style={{ fontSize: 16 }} /></InputAdornment> }}
+                      />
+                    </Grid>
+                  </Grid>
+
                   <Divider />
 
                   {/* Áreas */}
@@ -869,6 +896,38 @@ return (
                       />
                     </Grid>
                   </Grid>
+
+                  <Divider />
+
+                  {/* Stats "¿Por qué elegir?" */}
+                  <Box>
+                    <Typography variant='subtitle2' fontWeight={700} sx={{ mb: 0.5 }}>
+                      Sección &quot;¿Por qué elegir?&quot; — 3 estadísticas
+                    </Typography>
+                    <Typography variant='caption' color='text.secondary' sx={{ mb: 2, display: 'block' }}>
+                      Personaliza el valor, etiqueta y descripción de cada estadística de la sección oscura de la escuela.
+                    </Typography>
+                    <Grid container spacing={2}>
+                      {([
+                        { n: 1, vKey: `${keyPrefix}_STAT1_VALUE`, lKey: `${keyPrefix}_STAT1_LABEL`, dKey: `${keyPrefix}_STAT1_DESC`, vPh: '#1', lPh: 'En Calidad Educativa', dPh: 'Respaldado por las mejores instituciones...' },
+                        { n: 2, vKey: `${keyPrefix}_STAT2_VALUE`, lKey: `${keyPrefix}_STAT2_LABEL`, dKey: `${keyPrefix}_STAT2_DESC`, vPh: '+14', lPh: 'Años de Experiencia', dPh: 'Transformando la carrera de miles de profesionales en toda Latam.' },
+                        { n: 3, vKey: `${keyPrefix}_STAT3_VALUE`, lKey: `${keyPrefix}_STAT3_LABEL`, dKey: `${keyPrefix}_STAT3_DESC`, vPh: '100%', lPh: 'Metodología Práctica', dPh: 'Casos reales de empresas top, diseñados para aplicación inmediata.' },
+                      ] as { n: number; vKey: string; lKey: string; dKey: string; vPh: string; lPh: string; dPh: string }[]).map((s) => (
+                        <Grid item xs={12} md={4} key={s.n}>
+                          <Paper variant='outlined' sx={{ p: 2, borderRadius: 2 }}>
+                            <Typography variant='caption' color='text.secondary' sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                              <i className='tabler-chart-bar' style={{ fontSize: 14 }} /> Estadística {s.n}
+                            </Typography>
+                            <Stack spacing={1.5}>
+                              <TextField size='small' fullWidth label='Valor' value={config[s.vKey] || ''} onChange={(e) => handleInputChange(s.vKey, e.target.value)} placeholder={s.vPh} helperText='Ej: #1  o  +14  o  100%' />
+                              <TextField size='small' fullWidth label='Etiqueta' value={config[s.lKey] || ''} onChange={(e) => handleInputChange(s.lKey, e.target.value)} placeholder={s.lPh} />
+                              <TextField size='small' fullWidth label='Descripción' value={config[s.dKey] || ''} onChange={(e) => handleInputChange(s.dKey, e.target.value)} placeholder={s.dPh} multiline rows={2} />
+                            </Stack>
+                          </Paper>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Box>
 
                   <Divider />
 

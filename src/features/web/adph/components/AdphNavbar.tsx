@@ -50,9 +50,9 @@ export default function AdphNavbar() {
             ? 'bg-[#08479b]/90 backdrop-blur-md shadow-lg shadow-[#08479b]/20 py-3 border-b border-white/10' 
             : 'bg-gradient-to-b from-[#08479b] to-[#08479b]/95 py-5 border-b border-white/5'
         }`}
-        style={{ height: 'var(--adph-navbar-height, 80px)' }}
+        style={{ height: 'var(--adph-navbar-height, 110px)' }}
       >
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 flex items-center justify-between h-full">
+        <div className="max-w-[1920px] mx-auto px-6 lg:px-10 flex items-center justify-between h-full">
 
           {/* LOGO */}
           <Link href="/" className="flex items-center flex-shrink-0 group">
@@ -60,7 +60,7 @@ export default function AdphNavbar() {
             <img
               src="/adph/Logo_ADPH.png"
               alt="ADPH Group"
-              className="h-10 lg:h-12 w-auto transition-all duration-300 group-hover:scale-[1.03] group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] brightness-0 invert"
+              className="h-16 lg:h-[76px] w-auto transition-all duration-300 group-hover:scale-[1.03] group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] brightness-0 invert"
             />
           </Link>
 
@@ -70,7 +70,7 @@ export default function AdphNavbar() {
             {/* Escuelas Dropdown */}
             <div className="relative group h-full flex items-center">
               <button
-                className="flex items-center gap-1.5 text-[15px] font-semibold text-white/90 hover:text-white tracking-wide transition-colors py-2 font-manrope bg-transparent border-0 cursor-pointer"
+                className="flex items-center gap-1.5 text-[16px] font-semibold text-white/90 hover:text-white tracking-wide transition-colors py-2 font-manrope bg-transparent border-0 cursor-pointer"
               >
                 Escuelas
                 <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180 text-white/60 group-hover:text-[#fcd116]" />
@@ -83,7 +83,7 @@ export default function AdphNavbar() {
                     <Link
                       key={escuela.id}
                       href={`/escuelas/${escuela.id}`}
-                      className="px-6 py-3.5 text-[14px] font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all block font-manrope"
+                      className="px-6 py-3.5 text-[18px] font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all block font-manrope"
                     >
                       {escuela.name}
                     </Link>
@@ -97,7 +97,7 @@ export default function AdphNavbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative text-[15px] font-semibold tracking-wide transition-all duration-300 py-2 font-manrope group ${
+                className={`relative text-[16px] font-semibold tracking-wide transition-all duration-300 py-2 font-manrope group ${
                   pathname === item.href ? 'text-white' : 'text-white/80 hover:text-white'
                 }`}
               >
@@ -112,7 +112,7 @@ export default function AdphNavbar() {
             {!session && (
               <button
                 onClick={() => openLogin()}
-                className="relative flex items-center gap-1.5 text-[15px] font-semibold tracking-wide transition-all duration-300 py-2 font-manrope group text-white/80 hover:text-[#fcd116] bg-transparent border-0 cursor-pointer"
+                className="relative flex items-center gap-1.5 text-[16px] font-semibold tracking-wide transition-all duration-300 py-2 font-manrope group text-white/80 hover:text-[#fcd116] bg-transparent border-0 cursor-pointer"
               >
                 Campus Virtual
                 <ExternalLink className="w-4 h-4 opacity-70 group-hover:opacity-100 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all" />
@@ -142,7 +142,7 @@ export default function AdphNavbar() {
       {mobileMenuOpen && (
         <div
           className="fixed inset-0 z-40 bg-white lg:hidden overflow-y-auto font-manrope"
-          style={{ paddingTop: 'var(--adph-navbar-height, 80px)' }}
+          style={{ paddingTop: 'var(--adph-navbar-height, 110px)' }}
         >
           <div className="px-6 py-8 flex flex-col gap-6">
 

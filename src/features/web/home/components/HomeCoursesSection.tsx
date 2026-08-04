@@ -93,7 +93,7 @@ export default function HomeCoursesSection({
 
             {/* Badges */}
             <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-              {course.tipo_emision === 'SINCRONO' && (
+              {course.tipo_emision === 'EN_VIVO' && (
                 <span
                   className="px-2.5 py-1 rounded-full text-xs font-bold text-white"
                   style={{ backgroundColor: '#ef4444', fontFamily: 'Poppins, sans-serif' }}

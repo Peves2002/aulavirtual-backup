@@ -1,4 +1,4 @@
-﻿import Link from 'next/link'
+import Link from 'next/link'
 
 
 import { Play, ChevronRight, GraduationCap, Award, Briefcase, Users, Star, CheckCircle } from 'lucide-react'
@@ -144,11 +144,11 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
       </section>
 
       {/* 2. Áreas y Certificaciones */}
-      <section className="border-b border-blue-900 relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #06316b 0%, #08479b 100%)' }}>
+      <section className="border-b border-slate-200 relative overflow-hidden bg-gray-200">
 
         {/* Decoración de fondo */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-          <div className="absolute inset-0 opacity-[0.025]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '36px 36px' }} />
+          <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, black 1px, transparent 0)', backgroundSize: '36px 36px' }} />
           <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-[0.06]" style={{ background: 'radial-gradient(circle, #fcd116 0%, transparent 70%)' }} />
           <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full opacity-[0.06]" style={{ background: 'radial-gradient(circle, #fcd116 0%, transparent 70%)' }} />
         </div>
@@ -157,16 +157,15 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10 pt-24 pb-16 relative text-center">
           <ScrollReveal>
             <span
-              className="inline-flex items-center gap-2 text-[#fcd116] font-bold text-xs tracking-[0.2em] uppercase mb-5 px-5 py-2 rounded-full"
-              style={{ background: 'rgba(252,209,22,0.1)', border: '1px solid rgba(252,209,22,0.3)' }}
+              className="inline-flex items-center gap-2 text-[#08479b] font-bold text-xs tracking-[0.2em] uppercase mb-5 px-5 py-2 rounded-full bg-[#08479b]/10 border border-[#08479b]/20"
             >
               <Award className="w-3.5 h-3.5" />
               Líneas de Especialización
             </span>
-            <h2 className="text-white font-black text-4xl md:text-6xl tracking-tight drop-shadow-lg mb-4">
+            <h2 className="text-slate-900 font-black text-4xl md:text-6xl tracking-tight drop-shadow-sm mb-4">
               Certificaciones y Áreas
             </h2>
-            <p className="text-white/60 text-lg max-w-2xl mx-auto">
+            <p className="text-slate-600 text-lg max-w-2xl mx-auto">
               Programas diseñados por expertos para potenciar tu perfil profesional con certificaciones de reconocimiento regional.
             </p>
             <div className="w-20 h-1 mx-auto mt-6 rounded-full" style={{ background: 'linear-gradient(90deg, transparent, #fcd116, transparent)' }} />
@@ -178,7 +177,7 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
           <ScrollReveal>
             <div className="relative">
               {/* Separador superior */}
-              <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)' }} />
+              <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent)' }} />
               <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 min-h-[520px]">
 
                 {/* Panel imagen */}
@@ -188,16 +187,12 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
                     alt="Certificaciones de Especialista"
                     className="w-full h-full object-cover absolute inset-0 transition-transform duration-[1.2s] group-hover:scale-105"
                   />
-                  {/* Overlay principal */}
-                  <div className="absolute inset-0" style={{ background: 'linear-gradient(105deg, rgba(6,49,107,0.15) 0%, rgba(6,49,107,0.6) 100%)' }} />
-                  {/* Overlay derecho para fundir con contenido */}
-                  <div className="absolute inset-0 hidden lg:block" style={{ background: 'linear-gradient(to right, transparent 50%, #08479b 100%)' }} />
 
                   {/* Badge flotante */}
                   <div className="absolute top-8 left-8">
                     <div
                       className="flex items-center gap-3 px-4 py-3 rounded-xl"
-                      style={{ background: 'rgba(6,49,107,0.7)', backdropFilter: 'blur(12px)', border: '1px solid rgba(252,209,22,0.3)' }}
+                      style={{ background: 'rgba(6,49,107,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(252,209,22,0.3)' }}
                     >
                       <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#fcd116' }}>
                         <Award className="w-5 h-5 text-slate-900" />
@@ -210,50 +205,48 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
                   </div>
 
                   {/* Número grande decorativo */}
-                  <div className="absolute bottom-8 right-8 text-white/10 font-black text-[120px] leading-none select-none hidden lg:block">01</div>
+                  <div className="absolute bottom-8 right-8 text-white/40 font-black text-[120px] leading-none select-none hidden lg:block mix-blend-overlay">01</div>
                 </div>
 
                 {/* Panel contenido */}
-                <div className="flex flex-col justify-center px-8 lg:px-14 py-14 relative">
+                <div className="flex flex-col justify-center px-8 lg:px-14 py-14 relative bg-gray-200">
                   {/* Línea vertical decorativa */}
                   <div className="absolute left-0 top-16 bottom-16 w-px hidden lg:block" style={{ background: 'linear-gradient(to bottom, transparent, rgba(252,209,22,0.4), transparent)' }} />
 
-                  <p className="text-[#fcd116] text-xs font-bold uppercase tracking-[0.2em] mb-3">Certificaciones de Especialista</p>
-                  <h3 className="text-white font-black text-2xl md:text-3xl leading-tight mb-2">
+                  <p className="text-[#08479b] text-xs font-bold uppercase tracking-[0.2em] mb-3">Certificaciones de Especialista</p>
+                  <h3 className="text-slate-900 font-black text-2xl md:text-3xl leading-tight mb-2">
                     Conviértete en un Experto Certificado
                   </h3>
-                  <p className="text-white/50 text-sm mb-8">Domina las competencias más demandadas por las organizaciones líderes de Latinoamérica.</p>
+                  <p className="text-slate-600 text-sm mb-8">Domina las competencias más demandadas por las organizaciones líderes de Latinoamérica.</p>
 
                   {/* Lista de certificados */}
                   <div className="space-y-3 mb-8">
                     {escuela.certificationsEsp.map((cert, i) => (
                       <div
                         key={i}
-                        className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 group/item"
-                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                        className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 group/item bg-white border border-slate-200 hover:shadow-md hover:border-[#08479b]/30"
                       >
                         <span
-                          className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-black text-slate-900 transition-transform duration-300 group-hover/item:scale-110"
-                          style={{ background: '#fcd116' }}
+                          className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-black text-slate-900 transition-transform duration-300 group-hover/item:scale-110 bg-[#fcd116]"
                         >
                           {String(i + 1).padStart(2, '0')}
                         </span>
-                        <span className="text-white/75 text-sm font-medium group-hover/item:text-white transition-colors">{cert}</span>
-                        <ChevronRight className="w-4 h-4 text-white/20 ml-auto group-hover/item:text-[#fcd116] group-hover/item:translate-x-1 transition-all duration-300" />
+                        <span className="text-slate-700 text-sm font-medium group-hover/item:text-[#08479b] transition-colors">{cert}</span>
+                        <ChevronRight className="w-4 h-4 text-slate-300 ml-auto group-hover/item:text-[#fcd116] group-hover/item:translate-x-1 transition-all duration-300" />
                       </div>
                     ))}
                   </div>
 
                   {/* Footer */}
-                  <div className="flex items-center gap-3 pt-6" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                  <div className="flex items-center gap-3 pt-6 border-t border-slate-200">
                     <CheckCircle className="w-4 h-4 text-[#fcd116]" />
-                    <span className="text-white/40 text-xs font-semibold uppercase tracking-wider">
+                    <span className="text-slate-500 text-xs font-semibold uppercase tracking-wider">
                       {escuela.certificationsEsp.length} certificaciones disponibles
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)' }} />
+              <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent)' }} />
             </div>
           </ScrollReveal>
         )}
@@ -265,40 +258,38 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
               <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 min-h-[520px]">
 
                 {/* Panel contenido (izquierda) */}
-                <div className="flex flex-col justify-center px-8 lg:px-14 py-14 order-2 lg:order-1 relative">
+                <div className="flex flex-col justify-center px-8 lg:px-14 py-14 order-2 lg:order-1 relative bg-gray-200">
                   {/* Línea vertical decorativa */}
                   <div className="absolute right-0 top-16 bottom-16 w-px hidden lg:block" style={{ background: 'linear-gradient(to bottom, transparent, rgba(252,209,22,0.4), transparent)' }} />
 
-                  <p className="text-[#fcd116] text-xs font-bold uppercase tracking-[0.2em] mb-3">Certificaciones de Consultor</p>
-                  <h3 className="text-white font-black text-2xl md:text-3xl leading-tight mb-2">
+                  <p className="text-[#08479b] text-xs font-bold uppercase tracking-[0.2em] mb-3">Certificaciones de Consultor</p>
+                  <h3 className="text-slate-900 font-black text-2xl md:text-3xl leading-tight mb-2">
                     Lidera el Cambio Organizacional
                   </h3>
-                  <p className="text-white/50 text-sm mb-8">Desarrolla capacidades de consultoría de alto nivel para acompañar a organizaciones en su transformación.</p>
+                  <p className="text-slate-600 text-sm mb-8">Desarrolla capacidades de consultoría de alto nivel para acompañar a organizaciones en su transformación.</p>
 
                   {/* Lista de certificados */}
                   <div className="space-y-3 mb-8">
                     {escuela.certificationsCons.map((cert, i) => (
                       <div
                         key={i}
-                        className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 group/item"
-                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                        className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 group/item bg-white border border-slate-200 hover:shadow-md hover:border-[#08479b]/30"
                       >
                         <span
-                          className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-black text-slate-900 transition-transform duration-300 group-hover/item:scale-110"
-                          style={{ background: '#fcd116' }}
+                          className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-black text-slate-900 transition-transform duration-300 group-hover/item:scale-110 bg-[#fcd116]"
                         >
                           {String(i + 1).padStart(2, '0')}
                         </span>
-                        <span className="text-white/75 text-sm font-medium group-hover/item:text-white transition-colors">{cert}</span>
-                        <ChevronRight className="w-4 h-4 text-white/20 ml-auto group-hover/item:text-[#fcd116] group-hover/item:translate-x-1 transition-all duration-300" />
+                        <span className="text-slate-700 text-sm font-medium group-hover/item:text-[#08479b] transition-colors">{cert}</span>
+                        <ChevronRight className="w-4 h-4 text-slate-300 ml-auto group-hover/item:text-[#fcd116] group-hover/item:translate-x-1 transition-all duration-300" />
                       </div>
                     ))}
                   </div>
 
                   {/* Footer */}
-                  <div className="flex items-center gap-3 pt-6" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                  <div className="flex items-center gap-3 pt-6 border-t border-slate-200">
                     <CheckCircle className="w-4 h-4 text-[#fcd116]" />
-                    <span className="text-white/40 text-xs font-semibold uppercase tracking-wider">
+                    <span className="text-slate-500 text-xs font-semibold uppercase tracking-wider">
                       {escuela.certificationsCons.length} certificaciones disponibles
                     </span>
                   </div>
@@ -311,15 +302,12 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
                     alt="Certificaciones de Consultor"
                     className="w-full h-full object-cover absolute inset-0 transition-transform duration-[1.2s] group-hover:scale-105"
                   />
-                  <div className="absolute inset-0" style={{ background: 'linear-gradient(105deg, rgba(6,49,107,0.6) 0%, rgba(6,49,107,0.15) 100%)' }} />
-                  {/* Overlay izquierdo para fundir con contenido */}
-                  <div className="absolute inset-0 hidden lg:block" style={{ background: 'linear-gradient(to left, transparent 50%, #08479b 100%)' }} />
 
                   {/* Badge flotante */}
                   <div className="absolute top-8 right-8">
                     <div
                       className="flex items-center gap-3 px-4 py-3 rounded-xl"
-                      style={{ background: 'rgba(6,49,107,0.7)', backdropFilter: 'blur(12px)', border: '1px solid rgba(252,209,22,0.3)' }}
+                      style={{ background: 'rgba(6,49,107,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(252,209,22,0.3)' }}
                     >
                       <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#fcd116' }}>
                         <Briefcase className="w-5 h-5 text-slate-900" />
@@ -332,10 +320,10 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
                   </div>
 
                   {/* Número grande decorativo */}
-                  <div className="absolute bottom-8 left-8 text-white/10 font-black text-[120px] leading-none select-none hidden lg:block">02</div>
+                  <div className="absolute bottom-8 left-8 text-white/40 font-black text-[120px] leading-none select-none hidden lg:block mix-blend-overlay">02</div>
                 </div>
               </div>
-              <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)' }} />
+              <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent)' }} />
             </div>
           </ScrollReveal>
         )}
@@ -416,52 +404,61 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
       </section>
 
       {/* 5. Programas (Experiencia Internacional Grid Style) */}
-      <section id="programas" className="py-24 bg-[#08479b]">
+      <section id="programas" className="py-24 bg-white">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
           <ScrollReveal>
             <div className="text-center mb-16">
-              <h2 className="text-[#fcd116] font-bold text-sm tracking-widest uppercase mb-4">
+              <h2 className="text-[#08479b] font-bold text-sm tracking-widest uppercase mb-4">
                 Experiencia Educativa
               </h2>
-              <h3 className="text-white font-black text-3xl md:text-5xl tracking-tight">
+              <h3 className="text-slate-900 font-black text-3xl md:text-5xl tracking-tight">
                 Programas Especializados
               </h3>
             </div>
           </ScrollReveal>
 
           {programasEscuela.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {programasEscuela.map((prog, index) => (
-                <ScrollReveal key={prog.id} delay={0.1 * (index % 3)}>
-                  <Link href={`/programas/${prog.slug}`} className="block relative h-[450px] rounded-[2rem] overflow-hidden group shadow-lg">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={prog.image} alt={prog.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/90"></div>
-                    
-                    {/* Top Tag */}
-                    <div className="absolute top-6 left-6 right-6 flex justify-between items-start">
-                      <div className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
-                        {prog.duration}
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {programasEscuela.map((prog, index) => (
+                  <ScrollReveal key={prog.id} delay={0.1 * (index % 3)}>
+                    <Link href={`/programas/${prog.slug}`} className="block relative h-[450px] rounded-[2rem] overflow-hidden group shadow-lg">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={prog.image} alt={prog.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/90"></div>
+                      
+                      {/* Top Tag */}
+                      <div className="absolute top-6 left-6 right-6 flex justify-between items-start">
+                        <div className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+                          {prog.duration}
+                        </div>
+                        <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 group-hover:bg-[#08479b] group-hover:border-[#08479b] transition-colors">
+                          <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
+                        </div>
                       </div>
-                      <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 group-hover:bg-[#08479b] group-hover:border-[#08479b] transition-colors">
-                        <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
-                      </div>
-                    </div>
 
-                    {/* Content Bottom */}
-                    <div className="absolute bottom-0 left-0 right-0 p-8">
-                      <div className="w-12 h-1 bg-[#fcd116] mb-6 rounded-full transform origin-left transition-all duration-300 group-hover:w-20"></div>
-                      <h3 className="text-white font-black text-2xl leading-tight mb-3">
-                        {prog.title}
-                      </h3>
-                      <p className="text-white/70 text-sm font-medium">
-                        {prog.category}
-                      </p>
-                    </div>
+                      {/* Content Bottom */}
+                      <div className="absolute bottom-0 left-0 right-0 p-8">
+                        <div className="w-12 h-1 bg-[#fcd116] mb-6 rounded-full transform origin-left transition-all duration-300 group-hover:w-20"></div>
+                        <h3 className="text-white font-black text-2xl leading-tight mb-3">
+                          {prog.title}
+                        </h3>
+                        <p className="text-white/70 text-sm font-medium">
+                          {prog.category}
+                        </p>
+                      </div>
+                    </Link>
+                  </ScrollReveal>
+                ))}
+              </div>
+              <ScrollReveal delay={0.2}>
+                <div className="mt-16 text-center">
+                  <Link href="/programas" className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all bg-[#08479b] rounded-full hover:bg-[#06316b] hover:shadow-lg hover:-translate-y-1 gap-2">
+                    Ver todos los programas <ChevronRight className="w-5 h-5" />
                   </Link>
-                </ScrollReveal>
-              ))}
-            </div>
+                </div>
+              </ScrollReveal>
+            </>
           ) : (
             <ScrollReveal delay={0.1}>
               <div className="text-center py-24 bg-white border border-dashed border-slate-300 rounded-3xl">

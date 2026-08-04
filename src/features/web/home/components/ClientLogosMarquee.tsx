@@ -27,7 +27,7 @@ export default function ClientLogosMarquee({ logos: logosFromProps }: Props) {
   const activeLogos: LogoItem[] =
     logosFromProps && logosFromProps.length > 0 ? logosFromProps : DEFAULT_LOGOS
 
-  const isMarquee = activeLogos.length > 5
+  const isMarquee = activeLogos.length >= 5
   const track = isMarquee ? [...activeLogos, ...activeLogos, ...activeLogos] : activeLogos
   const rowRef = useRef<HTMLDivElement>(null)
 
@@ -137,7 +137,6 @@ function DynamicLogoCard({ label, url }: { label: string; url: string }) {
 
   const handleEnter = () => {
     if (!ref.current) return
-    ref.current.style.filter = 'grayscale(0) opacity(1)'
     ref.current.style.transform = 'scale(1.05)'
     ref.current.style.borderColor = 'var(--web-primary, #25927F)'
     ref.current.style.boxShadow = '0 6px 24px rgba(37,146,127,0.2)'
@@ -145,7 +144,6 @@ function DynamicLogoCard({ label, url }: { label: string; url: string }) {
 
   const handleLeave = () => {
     if (!ref.current) return
-    ref.current.style.filter = 'grayscale(1) opacity(0.55)'
     ref.current.style.transform = 'scale(1)'
     ref.current.style.borderColor = 'hsl(214,20%,90%)'
     ref.current.style.boxShadow = 'none'
@@ -168,8 +166,7 @@ function DynamicLogoCard({ label, url }: { label: string; url: string }) {
         border: '1.5px solid hsl(214,20%,90%)',
         backgroundColor: '#ffffff',
         cursor: 'default',
-        filter: 'grayscale(1) opacity(0.55)',
-        transition: 'filter 0.3s ease, transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
+        transition: 'transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
         userSelect: 'none',
       }}
     >
@@ -187,7 +184,6 @@ function LogoCard({ label, initials, color, light }: HardcodedLogo) {
 
   const handleEnter = () => {
     if (!ref.current) return
-    ref.current.style.filter = 'grayscale(0) opacity(1)'
     ref.current.style.transform = 'scale(1.05)'
     ref.current.style.borderColor = color
     ref.current.style.boxShadow = `0 6px 24px ${color}22`
@@ -201,7 +197,6 @@ function LogoCard({ label, initials, color, light }: HardcodedLogo) {
 
   const handleLeave = () => {
     if (!ref.current) return
-    ref.current.style.filter = 'grayscale(1) opacity(0.55)'
     ref.current.style.transform = 'scale(1)'
     ref.current.style.borderColor = 'hsl(214,20%,90%)'
     ref.current.style.boxShadow = 'none'
@@ -228,8 +223,7 @@ function LogoCard({ label, initials, color, light }: HardcodedLogo) {
         border: '1.5px solid hsl(214,20%,90%)',
         backgroundColor: '#ffffff',
         cursor: 'default',
-        filter: 'grayscale(1) opacity(0.55)',
-        transition: 'filter 0.3s ease, transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
+        transition: 'transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
         userSelect: 'none',
         minWidth: '180px',
       }}

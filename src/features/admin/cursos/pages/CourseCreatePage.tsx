@@ -250,17 +250,17 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
                               Asíncrono
                             </Button>
                             <Button
-                              variant={values.tipo_emision === 'SINCRONO' ? 'contained' : 'outlined'}
+                              variant={values.tipo_emision === 'EN_VIVO' ? 'contained' : 'outlined'}
                               size='small'
-                              onClick={() => setFieldValue('tipo_emision', 'SINCRONO')}
+                              onClick={() => setFieldValue('tipo_emision', 'EN_VIVO')}
                               startIcon={<i className='tabler-live-photo' />}
                             >
                               Síncrono
                             </Button>
                             <Button
-                              variant={values.tipo_emision === 'MIXTO' ? 'contained' : 'outlined'}
+                              variant={values.tipo_emision === 'HIBRIDO' ? 'contained' : 'outlined'}
                               size='small'
-                              onClick={() => setFieldValue('tipo_emision', 'MIXTO')}
+                              onClick={() => setFieldValue('tipo_emision', 'HIBRIDO')}
                               startIcon={<i className='tabler-arrows-split' />}
                             >
                               Mixto
@@ -269,7 +269,7 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
                         </Box>
                       </Grid>
 
-                      {(values.tipo_emision === 'SINCRONO' || values.tipo_emision === 'MIXTO') && (
+                      {(values.tipo_emision === 'EN_VIVO' || values.tipo_emision === 'HIBRIDO') && (
                         <Grid item xs={12} sm={6}>
                           <CustomTextField
                             fullWidth

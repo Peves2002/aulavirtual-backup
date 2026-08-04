@@ -170,6 +170,8 @@ model Curso {
   profesor_id          String
   categoria_id         String?
   escuela              String?
+  estado_venta         EstadoVentaCurso  @default(ASINCRONICO)
+  codigo_embeber       String?           @db.Text
   nivel                NivelCurso?
   tipo                 TipoCurso         @default(CURSO)
   beneficios           Json?             @default("[]")
@@ -192,7 +194,11 @@ model Curso {
   empresas_alumnos     Json?             @default("[]")
   acompanamiento       Json?             @default("[]")
   por_que_nosotros     Json?             @default("{}")
+  banner_disponibilidad Json?            @default("{}")
+  advanced_specializations Json?          @default("{}")
+  partners_institucionales Json?          @default("{}")
   mostrar_beneficios   Boolean           @default(true)
+  mostrar_banner_disponibilidad Boolean  @default(true)
   mostrar_incluye      Boolean           @default(true)
   mostrar_metodologia  Boolean           @default(true)
   mostrar_objetivos    Boolean           @default(true)
@@ -210,6 +216,8 @@ model Curso {
   mostrar_relacionados     Boolean       @default(true)
   mostrar_por_que_estudiar Boolean       @default(true)
   mostrar_por_que_nosotros Boolean       @default(true)
+  mostrar_advanced_specializations Boolean @default(true)
+  mostrar_partners_institucionales Boolean @default(true)
   fecha_inicio         DateTime?
   fecha_fin            DateTime?
   vigencia_meses       Int?
@@ -794,9 +802,14 @@ enum EstadoLeccion {
 }
 
 enum TipoEmision {
-  SINCRONO
+  EN_VIVO
   ASINCRONO
-  MIXTO
+  HIBRIDO
+}
+
+enum EstadoVentaCurso {
+  ASINCRONICO
+  EN_CONVOCATORIA
 }
 
 enum NivelCurso {
@@ -1250,3 +1263,71 @@ model RolPersonalizado {
   @@map("roles_personalizados")
 }
 
+
+
+model Articulo {
+  id                String         @id @default(uuid())
+  titulo            String
+  slug              String         @unique
+  resumen           String?        @db.Text
+  contenido         String         @db.Text
+  miniatura         String?
+  tipo              TipoArticulo   @default(NOTICIA)
+  estado            EstadoArticulo @default(BORRADOR)
+  autor             String?
+  es_destacado      Boolean        @default(false)
+  fecha_publicacion DateTime       @default(now())
+  creado_en         DateTime       @default(now())
+  actualizado_en    DateTime       @updatedAt
+  enlace_externo    String?
+
+  // Campos para Eventos
+  fecha_evento      DateTime?
+  hora_evento       String?
+  modalidad_evento  String?
+  expositor         String?
+  link_registro     String?
+  codigo_embeber    String?        @db.Text
+
+  categorias        CategoriaArticulo[] @relation("ArticuloCategorias")
+  etiquetas         EtiquetaArticulo[]  @relation("ArticuloEtiquetas")
+  
+  @@index([tipo])
+  @@index([estado])
+  @@map("articulos")
+}
+
+enum TipoArticulo {
+  NOTICIA
+  EVENTO
+  EXPERTO
+  BLOG
+}
+
+enum EstadoArticulo {
+  BORRADOR
+  PUBLICADO
+}
+
+model CategoriaArticulo {
+  id             String     @id @default(uuid())
+  nombre         String
+  slug           String     @unique
+  descripcion    String?    @db.Text
+  creado_en      DateTime   @default(now())
+  actualizado_en DateTime   @updatedAt
+  articulos      Articulo[] @relation("ArticuloCategorias")
+
+  @@map("categorias_articulo")
+}
+
+model EtiquetaArticulo {
+  id             String     @id @default(uuid())
+  nombre         String     @unique
+  slug           String     @unique
+  creado_en      DateTime   @default(now())
+  actualizado_en DateTime   @updatedAt
+  articulos      Articulo[] @relation("ArticuloEtiquetas")
+
+  @@map("etiquetas_articulo")
+}

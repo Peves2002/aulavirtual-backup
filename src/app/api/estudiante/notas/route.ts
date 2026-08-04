@@ -13,7 +13,7 @@ import {
 } from '@/utils/functions/calcularNotasCurso'
 
 function modalidadLabel(tipoEmision: string): string {
-  if (tipoEmision === 'SINCRONO') return 'PRESENCIAL'
+  if (tipoEmision === 'EN_VIVO') return 'PRESENCIAL'
 
   return 'REGULAR'
 }

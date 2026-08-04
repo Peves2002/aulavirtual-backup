@@ -1,16 +1,10 @@
-﻿
 import fs from 'fs'
 import path from 'path'
 
-
 import Link from 'next/link'
 
-
 import type { Metadata } from 'next'
-
-
 import { ArrowRight, ChevronRight, BookOpen, Building2 } from 'lucide-react'
-
 
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
@@ -19,8 +13,6 @@ import AdphEscuelasCarousel from '@/features/web/adph/components/AdphEscuelasCar
 import TestimoniosCarousel from '@/features/web/adph/components/TestimoniosCarousel'
 import FadeIn from '@/utils/components/animations/FadeIn'
 import { ESCUELAS } from '@/features/web/adph/data/escuelas'
-
-
 import AdphNewsletter from '@/features/web/adph/components/AdphNewsletter'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
 
@@ -82,6 +74,33 @@ const NOTICIAS = [
   { id: 2, tag: 'INNOVACIÓN', title: 'Nuevas metodologías experienciales en alianza internacional', date: 'Junio 28, 2026', image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&q=80' }
 ]
 
+function parseSpanishDate(dateStr: string): Date {
+  if (!dateStr) return new Date(0)
+  
+  const clean = dateStr.toLowerCase().replace(/ de /g, ' ').replace(/,/g, '').trim()
+  const parts = clean.split(/\s+/)
+  
+  if (parts.length === 3) {
+    const day = parseInt(parts[0], 10)
+    const monthStr = parts[1]
+    const year = parseInt(parts[2], 10)
+    
+    const months: Record<string, number> = {
+      enero: 0, febrero: 1, marzo: 2, abril: 3, mayo: 4, junio: 5,
+      julio: 6, agosto: 7, septiembre: 8, octubre: 9, noviembre: 10, diciembre: 11
+    }
+    
+    const month = months[monthStr]
+
+    if (month !== undefined && !isNaN(day) && !isNaN(year)) {
+      return new Date(year, month, day)
+    }
+  }
+  
+  const parsed = new Date(dateStr)
+
+  return isNaN(parsed.getTime()) ? new Date(0) : parsed
+}
 
 export default async function HomePage() {
   // Query configurations to apply dynamic school images
@@ -111,31 +130,98 @@ export default async function HomePage() {
     }
   }
 
-  // Load dynamic blogs
-  let dynamicBlogs: any[] = BLOGS
-  const dbBlogsStr = configs['WEB_BLOGS']
+
+  // Load dynamic blogs from DB
+  const dbBlogs = await prisma.articulo.findMany({
+    where: { tipo: 'BLOG', estado: 'PUBLICADO', es_destacado: true },
+    orderBy: { fecha_publicacion: 'desc' },
+    take: 4,
+    include: { categorias: true }
+  })
+
+  const mappedDbBlogs = dbBlogs.map(blog => ({
+    id: blog.slug,
+    title: blog.titulo,
+    date: new Date(blog.fecha_publicacion).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }),
+    image: blog.miniatura || 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&q=80',
+    author: blog.autor || 'Académico ADPH',
+    resumen: blog.resumen || 'Explora a fondo las mejores estrategias de formación ejecutiva.',
+    enlaceExterno: blog.enlace_externo,
+    targetUrl: blog.enlace_externo || `/blog/${blog.slug}`,
+    fechaOriginal: blog.fecha_publicacion
+  }))
+
+  // Combinar y ordenar por fecha descendente
+  let mappedConfigBlogs: any[] = []
+  const dbBlogsStr = configs.WEB_BLOGS
 
   if (dbBlogsStr?.trim()) {
     try {
-      dynamicBlogs = JSON.parse(dbBlogsStr)
+      const parsed = JSON.parse(dbBlogsStr)
+
+      if (parsed && parsed.length > 0) {
+        mappedConfigBlogs = parsed.map((blog: any) => ({
+          id: blog.id,
+          title: blog.title,
+          date: blog.date || 'Actualidad',
+          image: blog.image || 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&q=80',
+          author: blog.author || 'Académico ADPH',
+          resumen: blog.desc || 'Explora a fondo las mejores estrategias de formación ejecutiva.',
+          enlaceExterno: blog.enlaceExterno || null,
+          targetUrl: blog.enlaceExterno || `/blog/${blog.id}`,
+          fechaOriginal: blog.date ? parseSpanishDate(blog.date) : new Date(0)
+        }))
+      }
     } catch (e) {
-      console.error('Error parsing dynamic blogs:', e)
+      console.error('Error parsing dynamic blogs in landing page:', e)
     }
   }
 
-  // Load dynamic news
-  let dynamicNoticias: any[] = NOTICIAS
-  const dbNoticiasStr = configs['WEB_NOTICIAS']
+  // Combinar y ordenar por fecha descendente
+  const allBlogs = [...mappedDbBlogs, ...mappedConfigBlogs].sort((a, b) => {
+    const timeA = a.fechaOriginal instanceof Date && !isNaN(a.fechaOriginal.getTime()) ? a.fechaOriginal.getTime() : 0
+    const timeB = b.fechaOriginal instanceof Date && !isNaN(b.fechaOriginal.getTime()) ? b.fechaOriginal.getTime() : 0
 
-  if (dbNoticiasStr?.trim()) {
-    try {
-      dynamicNoticias = JSON.parse(dbNoticiasStr)
-    } catch (e) {
-      console.error('Error parsing dynamic news:', e)
-    }
-  }
+    return timeB - timeA
+  })
 
-  // Load dynamic logos
+  const parsedBlogs = allBlogs.length > 0 ? allBlogs : BLOGS.map(blog => ({
+    id: blog.id.toString(),
+    title: blog.title,
+    date: blog.date,
+    image: blog.image,
+    author: 'Académico ADPH',
+    resumen: 'Explora a fondo las mejores estrategias de formación ejecutiva.',
+    enlaceExterno: null,
+    targetUrl: '/blog'
+  })); // Fallback to hardcoded if empty
+
+  // Load dynamic news from DB
+  const dbNoticias = await prisma.articulo.findMany({
+    where: { tipo: { in: ['NOTICIA', 'EVENTO'] }, estado: 'PUBLICADO', es_destacado: true },
+    orderBy: { fecha_publicacion: 'desc' },
+    take: 6,
+    include: { etiquetas: true }
+  })
+
+  const parsedNoticias = dbNoticias.length > 0 ? dbNoticias.map(news => ({
+    id: news.slug,
+    title: news.titulo,
+    date: new Date(news.fecha_publicacion).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }),
+    image: news.miniatura || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&q=80',
+    tag: news.tipo,
+    enlaceExterno: news.enlace_externo,
+    targetUrl: news.enlace_externo || `/noticias/${news.slug}`
+  })) : NOTICIAS.map(news => ({
+    id: news.id.toString(),
+    title: news.title,
+    date: news.date,
+    image: news.image,
+    tag: news.tag,
+    enlaceExterno: null,
+    targetUrl: '/noticias'
+  })); // Fallback to hardcoded if empty
+
   let dynamicLogos: any[] = []
   const dbLogosStr = configs['HOME_LOGOS']
 
@@ -484,7 +570,7 @@ export default async function HomePage() {
 
           {/* 2-Column Horizontal Blog Cards */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {dynamicBlogs.slice(0, 3).map((blog, index) => (
+            {parsedBlogs.slice(0, 4).map((blog, index) => (
               <FadeIn key={blog.id} delay={index * 0.1}>
                 <div className="group flex flex-col md:flex-row bg-white rounded-xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 overflow-hidden h-full">
                   <div className="md:w-2/5 h-52 md:h-auto relative overflow-hidden">
@@ -503,7 +589,7 @@ export default async function HomePage() {
                     <div className="pt-4 flex items-center justify-between border-t border-slate-100 mt-6 font-manrope">
                       <span className="text-[10px] text-slate-400 font-bold">Por: {blog.author || 'Académico ADPH'}</span>
                       <Link
-                        href={blog.enlaceExterno || '/blog'}
+                        href={blog.targetUrl || '/blog'}
                         target={blog.enlaceExterno ? '_blank' : undefined}
                         rel={blog.enlaceExterno ? 'noopener noreferrer' : undefined}
                         className="text-xs font-bold text-[#08479b] hover:underline inline-flex items-center gap-1"
@@ -564,9 +650,9 @@ export default async function HomePage() {
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-[1440px] mx-auto">
-            {dynamicNoticias.map((news, index) => {
-              const targetUrl = news.url && news.url.startsWith('http') ? news.url : `/noticias/${news.id}`
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-[1440px] mx-auto">
+            {parsedNoticias.map((news, index) => {
+              const targetUrl = news.targetUrl || `/noticias/${news.id}`
 
               return (
                 <FadeIn key={news.id} delay={index * 0.15}>
@@ -578,7 +664,7 @@ export default async function HomePage() {
                     }}
                   >
                     {/* Imagen con overlay gradiente */}
-                    <div className="h-60 relative overflow-hidden bg-slate-100">
+                    <div className="aspect-[16/10] w-full relative overflow-hidden bg-slate-100">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={news.image}

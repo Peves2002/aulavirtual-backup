@@ -123,15 +123,27 @@ export default function EstudianteDashboardPage({ initialData, nombreUsuario }: 
               Tus cursos activos ordenados por avance.
             </Typography>
           </Box>
-          <Button
-            variant='outlined'
-            size='small'
-            href='/estudiante/mis-cursos'
-            startIcon={<i className='tabler-books' />}
-            sx={{ borderRadius: '10px', fontWeight: 700, textTransform: 'none', flexShrink: 0 }}
-          >
-            Ver todos
-          </Button>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button
+              variant='contained'
+              size='small'
+              href='/programas'
+              color='primary'
+              startIcon={<i className='tabler-search' />}
+              sx={{ borderRadius: '10px', fontWeight: 700, textTransform: 'none', flexShrink: 0, boxShadow: '0 4px 14px 0 rgba(8, 71, 155, 0.39)' }}
+            >
+              Explorar más programas
+            </Button>
+            <Button
+              variant='outlined'
+              size='small'
+              href='/estudiante/mis-cursos'
+              startIcon={<i className='tabler-books' />}
+              sx={{ borderRadius: '10px', fontWeight: 700, textTransform: 'none', flexShrink: 0 }}
+            >
+              Ver todos mis cursos
+            </Button>
+          </Box>
         </Stack>
 
         <CursosEnProgreso cursos={cursosRecientes} loading={isLoading} />

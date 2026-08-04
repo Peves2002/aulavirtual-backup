@@ -21,6 +21,7 @@ function getRequiredPermission(path: string): string | null {
   if (path.startsWith('/admin/carrousel')) return 'VER_CARRUSEL'
   if (path.startsWith('/admin/edicion-web')) return 'EDITAR_CONTENIDO_WEB'
   if (path.startsWith('/admin/configuracion')) return 'VER_CONFIGURACION'
+  if (path.startsWith('/admin/leads')) return 'VER_LEADS'
   
 return null
 }
@@ -158,6 +159,8 @@ return NextResponse.redirect(new URL('/unauthorized', req.url), { status: 302 })
           path.startsWith('/entrenamiento-digital') ||
           path.startsWith('/ficha-de-inscripcion') ||
           path.startsWith('/escuelas') ||
+          path.startsWith('/programas') ||
+          path.startsWith('/noticias') ||
           path === '/'
         ) {
           return true

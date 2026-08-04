@@ -161,7 +161,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
 
   const embedUrl = getEmbedUrl(course.video_presentacion)
 
-  const isLive = course.tipo_emision === 'SINCRONO' || course.tipo_emision === 'MIXTO'
+  const isLive = course.tipo_emision === 'EN_VIVO' || course.tipo_emision === 'HIBRIDO'
 
   const displayDate = isLive
     ? {
@@ -295,7 +295,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
                     <Chip label={course.nivel === 'BASICO' ? 'Básico' : course.nivel === 'INTERMEDIO' ? 'Intermedio' : 'Avanzado'}
                       sx={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.75rem', bgcolor: 'rgba(var(--web-light-rgb, 189,217,98),0.15)', color: 'var(--web-light, #BDD962)', borderRadius: '8px', border: '1px solid rgba(var(--web-light-rgb,189,217,98),0.3)' }} />
                   )}
-                  <Chip label={course.tipo_emision === 'SINCRONO' ? 'Sincrónico' : course.tipo_emision === 'MIXTO' ? 'Mixto' : 'Grabado'}
+                  <Chip label={course.tipo_emision === 'EN_VIVO' ? 'Sincrónico' : course.tipo_emision === 'HIBRIDO' ? 'Mixto' : 'Grabado'}
                     sx={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.75rem', bgcolor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.85)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.15)' }} />
                 </Stack>
 

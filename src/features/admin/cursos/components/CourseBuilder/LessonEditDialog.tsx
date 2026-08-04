@@ -259,16 +259,6 @@ export function LessonEditDialog({ open, onClose, lessonData, onSave, isSaving }
                 error={!!errors.fechaFin}
                 helperText={errors.fechaFin}
               />
-              <CustomTextField
-                fullWidth
-                label='Enlace de la Reunión (Zoom, Meet, WhatsApp, etc.)'
-                placeholder='https://zoom.us/j/...'
-                value={enlaceReunion}
-                onChange={e => setEnlaceReunion(e.target.value)}
-                InputProps={{
-                  startAdornment: <InputAdornment position='start'><i className='tabler-link text-xl text-textSecondary' /></InputAdornment>
-                }}
-              />
             </>
           ) : (
             <Stack spacing={3}>

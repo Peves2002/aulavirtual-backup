@@ -97,7 +97,7 @@ export default function AdphHeroForm({
         <div className="absolute inset-0 bg-black/50" />
       </div>
 
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 lg:px-10 py-24 flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 lg:px-10 pt-[120px] pb-24 lg:pt-24 flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
 
         {/* Left Texts */}
         <div className="flex-1 text-left space-y-6">

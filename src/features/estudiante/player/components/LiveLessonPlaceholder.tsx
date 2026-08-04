@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 
-import { Box, Typography, Button, Paper, Stack, alpha } from '@mui/material'
+import { Box, Typography, Paper, Stack, alpha } from '@mui/material'
 
 interface LiveLessonPlaceholderProps {
   titulo: string
@@ -32,7 +32,6 @@ const LiveLessonPlaceholder = ({
   titulo,
   fechaProgramada,
   fechaFin,
-  enlaceReunion,
   esEnVivo
 }: LiveLessonPlaceholderProps) => {
   const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null)
@@ -229,37 +228,6 @@ const LiveLessonPlaceholder = ({
                 Finaliza:&nbsp;{formatShortDate(fechaFin)}
               </Typography>
             )}
-
-            <Button
-              variant="contained"
-              size="large"
-              href={enlaceReunion || '#'}
-              target="_blank"
-              startIcon={<i className="tabler-external-link" />}
-              sx={{
-                mt: 0.5,
-                py: 1.5,
-                px: 5,
-                borderRadius: '12px',
-                fontSize: '1rem',
-                fontWeight: 800,
-                textTransform: 'none',
-                bgcolor: '#025E44',
-                boxShadow: '0 8px 20px rgba(2,94,68,0.35)',
-                '&:hover': {
-                  bgcolor: '#014d36',
-                  boxShadow: '0 12px 28px rgba(2,94,68,0.45)',
-                  transform: 'translateY(-1px)'
-                },
-                transition: 'all 0.25s'
-              }}
-            >
-              Unirse a la Clase en Vivo
-            </Button>
-
-            <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.35)', mt: -0.5 }}>
-              Haz clic arriba para unirte a la reunión en vivo
-            </Typography>
           </>
         )}
       </Stack>
