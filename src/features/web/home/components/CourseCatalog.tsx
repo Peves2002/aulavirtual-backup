@@ -23,6 +23,8 @@ import {
 
 import CourseList from './CourseList'
 import { useCart } from '../../cart/context/CartContext'
+import type { TipoPrograma } from '@/utils/configs/tipoPrograma'
+import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
 
 interface Category {
   id: string
@@ -65,7 +67,8 @@ const CourseCatalog = ({ courses, categories, noun = 'cursos' }: CourseCatalogPr
 
       const matchesCategory = selectedCategory === 'all' || course.categoria?.slug === selectedCategory
 
-      const matchesLevel = selectedLevel === 'all' || course.nivel === selectedLevel
+      const matchesLevel = selectedLevel === 'all' ||
+        (selectedLevel === 'none' ? !course.nivel : course.nivel === selectedLevel)
 
       const matchesPrice = selectedPrice === 'all' ||
         (selectedPrice === 'free' ? course.es_gratis : !course.es_gratis)
@@ -114,7 +117,7 @@ const CourseCatalog = ({ courses, categories, noun = 'cursos' }: CourseCatalogPr
               {noun === 'programas' ? 'Nuestros Programas' : 'Nuestros Cursos'}
             </Typography>
             <Typography variant="h6" sx={{ color: '#475569', fontWeight: 500, maxWidth: 600, mx: 'auto' }}>
-              Aprende de expertos y potencia tu carrera profesional con nuestra selección premium.
+              {config.catalogSectionSubtitle}
             </Typography>
           </Box>
 
@@ -122,7 +125,7 @@ const CourseCatalog = ({ courses, categories, noun = 'cursos' }: CourseCatalogPr
             {/* Search Bar Premium */}
             <TextField
               fullWidth
-              placeholder="Buscar por título o descripción..."
+              placeholder={config.searchPlaceholder}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               sx={{ maxWidth: 800 }}
@@ -246,6 +249,7 @@ const CourseCatalog = ({ courses, categories, noun = 'cursos' }: CourseCatalogPr
                   <MenuItem value="BASICO">Básico</MenuItem>
                   <MenuItem value="INTERMEDIO">Intermedio</MenuItem>
                   <MenuItem value="AVANZADO">Avanzado</MenuItem>
+                  <MenuItem value="none">Sin nivel</MenuItem>
                 </TextField>
 
                 {/* Tipo/Precio */}
@@ -385,7 +389,7 @@ const CourseCatalog = ({ courses, categories, noun = 'cursos' }: CourseCatalogPr
                   sx={{ bgcolor: 'white', fontWeight: 700, color: 'text.secondary', border: '1px solid #e2e8f0', px: 1 }}
                 />
               </Stack>
-              <CourseList courses={filteredAndSortedCourses} />
+              <CourseList courses={filteredAndSortedCourses} emptySearchMessage={config.catalogEmptySearch} />
             </Box>
           </Fade>
         </Stack>

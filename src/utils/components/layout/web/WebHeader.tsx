@@ -19,6 +19,7 @@ interface WebHeaderProps {
   initialCategories?: Category[]
   platformName?: string
   platformSlogan?: string
+  empresasHabilitado?: boolean
 }
 
 /* ── Announcement Bar ── */
@@ -49,11 +50,11 @@ function AnnouncementBar() {
 
 /* ── Nav links (same as git) ── */
 const links = [
-  { to: '/programas',  label: 'Programas'     },
-  { to: '/marketplace',label: 'Marketplace IA' },
-  { to: '/consultoria',label: 'Consultoría'    },
-  { to: '/comunidad',  label: 'Comunidad'      },
-  { to: '/blog',       label: 'Blog'           },
+  { to: '/programas', label: 'Programas' },
+  { to: '/marketplace', label: 'Marketplace IA' },
+  { to: '/consultoria', label: 'Consultoría' },
+  { to: '/comunidad', label: 'Comunidad' },
+  { to: '/blog', label: 'Blog' },
 ]
 
 /* ── Navbar ── */
@@ -62,8 +63,8 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
   void platformSlogan
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
-  const configs  = useConfig()
-  const name     = configs.TEMPLATE_NAME || platformName
+  const configs = useConfig()
+  const name = configs.TEMPLATE_NAME || platformName
   const { data: session } = useSession()
   const { openLogin, openRegister } = useAuthModal()
 

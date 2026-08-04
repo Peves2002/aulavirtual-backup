@@ -3,6 +3,7 @@ import { Facebook, Instagram, Youtube, Linkedin, Twitter } from 'lucide-react'
 
 import { getConfigs } from '@/utils/libs/config'
 import HydratedDate from '@/utils/components/HydratedDate'
+import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
 interface WebFooterProps {
   platformName?: string
@@ -25,9 +26,9 @@ const FooterCol = ({ title, links }: { title: string; links: { to: string; label
 const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true }: WebFooterProps) => {
   void rutasHabilitado
   const configs = await getConfigs()
-  const name      = configs.TEMPLATE_NAME    || platformName
-  const waNumber  = configs.WHATSAPP_NUMERO  || ''
-  const email     = configs.EMAIL_CONTACTO   || ''
+  const name = configs.TEMPLATE_NAME || platformName
+  const waNumber = configs.WHATSAPP_NUMERO || ''
+  const email = configs.EMAIL_CONTACTO || ''
 
   return (
     <footer className="border-t mt-24 pt-16 pb-8" style={{ borderColor: 'rgba(255,255,255,0.05)', backgroundColor: 'hsl(240 25% 8% / 0.3)' }}>
@@ -58,11 +59,11 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
 
           {/* Columna 2 — Explora */}
           <FooterCol title="Explora" links={[
-            { to: '/',                      label: 'Inicio' },
-            { to: '/cursos',                label: 'Programas' },
-            { to: '/nosotros',              label: 'Quiénes Somos' },
+            { to: '/', label: 'Inicio' },
+            { to: '/cursos', label: 'Programas' },
+            { to: '/nosotros', label: 'Quiénes Somos' },
             { to: '/verificar-certificado', label: 'Verificar Certificado' },
-            { to: '/contacto',              label: 'Contacto' },
+            { to: '/contacto', label: 'Contacto' },
           ]} />
 
           {/* Columna 3 — Recursos */}
@@ -85,7 +86,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
           {/* Columna 5 — Legal */}
           <div className="space-y-4">
             <FooterCol title="Legal" links={[
-              { to: '/terminos-y-condiciones',             label: 'Términos y Condiciones' },
+              { to: '/terminos-y-condiciones', label: 'Términos y Condiciones' },
               { to: '/politica-de-cambios-y-devoluciones', label: 'Política de Privacidad' },
               { to: '/politica-de-cambios-y-devoluciones', label: 'Política de Reembolsos' },
             ]} />
@@ -101,8 +102,8 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
               <div className="space-y-3">
                 <div className="text-sm font-semibold text-white">Contacto</div>
                 <ul className="space-y-2 text-sm">
-                  {email    && <li><a href={`mailto:${email}`}              className="footer-link no-underline">{email}</a></li>}
-                  {waNumber && <li><a href={`https://wa.me/${waNumber}`}    className="footer-link no-underline">WhatsApp: +{waNumber}</a></li>}
+                  {email && <li><a href={`mailto:${email}`} className="footer-link no-underline">{email}</a></li>}
+                  {waNumber && <li><a href={`https://wa.me/${waNumber}`} className="footer-link no-underline">WhatsApp: +{waNumber}</a></li>}
                   <li className="footer-link">Horario L-V 9am-6pm</li>
                 </ul>
               </div>

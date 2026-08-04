@@ -8,6 +8,7 @@ import { ApiResponse } from '@/utils/libs/apiResponse'
 import { getAuthSession } from '@/utils/libs/auth-helpers'
 import { handleApiError } from '@/utils/libs/validation'
 import prisma from '@/utils/libs/prisma'
+import { puedeAccederCurso } from '@/utils/libs/subscription-access'
 
 const JWT_SECRET = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || 'dev-secret'
 
@@ -58,6 +59,16 @@ export async function GET(request: Request, { params }: { params: { slug: string
                 }
               },
               orderBy: { orden: 'asc' }
+            },
+            actividades: {
+              where: { esta_publicado: true },
+              orderBy: { orden: 'asc' },
+              include: {
+                entregas: {
+                  where: { usuario_id: user.id },
+                  take: 1
+                }
+              }
             }
           },
           orderBy: { orden: 'asc' }
@@ -92,40 +103,25 @@ export async function GET(request: Request, { params }: { params: { slug: string
     let inscription = null
 
     if (!isAdmin && !isCourseProfessor) {
-      inscription = await prisma.inscripcion.findUnique({
-        where: {
-          usuario_id_curso_id: {
-            usuario_id: user.id,
-            curso_id: course.id
-          }
-        }
-      })
+      const { acceso } = await puedeAccederCurso(user.id, course.id, user.rol, course.profesor_id)
 
-      const vigenciaMeses = course.vigencia_meses ?? 0
-      let accesoVigente = true
-
-      if (vigenciaMeses > 0 && inscription) {
-        const accesHasta = new Date(inscription.inscrito_en)
-
-        accesHasta.setMonth(accesHasta.getMonth() + vigenciaMeses)
-        accesoVigente = accesHasta > new Date()
-      }
-
-      if (!inscription || inscription.estado !== 'ACTIVO' || !accesoVigente) {
+      if (!acceso) {
         return NextResponse.json(
           {
             status: false,
             code: 'UNCISCRIBED',
-            message:
-              !inscription || inscription.estado !== 'ACTIVO'
-                ? 'Usuario no matriculado'
-                : 'Tu acceso a este curso ha caducado',
+            message: 'No tienes acceso a este curso',
             statusCode: 403,
             timestamp: new Date().toISOString()
           },
           { status: 403 }
         )
       }
+
+      // Cargar inscripción para el resto de la lógica (progreso, etc.)
+      inscription = await prisma.inscripcion.findUnique({
+        where: { usuario_id_curso_id: { usuario_id: user.id, curso_id: course.id } }
+      })
     }
 
     // Obtener intentos del usuario para todos los exámenes del curso (una sola query)
@@ -184,11 +180,34 @@ export async function GET(request: Request, { params }: { params: { slug: string
             orden: l.orden,
             video_url: l.video_url,
             es_en_vivo: (l as any).es_en_vivo,
+            es_pdf: (l as any).es_pdf,
             fecha_programada: (l as any).fecha_programada,
+            fecha_fin: (l as any).fecha_fin,
             enlace_reunion: (l as any).enlace_reunion,
             completada: l.progreso[0]?.esta_completado || false,
             recursos: Array.isArray(l.recursos) ? l.recursos : []
-          }))
+          })),
+        actividades: m.actividades.map(a => ({
+          id: a.id,
+          titulo: a.titulo,
+          tipo: a.tipo,
+          orden: a.orden,
+          puntaje_maximo: a.puntaje_maximo,
+          fecha_inicio: a.fecha_inicio,
+          fecha_fin: a.fecha_fin,
+          entrega: a.entregas[0]
+            ? {
+                id: a.entregas[0].id,
+                archivo_url: a.entregas[0].archivo_url,
+                archivo_nombre: a.entregas[0].archivo_nombre,
+                comentario_estudiante: a.entregas[0].comentario_estudiante,
+                nota: a.entregas[0].nota,
+                comentario_docente: a.entregas[0].comentario_docente,
+                creado_en: a.entregas[0].creado_en,
+                actualizado_en: a.entregas[0].actualizado_en
+              }
+            : null
+        }))
       })),
       examenes: course.examenes.map(ex => ({
         ...ex,

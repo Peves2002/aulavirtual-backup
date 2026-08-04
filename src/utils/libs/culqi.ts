@@ -1,5 +1,3 @@
-import crypto from 'crypto'
-
 const BASE = 'https://api.culqi.com/v2'
 const KEY = process.env.CULQI_SECRET_KEY!
 
@@ -29,14 +27,9 @@ export const culqi = {
       phone_number: '999999999'
     }),
 
-  crearSuscripcion: (plan_id: string, token_id: string, metadata?: object) =>
-    req('POST', '/subscriptions', { plan_id, token_id, metadata }),
+  verificarBasicAuth: (authHeader: string) => {
+    const expected = 'Basic ' + Buffer.from(`${process.env.CULQI_WEBHOOK_USER}:${process.env.CULQI_WEBHOOK_SECRET}`).toString('base64')
 
-  cancelarSuscripcion: (id: string) => req('DELETE', `/subscriptions/${id}`),
-
-  verificarFirma: (payload: string, firma: string) => {
-    const expected = crypto.createHmac('sha256', process.env.CULQI_WEBHOOK_SECRET!).update(payload).digest('hex')
-
-    return expected === firma
+    return authHeader === expected
   }
 }
