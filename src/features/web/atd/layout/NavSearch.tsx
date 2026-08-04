@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from "react";
+
 import { Search, X } from "lucide-react";
-import { cn } from "@/features/web/atd/lib/utils";
 
 export default function NavSearch() {
   const [open, setOpen] = useState(false);
@@ -16,6 +16,7 @@ export default function NavSearch() {
   const clearHighlights = useCallback(() => {
     document.querySelectorAll(`.${highlightClass}`).forEach((el) => {
       const parent = el.parentNode;
+
       if (parent) {
         parent.replaceChild(document.createTextNode(el.textContent || ""), el);
         parent.normalize();
@@ -35,11 +36,14 @@ export default function NavSearch() {
       {
         acceptNode(node) {
           const parent = node.parentElement;
+
           if (!parent) return NodeFilter.FILTER_REJECT;
           const tag = parent.tagName.toLowerCase();
+
           if (["script", "style", "noscript"].includes(tag)) return NodeFilter.FILTER_REJECT;
           if (parent.closest("nav, header")) return NodeFilter.FILTER_REJECT;
-          return NodeFilter.FILTER_ACCEPT;
+          
+return NodeFilter.FILTER_ACCEPT;
         },
       }
     );
@@ -48,22 +52,29 @@ export default function NavSearch() {
     const nodesToReplace: { node: Text; matches: RegExpMatchArray[] }[] = [];
 
     let node: Node | null;
+
     while ((node = walker.nextNode())) {
       const text = node.textContent || "";
       const found = [...text.matchAll(regex)];
+
       if (found.length) nodesToReplace.push({ node: node as Text, matches: found });
     }
 
     let total = 0;
+
     nodesToReplace.forEach(({ node, matches: found }) => {
       const parent = node.parentNode;
+
       if (!parent) return;
       const frag = document.createDocumentFragment();
       let lastIdx = 0;
+
       found.forEach((m) => {
         const idx = m.index ?? 0;
+
         if (idx > lastIdx) frag.appendChild(document.createTextNode(node.textContent!.slice(lastIdx, idx)));
         const span = document.createElement("span");
+
         span.className = highlightClass;
         span.textContent = m[0];
         span.dataset.matchIdx = String(total++);
@@ -81,6 +92,7 @@ export default function NavSearch() {
   const scrollToMatch = (idx: number) => {
     document.querySelectorAll(`.${activeClass}`).forEach((el) => el.classList.remove(activeClass));
     const el = document.querySelector(`[data-match-idx="${idx}"]`);
+
     if (el) {
       el.classList.add(activeClass);
       el.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -98,8 +110,10 @@ export default function NavSearch() {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") { e.preventDefault(); setOpen((o) => !o); }
       if (e.key === "Escape") setOpen(false);
     };
+
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    
+return () => window.removeEventListener("keydown", handler);
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

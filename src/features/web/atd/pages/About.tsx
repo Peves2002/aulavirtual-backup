@@ -1,14 +1,14 @@
+import { Target, Heart, Globe, Zap } from "lucide-react";
+
 import PageHeader from "@/features/web/atd/PageHeader";
 import { Card } from "@/features/web/atd/ui/card";
-import { Target, Heart, Globe, Zap } from "lucide-react";
 import StatsSection from "@/features/web/atd/components/StatsSection";
 import VideoTestimonialsSection from "@/features/web/atd/components/VideoTestimonialsSection";
+
 const principalImg = "/atd-assets/multimedia/equipo-humano/1-principal.png";
 const historiaImg = "/atd-assets/multimedia/equipo-humano/2-historia-atd.png";
 const otros1Img = "/atd-assets/multimedia/equipo-humano/3-otros.png";
 const otros2Img = "/atd-assets/multimedia/equipo-humano/4-otros.png";
-const otros3Img = "/atd-assets/multimedia/equipo-humano/5-otros.png";
-const otros4Img = "/atd-assets/multimedia/equipo-humano/6-otros.png";
 
 const About = () => (
   <>

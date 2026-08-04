@@ -1,7 +1,8 @@
+import { Check } from "lucide-react";
+
 import PageHeader from "@/features/web/atd/PageHeader";
 import { Card } from "@/features/web/atd/ui/card";
 import { Button } from "@/features/web/atd/ui/button";
-import { Check } from "lucide-react";
 
 const plansData = [
   { name: "Free", price: "0", desc: "Explora ATD por 7 días.", features: ["3 cursos intro", "1 GPT demo", "Comunidad básica"], cta: "Empezar gratis" },

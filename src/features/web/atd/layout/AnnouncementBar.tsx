@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
+
 import { Sparkles } from "lucide-react";
 
 const messages = [
@@ -11,11 +12,15 @@ const messages = [
 
 const AnnouncementBar = () => {
   const [i, setI] = useState(0);
+
   useEffect(() => {
     const t = setInterval(() => setI((v) => (v + 1) % messages.length), 5000);
-    return () => clearInterval(t);
+
+    
+return () => clearInterval(t);
   }, []);
-  return (
+  
+return (
     <div className="relative overflow-hidden bg-gradient-to-r from-primary via-primary-glow to-secondary text-primary-foreground">
       <div className="container flex items-center justify-center gap-2 py-2 text-xs sm:text-sm font-medium">
         <Sparkles className="h-3.5 w-3.5 shrink-0" />

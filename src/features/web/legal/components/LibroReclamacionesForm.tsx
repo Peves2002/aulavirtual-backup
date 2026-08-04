@@ -137,9 +137,11 @@ export default function LibroReclamacionesForm() {
           esta institución cuenta con un Libro de Reclamaciones Virtual a su disposición.
         </Typography>
         <Box sx={{ mt: 2, textAlign: 'left', bgcolor: 'white', p: 2, border: '1px solid #eee', borderRadius: 1 }}>
-          <Typography variant="caption" display="block"><strong>PROVEEDOR:</strong> NOMBRE DE TU EMPRESA</Typography>
-          <Typography variant="caption" display="block"><strong>RUC:</strong> 20600000000 </Typography>
-          <Typography variant="caption" display="block"><strong>DOMICILIO:</strong> [DIRECCIÓN]</Typography>
+          <Typography variant="caption" display="block"><strong>PROVEEDOR:</strong> Emilio Simón Ticona Tapia (ATD Academy)</Typography>
+          <Typography variant="caption" display="block"><strong>DNI:</strong> 44148540</Typography>
+          <Typography variant="caption" display="block"><strong>CORREO:</strong> transf.digital777@gmail.com</Typography>
+          <Typography variant="caption" display="block"><strong>CELULAR:</strong> +51 926 242 351</Typography>
+          <Typography variant="caption" display="block"><strong>SERVICIOS:</strong> De acuerdo a lo mostrado en la plataforma web</Typography>
         </Box>
       </Box>
 

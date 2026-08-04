@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useRef, useEffect } from "react";
+
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+
 import { Menu, X, ChevronDown, Globe, LogOut, User, BookOpen, Bot, ShoppingBag, LayoutDashboard } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 
@@ -15,9 +17,7 @@ import NavSearch from "@/features/web/atd/layout/NavSearch";
 const logo = "/atd-assets/general/logo.png";
 
 const LANGS = [
-  { code: "ES", label: "Español" },
-  { code: "EN", label: "English" },
-  { code: "PT", label: "Português" },
+  { code: "ES", label: "Español" }
 ];
 
 function LangSelector() {
@@ -29,7 +29,9 @@ function LangSelector() {
     const handler = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
+
     document.addEventListener("mousedown", handler);
+
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
@@ -69,13 +71,14 @@ function UserMenu() {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
+
     document.addEventListener("mousedown", handler);
+
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
@@ -92,7 +95,7 @@ function UserMenu() {
     { href: "/perfil", label: "Mi perfil", icon: User },
     { href: "/estudiante/mis-cursos", label: "Mis cursos", icon: BookOpen },
     { href: "/estudiante/mis-gpts", label: "Mis GPTs", icon: Bot },
-    { href: "/estudiante/mis-pedidos", label: "Mis pedidos", icon: ShoppingBag },
+    { href: "/estudiante/pedidos", label: "Mis pedidos", icon: ShoppingBag },
   ];
 
   if (isAdmin) menuLinks.push({ href: "/admin", label: "Panel Admin", icon: LayoutDashboard });
@@ -174,7 +177,7 @@ const links = [
   { to: "/programas", label: "Programas" },
   { to: "/marketplace", label: "Marketplace IA" },
   { to: "/consultoria", label: "Consultoría" },
-  { to: "/empresas", label: "Empresas" },
+  { to: "/suscripciones", label: "Suscripciones" },
   { to: "/nosotros", label: "Nosotros" },
   { to: "/comunidad", label: "Comunidad" },
   { to: "/blog", label: "Blog" },
@@ -202,10 +205,12 @@ const Navbar = () => {
 
         <nav className="hidden lg:flex items-center gap-1">
           <NavSearch />
-          <LangSelector />
+          {/* <LangSelector /> */}
           <div className="w-px h-4 bg-white/10 mx-1" />
           {links.map((l) => {
             const isActive = pathname === l.to;
+
+
             return (
               <Link
                 key={l.to}
@@ -250,6 +255,8 @@ const Navbar = () => {
           <div className="container py-4 flex flex-col gap-1">
             {links.map((l) => {
               const isActive = pathname === l.to;
+
+
               return (
                 <Link
                   key={l.to}
@@ -291,6 +298,7 @@ const Navbar = () => {
 // ─── Mobile user section ──────────────────────────────────────────────────────
 function MobileUserSection({ onClose }: { onClose: () => void }) {
   const { data: session } = useSession();
+
   if (!session?.user) return null;
 
   const user = session.user as any;
@@ -304,7 +312,7 @@ function MobileUserSection({ onClose }: { onClose: () => void }) {
     { href: "/perfil", label: "Mi perfil", icon: User },
     { href: "/estudiante/mis-cursos", label: "Mis cursos", icon: BookOpen },
     { href: "/estudiante/mis-gpts", label: "Mis GPTs", icon: Bot },
-    { href: "/estudiante/mis-pedidos", label: "Mis pedidos", icon: ShoppingBag },
+    { href: "/estudiante/pedidos", label: "Mis pedidos", icon: ShoppingBag },
     ...(isAdmin ? [{ href: "/admin", label: "Panel Admin", icon: LayoutDashboard }] : []),
     ...(isProfesor ? [{ href: "/profesor", label: "Panel Profesor", icon: LayoutDashboard }] : []),
   ];

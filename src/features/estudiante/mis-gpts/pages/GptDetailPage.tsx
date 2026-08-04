@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+
 import { Box, Button, Container, Divider, Paper, Stack, Typography, Chip } from '@mui/material'
 import { ArrowLeft, Bot, CheckCircle, ExternalLink, Gift, Tag } from 'lucide-react'
 

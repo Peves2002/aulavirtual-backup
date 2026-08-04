@@ -16,6 +16,7 @@ export async function GET(request: Request) {
 
     let where = ''
     const conditions: string[] = []
+
     if (!admin) conditions.push(`estado = 'PUBLICADO'`)
     if (estado) conditions.push(`estado = '${estado}'`)
     if (buscar) conditions.push(`titulo ILIKE '%${buscar.replace(/'/g, "''")}%'`)
@@ -34,6 +35,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const auth = await requireAdmin(request)
+
     if (!auth.authorized) return auth.error
 
     const body = await request.json()
@@ -54,7 +56,9 @@ export async function POST(request: Request) {
 
     const rows: any[] = await prisma.$queryRawUnsafe(`SELECT * FROM productos_ia WHERE id = $1`, id)
     const row = rows[0]
-    return ApiResponse.success(request, { ...row, precio: Number(row.precio) }, 201)
+
+    
+return ApiResponse.success(request, { ...row, precio: Number(row.precio) }, 201)
   } catch (error) {
     return handleApiError(error, request)
   }

@@ -1,9 +1,9 @@
 import Link from 'next/link'
+
 import { Facebook, Instagram, Youtube, Linkedin, Twitter } from 'lucide-react'
 
 import { getConfigs } from '@/utils/libs/config'
 import HydratedDate from '@/utils/components/HydratedDate'
-import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
 interface WebFooterProps {
   platformName?: string
@@ -67,13 +67,15 @@ const WebFooter = async ({ platformName = 'Aula Virtual', rutasHabilitado = true
           ]} />
 
           {/* Columna 3 — Recursos */}
-          <FooterCol title="Recursos" links={[
-            { to: '#', label: 'Centro de Ayuda' },
-            { to: '#', label: 'Preguntas Frecuentes' },
-            { to: '#', label: 'Guías Gratuitas' },
-            { to: '#', label: 'Webinars' },
-            { to: '#', label: 'Casos de Éxito' },
-          ]} />
+          <FooterCol title="Recursos"
+            links={[
+              { to: '#', label: 'Centro de Ayuda' },
+              { to: '#', label: 'Preguntas Frecuentes' },
+              { to: '#', label: 'Guías Gratuitas' },
+              { to: '#', label: 'Webinars' },
+              { to: '#', label: 'Casos de Éxito' },
+            ]}
+          />
 
           {/* Columna 4 — Para Empresas */}
           <FooterCol title="Para Empresas" links={[

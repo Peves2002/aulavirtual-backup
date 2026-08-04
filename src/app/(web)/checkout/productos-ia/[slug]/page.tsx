@@ -1,4 +1,5 @@
 import { notFound, redirect } from 'next/navigation'
+
 import { getAuthSession } from '@/utils/libs/auth-helpers'
 import prisma from '@/utils/libs/prisma'
 import ProductoIACheckoutView from '@/features/web/checkout/components/ProductoIACheckoutView'
@@ -13,6 +14,7 @@ export default async function Page({ params }: Props) {
       `SELECT id, titulo, slug, descripcion, miniatura, precio, precio_falso, moneda, es_gratis, categoria, estado
        FROM productos_ia WHERE slug = $1 LIMIT 1`, params.slug
     )
+
     if (!rows.length) notFound()
 
     const producto = {
@@ -33,6 +35,7 @@ export default async function Page({ params }: Props) {
       `SELECT id FROM inscripciones_gpt WHERE usuario_id = $1 AND producto_ia_id = $2 LIMIT 1`,
       session.user.id, producto.id
     )
+
     if (inscExist.length) redirect('/estudiante/mis-gpts')
 
     return <ProductoIACheckoutView producto={producto} />

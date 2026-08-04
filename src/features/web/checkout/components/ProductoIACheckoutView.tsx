@@ -1,10 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+
 import { Box, Container, Grid, Typography, Paper, Stack, Divider, Chip, Button, CircularProgress, Alert } from '@mui/material'
 import { ChevronRight, ShoppingCart, ShieldCheck, Bot, Gift, CheckCircle } from 'lucide-react'
+
 import ProductoIAPaymentForm from './ProductoIAPaymentForm'
 
 const FONT = 'Poppins, sans-serif'
@@ -32,13 +35,16 @@ function FreeEnrollSection({ producto }: { producto: Producto }) {
   const handleEnroll = async () => {
     setLoading(true)
     setError(null)
+
     try {
       const res = await fetch('/api/checkout/producto-ia', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productoId: producto.id, gateway: 'GRATIS' })
       })
+
       const data = await res.json()
+
       if (!res.ok) throw new Error(data?.error || 'No se pudo agregar el GPT')
       setDone(true)
       setTimeout(() => router.push('/estudiante/mis-gpts?success=1'), 1800)
@@ -96,7 +102,8 @@ function FreeEnrollSection({ producto }: { producto: Producto }) {
 export default function ProductoIACheckoutView({ producto }: { producto: Producto }) {
   const renderMainSection = () => {
     if (producto.es_gratis) return <FreeEnrollSection producto={producto} />
-    return <ProductoIAPaymentForm producto={producto} />
+    
+return <ProductoIAPaymentForm producto={producto} />
   }
 
   return (

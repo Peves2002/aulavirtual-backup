@@ -36,9 +36,18 @@ interface CourseCatalogProps {
   courses: any[]
   categories: Category[]
   noun?: string
+  tipo?: TipoPrograma
 }
 
-const CourseCatalog = ({ courses, categories, noun = 'cursos' }: CourseCatalogProps) => {
+const CourseCatalog = ({ courses, categories, noun = 'cursos', tipo }: CourseCatalogProps) => {
+  const config = tipo
+    ? getTipoProgramaConfig(tipo)
+    : {
+        catalogSectionSubtitle: 'Aprende de expertos y potencia tu carrera profesional con nuestra selección premium.',
+        searchPlaceholder: `Buscar ${noun} por título o descripción...`,
+        catalogEmptySearch: `No encontramos ${noun} que coincidan con tu búsqueda.`
+      }
+
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [selectedLevel, setSelectedLevel] = useState('all')
@@ -207,7 +216,7 @@ const CourseCatalog = ({ courses, categories, noun = 'cursos' }: CourseCatalogPr
                       borderColor: selectedCategory !== 'all' ? 'var(--mui-palette-primary-main)' : 'transparent',
                       '& fieldset': { border: 'none' },
                       bgcolor: selectedCategory !== 'all' ? 'primary.50' : '#f8fafc',
-                      color: selectedCategory !== 'all' ? 'primary.main' : 'inherit',
+                      color: selectedCategory !== 'all' ? 'primary.main' : '#334155',
                       fontWeight: 700,
                       transition: 'all 0.2s ease'
                     }
@@ -238,7 +247,7 @@ const CourseCatalog = ({ courses, categories, noun = 'cursos' }: CourseCatalogPr
                       borderColor: selectedLevel !== 'all' ? 'var(--mui-palette-primary-main)' : 'transparent',
                       '& fieldset': { border: 'none' },
                       bgcolor: selectedLevel !== 'all' ? 'primary.50' : '#f8fafc',
-                      color: selectedLevel !== 'all' ? 'primary.main' : 'inherit',
+                      color: selectedLevel !== 'all' ? 'primary.main' : '#334155',
                       fontWeight: 700,
                       transition: 'all 0.2s ease'
                     }
@@ -270,7 +279,7 @@ const CourseCatalog = ({ courses, categories, noun = 'cursos' }: CourseCatalogPr
                       borderColor: selectedPrice !== 'all' ? 'var(--mui-palette-primary-main)' : 'transparent',
                       '& fieldset': { border: 'none' },
                       bgcolor: selectedPrice !== 'all' ? 'primary.50' : '#f8fafc',
-                      color: selectedPrice !== 'all' ? 'primary.main' : 'inherit',
+                      color: selectedPrice !== 'all' ? 'primary.main' : '#334155',
                       fontWeight: 700,
                       transition: 'all 0.2s ease'
                     }
@@ -300,7 +309,7 @@ const CourseCatalog = ({ courses, categories, noun = 'cursos' }: CourseCatalogPr
                       borderColor: selectedModality !== 'all' ? 'var(--mui-palette-primary-main)' : 'transparent',
                       '& fieldset': { border: 'none' },
                       bgcolor: selectedModality !== 'all' ? 'primary.50' : '#f8fafc',
-                      color: selectedModality !== 'all' ? 'primary.main' : 'inherit',
+                      color: selectedModality !== 'all' ? 'primary.main' : '#334155',
                       fontWeight: 700,
                       transition: 'all 0.2s ease'
                     }

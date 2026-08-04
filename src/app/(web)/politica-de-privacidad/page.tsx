@@ -3,7 +3,7 @@ import React from 'react'
 import { Box, Container, Typography, Divider } from '@mui/material'
 
 export const metadata = {
-  title: 'Política de Privacidad | ARM Asset Reliability Management',
+  title: 'Política de Privacidad | ATD Academy',
 }
 
 export default function PoliticaDePrivacidadPage() {
@@ -20,10 +20,10 @@ export default function PoliticaDePrivacidadPage() {
         <Box sx={{ '& h4': { color: 'var(--web-dark, #025E44)', fontWeight: 800, mt: 5, mb: 2 }, '& p': { mb: 2, lineHeight: 1.8 } }}>
 
           <Typography paragraph>
-            En <strong>[NOMBRE DE EMPRESA]</strong> valoramos la confianza que nuestros usuarios depositan al
-            compartir su información personal. Esta Política de Privacidad describe cómo recopilamos, usamos,
-            almacenamos y protegemos los datos personales de quienes acceden a nuestra Aula Virtual, de acuerdo
-            con la <strong>Ley N° 29733, Ley de Protección de Datos Personales</strong>, y su reglamento.
+            En <strong>ATD Academy</strong>, operada por Emilio Simón Ticona Tapia (DNI 44148540), valoramos la confianza
+            que nuestros usuarios depositan al compartir su información personal. Esta Política de Privacidad describe
+            cómo recopilamos, usamos, almacenamos y protegemos los datos personales de quienes acceden a nuestra Aula
+            Virtual, de acuerdo con la <strong>Ley N° 29733, Ley de Protección de Datos Personales</strong>, y su reglamento.
           </Typography>
 
           <Divider sx={{ my: 4 }} />

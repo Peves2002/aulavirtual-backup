@@ -1,11 +1,14 @@
 'use client'
 
 import { useState, useMemo } from "react";
+
 import Link from "next/link";
+
+import { Bot, ShoppingCart, CheckCircle, Search, X } from "lucide-react";
+
 import PageHeader from "@/features/web/atd/PageHeader";
 import { Card } from "@/features/web/atd/ui/card";
 import { Button } from "@/features/web/atd/ui/button";
-import { Bot, Star, ShoppingCart, CheckCircle, Search, X } from "lucide-react";
 
 export interface GptProducto {
   id: string
@@ -31,15 +34,21 @@ const Marketplace = ({ productos }: Props) => {
 
   const categories = useMemo(() => {
     const cats = Array.from(new Set(productos.map(p => p.categoria).filter(Boolean))) as string[]
-    return ["Todas", ...cats]
+
+    
+return ["Todas", ...cats]
   }, [productos])
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
-    return productos.filter((g) => {
+
+    
+return productos.filter((g) => {
       const matchCat = activeCategory === "Todas" || g.categoria === activeCategory;
       const matchSearch = !q || g.titulo.toLowerCase().includes(q) || (g.descripcion || "").toLowerCase().includes(q) || (g.categoria || "").toLowerCase().includes(q);
-      return matchCat && matchSearch;
+
+      
+return matchCat && matchSearch;
     });
   }, [search, activeCategory, productos]);
 

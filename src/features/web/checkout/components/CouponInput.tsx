@@ -61,7 +61,7 @@ const CouponInput = ({ cursoIds, onApplied }: CouponInputProps) => {
 
   return (
     <Box>
-      <Typography sx={{ fontFamily: FONT, fontSize: '0.875rem', fontWeight: 700, color: '#0A0A0A', mb: 1.5 }}>
+      <Typography sx={{ fontFamily: FONT, fontSize: '0.875rem', fontWeight: 700, color: 'hsl(var(--foreground))', mb: 1.5 }}>
         ¿Tienes un código de descuento?
       </Typography>
 
@@ -75,19 +75,20 @@ const CouponInput = ({ cursoIds, onApplied }: CouponInputProps) => {
             onChange={(e) => setCodigo(e.target.value)}
             disabled={loading}
             sx={{
+              '& .MuiInputBase-input': { color: 'hsl(var(--foreground))', fontFamily: FONT, fontSize: '0.875rem' },
               '& .MuiOutlinedInput-root': {
                 borderRadius: '12px',
-                fontFamily: FONT,
-                fontSize: '0.875rem',
+                bgcolor: 'hsl(var(--muted))',
+                '& fieldset': { borderColor: 'hsl(var(--border))' },
               },
               '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                borderColor: 'var(--web-primary, #25927F)',
+                borderColor: 'hsl(var(--primary))',
               },
             }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Tag size={16} color="#94a3b8" />
+                  <Tag size={16} color="currentColor" style={{ opacity: 0.5 }} />
                 </InputAdornment>
               ),
             }}
@@ -103,9 +104,9 @@ const CouponInput = ({ cursoIds, onApplied }: CouponInputProps) => {
               fontWeight: 700,
               textTransform: 'none',
               minWidth: '90px',
-              backgroundColor: 'var(--web-primary, #25927F)',
-              '&:hover': { backgroundColor: 'var(--web-dark, #025E44)' },
-              '&:disabled': { backgroundColor: 'rgba(var(--web-primary-rgb, 37, 146, 127), 0.35)', color: 'rgba(255,255,255,0.7)' },
+              backgroundColor: 'hsl(var(--primary))',
+              '&:hover': { backgroundColor: 'hsl(var(--primary) / 0.9)' },
+              '&:disabled': { backgroundColor: 'hsl(var(--primary) / 0.35)', color: 'rgba(255,255,255,0.7)' },
             }}
           >
             {loading ? <CircularProgress size={20} color="inherit" /> : 'Aplicar'}
@@ -125,7 +126,7 @@ const CouponInput = ({ cursoIds, onApplied }: CouponInputProps) => {
       )}
 
       {error && (
-        <Typography sx={{ fontFamily: FONT, fontSize: '0.75rem', color: '#dc2626', mt: 1, display: 'block', fontWeight: 600 }}>
+        <Typography sx={{ fontFamily: FONT, fontSize: '0.75rem', color: 'hsl(var(--destructive))', mt: 1, display: 'block', fontWeight: 600 }}>
           {error}
         </Typography>
       )}

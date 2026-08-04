@@ -1,4 +1,5 @@
 ﻿import * as React from "react";
+
 import * as ToastPrimitives from "@radix-ui/react-toast";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
@@ -20,6 +21,7 @@ const ToastViewport = React.forwardRef<
     {...props}
   />
 ));
+
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
 
 const toastVariants = cva(
@@ -43,6 +45,7 @@ const Toast = React.forwardRef<
 >(({ className, variant, ...props }, ref) => {
   return <ToastPrimitives.Root ref={ref} className={cn(toastVariants({ variant }), className)} {...props} />;
 });
+
 Toast.displayName = ToastPrimitives.Root.displayName;
 
 const ToastAction = React.forwardRef<
@@ -58,6 +61,7 @@ const ToastAction = React.forwardRef<
     {...props}
   />
 ));
+
 ToastAction.displayName = ToastPrimitives.Action.displayName;
 
 const ToastClose = React.forwardRef<
@@ -76,6 +80,7 @@ const ToastClose = React.forwardRef<
     <X className="h-4 w-4" />
   </ToastPrimitives.Close>
 ));
+
 ToastClose.displayName = ToastPrimitives.Close.displayName;
 
 const ToastTitle = React.forwardRef<
@@ -84,6 +89,7 @@ const ToastTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitives.Title ref={ref} className={cn("text-sm font-semibold", className)} {...props} />
 ));
+
 ToastTitle.displayName = ToastPrimitives.Title.displayName;
 
 const ToastDescription = React.forwardRef<
@@ -92,6 +98,7 @@ const ToastDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitives.Description ref={ref} className={cn("text-sm opacity-90", className)} {...props} />
 ));
+
 ToastDescription.displayName = ToastPrimitives.Description.displayName;
 
 type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;

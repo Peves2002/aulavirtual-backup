@@ -1,7 +1,9 @@
+import { Calendar, ArrowRight } from "lucide-react";
+
 import PageHeader from "@/features/web/atd/PageHeader";
 import { Card } from "@/features/web/atd/ui/card";
 import { Button } from "@/features/web/atd/ui/button";
-import { Calendar, ArrowRight } from "lucide-react";
+
 const blog1 = "/atd-assets/multimedia/imagenes/1-blog-recursos-educativos.png";
 const blog2 = "/atd-assets/multimedia/imagenes/2-blog-recursos-educativos.png";
 const blog3 = "/atd-assets/multimedia/imagenes/otros-11.png";

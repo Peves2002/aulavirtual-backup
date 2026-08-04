@@ -14,11 +14,13 @@ export default async function Page() {
     )
 
     let inscritosIds: string[] = []
+
     if (session?.user?.id) {
       const inscritos: any[] = await prisma.$queryRawUnsafe(
         `SELECT producto_ia_id FROM inscripciones_gpt WHERE usuario_id = $1 AND estado = 'ACTIVO'`,
         session.user.id
       )
+
       inscritosIds = inscritos.map((i: any) => i.producto_ia_id)
     }
 
@@ -39,6 +41,7 @@ export default async function Page() {
     return <MarketplacePage productos={data} />
   } catch (e) {
     console.error('[Marketplace] DB error:', e)
-    return <MarketplacePage productos={[]} />
+    
+return <MarketplacePage productos={[]} />
   }
 }

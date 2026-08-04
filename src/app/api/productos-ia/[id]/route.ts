@@ -6,9 +6,12 @@ import { handleApiError } from '@/utils/libs/validation'
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
     const rows: any[] = await prisma.$queryRawUnsafe(`SELECT * FROM productos_ia WHERE id = $1 LIMIT 1`, params.id)
+
     if (!rows.length) return ApiResponse.error(request, 'Producto IA no encontrado', 404)
     const row = rows[0]
-    return ApiResponse.success(request, { ...row, precio: Number(row.precio), precio_falso: row.precio_falso ? Number(row.precio_falso) : null })
+
+    
+return ApiResponse.success(request, { ...row, precio: Number(row.precio), precio_falso: row.precio_falso ? Number(row.precio_falso) : null })
   } catch (error) {
     return handleApiError(error, request)
   }
@@ -17,9 +20,11 @@ export async function GET(request: Request, { params }: { params: { id: string }
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {
     const auth = await requireAdmin(request)
+
     if (!auth.authorized) return auth.error
 
     const rows: any[] = await prisma.$queryRawUnsafe(`SELECT id FROM productos_ia WHERE id = $1`, params.id)
+
     if (!rows.length) return ApiResponse.error(request, 'Producto IA no encontrado', 404)
 
     const body = await request.json()
@@ -48,7 +53,9 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
     const updated: any[] = await prisma.$queryRawUnsafe(`SELECT * FROM productos_ia WHERE id = $1`, params.id)
     const row = updated[0]
-    return ApiResponse.success(request, { ...row, precio: Number(row.precio), precio_falso: row.precio_falso ? Number(row.precio_falso) : null })
+
+    
+return ApiResponse.success(request, { ...row, precio: Number(row.precio), precio_falso: row.precio_falso ? Number(row.precio_falso) : null })
   } catch (error) {
     return handleApiError(error, request)
   }
@@ -57,14 +64,17 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
     const auth = await requireAdmin(request)
+
     if (!auth.authorized) return auth.error
 
     const rows: any[] = await prisma.$queryRawUnsafe(`SELECT id, estado FROM productos_ia WHERE id = $1`, params.id)
+
     if (!rows.length) return ApiResponse.error(request, 'Producto IA no encontrado', 404)
     if (rows[0].estado !== 'BORRADOR') return ApiResponse.error(request, 'Solo se pueden eliminar productos en borrador', 400)
 
     await prisma.$executeRawUnsafe(`DELETE FROM productos_ia WHERE id = $1`, params.id)
-    return ApiResponse.success(request, { message: 'Eliminado correctamente' })
+    
+return ApiResponse.success(request, { message: 'Eliminado correctamente' })
   } catch (error) {
     return handleApiError(error, request)
   }

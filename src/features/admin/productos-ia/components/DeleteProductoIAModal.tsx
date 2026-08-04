@@ -1,7 +1,8 @@
 'use client'
 
-import AppModal from '@/utils/components/AppModal'
 import { Box, Button, Typography } from '@mui/material'
+
+import AppModal from '@/utils/components/AppModal'
 import { useEliminarProductoIA } from '../hooks/useProductosIA'
 import type { ProductoIAListaItem } from '../entity/ProductoIA'
 

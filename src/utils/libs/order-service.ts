@@ -28,17 +28,12 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
       }
     })
 
-    // Fetch raw detalles to get simulacro_id (Prisma client may not know about this column yet)
-    const detallesRaw: any[] = await prisma.$queryRaw`
-      SELECT id, curso_id, simulacro_id FROM detalles_pedido WHERE pedido_id = ${pedidoId}`
-
-    const simulacroDetallesMap = new Map(detallesRaw.map(d => [d.id, d.simulacro_id]))
-
     if (!pedidoInit) throw new Error(`Pedido ${pedidoId} no encontrado.`)
 
     // Pre-fetch producto_ia_id / simulacro_id por detalle (fuera del tipo Prisma)
     const detallesRaw: any[] = await prisma.$queryRaw`
       SELECT id, simulacro_id, producto_ia_id FROM detalles_pedido WHERE pedido_id = ${pedidoId}`
+
     const extraMap = new Map(detallesRaw.map(d => [d.id, { simulacroId: d.simulacro_id, productoIaId: d.producto_ia_id }]))
 
     if (pedidoInit.estado === 'COMPLETADO') {
@@ -52,13 +47,6 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
     }
 
     // Obtener detalles de ebooks via raw SQL (ebook_id no está en el cliente Prisma aún)
-    const ebookDetalles = await prisma.$queryRaw<Array<{ ebook_id: string }>>`
-      SELECT ebook_id FROM detalles_pedido
-      WHERE pedido_id = ${pedidoId}
-        AND tipo_item = 'EBOOK'
-        AND ebook_id IS NOT NULL
-    `
-
     // 2. Transacción de Base de Datos
     const result = await prisma.$transaction(
       async tx => {
@@ -100,37 +88,45 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
           // Inscripción de simulacro
           if (extra?.simulacroId) {
             const { randomUUID } = await import('crypto')
+
             const existing: any[] = await tx.$queryRaw`
               SELECT id FROM inscripciones_simulacro WHERE usuario_id = ${pedidoInit.usuario_id} AND simulacro_id = ${extra.simulacroId} LIMIT 1`
+
             if (!existing.length) {
               await tx.$executeRaw`
                 INSERT INTO inscripciones_simulacro (id, usuario_id, simulacro_id, estado, inscrito_en)
                 VALUES (${randomUUID()}, ${pedidoInit.usuario_id}, ${extra.simulacroId}, 'ACTIVO', NOW())`
             }
+
             continue
           }
 
           // Inscripción de producto IA (GPT)
           if (extra?.productoIaId) {
             const { randomUUID } = await import('crypto')
+
             const existing: any[] = await tx.$queryRaw`
               SELECT id FROM inscripciones_gpt WHERE usuario_id = ${pedidoInit.usuario_id} AND producto_ia_id = ${extra.productoIaId} LIMIT 1`
+
             if (!existing.length) {
               await tx.$executeRaw`
                 INSERT INTO inscripciones_gpt (id, usuario_id, producto_ia_id, estado, inscrito_en)
                 VALUES (${randomUUID()}, ${pedidoInit.usuario_id}, ${extra.productoIaId}, 'ACTIVO', NOW())`
             }
+
             continue
           }
 
           // Inscripción de curso normal
           if (!detalle.curso_id) continue
           const fechaInscripcion = new Date()
+
           const ins = await tx.inscripcion.upsert({
             where: { usuario_id_curso_id: { usuario_id: pedidoInit.usuario_id, curso_id: detalle.curso_id } },
             update: { estado: 'ACTIVO', pedido_id: pedidoId },
             create: { usuario_id: pedidoInit.usuario_id, curso_id: detalle.curso_id, pedido_id: pedidoId, estado: 'ACTIVO', inscrito_en: fechaInscripcion }
           })
+
           inscripciones.push(ins)
         }
 

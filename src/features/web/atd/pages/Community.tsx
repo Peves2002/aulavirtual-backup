@@ -1,7 +1,8 @@
+import { MessageCircle, Calendar, Users, Trophy } from "lucide-react";
+
 import PageHeader from "@/features/web/atd/PageHeader";
 import { Card } from "@/features/web/atd/ui/card";
 import { Button } from "@/features/web/atd/ui/button";
-import { MessageCircle, Calendar, Users, Trophy } from "lucide-react";
 
 const Community = () => (
   <>

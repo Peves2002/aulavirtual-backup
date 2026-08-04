@@ -3,8 +3,6 @@ import React from 'react'
 
 import { notFound } from 'next/navigation'
 
-import { Box } from '@mui/material'
-
 import { getAuthSession } from '@/utils/libs/auth-helpers'
 import { AxiosWebCursos } from '@/features/web/cursos/http/axiosWebCursos'
 
@@ -47,11 +45,7 @@ export default async function CourseDetailPage({
     //     redirect(`/landing/${course.slug}`)
     // }
 
-    return (
-        <Box sx={{ flexGrow: 1, bgcolor: 'background.default' }}>
-            <CourseDetail course={course} />
-        </Box>
-    )
+    return <CourseDetail course={course} />
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {

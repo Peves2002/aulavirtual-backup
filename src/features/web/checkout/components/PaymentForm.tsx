@@ -69,6 +69,21 @@ interface PaymentFormProps {
   finalTotal?: number
 }
 
+// ─── Dark TextField styling (matches atd design tokens) ───────────────────────
+const darkFieldSx = {
+  '& .MuiInputBase-input': { color: 'hsl(var(--foreground))' },
+  '& .MuiInputLabel-root': { color: 'hsl(var(--muted-foreground))' },
+  '& .MuiInputLabel-root.Mui-focused': { color: 'hsl(var(--primary))' },
+  '& .MuiFormHelperText-root': { color: 'hsl(var(--destructive))' },
+  '& .MuiOutlinedInput-root': {
+    bgcolor: 'hsl(var(--muted))',
+    '& fieldset': { borderColor: 'hsl(var(--border))' },
+    '&:hover fieldset': { borderColor: 'hsl(var(--primary) / 0.5)' },
+    '&.Mui-focused fieldset': { borderColor: 'hsl(var(--primary))' },
+  },
+  '& select, & option': { color: 'hsl(var(--foreground))', bgcolor: 'hsl(var(--card))' },
+}
+
 // ─── Payment method tab ───────────────────────────────────────────────────────
 interface MethodTabProps {
   icon: string
@@ -78,7 +93,7 @@ interface MethodTabProps {
   color?: string
 }
 
-const MethodTab = ({ icon, label, selected, onClick, color = 'var(--mui-palette-primary-main)' }: MethodTabProps) => (
+const MethodTab = ({ icon, label, selected, onClick, color = 'hsl(var(--primary))' }: MethodTabProps) => (
   <Box
     onClick={onClick}
     sx={{
@@ -90,18 +105,18 @@ const MethodTab = ({ icon, label, selected, onClick, color = 'var(--mui-palette-
       cursor: 'pointer',
       textAlign: 'center',
       border: '2px solid',
-      borderColor: selected ? color : 'divider',
-      bgcolor: selected ? `color-mix(in srgb, ${color} 8%, white)` : 'white',
+      borderColor: selected ? color : 'hsl(var(--border))',
+      bgcolor: selected ? `color-mix(in srgb, ${color} 15%, hsl(var(--card)))` : 'hsl(var(--card))',
       transition: 'all 0.2s',
-      '&:hover': { borderColor: color, bgcolor: `color-mix(in srgb, ${color} 5%, white)` }
+      '&:hover': { borderColor: color, bgcolor: `color-mix(in srgb, ${color} 8%, hsl(var(--card)))` }
     }}
   >
-    <i className={icon} style={{ fontSize: 22, color: selected ? color : '#9e9e9e' }} />
+    <i className={icon} style={{ fontSize: 22, color: selected ? color : 'hsl(var(--muted-foreground))' }} />
     <Typography
       variant='caption'
       display='block'
       fontWeight={selected ? 700 : 500}
-      sx={{ mt: 0.5, color: selected ? color : 'text.secondary', lineHeight: 1.2 }}
+      sx={{ mt: 0.5, color: selected ? color : 'hsl(var(--muted-foreground))', lineHeight: 1.2 }}
     >
       {label}
     </Typography>
@@ -120,14 +135,14 @@ const SecureBadge = ({ provider }: { provider: string }) => (
 
 // ─── Terms checkbox ───────────────────────────────────────────────────────────
 const TermsCheck = ({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) => (
-  <Box sx={{ mb: 2.5, p: 1.5, bgcolor: 'grey.50', borderRadius: 2 }}>
+  <Box sx={{ mb: 2.5, p: 1.5, bgcolor: 'hsl(var(--muted))', borderRadius: 2 }}>
     <FormControlLabel
       sx={{ m: 0, alignItems: 'flex-start' }}
-      control={<Checkbox size='small' checked={checked} onChange={e => onChange(e.target.checked)} sx={{ pt: 0 }} />}
+      control={<Checkbox size='small' checked={checked} onChange={e => onChange(e.target.checked)} sx={{ pt: 0, color: 'hsl(var(--muted-foreground))', '&.Mui-checked': { color: 'hsl(var(--primary))' } }} />}
       label={
-        <Typography variant='caption' color='text.secondary' lineHeight={1.6}>
+        <Typography variant='caption' sx={{ color: 'hsl(var(--muted-foreground))' }} lineHeight={1.6}>
           He leído y acepto los{' '}
-          <Link href='/terminos-y-condiciones' target='_blank' style={{ color: 'var(--mui-palette-primary-main)', fontWeight: 700 }}>
+          <Link href='/terminos-y-condiciones' target='_blank' style={{ color: 'hsl(var(--primary))', fontWeight: 700 }}>
             Términos y Condiciones
           </Link>{' '}
           de la plataforma
@@ -140,11 +155,11 @@ const TermsCheck = ({ checked, onChange }: { checked: boolean; onChange: (v: boo
 // ─── Copy row ─────────────────────────────────────────────────────────────────
 const CopyRow = ({ label, value, onCopy }: { label: string; value: string; onCopy: () => void }) => (
   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', py: 0.75 }}>
-    <Typography variant='caption' color='text.secondary' sx={{ minWidth: 110 }}>{label}</Typography>
+    <Typography variant='caption' sx={{ minWidth: 110, color: 'hsl(var(--muted-foreground))' }}>{label}</Typography>
     <Stack direction='row' alignItems='center' spacing={0.25}>
-      <Typography variant='body2' fontWeight={700} fontFamily='monospace'>{value}</Typography>
+      <Typography variant='body2' fontWeight={700} fontFamily='monospace' sx={{ color: 'hsl(var(--foreground))' }}>{value}</Typography>
       <Tooltip title='Copiar'>
-        <IconButton size='small' onClick={onCopy} sx={{ p: 0.5, color: 'text.disabled', '&:hover': { color: 'primary.main' } }}>
+        <IconButton size='small' onClick={onCopy} sx={{ p: 0.5, color: 'hsl(var(--muted-foreground))', '&:hover': { color: 'hsl(var(--primary))' } }}>
           <i className='tabler-copy' style={{ fontSize: 14 }} />
         </IconButton>
       </Tooltip>
@@ -549,16 +564,16 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
 
   if (paymentSuccess) {
     return (
-      <Paper elevation={0} sx={{ p: { xs: 3, md: 5 }, borderRadius: '24px', bgcolor: 'white', border: '1px solid', borderColor: 'divider' }}>
+      <Paper elevation={0} sx={{ p: { xs: 3, md: 5 }, borderRadius: '24px', bgcolor: 'hsl(var(--card))', border: '1px solid', borderColor: 'hsl(var(--border))' }}>
         <Stack spacing={3} alignItems='center' sx={{ py: 4 }}>
-          <Box sx={{ width: 80, height: 80, borderRadius: '50%', bgcolor: 'success.light', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <i className='tabler-check' style={{ fontSize: '2.5rem', color: '#2e7d32' }} />
+          <Box sx={{ width: 80, height: 80, borderRadius: '50%', bgcolor: 'hsl(var(--secondary) / 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <i className='tabler-check' style={{ fontSize: '2.5rem', color: 'hsl(var(--secondary))' }} />
           </Box>
-          <Typography variant='h5' sx={{ fontWeight: 800, color: 'success.main' }}>¡Pago Exitoso!</Typography>
-          <Typography variant='body1' color='text.secondary' textAlign='center'>
+          <Typography variant='h5' sx={{ fontWeight: 800, color: 'hsl(var(--secondary))' }}>¡Pago Exitoso!</Typography>
+          <Typography variant='body1' sx={{ color: 'hsl(var(--muted-foreground))' }} textAlign='center'>
             Tu inscripción al curso ha sido confirmada. Serás redirigido a tus cursos en unos segundos...
           </Typography>
-          <CircularProgress size={24} color='success' />
+          <CircularProgress size={24} sx={{ color: 'hsl(var(--secondary))' }} />
         </Stack>
       </Paper>
     )
@@ -566,7 +581,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
 
   return (
     <>
-      <Paper elevation={0} sx={{ p: { xs: 3, md: 4 }, borderRadius: '24px', bgcolor: 'white', border: '1px solid', borderColor: 'divider' }}>
+      <Paper elevation={0} sx={{ p: { xs: 3, md: 4 }, borderRadius: '24px', bgcolor: 'hsl(var(--card))', border: '1px solid', borderColor: 'hsl(var(--border))' }}>
         <CulqiScript
           publicKey={configs.CULQI_PUBLIC_KEY || ''}
           settings={culqiSettings || { currency: courses[0]?.moneda || 'PEN', amount: Math.round(displayTotal * 100) }}
@@ -580,10 +595,10 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
         <Stack spacing={4}>
           {/* ─── Header ─── */}
           <Box>
-            <Typography variant='h5' sx={{ fontWeight: 800, mb: 0.5, color: 'text.primary' }}>
-              Información de <span style={{ color: 'var(--mui-palette-primary-main)' }}>Pago</span>
+            <Typography variant='h5' sx={{ fontWeight: 800, mb: 0.5, color: 'hsl(var(--foreground))' }}>
+              Información de <span style={{ color: 'hsl(var(--primary))' }}>Pago</span>
             </Typography>
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant='body2' sx={{ color: 'hsl(var(--muted-foreground))' }}>
               {isGuest ? 'Identifícate e ingresa tus datos para finalizar la inscripción.' : 'Verifica tus datos y completa el pago.'}
             </Typography>
           </Box>
@@ -597,10 +612,10 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
           {/* ─── Student data ─── */}
           <Box>
             <Stack direction='row' alignItems='center' spacing={1} sx={{ mb: 2 }}>
-              <Box sx={{ width: 28, height: 28, borderRadius: 1.5, bgcolor: 'primary.50', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <i className='tabler-user' style={{ fontSize: 15, color: 'var(--mui-palette-primary-main)' }} />
+              <Box sx={{ width: 28, height: 28, borderRadius: 1.5, bgcolor: 'hsl(var(--primary) / 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <i className='tabler-user' style={{ fontSize: 15, color: 'hsl(var(--primary))' }} />
               </Box>
-              <Typography variant='subtitle1' fontWeight={700} color='text.primary'>Datos del Estudiante</Typography>
+              <Typography variant='subtitle1' fontWeight={700} sx={{ color: 'hsl(var(--foreground))' }}>Datos del Estudiante</Typography>
             </Stack>
 
             <Grid container spacing={2}>
@@ -612,6 +627,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                   onChange={e => setFormData(p => ({ ...p, nombres: e.target.value }))}
                   disabled={!isGuest}
                   size='small'
+                  sx={darkFieldSx}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -622,6 +638,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                   onChange={e => setFormData(p => ({ ...p, apellidos: e.target.value }))}
                   disabled={!isGuest}
                   size='small'
+                  sx={darkFieldSx}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -632,6 +649,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                   onChange={e => setFormData(p => ({ ...p, correo: e.target.value }))}
                   disabled={!isGuest}
                   size='small'
+                  sx={darkFieldSx}
                   InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-mail' style={{ fontSize: 16 }} /></InputAdornment> }}
                 />
               </Grid>
@@ -642,10 +660,10 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
           {configs.PEDIDOS_SOLICITAR_COMPROBANTE !== 'false' && (
             <Box>
               <Stack direction='row' alignItems='center' spacing={1} sx={{ mb: 2 }}>
-                <Box sx={{ width: 28, height: 28, borderRadius: 1.5, bgcolor: 'primary.50', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <i className='tabler-file-invoice' style={{ fontSize: 15, color: 'var(--mui-palette-primary-main)' }} />
+                <Box sx={{ width: 28, height: 28, borderRadius: 1.5, bgcolor: 'hsl(var(--primary) / 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <i className='tabler-file-invoice' style={{ fontSize: 15, color: 'hsl(var(--primary))' }} />
                 </Box>
-                <Typography variant='subtitle1' fontWeight={700} color='text.primary'>Datos de Facturación (Opcional)</Typography>
+                <Typography variant='subtitle1' fontWeight={700} sx={{ color: 'hsl(var(--foreground))' }}>Datos de Facturación (Opcional)</Typography>
               </Stack>
 
               <Grid container spacing={2}>
@@ -658,6 +676,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                     value={tipoComprobante}
                     onChange={e => setTipoComprobante(e.target.value as any)}
                     SelectProps={{ native: true }}
+                    sx={darkFieldSx}
                   >
                     <option value='TICKET'>Ticket</option>
                     <option value='BOLETA'>Boleta</option>
@@ -674,6 +693,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                     error={!!comprobanteError}
                     helperText={comprobanteError}
                     placeholder={tipoComprobante === 'FACTURA' ? 'Ingrese RUC' : 'Ingrese documento'}
+                    sx={darkFieldSx}
                   />
                 </Grid>
               </Grid>
@@ -683,10 +703,10 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
           {/* ─── Payment method selector ─── */}
           <Box>
             <Stack direction='row' alignItems='center' spacing={1} sx={{ mb: 2 }}>
-              <Box sx={{ width: 28, height: 28, borderRadius: 1.5, bgcolor: 'primary.50', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <i className='tabler-credit-card' style={{ fontSize: 15, color: 'var(--mui-palette-primary-main)' }} />
+              <Box sx={{ width: 28, height: 28, borderRadius: 1.5, bgcolor: 'hsl(var(--primary) / 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <i className='tabler-credit-card' style={{ fontSize: 15, color: 'hsl(var(--primary))' }} />
               </Box>
-              <Typography variant='subtitle1' fontWeight={700} color='text.primary'>Método de Pago</Typography>
+              <Typography variant='subtitle1' fontWeight={700} sx={{ color: 'hsl(var(--foreground))' }}>Método de Pago</Typography>
             </Stack>
 
             {(!isCulqiEnabled && !isIzipayEnabled && !isPaypalEnabled && !isMercadoPagoEnabled && (!isManualEnabled || metodosManual.length === 0)) && (
@@ -716,7 +736,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
 
             {/* ── Culqi ── */}
             {paymentMethod === 'culqi' && isCulqiEnabled && (
-              <Box sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider', bgcolor: 'grey.50' }}>
+              <Box sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'hsl(var(--border))', bgcolor: 'hsl(var(--muted))' }}>
                 <SecureBadge provider='Culqi' />
                 <TermsCheck checked={acceptedTerms} onChange={setAcceptedTerms} />
                 <Button
@@ -726,7 +746,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                   onClick={handleCulqiCheckout}
                   disabled={isLoading || !isCulqiLoaded || (!acceptedTerms && !isGuest)}
                   startIcon={isLoading || !isCulqiLoaded ? <CircularProgress size={18} color='inherit' /> : <i className='tabler-lock' />}
-                  sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, fontSize: '1rem', textTransform: 'none' }}
+                  sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, fontSize: '1rem', textTransform: 'none', bgcolor: 'hsl(var(--primary))', '&:hover': { bgcolor: 'hsl(var(--primary) / 0.9)' } }}
                 >
                   {isLoading ? 'Procesando...' : !isCulqiLoaded ? 'Cargando...' : isGuest ? 'Identificarse para Comprar' : `Pagar ${currencySymbol} ${displayTotal.toFixed(2)}`}
                 </Button>
@@ -735,7 +755,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
 
             {/* ── Izipay ── */}
             {paymentMethod === 'izipay' && isIzipayEnabled && (
-              <Box sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider', bgcolor: 'grey.50' }}>
+              <Box sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'hsl(var(--border))', bgcolor: 'hsl(var(--muted))' }}>
                 <SecureBadge provider='Izipay' />
                 <TermsCheck checked={acceptedTerms} onChange={setAcceptedTerms} />
                 <Button
@@ -745,7 +765,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                   onClick={handleCheckout}
                   disabled={isLoading || (!acceptedTerms && !isGuest)}
                   startIcon={isLoading ? <CircularProgress size={18} color='inherit' /> : <i className='tabler-lock' />}
-                  sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, fontSize: '1rem', textTransform: 'none' }}
+                  sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, fontSize: '1rem', textTransform: 'none', bgcolor: 'hsl(var(--primary))', '&:hover': { bgcolor: 'hsl(var(--primary) / 0.9)' } }}
                 >
                   {isLoading ? 'Preparando...' : isGuest ? 'Identificarse para Comprar' : `Pagar ${currencySymbol} ${displayTotal.toFixed(2)}`}
                 </Button>
@@ -754,9 +774,9 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
 
             {/* ── PayPal ── */}
             {paymentMethod === 'paypal' && isPaypalEnabled && (
-              <Box sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider', bgcolor: 'grey.50' }}>
+              <Box sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'hsl(var(--border))', bgcolor: 'hsl(var(--muted))' }}>
                 {isGuest ? (
-                  <Button variant='contained' fullWidth size='large' onClick={() => openLogin()} sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, textTransform: 'none' }}>
+                  <Button variant='contained' fullWidth size='large' onClick={() => openLogin()} sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, textTransform: 'none', bgcolor: 'hsl(var(--primary))', '&:hover': { bgcolor: 'hsl(var(--primary) / 0.9)' } }}>
                     Identificarse para Comprar
                   </Button>
                 ) : (
@@ -777,9 +797,9 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
 
             {/* ── Mercado Pago ── */}
             {paymentMethod === 'mercadopago' && isMercadoPagoEnabled && (
-              <Box sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider', bgcolor: 'grey.50' }}>
+              <Box sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'hsl(var(--border))', bgcolor: 'hsl(var(--muted))' }}>
                 {isGuest ? (
-                  <Button variant='contained' fullWidth size='large' onClick={() => openLogin()} sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, textTransform: 'none' }}>
+                  <Button variant='contained' fullWidth size='large' onClick={() => openLogin()} sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, textTransform: 'none', bgcolor: 'hsl(var(--primary))', '&:hover': { bgcolor: 'hsl(var(--primary) / 0.9)' } }}>
                     Identificarse para Comprar
                   </Button>
                 ) : (
@@ -797,7 +817,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                     >
                       {isLoading ? 'Redirigiendo...' : `Pagar ${currencySymbol} ${displayTotal.toFixed(2)} con Mercado Pago`}
                     </Button>
-                    <Typography variant='caption' color='text.secondary' textAlign='center' display='block' sx={{ mt: 1.5 }}>
+                    <Typography variant='caption' sx={{ color: 'hsl(var(--muted-foreground))', mt: 1.5 }} textAlign='center' display='block'>
                       Serás redirigido a Mercado Pago para completar tu pago de forma segura.
                     </Typography>
                   </>
@@ -807,7 +827,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
 
             {/* ── Pago Manual ── */}
             {paymentMethod === 'manual' && isManualEnabled && (
-              <Box sx={{ borderRadius: 3, border: '1px solid', borderColor: 'divider', overflow: 'hidden' }}>
+              <Box sx={{ borderRadius: 3, border: '1px solid', borderColor: 'hsl(var(--border))', overflow: 'hidden' }}>
                 {isGuest ? (
                   <Box sx={{ p: 3 }}>
                     <Button
@@ -815,21 +835,21 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                       fullWidth
                       size='large'
                       onClick={() => openLogin()}
-                      sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, textTransform: 'none' }}
+                      sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, textTransform: 'none', bgcolor: 'hsl(var(--primary))', '&:hover': { bgcolor: 'hsl(var(--primary) / 0.9)' } }}
                     >
                       Identificarse para Comprar
                     </Button>
                   </Box>
                 ) : (
-                  <Stack spacing={0} divider={<Divider />}>
+                  <Stack spacing={0} divider={<Divider sx={{ borderColor: 'hsl(var(--border))' }} />}>
 
                     {/* Step 1: Seleccionar método */}
                     <Box sx={{ p: 3 }}>
                       <Stack direction='row' alignItems='center' spacing={1.5} sx={{ mb: 2 }}>
-                        <Box sx={{ width: 24, height: 24, borderRadius: '50%', bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <Typography variant='caption' color='white' fontWeight={800} lineHeight={1}>1</Typography>
+                        <Box sx={{ width: 24, height: 24, borderRadius: '50%', bgcolor: 'hsl(var(--primary))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <Typography variant='caption' sx={{ color: '#fff' }} fontWeight={800} lineHeight={1}>1</Typography>
                         </Box>
-                        <Typography variant='subtitle2' fontWeight={700}>Elige dónde vas a realizar el pago</Typography>
+                        <Typography variant='subtitle2' fontWeight={700} sx={{ color: 'hsl(var(--foreground))' }}>Elige dónde vas a realizar el pago</Typography>
                       </Stack>
 
                       <Stack spacing={1.5}>
@@ -842,13 +862,13 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                               onClick={() => setSelectedMetodoManualId(m.id)}
                               sx={{
                                 border: '2px solid',
-                                borderColor: isSelected ? 'primary.main' : 'divider',
+                                borderColor: isSelected ? 'hsl(var(--primary))' : 'hsl(var(--border))',
                                 borderRadius: 2.5,
                                 cursor: 'pointer',
                                 overflow: 'hidden',
                                 transition: 'all 0.2s',
-                                bgcolor: isSelected ? 'primary.50' : 'white',
-                                '&:hover': { borderColor: 'primary.main' }
+                                bgcolor: isSelected ? 'hsl(var(--primary) / 0.1)' : 'hsl(var(--card))',
+                                '&:hover': { borderColor: 'hsl(var(--primary))' }
                               }}
                             >
                               <Stack direction='row' alignItems='center' spacing={2} sx={{ p: 1.75 }}>
@@ -856,25 +876,25 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                                   <Avatar
                                     src={m.imagen_url}
                                     variant='rounded'
-                                    sx={{ width: 44, height: 44, borderRadius: 1.5, border: '1px solid', borderColor: 'divider' }}
+                                    sx={{ width: 44, height: 44, borderRadius: 1.5, border: '1px solid', borderColor: 'hsl(var(--border))', bgcolor: '#fff' }}
                                   />
                                 ) : (
                                   <Avatar
                                     variant='rounded'
-                                    sx={{ width: 44, height: 44, borderRadius: 1.5, bgcolor: 'primary.100' }}
+                                    sx={{ width: 44, height: 44, borderRadius: 1.5, bgcolor: 'hsl(var(--primary) / 0.15)' }}
                                   >
-                                    <i className='tabler-cash' style={{ fontSize: 20, color: 'var(--mui-palette-primary-main)' }} />
+                                    <i className='tabler-cash' style={{ fontSize: 20, color: 'hsl(var(--primary))' }} />
                                   </Avatar>
                                 )}
                                 <Box flex={1} minWidth={0}>
-                                  <Typography variant='body2' fontWeight={700} noWrap>{m.nombre_banco || m.nombre}</Typography>
-                                  <Typography variant='caption' color='text.secondary' noWrap>{m.numero_cuenta}</Typography>
+                                  <Typography variant='body2' fontWeight={700} noWrap sx={{ color: 'hsl(var(--foreground))' }}>{m.nombre_banco || m.nombre}</Typography>
+                                  <Typography variant='caption' sx={{ color: 'hsl(var(--muted-foreground))' }} noWrap>{m.numero_cuenta}</Typography>
                                 </Box>
                                 <Box
                                   sx={{
                                     width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
-                                    border: '2px solid', borderColor: isSelected ? 'primary.main' : 'divider',
-                                    bgcolor: isSelected ? 'primary.main' : 'transparent',
+                                    border: '2px solid', borderColor: isSelected ? 'hsl(var(--primary))' : 'hsl(var(--border))',
+                                    bgcolor: isSelected ? 'hsl(var(--primary))' : 'transparent',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                                     transition: 'all 0.2s'
                                   }}
@@ -890,17 +910,17 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
 
                     {/* Step 2: Datos del método seleccionado */}
                     {selectedMetodo && (
-                      <Box sx={{ p: 3, bgcolor: 'grey.50' }}>
+                      <Box sx={{ p: 3, bgcolor: 'hsl(var(--muted))' }}>
                         <Stack direction='row' alignItems='center' spacing={1.5} sx={{ mb: 2 }}>
-                          <Box sx={{ width: 24, height: 24, borderRadius: '50%', bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <Typography variant='caption' color='white' fontWeight={800} lineHeight={1}>2</Typography>
+                          <Box sx={{ width: 24, height: 24, borderRadius: '50%', bgcolor: 'hsl(var(--primary))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <Typography variant='caption' sx={{ color: '#fff' }} fontWeight={800} lineHeight={1}>2</Typography>
                           </Box>
-                          <Typography variant='subtitle2' fontWeight={700}>Realiza el pago con estos datos</Typography>
+                          <Typography variant='subtitle2' fontWeight={700} sx={{ color: 'hsl(var(--foreground))' }}>Realiza el pago con estos datos</Typography>
                         </Stack>
 
-                        <Box sx={{ bgcolor: 'white', borderRadius: 2, border: '1px solid', borderColor: 'divider', overflow: 'hidden' }}>
+                        <Box sx={{ bgcolor: 'hsl(var(--card))', borderRadius: 2, border: '1px solid', borderColor: 'hsl(var(--border))', overflow: 'hidden' }}>
                           {selectedMetodo.imagen_url && (
-                            <Box sx={{ textAlign: 'center', p: 2, borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'grey.50' }}>
+                            <Box sx={{ textAlign: 'center', p: 2, borderBottom: '1px solid', borderColor: 'hsl(var(--border))', bgcolor: '#fff' }}>
                               <Box
                                 component='img'
                                 src={selectedMetodo.imagen_url}
@@ -932,13 +952,12 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                             )}
                           </Box>
 
-                          <Box sx={{ px: 2.5, py: 1.5, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'primary.50', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <Typography variant='caption' fontWeight={600} color='primary.main'>Monto exacto a pagar</Typography>
+                          <Box sx={{ px: 2.5, py: 1.5, borderTop: '1px solid', borderColor: 'hsl(var(--border))', bgcolor: 'hsl(var(--primary) / 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Typography variant='caption' fontWeight={600} sx={{ color: 'hsl(var(--primary))' }}>Monto exacto a pagar</Typography>
                             <Chip
                               label={`${currencySymbol} ${displayTotal.toFixed(2)}`}
-                              color='primary'
                               size='small'
-                              sx={{ fontWeight: 800, fontSize: '0.85rem' }}
+                              sx={{ fontWeight: 800, fontSize: '0.85rem', bgcolor: 'hsl(var(--primary))', color: '#fff' }}
                             />
                           </Box>
                         </Box>
@@ -952,12 +971,12 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                     {/* Step 3: Subir voucher */}
                     <Box sx={{ p: 3 }}>
                       <Stack direction='row' alignItems='center' spacing={1.5} sx={{ mb: 2 }}>
-                        <Box sx={{ width: 24, height: 24, borderRadius: '50%', bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <Typography variant='caption' color='white' fontWeight={800} lineHeight={1}>3</Typography>
+                        <Box sx={{ width: 24, height: 24, borderRadius: '50%', bgcolor: 'hsl(var(--primary))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <Typography variant='caption' sx={{ color: '#fff' }} fontWeight={800} lineHeight={1}>3</Typography>
                         </Box>
                         <Box>
-                          <Typography variant='subtitle2' fontWeight={700}>Sube tu comprobante de pago</Typography>
-                          <Typography variant='caption' color='text.secondary'>Captura de pantalla o foto de la transferencia (JPG, PNG, WEBP · máx. 5 MB)</Typography>
+                          <Typography variant='subtitle2' fontWeight={700} sx={{ color: 'hsl(var(--foreground))' }}>Sube tu comprobante de pago</Typography>
+                          <Typography variant='caption' sx={{ color: 'hsl(var(--muted-foreground))' }}>Captura de pantalla o foto de la transferencia (JPG, PNG, WEBP · máx. 5 MB)</Typography>
                         </Box>
                       </Stack>
 
@@ -995,23 +1014,23 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                         <Box
                           sx={{
                             border: '2px dashed',
-                            borderColor: 'divider',
+                            borderColor: 'hsl(var(--border))',
                             borderRadius: 2.5,
                             p: 4,
                             textAlign: 'center',
                             cursor: 'pointer',
                             transition: 'all 0.2s',
-                            '&:hover': { borderColor: 'primary.main', bgcolor: 'primary.50' }
+                            '&:hover': { borderColor: 'hsl(var(--primary))', bgcolor: 'hsl(var(--primary) / 0.05)' }
                           }}
                           onClick={() => fileInputRef.current?.click()}
                         >
-                          <Box sx={{ width: 56, height: 56, borderRadius: 2, bgcolor: 'grey.100', display: 'flex', alignItems: 'center', justifyContent: 'center', mx: 'auto', mb: 1.5 }}>
-                            <i className='tabler-cloud-upload' style={{ fontSize: 28, color: '#9e9e9e' }} />
+                          <Box sx={{ width: 56, height: 56, borderRadius: 2, bgcolor: 'hsl(var(--muted))', display: 'flex', alignItems: 'center', justifyContent: 'center', mx: 'auto', mb: 1.5 }}>
+                            <i className='tabler-cloud-upload' style={{ fontSize: 28, color: 'hsl(var(--muted-foreground))' }} />
                           </Box>
-                          <Typography variant='body2' fontWeight={600} color='text.secondary'>
+                          <Typography variant='body2' fontWeight={600} sx={{ color: 'hsl(var(--muted-foreground))' }}>
                             Haz clic para subir tu comprobante
                           </Typography>
-                          <Typography variant='caption' color='text.disabled'>
+                          <Typography variant='caption' sx={{ color: 'hsl(var(--muted-foreground) / 0.7)' }}>
                             o arrastra tu imagen aquí
                           </Typography>
                         </Box>
@@ -1019,7 +1038,7 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                     </Box>
 
                     {/* Confirm button */}
-                    <Box sx={{ p: 3, bgcolor: voucher ? 'primary.50' : 'grey.50' }}>
+                    <Box sx={{ p: 3, bgcolor: voucher ? 'hsl(var(--primary) / 0.1)' : 'hsl(var(--muted))' }}>
                       <Button
                         variant='contained'
                         fullWidth
@@ -1027,11 +1046,11 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                         onClick={handleManualCheckout}
                         disabled={isLoading || !voucher}
                         startIcon={isLoading ? <CircularProgress size={18} color='inherit' /> : <i className='tabler-send' />}
-                        sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, fontSize: '1rem', textTransform: 'none', letterSpacing: 0.3 }}
+                        sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, fontSize: '1rem', textTransform: 'none', letterSpacing: 0.3, bgcolor: 'hsl(var(--primary))', '&:hover': { bgcolor: 'hsl(var(--primary) / 0.9)' } }}
                       >
                         {isLoading ? 'Confirmando pedido...' : 'Confirmar Pedido'}
                       </Button>
-                      <Typography variant='caption' color='text.secondary' textAlign='center' display='block' sx={{ mt: 1.5 }}>
+                      <Typography variant='caption' sx={{ color: 'hsl(var(--muted-foreground))', mt: 1.5 }} textAlign='center' display='block'>
                         Tu pedido quedará en revisión. El acceso al curso se activa al verificar el pago.
                       </Typography>
                     </Box>

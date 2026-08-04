@@ -1,27 +1,50 @@
 'use client'
 
 import { useState } from "react";
+
 import Link from "next/link";
-import { ArrowRight, Star, Users, Globe, ShieldCheck, Clock, TrendingUp, AlertTriangle, Target, Zap, Languages, Bot, Play, Check, Sparkles, Brain } from "lucide-react";
+
+import { ArrowRight, Star, Users, Globe, ShieldCheck, Clock, TrendingUp, AlertTriangle, Target, Zap, Languages, Bot, Play, Sparkles } from "lucide-react";
+
 import { Button } from "@/features/web/atd/ui/button";
 import { Card } from "@/features/web/atd/ui/card";
 import VideoTestimonialsSection from "@/features/web/atd/components/VideoTestimonialsSection";
 import FaqSection from "@/features/web/atd/components/FaqSection";
+import CourseThumbnail from "@/utils/components/CourseThumbnail";
+
 const heroVideo = "/atd-assets/multimedia/videos/video-de-portada.mp4";
 
 const portadaImg = "/atd-assets/multimedia/imagenes/1-atd-portada.png";
 const mentorImg = "/atd-assets/multimedia/imagenes/1-atd-mentor.png";
 const antesDespuesImg = "/atd-assets/multimedia/imagenes/antes-y-despues-1.png";
 const comunidadImg = "/atd-assets/multimedia/imagenes/comunidad-atd-networking.png";
-const gptsImg = "/atd-assets/multimedia/imagenes/gpts.png";
-const docentesImg = "/atd-assets/multimedia/imagenes/programa-prompt-docentes.png";
-const abogadosImg = "/atd-assets/multimedia/imagenes/otros-2.png";
-const finanzasImg = "/atd-assets/multimedia/imagenes/otros-3.png";
-const autoImg = "/atd-assets/multimedia/imagenes/otros-4.png";
-const medicosImg = "/atd-assets/multimedia/imagenes/otros-5.png";
 const logoImg = "/atd-assets/general/logo.png";
 
-const Home = () => {
+const nivelLabel: Record<string, string> = {
+  BASICO: "Básico",
+  INTERMEDIO: "Intermedio",
+  AVANZADO: "Avanzado",
+};
+
+interface FeaturedCourse {
+  id: string;
+  slug: string;
+  titulo: string;
+  descripcion?: string | null;
+  miniatura?: string | null;
+  duracion?: string | null;
+  precio: number;
+  moneda: string;
+  es_gratis: boolean;
+  nivel?: string | null;
+  categoria?: { nombre: string } | null;
+}
+
+interface HomeProps {
+  courses?: FeaturedCourse[];
+}
+
+const Home = ({ courses = [] }: HomeProps) => {
   const [videoLoaded, setVideoLoaded] = useState(false);
 
   return (
@@ -190,27 +213,46 @@ const Home = () => {
             <Link href="/programas">Ver todos <ArrowRight className="h-4 w-4" /></Link>
           </Button>
         </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {programs.map((p) => (
-            <Card key={p.title} className="overflow-hidden bg-card/50 border-white/5 hover:border-primary/40 transition-all group hover:-translate-y-1">
-              <div className="h-48 relative overflow-hidden">
-                <img src={p.image} alt={p.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
-                <div className="absolute top-4 left-4 text-xs font-medium px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10">
-                  {p.tag}
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">{p.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{p.desc}</p>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">{p.duration}</span>
-                  <span className="font-semibold text-primary">{p.price}</span>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
+        {courses.length === 0 ? (
+          <p className="text-center text-muted-foreground py-16">Próximamente nuevos programas disponibles.</p>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {courses.map((course) => {
+              const tag = course.categoria?.nombre ?? (course.nivel ? nivelLabel[course.nivel] ?? course.nivel : null);
+
+              return (
+                <Link key={course.id} href={`/cursos/${course.slug}`} className="block">
+                  <Card className="h-full overflow-hidden bg-card/50 border-white/5 hover:border-primary/40 transition-all group hover:-translate-y-1">
+                    <div className="h-48 relative overflow-hidden">
+                      <CourseThumbnail
+                        src={course.miniatura}
+                        title={course.titulo}
+                        aspectRatio="auto"
+                        sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent pointer-events-none" style={{ zIndex: 2 }} />
+                      {tag && (
+                        <div className="absolute top-4 left-4 text-xs font-medium px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10" style={{ zIndex: 3 }}>
+                          {tag}
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-6">
+                      <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">{course.titulo}</h3>
+                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{course.descripcion}</p>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">{course.duracion || '—'}</span>
+                        <span className="font-semibold text-primary">
+                          {course.es_gratis ? 'Gratis' : `${course.moneda} ${Number(course.precio).toFixed(2)}`}
+                        </span>
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       {/* MÉTRICAS */}
@@ -256,7 +298,7 @@ const Home = () => {
                 <div className="flex gap-0.5 mb-4">
                   {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />)}
                 </div>
-                <p className="text-foreground/90 mb-4 italic">"{t.quote}"</p>
+                <p className="text-foreground/90 mb-4 italic">&quot;{t.quote}&quot;</p>
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-full bg-cover bg-center" style={{ backgroundImage: `url(${mentorImg})` }} />
                   <div>
@@ -326,33 +368,10 @@ const Badge = ({ icon, children }: { icon: React.ReactNode; children: React.Reac
   <span className="inline-flex items-center gap-1.5">{icon} {children}</span>
 );
 
-const programs = [
-  { title: "IA para Abogados", desc: "Domina LeyPERÚ, redacta demandas y analiza jurisprudencia con IA.", duration: "8 semanas", price: "USD 297", tag: "Bestseller", image: abogadosImg },
-  { title: "MentorIA para Docentes", desc: "Crea exámenes, planes de clase y materiales en minutos.", duration: "6 semanas", price: "USD 247", tag: "Nuevo", image: docentesImg },
-  { title: "FinanzasPRO con IA", desc: "Analiza estados financieros y proyecciones automáticamente.", duration: "10 semanas", price: "USD 347", tag: "Popular", image: finanzasImg },
-  { title: "ChatGPT Avanzado para Emprendedores", desc: "De idea a negocio funcional con IA en 30 días.", duration: "4 semanas", price: "USD 247", tag: "Top ventas", image: gptsImg },
-  { title: "Automatización con Make & Zapier", desc: "Conecta tus apps y elimina el trabajo repetitivo.", duration: "5 semanas", price: "USD 197", tag: "Práctico", image: autoImg },
-  { title: "IA para Médicos", desc: "Diagnóstico asistido y gestión clínica con IA aplicada.", duration: "8 semanas", price: "USD 347", tag: "Premium", image: medicosImg },
-];
-
 const testimonials = [
   { name: "María González", role: "Abogada · Lima", quote: "Reduje en 70% el tiempo de redacción de demandas. Ahora atiendo el doble de casos." },
   { name: "Carlos Ramírez", role: "Docente · Bogotá", quote: "MentorIA transformó mi forma de enseñar. Mis alumnos están más comprometidos que nunca." },
   { name: "Ana Torres", role: "Emprendedora · CDMX", quote: "En 30 días lancé mi negocio con IA. Lo que antes me tomaba meses, ahora son días." },
-];
-
-
-const faqs = [
-  { q: "¿Necesito conocimientos previos de IA?", a: "No. Nuestros programas empiezan desde cero y avanzan progresivamente." },
-  { q: "¿Los cursos son en vivo o grabados?", a: "La mayoría son bajo demanda con masterclasses en vivo mensuales para miembros PRO." },
-  { q: "¿Qué pasa si no me convence?", a: "Tienes 7 días de garantía total. Si no te convence, te devolvemos el 100%." },
-  { q: "¿Recibo certificado al finalizar?", a: "Sí. Cada programa entrega certificado digital verificable y descargable." },
-  { q: "¿Cómo funciona el Marketplace de GPTs?", a: "Compras acceso permanente a GPTs profesionales pre-entrenados para tu industria." },
-  { q: "¿Hay descuentos para estudiantes?", a: "Sí, ofrecemos 30% de descuento con verificación de matrícula vigente." },
-  { q: "¿Puedo cancelar cuando quiera?", a: "Por supuesto. Sin permanencia, sin letra pequeña. Cancela desde tu cuenta." },
-  { q: "¿Aceptan pagos en moneda local?", a: "Sí: Stripe, PayPal, Culqi, Yape, PLIN, Mercado Pago, PIX y más." },
-  { q: "¿Cuánto tiempo toma ver resultados?", a: "La mayoría de alumnos aplica lo aprendido desde la primera semana." },
-  { q: "¿Tienen soporte humano?", a: "Sí, soporte por WhatsApp y email de lunes a viernes 9am–6pm (GMT-5)." },
 ];
 
 export default Home;

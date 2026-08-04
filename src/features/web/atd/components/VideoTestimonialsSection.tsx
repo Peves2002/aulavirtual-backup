@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from "react";
+
 import { Play } from "lucide-react";
 
 const testimonials = [
@@ -38,8 +39,10 @@ export default function VideoTestimonialsSection() {
       },
       { threshold: 0.15 }
     );
+
     if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    
+return () => observer.disconnect();
   }, []);
 
   return (
@@ -92,7 +95,7 @@ export default function VideoTestimonialsSection() {
 
             {/* Info */}
             <div className="px-1">
-              <p className="text-xs text-muted-foreground italic mb-2">"{t.quote}"</p>
+              <p className="text-xs text-muted-foreground italic mb-2">&quot;{t.quote}&quot;</p>
               <div className="flex items-center gap-2">
                 <div className="h-7 w-7 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-xs font-bold text-primary flex-shrink-0">
                   {t.name[0]}

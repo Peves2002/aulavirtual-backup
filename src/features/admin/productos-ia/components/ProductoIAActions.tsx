@@ -1,8 +1,11 @@
 'use client'
 
 import { useState } from 'react'
+
 import { useRouter } from 'next/navigation'
-import { IconButton, Tooltip, Menu, MenuItem, ListItemIcon, Typography } from '@mui/material'
+
+import { IconButton, Menu, MenuItem, ListItemIcon, Typography } from '@mui/material'
+
 import { useCambiarEstadoProductoIA } from '../hooks/useProductosIA'
 import DeleteProductoIAModal from './DeleteProductoIAModal'
 import type { ProductoIAListaItem, EstadoProductoIA } from '../entity/ProductoIA'
@@ -20,6 +23,7 @@ export default function ProductoIAActions({ row }: Props) {
     PUBLICADO: { label: 'Archivar', value: 'ARCHIVADO' },
     ARCHIVADO: { label: 'Volver a Borrador', value: 'BORRADOR' }
   }
+
   const siguiente = estadoSiguiente[row.estado]
 
   return (

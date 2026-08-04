@@ -12,13 +12,28 @@ export default withAuth(
     if (token && (path.startsWith('/login') || path.startsWith('/register'))) {
       if (rol === 'ADMIN') return NextResponse.redirect(new URL('/admin/dashboard', req.url), { status: 302 })
       if (rol === 'PROFESOR') return NextResponse.redirect(new URL('/profesor/dashboard', req.url), { status: 302 })
-      return NextResponse.redirect(new URL('/estudiante/dashboard', req.url), { status: 302 })
+      
+return NextResponse.redirect(new URL('/estudiante/dashboard', req.url), { status: 302 })
     }
 
     // Redirigir /dashboard genérico según rol
     if (path === '/dashboard') {
       if (rol === 'ADMIN') return NextResponse.redirect(new URL('/admin/dashboard', req.url), { status: 302 })
       if (rol === 'PROFESOR') return NextResponse.redirect(new URL('/profesor/dashboard', req.url), { status: 302 })
+      
+return NextResponse.redirect(new URL('/estudiante/dashboard', req.url), { status: 302 })
+    }
+
+    // Redirigir raíz de cada panel a su dashboard (no existe page.tsx en /admin, /profesor, /estudiante)
+    if (path === '/admin' || path === '/admin/') {
+      return NextResponse.redirect(new URL('/admin/dashboard', req.url), { status: 302 })
+    }
+
+    if (path === '/profesor' || path === '/profesor/') {
+      return NextResponse.redirect(new URL('/profesor/dashboard', req.url), { status: 302 })
+    }
+
+    if (path === '/estudiante' || path === '/estudiante/') {
       return NextResponse.redirect(new URL('/estudiante/dashboard', req.url), { status: 302 })
     }
 

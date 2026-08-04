@@ -17,7 +17,9 @@ export const useProductoIA = (id: string) =>
 
 export const useCrearProductoIA = () => {
   const qc = useQueryClient()
-  return useMutation({
+
+  
+return useMutation({
     mutationFn: (dto: CrearProductoIADto) => axiosCrearProductoIA(dto),
     onSuccess: () => { qc.invalidateQueries({ queryKey: [KEY] }); enqueueSnackbar('Producto IA creado', { variant: 'success' }) },
     onError: (e: any) => enqueueSnackbar(e?.response?.data?.message || 'Error al crear', { variant: 'error' })
@@ -26,7 +28,9 @@ export const useCrearProductoIA = () => {
 
 export const useEditarProductoIA = (id: string) => {
   const qc = useQueryClient()
-  return useMutation({
+
+  
+return useMutation({
     mutationFn: (dto: ActualizarProductoIADto) => axiosActualizarProductoIA(id, dto),
     onSuccess: () => { qc.invalidateQueries({ queryKey: [KEY] }); enqueueSnackbar('Producto IA actualizado', { variant: 'success' }) },
     onError: (e: any) => enqueueSnackbar(e?.response?.data?.message || 'Error al actualizar', { variant: 'error' })
@@ -35,7 +39,9 @@ export const useEditarProductoIA = (id: string) => {
 
 export const useEliminarProductoIA = () => {
   const qc = useQueryClient()
-  return useMutation({
+
+  
+return useMutation({
     mutationFn: (id: string) => axiosEliminarProductoIA(id),
     onSuccess: () => { qc.invalidateQueries({ queryKey: [KEY] }); enqueueSnackbar('Producto IA eliminado', { variant: 'success' }) },
     onError: (e: any) => enqueueSnackbar(e?.response?.data?.message || 'Error al eliminar', { variant: 'error' })
@@ -44,7 +50,9 @@ export const useEliminarProductoIA = () => {
 
 export const useCambiarEstadoProductoIA = () => {
   const qc = useQueryClient()
-  return useMutation({
+
+  
+return useMutation({
     mutationFn: ({ id, estado }: { id: string; estado: EstadoProductoIA }) => axiosCambiarEstadoProductoIA(id, estado),
     onSuccess: () => { qc.invalidateQueries({ queryKey: [KEY] }); enqueueSnackbar('Estado actualizado', { variant: 'success' }) },
     onError: (e: any) => enqueueSnackbar(e?.response?.data?.message || 'Error', { variant: 'error' })

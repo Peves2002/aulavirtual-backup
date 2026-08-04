@@ -1,12 +1,15 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+
 import { useRouter } from 'next/navigation'
+
 import {
   Box, Button, Chip, Typography, TextField, InputAdornment,
   Card, CardContent, Avatar, Stack, LinearProgress
 } from '@mui/material'
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
+
 import { useProductosIA } from '../hooks/useProductosIA'
 import ProductoIAActions from '../components/ProductoIAActions'
 import type { ProductoIAListaItem, EstadoProductoIA } from '../entity/ProductoIA'

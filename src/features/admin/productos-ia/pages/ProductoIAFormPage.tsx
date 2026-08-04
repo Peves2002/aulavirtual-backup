@@ -1,14 +1,16 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import { useRouter } from 'next/navigation'
+
 import {
-  Box, Button, Card, CardContent, Chip, Divider, FormControlLabel,
+  Box, Button, Card, CardContent, Chip, FormControlLabel,
   Grid, Stack, Switch, TextField, ToggleButton, ToggleButtonGroup, Typography, CircularProgress
 } from '@mui/material'
 import { useForm, Controller } from 'react-hook-form'
+
 import { useProductoIA, useCrearProductoIA, useEditarProductoIA, useCambiarEstadoProductoIA } from '../hooks/useProductosIA'
-import AppModal from '@/utils/components/AppModal'
 import MediaLibrary from '@/features/admin/cursos/components/MediaLibrary'
 import type { EstadoProductoIA } from '../entity/ProductoIA'
 
@@ -44,6 +46,7 @@ export default function ProductoIAFormPage({ mode, productoId }: Props) {
   const { control, handleSubmit, reset, watch } = useForm<FormValues>({
     defaultValues: { titulo: '', descripcion: '', categoria: '', url_acceso: '', url_regalo: '', precio: 0, precio_falso: 0, moneda: 'USD', es_gratis: false }
   })
+
   const esGratis = watch('es_gratis')
 
   useEffect(() => {
@@ -65,6 +68,7 @@ export default function ProductoIAFormPage({ mode, productoId }: Props) {
 
   const onSubmit = async (values: FormValues) => {
     const payload = { ...values, miniatura, precio: Number(values.precio), precio_falso: Number(values.precio_falso) || 0 }
+
     if (mode === 'create') {
       await (crear.mutateAsync as any)(payload)
       router.push('/admin/productos-ia')
@@ -76,6 +80,7 @@ export default function ProductoIAFormPage({ mode, productoId }: Props) {
   const estadoColor: Record<EstadoProductoIA, 'default' | 'success' | 'warning'> = {
     BORRADOR: 'default', PUBLICADO: 'success', ARCHIVADO: 'warning'
   }
+
   const estadoSig: Record<EstadoProductoIA, { label: string; value: EstadoProductoIA }> = {
     BORRADOR: { label: 'Publicar', value: 'PUBLICADO' },
     PUBLICADO: { label: 'Archivar', value: 'ARCHIVADO' },

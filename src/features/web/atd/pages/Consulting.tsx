@@ -1,8 +1,11 @@
+import Link from "next/link";
+
+import { Building2, Briefcase, Rocket, Check, ArrowRight, Play } from "lucide-react";
+
 import PageHeader from "@/features/web/atd/PageHeader";
 import { Card } from "@/features/web/atd/ui/card";
 import { Button } from "@/features/web/atd/ui/button";
-import { Building2, Briefcase, Rocket, Check, ArrowRight, Play } from "lucide-react";
-import Link from "next/link";
+
 const consultoriaVideo = "/atd-assets/multimedia/videos/1-consultoria-ia.mp4";
 
 const empresasImg = "/atd-assets/multimedia/imagenes/expancion-para-empresas.png";

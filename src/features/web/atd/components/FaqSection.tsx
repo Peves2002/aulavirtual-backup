@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from "react";
+
 import { ChevronDown } from "lucide-react";
 
 const faqs = [
@@ -37,7 +38,9 @@ export default function FaqSection() {
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
           {faqs.map((f, i) => {
             const isOpen = open === i;
-            return (
+
+            
+return (
               <div
                 key={i}
                 style={{

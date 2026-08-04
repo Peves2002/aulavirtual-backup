@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+
 import { getAuthSession } from '@/utils/libs/auth-helpers'
 import prisma from '@/utils/libs/prisma'
 import MisGptsPage from '@/features/estudiante/mis-gpts/pages/MisGptsPage'
@@ -9,6 +10,7 @@ interface Props { searchParams?: { success?: string } }
 
 export default async function Page({ searchParams }: Props) {
   const session = await getAuthSession()
+
   if (!session?.user?.id) redirect('/login')
 
   let gpts: any[] = []

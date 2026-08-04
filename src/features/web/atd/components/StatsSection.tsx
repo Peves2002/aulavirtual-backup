@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from "react";
+
 import { Users, Globe, Star } from "lucide-react";
 
 const stats = [
@@ -43,8 +44,10 @@ function useCountUp(target: number, duration = 1800, active: boolean) {
     if (!active) return;
     let start = 0;
     const step = target / (duration / 16);
+
     const timer = setInterval(() => {
       start += step;
+
       if (start >= target) {
         setCount(target);
         clearInterval(timer);
@@ -52,7 +55,9 @@ function useCountUp(target: number, duration = 1800, active: boolean) {
         setCount(Math.floor(start));
       }
     }, 16);
-    return () => clearInterval(timer);
+
+    
+return () => clearInterval(timer);
   }, [active, target, duration]);
 
   return count;
@@ -109,8 +114,10 @@ export default function StatsSection() {
       },
       { threshold: 0.2 }
     );
+
     if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    
+return () => observer.disconnect();
   }, []);
 
   return (
@@ -136,7 +143,9 @@ export default function StatsSection() {
             {bars.map((bar, i) => {
               const pct = (bar.value / bar.max) * 100;
               const isFirst = i === 0;
-              return (
+
+              
+return (
                 <div
                   key={bar.year}
                   className="flex items-center gap-3 transition-all duration-1000 ease-out"

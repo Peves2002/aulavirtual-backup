@@ -1,12 +1,15 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+
 import Link from 'next/link'
+
 import {
   Box, Card, CardActionArea, CardContent, Chip, Grid,
   InputAdornment, Typography, Button, Stack, Alert
 } from '@mui/material'
 import { Bot, ArrowRight, ExternalLink, Gift, Search } from 'lucide-react'
+
 import CustomTextField from '@core/components/mui/TextField'
 
 interface GptItem {
@@ -31,7 +34,9 @@ export default function MisGptsPage({ gpts, success }: Props) {
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase()
-    return gpts.filter(g =>
+
+    
+return gpts.filter(g =>
       !q || g.titulo.toLowerCase().includes(q) || g.categoria?.toLowerCase().includes(q)
     )
   }, [gpts, search])
@@ -98,7 +103,7 @@ export default function MisGptsPage({ gpts, success }: Props) {
 
           {filtered.length === 0 ? (
             <Box sx={{ textAlign: 'center', py: 8 }}>
-              <Typography color="text.secondary">No se encontraron GPTs con "{search}"</Typography>
+              <Typography color="text.secondary">No se encontraron GPTs con &quot;{search}&quot;</Typography>
             </Box>
           ) : (
             <Grid container spacing={3}>

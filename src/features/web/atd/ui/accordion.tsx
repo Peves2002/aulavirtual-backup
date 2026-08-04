@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDown } from "lucide-react";
 
@@ -21,6 +22,7 @@ const AccordionItem = React.forwardRef<
     {...props}
   />
 ));
+
 AccordionItem.displayName = "AccordionItem";
 
 const AccordionTrigger = React.forwardRef<
@@ -35,7 +37,7 @@ const AccordionTrigger = React.forwardRef<
         "transition-colors duration-200 [&[data-state=open]>span>svg]:rotate-180",
         className,
       )}
-      style={{ color: "rgba(255,255,255,0.8)" }}
+      style={{ color: "rgba(255,255,255,0.8)", appearance: "none", background: "transparent", border: "none", cursor: "pointer" }}
       {...props}
     >
       {children}
@@ -48,6 +50,7 @@ const AccordionTrigger = React.forwardRef<
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));
+
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
 
 const AccordionContent = React.forwardRef<

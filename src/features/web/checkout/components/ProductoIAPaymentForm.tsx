@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
+
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+
 import {
   Box, Typography, Stack, TextField, Button, Grid, Paper,
   InputAdornment, Alert, CircularProgress, Checkbox, Chip,
@@ -10,10 +12,10 @@ import {
 } from '@mui/material'
 import { toDataURL } from 'qrcode'
 import { useSession } from 'next-auth/react'
+
 import { useConfig } from '@/contexts/ConfigContext'
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import AppModal from '@/utils/components/AppModal'
-import IzipayScript from './IzipayScript'
 import CulqiScript from './CulqiScript'
 
 declare global {
@@ -141,6 +143,7 @@ const ProductoIAPaymentForm = ({ producto }: { producto: Producto }) => {
   useEffect(() => {
     if (session?.user) {
       const user = session.user as any
+
       setFormData({ nombres: user.nombre || user.name || '', apellidos: user.apellido || '', correo: user.email || '' })
     }
   }, [session])
@@ -168,6 +171,7 @@ const ProductoIAPaymentForm = ({ producto }: { producto: Producto }) => {
 
   const handleVoucherChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
+
     if (!file) return
     setVoucher(file)
     setVoucherPreview(URL.createObjectURL(file))
@@ -181,14 +185,23 @@ const ProductoIAPaymentForm = ({ producto }: { producto: Producto }) => {
   const validateComprobante = useCallback(() => {
     if (configs.PEDIDOS_SOLICITAR_COMPROBANTE === 'false') return true
     setComprobanteError(null)
+
     if (tipoComprobante === 'FACTURA') {
-      if (!/^\d{11}$/.test(numeroComprobante)) { setComprobanteError('El RUC para factura debe tener 11 dígitos'); return false }
+      if (!/^\d{11}$/.test(numeroComprobante)) { setComprobanteError('El RUC para factura debe tener 11 dígitos'); 
+
+return false }
     } else if (tipoComprobante === 'BOLETA') {
-      if (!/^\d{8}$|^\d{11}$/.test(numeroComprobante)) { setComprobanteError('El documento para boleta debe tener 8 u 11 dígitos'); return false }
+      if (!/^\d{8}$|^\d{11}$/.test(numeroComprobante)) { setComprobanteError('El documento para boleta debe tener 8 u 11 dígitos'); 
+
+return false }
     } else if (tipoComprobante === 'TICKET') {
-      if (numeroComprobante && !/^\d{8}$|^\d{11}$/.test(numeroComprobante)) { setComprobanteError('Si ingresas un documento, debe tener 8 u 11 dígitos'); return false }
+      if (numeroComprobante && !/^\d{8}$|^\d{11}$/.test(numeroComprobante)) { setComprobanteError('Si ingresas un documento, debe tener 8 u 11 dígitos'); 
+
+return false }
     }
-    return true
+
+    
+return true
   }, [configs.PEDIDOS_SOLICITAR_COMPROBANTE, tipoComprobante, numeroComprobante])
 
   const handlePaymentResponse = useCallback(async (response: any, pedidoId: string) => {
@@ -197,7 +210,9 @@ const ProductoIAPaymentForm = ({ producto }: { producto: Producto }) => {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ pedidoId, response })
       })
+
       const confirmData = await confirmRes.json()
+
       if (response.code === '00') {
         confirmRes.ok ? handlePaymentSuccess() : setPaymentError(confirmData.message || 'Error al confirmar el pago')
       } else {
@@ -210,31 +225,43 @@ const ProductoIAPaymentForm = ({ producto }: { producto: Producto }) => {
     try {
       setIsLoading(true)
       const pedidoId = (window as any)._currentPedidoId
+
       const res = await fetch('/api/culqi/charge', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ pedidoId, tokenId: token, email })
       })
+
       const data = await res.json()
+
       res.ok ? handlePaymentSuccess() : setPaymentError(data.message || 'Error al procesar el cargo con Culqi')
     } catch { setPaymentError('Error inesperado al procesar el pago') }
     finally { setIsLoading(false) }
   }, [handlePaymentSuccess])
 
   const handleCheckout = async () => {
-    if (!session) { openLogin(); return }
+    if (!session) { openLogin(); 
+
+return }
+
     if (!validateComprobante()) return
     setPaymentError(null)
+
     try {
       setIsLoading(true)
+
       const response = await fetch('/api/checkout/producto-ia', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productoId: producto.id, gateway: 'IZIPAY', tipoComprobante, numeroComprobante })
       })
+
       const dataRaw = await response.json()
+
       if (!response.ok) throw new Error(dataRaw.message || 'Error al iniciar el pago')
       const { iziConfig, token, keyRSA, pedidoId } = dataRaw.result
+
       if (!window.Izipay) throw new Error('El SDK de Izipay no se ha cargado.')
       const checkout = new window.Izipay({ config: iziConfig })
+
       checkout.LoadForm({ authorization: token, keyRSA, callbackResponse: (r: any) => handlePaymentResponse(r, pedidoId) })
     } catch (error: any) {
       setPaymentError(error.message || 'Ocurrió un error inesperado')
@@ -242,18 +269,27 @@ const ProductoIAPaymentForm = ({ producto }: { producto: Producto }) => {
   }
 
   const handleCulqiCheckout = async () => {
-    if (!session) { openLogin(); return }
+    if (!session) { openLogin(); 
+
+return }
+
     if (!validateComprobante()) return
     setPaymentError(null)
+
     try {
       setIsLoading(true)
+
       const response = await fetch('/api/checkout/producto-ia', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productoId: producto.id, gateway: 'CULQI', tipoComprobante, numeroComprobante })
       })
+
       const dataRaw = await response.json()
+
       if (!response.ok) throw new Error(dataRaw.message || 'Error al iniciar el pedido')
-      const { pedidoId, culqiOrderId, publicKey, rsaId, rsaPublicKey } = dataRaw.result
+
+      const { pedidoId, culqiOrderId, rsaId, rsaPublicKey } = dataRaw.result
+
         ; (window as any)._currentPedidoId = pedidoId
       setCulqiSettings({ currency: producto.moneda, amount: Math.round(displayTotal * 100), order: culqiOrderId, xculqirsaid: rsaId, rsapublickey: rsaPublicKey })
     } catch (error: any) {
@@ -262,25 +298,42 @@ const ProductoIAPaymentForm = ({ producto }: { producto: Producto }) => {
   }
 
   const handleManualCheckout = async () => {
-    if (!session) { openLogin(); return }
-    if (!selectedMetodoManualId) { setPaymentError('Selecciona un método de pago'); return }
-    if (!voucher) { setPaymentError('Debes subir una imagen de tu comprobante de pago'); return }
+    if (!session) { openLogin(); 
+
+return }
+
+    if (!selectedMetodoManualId) { setPaymentError('Selecciona un método de pago'); 
+
+return }
+
+    if (!voucher) { setPaymentError('Debes subir una imagen de tu comprobante de pago'); 
+
+return }
+
     if (!validateComprobante()) return
     setPaymentError(null)
+
     try {
       setIsLoading(true)
+
       const checkoutRes = await fetch('/api/checkout/producto-ia', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productoId: producto.id, gateway: 'MANUAL', metodoPagoManualId: selectedMetodoManualId, tipoComprobante, numeroComprobante })
       })
+
       const checkoutData = await checkoutRes.json()
+
       if (!checkoutRes.ok) throw new Error(checkoutData.message || 'Error al crear el pedido')
       const { pedidoId, numeroPedido, total, productos: titulosProductos } = checkoutData.result
 
       const fd = new FormData()
+
       fd.append('voucher', voucher)
       const voucherRes = await fetch(`/api/pedidos/${pedidoId}/voucher`, { method: 'POST', body: fd })
-      if (!voucherRes.ok) { const vd = await voucherRes.json(); throw new Error(vd.message || 'Error al subir el comprobante') }
+
+      if (!voucherRes.ok) { const vd = await voucherRes.json();
+
+ throw new Error(vd.message || 'Error al subir el comprobante') }
 
       if (whatsappNumero) {
         const nombre = (session.user as any)?.nombre || session.user?.name || ''
@@ -288,8 +341,10 @@ const ProductoIAPaymentForm = ({ producto }: { producto: Producto }) => {
         const totalFormateado = `${currencySymbol} ${Number(total).toFixed(2)}`
         const mensaje = [`Pedido #${numeroPedido} - ${nombre}`, productosFormateados, `Total: ${totalFormateado}`, `Adjunto comprobante.`].join('\n')
         const url = `https://wa.me/${whatsappNumero}?text=${encodeURIComponent(mensaje)}`
+
         try {
           const qrDataUrl = await toDataURL(url, { width: 400, margin: 2, errorCorrectionLevel: 'L', color: { dark: '#000000', light: '#FFFFFF' } })
+
           setWhatsappUrl(url); setWhatsappQr(qrDataUrl)
         } catch { setWhatsappUrl(url) }
       }
@@ -306,18 +361,26 @@ const ProductoIAPaymentForm = ({ producto }: { producto: Producto }) => {
   }
 
   const handleMercadoPagoCheckout = async () => {
-    if (!session) { openLogin(); return }
+    if (!session) { openLogin(); 
+
+return }
+
     if (!validateComprobante()) return
     setPaymentError(null)
+
     try {
       setIsLoading(true)
+
       const response = await fetch('/api/checkout/producto-ia', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productoId: producto.id, gateway: 'MERCADOPAGO', tipoComprobante, numeroComprobante })
       })
+
       const dataRaw = await response.json()
+
       if (!response.ok) throw new Error(dataRaw.message || 'Error al iniciar el pago con Mercado Pago')
       const { mpSandboxInitPoint, mpInitPoint } = dataRaw.result
+
       window.location.href = mpSandboxInitPoint || mpInitPoint
     } catch (error: any) {
       setPaymentError(error.message || 'Ocurrió un error inesperado')
@@ -352,7 +415,6 @@ const ProductoIAPaymentForm = ({ producto }: { producto: Producto }) => {
   return (
     <>
       <Paper elevation={0} sx={{ p: { xs: 3, md: 4 }, borderRadius: '24px', bgcolor: 'white', border: '1px solid', borderColor: 'divider' }}>
-        <IzipayScript />
         <CulqiScript
           publicKey={configs.CULQI_PUBLIC_KEY || ''}
           settings={culqiSettings || { currency: producto.moneda, amount: Math.round(displayTotal * 100) }}
@@ -547,7 +609,9 @@ const ProductoIAPaymentForm = ({ producto }: { producto: Producto }) => {
                       <Stack spacing={1.5}>
                         {metodosManual.map(m => {
                           const isSelected = selectedMetodoManualId === m.id
-                          return (
+
+                          
+return (
                             <Box key={m.id} onClick={() => setSelectedMetodoManualId(m.id)} sx={{
                               border: '2px solid', borderColor: isSelected ? 'primary.main' : 'divider',
                               borderRadius: 2.5, cursor: 'pointer', overflow: 'hidden', transition: 'all 0.2s',

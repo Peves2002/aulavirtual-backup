@@ -1,4 +1,5 @@
 import { redirect, notFound } from 'next/navigation'
+
 import { getAuthSession } from '@/utils/libs/auth-helpers'
 import prisma from '@/utils/libs/prisma'
 import GptDetailPage from '@/features/estudiante/mis-gpts/pages/GptDetailPage'
@@ -9,6 +10,7 @@ interface Props { params: { id: string } }
 
 export default async function Page({ params }: Props) {
   const session = await getAuthSession()
+
   if (!session?.user?.id) redirect('/login')
 
   try {
@@ -33,6 +35,7 @@ export default async function Page({ params }: Props) {
     if (!rows.length) notFound()
 
     const r = rows[0]
+
     const gpt = {
       id: String(r.id),
       titulo: String(r.titulo ?? ''),

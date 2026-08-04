@@ -42,6 +42,7 @@ model Usuario {
   eventos_externos        EventoExterno[]
   ebook_accesos             EbookAcceso[]
   ebook_annotaciones        EbookAnnotacion[]
+  inscripciones_gpt    InscripcionGpt[]
   participaciones_chat ParticipanteConversacion[]
   mensajes_enviados    MensajeChat[]              @relation("MensajesEnviados")
 
@@ -144,6 +145,44 @@ model EbookAnnotacion {
 
   @@index([usuario_id, ebook_id])
   @@map("ebook_annotaciones")
+}
+
+model ProductoIA {
+  id             String           @id @default(uuid())
+  titulo         String
+  slug           String           @unique
+  descripcion    String?
+  miniatura      String?
+  estado         EstadoProductoIA @default(BORRADOR)
+  precio         Decimal          @default(0) @db.Decimal(10, 2)
+  precio_falso   Decimal?         @db.Decimal(10, 2)
+  moneda         String           @default("USD")
+  es_gratis      Boolean          @default(false)
+  categoria      String?
+  url_acceso     String?
+  url_regalo     String?
+  creado_en      DateTime         @default(now())
+  actualizado_en DateTime         @updatedAt
+  inscripciones  InscripcionGpt[]
+  detalles       DetallePedido[]
+
+  @@index([estado])
+  @@map("productos_ia")
+}
+
+model InscripcionGpt {
+  id             String            @id @default(uuid())
+  usuario_id     String
+  producto_ia_id String
+  estado         EstadoInscripcion @default(ACTIVO)
+  inscrito_en    DateTime          @default(now())
+  usuario        Usuario           @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  producto_ia    ProductoIA        @relation(fields: [producto_ia_id], references: [id], onDelete: Cascade)
+
+  @@unique([usuario_id, producto_ia_id])
+  @@index([usuario_id])
+  @@index([producto_ia_id])
+  @@map("inscripciones_gpt")
 }
 
 model Curso {
@@ -344,15 +383,18 @@ model DetallePedido {
   curso_id        String?
   ebook_id        String?
   simulacro_id    String?
-  curso           Curso?     @relation(fields: [curso_id], references: [id])
-  ebook           Ebook?     @relation(fields: [ebook_id], references: [id])
-  simulacro       Simulacro? @relation(fields: [simulacro_id], references: [id])
-  pedido          Pedido     @relation(fields: [pedido_id], references: [id], onDelete: Cascade)
+  producto_ia_id  String?
+  curso           Curso?      @relation(fields: [curso_id], references: [id])
+  ebook           Ebook?      @relation(fields: [ebook_id], references: [id])
+  simulacro       Simulacro?  @relation(fields: [simulacro_id], references: [id])
+  producto_ia     ProductoIA? @relation(fields: [producto_ia_id], references: [id])
+  pedido          Pedido      @relation(fields: [pedido_id], references: [id], onDelete: Cascade)
 
   @@index([pedido_id])
   @@index([curso_id])
   @@index([ebook_id])
   @@index([simulacro_id])
+  @@index([producto_ia_id])
   @@map("detalles_pedido")
 }
 
@@ -758,6 +800,12 @@ enum EstadoCurso {
 }
 
 enum EstadoEbook {
+  BORRADOR
+  PUBLICADO
+  ARCHIVADO
+}
+
+enum EstadoProductoIA {
   BORRADOR
   PUBLICADO
   ARCHIVADO

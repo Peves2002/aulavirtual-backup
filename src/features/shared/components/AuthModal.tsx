@@ -24,6 +24,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { loginSchema, type LoginDto, registerSchema, type RegisterDto, forgotPasswordSchema, type ForgotPasswordDto, resetPasswordSchema, type ResetPasswordDto } from '@/schemas/auth.schema'
 import CustomTextField from '@core/components/mui/TextField'
+import GoogleButton from '@/features/shared/components/GoogleButton'
+
 const ATD_LOGO = "/atd-assets/general/logo.png";
 
 export type Mode = 'login' | 'register' | 'forgot-password' | 'reset-password'

@@ -1,11 +1,15 @@
 'use client'
 
 import { useState } from "react";
+
 import Link from "next/link";
+
+import { Clock, Users, Award, Play } from "lucide-react";
+
 import PageHeader from "@/features/web/atd/PageHeader";
 import { Card } from "@/features/web/atd/ui/card";
 import { Button } from "@/features/web/atd/ui/button";
-import { Clock, Users, Award, Play } from "lucide-react";
+
 const promptDocentesImg = "/atd-assets/multimedia/imagenes/programa-prompt-docentes.png";
 const mentorVideo = "/atd-assets/multimedia/videos/mentoria.mp4";
 const abogadosImg = "/atd-assets/multimedia/imagenes/otros-2.png";
@@ -34,7 +38,9 @@ const programs = [
 const Programs = () => {
   const [active, setActive] = useState("Todos");
   const filtered = active === "Todos" ? programs : programs.filter((p) => p.cat === active);
-  return (
+
+  
+return (
     <>
       <PageHeader
         eyebrow="Programas de Formación"

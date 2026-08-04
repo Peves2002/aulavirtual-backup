@@ -2,9 +2,11 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+
 import { useSession } from 'next-auth/react'
 import { Box, Container, Grid, Typography, Chip, Button, Stack, Divider, Paper } from '@mui/material'
 import { Bot, ShoppingCart, CheckCircle, ArrowLeft, Tag, Globe, Gift, ExternalLink } from 'lucide-react'
+
 import { useAuthModal } from '@/contexts/AuthModalContext'
 
 interface Producto {

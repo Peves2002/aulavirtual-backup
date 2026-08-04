@@ -1,17 +1,21 @@
 'use client'
 
 import { useState } from "react";
+
+import { Mail, MessageSquare, MapPin } from "lucide-react";
+
+import { toast } from "sonner";
+
 import PageHeader from "@/features/web/atd/PageHeader";
 import { Card } from "@/features/web/atd/ui/card";
 import { Button } from "@/features/web/atd/ui/button";
 import { Input } from "@/features/web/atd/ui/input";
 import { Textarea } from "@/features/web/atd/ui/textarea";
 import { Label } from "@/features/web/atd/ui/label";
-import { Mail, MessageSquare, MapPin } from "lucide-react";
-import { toast } from "sonner";
 
 const Contact = () => {
   const [sending, setSending] = useState(false);
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
@@ -21,7 +25,9 @@ const Contact = () => {
       (e.target as HTMLFormElement).reset();
     }, 800);
   };
-  return (
+
+  
+return (
     <>
       <PageHeader
         eyebrow="Contacto"

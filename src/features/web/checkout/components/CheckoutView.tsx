@@ -52,16 +52,16 @@ const CheckoutView = ({ courses, ebooks }: CheckoutViewProps) => {
         : { label: 'Cursos', href: courses[0] ? `/cursos/${courses[0].slug}` : '/cursos' }
 
     return (
-        <Box sx={{ bgcolor: '#f8fafc', minHeight: 'calc(100vh - 64px)', fontFamily: FONT }}>
+        <Box sx={{ minHeight: 'calc(100vh - 64px)', fontFamily: FONT }}>
             {/* Mini hero */}
             <Box sx={{
-                background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
-                py: { xs: 4, md: 5 },
-                px: { xs: 3, md: 8, lg: 12 },
                 position: 'relative',
                 overflow: 'hidden',
+                borderBottom: '1px solid hsl(var(--border))',
+                py: { xs: 4, md: 5 },
+                px: { xs: 3, md: 8, lg: 12 },
             }}>
-                <Box aria-hidden sx={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '48px 48px' }} />
+                <Box aria-hidden className="bg-mesh" sx={{ position: 'absolute', inset: 0, opacity: 0.6, pointerEvents: 'none' }} />
 
                 <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, flexWrap: 'wrap', mb: 2 }}>
@@ -70,24 +70,24 @@ const CheckoutView = ({ courses, ebooks }: CheckoutViewProps) => {
                             breadcrumbBack,
                         ].map((item, i) => (
                             <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-                                <Link href={item.href} style={{ fontFamily: FONT, fontSize: '0.8125rem', fontWeight: 500, color: 'rgba(255,255,255,0.55)', textDecoration: 'none' }}>
+                                <Link href={item.href} style={{ fontFamily: FONT, fontSize: '0.8125rem', fontWeight: 500, color: 'hsl(var(--muted-foreground))', textDecoration: 'none' }}>
                                     {item.label}
                                 </Link>
-                                <ChevronRight size={12} color="rgba(255,255,255,0.3)" />
+                                <ChevronRight size={12} color="hsl(var(--muted-foreground))" />
                             </Box>
                         ))}
-                        <span style={{ fontFamily: FONT, fontSize: '0.8125rem', fontWeight: 700, color: 'var(--web-light, #BDD962)' }}>Checkout</span>
+                        <span style={{ fontFamily: FONT, fontSize: '0.8125rem', fontWeight: 700, color: 'hsl(var(--primary))' }}>Checkout</span>
                     </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Box sx={{ width: 48, height: 48, borderRadius: '14px', bgcolor: 'rgba(var(--web-light-rgb,189,217,98),0.15)', border: '1px solid rgba(var(--web-light-rgb,189,217,98),0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <ShoppingCart size={22} color="var(--web-light, #BDD962)" />
+                        <Box sx={{ width: 48, height: 48, borderRadius: '14px', bgcolor: 'hsl(var(--primary) / 0.1)', border: '1px solid hsl(var(--primary) / 0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <ShoppingCart size={22} color="hsl(var(--primary))" />
                         </Box>
                         <Box>
-                            <Typography sx={{ fontFamily: FONT, fontWeight: 900, fontSize: { xs: '1.5rem', md: '2rem' }, color: '#fff', lineHeight: 1.1 }}>
+                            <Typography sx={{ fontFamily: FONT, fontWeight: 900, fontSize: { xs: '1.5rem', md: '2rem' }, color: 'hsl(var(--foreground))', lineHeight: 1.1 }}>
                                 Finalizar Compra
                             </Typography>
-                            <Typography sx={{ fontFamily: FONT, fontSize: '0.875rem', color: 'rgba(255,255,255,0.6)', fontWeight: 400, mt: 0.25 }}>
+                            <Typography sx={{ fontFamily: FONT, fontSize: '0.875rem', color: 'hsl(var(--muted-foreground))', fontWeight: 400, mt: 0.25 }}>
                                 Estás a un paso de comenzar tu transformación profesional.
                             </Typography>
                         </Box>
