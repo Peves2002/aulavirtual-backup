@@ -158,6 +158,11 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
               Pedidos
             </MenuItem>
             {rol === 'ADMIN' && (
+              <MenuItem href='/admin/pagos' icon={<i className='tabler-cash' />}>
+                Pagos
+              </MenuItem>
+            )}
+            {rol === 'ADMIN' && (
               <>
                 <MenuItem href='/admin/cupones' icon={<i className='tabler-ticket' />}>
                   Cupones

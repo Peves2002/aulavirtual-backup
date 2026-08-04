@@ -124,6 +124,30 @@ export async function GET(request: Request, { params }: { params: { slug: string
       })
     }
 
+    // Control de módulos por cuotas manuales (Admin Pagos):
+    // si el alumno tiene registros, solo ve módulos ya habilitados (acumulativos por cuotas pagadas).
+    let modulosVisibles = course.modulos
+    let usaControlCuotas = false
+
+    if (inscription && !isAdmin && !isCourseProfessor) {
+      const countRegistros = await prisma.registroCuotaManual.count({
+        where: { inscripcion_id: inscription.id }
+      })
+
+      if (countRegistros > 0) {
+        usaControlCuotas = true
+
+        const accesos = await prisma.accesoModuloInscripcion.findMany({
+          where: { inscripcion_id: inscription.id },
+          select: { modulo_id: true }
+        })
+
+        const permitidos = new Set(accesos.map(a => a.modulo_id))
+
+        modulosVisibles = course.modulos.filter(m => permitidos.has(m.id))
+      }
+    }
+
     // Obtener intentos del usuario para todos los exámenes del curso (una sola query)
     const intentosUsuario = await prisma.intentoExamen.findMany({
       where: {
@@ -167,7 +191,7 @@ export async function GET(request: Request, { params }: { params: { slug: string
       que_aprenderas: (course as any).que_aprenderas || null,
       a_quien_va_dirigido: (course as any).a_quien_va_dirigido || null,
       miniatura: (course as any).miniatura || null,
-      modulos: course.modulos.map(m => ({
+      modulos: modulosVisibles.map(m => ({
         id: m.id,
         titulo: m.titulo,
         orden: m.orden,
@@ -209,7 +233,14 @@ export async function GET(request: Request, { params }: { params: { slug: string
             : null
         }))
       })),
-      examenes: course.examenes.map(ex => ({
+      examenes: course.examenes
+        .filter(ex => {
+          if (!usaControlCuotas || isAdmin || isCourseProfessor) return true
+          if (!ex.modulo_id) return modulosVisibles.length > 0
+
+          return modulosVisibles.some(m => m.id === ex.modulo_id)
+        })
+        .map(ex => ({
         ...ex,
         intentos_realizados: intentosPorExamen[ex.id]?.intentos_realizados ?? 0,
         ya_aprobado: intentosPorExamen[ex.id]?.ya_aprobado ?? false,

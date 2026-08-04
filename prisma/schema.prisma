@@ -20,6 +20,7 @@ model Usuario {
   celular                 String?
   departamento            String?
   provincia               String?
+  tipo_documento          TipoDocumento?         @default(DNI)
   rol                     Rol                    @default(ESTUDIANTE)
   esta_activo             Boolean                @default(true)
   creado_en               DateTime               @default(now())
@@ -45,6 +46,7 @@ model Usuario {
   ebook_annotaciones        EbookAnnotacion[]
   participaciones_chat ParticipanteConversacion[]
   mensajes_enviados    MensajeChat[]              @relation("MensajesEnviados")
+  registros_cuota_manual RegistroCuotaManual[]
 
   @@index([rol])
   @@map("usuarios")
@@ -194,6 +196,8 @@ model Curso {
   cupones              CuponCurso[]
   valoraciones         ValoracionCurso[]
   planes               CursoEnPlan[]
+  registros_cuota_manual RegistroCuotaManual[]
+  configs_cuota_manual   ConfigCuotaManual[]
 
   @@index([profesor_id])
   @@index([categoria_id])
@@ -214,6 +218,7 @@ model Modulo {
   lecciones      Leccion[]
   actividades    Actividad[]
   curso          Curso       @relation(fields: [curso_id], references: [id], onDelete: Cascade)
+  accesos_inscripcion AccesoModuloInscripcion[]
 
   @@unique([curso_id, orden])
   @@index([curso_id])
@@ -361,6 +366,8 @@ model Inscripcion {
   curso                  Curso             @relation(fields: [curso_id], references: [id], onDelete: Cascade)
   pedido                 Pedido?           @relation(fields: [pedido_id], references: [id])
   usuario                Usuario           @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  registros_cuota_manual RegistroCuotaManual[]
+  accesos_modulo         AccesoModuloInscripcion[]
 
   @@unique([usuario_id, curso_id])
   @@index([usuario_id])
@@ -697,6 +704,13 @@ enum Rol {
   PROFESOR
   ESTUDIANTE
   ASESOR
+}
+
+enum TipoDocumento {
+  DNI
+  CE
+  PASAPORTE
+  OTRO
 }
 
 enum EstadoCurso {
@@ -1159,4 +1173,61 @@ model EntregaActividad {
   @@index([actividad_id])
   @@index([usuario_id])
   @@map("entregas_actividad")
+}
+
+enum ConfirmacionCuota {
+  NO_ENVIADO
+  ENVIADO
+}
+
+/// Registro manual de cuotas offline (lista física). No relacionado con pasarelas.
+model RegistroCuotaManual {
+  id             String            @id @default(uuid())
+  curso_id       String
+  inscripcion_id String
+  usuario_id     String
+  numero_cuota   Int
+  monto_pago     Decimal           @default(0) @db.Decimal(10, 2)
+  confirmacion   ConfirmacionCuota @default(NO_ENVIADO)
+  creado_en      DateTime          @default(now())
+  actualizado_en DateTime          @updatedAt
+  curso          Curso             @relation(fields: [curso_id], references: [id], onDelete: Cascade)
+  inscripcion    Inscripcion       @relation(fields: [inscripcion_id], references: [id], onDelete: Cascade)
+  usuario        Usuario           @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+
+  @@unique([inscripcion_id, numero_cuota])
+  @@index([curso_id])
+  @@index([usuario_id])
+  @@index([confirmacion])
+  @@map("registros_cuota_manual")
+}
+
+/// Configuración de módulos habilitados por cuota (último guardado en Admin Pagos).
+model ConfigCuotaManual {
+  id             String   @id @default(uuid())
+  curso_id       String
+  numero_cuota   Int
+  modulo_ids     Json     @default("[]")
+  creado_en      DateTime @default(now())
+  actualizado_en DateTime @updatedAt
+  curso          Curso    @relation(fields: [curso_id], references: [id], onDelete: Cascade)
+
+  @@unique([curso_id, numero_cuota])
+  @@index([curso_id])
+  @@map("configs_cuota_manual")
+}
+
+/// Módulos desbloqueados por inscripción (controlados desde Admin Pagos).
+model AccesoModuloInscripcion {
+  id             String      @id @default(uuid())
+  inscripcion_id String
+  modulo_id      String
+  creado_en      DateTime    @default(now())
+  inscripcion    Inscripcion @relation(fields: [inscripcion_id], references: [id], onDelete: Cascade)
+  modulo         Modulo      @relation(fields: [modulo_id], references: [id], onDelete: Cascade)
+
+  @@unique([inscripcion_id, modulo_id])
+  @@index([inscripcion_id])
+  @@index([modulo_id])
+  @@map("accesos_modulo_inscripcion")
 }
