@@ -133,7 +133,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             
             {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_LEADS')) && (
               <MenuItem href='/admin/leads' icon={<i className='tabler-forms' />}>
-                Registros de Eventos
+                Leads y Registros
               </MenuItem>
             )}
             

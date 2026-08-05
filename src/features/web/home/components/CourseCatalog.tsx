@@ -434,7 +434,7 @@ const CourseCatalog = ({ courses, categories, tipo = 'CURSO' }: CourseCatalogPro
                   sx={{ bgcolor: 'white', fontWeight: 700, color: 'text.secondary', border: '1px solid #e2e8f0', px: 1 }}
                 />
               </Stack>
-              <CourseList courses={filteredAndSortedCourses} emptySearchMessage={config.catalogEmptySearch} />
+              <CourseList courses={filteredAndSortedCourses} emptySearchMessage={config.catalogEmptySearch} tipo={tipo} />
             </Box>
           </Fade>
         </Stack>
