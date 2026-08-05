@@ -145,7 +145,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             
             {(rol === 'ADMIN' || session?.user?.permisos?.includes('VER_CURSOS')) && (
               <MenuItem href='/admin/cursos' icon={<i className='tabler-book' />}>
-                Cursos
+                Programas
               </MenuItem>
             )}
             

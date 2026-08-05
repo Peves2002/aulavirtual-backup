@@ -39,6 +39,7 @@ export default async function ConsultoriaPage() {
   const waNumero = configs.WHATSAPP_NUMERO ?? '51924943982'
   const consultoriaHeroTitle = configs['CONSULTORIA_HERO_TITLE']?.trim() || 'Consultoría Estratégica en RRHH'
   const consultoriaHeroDesc = configs['CONSULTORIA_HERO_DESC']?.trim() || 'Acompañamos a las organizaciones en el fortalecimiento de su capital humano con soluciones personalizadas.'
+  const consultoriaSec2Eyebrow = configs['CONSULTORIA_SEC2_EYEBROW']?.trim() || 'Consultoría Estratégica'
   const consultoriaSec2Title = configs['CONSULTORIA_SEC2_TITLE']?.trim() || 'Soluciones Corporativas a Medida'
   const consultoriaSec2Desc = configs['CONSULTORIA_SEC2_DESC']?.trim() || 'Fortalecemos la gestión del talento humano y la salud ocupacional en tu organización a través de metodologías de alto impacto regional.'
   const consultoriaSec3Title = configs['CONSULTORIA_SEC3_TITLE']?.trim() || 'Tecnología Inteligente para RRHH'
@@ -109,7 +110,7 @@ export default async function ConsultoriaPage() {
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-[#3BA8C5]/10 text-[#3BA8C5] text-xs font-extrabold uppercase tracking-widest px-4 py-1.5">
-              <Users className="w-3.5 h-3.5" /> Consultoría Estratégica
+              <Users className="w-3.5 h-3.5" /> {consultoriaSec2Eyebrow}
             </span>
             <div
               className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight [&>p]:m-0"
@@ -124,8 +125,10 @@ export default async function ConsultoriaPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {CONSULTORIA_SERVICIOS.map(s => {
               const dbImage = configs[`CONSULTORIA_SVC_${s.id.toUpperCase()}_IMAGE`]
+              const dbTitle = configs[`CONSULTORIA_SVC_${s.id.toUpperCase()}_TITLE`]?.trim() || s.title
+              const dbDesc = configs[`CONSULTORIA_SVC_${s.id.toUpperCase()}_DESC`]?.trim() || s.desc
 
-              
+
 return (
                 <div
                   key={s.id}
@@ -136,7 +139,7 @@ return (
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={dbImage || s.image}
-                        alt={s.title}
+                        alt={dbTitle}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       />
                       <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors" />
@@ -145,12 +148,14 @@ return (
                       </div>
                     </div>
                     <div className="p-5">
-                      <h3 className="text-sm lg:text-base font-black text-slate-900 group-hover:text-[#3BA8C5] transition-colors leading-snug min-h-[2.4rem]">
-                        {s.title}
-                      </h3>
-                      <p className="mt-2 text-slate-500 text-xs leading-relaxed line-clamp-3 font-semibold">
-                        {s.desc}
-                      </p>
+                      <h3
+                        className="text-sm lg:text-base font-black text-slate-900 group-hover:text-[#3BA8C5] transition-colors leading-snug min-h-[2.4rem] [&>p]:m-0"
+                        dangerouslySetInnerHTML={{ __html: dbTitle }}
+                      />
+                      <p
+                        className="mt-2 text-slate-500 text-xs leading-relaxed line-clamp-3 font-semibold [&>p]:m-0"
+                        dangerouslySetInnerHTML={{ __html: dbDesc }}
+                      />
                     </div>
                   </div>
                   <div className="px-5 pb-5">

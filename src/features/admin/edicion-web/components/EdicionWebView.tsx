@@ -28,10 +28,13 @@ import MediaLibrary from '../../cursos/components/MediaLibrary'
 import { ESCUELAS } from '@/features/web/adph/data/escuelas'
 import { CONSULTORIA_SERVICIOS, HRCOREX_SERVICIOS } from '@/features/web/adph/data/services'
 import TestimoniosSettings from '../../configuracion/components/TestimoniosSettings'
+import ValoresSettings from '../../configuracion/components/ValoresSettings'
 
 import RichTextEditor from '@/utils/components/RichTextEditor'
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
+
+const stripHtml = (html: string): string => (html || '').replace(/<[^>]*>?/gm, '').trim()
 
 const toYouTubeEmbed = (url: string): string => {
   if (!url) return ''
@@ -154,7 +157,7 @@ export function EdicionWebView({ initialData }: EdicionWebViewProps) {
   const { enqueueSnackbar } = useSnackbar()
   const [tabValue, setTabValue] = useState(0)
   const [saving, setSaving] = useState(false)
-  const [mediaSelectTarget, setMediaSelectTarget] = useState<{ key: string } | null>(null)
+  const [mediaSelectTarget, setMediaSelectTarget] = useState<{ key: string; acceptType?: 'IMAGEN' | 'PDF'; title?: string } | null>(null)
   const [openLogoMedia, setOpenLogoMedia] = useState(false)
   const [pendingLogoLabel, setPendingLogoLabel] = useState('')
 
@@ -166,31 +169,44 @@ return acc
   }, {})
 
   const [config, setConfig] = useState<{ [key: string]: string }>({
-    // Home — Hero
-    HOME_HERO_TITLE: '',
-    HOME_HERO_DESCRIPTION: '',
-
     // Home — Secciones
     HOME_ESCUELAS_TITLE: 'Escuelas Especializadas',
     HOME_PROGRAMAS_TITLE: 'Programas en convocatoria',
     HOME_NOSOTROS_TITLE: 'Expertos en formación ejecutiva',
     HOME_NOSOTROS_DESC: '',
     HOME_NOSOTROS_VIDEO_URL: 'https://www.youtube.com/embed/ZUZif1Ll9u4',
+    HOME_NOSOTROS_BUTTON_TEXT: 'Conoce nuestra historia',
+    HOME_NOSOTROS_BUTTON_URL: '/nosotros',
     HOME_CORP_TITLE: 'Soluciones Corporativas',
     HOME_CORP_DESC: '',
+    HOME_CORP_BUTTON_TEXT: 'Explorar Soluciones Corporativas',
+    HOME_CORP_BUTTON_URL: '/empresas',
     HOME_LOGOS: '[]',
 
     // Nosotros
+    NOSOTROS_HERO_BADGE: 'Sobre nosotros',
     NOSOTROS_HERO_TITLE: 'Somos calidad y responsabilidad a tu servicio',
     NOSOTROS_HERO_DESC: '',
+    NOSOTROS_HERO_CTA1_TEXT: 'Ver programas',
+    NOSOTROS_HERO_CTA1_URL: '/programas',
+    NOSOTROS_HERO_CTA2_TEXT: 'Trabaja con nosotros',
+    NOSOTROS_HERO_CTA2_URL: '/contacto',
     NOSOTROS_STAT_1_VALUE: '+1,200',
     NOSOTROS_STAT_1_LABEL: 'Estudiantes formados',
+    NOSOTROS_STAT_1_EMOJI: '👩‍🎓',
     NOSOTROS_STAT_2_VALUE: '+80',
     NOSOTROS_STAT_2_LABEL: 'Cursos disponibles',
+    NOSOTROS_STAT_2_EMOJI: '📚',
     NOSOTROS_STAT_3_VALUE: '+30',
     NOSOTROS_STAT_3_LABEL: 'Docentes expertos',
+    NOSOTROS_STAT_3_EMOJI: '👨‍🏫',
     NOSOTROS_STAT_4_VALUE: '98%',
     NOSOTROS_STAT_4_LABEL: 'Tasa de satisfacción',
+    NOSOTROS_STAT_4_EMOJI: '🏆',
+    NOSOTROS_MV_EYEBROW: 'Quiénes somos',
+    NOSOTROS_MV_HEADING: 'Misión y Visión',
+    NOSOTROS_MISION_ICON: '🎯',
+    NOSOTROS_VISION_ICON: '🔭',
 
     // Contacto
     CONTACTO_HERO_TITLE: 'Ponte en Contacto',
@@ -216,6 +232,9 @@ return acc
     NOSOTROS_MISION_TEXT: '',
     NOSOTROS_VISION_TITLE: 'Nuestra Visión',
     NOSOTROS_VISION_TEXT: '',
+    NOSOTROS_VALORES_EYEBROW: 'Lo que nos define',
+    NOSOTROS_VALORES_HEADING: 'Valores que nos identifican',
+    NOSOTROS_VALORES_QUOTE: 'La excelencia no es un acto, sino un hábito. Cada valor que practicamos a diario define quiénes somos y hacia dónde vamos.',
     NOSOTROS_VALORES: '[]',
 
     // Blogs y Noticias
@@ -282,25 +301,6 @@ return s?.user?.accessToken ?? null
       icon: 'tabler-home',
       content: (
         <Stack spacing={2}>
-          <WebSectionCard icon='tabler-home' title='Hero — Banner Principal' subtitle='Título y subtítulo del banner superior de la página de inicio' url='/'>
-            <Stack spacing={3}>
-              <RichTextEditor
-                label='Título del Hero'
-                placeholder='Aprende sin límites, crece sin fronteras'
-                value={config.HOME_HERO_TITLE}
-                onChange={(value) => handleInputChange('HOME_HERO_TITLE', value)}
-                minHeight={60}
-                simple
-              />
-              <RichTextEditor
-                label='Descripción del Hero'
-                placeholder='Accede a cursos especializados...'
-                value={config.HOME_HERO_DESCRIPTION}
-                onChange={(value) => handleInputChange('HOME_HERO_DESCRIPTION', value)}
-              />
-            </Stack>
-          </WebSectionCard>
-
           <WebSectionCard icon='tabler-layout-list' title='Títulos de Secciones' subtitle='Encabezados que separan cada bloque de contenido de la home' url='/'>
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
@@ -362,6 +362,26 @@ return s?.user?.accessToken ?? null
                   )}
                 </Stack>
               </Box>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth size='small'
+                    label='Texto del Botón'
+                    value={config.HOME_NOSOTROS_BUTTON_TEXT}
+                    onChange={(e) => handleInputChange('HOME_NOSOTROS_BUTTON_TEXT', e.target.value)}
+                    placeholder='Conoce nuestra historia'
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth size='small'
+                    label='URL del Botón'
+                    value={config.HOME_NOSOTROS_BUTTON_URL}
+                    onChange={(e) => handleInputChange('HOME_NOSOTROS_BUTTON_URL', e.target.value)}
+                    placeholder='/nosotros'
+                  />
+                </Grid>
+              </Grid>
             </Stack>
           </WebSectionCard>
 
@@ -380,6 +400,26 @@ return s?.user?.accessToken ?? null
                 value={config.HOME_CORP_DESC}
                 onChange={(value) => handleInputChange('HOME_CORP_DESC', value)}
               />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth size='small'
+                    label='Texto del Botón'
+                    value={config.HOME_CORP_BUTTON_TEXT}
+                    onChange={(e) => handleInputChange('HOME_CORP_BUTTON_TEXT', e.target.value)}
+                    placeholder='Explorar Soluciones Corporativas'
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth size='small'
+                    label='URL del Botón'
+                    value={config.HOME_CORP_BUTTON_URL}
+                    onChange={(e) => handleInputChange('HOME_CORP_BUTTON_URL', e.target.value)}
+                    placeholder='/empresas'
+                  />
+                </Grid>
+              </Grid>
             </Stack>
           </WebSectionCard>
 
@@ -440,86 +480,133 @@ return s?.user?.accessToken ?? null
       label: 'Nosotros',
       icon: 'tabler-heart-handshake',
       content: (
-        <WebSectionCard icon='tabler-heart-handshake' title='Página Nosotros' subtitle='Hero, descripción e indicadores estadísticos de la página institucional' url='/nosotros'>
-          <Stack spacing={3}>
-            <RichTextEditor
-              label='Título del Hero'
-              value={config.NOSOTROS_HERO_TITLE}
-              onChange={(value) => handleInputChange('NOSOTROS_HERO_TITLE', value)}
-              placeholder='Somos calidad y responsabilidad a tu servicio'
-              minHeight={60}
-              simple
-            />
-            <RichTextEditor
-              label='Descripción'
-              value={config.NOSOTROS_HERO_DESC}
-              onChange={(value) => handleInputChange('NOSOTROS_HERO_DESC', value)}
-            />
-            
-            {/* Imagen de Portada */}
-            <Typography variant='subtitle2' fontWeight={700}>Fondo de Portada (Hero Banner)</Typography>
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-              <Box sx={{ width: 140, height: 90, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                {config.NOSOTROS_HERO_IMAGE
-                  ? <img src={config.NOSOTROS_HERO_IMAGE} alt='Hero' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  : <Typography variant='caption' color='text.disabled'>Sin imagen (Gradiente por defecto)</Typography>
-                }
-              </Box>
-              <Stack spacing={1}>
-                <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key: 'NOSOTROS_HERO_IMAGE' })}>
-                  Cambiar Portada
-                </Button>
-                {config.NOSOTROS_HERO_IMAGE && (
-                  <Button variant='text' size='small' color='error' onClick={() => handleInputChange('NOSOTROS_HERO_IMAGE', '')}>
-                    Quitar (Usar gradiente)
-                  </Button>
-                )}
-              </Stack>
-            </Box>
-            <Box>
-              <Typography variant='body2' fontWeight={600} color='text.secondary' sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-                <i className='tabler-chart-bar' style={{ fontSize: 16 }} /> Estadísticas
-              </Typography>
-              <Grid container spacing={2}>
-                {[
-                  { vKey: 'NOSOTROS_STAT_1_VALUE', lKey: 'NOSOTROS_STAT_1_LABEL', emoji: '👩‍🎓', vPh: '+1,200', lPh: 'Estudiantes formados' },
-                  { vKey: 'NOSOTROS_STAT_2_VALUE', lKey: 'NOSOTROS_STAT_2_LABEL', emoji: '📚', vPh: '+80', lPh: 'Cursos disponibles' },
-                  { vKey: 'NOSOTROS_STAT_3_VALUE', lKey: 'NOSOTROS_STAT_3_LABEL', emoji: '👨‍🏫', vPh: '+30', lPh: 'Docentes expertos' },
-                  { vKey: 'NOSOTROS_STAT_4_VALUE', lKey: 'NOSOTROS_STAT_4_LABEL', emoji: '🏆', vPh: '98%', lPh: 'Tasa de satisfacción' },
-                ].map((s, i) => (
-                  <Grid item xs={12} sm={6} key={i}>
-                    <Paper variant='outlined' sx={{ p: 2, borderRadius: 2 }}>
-                      <Typography variant='caption' color='text.secondary' sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                        <span style={{ fontSize: 16 }}>{s.emoji}</span> Estadística {i + 1}
-                      </Typography>
-                      <Stack spacing={1.5}>
-                        <TextField size='small' fullWidth label='Valor' value={config[s.vKey] || ''} onChange={(e) => handleInputChange(s.vKey, e.target.value)} placeholder={s.vPh} />
-                        <TextField size='small' fullWidth label='Etiqueta' value={config[s.lKey] || ''} onChange={(e) => handleInputChange(s.lKey, e.target.value)} placeholder={s.lPh} />
-                      </Stack>
-                    </Paper>
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
+        <Stack spacing={2}>
+          <WebSectionCard icon='tabler-photo' title='Hero — Portada' subtitle='Badge, título, descripción, imagen de fondo y botones de acción' url='/nosotros'>
+            <Stack spacing={3}>
+              <TextField
+                label='Texto del Badge'
+                fullWidth
+                value={config.NOSOTROS_HERO_BADGE || ''}
+                onChange={(e) => handleInputChange('NOSOTROS_HERO_BADGE', e.target.value)}
+                placeholder='Sobre nosotros'
+              />
+              <RichTextEditor
+                label='Título del Hero'
+                value={config.NOSOTROS_HERO_TITLE}
+                onChange={(value) => handleInputChange('NOSOTROS_HERO_TITLE', value)}
+                placeholder='Somos calidad y responsabilidad a tu servicio'
+                minHeight={60}
+                simple
+              />
+              <RichTextEditor
+                label='Descripción'
+                value={config.NOSOTROS_HERO_DESC}
+                onChange={(value) => handleInputChange('NOSOTROS_HERO_DESC', value)}
+              />
 
-            <Divider sx={{ my: 1 }} />
-            <Typography variant='subtitle1' fontWeight={700}>Sección: Misión y Visión</Typography>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
-                <Stack spacing={2}>
-                  <RichTextEditor label='Título Misión' value={config.NOSOTROS_MISION_TITLE || ''} onChange={(value) => handleInputChange('NOSOTROS_MISION_TITLE', value)} placeholder='Nuestra Misión' minHeight={60} simple />
-                  <RichTextEditor label='Texto Misión' value={config.NOSOTROS_MISION_TEXT || ''} onChange={(value) => handleInputChange('NOSOTROS_MISION_TEXT', value)} placeholder='Brindar formación profesional...' />
+              {/* Imagen de Portada */}
+              <Typography variant='subtitle2' fontWeight={700}>Fondo de Portada (Hero Banner)</Typography>
+              <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                <Box sx={{ width: 140, height: 90, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {config.NOSOTROS_HERO_IMAGE
+                    ? <img src={config.NOSOTROS_HERO_IMAGE} alt='Hero' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    : <Typography variant='caption' color='text.disabled'>Sin imagen (Gradiente por defecto)</Typography>
+                  }
+                </Box>
+                <Stack spacing={1}>
+                  <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key: 'NOSOTROS_HERO_IMAGE' })}>
+                    Cambiar Portada
+                  </Button>
+                  {config.NOSOTROS_HERO_IMAGE && (
+                    <Button variant='text' size='small' color='error' onClick={() => handleInputChange('NOSOTROS_HERO_IMAGE', '')}>
+                      Quitar (Usar gradiente)
+                    </Button>
+                  )}
                 </Stack>
+              </Box>
+
+              <Divider sx={{ my: 1 }} />
+              <Typography variant='subtitle2' fontWeight={700}>Botones de Acción (CTA)</Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <Stack spacing={1.5}>
+                    <TextField size='small' fullWidth label='Botón 1 — Texto' value={config.NOSOTROS_HERO_CTA1_TEXT || ''} onChange={(e) => handleInputChange('NOSOTROS_HERO_CTA1_TEXT', e.target.value)} placeholder='Ver programas' />
+                    <TextField size='small' fullWidth label='Botón 1 — URL' value={config.NOSOTROS_HERO_CTA1_URL || ''} onChange={(e) => handleInputChange('NOSOTROS_HERO_CTA1_URL', e.target.value)} placeholder='/programas' />
+                  </Stack>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Stack spacing={1.5}>
+                    <TextField size='small' fullWidth label='Botón 2 — Texto' value={config.NOSOTROS_HERO_CTA2_TEXT || ''} onChange={(e) => handleInputChange('NOSOTROS_HERO_CTA2_TEXT', e.target.value)} placeholder='Trabaja con nosotros' />
+                    <TextField size='small' fullWidth label='Botón 2 — URL' value={config.NOSOTROS_HERO_CTA2_URL || ''} onChange={(e) => handleInputChange('NOSOTROS_HERO_CTA2_URL', e.target.value)} placeholder='/contacto' />
+                  </Stack>
+                </Grid>
               </Grid>
-              <Grid item xs={12} md={6}>
-                <Stack spacing={2}>
-                  <RichTextEditor label='Título Visión' value={config.NOSOTROS_VISION_TITLE || ''} onChange={(value) => handleInputChange('NOSOTROS_VISION_TITLE', value)} placeholder='Nuestra Visión' minHeight={60} simple />
-                  <RichTextEditor label='Texto Visión' value={config.NOSOTROS_VISION_TEXT || ''} onChange={(value) => handleInputChange('NOSOTROS_VISION_TEXT', value)} placeholder='Ser la plataforma de referencia...' />
-                </Stack>
-              </Grid>
+            </Stack>
+          </WebSectionCard>
+
+          <WebSectionCard icon='tabler-chart-bar' title='Barra de Estadísticas' subtitle='4 indicadores numéricos debajo del hero'>
+            <Grid container spacing={2}>
+              {[
+                { vKey: 'NOSOTROS_STAT_1_VALUE', lKey: 'NOSOTROS_STAT_1_LABEL', eKey: 'NOSOTROS_STAT_1_EMOJI', emoji: '👩‍🎓', vPh: '+1,200', lPh: 'Estudiantes formados' },
+                { vKey: 'NOSOTROS_STAT_2_VALUE', lKey: 'NOSOTROS_STAT_2_LABEL', eKey: 'NOSOTROS_STAT_2_EMOJI', emoji: '📚', vPh: '+80', lPh: 'Cursos disponibles' },
+                { vKey: 'NOSOTROS_STAT_3_VALUE', lKey: 'NOSOTROS_STAT_3_LABEL', eKey: 'NOSOTROS_STAT_3_EMOJI', emoji: '👨‍🏫', vPh: '+30', lPh: 'Docentes expertos' },
+                { vKey: 'NOSOTROS_STAT_4_VALUE', lKey: 'NOSOTROS_STAT_4_LABEL', eKey: 'NOSOTROS_STAT_4_EMOJI', emoji: '🏆', vPh: '98%', lPh: 'Tasa de satisfacción' },
+              ].map((s, i) => (
+                <Grid item xs={12} sm={6} key={i}>
+                  <Paper variant='outlined' sx={{ p: 2, borderRadius: 2 }}>
+                    <Typography variant='caption' color='text.secondary' sx={{ mb: 1.5, display: 'block' }}>
+                      Estadística {i + 1}
+                    </Typography>
+                    <Stack spacing={1.5}>
+                      <TextField size='small' fullWidth label='Emoji' value={config[s.eKey] || ''} onChange={(e) => handleInputChange(s.eKey, e.target.value)} placeholder={s.emoji} />
+                      <TextField size='small' fullWidth label='Valor' value={config[s.vKey] || ''} onChange={(e) => handleInputChange(s.vKey, e.target.value)} placeholder={s.vPh} />
+                      <TextField size='small' fullWidth label='Etiqueta' value={config[s.lKey] || ''} onChange={(e) => handleInputChange(s.lKey, e.target.value)} placeholder={s.lPh} />
+                    </Stack>
+                  </Paper>
+                </Grid>
+              ))}
             </Grid>
-          </Stack>
-        </WebSectionCard>
+          </WebSectionCard>
+
+          <WebSectionCard icon='tabler-compass' title='Misión y Visión' subtitle='Eyebrow, encabezado e íconos + textos de cada tarjeta' url='/nosotros'>
+            <Stack spacing={3}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <TextField fullWidth label='Eyebrow' value={config.NOSOTROS_MV_EYEBROW || ''} onChange={(e) => handleInputChange('NOSOTROS_MV_EYEBROW', e.target.value)} placeholder='Quiénes somos' />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField fullWidth label='Encabezado' value={config.NOSOTROS_MV_HEADING || ''} onChange={(e) => handleInputChange('NOSOTROS_MV_HEADING', e.target.value)} placeholder='Misión y Visión' />
+                </Grid>
+              </Grid>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Stack spacing={2}>
+                    <TextField size='small' label='Ícono (emoji)' value={config.NOSOTROS_MISION_ICON || ''} onChange={(e) => handleInputChange('NOSOTROS_MISION_ICON', e.target.value)} placeholder='🎯' sx={{ maxWidth: 160 }} />
+                    <RichTextEditor label='Título Misión' value={config.NOSOTROS_MISION_TITLE || ''} onChange={(value) => handleInputChange('NOSOTROS_MISION_TITLE', value)} placeholder='Nuestra Misión' minHeight={60} simple />
+                    <RichTextEditor label='Texto Misión' value={config.NOSOTROS_MISION_TEXT || ''} onChange={(value) => handleInputChange('NOSOTROS_MISION_TEXT', value)} placeholder='Brindar formación profesional...' />
+                  </Stack>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Stack spacing={2}>
+                    <TextField size='small' label='Ícono (emoji)' value={config.NOSOTROS_VISION_ICON || ''} onChange={(e) => handleInputChange('NOSOTROS_VISION_ICON', e.target.value)} placeholder='🔭' sx={{ maxWidth: 160 }} />
+                    <RichTextEditor label='Título Visión' value={config.NOSOTROS_VISION_TITLE || ''} onChange={(value) => handleInputChange('NOSOTROS_VISION_TITLE', value)} placeholder='Nuestra Visión' minHeight={60} simple />
+                    <RichTextEditor label='Texto Visión' value={config.NOSOTROS_VISION_TEXT || ''} onChange={(value) => handleInputChange('NOSOTROS_VISION_TEXT', value)} placeholder='Ser la plataforma de referencia...' />
+                  </Stack>
+                </Grid>
+              </Grid>
+            </Stack>
+          </WebSectionCard>
+
+          <WebSectionCard icon='tabler-star' title='Valores que nos identifican' subtitle='Eyebrow, encabezado, cita y tarjetas de valores (con íconos y orden)'>
+            <Stack spacing={3}>
+              <TextField fullWidth label='Eyebrow' value={config.NOSOTROS_VALORES_EYEBROW || ''} onChange={(e) => handleInputChange('NOSOTROS_VALORES_EYEBROW', e.target.value)} placeholder='Lo que nos define' />
+              <TextField fullWidth label='Encabezado' value={config.NOSOTROS_VALORES_HEADING || ''} onChange={(e) => handleInputChange('NOSOTROS_VALORES_HEADING', e.target.value)} placeholder='Valores que nos identifican' />
+              <TextField fullWidth multiline rows={2} label='Cita destacada' value={config.NOSOTROS_VALORES_QUOTE || ''} onChange={(e) => handleInputChange('NOSOTROS_VALORES_QUOTE', e.target.value)} placeholder='La excelencia no es un acto, sino un hábito...' />
+              <Divider />
+              <ValoresSettings config={config} onInputChange={handleInputChange} />
+            </Stack>
+          </WebSectionCard>
+        </Stack>
       )
     },
     {
@@ -570,128 +657,141 @@ return s?.user?.accessToken ?? null
       label: 'Consultoría',
       icon: 'tabler-chart-dots',
       content: (
-        <WebSectionCard icon='tabler-chart-dots' title='Página Consultoría' subtitle='Textos del banner hero y secciones de la página de consultoría estratégica en RRHH' url='/consultoria'>
-          <Stack spacing={3}>
-            <RichTextEditor
-              label='Título del Hero'
-              value={config.CONSULTORIA_HERO_TITLE}
-              onChange={(value) => handleInputChange('CONSULTORIA_HERO_TITLE', value)}
-              placeholder='Consultoría Estratégica en RRHH'
-              minHeight={60}
-              simple
-            />
-            <RichTextEditor
-              label='Descripción'
-              value={config.CONSULTORIA_HERO_DESC}
-              onChange={(value) => handleInputChange('CONSULTORIA_HERO_DESC', value)}
-            />
+        <Stack spacing={2}>
+          <WebSectionCard icon='tabler-photo' title='Hero — Portada' subtitle='Título, descripción e imagen de fondo del banner principal' url='/consultoria'>
+            <Stack spacing={3}>
+              <RichTextEditor
+                label='Título del Hero'
+                value={config.CONSULTORIA_HERO_TITLE}
+                onChange={(value) => handleInputChange('CONSULTORIA_HERO_TITLE', value)}
+                placeholder='Consultoría Estratégica en RRHH'
+                minHeight={60}
+                simple
+              />
+              <RichTextEditor
+                label='Descripción'
+                value={config.CONSULTORIA_HERO_DESC}
+                onChange={(value) => handleInputChange('CONSULTORIA_HERO_DESC', value)}
+              />
 
-            {/* Imagen de Portada */}
-            <Typography variant='subtitle2' fontWeight={700}>Fondo de Portada (Hero Banner)</Typography>
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-              <Box sx={{ width: 140, height: 90, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                {config.CONSULTORIA_HERO_IMAGE
-                  ? <img src={config.CONSULTORIA_HERO_IMAGE} alt='Hero' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  : <Typography variant='caption' color='text.disabled'>Sin imagen (Gradiente por defecto)</Typography>
-                }
-              </Box>
-              <Stack spacing={1}>
-                <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key: 'CONSULTORIA_HERO_IMAGE' })}>
-                  Cambiar Portada
-                </Button>
-                {config.CONSULTORIA_HERO_IMAGE && (
-                  <Button variant='text' size='small' color='error' onClick={() => handleInputChange('CONSULTORIA_HERO_IMAGE', '')}>
-                    Quitar (Usar gradiente)
+              {/* Imagen de Portada */}
+              <Typography variant='subtitle2' fontWeight={700}>Fondo de Portada (Hero Banner)</Typography>
+              <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                <Box sx={{ width: 140, height: 90, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {config.CONSULTORIA_HERO_IMAGE
+                    ? <img src={config.CONSULTORIA_HERO_IMAGE} alt='Hero' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    : <Typography variant='caption' color='text.disabled'>Sin imagen (Gradiente por defecto)</Typography>
+                  }
+                </Box>
+                <Stack spacing={1}>
+                  <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key: 'CONSULTORIA_HERO_IMAGE' })}>
+                    Cambiar Portada
                   </Button>
-                )}
-              </Stack>
-            </Box>
-            
-            <Divider sx={{ my: 2 }} />
-            <Typography variant='subtitle1' fontWeight={700}>Sección 2: Servicios Corporativos</Typography>
-            
-            <RichTextEditor
-              label='Título de Sección 2'
-              value={config.CONSULTORIA_SEC2_TITLE}
-              onChange={(value) => handleInputChange('CONSULTORIA_SEC2_TITLE', value)}
-              placeholder='Soluciones Corporativas a Medida'
-              minHeight={60}
-              simple
-            />
-            <RichTextEditor
-              label='Descripción de Sección 2'
-              value={config.CONSULTORIA_SEC2_DESC}
-              onChange={(value) => handleInputChange('CONSULTORIA_SEC2_DESC', value)}
-            />
+                  {config.CONSULTORIA_HERO_IMAGE && (
+                    <Button variant='text' size='small' color='error' onClick={() => handleInputChange('CONSULTORIA_HERO_IMAGE', '')}>
+                      Quitar (Usar gradiente)
+                    </Button>
+                  )}
+                </Stack>
+              </Box>
+            </Stack>
+          </WebSectionCard>
 
-            <Typography variant='subtitle2' fontWeight={700} sx={{ mt: 2 }}>Imágenes de Servicios Corporativos</Typography>
-            <Grid container spacing={2}>
-              {CONSULTORIA_SERVICIOS.map(s => {
-                const key = `CONSULTORIA_SVC_${s.id.toUpperCase()}_IMAGE`
+          <WebSectionCard icon='tabler-briefcase' title='Servicios Corporativos' subtitle='Eyebrow, título, descripción y tarjetas de servicios con imágenes' url='/consultoria'>
+            <Stack spacing={3}>
+              <TextField size='small' fullWidth label='Etiqueta (eyebrow)' value={config.CONSULTORIA_SEC2_EYEBROW || ''} onChange={(e) => handleInputChange('CONSULTORIA_SEC2_EYEBROW', e.target.value)} placeholder='Consultoría Estratégica' />
+              <RichTextEditor
+                label='Título de Sección'
+                value={config.CONSULTORIA_SEC2_TITLE}
+                onChange={(value) => handleInputChange('CONSULTORIA_SEC2_TITLE', value)}
+                placeholder='Soluciones Corporativas a Medida'
+                minHeight={60}
+                simple
+              />
+              <RichTextEditor
+                label='Descripción de Sección'
+                value={config.CONSULTORIA_SEC2_DESC}
+                onChange={(value) => handleInputChange('CONSULTORIA_SEC2_DESC', value)}
+              />
 
-                
+              <Typography variant='subtitle2' fontWeight={700} sx={{ mt: 2 }}>Tarjetas de Servicios</Typography>
+              <Grid container spacing={2}>
+                {CONSULTORIA_SERVICIOS.map(s => {
+                  const key = `CONSULTORIA_SVC_${s.id.toUpperCase()}_IMAGE`
+                  const titleKey = `CONSULTORIA_SVC_${s.id.toUpperCase()}_TITLE`
+                  const descKey = `CONSULTORIA_SVC_${s.id.toUpperCase()}_DESC`
+
+
 return (
-                  <Grid item xs={12} sm={6} md={4} key={s.id}>
-                    <Paper variant='outlined' sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column', gap: 1 }}>
-                      <Typography variant='caption' fontWeight={700}>{s.title}</Typography>
-                      <Box sx={{ flex: 1, minHeight: 90, borderRadius: 1, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <img src={config[key] || s.image} alt={s.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      </Box>
-                      <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key })}>
-                        Cambiar
-                      </Button>
-                      {config[key] && config[key] !== s.image && (
-                        <Button variant='text' size='small' color='error' onClick={() => handleInputChange(key, s.image)}>Restablecer</Button>
-                      )}
-                    </Paper>
-                  </Grid>
-                )
-              })}
-            </Grid>
+                    <Grid item xs={12} sm={6} md={4} key={s.id}>
+                      <Paper variant='outlined' sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <Typography variant='caption' color='text.secondary'>ID: {s.id}</Typography>
+                        <RichTextEditor label='Título' value={config[titleKey] || ''} onChange={(value) => handleInputChange(titleKey, value)} placeholder={s.title} minHeight={50} simple />
+                        <RichTextEditor label='Descripción' value={config[descKey] || ''} onChange={(value) => handleInputChange(descKey, value)} placeholder={s.desc} minHeight={70} simple />
+                        <Box sx={{ flex: 1, minHeight: 90, borderRadius: 1, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <img src={config[key] || s.image} alt={s.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        </Box>
+                        <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key })}>
+                          Cambiar
+                        </Button>
+                        {config[key] && config[key] !== s.image && (
+                          <Button variant='text' size='small' color='error' onClick={() => handleInputChange(key, s.image)}>Restablecer</Button>
+                        )}
+                      </Paper>
+                    </Grid>
+                  )
+                })}
+              </Grid>
+            </Stack>
+          </WebSectionCard>
 
-            <Divider sx={{ my: 2 }} />
-            <Typography variant='subtitle1' fontWeight={700}>Sección 3: HR CoreX (Tech Suite)</Typography>
+          <WebSectionCard icon='tabler-cpu' title='HR CoreX — Tech Suite' subtitle='Título, descripción e imágenes de la suite tecnológica' url='/consultoria'>
+            <Stack spacing={3}>
+              <RichTextEditor
+                label='Título de Sección'
+                value={config.CONSULTORIA_SEC3_TITLE}
+                onChange={(value) => handleInputChange('CONSULTORIA_SEC3_TITLE', value)}
+                placeholder='Tecnología Inteligente para RRHH'
+                minHeight={60}
+                simple
+              />
+              <RichTextEditor
+                label='Descripción de Sección'
+                value={config.CONSULTORIA_SEC3_DESC}
+                onChange={(value) => handleInputChange('CONSULTORIA_SEC3_DESC', value)}
+              />
 
-            <RichTextEditor
-              label='Título de Sección 3'
-              value={config.CONSULTORIA_SEC3_TITLE}
-              onChange={(value) => handleInputChange('CONSULTORIA_SEC3_TITLE', value)}
-              placeholder='Tecnología Inteligente para RRHH'
-              minHeight={60}
-              simple
-            />
-            <RichTextEditor
-              label='Descripción de Sección 3'
-              value={config.CONSULTORIA_SEC3_DESC}
-              onChange={(value) => handleInputChange('CONSULTORIA_SEC3_DESC', value)}
-            />
+              <Typography variant='subtitle2' fontWeight={700} sx={{ mt: 2 }}>Imágenes de HR CoreX</Typography>
+              <Grid container spacing={2}>
+                {HRCOREX_SERVICIOS.map(s => {
+                  const key = `HRCOREX_SVC_${s.id.toUpperCase()}_IMAGE`
 
-            <Typography variant='subtitle2' fontWeight={700} sx={{ mt: 2 }}>Imágenes de HR CoreX</Typography>
-            <Grid container spacing={2}>
-              {HRCOREX_SERVICIOS.map(s => {
-                const key = `HRCOREX_SVC_${s.id.toUpperCase()}_IMAGE`
 
-                
 return (
-                  <Grid item xs={12} sm={6} md={4} key={s.id}>
-                    <Paper variant='outlined' sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column', gap: 1 }}>
-                      <Typography variant='caption' fontWeight={700}>{s.title}</Typography>
-                      <Box sx={{ flex: 1, minHeight: 90, borderRadius: 1, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <img src={config[key] || s.image} alt={s.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      </Box>
-                      <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key })}>
-                        Cambiar
-                      </Button>
-                      {config[key] && config[key] !== s.image && (
-                        <Button variant='text' size='small' color='error' onClick={() => handleInputChange(key, s.image)}>Restablecer</Button>
-                      )}
-                    </Paper>
-                  </Grid>
-                )
-              })}
-            </Grid>
-          </Stack>
-        </WebSectionCard>
+                    <Grid item xs={12} sm={6} md={4} key={s.id}>
+                      <Paper variant='outlined' sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <Typography variant='caption' fontWeight={700}>{s.title}</Typography>
+                        <Box sx={{ flex: 1, minHeight: 90, borderRadius: 1, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <img src={config[key] || s.image} alt={s.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        </Box>
+                        <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key })}>
+                          Cambiar
+                        </Button>
+                        {config[key] && config[key] !== s.image && (
+                          <Button variant='text' size='small' color='error' onClick={() => handleInputChange(key, s.image)}>Restablecer</Button>
+                        )}
+                      </Paper>
+                    </Grid>
+                  )
+                })}
+              </Grid>
+            </Stack>
+          </WebSectionCard>
+
+          <WebSectionCard icon='tabler-message-star' title='Testimonios' subtitle='Testimonios de clientes que aparecen en la página de consultoría'>
+            <TestimoniosSettings config={config} onInputChange={handleInputChange} />
+          </WebSectionCard>
+        </Stack>
       )
     },
     {
@@ -786,6 +886,7 @@ return (
             const areasKey = `${keyPrefix}_AREAS`
             const certsEspKey = `${keyPrefix}_CERTS_ESP`
             const certsConsKey = `${keyPrefix}_CERTS_CONS`
+            const brochureKey = `${keyPrefix}_BROCHURE`
 
             const cardImageUrl = config[cardImageKey] || esc.image
             const heroBgUrl = config[heroBgKey] || esc.heroBg
@@ -806,26 +907,70 @@ return (
                 url={`/escuelas/${esc.id}`}
               >
                 <Stack spacing={3}>
+                  {/* Brochure PDF */}
+                  <Box>
+                    <Typography variant='subtitle2' fontWeight={700} sx={{ mb: 1 }}>Brochure (PDF)</Typography>
+                    {config[brochureKey] ? (
+                      <Box sx={{ p: 2, borderRadius: 2, bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minWidth: 0 }}>
+                          <i className='tabler-file-type-pdf text-3xl text-error' />
+                          <Box sx={{ minWidth: 0 }}>
+                            <Typography variant='body2' fontWeight={600} noWrap>Brochure adjunto</Typography>
+                            <Typography
+                              variant='caption' color='primary' component='a'
+                              href={config[brochureKey]} target='_blank' rel='noopener noreferrer'
+                              sx={{ display: 'block', textDecoration: 'none' }}
+                            >
+                              Ver archivo
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Stack direction='row' spacing={1} sx={{ flexShrink: 0 }}>
+                          <Button
+                            variant='outlined' size='small'
+                            onClick={() => setMediaSelectTarget({ key: brochureKey, acceptType: 'PDF', title: 'Seleccionar Brochure (PDF)' })}
+                          >
+                            Cambiar
+                          </Button>
+                          <Button variant='text' size='small' color='error' onClick={() => handleInputChange(brochureKey, '')}>
+                            Quitar
+                          </Button>
+                        </Stack>
+                      </Box>
+                    ) : (
+                      <Button
+                        variant='outlined' size='small'
+                        startIcon={<i className='tabler-file-plus' />}
+                        onClick={() => setMediaSelectTarget({ key: brochureKey, acceptType: 'PDF', title: 'Seleccionar Brochure (PDF)' })}
+                      >
+                        Subir Brochure (PDF)
+                      </Button>
+                    )}
+                    <Typography variant='caption' color='text.secondary' sx={{ display: 'block', mt: 0.5 }}>
+                      Se descarga desde el formulario de la página /escuelas/{esc.id} al completar el registro
+                    </Typography>
+                  </Box>
+
                   {/* Nombre y descripción corta */}
                   <Grid container spacing={2}>
                     <Grid item xs={12} md={6}>
-                      <RichTextEditor
+                      <TextField
+                        fullWidth size='small'
                         label='Nombre de la Escuela'
-                        value={config[nameKey] || esc.name}
-                        onChange={(value) => handleInputChange(nameKey, value)}
+                        value={stripHtml(config[nameKey]) || esc.name}
+                        onChange={(e) => handleInputChange(nameKey, e.target.value)}
                         placeholder={esc.name}
-                        minHeight={60}
-                        simple
+                        helperText='Texto plano — se usa para filtrar cursos y en el menú de navegación'
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
-                      <RichTextEditor
+                      <TextField
+                        fullWidth size='small'
                         label='Descripción Corta (tarjeta)'
-                        value={config[descKey] || esc.desc}
-                        onChange={(value) => handleInputChange(descKey, value)}
+                        value={stripHtml(config[descKey]) || esc.desc}
+                        onChange={(e) => handleInputChange(descKey, e.target.value)}
                         placeholder={esc.desc}
-                        minHeight={60}
-                        simple
+                        helperText='Texto plano — aparece en el banner y en el meta description'
                       />
                     </Grid>
                   </Grid>
@@ -990,11 +1135,6 @@ return (
           })}
         </Stack>
       )
-    },
-    {
-      label: 'Testimonios',
-      icon: 'tabler-message-star',
-      content: <TestimoniosSettings config={config} onInputChange={handleInputChange} />
     }
   ]
 
@@ -1088,13 +1228,18 @@ return (
         onSelect={(url) => {
           if (mediaSelectTarget) {
             handleInputChange(mediaSelectTarget.key, url)
-            enqueueSnackbar('Imagen seleccionada — recuerda guardar los cambios', { variant: 'info' })
+            enqueueSnackbar(
+              mediaSelectTarget.acceptType === 'PDF'
+                ? 'PDF seleccionado — recuerda guardar los cambios'
+                : 'Imagen seleccionada — recuerda guardar los cambios',
+              { variant: 'info' }
+            )
           }
 
           setMediaSelectTarget(null)
         }}
-        title='Seleccionar Imagen'
-        acceptType='IMAGEN'
+        title={mediaSelectTarget?.title || 'Seleccionar Imagen'}
+        acceptType={mediaSelectTarget?.acceptType || 'IMAGEN'}
       />
     </Box>
   )

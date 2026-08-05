@@ -239,8 +239,12 @@ export default async function HomePage() {
   const homeNosotrosTitle = configs['HOME_NOSOTROS_TITLE']?.trim() || 'Expertos en formación ejecutiva'
   const homeNosotrosDesc = configs['HOME_NOSOTROS_DESC']?.trim() || 'ADPH Group is an executive education leader dedicated to transforming talent for organizations across Latin America. Through high-level training, first-class faculty, and actionable methodologies, we deliver tangible business outcomes.'
   const homeNosotrosVideoUrl = configs['HOME_NOSOTROS_VIDEO_URL']?.trim() || 'https://www.youtube.com/embed/ZUZif1Ll9u4'
+  const homeNosotrosBtnText = configs['HOME_NOSOTROS_BUTTON_TEXT']?.trim() || 'Conoce nuestra historia'
+  const homeNosotrosBtnUrl = configs['HOME_NOSOTROS_BUTTON_URL']?.trim() || '/nosotros'
   const homeCorpTitle = configs['HOME_CORP_TITLE']?.trim() || 'Soluciones Corporativas'
   const homeCorpDesc = configs['HOME_CORP_DESC']?.trim() || 'Diseñamos programas a medida para potenciar el talento de tu organización: capacitación in-company, consultoría y tecnología de gestión humana.'
+  const homeCorpBtnText = configs['HOME_CORP_BUTTON_TEXT']?.trim() || 'Explorar Soluciones Corporativas'
+  const homeCorpBtnUrl = configs['HOME_CORP_BUTTON_URL']?.trim() || '/empresas'
 
   // Query featured courses from Database
   let cursosDestacados: any[] = []
@@ -259,22 +263,6 @@ export default async function HomePage() {
         categoria: true
       }
     })
-
-    // Fallback: if no courses are marked as featured, load the latest 6 published courses
-    if (cursosDestacados.length === 0) {
-      cursosDestacados = await prisma.curso.findMany({
-        where: {
-          estado: 'PUBLICADO'
-        },
-        take: 6,
-        orderBy: {
-          creado_en: 'desc'
-        },
-        include: {
-          categoria: true
-        }
-      })
-    }
   } catch (err) {
     console.error('Error fetching courses from database:', err)
   }
@@ -341,6 +329,7 @@ export default async function HomePage() {
       </section>
 
       {/* 4. SECCIÓN 'PROGRAMAS EN CONVOCATORIA' */}
+      {displayProgramas.length > 0 && (
       <section
         className="py-24 border-b border-blue-900 relative overflow-hidden"
         style={{ background: 'linear-gradient(160deg, #06316b 0%, #08479b 45%, #0a56b8 100%)' }}
@@ -446,6 +435,7 @@ export default async function HomePage() {
           </FadeIn>
         </div>
       </section>
+      )}
 
       {/* 5. SECCIÓN 'SOLUCIONES CORPORATIVAS' */}
       <section className="py-32 bg-slate-900 border-b border-slate-800 relative overflow-hidden">
@@ -466,10 +456,10 @@ export default async function HomePage() {
               dangerouslySetInnerHTML={{ __html: homeCorpDesc }}
             />
             <Link
-              href="/empresas"
+              href={homeCorpBtnUrl}
               className="inline-flex items-center justify-center gap-2.5 bg-[#08479b] hover:bg-[#06316b] text-white font-extrabold text-sm md:text-base uppercase tracking-widest px-8 md:px-10 py-4 md:py-5 rounded-md transition-all duration-300 shadow-[0_0_30px_rgba(8,71,155,0.4)] hover:shadow-[0_0_40px_rgba(8,71,155,0.6)] hover:-translate-y-1 font-manrope"
             >
-              <Building2 className="w-5 h-5" /> Explorar Soluciones Corporativas
+              <Building2 className="w-5 h-5" /> {homeCorpBtnText}
             </Link>
           </FadeIn>
         </div>
@@ -500,14 +490,14 @@ export default async function HomePage() {
                   dangerouslySetInnerHTML={{ __html: homeNosotrosDesc }}
                 />
                 <div className="pt-4 font-manrope">
-                  <Link 
-                    href="/nosotros" 
+                  <Link
+                    href={homeNosotrosBtnUrl}
                     className="group inline-flex items-center gap-4 text-xs font-black uppercase tracking-widest text-slate-900 font-manrope"
                   >
                     <span className="w-10 h-10 rounded-full bg-[#08479b]/10 text-[#08479b] flex items-center justify-center group-hover:bg-[#08479b] group-hover:text-white transition-all duration-300 shadow-sm shrink-0">
                       <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                     </span>
-                    CONOCE NUESTRA HISTORIA
+                    {homeNosotrosBtnText.toUpperCase()}
                   </Link>
                 </div>
               </div>

@@ -8,8 +8,8 @@ import { AxiosCurso } from '@/features/admin/cursos/http/axiosCurso'
 import type { Curso } from '@/features/admin/cursos/entity/Curso'
 
 export const metadata: Metadata = {
-    title: 'Gestión de Cursos',
-    description: 'Administra los cursos del aula virtual'
+    title: 'Gestión de Programas',
+    description: 'Administra los programas del aula virtual'
 }
 
 export default async function Page() {

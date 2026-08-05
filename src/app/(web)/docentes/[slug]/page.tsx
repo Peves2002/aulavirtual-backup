@@ -113,7 +113,7 @@ export default async function DocentePage({ params }: Props) {
   }
 
   return (
-    <Box sx={{ pb: 10, bgcolor: '#f8fafc', pt: 4 }}>
+    <Box sx={{ pb: 10, bgcolor: '#f8fafc' }}>
       {/* Hero del docente */}
       <Box
         sx={{

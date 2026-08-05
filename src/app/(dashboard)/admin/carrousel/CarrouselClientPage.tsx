@@ -52,7 +52,11 @@ export default function CarrouselClientPage({ initialSlides }: CarrouselClientPa
   const [slides, setSlides] = useState<Slide[]>(initialSlides)
   const [openDialog, setOpenDialog] = useState(false)
   const [editingSlide, setEditingSlide] = useState<Slide | null>(null)
-  
+
+  // Reorder state
+  const [reorderingId, setReorderingId] = useState<string | null>(null)
+  const sortedSlides = [...slides].sort((a, b) => a.orden - b.orden)
+
   // Confirmation states
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [slideToDelete, setSlideToDelete] = useState<string | null>(null)
@@ -200,6 +204,39 @@ export default function CarrouselClientPage({ initialSlides }: CarrouselClientPa
     }
   }
 
+  const handleMoveSlide = async (index: number, direction: 'up' | 'down') => {
+    const targetIndex = direction === 'up' ? index - 1 : index + 1
+
+    if (targetIndex < 0 || targetIndex >= sortedSlides.length || reorderingId) return
+
+    const current = sortedSlides[index]
+    const target = sortedSlides[targetIndex]
+
+    setReorderingId(current.id)
+
+    try {
+      const [resCurrent, resTarget] = await Promise.all([
+        axios.put(`/api/web/slides/${current.id}`, { ...current, orden: target.orden }),
+        axios.put(`/api/web/slides/${target.id}`, { ...target, orden: current.orden })
+      ])
+
+      setSlides(prev =>
+        prev.map(s => {
+          if (s.id === current.id) return resCurrent.data.data
+          if (s.id === target.id) return resTarget.data.data
+
+          return s
+        })
+      )
+      router.refresh()
+    } catch (error) {
+      console.error('Error reordering slides:', error)
+      toast.error('Error al actualizar el orden')
+    } finally {
+      setReorderingId(null)
+    }
+  }
+
   const handleOpenDelete = (id: string) => {
     setSlideToDelete(id)
     setDeleteConfirmOpen(true)
@@ -263,17 +300,41 @@ export default function CarrouselClientPage({ initialSlides }: CarrouselClientPa
               </TableRow>
             </TableHead>
             <TableBody>
-              {slides.length === 0 ? (
+              {sortedSlides.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} align='center' sx={{ py: 10 }}>
                     <Typography color='text.secondary'>No hay diapositivas configuradas en la base de datos. Se están mostrando las diapositivas por defecto.</Typography>
                   </TableCell>
                 </TableRow>
               ) : (
-                slides.map((slide) => (
-                  <TableRow key={slide.id} hover>
+                sortedSlides.map((slide, index) => (
+                  <TableRow key={slide.id} hover selected={reorderingId === slide.id}>
                     <TableCell align='center'>
-                      <Typography className='font-bold'>{slide.orden}</Typography>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <Tooltip title='Subir'>
+                          <span>
+                            <IconButton
+                              size='small'
+                              onClick={() => handleMoveSlide(index, 'up')}
+                              disabled={index === 0 || !!reorderingId}
+                            >
+                              <i className='tabler-chevron-up text-lg' />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                        <Typography className='font-bold'>{slide.orden}</Typography>
+                        <Tooltip title='Bajar'>
+                          <span>
+                            <IconButton
+                              size='small'
+                              onClick={() => handleMoveSlide(index, 'down')}
+                              disabled={index === sortedSlides.length - 1 || !!reorderingId}
+                            >
+                              <i className='tabler-chevron-down text-lg' />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                      </Box>
                     </TableCell>
                     <TableCell>
                       <Box 
@@ -407,7 +468,7 @@ export default function CarrouselClientPage({ initialSlides }: CarrouselClientPa
                 value={formData.boton_url}
                 onChange={handleInputChange}
                 required
-                placeholder='Ej. /programas o #escuelas'
+                placeholder='Ingrese URL'
               />
             </Box>
 

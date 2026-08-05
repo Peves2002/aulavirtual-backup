@@ -8,16 +8,20 @@ interface AdphHeroFormProps {
   title: React.ReactNode
   subtitle: React.ReactNode
   backgroundImage: string
+  mobileBackgroundImage?: string
   defaultSchool?: string
   formTitle?: string
+  brochureUrls?: Record<string, string>
 }
 
 export default function AdphHeroForm({
   title,
   subtitle,
   backgroundImage,
+  mobileBackgroundImage,
   defaultSchool = '',
   formTitle = 'SOLICITA INFORMACIÓN',
+  brochureUrls = {},
 }: AdphHeroFormProps) {
   const [formData, setFormData] = useState({
     nombres: '',
@@ -90,9 +94,15 @@ export default function AdphHeroForm({
       <div className="absolute inset-0 z-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
+          src={mobileBackgroundImage || backgroundImage}
+          alt="Hero Background"
+          className="w-full h-full object-cover lg:hidden"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={backgroundImage}
           alt="Hero Background"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover hidden lg:block"
         />
         <div className="absolute inset-0 bg-black/50" />
       </div>
@@ -126,16 +136,11 @@ export default function AdphHeroForm({
               <p className="text-white font-bold text-lg">¡Registro recibido!</p>
               <p className="text-slate-200 text-sm font-semibold">Un asesor se pondrá en contacto contigo pronto.</p>
               
-              {formData.escuela && (
+              {formData.escuela && brochureUrls[ESCUELAS.find(e => e.name === formData.escuela)?.id ?? ''] && (
                 <div className="pt-6 border-t border-white/10 mt-6">
                   <p className="text-sm text-slate-300 mb-3 font-medium">Mientras tanto, puedes descargar nuestro brochure:</p>
                   <a
-                    href={`/brochures/${ESCUELAS.find(e => e.name === formData.escuela)?.id || formData.escuela
-                      .toLowerCase()
-                      .normalize('NFD')
-                      .replace(/[\u0300-\u036f]/g, '')
-                      .replace(/[\s_]+/g, '-')
-                      .replace(/[^\w-]+/g, '')}.pdf`}
+                    href={brochureUrls[ESCUELAS.find(e => e.name === formData.escuela)?.id ?? '']}
                     download
                     target="_blank"
                     rel="noopener noreferrer"

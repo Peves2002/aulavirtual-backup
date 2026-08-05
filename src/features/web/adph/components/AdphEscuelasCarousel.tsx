@@ -17,7 +17,7 @@ export default function AdphEscuelasCarousel({ escuelas }: AdphEscuelasCarouselP
       <Link 
         key={escuela.id} 
         href={`/escuelas/${escuela.id}`}
-        className="group block rounded-3xl border border-slate-200/80 bg-white shadow-sm hover:shadow-2xl hover:shadow-[#08479b]/10 hover:-translate-y-2 transition-all duration-500 flex flex-col h-full overflow-hidden"
+        className="group block rounded-3xl border border-slate-200/80 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.12)] hover:shadow-2xl hover:shadow-[#08479b]/10 hover:-translate-y-2 transition-all duration-500 flex flex-col h-full overflow-hidden"
       >
         {/* Image container */}
         <div className="relative w-full h-[220px] overflow-hidden">

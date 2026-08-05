@@ -5,7 +5,7 @@ import { Play, ChevronRight, GraduationCap, Award, Briefcase, Users, Star, Check
 
 
 import AdphHeroForm from '@/features/web/adph/components/AdphHeroForm'
-import { ESCUELAS, getEscuela } from '@/features/web/adph/data/escuelas'
+import { ESCUELAS, getEscuela, getEscuelaBrochureUrls } from '@/features/web/adph/data/escuelas'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import { getConfigs } from '@/utils/libs/config'
 import prisma from '@/utils/libs/prisma'
@@ -33,8 +33,8 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
   
   const keyPrefix = `ESCUELA_${params.escuelaId.toUpperCase().replace(/-/g, '_')}`
   
-  const dbName = configs[`${keyPrefix}_NAME`]?.trim()
-  const dbDesc = configs[`${keyPrefix}_DESC`]?.trim()
+  const dbName = configs[`${keyPrefix}_NAME`]?.replace(/<[^>]*>?/gm, '').trim()
+  const dbDesc = configs[`${keyPrefix}_DESC`]?.replace(/<[^>]*>?/gm, '').trim()
   const dbAbout = configs[`${keyPrefix}_ABOUT`]?.trim()
   const dbImage = configs[`${keyPrefix}_IMAGE`]?.trim()
   const dbHeroBg = configs[`${keyPrefix}_HEROBG`]?.trim()
@@ -49,6 +49,8 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
   
   const dbCertsConsStr = configs[`${keyPrefix}_CERTS_CONS`]?.trim()
   const dbCertsCons = dbCertsConsStr ? dbCertsConsStr.split('\n').map(s => s.trim()).filter(Boolean) : undefined
+
+  const brochureUrls = getEscuelaBrochureUrls(configs)
 
   const escuela = {
     ...escuelaStatic,
@@ -93,7 +95,9 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
         title={escuela.name}
         subtitle={escuela.desc}
         backgroundImage={escuela.heroBg}
+        mobileBackgroundImage={escuela.image}
         defaultSchool={escuela.name}
+        brochureUrls={brochureUrls}
       />
 
       {/* 1. Presentación (Sobre la Escuela) */}
