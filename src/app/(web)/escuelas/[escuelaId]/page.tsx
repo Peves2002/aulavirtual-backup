@@ -1,7 +1,11 @@
 import Link from 'next/link'
 
 
-import { Play, ChevronRight, GraduationCap, Award, Briefcase, Users, Star, CheckCircle } from 'lucide-react'
+import {
+  Play, ChevronRight, GraduationCap, Award, Briefcase, Users, Star, CheckCircle,
+  Heart, Lightbulb, TrendingUp, ShieldCheck, Target, Rocket, BookOpen,
+  type LucideIcon
+} from 'lucide-react'
 
 
 import AdphHeroForm from '@/features/web/adph/components/AdphHeroForm'
@@ -13,6 +17,33 @@ import prisma from '@/utils/libs/prisma'
 
 
 export const dynamic = 'force-dynamic'
+
+// Defaults compartidos — deben coincidir con los placeholders/fallbacks en
+// src/features/admin/edicion-web/components/EdicionWebView.tsx (pestaña Escuelas)
+const DEFAULT_SEC1_TITLE = 'Formamos líderes para los <br/><span style="color:#08479b">retos del mañana</span>'
+const DEFAULT_SEC1_IMAGE = 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1200&q=80'
+const DEFAULT_SEC2_EYEBROW = 'Líneas de Especialización'
+const DEFAULT_SEC2_HEADING = 'Certificaciones y Áreas'
+const DEFAULT_SEC2_DESC = 'Programas diseñados por expertos para potenciar tu perfil profesional con certificaciones de reconocimiento regional.'
+const DEFAULT_SEC2_ESP_IMAGE = 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1000&q=80'
+const DEFAULT_SEC2_ESP_TITLE = 'Conviértete en un Experto Certificado'
+const DEFAULT_SEC2_ESP_DESC = 'Domina las competencias más demandadas por las organizaciones líderes de Latinoamérica.'
+const DEFAULT_SEC2_CONS_IMAGE = 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1000&q=80'
+const DEFAULT_SEC2_CONS_TITLE = 'Lidera el Cambio Organizacional'
+const DEFAULT_SEC2_CONS_DESC = 'Desarrolla capacidades de consultoría de alto nivel para acompañar a organizaciones en su transformación.'
+
+// Debe coincidir con ICON_OPTIONS en src/features/admin/configuracion/components/ValoresSettings.tsx
+const ICON_MAP: Record<string, LucideIcon> = {
+  Heart, Lightbulb, Users, TrendingUp, ShieldCheck, Award, Target, Star,
+  CheckCircle, Rocket, BookOpen, Briefcase, GraduationCap
+}
+
+const DEFAULT_SEC3_STATS = [
+  { icon: Users, value: '+10,000', label: 'Egresados' },
+  { icon: Briefcase, value: '95%', label: 'Tasa de Empleabilidad' },
+  { icon: Star, value: '4.8/5', label: 'Satisfacción Estudiantil' },
+  { icon: GraduationCap, value: '100%', label: 'Programas Actualizados' }
+]
 
 export function generateStaticParams() {
   return ESCUELAS.map(e => ({ escuelaId: e.id }))
@@ -52,6 +83,59 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
 
   const brochureUrls = getEscuelaBrochureUrls(configs)
 
+  // Botón CTA de la sección Presentación
+  const ctaLabel = configs[`${keyPrefix}_CTA_LABEL`]?.trim() || 'Ver Programas'
+  const ctaUrl = configs[`${keyPrefix}_CTA_URL`]?.trim() || '#programas'
+
+  // Título e imagen de la sección Presentación
+  const sec1Title = configs[`${keyPrefix}_SEC1_TITLE`]?.trim() || DEFAULT_SEC1_TITLE
+  const sec1VideoUrl = configs[`${keyPrefix}_SEC1_VIDEO_URL`]?.trim() || ''
+  const sec1Image = configs[`${keyPrefix}_SEC1_IMAGE`]?.trim() || DEFAULT_SEC1_IMAGE
+
+  // Encabezado de la sección "Certificaciones y Áreas"
+  const sec2Eyebrow = configs[`${keyPrefix}_SEC2_EYEBROW`]?.trim() || DEFAULT_SEC2_EYEBROW
+  const sec2Heading = configs[`${keyPrefix}_SEC2_HEADING`]?.trim() || DEFAULT_SEC2_HEADING
+  const sec2Desc = configs[`${keyPrefix}_SEC2_DESC`]?.trim() || DEFAULT_SEC2_DESC
+
+  // Bloques de Certificaciones (imagen + título + descripción)
+  const sec2EspImage = configs[`${keyPrefix}_SEC2_ESP_IMAGE`]?.trim() || DEFAULT_SEC2_ESP_IMAGE
+  const sec2EspTitle = configs[`${keyPrefix}_SEC2_ESP_TITLE`]?.trim() || DEFAULT_SEC2_ESP_TITLE
+  const sec2EspDesc = configs[`${keyPrefix}_SEC2_ESP_DESC`]?.trim() || DEFAULT_SEC2_ESP_DESC
+  const sec2ConsImage = configs[`${keyPrefix}_SEC2_CONS_IMAGE`]?.trim() || DEFAULT_SEC2_CONS_IMAGE
+  const sec2ConsTitle = configs[`${keyPrefix}_SEC2_CONS_TITLE`]?.trim() || DEFAULT_SEC2_CONS_TITLE
+  const sec2ConsDesc = configs[`${keyPrefix}_SEC2_CONS_DESC`]?.trim() || DEFAULT_SEC2_CONS_DESC
+
+  // Estadísticas Generales (4 tarjetas, ícono fijo por posición)
+  const statsGenerales = DEFAULT_SEC3_STATS.map((defaultStat, i) => {
+    const iconName = configs[`${keyPrefix}_SEC3_STAT${i + 1}_ICON`]?.trim()
+
+
+return {
+      icon: (iconName && ICON_MAP[iconName]) || defaultStat.icon,
+      value: configs[`${keyPrefix}_SEC3_STAT${i + 1}_VALUE`]?.trim() || defaultStat.value,
+      label: configs[`${keyPrefix}_SEC3_STAT${i + 1}_LABEL`]?.trim() || defaultStat.label
+    }
+  })
+
+  // "¿Por qué elegir esta escuela?" (3 estadísticas) — el default del stat 2 se calcula dinámicamente
+  const statsPorQueElegir = [
+    {
+      value: configs[`${keyPrefix}_STAT1_VALUE`]?.trim() || '#1',
+      label: configs[`${keyPrefix}_STAT1_LABEL`]?.trim() || 'En Calidad Educativa',
+      desc: configs[`${keyPrefix}_STAT1_DESC`]?.trim() || 'Respaldado por las mejores instituciones y expertos del sector corporativo.'
+    },
+    {
+      value: configs[`${keyPrefix}_STAT2_VALUE`]?.trim() || `+${new Date().getFullYear() - 2012}`,
+      label: configs[`${keyPrefix}_STAT2_LABEL`]?.trim() || 'Años de Experiencia',
+      desc: configs[`${keyPrefix}_STAT2_DESC`]?.trim() || 'Transformando la carrera de miles de profesionales en toda Latam.'
+    },
+    {
+      value: configs[`${keyPrefix}_STAT3_VALUE`]?.trim() || '100%',
+      label: configs[`${keyPrefix}_STAT3_LABEL`]?.trim() || 'Metodología Práctica',
+      desc: configs[`${keyPrefix}_STAT3_DESC`]?.trim() || 'Casos reales de empresas top, diseñados para aplicación inmediata.'
+    }
+  ]
+
   const escuela = {
     ...escuelaStatic,
     name: dbName || escuelaStatic.name,
@@ -62,8 +146,24 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
     areas: dbAreas || escuelaStatic.areas,
     certificationsEsp: dbCertsEsp || escuelaStatic.certificationsEsp,
     certificationsCons: dbCertsCons || escuelaStatic.certificationsCons,
+    ctaLabel,
+    ctaUrl,
+    sec1Title,
+    sec1VideoUrl,
+    sec1Image,
+    sec2Eyebrow,
+    sec2Heading,
+    sec2Desc,
+    sec2EspImage,
+    sec2EspTitle,
+    sec2EspDesc,
+    sec2ConsImage,
+    sec2ConsTitle,
+    sec2ConsDesc,
+    statsGenerales,
+    statsPorQueElegir,
   }
-  
+
   const cursosDB = await prisma.curso.findMany({
     where: {
       estado: 'PUBLICADO',
@@ -79,6 +179,12 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
     },
     orderBy: { orden: 'asc' }
   })
+
+  // Si hay URL de video, la imagen de Presentación se vuelve un enlace clickeable
+  const PresentationMediaTag = escuela.sec1VideoUrl ? 'a' : 'div'
+  const presentationMediaProps = escuela.sec1VideoUrl
+    ? { href: escuela.sec1VideoUrl, target: '_blank', rel: 'noopener noreferrer' }
+    : {}
 
   const programasEscuela = cursosDB.map(c => ({
     id: c.id,
@@ -96,7 +202,7 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
         subtitle={escuela.desc}
         backgroundImage={escuela.heroBg}
         mobileBackgroundImage={escuela.image}
-        defaultSchool={escuela.name}
+        defaultSchool={escuelaStatic.name}
         brochureUrls={brochureUrls}
       />
 
@@ -109,30 +215,29 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
                 <h2 className="text-[#08479b] font-bold text-sm tracking-widest uppercase mb-4">
                   Presentación de la Escuela
                 </h2>
-                <h3 className="text-slate-900 font-black text-4xl md:text-5xl leading-tight mb-8">
-                  Formamos líderes para los <br />
-                  <span className="text-[#08479b]">retos del mañana</span>
-                </h3>
+                <h3
+                  className="text-slate-900 font-black text-4xl md:text-5xl leading-tight mb-8 [&>p]:m-0"
+                  dangerouslySetInnerHTML={{ __html: escuela.sec1Title }}
+                />
                 <div className="text-slate-600 text-lg leading-relaxed space-y-6 text-justify">
                   <div dangerouslySetInnerHTML={{ __html: escuela.about ?? '' }} />
-                  <p>
-                    Nuestra metodología combina el rigor académico con la aplicación práctica 
-                    en entornos reales de negocio, preparándote para destacar en el mercado actual.
-                  </p>
                 </div>
                 <div className="mt-10">
-                  <Link href="#programas" className="bg-[#08479b] hover:bg-[#06316b] text-white px-8 py-4 rounded-full font-bold inline-flex items-center gap-2 transition-all hover:-translate-y-1 hover:shadow-lg">
-                    Ver Programas <ChevronRight className="w-5 h-5" />
+                  <Link href={escuela.ctaUrl} className="bg-[#08479b] hover:bg-[#06316b] text-white px-8 py-4 rounded-full font-bold inline-flex items-center gap-2 transition-all hover:-translate-y-1 hover:shadow-lg">
+                    {escuela.ctaLabel} <ChevronRight className="w-5 h-5" />
                   </Link>
                 </div>
               </div>
             </ScrollReveal>
-            
+
             <ScrollReveal delay={0.2}>
-              <div className="relative rounded-none overflow-hidden shadow-2xl group cursor-pointer aspect-video">
-                <img 
-                  src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1200&q=80" 
-                  alt="Presentación" 
+              <PresentationMediaTag
+                {...presentationMediaProps}
+                className="relative rounded-none overflow-hidden shadow-2xl group cursor-pointer aspect-video block"
+              >
+                <img
+                  src={escuela.sec1Image}
+                  alt="Presentación"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors"></div>
@@ -141,7 +246,7 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
                     <Play className="w-8 h-8 ml-1" fill="currentColor" />
                   </div>
                 </div>
-              </div>
+              </PresentationMediaTag>
             </ScrollReveal>
           </div>
         </div>
@@ -164,14 +269,28 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
               className="inline-flex items-center gap-2 text-[#08479b] font-bold text-xs tracking-[0.2em] uppercase mb-5 px-5 py-2 rounded-full bg-[#08479b]/10 border border-[#08479b]/20"
             >
               <Award className="w-3.5 h-3.5" />
-              Líneas de Especialización
+              {escuela.sec2Eyebrow}
             </span>
-            <h2 className="text-slate-900 font-black text-4xl md:text-6xl tracking-tight drop-shadow-sm mb-4">
-              Certificaciones y Áreas
-            </h2>
-            <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-              Programas diseñados por expertos para potenciar tu perfil profesional con certificaciones de reconocimiento regional.
-            </p>
+            <h2
+              className="text-slate-900 font-black text-4xl md:text-6xl tracking-tight drop-shadow-sm mb-4 [&>p]:m-0"
+              dangerouslySetInnerHTML={{ __html: escuela.sec2Heading }}
+            />
+            <div
+              className="text-slate-600 text-lg max-w-2xl mx-auto [&>p]:m-0"
+              dangerouslySetInnerHTML={{ __html: escuela.sec2Desc }}
+            />
+            {escuela.areas && escuela.areas.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto mt-8">
+                {escuela.areas.map((area, i) => (
+                  <span
+                    key={i}
+                    className="text-slate-700 text-xs font-semibold px-4 py-2 rounded-full bg-white border border-slate-200"
+                  >
+                    {area}
+                  </span>
+                ))}
+              </div>
+            )}
             <div className="w-20 h-1 mx-auto mt-6 rounded-full" style={{ background: 'linear-gradient(90deg, transparent, #fcd116, transparent)' }} />
           </ScrollReveal>
         </div>
@@ -187,7 +306,7 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
                 {/* Panel imagen */}
                 <div className="relative overflow-hidden min-h-[320px] lg:min-h-0 group">
                   <img
-                    src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1000&q=80"
+                    src={escuela.sec2EspImage}
                     alt="Certificaciones de Especialista"
                     className="w-full h-full object-cover absolute inset-0 transition-transform duration-[1.2s] group-hover:scale-105"
                   />
@@ -219,9 +338,9 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
 
                   <p className="text-[#08479b] text-xs font-bold uppercase tracking-[0.2em] mb-3">Certificaciones de Especialista</p>
                   <h3 className="text-slate-900 font-black text-2xl md:text-3xl leading-tight mb-2">
-                    Conviértete en un Experto Certificado
+                    {escuela.sec2EspTitle}
                   </h3>
-                  <p className="text-slate-600 text-sm mb-8">Domina las competencias más demandadas por las organizaciones líderes de Latinoamérica.</p>
+                  <p className="text-slate-600 text-sm mb-8">{escuela.sec2EspDesc}</p>
 
                   {/* Lista de certificados */}
                   <div className="space-y-3 mb-8">
@@ -268,9 +387,9 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
 
                   <p className="text-[#08479b] text-xs font-bold uppercase tracking-[0.2em] mb-3">Certificaciones de Consultor</p>
                   <h3 className="text-slate-900 font-black text-2xl md:text-3xl leading-tight mb-2">
-                    Lidera el Cambio Organizacional
+                    {escuela.sec2ConsTitle}
                   </h3>
-                  <p className="text-slate-600 text-sm mb-8">Desarrolla capacidades de consultoría de alto nivel para acompañar a organizaciones en su transformación.</p>
+                  <p className="text-slate-600 text-sm mb-8">{escuela.sec2ConsDesc}</p>
 
                   {/* Lista de certificados */}
                   <div className="space-y-3 mb-8">
@@ -302,7 +421,7 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
                 {/* Panel imagen (derecha) */}
                 <div className="relative overflow-hidden min-h-[320px] lg:min-h-0 order-1 lg:order-2 group">
                   <img
-                    src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1000&q=80"
+                    src={escuela.sec2ConsImage}
                     alt="Certificaciones de Consultor"
                     className="w-full h-full object-cover absolute inset-0 transition-transform duration-[1.2s] group-hover:scale-105"
                   />
@@ -341,15 +460,10 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
         <div className="absolute top-0 left-0 w-full h-1/2 bg-[#F4F7FC]"></div>
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: Users, label: "Egresados", value: "+10,000", color: "#08479b" },
-              { icon: Briefcase, label: "Tasa de Empleabilidad", value: "95%", color: "#08479b" },
-              { icon: Star, label: "Satisfacción Estudiantil", value: "4.8/5", color: "#08479b" },
-              { icon: GraduationCap, label: "Programas Actualizados", value: "100%", color: "#08479b" }
-            ].map((stat, i) => (
+            {escuela.statsGenerales.map((stat, i) => (
               <ScrollReveal key={i} delay={0.1 * i}>
                 <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-[0_15px_30px_rgba(0,0,0,0.04)] text-center group hover:-translate-y-2 transition-all duration-300">
-                  <div className="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110" style={{ backgroundColor: `${stat.color}15`, color: stat.color }}>
+                  <div className="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110" style={{ backgroundColor: '#08479b15', color: '#08479b' }}>
                     <stat.icon className="w-8 h-8" />
                   </div>
                   <h4 className="text-slate-900 font-black text-3xl mb-2">{stat.value}</h4>
@@ -374,35 +488,22 @@ export default async function EscuelaPage({ params }: { params: { escuelaId: str
           </ScrollReveal>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center divide-y md:divide-y-0 md:divide-x divide-white/20">
-            <ScrollReveal delay={0.1}>
-              <div className="px-8 py-6 md:py-0">
-                <div className="text-5xl md:text-7xl font-black text-white mb-4 flex justify-center items-end gap-2">
-                  <span className="text-[#3BA8C5]">#</span>1
-                </div>
-                <h4 className="text-white/90 font-bold text-xl mb-3">En Calidad Educativa</h4>
-                <p className="text-white/60 text-sm">Respaldado por las mejores instituciones y expertos del sector corporativo.</p>
-              </div>
-            </ScrollReveal>
-            
-            <ScrollReveal delay={0.2}>
-              <div className="px-8 py-6 md:py-0">
-                <div className="text-5xl md:text-7xl font-black text-white mb-4 flex justify-center items-end gap-2">
-                  <span className="text-[#3BA8C5]">+</span>{new Date().getFullYear() - 2012}
-                </div>
-                <h4 className="text-white/90 font-bold text-xl mb-3">Años de Experiencia</h4>
-                <p className="text-white/60 text-sm">Transformando la carrera de miles de profesionales en toda Latam.</p>
-              </div>
-            </ScrollReveal>
-            
-            <ScrollReveal delay={0.3}>
-              <div className="px-8 py-6 md:py-0">
-                <div className="text-5xl md:text-7xl font-black text-white mb-4 flex justify-center items-end gap-2">
-                  <span className="text-[#3BA8C5]">100</span><span className="text-4xl">%</span>
-                </div>
-                <h4 className="text-white/90 font-bold text-xl mb-3">Metodología Práctica</h4>
-                <p className="text-white/60 text-sm">Casos reales de empresas top, diseñados para aplicación inmediata.</p>
-              </div>
-            </ScrollReveal>
+            {escuela.statsPorQueElegir.map((stat, i) => {
+              const accentChar = /^[#+]/.test(stat.value) ? stat.value[0] : ''
+              const rest = accentChar ? stat.value.slice(1) : stat.value
+
+              return (
+                <ScrollReveal key={i} delay={0.1 * (i + 1)}>
+                  <div className="px-8 py-6 md:py-0">
+                    <div className="text-5xl md:text-7xl font-black text-white mb-4 flex justify-center items-end gap-2">
+                      {accentChar && <span className="text-[#3BA8C5]">{accentChar}</span>}{rest}
+                    </div>
+                    <h4 className="text-white/90 font-bold text-xl mb-3">{stat.label}</h4>
+                    <p className="text-white/60 text-sm">{stat.desc}</p>
+                  </div>
+                </ScrollReveal>
+              )
+            })}
           </div>
         </div>
       </section>

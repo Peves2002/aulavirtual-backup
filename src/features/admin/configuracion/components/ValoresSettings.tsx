@@ -25,6 +25,8 @@ import {
   CheckCircle,
   Rocket,
   BookOpen,
+  Briefcase,
+  GraduationCap,
   ArrowUp,
   ArrowDown,
   type LucideIcon
@@ -55,7 +57,9 @@ export const ICON_OPTIONS: { key: string; Icon: LucideIcon; label: string }[] = 
   { key: 'Star', Icon: Star, label: 'Estrella' },
   { key: 'CheckCircle', Icon: CheckCircle, label: 'Calidad' },
   { key: 'Rocket', Icon: Rocket, label: 'Impulso' },
-  { key: 'BookOpen', Icon: BookOpen, label: 'Aprendizaje' }
+  { key: 'BookOpen', Icon: BookOpen, label: 'Aprendizaje' },
+  { key: 'Briefcase', Icon: Briefcase, label: 'Empleabilidad' },
+  { key: 'GraduationCap', Icon: GraduationCap, label: 'Graduación' }
 ]
 
 const ICON_MAP: Record<string, LucideIcon> = ICON_OPTIONS.reduce(

@@ -17,7 +17,11 @@ import {
   Tab,
   Divider,
   Chip,
-  CardHeader
+  CardHeader,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  MenuItem
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { getSession } from 'next-auth/react'
@@ -28,7 +32,7 @@ import MediaLibrary from '../../cursos/components/MediaLibrary'
 import { ESCUELAS } from '@/features/web/adph/data/escuelas'
 import { CONSULTORIA_SERVICIOS, HRCOREX_SERVICIOS } from '@/features/web/adph/data/services'
 import TestimoniosSettings from '../../configuracion/components/TestimoniosSettings'
-import ValoresSettings from '../../configuracion/components/ValoresSettings'
+import ValoresSettings, { ICON_OPTIONS } from '../../configuracion/components/ValoresSettings'
 
 import RichTextEditor from '@/utils/components/RichTextEditor'
 
@@ -53,6 +57,29 @@ return url
     return url
   }
 }
+
+// ─── Defaults compartidos — Página de Escuela ──────────────────────────────────
+// Mismos valores que hoy están hardcodeados en src/app/(web)/escuelas/[escuelaId]/page.tsx,
+// usados como placeholder aquí y como fallback allá cuando el admin no los edita.
+
+const DEFAULT_SEC1_TITLE = 'Formamos líderes para los <br/><span style="color:#08479b">retos del mañana</span>'
+const DEFAULT_SEC1_IMAGE = 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1200&q=80'
+const DEFAULT_SEC2_EYEBROW = 'Líneas de Especialización'
+const DEFAULT_SEC2_HEADING = 'Certificaciones y Áreas'
+const DEFAULT_SEC2_DESC = 'Programas diseñados por expertos para potenciar tu perfil profesional con certificaciones de reconocimiento regional.'
+const DEFAULT_SEC2_ESP_IMAGE = 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1000&q=80'
+const DEFAULT_SEC2_ESP_TITLE = 'Conviértete en un Experto Certificado'
+const DEFAULT_SEC2_ESP_DESC = 'Domina las competencias más demandadas por las organizaciones líderes de Latinoamérica.'
+const DEFAULT_SEC2_CONS_IMAGE = 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1000&q=80'
+const DEFAULT_SEC2_CONS_TITLE = 'Lidera el Cambio Organizacional'
+const DEFAULT_SEC2_CONS_DESC = 'Desarrolla capacidades de consultoría de alto nivel para acompañar a organizaciones en su transformación.'
+
+const DEFAULT_SEC3_STATS = [
+  { n: 1, vPh: '+10,000', lPh: 'Egresados', iconDefault: 'Users' },
+  { n: 2, vPh: '95%', lPh: 'Tasa de Empleabilidad', iconDefault: 'Briefcase' },
+  { n: 3, vPh: '4.8/5', lPh: 'Satisfacción Estudiantil', iconDefault: 'Star' },
+  { n: 4, vPh: '100%', lPh: 'Programas Actualizados', iconDefault: 'GraduationCap' }
+]
 
 // ─── Collapsible Section Card ──────────────────────────────────────────────────
 
@@ -137,6 +164,30 @@ function WebSectionCard({ icon, title, subtitle, url, children }: WebSectionCard
   )
 }
 
+// ─── Escuela Sub-Section Accordion ─────────────────────────────────────────────
+
+interface EscuelaSubSectionProps {
+  icon: string
+  title: string
+  children: React.ReactNode
+}
+
+function EscuelaSubSection({ icon, title, children }: EscuelaSubSectionProps) {
+  return (
+    <Accordion variant='outlined' disableGutters sx={{ borderRadius: 2, '&:before': { display: 'none' } }}>
+      <AccordionSummary expandIcon={<i className='tabler-chevron-down' style={{ fontSize: 18 }} />}>
+        <Stack direction='row' spacing={1.5} alignItems='center'>
+          <i className={icon} style={{ fontSize: 16, color: 'var(--mui-palette-primary-main)' }} />
+          <Typography variant='subtitle2' fontWeight={700}>{title}</Typography>
+        </Stack>
+      </AccordionSummary>
+      <AccordionDetails sx={{ pt: 1 }}>
+        <Stack spacing={3}>{children}</Stack>
+      </AccordionDetails>
+    </Accordion>
+  )
+}
+
 // ─── Tab Panel ─────────────────────────────────────────────────────────────────
 
 function CustomTabPanel({ children, value, index }: { children?: React.ReactNode; value: number; index: number }) {
@@ -157,7 +208,7 @@ export function EdicionWebView({ initialData }: EdicionWebViewProps) {
   const { enqueueSnackbar } = useSnackbar()
   const [tabValue, setTabValue] = useState(0)
   const [saving, setSaving] = useState(false)
-  const [mediaSelectTarget, setMediaSelectTarget] = useState<{ key: string; acceptType?: 'IMAGEN' | 'PDF'; title?: string } | null>(null)
+  const [mediaSelectTarget, setMediaSelectTarget] = useState<{ key: string; nameKey?: string; acceptType?: 'IMAGEN' | 'PDF'; title?: string } | null>(null)
   const [openLogoMedia, setOpenLogoMedia] = useState(false)
   const [pendingLogoLabel, setPendingLogoLabel] = useState('')
 
@@ -887,11 +938,30 @@ return (
             const certsEspKey = `${keyPrefix}_CERTS_ESP`
             const certsConsKey = `${keyPrefix}_CERTS_CONS`
             const brochureKey = `${keyPrefix}_BROCHURE`
+            const brochureNameKey = `${keyPrefix}_BROCHURE_NAME`
 
             const cardImageUrl = config[cardImageKey] || esc.image
             const heroBgUrl = config[heroBgKey] || esc.heroBg
             const ctaLabelKey = `${keyPrefix}_CTA_LABEL`
             const ctaUrlKey   = `${keyPrefix}_CTA_URL`
+
+            // Presentación e imágenes de certificaciones (por escuela, con default compartido)
+            const sec1TitleKey = `${keyPrefix}_SEC1_TITLE`
+            const sec1VideoUrlKey = `${keyPrefix}_SEC1_VIDEO_URL`
+            const sec1ImageKey = `${keyPrefix}_SEC1_IMAGE`
+            const sec2EyebrowKey = `${keyPrefix}_SEC2_EYEBROW`
+            const sec2HeadingKey = `${keyPrefix}_SEC2_HEADING`
+            const sec2DescKey = `${keyPrefix}_SEC2_DESC`
+            const sec2EspImageKey = `${keyPrefix}_SEC2_ESP_IMAGE`
+            const sec2EspTitleKey = `${keyPrefix}_SEC2_ESP_TITLE`
+            const sec2EspDescKey = `${keyPrefix}_SEC2_ESP_DESC`
+            const sec2ConsImageKey = `${keyPrefix}_SEC2_CONS_IMAGE`
+            const sec2ConsTitleKey = `${keyPrefix}_SEC2_CONS_TITLE`
+            const sec2ConsDescKey = `${keyPrefix}_SEC2_CONS_DESC`
+
+            const sec1ImageUrl = config[sec1ImageKey] || DEFAULT_SEC1_IMAGE
+            const sec2EspImageUrl = config[sec2EspImageKey] || DEFAULT_SEC2_ESP_IMAGE
+            const sec2ConsImageUrl = config[sec2ConsImageKey] || DEFAULT_SEC2_CONS_IMAGE
 
             // Areas and certs: stored as JSON array or newline-separated string
             const areasVal = config[areasKey] ?? (esc.areas || []).join('\n')
@@ -906,150 +976,405 @@ return (
                 subtitle={config[descKey] || esc.desc}
                 url={`/escuelas/${esc.id}`}
               >
-                <Stack spacing={3}>
-                  {/* Brochure PDF */}
-                  <Box>
-                    <Typography variant='subtitle2' fontWeight={700} sx={{ mb: 1 }}>Brochure (PDF)</Typography>
-                    {config[brochureKey] ? (
-                      <Box sx={{ p: 2, borderRadius: 2, bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minWidth: 0 }}>
-                          <i className='tabler-file-type-pdf text-3xl text-error' />
-                          <Box sx={{ minWidth: 0 }}>
-                            <Typography variant='body2' fontWeight={600} noWrap>Brochure adjunto</Typography>
-                            <Typography
-                              variant='caption' color='primary' component='a'
-                              href={config[brochureKey]} target='_blank' rel='noopener noreferrer'
-                              sx={{ display: 'block', textDecoration: 'none' }}
-                            >
-                              Ver archivo
-                            </Typography>
+                <Stack spacing={2}>
+                  <EscuelaSubSection icon='tabler-info-circle' title='Portada'>
+                    {/* Brochure PDF */}
+                    <Box>
+                      <Typography variant='subtitle2' fontWeight={700} sx={{ mb: 1 }}>Brochure (PDF)</Typography>
+                      {config[brochureKey] ? (
+                        <Box sx={{ p: 2, borderRadius: 2, bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minWidth: 0 }}>
+                            <i className='tabler-file-type-pdf text-3xl text-error' />
+                            <Box sx={{ minWidth: 0 }}>
+                              <Typography variant='body2' fontWeight={600} noWrap>
+                                {config[brochureNameKey] || 'Brochure adjunto'}
+                              </Typography>
+                              <Typography
+                                variant='caption' color='primary' component='a'
+                                href={config[brochureKey]} target='_blank' rel='noopener noreferrer'
+                                sx={{ display: 'block', textDecoration: 'none' }}
+                              >
+                                Ver archivo
+                              </Typography>
+                            </Box>
                           </Box>
+                          <Stack direction='row' spacing={1} sx={{ flexShrink: 0 }}>
+                            <Button
+                              variant='outlined' size='small'
+                              onClick={() => setMediaSelectTarget({ key: brochureKey, nameKey: brochureNameKey, acceptType: 'PDF', title: 'Seleccionar Brochure (PDF)' })}
+                            >
+                              Cambiar
+                            </Button>
+                            <Button variant='text' size='small' color='error' onClick={() => { handleInputChange(brochureKey, ''); handleInputChange(brochureNameKey, '') }}>
+                              Quitar
+                            </Button>
+                          </Stack>
                         </Box>
-                        <Stack direction='row' spacing={1} sx={{ flexShrink: 0 }}>
-                          <Button
-                            variant='outlined' size='small'
-                            onClick={() => setMediaSelectTarget({ key: brochureKey, acceptType: 'PDF', title: 'Seleccionar Brochure (PDF)' })}
-                          >
-                            Cambiar
+                      ) : (
+                        <Button
+                          variant='outlined' size='small'
+                          startIcon={<i className='tabler-file-plus' />}
+                          onClick={() => setMediaSelectTarget({ key: brochureKey, nameKey: brochureNameKey, acceptType: 'PDF', title: 'Seleccionar Brochure (PDF)' })}
+                        >
+                          Subir Brochure (PDF)
+                        </Button>
+                      )}
+                      <Typography variant='caption' color='text.secondary' sx={{ display: 'block', mt: 0.5 }}>
+                        Se descarga desde el formulario de la página /escuelas/{esc.id} al completar el registro
+                      </Typography>
+                    </Box>
+
+                    {/* Nombre y descripción corta */}
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} md={6}>
+                        <TextField
+                          fullWidth size='small'
+                          label='Nombre de la Escuela'
+                          value={stripHtml(config[nameKey]) || esc.name}
+                          onChange={(e) => handleInputChange(nameKey, e.target.value)}
+                          placeholder={esc.name}
+                          helperText='Texto plano — se usa para filtrar cursos y en el menú de navegación'
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <TextField
+                          fullWidth size='small'
+                          label='Descripción Corta (tarjeta)'
+                          value={stripHtml(config[descKey]) || esc.desc}
+                          onChange={(e) => handleInputChange(descKey, e.target.value)}
+                          placeholder={esc.desc}
+                          helperText='Texto plano — aparece en el banner y en el meta description'
+                        />
+                      </Grid>
+                    </Grid>
+
+                    {/* Botón CTA */}
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} md={5}>
+                        <TextField
+                          size='small' fullWidth
+                          label='Texto del Botón'
+                          value={config[ctaLabelKey] || ''}
+                          onChange={(e) => handleInputChange(ctaLabelKey, e.target.value)}
+                          placeholder='Ver Programas'
+                          InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-cursor-text' style={{ fontSize: 16 }} /></InputAdornment> }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={7}>
+                        <TextField
+                          size='small' fullWidth
+                          label='Enlace del Botón (URL)'
+                          value={config[ctaUrlKey] || ''}
+                          onChange={(e) => handleInputChange(ctaUrlKey, e.target.value)}
+                          placeholder='#programas  ó  /programas/mi-programa'
+                          helperText='Puede ser un ancla (#programas), una ruta interna (/programas/...) o una URL externa'
+                          InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-link' style={{ fontSize: 16 }} /></InputAdornment> }}
+                        />
+                      </Grid>
+                    </Grid>
+
+                    <Divider />
+
+                    {/* Imágenes de Portada */}
+                    <Grid container spacing={3}>
+                      {/* Card Image */}
+                      <Grid item xs={12} md={6}>
+                        <Typography variant='body2' color='text.secondary' sx={{ mb: 1, fontWeight: 600 }}>
+                          🃏 Imagen de Tarjeta — 600×400 px recomendado
+                        </Typography>
+                        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                          <Box sx={{ width: 140, height: 90, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            {cardImageUrl
+                              ? <img src={cardImageUrl} alt='Card' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              : <Typography variant='caption' color='text.disabled'>Sin imagen</Typography>
+                            }
+                          </Box>
+                          <Stack spacing={1}>
+                            <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key: cardImageKey })}>
+                              Cambiar Imagen
+                            </Button>
+                            {config[cardImageKey] && config[cardImageKey] !== esc.image && (
+                              <Button variant='text' size='small' color='error' onClick={() => handleInputChange(cardImageKey, esc.image)}>
+                                Restablecer
+                              </Button>
+                            )}
+                          </Stack>
+                        </Box>
+                      </Grid>
+
+                      {/* Hero Banner */}
+                      <Grid item xs={12} md={6}>
+                        <Typography variant='body2' color='text.secondary' sx={{ mb: 1, fontWeight: 600 }}>
+                          🖼️ Imagen de Portada — 1920×600 px recomendado
+                        </Typography>
+                        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                          <Box sx={{ width: 140, height: 90, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            {heroBgUrl
+                              ? <img src={heroBgUrl} alt='Hero' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              : <Typography variant='caption' color='text.disabled'>Sin imagen</Typography>
+                            }
+                          </Box>
+                          <Stack spacing={1}>
+                            <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key: heroBgKey })}>
+                              Cambiar Portada
+                            </Button>
+                            {config[heroBgKey] && config[heroBgKey] !== esc.heroBg && (
+                              <Button variant='text' size='small' color='error' onClick={() => handleInputChange(heroBgKey, esc.heroBg)}>
+                                Restablecer
+                              </Button>
+                            )}
+                          </Stack>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </EscuelaSubSection>
+
+                  <EscuelaSubSection icon='tabler-align-left' title='Presentación'>
+                    {/* Título de Presentación */}
+                    <RichTextEditor
+                      label='Título de Presentación'
+                      value={config[sec1TitleKey] ?? DEFAULT_SEC1_TITLE}
+                      onChange={(value) => handleInputChange(sec1TitleKey, value)}
+                      placeholder={DEFAULT_SEC1_TITLE}
+                      minHeight={80}
+                      simple
+                      helperText='Título grande de la sección de Presentación. Usa el color de texto de la barra de herramientas para resaltar una parte, como en el diseño original'
+                    />
+
+                    {/* Texto About */}
+                    <RichTextEditor
+                      label='Presentación / Sobre la Escuela'
+                      value={config[aboutKey] ?? esc.about}
+                      onChange={(value) => handleInputChange(aboutKey, value)}
+                      placeholder={esc.about}
+                      helperText='Este texto aparece en la sección de Presentación dentro de la página de la escuela'
+                    />
+
+                    {/* Imagen lateral de Presentación */}
+                    <Box>
+                      <Typography variant='body2' color='text.secondary' sx={{ mb: 1, fontWeight: 600 }}>
+                        🖼️ Imagen Lateral — 1200×675 px recomendado
+                      </Typography>
+                      <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                        <Box sx={{ width: 140, height: 90, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <img src={sec1ImageUrl} alt='Presentación' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        </Box>
+                        <Stack spacing={1}>
+                          <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key: sec1ImageKey })}>
+                            Cambiar Imagen
                           </Button>
-                          <Button variant='text' size='small' color='error' onClick={() => handleInputChange(brochureKey, '')}>
-                            Quitar
-                          </Button>
+                          {config[sec1ImageKey] && config[sec1ImageKey] !== DEFAULT_SEC1_IMAGE && (
+                            <Button variant='text' size='small' color='error' onClick={() => handleInputChange(sec1ImageKey, DEFAULT_SEC1_IMAGE)}>
+                              Restablecer
+                            </Button>
+                          )}
                         </Stack>
                       </Box>
-                    ) : (
-                      <Button
-                        variant='outlined' size='small'
-                        startIcon={<i className='tabler-file-plus' />}
-                        onClick={() => setMediaSelectTarget({ key: brochureKey, acceptType: 'PDF', title: 'Seleccionar Brochure (PDF)' })}
-                      >
-                        Subir Brochure (PDF)
-                      </Button>
-                    )}
-                    <Typography variant='caption' color='text.secondary' sx={{ display: 'block', mt: 0.5 }}>
-                      Se descarga desde el formulario de la página /escuelas/{esc.id} al completar el registro
+                    </Box>
+
+                    {/* URL del Video (botón de play sobre la imagen lateral) */}
+                    <TextField
+                      fullWidth size='small'
+                      label='URL del Video (opcional)'
+                      value={config[sec1VideoUrlKey] || ''}
+                      onChange={(e) => handleInputChange(sec1VideoUrlKey, e.target.value)}
+                      placeholder='https://www.youtube.com/watch?v=...'
+                      helperText='Si se completa, el botón de reproducción sobre la imagen abrirá este video en una pestaña nueva. Si se deja vacío, la imagen se muestra sin acción al hacer clic'
+                      InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-brand-youtube' style={{ fontSize: 16 }} /></InputAdornment> }}
+                    />
+                  </EscuelaSubSection>
+
+                  <EscuelaSubSection icon='tabler-certificate' title='Áreas y Certificaciones'>
+                    {/* Encabezado de Sección */}
+                    <Box>
+                      <Typography variant='subtitle2' fontWeight={700} sx={{ mb: 1.5 }}>Encabezado de Sección</Typography>
+                      <Stack spacing={2}>
+                        <TextField
+                          fullWidth size='small'
+                          label='Etiqueta (eyebrow)'
+                          value={config[sec2EyebrowKey] || ''}
+                          onChange={(e) => handleInputChange(sec2EyebrowKey, e.target.value)}
+                          placeholder={DEFAULT_SEC2_EYEBROW}
+                        />
+                        <RichTextEditor
+                          label='Título de Sección'
+                          value={config[sec2HeadingKey] || ''}
+                          onChange={(value) => handleInputChange(sec2HeadingKey, value)}
+                          placeholder={DEFAULT_SEC2_HEADING}
+                          minHeight={60}
+                          simple
+                        />
+                        <RichTextEditor
+                          label='Descripción de Sección'
+                          value={config[sec2DescKey] || ''}
+                          onChange={(value) => handleInputChange(sec2DescKey, value)}
+                          placeholder={DEFAULT_SEC2_DESC}
+                        />
+                      </Stack>
+                    </Box>
+
+                    <Divider />
+
+                    {/* Áreas */}
+                    <TextField
+                      fullWidth multiline rows={5}
+                      label='Líneas de Especialización (Áreas)'
+                      value={areasVal}
+                      onChange={(e) => handleInputChange(areasKey, e.target.value)}
+                      helperText='Una área por línea. Se muestran como etiquetas debajo del encabezado de esta sección.'
+                    />
+
+                    <Divider />
+
+                    {/* Certificaciones de Especialista */}
+                    <Box>
+                      <Typography variant='subtitle2' fontWeight={700} sx={{ mb: 1.5 }}>Certificaciones de Especialista</Typography>
+                      <Stack spacing={2}>
+                        <Grid container spacing={2}>
+                          <Grid item xs={12} md={6}>
+                            <TextField
+                              fullWidth size='small'
+                              label='Título del Bloque'
+                              value={config[sec2EspTitleKey] || ''}
+                              onChange={(e) => handleInputChange(sec2EspTitleKey, e.target.value)}
+                              placeholder={DEFAULT_SEC2_ESP_TITLE}
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={6}>
+                            <TextField
+                              fullWidth size='small' multiline rows={2}
+                              label='Descripción del Bloque'
+                              value={config[sec2EspDescKey] || ''}
+                              onChange={(e) => handleInputChange(sec2EspDescKey, e.target.value)}
+                              placeholder={DEFAULT_SEC2_ESP_DESC}
+                            />
+                          </Grid>
+                        </Grid>
+                        <TextField
+                          fullWidth multiline rows={5}
+                          label='Lista de Certificaciones'
+                          value={certsEspVal}
+                          onChange={(e) => handleInputChange(certsEspKey, e.target.value)}
+                          helperText='Una certificación por línea'
+                        />
+                        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                          <Box sx={{ width: 140, height: 90, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <img src={sec2EspImageUrl} alt='Especialista' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          </Box>
+                          <Stack spacing={1}>
+                            <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key: sec2EspImageKey })}>
+                              Cambiar Imagen
+                            </Button>
+                            {config[sec2EspImageKey] && config[sec2EspImageKey] !== DEFAULT_SEC2_ESP_IMAGE && (
+                              <Button variant='text' size='small' color='error' onClick={() => handleInputChange(sec2EspImageKey, DEFAULT_SEC2_ESP_IMAGE)}>
+                                Restablecer
+                              </Button>
+                            )}
+                          </Stack>
+                        </Box>
+                      </Stack>
+                    </Box>
+
+                    <Divider />
+
+                    {/* Certificaciones de Consultor */}
+                    <Box>
+                      <Typography variant='subtitle2' fontWeight={700} sx={{ mb: 1.5 }}>Certificaciones de Consultor</Typography>
+                      <Stack spacing={2}>
+                        <Grid container spacing={2}>
+                          <Grid item xs={12} md={6}>
+                            <TextField
+                              fullWidth size='small'
+                              label='Título del Bloque'
+                              value={config[sec2ConsTitleKey] || ''}
+                              onChange={(e) => handleInputChange(sec2ConsTitleKey, e.target.value)}
+                              placeholder={DEFAULT_SEC2_CONS_TITLE}
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={6}>
+                            <TextField
+                              fullWidth size='small' multiline rows={2}
+                              label='Descripción del Bloque'
+                              value={config[sec2ConsDescKey] || ''}
+                              onChange={(e) => handleInputChange(sec2ConsDescKey, e.target.value)}
+                              placeholder={DEFAULT_SEC2_CONS_DESC}
+                            />
+                          </Grid>
+                        </Grid>
+                        <TextField
+                          fullWidth multiline rows={5}
+                          label='Lista de Certificaciones'
+                          value={certsConsVal}
+                          onChange={(e) => handleInputChange(certsConsKey, e.target.value)}
+                          helperText='Una certificación por línea'
+                        />
+                        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                          <Box sx={{ width: 140, height: 90, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <img src={sec2ConsImageUrl} alt='Consultor' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          </Box>
+                          <Stack spacing={1}>
+                            <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key: sec2ConsImageKey })}>
+                              Cambiar Imagen
+                            </Button>
+                            {config[sec2ConsImageKey] && config[sec2ConsImageKey] !== DEFAULT_SEC2_CONS_IMAGE && (
+                              <Button variant='text' size='small' color='error' onClick={() => handleInputChange(sec2ConsImageKey, DEFAULT_SEC2_CONS_IMAGE)}>
+                                Restablecer
+                              </Button>
+                            )}
+                          </Stack>
+                        </Box>
+                      </Stack>
+                    </Box>
+                  </EscuelaSubSection>
+
+                  <EscuelaSubSection icon='tabler-chart-infographic' title='Estadísticas Generales'>
+                    <Typography variant='caption' color='text.secondary' sx={{ display: 'block' }}>
+                      Las 4 tarjetas de estadísticas que aparecen justo debajo de Certificaciones y Áreas.
                     </Typography>
-                  </Box>
+                    <Grid container spacing={2}>
+                      {DEFAULT_SEC3_STATS.map((s) => {
+                        const vKey = `${keyPrefix}_SEC3_STAT${s.n}_VALUE`
+                        const lKey = `${keyPrefix}_SEC3_STAT${s.n}_LABEL`
+                        const iKey = `${keyPrefix}_SEC3_STAT${s.n}_ICON`
+                        const currentIcon = config[iKey] || s.iconDefault
 
-                  {/* Nombre y descripción corta */}
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                      <TextField
-                        fullWidth size='small'
-                        label='Nombre de la Escuela'
-                        value={stripHtml(config[nameKey]) || esc.name}
-                        onChange={(e) => handleInputChange(nameKey, e.target.value)}
-                        placeholder={esc.name}
-                        helperText='Texto plano — se usa para filtrar cursos y en el menú de navegación'
-                      />
+
+return (
+                          <Grid item xs={12} sm={6} md={3} key={s.n}>
+                            <Paper variant='outlined' sx={{ p: 2, borderRadius: 2 }}>
+                              <Typography variant='caption' color='text.secondary' sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                <i className='tabler-chart-bar' style={{ fontSize: 14 }} /> Estadística {s.n}
+                              </Typography>
+                              <Stack spacing={1.5}>
+                                <TextField
+                                  select
+                                  size='small'
+                                  fullWidth
+                                  label='Ícono'
+                                  value={currentIcon}
+                                  onChange={(e) => handleInputChange(iKey, e.target.value)}
+                                >
+                                  {ICON_OPTIONS.map(({ key, Icon, label }) => (
+                                    <MenuItem key={key} value={key}>
+                                      <Stack direction='row' spacing={1} alignItems='center'>
+                                        <Icon size={16} />
+                                        <span>{label}</span>
+                                      </Stack>
+                                    </MenuItem>
+                                  ))}
+                                </TextField>
+                                <TextField size='small' fullWidth label='Valor' value={config[vKey] || ''} onChange={(e) => handleInputChange(vKey, e.target.value)} placeholder={s.vPh} />
+                                <TextField size='small' fullWidth label='Etiqueta' value={config[lKey] || ''} onChange={(e) => handleInputChange(lKey, e.target.value)} placeholder={s.lPh} />
+                              </Stack>
+                            </Paper>
+                          </Grid>
+                        )
+                      })}
                     </Grid>
-                    <Grid item xs={12} md={6}>
-                      <TextField
-                        fullWidth size='small'
-                        label='Descripción Corta (tarjeta)'
-                        value={stripHtml(config[descKey]) || esc.desc}
-                        onChange={(e) => handleInputChange(descKey, e.target.value)}
-                        placeholder={esc.desc}
-                        helperText='Texto plano — aparece en el banner y en el meta description'
-                      />
-                    </Grid>
-                  </Grid>
+                  </EscuelaSubSection>
 
-                  {/* Texto About */}
-                  <RichTextEditor
-                    label='Presentación / Sobre la Escuela'
-                    value={config[aboutKey] ?? esc.about}
-                    onChange={(value) => handleInputChange(aboutKey, value)}
-                    placeholder={esc.about}
-                    helperText='Este texto aparece en la sección de Presentación dentro de la página de la escuela'
-                  />
-
-                  {/* Botón CTA */}
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} md={5}>
-                      <TextField
-                        size='small' fullWidth
-                        label='Texto del Botón'
-                        value={config[ctaLabelKey] || ''}
-                        onChange={(e) => handleInputChange(ctaLabelKey, e.target.value)}
-                        placeholder='Ver Programas'
-                        InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-cursor-text' style={{ fontSize: 16 }} /></InputAdornment> }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} md={7}>
-                      <TextField
-                        size='small' fullWidth
-                        label='Enlace del Botón (URL)'
-                        value={config[ctaUrlKey] || ''}
-                        onChange={(e) => handleInputChange(ctaUrlKey, e.target.value)}
-                        placeholder='#programas  ó  /programas/mi-programa'
-                        helperText='Puede ser un ancla (#programas), una ruta interna (/programas/...) o una URL externa'
-                        InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-link' style={{ fontSize: 16 }} /></InputAdornment> }}
-                      />
-                    </Grid>
-                  </Grid>
-
-                  <Divider />
-
-                  {/* Áreas */}
-                  <TextField
-                    fullWidth multiline rows={5}
-                    label='Líneas de Especialización (Áreas)'
-                    value={areasVal}
-                    onChange={(e) => handleInputChange(areasKey, e.target.value)}
-                    helperText='Una área por línea. Ej: Reclutamiento y Selección Estratégica'
-                  />
-
-                  {/* Certificaciones */}
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                      <TextField
-                        fullWidth multiline rows={5}
-                        label='Certificaciones de Especialista'
-                        value={certsEspVal}
-                        onChange={(e) => handleInputChange(certsEspKey, e.target.value)}
-                        helperText='Una certificación por línea'
-                      />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <TextField
-                        fullWidth multiline rows={5}
-                        label='Certificaciones de Consultor'
-                        value={certsConsVal}
-                        onChange={(e) => handleInputChange(certsConsKey, e.target.value)}
-                        helperText='Una certificación por línea'
-                      />
-                    </Grid>
-                  </Grid>
-
-                  <Divider />
-
-                  {/* Stats "¿Por qué elegir?" */}
-                  <Box>
-                    <Typography variant='subtitle2' fontWeight={700} sx={{ mb: 0.5 }}>
-                      Sección &quot;¿Por qué elegir?&quot; — 3 estadísticas
-                    </Typography>
-                    <Typography variant='caption' color='text.secondary' sx={{ mb: 2, display: 'block' }}>
+                  <EscuelaSubSection icon='tabler-star' title='¿Por qué elegir esta escuela?'>
+                    <Typography variant='caption' color='text.secondary' sx={{ display: 'block' }}>
                       Personaliza el valor, etiqueta y descripción de cada estadística de la sección oscura de la escuela.
                     </Typography>
                     <Grid container spacing={2}>
@@ -1072,63 +1397,7 @@ return (
                         </Grid>
                       ))}
                     </Grid>
-                  </Box>
-
-                  <Divider />
-
-                  {/* Imágenes */}
-                  <Typography variant='subtitle2' fontWeight={700}>Imágenes</Typography>
-                  <Grid container spacing={3}>
-                    {/* Card Image */}
-                    <Grid item xs={12} md={6}>
-                      <Typography variant='body2' color='text.secondary' sx={{ mb: 1, fontWeight: 600 }}>
-                        🃏 Imagen de Tarjeta — 600×400 px recomendado
-                      </Typography>
-                      <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                        <Box sx={{ width: 140, height: 90, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          {cardImageUrl
-                            ? <img src={cardImageUrl} alt='Card' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                            : <Typography variant='caption' color='text.disabled'>Sin imagen</Typography>
-                          }
-                        </Box>
-                        <Stack spacing={1}>
-                          <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key: cardImageKey })}>
-                            Cambiar Imagen
-                          </Button>
-                          {config[cardImageKey] && config[cardImageKey] !== esc.image && (
-                            <Button variant='text' size='small' color='error' onClick={() => handleInputChange(cardImageKey, esc.image)}>
-                              Restablecer
-                            </Button>
-                          )}
-                        </Stack>
-                      </Box>
-                    </Grid>
-
-                    {/* Hero Banner */}
-                    <Grid item xs={12} md={6}>
-                      <Typography variant='body2' color='text.secondary' sx={{ mb: 1, fontWeight: 600 }}>
-                        🖼️ Imagen de Portada — 1920×600 px recomendado
-                      </Typography>
-                      <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                        <Box sx={{ width: 140, height: 90, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          {heroBgUrl
-                            ? <img src={heroBgUrl} alt='Hero' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                            : <Typography variant='caption' color='text.disabled'>Sin imagen</Typography>
-                          }
-                        </Box>
-                        <Stack spacing={1}>
-                          <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key: heroBgKey })}>
-                            Cambiar Portada
-                          </Button>
-                          {config[heroBgKey] && config[heroBgKey] !== esc.heroBg && (
-                            <Button variant='text' size='small' color='error' onClick={() => handleInputChange(heroBgKey, esc.heroBg)}>
-                              Restablecer
-                            </Button>
-                          )}
-                        </Stack>
-                      </Box>
-                    </Grid>
-                  </Grid>
+                  </EscuelaSubSection>
                 </Stack>
               </WebSectionCard>
             )
@@ -1225,9 +1494,14 @@ return (
       <MediaLibrary
         open={!!mediaSelectTarget}
         onClose={() => setMediaSelectTarget(null)}
-        onSelect={(url) => {
+        onSelect={(url, nombre) => {
           if (mediaSelectTarget) {
             handleInputChange(mediaSelectTarget.key, url)
+
+            if (mediaSelectTarget.nameKey) {
+              handleInputChange(mediaSelectTarget.nameKey, nombre || '')
+            }
+
             enqueueSnackbar(
               mediaSelectTarget.acceptType === 'PDF'
                 ? 'PDF seleccionado — recuerda guardar los cambios'
