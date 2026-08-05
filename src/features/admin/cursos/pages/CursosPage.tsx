@@ -213,7 +213,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
         )
       }),
       columnHelper.accessor('titulo', {
-        header: 'Curso',
+        header: 'Programa',
         cell: ({ row }) => (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, maxWidth: 300 }}>
             <CourseThumbnail
@@ -464,7 +464,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
   return (
     <>
       <Card>
-        <CardHeader title='Gestión de Cursos' className='pbe-4' />
+        <CardHeader title='Gestión de Programas' className='pbe-4' />
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -511,7 +511,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
                 setGlobalFilter(String(value))
                 table.setPageIndex(0)
               }}
-              placeholder='Buscar curso'
+              placeholder='Buscar programa'
               className='is-full sm:is-auto'
             />
             <Button
@@ -521,7 +521,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
               component='a'
               className='is-full sm:is-auto'
             >
-              Nuevo Curso
+              Nuevo Programa
             </Button>
           </div>
         </div>
@@ -529,7 +529,7 @@ export function CursosPage({ initialDataCursos }: CursosPageProps) {
         <div className='overflow-x-auto relative min-h-[200px]'>
           {isLoading && (
             <div className='absolute inset-0 bg-white/50 z-10 flex items-center justify-center'>
-              <Typography variant='body2'>Cargando cursos...</Typography>
+              <Typography variant='body2'>Cargando programas...</Typography>
             </div>
           )}
           <table className={tableStyles.table}>

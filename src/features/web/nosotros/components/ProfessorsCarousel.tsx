@@ -64,6 +64,9 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
   const dots = Math.ceil(total / visible)
   const activeDot = Math.floor(current / visible)
 
+  const pageTeachers = teachers.slice(current, current + visible)
+  const isFullPage = pageTeachers.length === visible
+
   if (total === 0) return null
 
   return (
@@ -85,10 +88,10 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
         <div className="relative px-0 md:px-12">
           {/* Cards */}
           <div
-            className="grid gap-6"
-            style={{ gridTemplateColumns: `repeat(${Math.min(visible, total)}, 1fr)` }}
+            className={isFullPage ? 'grid gap-6' : 'flex flex-wrap justify-center gap-6'}
+            style={isFullPage ? { gridTemplateColumns: `repeat(${visible}, 1fr)` } : undefined}
           >
-            {teachers.slice(current, current + visible).map((teacher, i) => {
+            {pageTeachers.map((teacher, i) => {
               const initials = `${teacher.nombre[0]}${teacher.apellido[0]}`
               const color = AVATAR_COLORS[(current + i) % AVATAR_COLORS.length]
               const href = teacherHref(teacher)
@@ -97,7 +100,7 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
                 <Link
                   key={teacher.id}
                   href={href}
-                  className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_40px_rgb(8,71,155,0.08)] hover:border-[#08479b]/20"
+                  className={`group flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_40px_rgb(8,71,155,0.08)] hover:border-[#08479b]/20 ${isFullPage ? '' : 'w-full max-w-[300px]'}`}
                 >
                   {/* Photo Area */}
                   <div className="relative w-full pt-[100%] bg-slate-100 overflow-hidden">

@@ -204,3 +204,17 @@ export const ESCUELAS: Escuela[] = [
 ]
 
 export const getEscuela = (id: string) => ESCUELAS.find(e => e.id === id) ?? ESCUELAS[0]
+
+export const getEscuelaConfigKeyPrefix = (id: string) => `ESCUELA_${id.toUpperCase().replace(/-/g, '_')}`
+
+export const getEscuelaBrochureUrls = (configs: Record<string, string>): Record<string, string> => {
+  const map: Record<string, string> = {}
+
+  ESCUELAS.forEach(e => {
+    const url = configs[`${getEscuelaConfigKeyPrefix(e.id)}_BROCHURE`]?.trim()
+
+    if (url) map[e.id] = url
+  })
+
+  return map
+}

@@ -70,15 +70,28 @@ export default async function NosotrosPage() {
   const teachers = await getTeachers()
   const configs = await getConfigs()
 
+  const heroBadge = configs['NOSOTROS_HERO_BADGE']?.trim() || 'Sobre nosotros'
   const heroTitle = configs['NOSOTROS_HERO_TITLE']?.trim() || 'Somos calidad y responsabilidad a tu servicio'
   const heroDesc = configs['NOSOTROS_HERO_DESC']?.trim() || 'Somos una plataforma educativa especializada en la formación profesional de alto impacto. Ofrecemos cursos diseñados por expertos del sector, con certificaciones reconocidas que impulsan tu desarrollo profesional y el de tu equipo.'
+  const cta1Text = configs['NOSOTROS_HERO_CTA1_TEXT']?.trim() || 'Ver programas'
+  const cta1Url = configs['NOSOTROS_HERO_CTA1_URL']?.trim() || '/programas'
+  const cta2Text = configs['NOSOTROS_HERO_CTA2_TEXT']?.trim() || 'Trabaja con nosotros'
+  const cta2Url = configs['NOSOTROS_HERO_CTA2_URL']?.trim() || '/contacto'
 
+  const mvEyebrow = configs['NOSOTROS_MV_EYEBROW']?.trim() || undefined
+  const mvHeading = configs['NOSOTROS_MV_HEADING']?.trim() || undefined
+  const misionIcon = configs['NOSOTROS_MISION_ICON']?.trim() || undefined
+  const visionIcon = configs['NOSOTROS_VISION_ICON']?.trim() || undefined
   const misionTitle = configs['NOSOTROS_MISION_TITLE']?.trim() || undefined
   const misionText = configs['NOSOTROS_MISION_TEXT']?.trim() || undefined
   const visionTitle = configs['NOSOTROS_VISION_TITLE']?.trim() || undefined
   const visionText = configs['NOSOTROS_VISION_TEXT']?.trim() || undefined
 
-  let dynamicValores: { title: string; desc: string }[] | undefined = undefined
+  const valoresEyebrow = configs['NOSOTROS_VALORES_EYEBROW']?.trim() || undefined
+  const valoresHeading = configs['NOSOTROS_VALORES_HEADING']?.trim() || undefined
+  const valoresQuote = configs['NOSOTROS_VALORES_QUOTE']?.trim() || undefined
+
+  let dynamicValores: { title: string; desc: string; icon?: string }[] | undefined = undefined
   const dbValoresStr = configs['NOSOTROS_VALORES']
 
   if (dbValoresStr?.trim()) {
@@ -86,10 +99,10 @@ export default async function NosotrosPage() {
   }
 
   const stats = [
-    { emoji: '\uD83D\uDC69\u200D\uD83C\uDF93', value: configs['NOSOTROS_STAT_1_VALUE']?.trim() || '+1,200', label: configs['NOSOTROS_STAT_1_LABEL']?.trim() || 'Estudiantes formados' },
-    { emoji: '\uD83D\uDCDA', value: configs['NOSOTROS_STAT_2_VALUE']?.trim() || '+80', label: configs['NOSOTROS_STAT_2_LABEL']?.trim() || 'Cursos disponibles' },
-    { emoji: '\uD83D\uDC68\u200D\uD83C\uDFEB', value: configs['NOSOTROS_STAT_3_VALUE']?.trim() || '+30', label: configs['NOSOTROS_STAT_3_LABEL']?.trim() || 'Docentes expertos' },
-    { emoji: '\uD83C\uDFC6', value: configs['NOSOTROS_STAT_4_VALUE']?.trim() || '98%', label: configs['NOSOTROS_STAT_4_LABEL']?.trim() || 'Tasa de satisfacción' },
+    { emoji: configs['NOSOTROS_STAT_1_EMOJI']?.trim() || '\uD83D\uDC69\u200D\uD83C\uDF93', value: configs['NOSOTROS_STAT_1_VALUE']?.trim() || '+1,200', label: configs['NOSOTROS_STAT_1_LABEL']?.trim() || 'Estudiantes formados' },
+    { emoji: configs['NOSOTROS_STAT_2_EMOJI']?.trim() || '\uD83D\uDCDA', value: configs['NOSOTROS_STAT_2_VALUE']?.trim() || '+80', label: configs['NOSOTROS_STAT_2_LABEL']?.trim() || 'Cursos disponibles' },
+    { emoji: configs['NOSOTROS_STAT_3_EMOJI']?.trim() || '\uD83D\uDC68\u200D\uD83C\uDFEB', value: configs['NOSOTROS_STAT_3_VALUE']?.trim() || '+30', label: configs['NOSOTROS_STAT_3_LABEL']?.trim() || 'Docentes expertos' },
+    { emoji: configs['NOSOTROS_STAT_4_EMOJI']?.trim() || '\uD83C\uDFC6', value: configs['NOSOTROS_STAT_4_VALUE']?.trim() || '98%', label: configs['NOSOTROS_STAT_4_LABEL']?.trim() || 'Tasa de satisfacción' },
   ]
 
   const heroBg = configs['NOSOTROS_HERO_IMAGE']?.trim()
@@ -113,7 +126,7 @@ export default async function NosotrosPage() {
             <ScrollReveal>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-bold tracking-widest uppercase mb-8 mx-auto">
                 <span className="w-2 h-2 rounded-full bg-[#fcd116]"></span>
-                Sobre nosotros
+                {heroBadge}
               </div>
               <h1 
                 className="text-white font-black text-4xl md:text-6xl lg:text-7xl leading-[1.1] mb-6 [&>p]:m-0 mx-auto"
@@ -126,16 +139,16 @@ export default async function NosotrosPage() {
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
                 <Link
-                  href="/programas"
+                  href={cta1Url}
                   className="bg-[#fcd116] hover:bg-white text-slate-900 px-8 py-4 rounded-full font-bold inline-flex justify-center items-center gap-2 transition-all hover:shadow-xl w-full sm:w-auto"
                 >
-                  Ver programas <ArrowRight className="w-5 h-5" />
+                  {cta1Text} <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
-                  href="/contacto"
+                  href={cta2Url}
                   className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-full font-bold inline-flex justify-center items-center gap-2 transition-all w-full sm:w-auto"
                 >
-                  Trabaja con nosotros
+                  {cta2Text}
                 </Link>
               </div>
             </ScrollReveal>
@@ -208,10 +221,19 @@ export default async function NosotrosPage() {
         misionText={misionText}
         visionTitle={visionTitle}
         visionText={visionText}
+        eyebrow={mvEyebrow}
+        heading={mvHeading}
+        misionIcon={misionIcon}
+        visionIcon={visionIcon}
       />
 
       {/* ── 4. VALORES (client component) ─────────────── */}
-      <ValoresSection valores={dynamicValores} />
+      <ValoresSection
+        valores={dynamicValores}
+        eyebrow={valoresEyebrow}
+        heading={valoresHeading}
+        quote={valoresQuote}
+      />
 
       {/* ── 5. PROFESORES ─────────────────────────────── */}
       <ProfessorsCarousel teachers={JSON.parse(JSON.stringify(teachers))} />

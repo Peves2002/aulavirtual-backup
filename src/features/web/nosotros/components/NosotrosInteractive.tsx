@@ -1,6 +1,19 @@
 'use client'
 
-import { Heart, Lightbulb, Users, TrendingUp, ShieldCheck } from 'lucide-react'
+import {
+  Heart,
+  Lightbulb,
+  Users,
+  TrendingUp,
+  ShieldCheck,
+  Award,
+  Target,
+  Star,
+  CheckCircle,
+  Rocket,
+  BookOpen,
+  type LucideIcon
+} from 'lucide-react'
 
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 
@@ -34,31 +47,49 @@ const DEFAULT_VALORES = [
 
 const VALOR_ICONS = [Heart, Lightbulb, Users, TrendingUp, ShieldCheck]
 
+const ICON_MAP: Record<string, LucideIcon> = {
+  Heart, Lightbulb, Users, TrendingUp, ShieldCheck,
+  Award, Target, Star, CheckCircle, Rocket, BookOpen,
+}
+
 /* ── Misión / Visión ────────────────────────────────────── */
 interface MisionVisionProps {
   misionTitle?: string
   misionText?: string
   visionTitle?: string
   visionText?: string
+  eyebrow?: string
+  heading?: string
+  misionIcon?: string
+  visionIcon?: string
 }
 
-export function MisionVisionSection({ misionTitle, misionText, visionTitle, visionText }: MisionVisionProps) {
+export function MisionVisionSection({
+  misionTitle,
+  misionText,
+  visionTitle,
+  visionText,
+  eyebrow,
+  heading,
+  misionIcon,
+  visionIcon,
+}: MisionVisionProps) {
   return (
     <section className="bg-slate-50 py-20 px-6 lg:px-10">
       <div className="max-w-[1440px] mx-auto">
         <ScrollReveal>
           <div className="text-center mb-16">
-            <h2 className="text-[#08479b] font-bold text-sm tracking-widest uppercase mb-4">Quiénes somos</h2>
-            <h3 className="text-slate-900 font-black text-3xl md:text-5xl">Misión y Visión</h3>
+            <h2 className="text-[#08479b] font-bold text-sm tracking-widest uppercase mb-4">{eyebrow || 'Quiénes somos'}</h2>
+            <h3 className="text-slate-900 font-black text-3xl md:text-5xl">{heading || 'Misión y Visión'}</h3>
           </div>
         </ScrollReveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-5xl mx-auto">
           <ScrollReveal direction="left" delay={0.05}>
-            <MisionCard title={misionTitle} text={misionText} />
+            <MisionCard title={misionTitle} text={misionText} icon={misionIcon} />
           </ScrollReveal>
           <ScrollReveal direction="right" delay={0.1}>
-            <VisionCard title={visionTitle} text={visionText} />
+            <VisionCard title={visionTitle} text={visionText} icon={visionIcon} />
           </ScrollReveal>
         </div>
       </div>
@@ -66,7 +97,7 @@ export function MisionVisionSection({ misionTitle, misionText, visionTitle, visi
   )
 }
 
-function MisionCard({ title, text }: { title?: string; text?: string }) {
+function MisionCard({ title, text, icon }: { title?: string; text?: string; icon?: string }) {
   return (
     <div className="group bg-white rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgb(8,71,155,0.1)] hover:border-[#08479b]/20">
       <div className="h-[240px] bg-gradient-to-br from-[#08479b] to-[#1268db] flex items-center justify-center relative overflow-hidden">
@@ -74,14 +105,15 @@ function MisionCard({ title, text }: { title?: string; text?: string }) {
         <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
         {/* Icon Container */}
         <div className="w-24 h-24 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center relative z-10 transition-transform duration-500 group-hover:scale-110">
-          <span className="text-5xl">🎯</span>
+          <span className="text-5xl">{icon || '🎯'}</span>
         </div>
       </div>
       <div className="p-8 md:p-12 text-center md:text-left">
-        <h3 className="text-2xl font-black text-slate-900 mb-4 group-hover:text-[#08479b] transition-colors">
-          {title || 'Nuestra Misión'}
-        </h3>
-        <div 
+        <h3
+          className="text-2xl font-black text-slate-900 mb-4 group-hover:text-[#08479b] transition-colors [&>p]:m-0"
+          dangerouslySetInnerHTML={{ __html: title || 'Nuestra Misión' }}
+        />
+        <div
           className="text-slate-600 leading-relaxed text-lg [&>p]:m-0"
           dangerouslySetInnerHTML={{ __html: text || '<p>Brindar formación profesional de alta calidad, accesible y orientada al sector industrial, impulsando el desarrollo de competencias que generan valor real en las organizaciones y en la carrera de nuestros estudiantes.</p>' }}
         />
@@ -90,7 +122,7 @@ function MisionCard({ title, text }: { title?: string; text?: string }) {
   )
 }
 
-function VisionCard({ title, text }: { title?: string; text?: string }) {
+function VisionCard({ title, text, icon }: { title?: string; text?: string; icon?: string }) {
   return (
     <div className="group bg-white rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgb(8,71,155,0.1)] hover:border-[#08479b]/20">
       <div className="h-[240px] bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center relative overflow-hidden">
@@ -98,14 +130,15 @@ function VisionCard({ title, text }: { title?: string; text?: string }) {
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
         {/* Icon Container */}
         <div className="w-24 h-24 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center relative z-10 transition-transform duration-500 group-hover:scale-110">
-          <span className="text-5xl">🔭</span>
+          <span className="text-5xl">{icon || '🔭'}</span>
         </div>
       </div>
       <div className="p-8 md:p-12 text-center md:text-left">
-        <h3 className="text-2xl font-black text-slate-900 mb-4 group-hover:text-[#08479b] transition-colors">
-          {title || 'Nuestra Visión'}
-        </h3>
-        <div 
+        <h3
+          className="text-2xl font-black text-slate-900 mb-4 group-hover:text-[#08479b] transition-colors [&>p]:m-0"
+          dangerouslySetInnerHTML={{ __html: title || 'Nuestra Visión' }}
+        />
+        <div
           className="text-slate-600 leading-relaxed text-lg [&>p]:m-0"
           dangerouslySetInnerHTML={{ __html: text || '<p>Ser la plataforma de referencia a nivel hispanoamericano en educación continua e In-House, destacando por nuestra innovación, excelencia académica y contribución al crecimiento competitivo del ecosistema corporativo.</p>' }}
         />
@@ -116,17 +149,25 @@ function VisionCard({ title, text }: { title?: string; text?: string }) {
 
 /* ── Valores ─────────────────────────────────────────────── */
 interface ValorItem {
+  id?: string
   title: string
   desc: string
+  icon?: string
 }
 
 interface ValoresSectionProps {
   valores?: ValorItem[]
+  eyebrow?: string
+  heading?: string
+  quote?: string
 }
 
-export function ValoresSection({ valores }: ValoresSectionProps) {
+export function ValoresSection({ valores, eyebrow, heading, quote }: ValoresSectionProps) {
   const activeValores = valores && valores.length > 0
-    ? valores.map((v, i) => ({ ...v, icon: VALOR_ICONS[i % VALOR_ICONS.length] }))
+    ? valores.map((v, i) => ({
+        ...v,
+        icon: (v.icon && ICON_MAP[v.icon]) || VALOR_ICONS[i % VALOR_ICONS.length],
+      }))
     : DEFAULT_VALORES
 
   return (
@@ -134,10 +175,10 @@ export function ValoresSection({ valores }: ValoresSectionProps) {
       <div className="max-w-[1440px] mx-auto">
         <ScrollReveal>
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-[#08479b] font-bold text-sm tracking-widest uppercase mb-4">Lo que nos define</h2>
-            <h3 className="text-slate-900 font-black text-3xl md:text-5xl mb-6">Valores que nos identifican</h3>
+            <h2 className="text-[#08479b] font-bold text-sm tracking-widest uppercase mb-4">{eyebrow || 'Lo que nos define'}</h2>
+            <h3 className="text-slate-900 font-black text-3xl md:text-5xl mb-6">{heading || 'Valores que nos identifican'}</h3>
             <p className="text-slate-600 text-lg leading-relaxed">
-              &quot;La excelencia no es un acto, sino un hábito. Cada valor que practicamos a diario define quiénes somos y hacia dónde vamos.&quot;
+              &quot;{quote || 'La excelencia no es un acto, sino un hábito. Cada valor que practicamos a diario define quiénes somos y hacia dónde vamos.'}&quot;
             </p>
           </div>
         </ScrollReveal>
@@ -154,7 +195,7 @@ export function ValoresSection({ valores }: ValoresSectionProps) {
   )
 }
 
-function ValorCard({ v }: { v: { icon: typeof Heart; title: string; desc: string } }) {
+function ValorCard({ v }: { v: { icon: LucideIcon; title: string; desc: string } }) {
   return (
     <div className="group h-full bg-slate-50 rounded-[24px] p-8 border border-slate-200 text-center transition-all duration-300 hover:-translate-y-2 hover:bg-white hover:border-[#08479b]/30 hover:shadow-[0_12px_40px_rgb(8,71,155,0.08)] flex flex-col items-center">
       <div className="w-16 h-16 rounded-2xl bg-[#08479b]/5 flex items-center justify-center mb-6 border border-[#08479b]/10 transition-colors duration-300 group-hover:bg-[#08479b]/10 group-hover:border-[#08479b]/20">

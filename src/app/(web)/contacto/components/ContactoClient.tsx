@@ -28,20 +28,20 @@ export function ContactList() {
               padding: '2rem',
               textAlign: 'center',
               border: '1.5px solid hsl(214,20%,91%)',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+              boxShadow: '0 8px 24px rgba(15, 23, 42, 0.12)',
               transition: 'transform 0.3s, box-shadow 0.3s',
             }}
             onMouseEnter={e => {
               const el = e.currentTarget
 
               el.style.transform = 'translateY(-4px)'
-              el.style.boxShadow = '0 12px 32px rgba(8, 71, 155, 0.12)'
+              el.style.boxShadow = '0 20px 45px rgba(8, 71, 155, 0.22)'
             }}
             onMouseLeave={e => {
               const el = e.currentTarget
 
               el.style.transform = 'translateY(0)'
-              el.style.boxShadow = '0 2px 12px rgba(0,0,0,0.05)'
+              el.style.boxShadow = '0 8px 24px rgba(15, 23, 42, 0.12)'
             }}
           >
             <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', borderRadius: '16px', backgroundColor: 'rgba(8, 71, 155, 0.08)', marginBottom: '1.25rem' }}>
