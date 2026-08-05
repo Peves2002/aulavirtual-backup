@@ -18,7 +18,7 @@ export default function EventRegisterForm({ eventTitle }: EventRegisterFormProps
     lugarTrabajo: '',
     posicion: ''
   })
-  
+
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
@@ -33,13 +33,13 @@ export default function EventRegisterForm({ eventTitle }: EventRegisterFormProps
     e.preventDefault()
     setLoading(true)
     setError('')
-    
+
     // Validations
     if (!formData.nombres || !formData.apellidoPaterno || !formData.apellidoMaterno || !formData.email || !formData.celular || !formData.numeroDocumento) {
       setError('Por favor completa todos los campos obligatorios.')
       setLoading(false)
-      
-return
+
+      return
     }
 
     try {
@@ -84,7 +84,7 @@ return
         </div>
         <h3 className="text-2xl font-black mb-4">¡Registro Exitoso!</h3>
         <p className="text-gray-400 text-sm max-w-sm">
-          Te hemos registrado correctamente para el evento <strong>{eventTitle}</strong>. Te enviaremos los detalles de acceso a tu correo.
+          Te hemos registrado correctamente para el evento <strong>{eventTitle}</strong>. Te enviaremos los detalles a tu correo.
         </p>
       </div>
     )
@@ -93,7 +93,7 @@ return
   return (
     <div className="bg-black text-white p-8 md:p-10 h-full flex flex-col justify-center">
       <h3 className="text-3xl font-bold mb-8">Regístrate</h3>
-      
+
       {error && (
         <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg mb-6 text-sm">
           {error}
