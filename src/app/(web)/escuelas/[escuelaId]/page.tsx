@@ -182,6 +182,7 @@ return {
 
   // Si hay URL de video, la imagen de Presentación se vuelve un enlace clickeable
   const PresentationMediaTag = escuela.sec1VideoUrl ? 'a' : 'div'
+
   const presentationMediaProps = escuela.sec1VideoUrl
     ? { href: escuela.sec1VideoUrl, target: '_blank', rel: 'noopener noreferrer' }
     : {}

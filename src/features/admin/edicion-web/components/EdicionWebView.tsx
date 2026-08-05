@@ -265,6 +265,7 @@ return acc
     CONTACTO_HERO_EYEBROW: 'Estamos aquí para ayudarte',
     CONTACTO_UBICACION: 'Arequipa, Perú',
     CONTACTO_EMAIL: '',
+    WHATSAPP_NUMERO: '',
 
     // Empresas
     EMPRESAS_HERO_TITLE: 'Lleva a tu equipo al siguiente nivel',
@@ -849,47 +850,50 @@ return (
       label: 'Contacto',
       icon: 'tabler-phone',
       content: (
-        <WebSectionCard icon='tabler-phone' title='Página Contacto' subtitle='Hero y datos de contacto de la página de contacto' url='/contacto'>
-          <Stack spacing={3}>
-            <TextField size='small' fullWidth label='Subtexto Hero (eyebrow)' value={config.CONTACTO_HERO_EYEBROW || ''} onChange={(e) => handleInputChange('CONTACTO_HERO_EYEBROW', e.target.value)} placeholder='Estamos aquí para ayudarte' />
-            <RichTextEditor
-              label='Título del Hero'
-              value={config.CONTACTO_HERO_TITLE}
-              onChange={(value) => handleInputChange('CONTACTO_HERO_TITLE', value)}
-              placeholder='Ponte en Contacto'
-              minHeight={60}
-              simple
-            />
-            <RichTextEditor
-              label='Descripción'
-              value={config.CONTACTO_HERO_DESC}
-              onChange={(value) => handleInputChange('CONTACTO_HERO_DESC', value)}
-            />
-            
-            {/* Imagen de Portada */}
-            <Typography variant='subtitle2' fontWeight={700}>Fondo de Portada (Hero Banner)</Typography>
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-              <Box sx={{ width: 140, height: 90, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                {config.CONTACTO_HERO_IMAGE
-                  ? <img src={config.CONTACTO_HERO_IMAGE} alt='Hero' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  : <Typography variant='caption' color='text.disabled'>Sin imagen (Gradiente por defecto)</Typography>
-                }
-              </Box>
-              <Stack spacing={1}>
-                <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key: 'CONTACTO_HERO_IMAGE' })}>
-                  Cambiar Portada
-                </Button>
-                {config.CONTACTO_HERO_IMAGE && (
-                  <Button variant='text' size='small' color='error' onClick={() => handleInputChange('CONTACTO_HERO_IMAGE', '')}>
-                    Quitar (Usar gradiente)
+        <Stack spacing={2}>
+          <WebSectionCard icon='tabler-photo' title='Contacto — Portada (Hero)' subtitle='Encabezado y banner superior de la página de contacto' url='/contacto'>
+            <Stack spacing={3}>
+              <TextField size='small' fullWidth label='Subtexto Hero (eyebrow)' value={config.CONTACTO_HERO_EYEBROW || ''} onChange={(e) => handleInputChange('CONTACTO_HERO_EYEBROW', e.target.value)} placeholder='Estamos aquí para ayudarte' />
+              <RichTextEditor
+                label='Título del Hero'
+                value={config.CONTACTO_HERO_TITLE}
+                onChange={(value) => handleInputChange('CONTACTO_HERO_TITLE', value)}
+                placeholder='Ponte en Contacto'
+                minHeight={60}
+                simple
+              />
+              <RichTextEditor
+                label='Descripción'
+                value={config.CONTACTO_HERO_DESC}
+                onChange={(value) => handleInputChange('CONTACTO_HERO_DESC', value)}
+              />
+
+              {/* Imagen de Portada */}
+              <Typography variant='subtitle2' fontWeight={700}>Fondo de Portada (Hero Banner)</Typography>
+              <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                <Box sx={{ width: 140, height: 90, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', overflow: 'hidden', bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {config.CONTACTO_HERO_IMAGE
+                    ? <img src={config.CONTACTO_HERO_IMAGE} alt='Hero' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    : <Typography variant='caption' color='text.disabled'>Sin imagen (Gradiente por defecto)</Typography>
+                  }
+                </Box>
+                <Stack spacing={1}>
+                  <Button variant='outlined' size='small' startIcon={<i className='tabler-photo' />} onClick={() => setMediaSelectTarget({ key: 'CONTACTO_HERO_IMAGE' })}>
+                    Cambiar Portada
                   </Button>
-                )}
-              </Stack>
-            </Box>
-            <Divider sx={{ my: 1 }} />
-            <Typography variant='subtitle1' fontWeight={700}>Datos de Contacto</Typography>
+                  {config.CONTACTO_HERO_IMAGE && (
+                    <Button variant='text' size='small' color='error' onClick={() => handleInputChange('CONTACTO_HERO_IMAGE', '')}>
+                      Quitar (Usar gradiente)
+                    </Button>
+                  )}
+                </Stack>
+              </Box>
+            </Stack>
+          </WebSectionCard>
+
+          <WebSectionCard icon='tabler-address-book' title='Contacto — Tarjetas de Contacto' subtitle='Ubicación, WhatsApp y email que se muestran en las tarjetas de la página' url='/contacto'>
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={4}>
                 <TextField
                   fullWidth label='Ubicación / Dirección'
                   value={config.CONTACTO_UBICACION}
@@ -898,7 +902,17 @@ return (
                   InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-map-pin' style={{ fontSize: 16 }} /></InputAdornment> }}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  fullWidth label='Número de WhatsApp'
+                  value={config.WHATSAPP_NUMERO || ''}
+                  onChange={(e) => handleInputChange('WHATSAPP_NUMERO', e.target.value)}
+                  placeholder='51959436827'
+                  helperText='Incluye código de país, sin signos ni espacios'
+                  InputProps={{ startAdornment: <InputAdornment position='start'><i className='tabler-brand-whatsapp' style={{ fontSize: 16 }} /></InputAdornment> }}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
                 <TextField
                   fullWidth label='Email de Contacto'
                   value={config.CONTACTO_EMAIL}
@@ -908,8 +922,8 @@ return (
                 />
               </Grid>
             </Grid>
-          </Stack>
-        </WebSectionCard>
+          </WebSectionCard>
+        </Stack>
       )
     },
     {
