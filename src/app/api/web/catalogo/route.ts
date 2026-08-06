@@ -56,7 +56,10 @@ export async function GET(request: Request) {
     const [courses, categories] = await Promise.all([
       prisma.curso.findMany({
         where: {
-          estado: 'PUBLICADO',
+          OR: [
+            { estado: 'PUBLICADO' },
+            { landing_publicada: true }
+          ],
           ...(tipoFilter ? { tipo: tipoFilter } : {})
         },
         include: {

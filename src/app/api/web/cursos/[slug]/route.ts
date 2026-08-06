@@ -41,10 +41,13 @@ export async function GET(request: Request, { params }: { params: { slug: string
       }
     }
 
-    const course = await prisma.curso.findUnique({
+    const course = await prisma.curso.findFirst({
       where: {
         slug,
-        estado: 'PUBLICADO',
+        OR: [
+          { estado: 'PUBLICADO' },
+          { landing_publicada: true }
+        ],
         es_privado: false
       },
       include: {

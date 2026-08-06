@@ -212,11 +212,9 @@ return
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
       <DialogTitle>
-        {isBlogModule 
-          ? (articuloId ? 'Editar Blog' : 'Nuevo Blog') 
-          : isNewsModule 
-            ? (articuloId ? 'Editar Noticia' : 'Nueva Noticia') 
-            : (articuloId ? 'Editar Artículo' : 'Nuevo Artículo')}
+        {isNewsModule 
+          ? (articuloId ? 'Editar Noticia' : 'Nueva Noticia') 
+          : (articuloId ? 'Editar Artículo' : 'Nuevo Artículo')}
       </DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={3} sx={{ mt: 1 }}>
@@ -241,7 +239,7 @@ return
                 <MenuItem value="NOTICIA">Noticia</MenuItem>
                 <MenuItem value="EVENTO">Evento</MenuItem>
                 {!isNewsModule && <MenuItem value="EXPERTO">Experto</MenuItem>}
-                {!isNewsModule && <MenuItem value="BLOG">Blog</MenuItem>}
+                {!isNewsModule && <MenuItem value="BLOG">Artículo</MenuItem>}
               </TextField>
             </Grid>
           )}

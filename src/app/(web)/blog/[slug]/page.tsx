@@ -8,6 +8,8 @@ import { ArrowLeft, Facebook, Linkedin, Twitter, Search } from 'lucide-react'
 import { getConfigs } from '@/utils/libs/config'
 import prisma from '@/utils/libs/prisma'
 
+import ShareButtons from './ShareButtons'
+
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const articulo = await prisma.articulo.findUnique({
     where: { slug: params.slug }
@@ -157,18 +159,7 @@ export default async function BlogDetailPage({ params }: { params: { slug: strin
         
         {/* Content Body (Left on Desktop) */}
         <div className="lg:col-span-8 order-1">
-          <div className="flex items-center gap-4 mb-10 border-b border-gray-100 pb-8">
-            <span className="text-sm font-bold text-gray-600">Compartir:</span>
-            <button className="w-9 h-9 rounded-full bg-gray-100 text-[#08479b] flex items-center justify-center hover:bg-[#08479b] hover:text-white transition-colors">
-              <Linkedin className="w-4 h-4" />
-            </button>
-            <button className="w-9 h-9 rounded-full bg-gray-100 text-[#08479b] flex items-center justify-center hover:bg-[#08479b] hover:text-white transition-colors">
-              <Twitter className="w-4 h-4" />
-            </button>
-            <button className="w-9 h-9 rounded-full bg-gray-100 text-[#08479b] flex items-center justify-center hover:bg-[#08479b] hover:text-white transition-colors">
-              <Facebook className="w-4 h-4" />
-            </button>
-          </div>
+          <ShareButtons title={articulo.titulo} />
 
           <div 
             className="prose prose-xl prose-slate prose-p:leading-[2.2] prose-p:text-gray-700 prose-a:text-[#08479b] prose-headings:font-manrope prose-headings:font-black prose-headings:text-[#08479b] max-w-none text-justify tracking-wide"

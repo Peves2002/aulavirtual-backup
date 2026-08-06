@@ -185,16 +185,7 @@ export default async function HomePage() {
     return timeB - timeA
   })
 
-  const parsedBlogs = allBlogs.length > 0 ? allBlogs : BLOGS.map(blog => ({
-    id: blog.id.toString(),
-    title: blog.title,
-    date: blog.date,
-    image: blog.image,
-    author: 'Académico ADPH',
-    resumen: 'Explora a fondo las mejores estrategias de formación ejecutiva.',
-    enlaceExterno: null,
-    targetUrl: '/blog'
-  })); // Fallback to hardcoded if empty
+  const parsedBlogs = allBlogs
 
   // Load dynamic news from DB
   const dbNoticias = await prisma.articulo.findMany({
@@ -204,7 +195,7 @@ export default async function HomePage() {
     include: { etiquetas: true }
   })
 
-  const parsedNoticias = dbNoticias.length > 0 ? dbNoticias.map(news => ({
+  const parsedNoticias = dbNoticias.map(news => ({
     id: news.slug,
     title: news.titulo,
     date: new Date(news.fecha_publicacion).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }),
@@ -212,15 +203,7 @@ export default async function HomePage() {
     tag: news.tipo,
     enlaceExterno: news.enlace_externo,
     targetUrl: news.enlace_externo || `/noticias/${news.slug}`
-  })) : NOTICIAS.map(news => ({
-    id: news.id.toString(),
-    title: news.title,
-    date: news.date,
-    image: news.image,
-    tag: news.tag,
-    enlaceExterno: null,
-    targetUrl: '/noticias'
-  })); // Fallback to hardcoded if empty
+  }))
 
   let dynamicLogos: any[] = []
   const dbLogosStr = configs['HOME_LOGOS']

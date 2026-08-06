@@ -56,6 +56,13 @@ export default function ArticulosClient({ defaultTipo, isNewsModule, isBlogModul
   const [editingCatId, setEditingCatId] = useState<string | null>(null)
   const [catNombre, setCatNombre] = useState('')
 
+  // States for Etiquetas
+  const [etiquetas, setEtiquetas] = useState<any[]>([])
+  const [loadingEti, setLoadingEti] = useState(true)
+  const [openEtiModal, setOpenEtiModal] = useState(false)
+  const [editingEtiId, setEditingEtiId] = useState<string | null>(null)
+  const [etiNombre, setEtiNombre] = useState('')
+
   const fetchArticulos = async () => {
     setLoading(true)
 
@@ -105,9 +112,28 @@ export default function ArticulosClient({ defaultTipo, isNewsModule, isBlogModul
     }
   }
 
+  const fetchEtiquetas = async () => {
+    setLoadingEti(true)
+
+    try {
+      const res = await fetch('/api/admin/etiquetas-articulos')
+
+      if (res.ok) {
+        const data = await res.json()
+
+        setEtiquetas(data)
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoadingEti(false)
+    }
+  }
+
   useEffect(() => {
     if (currentTab === 0) fetchArticulos()
     if (currentTab === 1) fetchCategorias()
+    if (currentTab === 2) fetchEtiquetas()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab, filtroTipo])
 
@@ -200,19 +226,84 @@ return
     }
   }
 
+  // --- Etiqueta Handlers ---
+  const handleOpenEtiAdd = () => {
+    setEditingEtiId(null)
+    setEtiNombre('')
+    setOpenEtiModal(true)
+  }
+
+  const handleOpenEtiEdit = (eti: any) => {
+    setEditingEtiId(eti.id)
+    setEtiNombre(eti.nombre)
+    setOpenEtiModal(true)
+  }
+
+  const handleSaveEti = async () => {
+    if (!etiNombre.trim()) {
+      enqueueSnackbar('El nombre es obligatorio', { variant: 'warning' })
+      
+      return
+    }
+    
+    try {
+      const url = editingEtiId ? `/api/admin/etiquetas-articulos/${editingEtiId}` : '/api/admin/etiquetas-articulos'
+      const method = editingEtiId ? 'PUT' : 'POST'
+      
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre: etiNombre })
+      })
+
+      if (res.ok) {
+        enqueueSnackbar(`Etiqueta ${editingEtiId ? 'actualizada' : 'creada'}`, { variant: 'success' })
+        setOpenEtiModal(false)
+        fetchEtiquetas()
+      } else {
+        const err = await res.json()
+
+        enqueueSnackbar(err.error || 'Error al guardar', { variant: 'error' })
+      }
+    } catch (error) {
+      enqueueSnackbar('Error de conexión', { variant: 'error' })
+    }
+  }
+
+  const handleDeleteEti = async (id: string) => {
+    if (!confirm('¿Eliminar etiqueta? Los artículos no se borrarán pero perderán esta etiqueta.')) return
+    
+    try {
+      const res = await fetch(`/api/admin/etiquetas-articulos/${id}`, { method: 'DELETE' })
+
+      if (res.ok) {
+        enqueueSnackbar('Etiqueta eliminada', { variant: 'success' })
+        fetchEtiquetas()
+      } else {
+        enqueueSnackbar('Error al eliminar', { variant: 'error' })
+      }
+    } catch (error) {
+      enqueueSnackbar('Error de conexión', { variant: 'error' })
+    }
+  }
+
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant='h4'>
-          {isBlogModule ? 'Blogs' : isNewsModule ? 'Noticias y Eventos' : 'Prensa y Blog'}
+          {isBlogModule ? 'Artículos' : isNewsModule ? 'Noticias y Eventos' : 'Prensa y Artículos'}
         </Typography>
         {currentTab === 0 ? (
           <Button variant='contained' onClick={handleOpenAdd} startIcon={<i className='tabler-plus' />}>
-            {isBlogModule ? 'Nuevo Blog' : isNewsModule ? 'Nueva Noticia' : 'Nuevo Artículo'}
+            {isNewsModule ? 'Nueva Noticia' : 'Nuevo Artículo'}
           </Button>
-        ) : (
+        ) : currentTab === 1 ? (
           <Button variant='contained' onClick={handleOpenCatAdd} startIcon={<i className='tabler-plus' />}>
             Nueva Categoría
+          </Button>
+        ) : (
+          <Button variant='contained' onClick={handleOpenEtiAdd} startIcon={<i className='tabler-plus' />}>
+            Nueva Etiqueta
           </Button>
         )}
       </Box>
@@ -220,6 +311,7 @@ return
       <Tabs value={currentTab} onChange={(e, val) => setCurrentTab(val)} sx={{ mb: 3 }}>
         <Tab label="Artículos" />
         <Tab label="Categorías" />
+        <Tab label="Etiquetas" />
       </Tabs>
 
       {currentTab === 0 && (
@@ -244,7 +336,7 @@ return
                       <MenuItem value='NOTICIA'>Noticias</MenuItem>
                       <MenuItem value='EVENTO'>Eventos</MenuItem>
                       <MenuItem value='EXPERTO'>Expertos</MenuItem>
-                      <MenuItem value='BLOG'>Blogs</MenuItem>
+                      <MenuItem value='BLOG'>Artículos</MenuItem>
                     </>
                   )}
                 </Select>
@@ -359,6 +451,50 @@ return
         </Card>
       )}
 
+      {currentTab === 2 && (
+        <Card>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Nombre</TableCell>
+                  <TableCell>Slug</TableCell>
+                  <TableCell>Artículos Relacionados</TableCell>
+                  <TableCell>Acciones</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {loadingEti ? (
+                  <TableRow>
+                    <TableCell colSpan={4} align='center'>Cargando...</TableCell>
+                  </TableRow>
+                ) : etiquetas.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4} align='center'>No hay etiquetas registradas.</TableCell>
+                  </TableRow>
+                ) : (
+                  etiquetas.map((eti) => (
+                    <TableRow key={eti.id}>
+                      <TableCell><Typography variant='subtitle2'>{eti.nombre}</Typography></TableCell>
+                      <TableCell>{eti.slug}</TableCell>
+                      <TableCell>{eti._count?.articulos || 0}</TableCell>
+                      <TableCell>
+                        <IconButton color='primary' onClick={() => handleOpenEtiEdit(eti)}>
+                          <i className='tabler-edit' />
+                        </IconButton>
+                        <IconButton color='error' onClick={() => handleDeleteEti(eti.id)}>
+                          <i className='tabler-trash' />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
+      )}
+
       {openModal && (
         <ArticuloFormDialog 
           open={openModal} 
@@ -386,6 +522,24 @@ return
         <DialogActions>
           <Button onClick={() => setOpenCatModal(false)}>Cancelar</Button>
           <Button onClick={handleSaveCat} variant="contained">Guardar</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={openEtiModal} onClose={() => setOpenEtiModal(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>{editingEtiId ? 'Editar Etiqueta' : 'Nueva Etiqueta'}</DialogTitle>
+        <DialogContent dividers>
+          <TextField
+            autoFocus
+            fullWidth
+            label="Nombre de la etiqueta"
+            value={etiNombre}
+            onChange={(e) => setEtiNombre(e.target.value)}
+            sx={{ mt: 1 }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenEtiModal(false)}>Cancelar</Button>
+          <Button onClick={handleSaveEti} variant="contained">Guardar</Button>
         </DialogActions>
       </Dialog>
     </Box>

@@ -42,7 +42,7 @@ export default async function ProgramPage({ params }: { params: { slug: string }
     }
   })
 
-  if (!curso) {
+  if (!curso || (curso.estado !== 'PUBLICADO' && !(curso as any).landing_publicada)) {
     redirect('/programas')
   }
 

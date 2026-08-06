@@ -243,6 +243,7 @@ model Curso {
   valoraciones         ValoracionCurso[]
   planes               CursoEnPlan[]
   es_destacado         Boolean           @default(false)
+  landing_publicada    Boolean           @default(false)
 
   @@index([profesor_id])
   @@index([categoria_id])

@@ -11,56 +11,6 @@ export const metadata = {
     'Explora nuestros artículos, guías y tendencias en recursos humanos, psicología ocupacional y consultoría organizacional.',
 }
 
-const ARTICLES = [
-  {
-    id: 'pad-articulo-prueba',
-    title: 'Centros de datos: la decisión de directorio detrás de su infraestructura digital crítica',
-    category: 'Tecnología',
-    readTime: '15 min lectura',
-    date: '10 de Noviembre, 2024',
-    desc: 'Construir, coubicar, migrar a la nube o combinar. Por qué elegir dónde vive y quién controla la información crítica dejó de ser un asunto de tecnología.',
-    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80',
-    author: 'Fernando Pérez Lizano',
-    role: 'Director Académico Adjunto, PAD',
-    tags: ['Data Center', 'Infraestructura', 'Soberanía de Datos'],
-  },
-  {
-    id: 'tendencias-seleccion-2026',
-    title: 'Tendencias en Selección y Reclutamiento de Personal para el 2026',
-    category: 'Reclutamiento & ATS',
-    readTime: '5 min lectura',
-    date: '15 de Mayo, 2026',
-    desc: 'Descubre cómo la inteligencia artificial predictiva y los embudos automatizados están redefiniendo la captación del talento idóneo.',
-    image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80',
-    author: 'Mag. Roberto Castillo',
-    role: 'Director de Gestión Humana',
-    tags: ['Reclutamiento', 'RRHH', '2026'],
-  },
-  {
-    id: 'importancia-clima-laboral',
-    title: 'El Impacto Real del Clima Laboral en la Retención del Talento',
-    category: 'Clima Organizacional',
-    readTime: '7 min lectura',
-    date: '28 de Abril, 2026',
-    desc: 'Métricas y estrategias clave para medir la satisfacción de tus colaboradores y reducir la rotación no deseada de forma medible.',
-    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80',
-    author: 'Mag. Sofía Luna',
-    role: 'Consultora de Clima & Cultura',
-    tags: ['Clima', 'Talento'],
-  },
-  {
-    id: 'evaluacion-psicosocial-sunafil',
-    title: 'Guía Completa para el Monitoreo de Factores de Riesgo Psicosocial',
-    category: 'Salud Ocupacional',
-    readTime: '10 min lectura',
-    date: '10 de Abril, 2026',
-    desc: 'Cumplimiento legal y metodología paso a paso para la evaluación psicosocial según las normativas vigentes de fiscalización en la región.',
-    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80',
-    author: 'Dr. Alberto Varela',
-    role: 'Auditor ISO 45001',
-    tags: ['Salud', 'Legal'],
-  },
-]
 
 import prisma from '@/utils/libs/prisma'
 
@@ -155,7 +105,7 @@ export default async function BlogPage() {
     return timeB - timeA
   })
  
-  const dynamicBlogs = allBlogs.length > 0 ? [ARTICLES[0], ...allBlogs] : ARTICLES
+  const dynamicBlogs = allBlogs
 
   return (
     <>

@@ -59,6 +59,7 @@ export const actualizarCursoSchema = z.object({
   es_gratis: z.boolean().optional(),
   es_destacado: z.boolean().optional(),
   es_privado: z.boolean().optional(),
+  landing_publicada: z.boolean().optional(),
   completar_automatico: z.boolean().optional(),
   precio_certificado: z.coerce.number().min(0).optional().nullable(),
   precio: z.coerce.number().min(0, 'El precio no puede ser negativo').optional(),

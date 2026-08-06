@@ -34,6 +34,7 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
     const [esGratis, setEsGratis] = useState(curso.es_gratis)
     const [esPrivado, setEsPrivado] = useState(curso.es_privado ?? false)
     const [esDestacado, setEsDestacado] = useState(curso.es_destacado ?? false)
+    const [landingPublicada, setLandingPublicada] = useState((curso as any).landing_publicada ?? false)
     const [completarAutomatico, setCompletarAutomatico] = useState(curso.completar_automatico ?? false)
     const [precio, setPrecio] = useState(curso.precio)
     const [precioFalso, setPrecioFalso] = useState(curso.precio_falso)
@@ -78,6 +79,18 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
             await editMutation.mutateAsync({ id: curso.id, data: { es_destacado: valor } })
             setEsDestacado(valor)
             enqueueSnackbar(valor ? 'Curso marcado como destacado' : 'Curso quitado de destacados', { variant: 'success' })
+            onSuccess()
+        } catch (error: any) {
+            enqueueSnackbar(error?.message || 'Error', { variant: 'error' })
+        }
+    }
+
+    const handleToggleLandingPublicada = async () => {
+        const nuevoValor = !landingPublicada
+        try {
+            await editMutation.mutateAsync({ id: curso.id, data: { landing_publicada: nuevoValor } })
+            setLandingPublicada(nuevoValor)
+            enqueueSnackbar(nuevoValor ? 'Landing Page Publicada' : 'Landing Page Oculta', { variant: 'success' })
             onSuccess()
         } catch (error: any) {
             enqueueSnackbar(error?.message || 'Error', { variant: 'error' })
@@ -312,6 +325,15 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
                             Volver a Borrador
                         </Button>
                     )}
+                    <Button
+                        variant={landingPublicada ? 'outlined' : 'contained'}
+                        color={landingPublicada ? 'secondary' : 'info'}
+                        onClick={handleToggleLandingPublicada}
+                        disabled={editMutation.isPending}
+                        startIcon={<i className={landingPublicada ? 'tabler-eye-off' : 'tabler-eye'} />}
+                    >
+                        {landingPublicada ? 'Ocultar Landing' : 'Publicar Landing'}
+                    </Button>
                 </Box>
                 {curso.estado !== 'PUBLICADO' && (
                     <Typography variant='caption' color='text.disabled' sx={{ mt: 2, display: 'block' }}>

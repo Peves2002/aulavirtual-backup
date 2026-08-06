@@ -65,19 +65,12 @@ interface InscripcionesClientPageProps {
 export default function InscripcionesClientPage({ inscripciones }: InscripcionesClientPageProps) {
   const [globalFilter, setGlobalFilter] = useState('')
   const [escuelaFilter, setEscuelaFilter] = useState<string>('all')
-  const [modalidadFilter, setModalidadFilter] = useState<string>('all')
 
   // Obtener listas únicas para los selectores
   const escuelasUnicas = useMemo(() => {
     const escuelas = inscripciones.map(i => i.escuela).filter((e): e is string => !!e)
 
     return Array.from(new Set(escuelas)).sort()
-  }, [inscripciones])
-
-  const modalidadesUnicas = useMemo(() => {
-    const modalidades = inscripciones.map(i => i.modalidad).filter((m): m is string => !!m)
-
-    return Array.from(new Set(modalidades)).sort()
   }, [inscripciones])
 
   // Filtrado de datos
@@ -88,12 +81,8 @@ export default function InscripcionesClientPage({ inscripciones }: Inscripciones
       data = data.filter(i => i.escuela === escuelaFilter)
     }
 
-    if (modalidadFilter !== 'all') {
-      data = data.filter(i => i.modalidad === modalidadFilter)
-    }
-
     return data
-  }, [inscripciones, escuelaFilter, modalidadFilter])
+  }, [inscripciones, escuelaFilter])
 
   const columns = useMemo<ColumnDef<LeadPortada, any>[]>(
     () => [
@@ -122,12 +111,6 @@ export default function InscripcionesClientPage({ inscripciones }: Inscripciones
         header: 'Escuela',
         cell: ({ row }) => (
           <Chip label={row.original.escuela} color="primary" variant="outlined" size="small" />
-        )
-      }),
-      columnHelper.accessor('modalidad', {
-        header: 'Modalidad',
-        cell: ({ row }) => (
-          <Chip label={row.original.modalidad} color="secondary" size="small" />
         )
       }),
       columnHelper.accessor('creado_en', {
@@ -206,14 +189,13 @@ return
     const dataToExport = currentData.map(item => ({
       'Nombres': item.nombres,
       'Apellidos': item.apellidos,
-      'DNI': item.dni,
-      'Celular': item.celular,
       'Email': item.email,
-      'Escuela de interés': item.escuela,
-      'Modalidad': item.modalidad,
-      'Acepta Datos': item.aceptaDatos ? 'Sí' : 'No',
-      'Autoriza Publicidad': item.autorizaPublicidad ? 'Sí' : 'No',
-      'Fecha de Registro': new Date(item.creado_en).toLocaleString('es-PE')
+      'WhatsApp': item.celular,
+      'Escuela': item.escuela,
+      'País': item.pais,
+      'Ciudad': item.ciudad,
+      'Profesión': item.profesion,
+      'Detalle': item.detalle
     }))
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport)
@@ -252,21 +234,6 @@ return
             <MenuItem value='all'>Todas las Escuelas</MenuItem>
             {escuelasUnicas.map(escuela => (
               <MenuItem key={escuela} value={escuela}>{escuela}</MenuItem>
-            ))}
-          </CustomTextField>
-
-          <CustomTextField
-            select
-            value={modalidadFilter}
-            onChange={e => {
-              setModalidadFilter(e.target.value)
-              table.setPageIndex(0)
-            }}
-            className='is-full sm:is-[180px]'
-          >
-            <MenuItem value='all'>Todas las Modalidades</MenuItem>
-            {modalidadesUnicas.map(modalidad => (
-              <MenuItem key={modalidad} value={modalidad}>{modalidad}</MenuItem>
             ))}
           </CustomTextField>
 
