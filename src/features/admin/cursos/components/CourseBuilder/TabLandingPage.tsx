@@ -1376,18 +1376,36 @@ return arr
           bottom: 24,
           right: 24,
           zIndex: 100,
-          boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.15)',
-          borderRadius: '12px',
-          overflow: 'hidden'
+          display: 'flex',
+          gap: 2
         }}
       >
+        <Button
+            variant={curso.landing_publicada ? 'contained' : 'contained'}
+            color={curso.landing_publicada ? 'secondary' : 'info'}
+            onClick={async () => {
+                try {
+                    await editMutation.mutateAsync({ id: curso.id, data: { landing_publicada: !curso.landing_publicada } })
+                    enqueueSnackbar(curso.landing_publicada ? 'Landing Page Oculta' : 'Landing Page Publicada', { variant: 'success' })
+                    onSuccess()
+                } catch (e: any) {
+                    enqueueSnackbar(e?.message || 'Error', { variant: 'error' })
+                }
+            }}
+            disabled={editMutation.isPending}
+            startIcon={<i className={curso.landing_publicada ? 'tabler-eye-off' : 'tabler-eye'} />}
+            sx={{ px: 4, py: 3, fontWeight: 700, borderRadius: '12px', boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.15)' }}
+        >
+            {curso.landing_publicada ? 'Ocultar Landing' : 'Publicar Landing'}
+        </Button>
+
         <Button
           variant="contained"
           size="large"
           disabled={editMutation.isPending}
           onClick={handleSaveAll}
           startIcon={<i className="tabler-device-floppy" />}
-          sx={{ px: 6, py: 3, fontWeight: 700, borderRadius: '12px' }}
+          sx={{ px: 6, py: 3, fontWeight: 700, borderRadius: '12px', boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.15)' }}
         >
           {editMutation.isPending ? 'Guardando...' : 'Guardar Cambios de Landing'}
         </Button>
