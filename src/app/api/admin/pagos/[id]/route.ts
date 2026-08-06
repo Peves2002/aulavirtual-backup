@@ -28,6 +28,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     const data: {
       monto_pago?: number
       confirmacion?: 'NO_ENVIADO' | 'ENVIADO'
+      observaciones?: string | null
+      fecha_envio?: Date
     } = {}
 
     if (body.numero_cuota !== undefined) {
@@ -54,6 +56,36 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       }
 
       data.confirmacion = body.confirmacion
+    }
+
+    if (body.observaciones !== undefined) {
+      if (body.observaciones === null) {
+        data.observaciones = null
+      } else if (typeof body.observaciones === 'string') {
+        const texto = body.observaciones.trim()
+
+        if (texto.length > 500) {
+          return ApiResponse.error(request, 'observaciones no puede superar 500 caracteres', 400)
+        }
+
+        data.observaciones = texto || null
+      } else {
+        return ApiResponse.error(request, 'observaciones inválida', 400)
+      }
+    }
+
+    if (body.fecha_envio !== undefined) {
+      if (body.fecha_envio === null || body.fecha_envio === '') {
+        return ApiResponse.error(request, 'fecha_envio es obligatoria', 400)
+      }
+
+      const fecha = new Date(body.fecha_envio)
+
+      if (Number.isNaN(fecha.getTime())) {
+        return ApiResponse.error(request, 'fecha_envio inválida', 400)
+      }
+
+      data.fecha_envio = fecha
     }
 
     if (Object.keys(data).length === 0) {
@@ -91,6 +123,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
           numero_cuota: registro.numero_cuota,
           monto_pago: Number(registro.monto_pago),
           confirmacion: registro.confirmacion,
+          observaciones: registro.observaciones ?? null,
+          fecha_envio: registro.fecha_envio.toISOString(),
           alumno: `${registro.usuario.nombre} ${registro.usuario.apellido}`.trim(),
           dni: registro.usuario.numero_documento ?? '',
           correo: registro.usuario.correo

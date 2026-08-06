@@ -5,10 +5,12 @@ import type { AxiosStatic } from 'axios'
 import { getBaseURL } from '@/utils/env'
 import { AxiosInternalHttpClient } from '@/features/shared/http/httpClient'
 import type {
+  AlumnoPagoResumen,
   ConfirmacionCuota,
   CuotaReciente,
   PagosCursoData,
   PagosFiltrosData,
+  PagosPorAlumnoDetalle,
   RegistroCuotaManual
 } from '../entity/PagoCuota'
 
@@ -46,6 +48,18 @@ export class AxiosPagos extends AxiosInternalHttpClient {
     return res?.recientes ?? []
   }
 
+  async buscarAlumnos(q: string): Promise<AlumnoPagoResumen[]> {
+    const res = await this.iGet<{ alumnos: AlumnoPagoResumen[] }>(
+      `/por-alumno?q=${encodeURIComponent(q)}`
+    )
+
+    return res?.alumnos ?? []
+  }
+
+  async getPagosAlumno(usuarioId: string): Promise<PagosPorAlumnoDetalle> {
+    return this.iGet<PagosPorAlumnoDetalle>(`/por-alumno/${encodeURIComponent(usuarioId)}`)
+  }
+
   async getByCurso(cursoId: string): Promise<PagosCursoData> {
     return this.iGet<PagosCursoData>(`?cursoId=${encodeURIComponent(cursoId)}`)
   }
@@ -58,11 +72,27 @@ export class AxiosPagos extends AxiosInternalHttpClient {
 
   async actualizarRegistro(
     id: string,
-    data: Partial<{ monto_pago: number; confirmacion: ConfirmacionCuota }>
+    data: Partial<{
+      monto_pago: number
+      confirmacion: ConfirmacionCuota
+      observaciones: string | null
+      fecha_envio: string
+    }>
   ): Promise<RegistroCuotaManual> {
     const res = await this.iPatch<{ registro: RegistroCuotaManual }>(`/${id}`, data)
 
     return res.registro
+  }
+
+  async eliminarTabla(cursoId: string, numeroCuota: number) {
+    return this.iDelete<{
+      cursoId: string
+      numeroCuota: number
+      registrosEliminados: number
+      configsEliminadas: number
+    }>('/tabla', {
+      data: { cursoId, numeroCuota }
+    })
   }
 
   async guardarAccesos(cursoId: string, numeroCuota: number, moduloIds: string[]) {

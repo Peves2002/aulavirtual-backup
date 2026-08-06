@@ -1189,6 +1189,8 @@ model RegistroCuotaManual {
   numero_cuota   Int
   monto_pago     Decimal           @default(0) @db.Decimal(10, 2)
   confirmacion   ConfirmacionCuota @default(NO_ENVIADO)
+  observaciones  String?
+  fecha_envio    DateTime          @default(now())
   creado_en      DateTime          @default(now())
   actualizado_en DateTime          @updatedAt
   curso          Curso             @relation(fields: [curso_id], references: [id], onDelete: Cascade)

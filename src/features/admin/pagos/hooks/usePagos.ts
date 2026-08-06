@@ -31,6 +31,24 @@ export const usePagosRecientes = (enabled = true) => {
   })
 }
 
+export const useBuscarAlumnosPagos = (q: string, enabled = true) => {
+  const query = q.trim()
+
+  return useQuery({
+    queryKey: ['admin', 'pagos', 'alumnos', query],
+    queryFn: () => factory().buscarAlumnos(query),
+    enabled: enabled && query.length >= 2
+  })
+}
+
+export const usePagosAlumno = (usuarioId?: string) => {
+  return useQuery({
+    queryKey: ['admin', 'pagos', 'alumno', usuarioId ?? null],
+    queryFn: () => factory().getPagosAlumno(usuarioId!),
+    enabled: Boolean(usuarioId)
+  })
+}
+
 export const usePagosCurso = (cursoId?: string) => {
   return useQuery({
     queryKey: ['admin', 'pagos', 'curso', cursoId ?? null],
@@ -43,11 +61,7 @@ export const usePagosMutations = (cursoId?: string) => {
   const queryClient = useQueryClient()
 
   const invalidate = () => {
-    queryClient.invalidateQueries({ queryKey: ['admin', 'pagos', 'recientes'] })
-
-    if (cursoId) {
-      queryClient.invalidateQueries({ queryKey: ['admin', 'pagos', 'curso', cursoId] })
-    }
+    queryClient.invalidateQueries({ queryKey: ['admin', 'pagos'] })
   }
 
   const crearTabla = useMutation({
@@ -61,8 +75,19 @@ export const usePagosMutations = (cursoId?: string) => {
       data
     }: {
       id: string
-      data: Partial<{ monto_pago: number; confirmacion: ConfirmacionCuota }>
+      data: Partial<{
+        monto_pago: number
+        confirmacion: ConfirmacionCuota
+        observaciones: string | null
+        fecha_envio: string
+      }>
     }) => factory().actualizarRegistro(id, data),
+    onSuccess: invalidate
+  })
+
+  const eliminarTabla = useMutation({
+    mutationFn: ({ numeroCuota }: { numeroCuota: number }) =>
+      factory().eliminarTabla(cursoId!, numeroCuota),
     onSuccess: invalidate
   })
 
@@ -77,5 +102,5 @@ export const usePagosMutations = (cursoId?: string) => {
     onSuccess: invalidate
   })
 
-  return { crearTabla, actualizarRegistro, guardarAccesos }
+  return { crearTabla, actualizarRegistro, eliminarTabla, guardarAccesos }
 }

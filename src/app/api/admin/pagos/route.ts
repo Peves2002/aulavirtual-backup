@@ -126,6 +126,8 @@ export async function GET(request: Request) {
         numero_cuota: r.numero_cuota,
         monto_pago: Number(r.monto_pago),
         confirmacion: r.confirmacion,
+        observaciones: r.observaciones ?? null,
+        fecha_envio: r.fecha_envio.toISOString(),
         alumno: `${r.usuario.nombre} ${r.usuario.apellido}`.trim(),
         dni: r.usuario.numero_documento ?? '',
         correo: r.usuario.correo

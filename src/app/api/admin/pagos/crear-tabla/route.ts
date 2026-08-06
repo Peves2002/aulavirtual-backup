@@ -58,6 +58,7 @@ export async function POST(request: Request) {
         numero_cuota: numeroCuota,
         monto_pago: 0,
         confirmacion: 'NO_ENVIADO',
+        fecha_envio: now,
         actualizado_en: now
       })),
       skipDuplicates: true
