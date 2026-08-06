@@ -839,7 +839,7 @@ export default async function ProgramPage({ params }: { params: { slug: string }
       )}
 
       {/* Mobile Sticky Form */}
-      <MobileStickyForm cursoTitulo={curso.titulo} categoriaNombre={curso.categoria?.nombre || ''} estado={curso.estado} slug={curso.slug} />
+      <MobileStickyForm cursoTitulo={curso.titulo} categoriaNombre={curso.categoria?.nombre || ''} cursoSlug={curso.slug} />
     </div>
   )
 }
