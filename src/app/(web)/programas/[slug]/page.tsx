@@ -818,6 +818,16 @@ export default async function ProgramPage({ params }: { params: { slug: string }
           <div className="sticky top-[160px] bg-[#f4f5f7] p-8 shadow-lg border border-gray-100 z-20 max-h-[calc(100vh-180px)] overflow-y-auto custom-scrollbar">
             {(curso as any).codigo_embeber ? (
               <div dangerouslySetInnerHTML={{ __html: (curso as any).codigo_embeber }} />
+            ) : curso.estado === 'PUBLICADO' ? (
+              <div className="flex flex-col items-center justify-center text-center py-4">
+                <h3 className="text-2xl font-normal mb-4 text-gray-800 tracking-tight">¡Inscripciones Abiertas!</h3>
+                <p className="text-[14px] text-gray-600 mb-8">
+                  Este programa ya se encuentra disponible en nuestra plataforma. Accede para ver todos los detalles y matricularte.
+                </p>
+                <Link href={`/cursos/${curso.slug}`} className="w-full bg-[#fcd116] hover:bg-yellow-400 text-slate-900 font-bold py-4 px-6 text-[14px] tracking-wide uppercase transition-colors flex justify-center items-center shadow-md">
+                  Ver Detalles y Matricularse
+                </Link>
+              </div>
             ) : (
               <>
                 <h3 className="text-2xl font-normal mb-3 text-center text-gray-800 tracking-tight">Solicita información</h3>
@@ -839,7 +849,7 @@ export default async function ProgramPage({ params }: { params: { slug: string }
       )}
 
       {/* Mobile Sticky Form */}
-      <MobileStickyForm cursoTitulo={curso.titulo} categoriaNombre={curso.categoria?.nombre || ''} />
+      <MobileStickyForm cursoTitulo={curso.titulo} categoriaNombre={curso.categoria?.nombre || ''} estado={curso.estado} slug={curso.slug} />
     </div>
   )
 }

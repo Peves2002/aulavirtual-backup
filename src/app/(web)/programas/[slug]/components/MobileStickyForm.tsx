@@ -1,13 +1,26 @@
 'use client'
 
 import { useState } from 'react'
-
+import Link from 'next/link'
 import { X } from 'lucide-react'
 
 import SolicitaInfoForm from './SolicitaInfoForm'
 
-export default function MobileStickyForm({ cursoTitulo, categoriaNombre }: { cursoTitulo: string, categoriaNombre: string }) {
+export default function MobileStickyForm({ cursoTitulo, categoriaNombre, estado, slug }: { cursoTitulo: string, categoriaNombre: string, estado?: string, slug?: string }) {
   const [isOpen, setIsOpen] = useState(false)
+
+  if (estado === 'PUBLICADO' && slug) {
+    return (
+      <div className="lg:hidden fixed bottom-0 left-0 w-full z-50 flex h-[60px] shadow-[0_-4px_15px_rgba(0,0,0,0.1)]">
+        <Link 
+          href={`/cursos/${slug}`}
+          className="w-full bg-[#fcd116] text-slate-900 font-bold text-[15px] flex items-center justify-center tracking-wide"
+        >
+          MATRICULARSE
+        </Link>
+      </div>
+    )
+  }
 
   return (
     <>
