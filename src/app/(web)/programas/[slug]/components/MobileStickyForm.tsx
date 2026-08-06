@@ -6,21 +6,8 @@ import { X } from 'lucide-react'
 
 import SolicitaInfoForm from './SolicitaInfoForm'
 
-export default function MobileStickyForm({ cursoTitulo, categoriaNombre, estado, slug }: { cursoTitulo: string, categoriaNombre: string, estado?: string, slug?: string }) {
+export default function MobileStickyForm({ cursoTitulo, categoriaNombre, cursoSlug }: { cursoTitulo: string, categoriaNombre: string, cursoSlug?: string }) {
   const [isOpen, setIsOpen] = useState(false)
-
-  if (estado === 'PUBLICADO' && slug) {
-    return (
-      <div className="lg:hidden fixed bottom-0 left-0 w-full z-50 flex h-[60px] shadow-[0_-4px_15px_rgba(0,0,0,0.1)]">
-        <Link 
-          href={`/cursos/${slug}`}
-          className="w-full bg-[#fcd116] text-slate-900 font-bold text-[15px] flex items-center justify-center tracking-wide"
-        >
-          MATRICULARSE
-        </Link>
-      </div>
-    )
-  }
 
   return (
     <>
@@ -46,7 +33,7 @@ export default function MobileStickyForm({ cursoTitulo, categoriaNombre, estado,
             </button>
             <div className="p-8 pt-10 overflow-y-auto custom-scrollbar">
               <h3 className="text-[22px] font-bold mb-6 text-gray-800 tracking-tight">Solicitar información</h3>
-              <SolicitaInfoForm cursoTitulo={cursoTitulo} categoriaNombre={categoriaNombre} />
+              <SolicitaInfoForm cursoTitulo={cursoTitulo} categoriaNombre={categoriaNombre} cursoSlug={cursoSlug} />
             </div>
           </div>
         </div>

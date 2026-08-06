@@ -2,10 +2,12 @@
 /* eslint-disable padding-line-between-statements, newline-before-return, import/order */
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 import Swal from 'sweetalert2'
 
-export default function SolicitaInfoForm({ cursoTitulo, categoriaNombre }: { cursoTitulo: string, categoriaNombre: string }) {
+export default function SolicitaInfoForm({ cursoTitulo, categoriaNombre, cursoSlug }: { cursoTitulo: string, categoriaNombre: string, cursoSlug?: string }) {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     especialidad: categoriaNombre || 'Especialización',
     nombres: '',
@@ -62,9 +64,15 @@ export default function SolicitaInfoForm({ cursoTitulo, categoriaNombre }: { cur
       if (response.ok) {
         Swal.fire({
           title: '¡Solicitud enviada!',
-          text: 'Un asesor académico contactará contigo en breve.',
+          text: 'Redirigiendo a la página del programa...',
           icon: 'success',
-          confirmButtonColor: '#08479b'
+          confirmButtonColor: '#08479b',
+          timer: 2000,
+          showConfirmButton: false
+        }).then(() => {
+          if (cursoSlug) {
+            router.push(`/cursos/${cursoSlug}`)
+          }
         })
         setFormData({
           especialidad: categoriaNombre || 'Especialización',
