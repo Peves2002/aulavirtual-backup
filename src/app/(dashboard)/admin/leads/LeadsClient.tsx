@@ -7,7 +7,7 @@ import { Box, Typography, Tabs, Tab, Paper } from '@mui/material'
 
 import LeadsTable from './LeadsTable'
 
-export default function LeadsClient({ initialLeads }: { initialLeads: any[] }) {
+export default function LeadsClient({ initialLeads, cursos }: { initialLeads: any[], cursos: any[] }) {
   const [leads, setLeads] = useState(initialLeads)
   const [tabValue, setTabValue] = useState(0)
 
@@ -60,7 +60,8 @@ export default function LeadsClient({ initialLeads }: { initialLeads: any[] }) {
           leads={programsLeads} 
           isEventTab={false} 
           onUpdateLead={handleUpdateLead} 
-          onDeleteLead={handleDeleteLead} 
+          onDeleteLead={handleDeleteLead}
+          cursos={cursos} 
         />
       )}
       

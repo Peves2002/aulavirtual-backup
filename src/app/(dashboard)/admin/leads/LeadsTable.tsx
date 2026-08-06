@@ -26,11 +26,13 @@ import Swal from 'sweetalert2'
 import ViewLeadModal from './components/ViewLeadModal'
 import EditLeadModal from './components/EditLeadModal'
 
-export default function LeadsTable({ leads, isEventTab, onUpdateLead, onDeleteLead }: { leads: any[], isEventTab: boolean, onUpdateLead: (lead: any) => void, onDeleteLead: (id: string) => void }) {
+export default function LeadsTable({ leads, isEventTab, onUpdateLead, onDeleteLead, cursos = [] }: { leads: any[], isEventTab: boolean, onUpdateLead: (lead: any) => void, onDeleteLead: (id: string) => void, cursos?: any[] }) {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [search, setSearch] = useState('')
   const [filterType, setFilterType] = useState('ALL')
+  const [escuelaFilter, setEscuelaFilter] = useState('ALL')
+  const [programaFilter, setProgramaFilter] = useState('ALL')
 
   // Modals state
   const [viewLead, setViewLead] = useState<any>(null)
@@ -53,11 +55,45 @@ export default function LeadsTable({ leads, isEventTab, onUpdateLead, onDeleteLe
     return lead.escuela || '-'
   }
 
+  const getLeadPrograma = (lead: any) => {
+    if (lead.escuela?.startsWith('Programa: ')) {
+      return lead.escuela.replace('Programa: ', '').trim()
+    }
+    // Si no empieza con Programa (probablemente vino del Hero Form)
+    return '-' // O "General"
+  }
+
+  const getLeadEscuela = (lead: any) => {
+    if (lead.escuela?.startsWith('Programa: ')) {
+      const programaStr = lead.escuela.replace('Programa: ', '').trim()
+      const match = cursos.find(c => c.titulo === programaStr)
+      return match?.escuela || 'Sin Escuela'
+    }
+    return lead.escuela || 'Sin Escuela'
+  }
+
   const uniqueTypes = Array.from(new Set(leads.map(getEventOrProgram))).filter(t => t && t !== '-')
+  
+  // Extraer todas las escuelas y programas directamente de los cursos disponibles
+  const uniqueEscuelas = Array.from(new Set(cursos.map(c => c.escuela))).filter(t => t && t !== 'Sin Escuela')
+  const uniqueProgramas = Array.from(new Set(cursos.map(c => c.titulo))).filter(t => t && t !== '-')
+
+  // Solo mostramos los programas de la escuela seleccionada
+  const availableProgramas = escuelaFilter === 'ALL' 
+    ? uniqueProgramas
+    : Array.from(new Set(cursos.filter(c => c.escuela === escuelaFilter).map(c => c.titulo))).filter(t => t && t !== '-')
 
   const filteredLeads = leads.filter(lead => {
     const term = search.toLowerCase().trim()
-    const matchesFilter = filterType === 'ALL' || getEventOrProgram(lead) === filterType
+    
+    let matchesFilter = true
+    if (isEventTab) {
+      matchesFilter = filterType === 'ALL' || getEventOrProgram(lead) === filterType
+    } else {
+      const matchesEscuela = escuelaFilter === 'ALL' || getLeadEscuela(lead) === escuelaFilter
+      const matchesPrograma = programaFilter === 'ALL' || getLeadPrograma(lead) === programaFilter
+      matchesFilter = matchesEscuela && matchesPrograma
+    }
 
     if (!term) return matchesFilter
 
@@ -123,7 +159,7 @@ export default function LeadsTable({ leads, isEventTab, onUpdateLead, onDeleteLe
     if (!filteredLeads.length) return
 
     const exportData = filteredLeads.map(l => {
-      return {
+      const baseData = {
         'Fecha': new Date(l.creado_en).toLocaleString('es-PE'),
         'Nombres': l.nombres || '',
         'Apellidos': l.apellidos || '',
@@ -132,8 +168,21 @@ export default function LeadsTable({ leads, isEventTab, onUpdateLead, onDeleteLe
         'Celular': l.celular || '',
         'Cargo/Profesion': l.profesion || '',
         'Empresa/Lugar de Trabajo': getCompanyOrDetail(l),
-        'Programa/Evento': getEventOrProgram(l),
-        'Detalle Completo': l.detalle || ''
+      }
+
+      if (isEventTab) {
+        return {
+          ...baseData,
+          'Evento': getEventOrProgram(l),
+          'Detalle Completo': l.detalle || ''
+        }
+      } else {
+        return {
+          ...baseData,
+          'Escuela': getLeadEscuela(l),
+          'Programa': getLeadPrograma(l),
+          'Detalle Completo': l.detalle || ''
+        }
       }
     })
 
@@ -162,22 +211,61 @@ export default function LeadsTable({ leads, isEventTab, onUpdateLead, onDeleteLe
               )
             }}
           />
-          <TextField
-            select
-            size="small"
-            value={filterType}
-            onChange={(e) => {
-              setFilterType(e.target.value)
-              setPage(0)
-            }}
-            SelectProps={{ native: true }}
-            sx={{ minWidth: 220 }}
-          >
-            <option value="ALL">Todos los {isEventTab ? 'Eventos' : 'Programas'}</option>
-            {uniqueTypes.map((t, idx) => (
-              <option key={idx} value={t as string}>{t}</option>
-            ))}
-          </TextField>
+          {isEventTab ? (
+            <TextField
+              select
+              size="small"
+              value={filterType}
+              onChange={(e) => {
+                setFilterType(e.target.value)
+                setPage(0)
+              }}
+              SelectProps={{ native: true }}
+              sx={{ minWidth: 220 }}
+            >
+              <option value="ALL">Todos los Eventos</option>
+              {uniqueTypes.map((t, idx) => (
+                <option key={idx} value={t as string}>{t}</option>
+              ))}
+            </TextField>
+          ) : (
+            <>
+              <TextField
+                select
+                size="small"
+                value={escuelaFilter}
+                onChange={(e) => {
+                  setEscuelaFilter(e.target.value)
+                  setProgramaFilter('ALL')
+                  setPage(0)
+                }}
+                SelectProps={{ native: true }}
+                sx={{ minWidth: 220 }}
+              >
+                <option value="ALL">Todas las Escuelas</option>
+                {uniqueEscuelas.map((t, idx) => (
+                  <option key={idx} value={t as string}>{t}</option>
+                ))}
+              </TextField>
+              <TextField
+                select
+                size="small"
+                value={programaFilter}
+                onChange={(e) => {
+                  setProgramaFilter(e.target.value)
+                  setPage(0)
+                }}
+                disabled={escuelaFilter === 'ALL'}
+                SelectProps={{ native: true }}
+                sx={{ minWidth: 220 }}
+              >
+                <option value="ALL">Todos los Programas</option>
+                {availableProgramas.map((t, idx) => (
+                  <option key={idx} value={t as string}>{t}</option>
+                ))}
+              </TextField>
+            </>
+          )}
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Typography variant="body2" color="text.secondary">
@@ -202,6 +290,7 @@ export default function LeadsTable({ leads, isEventTab, onUpdateLead, onDeleteLe
               <TableCell>Nombres</TableCell>
               <TableCell>Contacto</TableCell>
               <TableCell>{isEventTab ? 'Empresa' : 'Detalle / Edad'}</TableCell>
+              {!isEventTab && <TableCell>Escuela</TableCell>}
               <TableCell>{isEventTab ? 'Evento' : 'Programa'}</TableCell>
               <TableCell align="center">Acciones</TableCell>
             </TableRow>
@@ -227,8 +316,13 @@ export default function LeadsTable({ leads, isEventTab, onUpdateLead, onDeleteLe
                     <Typography variant="body2">{getCompanyOrDetail(lead)}</Typography>
                     {lead.profesion && <Typography variant="caption" color="text.secondary">{lead.profesion}</Typography>}
                   </TableCell>
+                  {!isEventTab && (
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary">{getLeadEscuela(lead)}</Typography>
+                    </TableCell>
+                  )}
                   <TableCell>
-                    <Typography variant="body2" color="primary">{getEventOrProgram(lead)}</Typography>
+                    <Typography variant="body2" color="primary">{isEventTab ? getEventOrProgram(lead) : getLeadPrograma(lead)}</Typography>
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>

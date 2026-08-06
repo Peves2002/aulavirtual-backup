@@ -22,5 +22,9 @@ export default async function LeadsPage() {
     orderBy: { creado_en: 'desc' }
   })
 
-  return <LeadsClient initialLeads={leads} />
+  const cursos = await prisma.curso.findMany({
+    select: { id: true, titulo: true, escuela: true }
+  })
+
+  return <LeadsClient initialLeads={leads} cursos={cursos} />
 }
