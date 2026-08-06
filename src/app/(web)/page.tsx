@@ -63,16 +63,7 @@ const TESTIMONIOS = [
   { id: 3, name: 'Lucía Vargas', role: 'Analista de Cultura Org.', quote: 'Destaco la calidad de los docentes. Profesionales con trayectoria real que comparten su experiencia y te guían paso a paso.', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&q=80' },
 ]
 
-const BLOGS = [
-  { id: 1, title: 'El futuro del liderazgo en la era digital y remota', date: '15 Oct, 2023', image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&q=80' },
-  { id: 2, title: 'Salud Mental y Prevención en el Entorno Laboral', date: '02 Nov, 2023', image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=400&q=80' },
-  { id: 3, title: 'Gamificación: El secreto del aprendizaje corporativo', date: '20 Nov, 2023', image: 'https://images.unsplash.com/photo-1586528116311-ad8ed7c80a30?w=400&q=80' },
-]
 
-const NOTICIAS = [
-  { id: 1, tag: 'TENDENCIAS', title: 'ADPH Group presenta el estudio de Clima Laboral 2026', date: 'Julio 05, 2026', image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&q=80' },
-  { id: 2, tag: 'INNOVACIÓN', title: 'Nuevas metodologías experienciales en alianza internacional', date: 'Junio 28, 2026', image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&q=80' }
-]
 
 function parseSpanishDate(dateStr: string): Date {
   if (!dateStr) return new Date(0)

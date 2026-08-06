@@ -3,7 +3,7 @@ import { notFound, redirect } from 'next/navigation'
  
 export const dynamic = 'force-dynamic'
 
-import { ArrowLeft, Facebook, Linkedin, Twitter, Search } from 'lucide-react'
+import { ArrowLeft, Search } from 'lucide-react'
 
 import { getConfigs } from '@/utils/libs/config'
 import prisma from '@/utils/libs/prisma'

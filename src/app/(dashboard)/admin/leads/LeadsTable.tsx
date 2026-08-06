@@ -59,6 +59,7 @@ export default function LeadsTable({ leads, isEventTab, onUpdateLead, onDeleteLe
     if (lead.escuela?.startsWith('Programa: ')) {
       return lead.escuela.replace('Programa: ', '').trim()
     }
+
     // Si no empieza con Programa (probablemente vino del Hero Form)
     return '-' // O "General"
   }

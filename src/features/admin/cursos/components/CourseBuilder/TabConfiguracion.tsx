@@ -87,6 +87,7 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
 
     const handleToggleLandingPublicada = async () => {
         const nuevoValor = !landingPublicada
+
         try {
             await editMutation.mutateAsync({ id: curso.id, data: { landing_publicada: nuevoValor } })
             setLandingPublicada(nuevoValor)
