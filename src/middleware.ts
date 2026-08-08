@@ -81,6 +81,7 @@ export default withAuth(
           path.startsWith('/login') ||
           path.startsWith('/register') ||
           path.startsWith('/cursos') ||
+          path.startsWith('/landing') ||
           path.startsWith('/diplomados') ||
           path.startsWith('/especializaciones') ||
           path.startsWith('/ebooks') ||
@@ -107,6 +108,7 @@ export default withAuth(
           path.startsWith('/servicios') ||
           path.startsWith('/soluciones') ||
           path.startsWith('/simulacros') ||
+          path.startsWith('/articulos') ||
           path === '/'
         ) {
           return true

@@ -25,19 +25,19 @@ const WhatsAppIcon = ({ size = 16 }: { size?: number }) => (
 )
 
 const staticSocialLinks = [
-  { label: 'Facebook', href: 'https://www.facebook.com/flyup.store', icon: <Facebook size={20} /> },
-  { label: 'TikTok', href: 'https://tiktok.com/@flyupsale', icon: <TikTokIcon size={20} /> },
-  { label: 'Instagram', href: 'https://www.instagram.com/devrocket.software/', icon: <Instagram size={20} /> },
-  { label: 'Youtube', href: 'https://www.youtube.com/@Fly-s9b', icon: <Youtube size={20} /> },
+  { label: 'Facebook', href: 'https://www.facebook.com/gridexa', icon: <Facebook size={20} /> },
+  { label: 'TikTok', href: 'https://tiktok.com/@gridexa', icon: <TikTokIcon size={20} /> },
+  { label: 'Instagram', href: 'https://www.instagram.com/gridexa/', icon: <Instagram size={20} /> },
+  { label: 'Youtube', href: 'https://www.youtube.com/@gridexa', icon: <Youtube size={20} /> },
 ]
 
 interface WebFooterProps {
   platformName?: string
 }
 
-const WebFooter = async ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
+const WebFooter = async ({ platformName = 'GRIDEXA' }: WebFooterProps) => {
   const configs = await getConfigs()
-  const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
+  const waNumber = configs.WHATSAPP_NUMERO || '51936032964'
 
   const socialLinks = [
     ...staticSocialLinks,
@@ -60,15 +60,15 @@ const WebFooter = async ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
             <ul className="space-y-3" style={{ opacity: 0.8 }}>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <Phone size={16} className="flex-shrink-0 mt-0.5" />
-                <span>+51 928 510 125</span>
+                <span>+51 936 032 964</span>
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <Mail size={16} className="flex-shrink-0 mt-0.5" />
-                <span>flyup.sale@gmail.com</span>
+                <span>ejecutivo.comercial@gridexae.com</span>
               </li>
               <li className="flex items-start gap-2" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem' }}>
                 <MapPin size={16} className="flex-shrink-0 mt-0.5" />
-                <span>Lima, Miraflores</span>
+                <span>Jr. Paseo del Bosque 469, San Borja, Lima – Perú</span>
               </li>
             </ul>
           </div>
@@ -210,7 +210,7 @@ const WebFooter = async ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
               href="https://flyup.pe"
               target="_blank"
               rel="noopener noreferrer"
-              className="no-underline hover:opacity-80 inline-flex items-center align-middle"
+              className="no-underline hover:opacity-80 inline-flex items-center align-middle ml-1"
               style={{ color: 'var(--web-light, #BDD962)', fontWeight: 600 }}
             >
               <Image

@@ -85,7 +85,7 @@ export async function POST(request: Request) {
           </p>
         </div>
         <div style="background-color: #f3f4f6; padding: 15px; text-align: center; border-radius: 0 0 6px 6px; font-size: 12px; color: #888;">
-          NOMBRE DE TU EMPRESA - RUC: 20600000000
+          GRIDEXA ENERGY SAC - RUC: 20615993167
         </div>
       </div>
     `

@@ -4,12 +4,14 @@ import { useState, useEffect } from 'react'
 
 import { usePathname } from 'next/navigation'
 
-import { Button } from '@mui/material'
+import { Button, IconButton } from '@mui/material'
 import { useSession } from 'next-auth/react'
+import { Menu } from 'lucide-react'
 
 import Logo from '@components/layout/shared/Logo'
 import UserDropdown from '@components/layout/shared/UserDropdown'
 import CartIcon from '@/features/web/cart/components/CartIcon'
+import MobileNavDrawer from '@/utils/components/layout/web/MobileNavDrawer'
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import { useConfig } from '@/contexts/ConfigContext'
 import WebNavLinks from '@/utils/components/layout/web/WebNavLinks'
@@ -39,6 +41,7 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
   const pathname = usePathname()
   const isHome = pathname === '/'
   const [isScrolled, setIsScrolled] = useState(false)
+  const [navOpen, setNavOpen] = useState(false)
 
   useEffect(() => {
     if (!isHome) return
@@ -54,11 +57,10 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 transition-colors duration-300 ${
-        isTransparent
-          ? 'bg-transparent border-transparent shadow-none'
-          : 'bg-white border-b border-border shadow-sm'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 transition-colors duration-300 ${isTransparent
+        ? 'bg-transparent border-transparent shadow-none'
+        : 'bg-white border-b border-border shadow-sm'
+        }`}
       style={{ height: 'var(--navbar-height)' }}
     >
       {/* Logo */}
@@ -105,7 +107,20 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
             </Button>
           </>
         )}
+
+        <IconButton
+          onClick={() => setNavOpen(true)}
+          aria-label="Abrir menú"
+          sx={{
+            display: { xs: 'inline-flex', sm: 'none' },
+            color: '#02115C',
+          }}
+        >
+          <Menu size={26} />
+        </IconButton>
       </div>
+
+      <MobileNavDrawer open={navOpen} onClose={() => setNavOpen(false)} empresasHabilitado={empresasHabilitado} />
     </header>
   )
 }

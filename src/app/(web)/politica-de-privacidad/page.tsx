@@ -3,7 +3,7 @@ import React from 'react'
 import { Box, Container, Typography, Divider } from '@mui/material'
 
 export const metadata = {
-  title: 'Política de Privacidad | ARM Asset Reliability Management',
+  title: 'Política de Privacidad | GRIDEXA ENERGY ACADEMY',
 }
 
 export default function PoliticaDePrivacidadPage() {
@@ -20,10 +20,16 @@ export default function PoliticaDePrivacidadPage() {
         <Box sx={{ '& h4': { color: 'var(--web-dark, #025E44)', fontWeight: 800, mt: 5, mb: 2 }, '& p': { mb: 2, lineHeight: 1.8 } }}>
 
           <Typography paragraph>
-            En <strong>[NOMBRE DE EMPRESA]</strong> valoramos la confianza que nuestros usuarios depositan al
+            En <strong>GRIDEXA ENERGY ACADEMY</strong> valoramos la confianza que nuestros usuarios depositan al
             compartir su información personal. Esta Política de Privacidad describe cómo recopilamos, usamos,
             almacenamos y protegemos los datos personales de quienes acceden a nuestra Aula Virtual, de acuerdo
             con la <strong>Ley N° 29733, Ley de Protección de Datos Personales</strong>, y su reglamento.
+          </Typography>
+
+          <Typography paragraph>
+            El responsable del tratamiento de sus datos personales es <strong>GRIDEXA ENERGY SAC</strong>
+            (&quot;GRIDEXA ENERGY ACADEMY&quot;), con RUC <strong>20615993167</strong>, con domicilio en{' '}
+            <strong>Jr. Paseo del Bosque 469, San Borja, Lima – Perú</strong>.
           </Typography>
 
           <Divider sx={{ my: 4 }} />
@@ -55,7 +61,7 @@ export default function PoliticaDePrivacidadPage() {
           <Typography variant="h4">4. Derechos del Usuario (ARCO)</Typography>
           <Typography paragraph>
             El usuario puede ejercer sus derechos de <strong>Acceso, Rectificación, Cancelación y Oposición</strong>{' '}
-            sobre sus datos personales, enviando una solicitud a <strong>flyup.sale@gmail.com</strong>, adjuntando
+            sobre sus datos personales, enviando una solicitud a <strong>ejecutivo.comercial@gridexae.com</strong>, adjuntando
             copia de su documento de identidad para validar la titularidad de la solicitud.
           </Typography>
 
@@ -76,7 +82,7 @@ export default function PoliticaDePrivacidadPage() {
           <Typography variant="h4">7. Contacto</Typography>
           <Typography paragraph>
             Para consultas sobre el tratamiento de sus datos personales, escríbanos a{' '}
-            <strong>flyup.sale@gmail.com</strong>. De acuerdo a la legislación de protección al consumidor
+            <strong>ejecutivo.comercial@gridexae.com</strong>. De acuerdo a la legislación de protección al consumidor
             vigente, también ponemos a su disposición nuestro{' '}
             <a href="/libro-de-reclamaciones" style={{ color: 'var(--web-dark, #025E44)', textDecoration: 'underline' }}>
               Libro de Reclamaciones
