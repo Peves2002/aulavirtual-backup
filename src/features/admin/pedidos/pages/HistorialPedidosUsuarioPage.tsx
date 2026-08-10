@@ -71,6 +71,7 @@ interface HistorialPedidosUsuarioPageProps {
 
 export function HistorialPedidosUsuarioPage({ usuarioId, initialData, initialTotal = 0 }: HistorialPedidosUsuarioPageProps) {
   const router = useRouter()
+
   // Filtros aplicados a la consulta
   const [estadoFiltro, setEstadoFiltro] = useState('TODOS')
   const [nroPedido, setNroPedido] = useState('')
@@ -114,6 +115,7 @@ export function HistorialPedidosUsuarioPage({ usuarioId, initialData, initialTot
       const session = await getSession()
       const token = session?.user?.accessToken ?? null
       const axiosPedido = new AxiosPedido({ getAuthToken: () => token })
+
       const res = await axiosPedido.getAll({ 
         usuario_id: usuarioId,
         estado: estadoFiltro, 
@@ -122,6 +124,7 @@ export function HistorialPedidosUsuarioPage({ usuarioId, initialData, initialTot
         anio: anioFiltro,
         limit: '5000' 
       })
+
       const todos: Pedido[] = res?.pedidos ?? []
 
       const filas = todos.map(p => ({

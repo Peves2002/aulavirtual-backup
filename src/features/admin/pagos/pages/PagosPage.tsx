@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 
 import { usePathname } from 'next/navigation'
+
 import {
   Box,
   Button,
@@ -331,6 +332,7 @@ export default function PagosPage() {
 
       for (const row of dirty) {
         const orig = originalById.get(row.id)!
+
         const data: Partial<{
           monto_pago: number
           confirmacion: ConfirmacionCuota

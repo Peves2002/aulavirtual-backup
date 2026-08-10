@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import { useCart } from '@/features/web/cart/context/CartContext'
 
 import {
   Container,
@@ -20,6 +19,8 @@ import {
 } from '@mui/material'
 
 import { styled } from '@mui/material/styles'
+
+import { useCart } from '@/features/web/cart/context/CartContext'
 
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
 
@@ -168,7 +169,7 @@ const CourseCard = ({ curso, index, total }: { curso: CursoEnRuta; index: number
 
 const RutaDetail = ({ ruta }: RutaDetailProps) => {
   const router = useRouter()
-  const { addToCart, isInCart, cart } = useCart()
+  const { addToCart, isInCart } = useCart()
   
   const handleAddToCart = () => {
     addToCart({
@@ -186,6 +187,7 @@ const RutaDetail = ({ ruta }: RutaDetailProps) => {
     if (!isInCart(ruta.id)) {
       handleAddToCart()
     }
+
     router.push('/checkout')
   }
 

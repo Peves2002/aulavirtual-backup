@@ -66,7 +66,9 @@ export default withAuth(
         if (rol === 'ASESOR') {
           return NextResponse.redirect(new URL('/admin/pedidos', req.url), { status: 302 })
         }
-        return NextResponse.redirect(new URL('/admin/dashboard', req.url), { status: 302 })
+
+        
+return NextResponse.redirect(new URL('/admin/dashboard', req.url), { status: 302 })
       }
 
       if (rol === 'ASESOR') {
@@ -75,11 +77,13 @@ export default withAuth(
         
         if (!isAllowed) {
           console.log('[Middleware] ASESOR bloqueado en', path)
-          return NextResponse.redirect(new URL('/unauthorized', req.url), { status: 302 })
+          
+return NextResponse.redirect(new URL('/unauthorized', req.url), { status: 302 })
         }
       } else if (rol !== Rol.ADMIN) {
         console.log('[Middleware] No admin bloqueado en', path)
-        return NextResponse.redirect(new URL('/unauthorized', req.url), { status: 302 })
+        
+return NextResponse.redirect(new URL('/unauthorized', req.url), { status: 302 })
       }
     }
 

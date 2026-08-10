@@ -76,6 +76,7 @@ export async function GET(request: Request, { params }: { params: { usuarioId: s
 
     for (const cfg of configs) {
       const key = `${cfg.curso_id}:${cfg.numero_cuota}`
+
       const titulos = asStringArray(cfg.modulo_ids)
         .map(id => tituloById.get(id))
         .filter((t): t is string => Boolean(t))

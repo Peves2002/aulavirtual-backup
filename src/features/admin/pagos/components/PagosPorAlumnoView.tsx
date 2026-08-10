@@ -74,10 +74,12 @@ export default function PagosPorAlumnoView({
   onSelectAlumno
 }: Props) {
   const { enqueueSnackbar } = useSnackbar()
+
   const { data: alumnos, isLoading: loadingBusqueda, isFetching } = useBuscarAlumnosPagos(
     debouncedQ,
     !alumnoId
   )
+
   const { data: detalle, isLoading: loadingDetalle } = usePagosAlumno(alumnoId || undefined)
   const { actualizarRegistro } = usePagosMutations()
 
@@ -130,6 +132,7 @@ export default function PagosPorAlumnoView({
     try {
       for (const row of dirty) {
         const orig = originalById.get(row.id)!
+
         const data: Partial<{
           monto_pago: number
           confirmacion: ConfirmacionCuota

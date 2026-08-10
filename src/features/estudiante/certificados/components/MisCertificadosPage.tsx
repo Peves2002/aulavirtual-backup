@@ -23,7 +23,7 @@ const NIVEL_LABELS: Record<string, string> = {
 }
 
 function CertificadoCard({ cert }: { cert: MiCertificado }) {
-  const { data: session } = useSession()
+
   const { enqueueSnackbar } = useSnackbar()
   const [downloading, setDownloading] = useState(false)
 

@@ -60,6 +60,7 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
       async tx => {
         // Obtener los cursos de las rutas compradas
         const cursosRuta = []
+
         if (rutaIds.length > 0) {
           const rutasConCursos = await tx.rutaAprendizaje.findMany({
             where: { id: { in: rutaIds } },
@@ -72,6 +73,8 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
             }
           }
         }
+
+
         // a) Actualizar pedido
         const pedidoActualizado = await tx.pedido.update({
           where: { id: pedidoId },

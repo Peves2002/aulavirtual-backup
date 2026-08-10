@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Sparkles } from 'lucide-react'
 
 import { Box } from '@mui/material'

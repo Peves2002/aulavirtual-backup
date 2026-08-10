@@ -58,12 +58,6 @@ const rolStatusObj: UsuarioStatusType = {
   ESTUDIANTE: 'info'
 }
 
-const rolColors: { [key in Rol]: 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' } = {
-  ADMIN: 'error',
-  PROFESOR: 'info',
-  ESTUDIANTE: 'primary',
-  ASESOR: 'warning'
-}
 
 const rolLabels: { [key in Rol]: string } = {
   ADMIN: 'Administrador',

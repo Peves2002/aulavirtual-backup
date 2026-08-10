@@ -1,5 +1,6 @@
-import { Sparkles } from 'lucide-react'
 import { notFound } from 'next/navigation'
+
+import { Sparkles } from 'lucide-react'
 
 import { Container, Box } from '@mui/material'
 

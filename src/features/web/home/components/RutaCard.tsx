@@ -71,7 +71,9 @@ const RutaCard = ({
 }: RutaCardProps) => {
   const isFree = !precio || Number(precio) === 0
   const displayPrice = isFree ? 'Gratis' : `${moneda === 'USD' ? '$' : 'S/'} ${Number(precio).toFixed(2)}`
-  return (
+
+  
+return (
     <Link href={`/rutas/${slug}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
     <StyledCard>
       <Box sx={{ position: 'relative', overflow: 'hidden' }}>

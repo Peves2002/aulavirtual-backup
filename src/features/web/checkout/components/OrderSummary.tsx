@@ -26,6 +26,7 @@ const OrderSummary = ({ courses, ebooks = [], rutas = [], appliedCoupon, onCoupo
     const total = appliedCoupon ? appliedCoupon.total : subtotal
     const descuento = appliedCoupon ? appliedCoupon.descuento : 0
     const moneda = (courses[0] || ebooks[0] || rutas[0])?.moneda || 'PEN'
+
     const allItems = [
       ...courses.map(c => ({ ...c, tipo: 'CURSO' as const })),
       ...ebooks.map(e => ({ ...e, tipo: 'EBOOK' as const })),

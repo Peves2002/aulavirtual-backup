@@ -64,6 +64,7 @@ interface PedidosPageProps {
 
 export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps) {
   const router = useRouter()
+
   // Filtros aplicados a la consulta
   const [nombre, setNombre] = useState('')
   const [departamentoFiltro, setDepartamentoFiltro] = useState('')
@@ -108,6 +109,7 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
         provincia: provinciaFiltro,
         limit: '5000' 
       })
+
       const todos = res?.pedidos ?? []
 
       const filas = todos.map(p => ({

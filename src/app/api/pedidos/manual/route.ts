@@ -83,6 +83,7 @@ export async function POST(request: Request) {
 
       // Obtener todos los cursos dentro de los paquetes comprados
       const cursosAdicionales = []
+
       for (const r of rutas) {
         for (const cr of r.cursos) {
           if (!estudiante.inscripciones.some(ins => ins.curso_id === cr.curso_id)) {
@@ -93,6 +94,7 @@ export async function POST(request: Request) {
       
       // Combinar y remover duplicados
       const todosLosCursos = [...cursosParaInscribir, ...cursosAdicionales]
+
       cursosParaInscribir = Array.from(new Map(todosLosCursos.map(c => [c.id, c])).values()) as any
 
       if (cursosParaInscribir.length === 0 && rutas.length === 0) {

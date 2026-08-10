@@ -7,7 +7,7 @@ import {
 
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
-import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
+
 import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
