@@ -121,9 +121,16 @@ function MisionCard() {
           Nuestra Misión
         </h3>
         <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Brindar formación profesional de alta calidad, accesible y orientada al sector industrial,
-          impulsando el desarrollo de competencias que generan valor real en las organizaciones y en
-          la carrera de nuestros estudiantes.&quot;
+          &quot;En Gridexa Energy impulsamos la transformación del sector energético mediante la integración
+          de consultoría especializada, capacitación de alto nivel e innovación tecnológica, ofreciendo
+          soluciones estratégicas que responden a los desafíos actuales y futuros de la industria.
+          Acompañamos a empresas, instituciones y profesionales en la optimización de sus procesos, la
+          toma de decisiones y el desarrollo de capacidades técnicas, a través de servicios basados en el
+          conocimiento, el análisis de datos, las mejores prácticas internacionales y el uso de
+          herramientas digitales avanzadas. Nuestro compromiso es generar valor sostenible, promoviendo
+          la eficiencia operativa, la seguridad energética, la transición hacia sistemas más sostenibles
+          y el fortalecimiento del talento humano, contribuyendo al crecimiento competitivo de nuestros
+          clientes y al desarrollo del sector energético en Latinoamérica.&quot;
         </p>
       </div>
     </div>
@@ -184,9 +191,15 @@ function VisionCard() {
           Nuestra Visión
         </h3>
         <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Ser la plataforma de referencia en formación profesional especializada en Latinoamérica,
-          reconocida por la excelencia de sus contenidos, la solidez de sus certificaciones y su
-          compromiso con la transformación del sector industrial.&quot;
+          &quot;Ser la firma de referencia en consultoría, capacitación e innovación para el sector
+          energético en Latinoamérica, reconocida por la excelencia técnica de nuestros profesionales,
+          la calidad de nuestras soluciones, la confianza de nuestros clientes y nuestra capacidad para
+          liderar proyectos que impulsen la transformación del mercado energético. Aspiramos a
+          consolidarnos como un aliado estratégico de empresas públicas y privadas, organismos
+          reguladores, instituciones académicas y profesionales del sector, desarrollando soluciones
+          integrales que incorporen analítica avanzada, inteligencia artificial, transformación digital
+          y sostenibilidad, contribuyendo al fortalecimiento de una industria energética más eficiente,
+          resiliente y competitiva.&quot;
         </p>
       </div>
     </div>

@@ -7,6 +7,7 @@ import { getConfigs } from '@/utils/libs/config'
 import prisma from '@/utils/libs/prisma'
 import WebFooter from '@/utils/components/layout/web/WebFooter'
 import WebHeader from '@/utils/components/layout/web/WebHeader'
+import WhatsAppWidget from '@/utils/components/layout/web/WhatsAppWidget'
 import PWAInstalledToast from '@/features/web/home/components/PWAInstalledToast'
 
 const getCategorias = unstable_cache(
@@ -42,6 +43,7 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
           </main>
         </div>
         <PWAInstalledToast />
+        <WhatsAppWidget />
       </div>
     </AuthModalProvider>
   )
