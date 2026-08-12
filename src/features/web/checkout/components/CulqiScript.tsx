@@ -17,6 +17,7 @@ interface CulqiScriptProps {
     email: string
   }
   options?: any
+  appearance?: any
   onTokenReceived: (token: string, email: string) => void
   onError: (error: any) => void
   onLoad?: () => void
@@ -35,6 +36,7 @@ const CulqiScript = ({
   settings,
   client,
   options,
+  appearance,
   onTokenReceived,
   onError,
   onLoad
@@ -54,7 +56,8 @@ const CulqiScript = ({
           options: {
             modal: true,
             ...options
-          }
+          },
+          ...(appearance ? { appearance } : {})
         }
 
         const culqi = new window.CulqiCheckout(publicKey, config)
@@ -83,7 +86,7 @@ const CulqiScript = ({
     if (window.CulqiCheckout) {
       initCulqi()
     }
-  }, [publicKey, settings, client, options, onTokenReceived, onError])
+  }, [publicKey, settings, client, options, appearance, onTokenReceived, onError])
 
   return (
     <Script

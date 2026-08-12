@@ -750,8 +750,6 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
                     publicKey={configs.CULQI_PUBLIC_KEY || ''}
                     culqiSettings={culqiSettings}
                     clientEmail={formData.correo}
-                    acceptedTerms={acceptedTerms}
-                    onAcceptedTermsChange={setAcceptedTerms}
                     isCreatingOrder={isCreatingCulqiOrder}
                     hasOrderError={culqiOrderError}
                     onRetry={createCulqiOrder}

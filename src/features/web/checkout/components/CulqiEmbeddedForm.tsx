@@ -2,12 +2,13 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
+import Link from 'next/link'
 import Script from 'next/script'
 
 import { Alert, Box, Button, CircularProgress, Stack, Typography } from '@mui/material'
 
 import CulqiScript from './CulqiScript'
-import { SecureBadge, TermsCheck } from './PaymentForm'
+import { SecureBadge } from './PaymentForm'
 
 const CULQI_CONTAINER_ID = 'culqi-embed-container'
 
@@ -18,6 +19,10 @@ const CULQI_PAYMENT_METHODS = {
   bancaMovil: true,
   agente: true,
   cuotealo: true
+}
+
+const CULQI_APPEARANCE = {
+  hiddenCulqiLogo: true
 }
 
 interface CulqiSettings {
@@ -32,8 +37,6 @@ interface CulqiEmbeddedFormProps {
   publicKey: string
   culqiSettings: CulqiSettings | null
   clientEmail: string
-  acceptedTerms: boolean
-  onAcceptedTermsChange: (checked: boolean) => void
   isCreatingOrder: boolean
   hasOrderError: boolean
   onRetry: () => void
@@ -45,8 +48,6 @@ const CulqiEmbeddedForm = ({
   publicKey,
   culqiSettings,
   clientEmail,
-  acceptedTerms,
-  onAcceptedTermsChange,
   isCreatingOrder,
   hasOrderError,
   onRetry,
@@ -88,7 +89,14 @@ const CulqiEmbeddedForm = ({
   return (
     <>
       <SecureBadge provider='Culqi' />
-      <TermsCheck checked={acceptedTerms} onChange={onAcceptedTermsChange} />
+
+      <Typography variant='caption' color='text.secondary' display='block' sx={{ mb: 2 }}>
+        Al realizar la compra, aceptas los{' '}
+        <Link href='/terminos-y-condiciones' target='_blank' style={{ color: 'var(--mui-palette-primary-main)', fontWeight: 700 }}>
+          Términos y Condiciones
+        </Link>{' '}
+        del servicio.
+      </Typography>
 
       {hasOrderError && !isCreatingOrder && !culqiSettings && (
         <Alert
@@ -100,7 +108,14 @@ const CulqiEmbeddedForm = ({
         </Alert>
       )}
 
-      <Box sx={{ position: 'relative', minHeight: 220 }}>
+      <Box
+        sx={{
+          position: 'relative',
+          minHeight: 750,
+          width: '100%',
+          '& iframe': { width: '100% !important', minHeight: '750px !important', border: 'none' }
+        }}
+      >
         <Script
           src='https://js.culqi.com/checkout-js'
           strategy='afterInteractive'
@@ -123,31 +138,11 @@ const CulqiEmbeddedForm = ({
               settings={culqiSettings}
               client={client}
               options={options}
+              appearance={CULQI_APPEARANCE}
               onTokenReceived={onTokenReceived}
               onError={onError}
             />
             <div id={CULQI_CONTAINER_ID} />
-
-            {!acceptedTerms && (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  inset: 0,
-                  zIndex: 2,
-                  bgcolor: 'rgba(255,255,255,0.85)',
-                  borderRadius: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  px: 3,
-                  textAlign: 'center'
-                }}
-              >
-                <Typography variant='body2' fontWeight={700} color='text.secondary'>
-                  Acepta los Términos y Condiciones para habilitar el formulario de pago
-                </Typography>
-              </Box>
-            )}
           </>
         )}
       </Box>
