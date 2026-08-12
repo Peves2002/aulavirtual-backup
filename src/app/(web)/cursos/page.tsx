@@ -3,7 +3,7 @@ import { getAuthSession } from '@/utils/libs/auth-helpers'
 import CourseCatalog from '@/features/web/home/components/CourseCatalog'
 
 export const metadata = {
-  title: `${process.env.NEXT_PUBLIC_APP_NAME} | Cursos`,
+  title: `Grupo Ollarves | Cursos`,
   description: 'Explora nuestra amplia variedad de cursos y comienza a aprender hoy mismo.'
 }
 

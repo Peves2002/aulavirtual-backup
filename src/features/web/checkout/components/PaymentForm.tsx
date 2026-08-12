@@ -31,15 +31,9 @@ import { PayPalScriptProvider } from '@paypal/react-paypal-js'
 import { useConfig } from '@/contexts/ConfigContext'
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import AppModal from '@/utils/components/AppModal'
-import CulqiScript from './CulqiScript'
+import CulqiEmbeddedForm from './CulqiEmbeddedForm'
 import { PayPalPaymentButton } from './PayPalPaymentButton'
 import { useCart } from '../../cart/context/CartContext'
-
-declare global {
-  interface Window {
-    Culqi: any
-  }
-}
 
 interface MetodoPagoManualPublico {
   id: string
@@ -109,7 +103,7 @@ const MethodTab = ({ icon, label, selected, onClick, color = 'var(--mui-palette-
 )
 
 // ─── Security badge ───────────────────────────────────────────────────────────
-const SecureBadge = ({ provider }: { provider: string }) => (
+export const SecureBadge = ({ provider }: { provider: string }) => (
   <Stack direction='row' alignItems='center' justifyContent='center' spacing={1} sx={{ mb: 2.5 }}>
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, px: 1.5, py: 0.5, bgcolor: 'success.50', borderRadius: 10, border: '1px solid', borderColor: 'success.200' }}>
       <i className='tabler-shield-check' style={{ fontSize: 14, color: '#2e7d32' }} />
@@ -119,7 +113,7 @@ const SecureBadge = ({ provider }: { provider: string }) => (
 )
 
 // ─── Terms checkbox ───────────────────────────────────────────────────────────
-const TermsCheck = ({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) => (
+export const TermsCheck = ({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) => (
   <Box sx={{ mb: 2.5, p: 1.5, bgcolor: 'grey.50', borderRadius: 2 }}>
     <FormControlLabel
       sx={{ m: 0, alignItems: 'flex-start' }}
@@ -167,9 +161,12 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
   const isMercadoPagoEnabled = configs.MP_ENABLED !== 'false' && !!configs.MP_ACCESS_TOKEN
 
   const [paymentMethod, setPaymentMethod] = useState<'izipay' | 'paypal' | 'culqi' | 'mercadopago' | 'manual'>('culqi')
-  const [isCulqiLoaded, setIsCulqiLoaded] = useState(false)
   const [acceptedTerms, setAcceptedTerms] = useState(false)
   const [culqiSettings, setCulqiSettings] = useState<any>(null)
+  const [culqiPedidoId, setCulqiPedidoId] = useState<string | null>(null)
+  const [isCreatingCulqiOrder, setIsCreatingCulqiOrder] = useState(false)
+  const [culqiOrderError, setCulqiOrderError] = useState(false)
+  const hasRequestedCulqiOrderRef = useRef(false)
 
   const [metodosManual, setMetodosManual] = useState<MetodoPagoManualPublico[]>([])
   const [isManualEnabled, setIsManualEnabled] = useState(false)
@@ -293,12 +290,11 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
   const handleCulqiToken = useCallback(async (token: string, email: string) => {
     try {
       setIsLoading(true)
-      const pedidoId = (window as any)._currentPedidoId
 
       const res = await fetch('/api/culqi/charge', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ pedidoId, tokenId: token, email })
+        body: JSON.stringify({ pedidoId: culqiPedidoId, tokenId: token, email })
       })
 
       const data = await res.json()
@@ -309,7 +305,9 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
     } finally {
       setIsLoading(false)
     }
-  }, [handlePaymentSuccess])
+  }, [culqiPedidoId, handlePaymentSuccess])
+
+  const handleCulqiError = useCallback((err: any) => setPaymentError(err), [])
 
   const handleCheckout = async () => {
     if (!session) {
@@ -359,20 +357,14 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
     }
   }
 
-  const handleCulqiCheckout = async () => {
-    if (!session) {
-      openLogin()
-
-      return
-    }
-
+  const createCulqiOrder = useCallback(async () => {
     if (!validateComprobante()) return
 
     setPaymentError(null)
+    setCulqiOrderError(false)
+    setIsCreatingCulqiOrder(true)
 
     try {
-      setIsLoading(true)
-
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -398,14 +390,16 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
 
       const { pedidoId, culqiOrderId, rsaId, rsaPublicKey } = dataRaw.result
 
-        ; (window as any)._currentPedidoId = pedidoId
+      setCulqiPedidoId(pedidoId)
       setCulqiSettings({ currency: courses[0]?.moneda || 'PEN', amount: Math.round(displayTotal * 100), order: culqiOrderId, xculqirsaid: rsaId, rsapublickey: rsaPublicKey })
     } catch (error: any) {
-      setPaymentError(error.message || 'Ocurrió un error inesperado')
+      setPaymentError(error.message || 'Ocurrió un error inesperado al preparar el pago con Culqi')
+      setCulqiOrderError(true)
+      hasRequestedCulqiOrderRef.current = false
     } finally {
-      setIsLoading(false)
+      setIsCreatingCulqiOrder(false)
     }
-  }
+  }, [validateComprobante, courses, ebooks, appliedCouponCode, tipoComprobante, numeroComprobante, displayTotal, handlePaymentSuccess])
 
   const handleManualCheckout = async () => {
     if (!session) {
@@ -555,9 +549,28 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
     }
   }
 
+  // Crea el pedido + orden de Culqi automáticamente al entrar a la pestaña Culqi
+  // (o al loguearse desde ella), sin esperar un clic en "Pagar".
   useEffect(() => {
-    if (culqiSettings && window.Culqi?.open) window.Culqi.open()
-  }, [culqiSettings])
+    if (paymentMethod !== 'culqi' || !isCulqiEnabled) return
+    if (!session) return
+    if (culqiSettings || isCreatingCulqiOrder) return
+    if (hasRequestedCulqiOrderRef.current) return
+
+    hasRequestedCulqiOrderRef.current = true
+    createCulqiOrder()
+  }, [paymentMethod, isCulqiEnabled, session, culqiSettings, isCreatingCulqiOrder, createCulqiOrder])
+
+  // Si el monto cambia (p. ej. se aplica un cupón) después de haber creado la
+  // orden de Culqi, invalida y fuerza que se recree con el monto correcto.
+  useEffect(() => {
+    if (!culqiSettings) return
+
+    setCulqiSettings(null)
+    setCulqiPedidoId(null)
+    hasRequestedCulqiOrderRef.current = false
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appliedCouponCode, displayTotal])
 
   const isGuest = !session
   const paypalClientId = configs.PAYPAL_CLIENT_ID || 'test'
@@ -585,16 +598,6 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
   return (
     <>
       <Paper elevation={0} sx={{ p: { xs: 3, md: 4 }, borderRadius: '24px', bgcolor: 'white', border: '1px solid', borderColor: 'divider' }}>
-        <CulqiScript
-          publicKey={configs.CULQI_PUBLIC_KEY || ''}
-          settings={culqiSettings || { currency: courses[0]?.moneda || 'PEN', amount: Math.round(displayTotal * 100) }}
-          client={{ email: formData.correo }}
-          options={{ lang: 'auto', installments: true, paymentMethods: { tarjeta: true, yape: true, billetera: true, bancaMovil: true, agente: true, cuotealo: true } }}
-          onLoad={() => setIsCulqiLoaded(true)}
-          onTokenReceived={handleCulqiToken}
-          onError={(err) => setPaymentError(err)}
-        />
-
         <Stack spacing={4}>
           {/* ─── Header ─── */}
           <Box>
@@ -732,19 +735,30 @@ const PaymentForm = ({ courses, ebooks = [], appliedCouponCode, finalTotal }: Pa
             {/* ── Culqi ── */}
             {paymentMethod === 'culqi' && isCulqiEnabled && (
               <Box sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider', bgcolor: 'grey.50' }}>
-                <SecureBadge provider='Culqi' />
-                <TermsCheck checked={acceptedTerms} onChange={setAcceptedTerms} />
-                <Button
-                  variant='contained'
-                  fullWidth
-                  size='large'
-                  onClick={handleCulqiCheckout}
-                  disabled={isLoading || !isCulqiLoaded || (!acceptedTerms && !isGuest)}
-                  startIcon={isLoading || !isCulqiLoaded ? <CircularProgress size={18} color='inherit' /> : <i className='tabler-lock' />}
-                  sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, fontSize: '1rem', textTransform: 'none' }}
-                >
-                  {isLoading ? 'Procesando...' : !isCulqiLoaded ? 'Cargando...' : isGuest ? 'Identificarse para Comprar' : `Pagar ${currencySymbol} ${displayTotal.toFixed(2)}`}
-                </Button>
+                {isGuest ? (
+                  <Button
+                    variant='contained'
+                    fullWidth
+                    size='large'
+                    onClick={() => openLogin()}
+                    sx={{ py: 1.75, borderRadius: 2.5, fontWeight: 800, textTransform: 'none' }}
+                  >
+                    Identificarse para Comprar
+                  </Button>
+                ) : (
+                  <CulqiEmbeddedForm
+                    publicKey={configs.CULQI_PUBLIC_KEY || ''}
+                    culqiSettings={culqiSettings}
+                    clientEmail={formData.correo}
+                    acceptedTerms={acceptedTerms}
+                    onAcceptedTermsChange={setAcceptedTerms}
+                    isCreatingOrder={isCreatingCulqiOrder}
+                    hasOrderError={culqiOrderError}
+                    onRetry={createCulqiOrder}
+                    onTokenReceived={handleCulqiToken}
+                    onError={handleCulqiError}
+                  />
+                )}
               </Box>
             )}
 

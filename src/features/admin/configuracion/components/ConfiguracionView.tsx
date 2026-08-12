@@ -384,6 +384,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     HOME_HERO_DESCRIPTION: '',
     WHATSAPP_NUMERO: '',
     WHATSAPP_NUMERO_EMPRESAS: '',
+    WHATSAPP_MENSAJE_LANDING: '',
     HOME_LOGOS: '[]',
     TEMPLATE_NAME: 'Aula Virtual',
     TEMPLATE_SLOGAN: '',
@@ -707,6 +708,34 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
                   value={config.SETTINGS_COOKIE_NAME}
                   onChange={(e) => handleInputChange('SETTINGS_COOKIE_NAME', e.target.value)}
                   helperText='Prefijo usado para cookies de configuración del tema'
+                />
+              </Grid>
+            </Grid>
+          </Box>
+
+          <Divider />
+
+          <Box>
+            <SectionLabel>Contacto</SectionLabel>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label='Número de WhatsApp'
+                  value={config.WHATSAPP_NUMERO}
+                  onChange={(e) => handleInputChange('WHATSAPP_NUMERO', e.target.value)}
+                  helperText='Código de país + número, sin espacios ni signo +. Ej: 51999999999. Se usa en el botón flotante, las páginas de contacto y la landing de WhatsApp.'
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={2}
+                  label='Mensaje prellenado de la landing de WhatsApp'
+                  value={config.WHATSAPP_MENSAJE_LANDING}
+                  onChange={(e) => handleInputChange('WHATSAPP_MENSAJE_LANDING', e.target.value)}
+                  helperText='Texto con el que se abre el chat al redirigir desde /whatsapp.'
                 />
               </Grid>
             </Grid>
