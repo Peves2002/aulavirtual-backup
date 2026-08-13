@@ -21,7 +21,7 @@ export default function WhatsAppWidget() {
   const panelRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const configs = useConfig()
-  const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
+  const waNumber = configs.WHATSAPP_NUMERO || '51936032964'
 
   useEffect(() => {
     if (!open) return
