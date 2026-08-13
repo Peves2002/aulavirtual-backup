@@ -2,7 +2,10 @@
 
 import { useState } from 'react'
 
+import Link from 'next/link'
+
 import {
+    Alert,
     Box,
     Button,
     Chip,
@@ -307,12 +310,29 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
 
             {/* Firmante 1 / Firmante 2 (solo aplica a plantillas personalizadas) */}
             <Grid item xs={12}>
-                <Typography variant='h6' sx={{ mb: 1 }}>Firmante 1 / Firmante 2</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 2, mb: 1 }}>
+                    <Typography variant='h6'>Firmante 1 / Firmante 2</Typography>
+                    <Button
+                        variant='outlined'
+                        size='small'
+                        href='/admin/firmantes'
+                        component={Link}
+                        endIcon={<i className='tabler-arrow-right' style={{ fontSize: 16 }} />}
+                    >
+                        Gestionar firmantes
+                    </Button>
+                </Box>
                 <Typography variant='body2' color='text.secondary' sx={{ mb: 2 }}>
                     Solo aplica si este curso usa una plantilla de certificado personalizada con campos de
                     Firmante 1/2. Si dejas &quot;Usar el firmante por defecto&quot;, se usará el firmante global
                     configurado en Configuración &gt; Certificación.
                 </Typography>
+                {firmantesActivos.length === 0 && (
+                    <Alert severity='info' sx={{ mb: 2 }}>
+                        Aún no hay firmantes registrados. Crea uno en &quot;Gestionar firmantes&quot; para poder
+                        seleccionarlo aquí.
+                    </Alert>
+                )}
                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
                     <CustomTextField
                         select
