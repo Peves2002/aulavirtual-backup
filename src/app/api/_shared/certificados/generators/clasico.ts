@@ -52,6 +52,44 @@ export const generarClasico: GeneratorFn = async data => {
     timeZone: 'UTC'
   })
 
+  // ── Marca de agua ────────────────────────────────────────────────────
+  let watermark: { dataUrl: string; ratio: number } | null = null
+
+  try {
+    const watermarkBuffer = await fetchImageBuffer('/images/marca-de-agua.png')
+
+    if (watermarkBuffer) {
+      const { buffer: wmCompressed } = await compressImageForPdf(watermarkBuffer, { maxWidth: 500, format: 'png' })
+
+      let wmRatio = 1
+
+      try {
+        const { default: sharp } = await import('sharp')
+        const meta = await sharp(watermarkBuffer).metadata()
+
+        if (meta.width && meta.height) wmRatio = meta.width / meta.height
+      } catch {
+        /* usa ratio 1:1 por defecto si falla la lectura de metadata */
+      }
+
+      watermark = { dataUrl: `data:image/png;base64,${wmCompressed.toString('base64')}`, ratio: wmRatio }
+    }
+  } catch {
+    /* skip */
+  }
+
+  const drawWatermarkAt = (centerX: number, centerY: number, size: number, opacity: number) => {
+    if (!watermark) return
+
+    const w = size
+    const h = size / watermark.ratio
+
+    doc.saveGraphicsState()
+    doc.setGState(doc.GState({ opacity }))
+    doc.addImage(watermark.dataUrl, 'PNG', centerX - w / 2, centerY - h / 2, w, h)
+    doc.restoreGraphicsState()
+  }
+
   const addSignatureBlock = async (x: number, lineY: number, user: any) => {
     if (!user) return
 
@@ -181,6 +219,9 @@ export const generarClasico: GeneratorFn = async data => {
   // Área de contenido izquierda (blanco encima)
   doc.setFillColor(255, 255, 255)
   doc.rect(0, 0, contentW, pageHeight, 'F')
+
+  // Marca de agua, centrada detrás del contenido
+  drawWatermarkAt(cx, pageHeight / 2, 125, 0.24)
 
   // "CERTIFICADO" vertical
   doc.setFontSize(55)
@@ -323,6 +364,9 @@ export const generarClasico: GeneratorFn = async data => {
   doc.addPage()
   doc.setFillColor(255, 255, 255)
   doc.rect(0, 0, pageWidth, pageHeight, 'F')
+
+  // Marca de agua, centrada detrás del contenido
+  drawWatermarkAt(pageWidth / 2, pageHeight / 2, 155, 0.35)
 
   const T = { sectionTitle: 9, label: 8, body: 8, small: 7, score: 22 }
   const margin = 12
@@ -623,6 +667,7 @@ export const generarClasico: GeneratorFn = async data => {
       doc.addPage()
       doc.setFillColor(255, 255, 255)
       doc.rect(0, 0, pageWidth, pageHeight, 'F')
+      drawWatermarkAt(pageWidth / 2, pageHeight / 2, 155, 0.1)
       doc.setFillColor(pr, pg, pb)
       doc.rect(0, 0, pageWidth, 8, 'F')
       doc.setFontSize(T.small)
