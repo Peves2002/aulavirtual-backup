@@ -1,4 +1,4 @@
-import { fetchImageBuffer, compressImageForPdf, formatDateLong } from './utils'
+import { fetchImageBuffer, compressImageForPdf, formatDateLong, resolverSignatariosPlantillaFija } from './utils'
 
 import type { GeneratorFn } from './types'
 
@@ -27,9 +27,6 @@ export const generarClasico: GeneratorFn = async data => {
     fechaInicioVal,
     fechaFinVal,
     vigenciaHastaVal,
-    gerenteGeneral,
-    profesorSnapshot,
-    mostrarFirmaDocente,
     codigoVerificacion,
     qrDataUrl,
     modulos,
@@ -66,6 +63,24 @@ export const generarClasico: GeneratorFn = async data => {
           const { buffer: compressed, jsPdfFormat } = await compressImageForPdf(signatureBuffer, { maxWidth: 300, format: 'png' })
 
           doc.addImage(compressed, jsPdfFormat, x - 17, lineY - 34, 34, 34)
+        }
+      } catch {
+        /* skip */
+      }
+    }
+
+    // Sello, al lado izquierdo de la firma (solo los Firmante del catálogo
+    // reutilizable tienen sello; gerente general/docente no, así que para
+    // esos simplemente no se dibuja nada acá).
+    if (user.sello) {
+      try {
+        const selloBuffer = await fetchImageBuffer(user.sello)
+
+        if (selloBuffer) {
+          const { buffer: compressed, jsPdfFormat } = await compressImageForPdf(selloBuffer, { maxWidth: 260, format: 'png' })
+          const selloSize = 24
+
+          doc.addImage(compressed, jsPdfFormat, x - 19 - selloSize, lineY - 29, selloSize, selloSize)
         }
       } catch {
         /* skip */
@@ -278,15 +293,15 @@ export const generarClasico: GeneratorFn = async data => {
   y += 12
 
   // Firmas
-  const hasGerente = gerenteGeneral !== null
+  const { primero: signatarioPrimero, segundo: signatarioSegundo } = resolverSignatariosPlantillaFija(data)
 
-  if (hasGerente && mostrarFirmaDocente) {
-    await addSignatureBlock(cx - 54, y + 20, gerenteGeneral)
-    await addSignatureBlock(cx + 54, y + 20, profesorSnapshot)
-  } else if (hasGerente) {
-    await addSignatureBlock(cx, y + 20, gerenteGeneral)
-  } else if (mostrarFirmaDocente) {
-    await addSignatureBlock(cx, y + 20, profesorSnapshot)
+  if (signatarioPrimero && signatarioSegundo) {
+    await addSignatureBlock(cx - 54, y + 26, signatarioPrimero)
+    await addSignatureBlock(cx + 54, y + 26, signatarioSegundo)
+  } else if (signatarioPrimero) {
+    await addSignatureBlock(cx, y + 26, signatarioPrimero)
+  } else if (signatarioSegundo) {
+    await addSignatureBlock(cx, y + 26, signatarioSegundo)
   }
 
   // Footer página 1
@@ -645,6 +660,49 @@ export const generarClasico: GeneratorFn = async data => {
     doc.setFont('helvetica', 'bold')
     doc.setTextColor(pr, pg, pb)
     doc.text(institutionUrl, pageWidth - margin, footerTopY + 5, { align: 'right' })
+  }
+
+  // ── Acreditación OIEP (Gridexa Energy) ─────────────────────────────────
+  try {
+    const oiepLogoBuffer = await fetchImageBuffer('/images/logo-oiep.webp')
+
+    if (oiepLogoBuffer) {
+      // Respeta el ratio real de la imagen (es un logo horizontal, no cuadrado)
+      // para no deformarla/recortarla al insertarla en el PDF.
+      let oiepRatio = 1
+
+      try {
+        const { default: sharp } = await import('sharp')
+        const meta = await sharp(oiepLogoBuffer).metadata()
+
+        if (meta.width && meta.height) oiepRatio = meta.width / meta.height
+      } catch {
+        /* usa ratio 1:1 por defecto si falla la lectura de metadata */
+      }
+
+      const oiepImgH = 10
+      const oiepImgW = oiepImgH * oiepRatio
+      const oiepImgY = pageHeight - oiepImgH - 2.5
+      const oiepTextY = oiepImgY - 2.5
+
+      doc.setFontSize(9)
+      doc.setFont('helvetica', 'italic')
+      doc.setTextColor(120, 120, 120)
+      doc.text('En Gridexa Energy estamos acreditados por OIEP', margin, oiepTextY)
+
+      const { buffer: oiepCompressed, jsPdfFormat: oiepFormat } = await compressImageForPdf(oiepLogoBuffer, {
+        maxWidth: 400,
+        format: 'png'
+      })
+
+      doc.addImage(oiepCompressed, oiepFormat, margin, oiepImgY, oiepImgW, oiepImgH)
+      doc.setFontSize(9.5)
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(80, 80, 80)
+      doc.text('Como Centro Acreditado N° 1188', margin + oiepImgW + 3, oiepImgY + oiepImgH / 2 + 1.5)
+    }
+  } catch {
+    /* skip */
   }
 
   return doc.output('arraybuffer')

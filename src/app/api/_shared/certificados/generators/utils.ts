@@ -1,6 +1,8 @@
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 
+import type { CertificadoData, SignatarioData } from './types'
+
 /** Convierte un color hex (#RRGGBB) a rgb [r, g, b] */
 export function hexToRgb(hex: string): [number, number, number] {
   try {
@@ -147,6 +149,30 @@ return { w, h }
     }
   } catch { /* default */ }
 
-  
+
 return { w: maxH, h: maxH }
+}
+
+/**
+ * Decide qué firmantes dibujar en las 5 plantillas fijas (clásico, clásico
+ * resumido, corporativo, moderno, elegante).
+ *
+ * Prioridad: si el curso tiene Firmante 1 y/o Firmante 2 configurados
+ * (catálogo reutilizable de admin/firmantes, override por curso o default
+ * global — ver resolverFirmantes.ts), esos reemplazan por completo al
+ * sistema anterior de "gerente general" + "docente del curso". Si no hay
+ * ningún firmante configurado, se mantiene el comportamiento de siempre.
+ */
+export function resolverSignatariosPlantillaFija(data: CertificadoData): {
+  primero: SignatarioData | null
+  segundo: SignatarioData | null
+} {
+  if (data.firmante1 || data.firmante2) {
+    return { primero: data.firmante1, segundo: data.firmante2 }
+  }
+
+  return {
+    primero: data.gerenteGeneral,
+    segundo: data.mostrarFirmaDocente ? data.profesorSnapshot : null
+  }
 }

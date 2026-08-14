@@ -17,7 +17,6 @@ import { Menu, MenuItem } from '@menu/vertical-menu'
 // Hook Imports
 import { useSettings } from '@core/hooks/useSettings'
 import useVerticalNav from '@menu/hooks/useVerticalNav'
-import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
 // Styled Component Imports
 import StyledVerticalNavExpandIcon from '@menu/styles/vertical/StyledVerticalNavExpandIcon'
@@ -133,7 +132,8 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             <MenuItem href='/admin/articulos' icon={<i className='tabler-news' />}>
               Artículos
             </MenuItem>
-            {isFeatureEnabled('ebooks') && (
+
+            {/* {isFeatureEnabled('ebooks') && (
               <MenuItem href='/admin/ebooks' icon={<i className='tabler-book-2' />}>
                 Ebooks
               </MenuItem>
@@ -142,10 +142,11 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
               <MenuItem href='/admin/simulacros' icon={<i className='tabler-clipboard-list' />}>
                 Simulacros
               </MenuItem>
-            )}
-            <MenuItem href='/admin/rutas' icon={<i className='tabler-route' />}>
+            )} */}
+            {/* <MenuItem href='/admin/rutas' icon={<i className='tabler-route' />}>
               Rutas Aprendizaje
-            </MenuItem>
+            </MenuItem> */}
+
             <MenuItem href='/admin/calendario' icon={<i className='tabler-calendar' />}>
               Calendario
             </MenuItem>
@@ -158,7 +159,8 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             <MenuItem href='/admin/certificados' icon={<i className='tabler-certificate' />}>
               Certificados
             </MenuItem>
-            {isFeatureEnabled('suscripciones') && (
+
+            {/* {isFeatureEnabled('suscripciones') && (
               <>
                 <MenuItem href='/admin/planes-suscripcion' icon={<i className='tabler-repeat' />}>
                   Planes de Suscripción
@@ -167,7 +169,8 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
                   Suscripciones
                 </MenuItem>
               </>
-            )}
+            )} */}
+
             <MenuItem href='/admin/reclamaciones' icon={<i className='tabler-book-2' />}>
               Reclamaciones
             </MenuItem>

@@ -4,6 +4,9 @@ import { ApiResponse } from '@/utils/libs/apiResponse'
 import { handleApiError } from '@/utils/libs/validation'
 import prisma from '@/utils/libs/prisma'
 import { requireAuth } from '@/utils/libs/auth-helpers'
+import { getConfigs } from '@/utils/libs/config'
+import { resolverFirmantes } from '@/app/api/_shared/certificados/resolverFirmantes'
+import { resolverPlantillaId } from '@/app/api/_shared/certificados/resolverPlantilla'
 
 /** Calcula el promedio ponderado de las evaluaciones del estudiante en un curso.
  *  Los exámenes sin intentar cuentan como 0. */
@@ -182,22 +185,37 @@ export async function POST(request: Request) {
     }
 
     // 4. Capturar datos del curso y usuario para el snapshot
-    const [cursoData, usuarioData] = await Promise.all([
+    const [cursoData, usuarioData, configs] = await Promise.all([
       prisma.curso.findUnique({
         where: { id: cursoId },
         include: {
-          profesor: { select: { nombre: true, apellido: true, cargo: true, firma: true } }
+          profesor: { select: { nombre: true, apellido: true, cargo: true, firma: true } },
+          firmante_1: { select: { nombre: true, cargo: true, firma: true, sello: true } },
+          firmante_2: { select: { nombre: true, cargo: true, firma: true, sello: true } }
         }
       }),
       prisma.usuario.findUnique({
         where: { id: auth.user.id },
         select: { nombre: true, apellido: true, numero_documento: true }
-      })
+      }),
+      getConfigs()
     ])
 
     if (!cursoData) {
       return ApiResponse.error(request, 'Curso no encontrado', 404)
     }
+
+    // Se congela la plantilla y los firmantes vigentes al momento de emitirse,
+    // para que cambios futuros en el curso (cambiar de plantilla, reasignar
+    // firmantes) no alteren certificados ya emitidos. Ver resolverPlantilla.ts
+    // y resolverFirmantes.ts.
+    const plantillaId = resolverPlantillaId(cursoData.certificado_plantilla, configs)
+
+    const { firmante1, firmante2 } = await resolverFirmantes({
+      cursoFirmante1: cursoData.firmante_1,
+      cursoFirmante2: cursoData.firmante_2,
+      configs
+    })
 
     // 5. Generar código de verificación único: {CODIGO_CURSO}-{YYYYMMDD}-{DNI}-{NN}
     const fechaEmision = new Date().toISOString().slice(0, 10).replace(/-/g, '')
@@ -228,7 +246,10 @@ export async function POST(request: Request) {
         inicio_curso: cursoData.tipo_emision === 'SINCRONO' ? cursoData.fecha_inicio : inscripcion.inscrito_en,
         culminacion: inscripcion.completado_en || new Date(),
         emision: new Date()
-      }
+      },
+      plantilla_id: plantillaId,
+      firmante_1: firmante1,
+      firmante_2: firmante2
     }
 
     const certificado = await prisma.certificado.create({

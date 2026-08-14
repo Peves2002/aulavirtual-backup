@@ -84,7 +84,7 @@ export default function WebNavLinks({
         })}
         
         <a
-          href="https://www.linkedin.com"
+          href="https://www.linkedin.com/company/gridexa-energy/?viewAsMember=true"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center p-2 rounded-full transition-colors ml-1"

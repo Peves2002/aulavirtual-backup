@@ -3,7 +3,14 @@ export const dynamic = 'force-dynamic'
 import prisma from '@/utils/libs/prisma'
 import { requireAdmin } from '@/utils/libs/auth-helpers'
 import { ApiResponse } from '@/utils/libs/apiResponse'
-import { handleApiError } from '@/utils/libs/validation'
+import { validateRequest, handleApiError } from '@/utils/libs/validation'
+import { generateUniqueSlug } from '@/utils/libs/slug'
+import { sanitizeArticuloHtml } from '@/utils/libs/sanitizeHtml'
+import { crearArticuloSchema } from '@/schemas/articulo.schema'
+
+const articuloInclude = {
+  autor: { select: { id: true, nombre: true, apellido: true } }
+}
 
 /**
  * GET /api/admin/articulos
@@ -15,8 +22,13 @@ export async function GET(request: Request) {
 
     if (!auth.authorized) return auth.error
 
+    const { searchParams } = new URL(request.url)
+    const estado = searchParams.get('estado')
+
     const articulos = await prisma.articulo.findMany({
-      orderBy: { creado_en: 'desc' }
+      where: estado === 'BORRADOR' || estado === 'PUBLICADO' ? { estado } : undefined,
+      orderBy: { creado_en: 'desc' },
+      include: articuloInclude
     })
 
     return ApiResponse.success(request, articulos)
@@ -36,19 +48,27 @@ export async function POST(request: Request) {
     if (!auth.authorized) return auth.error
 
     const body = await request.json()
-    const { titulo, descripcion, imagen_portada, archivo_pdf } = body
+    const validation = validateRequest(crearArticuloSchema, body, request)
 
-    if (!titulo || !archivo_pdf) {
-      return ApiResponse.error(request, 'El título y el archivo PDF son obligatorios', 400)
-    }
+    if (!validation.success) return validation.error
+
+    const data = validation.data
+
+    const slug = await generateUniqueSlug(data.slug || data.titulo, prisma.articulo)
+    const descripcionSaneada = data.descripcion ? sanitizeArticuloHtml(data.descripcion) : null
 
     const nuevoArticulo = await prisma.articulo.create({
       data: {
-        titulo,
-        descripcion,
-        imagen_portada,
-        archivo_pdf
-      }
+        titulo: data.titulo,
+        slug,
+        descripcion: descripcionSaneada,
+        imagen_portada: data.imagen_portada || null,
+        archivo_pdf: data.archivo_pdf || null,
+        categoria: data.categoria || null,
+        autor_id: data.autor_id || null,
+        estado: data.estado
+      },
+      include: articuloInclude
     })
 
     return ApiResponse.success(request, nuevoArticulo, 201)

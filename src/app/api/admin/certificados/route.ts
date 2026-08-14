@@ -5,6 +5,9 @@ import prisma from '@/utils/libs/prisma'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { requireAdmin } from '@/utils/libs/auth-helpers'
 import { handleApiError } from '@/utils/libs/validation'
+import { getConfigs } from '@/utils/libs/config'
+import { resolverFirmantes } from '@/app/api/_shared/certificados/resolverFirmantes'
+import { resolverPlantillaId } from '@/app/api/_shared/certificados/resolverPlantilla'
 
 /**
  * GET /api/admin/certificados
@@ -129,22 +132,27 @@ export async function POST(request: Request) {
     }
 
     // Verificar que el curso existe con datos del profesor
-    const curso = await prisma.curso.findUnique({
-      where: { id: curso_id },
-      include: {
-        profesor: { select: { nombre: true, apellido: true, cargo: true, firma: true } },
-        modulos: {
-          orderBy: { orden: 'asc' },
-          select: {
-            id: true, titulo: true, orden: true,
-            lecciones: {
-              orderBy: { orden: 'asc' },
-              select: { id: true, titulo: true, orden: true, duracion: true }
+    const [curso, configs] = await Promise.all([
+      prisma.curso.findUnique({
+        where: { id: curso_id },
+        include: {
+          profesor: { select: { nombre: true, apellido: true, cargo: true, firma: true } },
+          firmante_1: { select: { nombre: true, cargo: true, firma: true, sello: true } },
+          firmante_2: { select: { nombre: true, cargo: true, firma: true, sello: true } },
+          modulos: {
+            orderBy: { orden: 'asc' },
+            select: {
+              id: true, titulo: true, orden: true,
+              lecciones: {
+                orderBy: { orden: 'asc' },
+                select: { id: true, titulo: true, orden: true, duracion: true }
+              }
             }
           }
         }
-      }
-    })
+      }),
+      getConfigs()
+    ])
 
     if (!curso) {
       return ApiResponse.error(request, 'El curso seleccionado no existe.', 404)
@@ -169,6 +177,17 @@ export async function POST(request: Request) {
     const parseDateOnly = (s: string) => new Date(`${s}T12:00:00.000Z`)
     const fechaEmision = fecha_emision ? parseDateOnly(fecha_emision) : new Date()
 
+    // Se congela la plantilla y los firmantes vigentes al momento de emitirse
+    // (o de reemplazar), para que cambios futuros en el curso no alteren este
+    // certificado. Ver resolverPlantilla.ts y resolverFirmantes.ts.
+    const plantillaId = resolverPlantillaId(curso.certificado_plantilla, configs)
+
+    const { firmante1, firmante2 } = await resolverFirmantes({
+      cursoFirmante1: curso.firmante_1,
+      cursoFirmante2: curso.firmante_2,
+      configs
+    })
+
     const snapshot = {
       usuario: { nombre: usuario.nombre, apellido: usuario.apellido },
       curso: {
@@ -188,6 +207,9 @@ export async function POST(request: Request) {
         cargo: docente_cargo_override || curso.profesor.cargo,
         firma: curso.profesor.firma
       },
+      plantilla_id: plantillaId,
+      firmante_1: firmante1,
+      firmante_2: firmante2,
       emision_manual: true
     }
 
@@ -199,7 +221,7 @@ export async function POST(request: Request) {
         where: { id: existente.id },
         data: {
           emitido_en: fechaEmision,
-          datos: snapshot
+          datos: snapshot as any
         },
         include: {
           usuario: { select: { id: true, nombre: true, apellido: true, correo: true, avatar: true } },
@@ -219,7 +241,7 @@ export async function POST(request: Request) {
           curso_id,
           codigo_verificacion: codigoVerificacion,
           emitido_en: fechaEmision,
-          datos: snapshot
+          datos: snapshot as any
         },
         include: {
           usuario: { select: { id: true, nombre: true, apellido: true, correo: true, avatar: true } },

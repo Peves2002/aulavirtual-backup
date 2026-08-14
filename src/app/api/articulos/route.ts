@@ -11,6 +11,7 @@ import { handleApiError } from '@/utils/libs/validation'
 export async function GET(request: Request) {
   try {
     const articulos = await prisma.articulo.findMany({
+      where: { estado: 'PUBLICADO' },
       orderBy: { creado_en: 'desc' }
     })
 

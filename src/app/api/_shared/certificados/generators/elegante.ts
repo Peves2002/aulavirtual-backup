@@ -1,4 +1,4 @@
-import { fetchImageBuffer, formatDateLong, resolveLogoDimensions } from './utils'
+import { fetchImageBuffer, compressImageForPdf, formatDateLong, resolveLogoDimensions, resolverSignatariosPlantillaFija } from './utils'
 
 import type { GeneratorFn } from './types'
 
@@ -25,9 +25,6 @@ export const generarElegante: GeneratorFn = async data => {
     fechaInicioVal,
     fechaFinVal,
     vigenciaHastaVal,
-    gerenteGeneral,
-    profesorSnapshot,
-    mostrarFirmaDocente,
     codigoVerificacion,
     qrDataUrl,
     modulos,
@@ -64,9 +61,9 @@ export const generarElegante: GeneratorFn = async data => {
         const buf = await fetchImageBuffer(user.firma)
 
         if (buf) {
-          const ext = user.firma.split('.').pop()?.split('?')[0]?.toLowerCase() ?? 'png'
+          const { buffer: compressed, jsPdfFormat } = await compressImageForPdf(buf, { maxWidth: 300, format: 'png' })
 
-          doc.addImage(buf, ext.toUpperCase(), x - 16, lineY - 28, 32, 28)
+          doc.addImage(compressed, jsPdfFormat, x - 16, lineY - 28, 32, 28)
         }
       } catch {
         /* skip */
@@ -240,15 +237,15 @@ export const generarElegante: GeneratorFn = async data => {
   y += 12
 
   // Firmas
-  const hasGerente = gerenteGeneral !== null
+  const { primero: signatarioPrimero, segundo: signatarioSegundo } = resolverSignatariosPlantillaFija(data)
 
-  if (hasGerente && mostrarFirmaDocente) {
-    await addSignatureBlock(cx - 62, y + 24, gerenteGeneral)
-    await addSignatureBlock(cx + 62, y + 24, profesorSnapshot)
-  } else if (hasGerente) {
-    await addSignatureBlock(cx, y + 24, gerenteGeneral)
-  } else if (mostrarFirmaDocente) {
-    await addSignatureBlock(cx, y + 24, profesorSnapshot)
+  if (signatarioPrimero && signatarioSegundo) {
+    await addSignatureBlock(cx - 62, y + 24, signatarioPrimero)
+    await addSignatureBlock(cx + 62, y + 24, signatarioSegundo)
+  } else if (signatarioPrimero) {
+    await addSignatureBlock(cx, y + 24, signatarioPrimero)
+  } else if (signatarioSegundo) {
+    await addSignatureBlock(cx, y + 24, signatarioSegundo)
   }
 
   // QR esquina inferior derecha

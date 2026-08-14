@@ -1,4 +1,4 @@
-import { fetchImageBuffer, formatDateLong, resolveLogoDimensions } from './utils'
+import { fetchImageBuffer, compressImageForPdf, formatDateLong, resolveLogoDimensions, resolverSignatariosPlantillaFija } from './utils'
 
 import type { GeneratorFn } from './types'
 
@@ -23,9 +23,6 @@ export const generarModerno: GeneratorFn = async data => {
     fechaInicioVal,
     fechaFinVal,
     vigenciaHastaVal,
-    gerenteGeneral,
-    profesorSnapshot,
-    mostrarFirmaDocente,
     codigoVerificacion,
     qrDataUrl,
     modulos,
@@ -63,9 +60,9 @@ export const generarModerno: GeneratorFn = async data => {
         const buf = await fetchImageBuffer(user.firma)
 
         if (buf) {
-          const ext = user.firma.split('.').pop()?.split('?')[0]?.toLowerCase() ?? 'png'
+          const { buffer: compressed, jsPdfFormat } = await compressImageForPdf(buf, { maxWidth: 300, format: 'png' })
 
-          doc.addImage(buf, ext.toUpperCase(), x - 15, lineY - 26, 30, 26)
+          doc.addImage(compressed, jsPdfFormat, x - 15, lineY - 26, 30, 26)
         }
       } catch {
         /* skip */
@@ -248,15 +245,15 @@ export const generarModerno: GeneratorFn = async data => {
   y += 12
 
   // Firmas
-  const hasGerente = gerenteGeneral !== null
+  const { primero: signatarioPrimero, segundo: signatarioSegundo } = resolverSignatariosPlantillaFija(data)
 
-  if (hasGerente && mostrarFirmaDocente) {
-    await addSignatureBlock(contentX + contentW / 4, y + 20, gerenteGeneral)
-    await addSignatureBlock(contentX + (contentW * 3) / 4, y + 20, profesorSnapshot)
-  } else if (hasGerente) {
-    await addSignatureBlock(ccx, y + 20, gerenteGeneral)
-  } else if (mostrarFirmaDocente) {
-    await addSignatureBlock(ccx, y + 20, profesorSnapshot)
+  if (signatarioPrimero && signatarioSegundo) {
+    await addSignatureBlock(contentX + contentW / 4, y + 20, signatarioPrimero)
+    await addSignatureBlock(contentX + (contentW * 3) / 4, y + 20, signatarioSegundo)
+  } else if (signatarioPrimero) {
+    await addSignatureBlock(ccx, y + 20, signatarioPrimero)
+  } else if (signatarioSegundo) {
+    await addSignatureBlock(ccx, y + 20, signatarioSegundo)
   }
 
   // Footer (línea inferior)

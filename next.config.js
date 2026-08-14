@@ -47,6 +47,12 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
+  // sanitize-html depende de htmlparser2 (paquete ESM); si webpack intenta
+  // bundlearlo falla con "ESM packages need to be imported". Se deja fuera
+  // del bundle y se resuelve con require() nativo de Node en runtime.
+  experimental: {
+    serverComponentsExternalPackages: ['sanitize-html']
+  },
   // NOTA: sin output: 'standalone'. La app usa un server.js personalizado (Socket.IO)
   // que requiere el árbol completo de node_modules en runtime; el output "standalone"
   // solo incluye lo que Next traza de las rutas/páginas y descarta server.js.

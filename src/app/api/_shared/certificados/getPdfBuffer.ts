@@ -6,6 +6,8 @@ import { getConfigs } from '@/utils/libs/config'
 import { buildCertificadoData } from './buildCertificadoData'
 import { getGenerator } from './generators'
 import { resolverFirmantes } from './resolverFirmantes'
+import { resolverPlantillaId } from './resolverPlantilla'
+import type { SignatarioData } from './generators/types'
 
 export async function getPdfBuffer(
   certificadoId: string,
@@ -131,18 +133,40 @@ return { buffer, filename }
 
   certData.gerenteGeneral = gerenteGeneral
 
-  const { firmante1, firmante2 } = await resolverFirmantes({
-    cursoFirmante1: certificado.curso.firmante_1,
-    cursoFirmante2: certificado.curso.firmante_2,
-    configs
-  })
+  // ── Plantilla y firmantes: congelados al emitirse ─────────────────
+  // Si el certificado tiene `datos.plantilla_id` significa que se emitió
+  // después de que se empezó a congelar esta info (ver resolverPlantilla.ts /
+  // resolverFirmantes.ts en las rutas de emisión) y hay que respetarla tal
+  // cual, aunque el curso haya cambiado de plantilla/firmantes desde
+  // entonces. Si no lo tiene (certificado legacy, o aún no pasó por el
+  // script de backfill) se cae al comportamiento anterior: resolución en
+  // vivo con la configuración actual del curso.
+  const tieneSnapshotCongelado = typeof snapshot?.plantilla_id === 'string' && snapshot.plantilla_id.length > 0
+
+  let firmante1: SignatarioData | null
+  let firmante2: SignatarioData | null
+
+  if (tieneSnapshotCongelado) {
+    firmante1 = snapshot.firmante_1 ?? null
+    firmante2 = snapshot.firmante_2 ?? null
+  } else {
+    const resuelto = await resolverFirmantes({
+      cursoFirmante1: certificado.curso.firmante_1,
+      cursoFirmante2: certificado.curso.firmante_2,
+      configs
+    })
+
+    firmante1 = resuelto.firmante1
+    firmante2 = resuelto.firmante2
+  }
 
   certData.firmante1 = firmante1
   certData.firmante2 = firmante2
 
-  // ── Seleccionar plantilla y generar PDF ───────────────────────────
-  // Prioridad: override del curso (certificado_plantilla) > configuración global > 'clasico'.
-  const plantilla = certificado.curso.certificado_plantilla || configs.CERTIFICADO_PLANTILLA || 'clasico'
+  const plantilla = tieneSnapshotCongelado
+    ? snapshot.plantilla_id
+    : resolverPlantillaId(certificado.curso.certificado_plantilla, configs)
+
   const generarPDF = await getGenerator(plantilla)
   const pdfBuffer = await generarPDF(certData)
 

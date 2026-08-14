@@ -1,5 +1,5 @@
 import type { GeneratorFn } from './types'
-import { fetchImageBuffer, formatDateLong } from './utils'
+import { fetchImageBuffer, compressImageForPdf, formatDateLong, resolverSignatariosPlantillaFija } from './utils'
 
 /**
  * Plantilla CLÁSICA RESUMIDA — Igual que Clásico, pero en la página 2
@@ -24,9 +24,6 @@ export const generarClasicoResumido: GeneratorFn = async data => {
     fechaInicioVal,
     fechaFinVal,
     vigenciaHastaVal,
-    gerenteGeneral,
-    profesorSnapshot,
-    mostrarFirmaDocente,
     codigoVerificacion,
     qrDataUrl,
     modulos,
@@ -58,9 +55,9 @@ export const generarClasicoResumido: GeneratorFn = async data => {
         const signatureBuffer = await fetchImageBuffer(user.firma)
 
         if (signatureBuffer) {
-          const sigExt = user.firma.split('.').pop()?.split('?')[0]?.toLowerCase() ?? 'png'
+          const { buffer: compressed, jsPdfFormat } = await compressImageForPdf(signatureBuffer, { maxWidth: 300, format: 'png' })
 
-          doc.addImage(signatureBuffer, sigExt.toUpperCase(), x - 17, lineY - 34, 34, 34)
+          doc.addImage(compressed, jsPdfFormat, x - 17, lineY - 34, 34, 34)
         }
       } catch {
         /* skip */
@@ -273,15 +270,15 @@ export const generarClasicoResumido: GeneratorFn = async data => {
   y += 12
 
   // Firmas
-  const hasGerente = gerenteGeneral !== null
+  const { primero: signatarioPrimero, segundo: signatarioSegundo } = resolverSignatariosPlantillaFija(data)
 
-  if (hasGerente && mostrarFirmaDocente) {
-    await addSignatureBlock(cx - 54, y + 20, gerenteGeneral)
-    await addSignatureBlock(cx + 54, y + 20, profesorSnapshot)
-  } else if (hasGerente) {
-    await addSignatureBlock(cx, y + 20, gerenteGeneral)
-  } else if (mostrarFirmaDocente) {
-    await addSignatureBlock(cx, y + 20, profesorSnapshot)
+  if (signatarioPrimero && signatarioSegundo) {
+    await addSignatureBlock(cx - 54, y + 20, signatarioPrimero)
+    await addSignatureBlock(cx + 54, y + 20, signatarioSegundo)
+  } else if (signatarioPrimero) {
+    await addSignatureBlock(cx, y + 20, signatarioPrimero)
+  } else if (signatarioSegundo) {
+    await addSignatureBlock(cx, y + 20, signatarioSegundo)
   }
 
   // Footer página 1

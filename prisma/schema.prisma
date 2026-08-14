@@ -28,6 +28,7 @@ model Usuario {
   certificados            Certificado[]
   comentarios             Comentario[]
   cursos_dictados         Curso[]                @relation("ProfesorCursos")
+  articulos               Articulo[]
   inscripciones           Inscripcion[]
   inscripciones_simulacro InscripcionSimulacro[]
   intentos_examen         IntentoExamen[]
@@ -1214,13 +1215,27 @@ model EntregaActividad {
 }
 
 model Articulo {
-  id             String   @id @default(uuid())
+  id             String         @id @default(uuid())
   titulo         String
+  slug           String         @unique
   descripcion    String?
   imagen_portada String?
-  archivo_pdf    String
-  creado_en      DateTime @default(now())
-  actualizado_en DateTime @updatedAt
+  archivo_pdf    String?
+  categoria      String?
+  autor_id       String?
+  estado         EstadoArticulo @default(BORRADOR)
+  creado_en      DateTime       @default(now())
+  actualizado_en DateTime       @updatedAt
 
+  autor          Usuario?       @relation(fields: [autor_id], references: [id], onDelete: SetNull)
+
+  @@index([estado])
+  @@index([autor_id])
+  @@index([categoria])
   @@map("articulos")
+}
+
+enum EstadoArticulo {
+  BORRADOR
+  PUBLICADO
 }

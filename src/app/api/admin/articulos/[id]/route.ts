@@ -3,7 +3,14 @@ export const dynamic = 'force-dynamic'
 import prisma from '@/utils/libs/prisma'
 import { requireAdmin } from '@/utils/libs/auth-helpers'
 import { ApiResponse } from '@/utils/libs/apiResponse'
-import { handleApiError } from '@/utils/libs/validation'
+import { validateRequest, handleApiError } from '@/utils/libs/validation'
+import { generateUniqueSlug } from '@/utils/libs/slug'
+import { sanitizeArticuloHtml } from '@/utils/libs/sanitizeHtml'
+import { actualizarArticuloSchema } from '@/schemas/articulo.schema'
+
+const articuloInclude = {
+  autor: { select: { id: true, nombre: true, apellido: true } }
+}
 
 /**
  * PUT /api/admin/articulos/[id]
@@ -17,7 +24,11 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
     const { id } = params
     const body = await request.json()
-    const { titulo, descripcion, imagen_portada, archivo_pdf } = body
+    const validation = validateRequest(actualizarArticuloSchema, body, request)
+
+    if (!validation.success) return validation.error
+
+    const data = validation.data
 
     const articulo = await prisma.articulo.findUnique({ where: { id } })
 
@@ -25,14 +36,24 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       return ApiResponse.error(request, 'Artículo no encontrado', 404)
     }
 
+    const updateData: Record<string, unknown> = { ...data }
+
+    // Regenerar slug solo si el admin lo cambió explícitamente, o si cambió el
+    // título y no proveyó un slug propio.
+    if ((data.slug && data.slug !== articulo.slug) || (data.titulo && data.titulo !== articulo.titulo && !data.slug)) {
+      updateData.slug = await generateUniqueSlug(data.slug || data.titulo!, prisma.articulo, id)
+    } else {
+      delete updateData.slug
+    }
+
+    if (data.descripcion !== undefined) {
+      updateData.descripcion = data.descripcion ? sanitizeArticuloHtml(data.descripcion) : null
+    }
+
     const articuloActualizado = await prisma.articulo.update({
       where: { id },
-      data: {
-        titulo: titulo !== undefined ? titulo : articulo.titulo,
-        descripcion: descripcion !== undefined ? descripcion : articulo.descripcion,
-        imagen_portada: imagen_portada !== undefined ? imagen_portada : articulo.imagen_portada,
-        archivo_pdf: archivo_pdf !== undefined ? archivo_pdf : articulo.archivo_pdf
-      }
+      data: updateData,
+      include: articuloInclude
     })
 
     return ApiResponse.success(request, articuloActualizado)
