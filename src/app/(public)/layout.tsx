@@ -94,9 +94,11 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         {/* Bottom Bar */}
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
           <p>&copy; {new Date().getFullYear()} IFSEC Group. Todos los derechos reservados.</p>
-          <div className="flex gap-6">
-            <Link href="/politica-de-privacidad" className="hover:text-white transition-colors no-underline">Política de Privacidad</Link>
-            <Link href="/terminos-y-condiciones" className="hover:text-white transition-colors no-underline">Términos y Condiciones</Link>
+          <div className="flex flex-wrap gap-4 md:gap-6 justify-center md:justify-end mt-4 md:mt-0">
+            <Link href="/libro-de-reclamaciones" className="hover:text-white transition-colors no-underline whitespace-nowrap">Libro de Reclamaciones</Link>
+            <Link href="/politica-de-cambios-y-devoluciones" className="hover:text-white transition-colors no-underline whitespace-nowrap">Política de Cambios y Devoluciones</Link>
+            <Link href="/politica-de-privacidad" className="hover:text-white transition-colors no-underline whitespace-nowrap">Política de Privacidad</Link>
+            <Link href="/terminos-y-condiciones" className="hover:text-white transition-colors no-underline whitespace-nowrap">Términos y Condiciones</Link>
           </div>
         </div>
       </footer>
