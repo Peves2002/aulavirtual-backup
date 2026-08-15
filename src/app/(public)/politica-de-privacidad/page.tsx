@@ -13,12 +13,15 @@ export default function PoliticaPrivacidadPage() {
           Política de Privacidad
         </h1>
         <p className="text-center text-gray-500 mb-12">
-          Última actualización: Noviembre de 2024
+          Última actualización: 15 de agosto de 2026
         </p>
 
         <div className="space-y-8 leading-relaxed">
           <p>
-            En <strong>IFSEC Group</strong> valoramos su privacidad y nos comprometemos a proteger sus datos personales. Esta Política de Privacidad explica cómo recopilamos, usamos, compartimos y protegemos su información cuando visita nuestro sitio web o utiliza nuestros servicios.
+            En <strong>IFSEC Group</strong>, marca comercial de <strong>Ifsec Perú S.A.C.</strong> (RUC <strong>20514508179</strong>,
+            domicilio en Callao, Callao, Bellavista), valoramos su privacidad y nos comprometemos a proteger sus datos personales.
+            Esta Política de Privacidad explica cómo recopilamos, usamos, compartimos y protegemos su información cuando visita
+            nuestro sitio web o utiliza nuestros servicios.
           </p>
 
           <hr className="border-gray-200" />
@@ -61,7 +64,7 @@ export default function PoliticaPrivacidadPage() {
           <div>
             <h2 className="text-2xl font-bold text-[var(--web-dark)] mb-4 mt-8">6. Contacto</h2>
             <p>
-              Si tiene alguna pregunta o inquietud sobre nuestra Política de Privacidad o el tratamiento de sus datos personales, no dude en contactarnos a través de <strong>comercial@ifsec.pe</strong>.
+              Si tiene alguna pregunta o inquietud sobre nuestra Política de Privacidad o el tratamiento de sus datos personales, no dude en contactarnos a través de <strong>comercial@ifsec.pe</strong> o al <strong>965 052 858</strong>.
             </p>
           </div>
         </div>

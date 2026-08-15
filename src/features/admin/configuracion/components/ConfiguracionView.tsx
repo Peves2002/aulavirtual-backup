@@ -412,6 +412,11 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     MP_PUBLIC_KEY: '',
     PEDIDOS_SOLICITAR_COMPROBANTE: 'true',
     COMENTARIOS_REQUIERE_APROBACION: 'false',
+    EMPRESA_RAZON_SOCIAL: '',
+    EMPRESA_RUC: '',
+    EMPRESA_DIRECCION: '',
+    EMPRESA_TELEFONO: '',
+    EMPRESA_EMAIL: '',
     ...initialMapped
   })
 
@@ -633,6 +638,64 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
               />
             </Paper>
           </Box>
+
+          <Divider />
+
+          {/* Datos de la empresa */}
+          <Box>
+            <Typography variant='h6' gutterBottom>Datos de la Empresa</Typography>
+            <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
+              Estos datos se muestran en el Libro de Reclamaciones Virtual y en el correo de confirmación que recibe el reclamante.
+            </Typography>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={8}>
+                <TextField
+                  fullWidth
+                  label='Razón Social'
+                  value={config.EMPRESA_RAZON_SOCIAL}
+                  onChange={(e) => handleInputChange('EMPRESA_RAZON_SOCIAL', e.target.value)}
+                  placeholder='Ej: Instituto Tecnológico ARM S.A.C.'
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  fullWidth
+                  label='RUC'
+                  value={config.EMPRESA_RUC}
+                  onChange={(e) => handleInputChange('EMPRESA_RUC', e.target.value)}
+                  placeholder='20600000000'
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label='Domicilio Fiscal'
+                  value={config.EMPRESA_DIRECCION}
+                  onChange={(e) => handleInputChange('EMPRESA_DIRECCION', e.target.value)}
+                  placeholder='Av. Ejemplo 123, Lima, Perú'
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label='Teléfono'
+                  value={config.EMPRESA_TELEFONO}
+                  onChange={(e) => handleInputChange('EMPRESA_TELEFONO', e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  type='email'
+                  label='Correo de Contacto'
+                  value={config.EMPRESA_EMAIL}
+                  onChange={(e) => handleInputChange('EMPRESA_EMAIL', e.target.value)}
+                />
+              </Grid>
+            </Grid>
+          </Box>
+
+          <Divider />
 
           {/* Comentarios */}
           <Box>

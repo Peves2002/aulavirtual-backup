@@ -28,7 +28,17 @@ import Swal from 'sweetalert2'
 import type { ReclamacionInput } from '@/schemas/reclamacion.schema'
 import { ReclamacionSchema } from '@/schemas/reclamacion.schema'
 
-export default function LibroReclamacionesForm() {
+interface LibroReclamacionesFormProps {
+  empresaNombre?: string
+  empresaRuc?: string
+  empresaDireccion?: string
+}
+
+export default function LibroReclamacionesForm({
+  empresaNombre = 'NOMBRE DE TU EMPRESA',
+  empresaRuc = '20600000000',
+  empresaDireccion = '[DIRECCIÓN]'
+}: LibroReclamacionesFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [successCode, setSuccessCode] = useState<string | null>(null)
 
@@ -137,9 +147,9 @@ export default function LibroReclamacionesForm() {
           esta institución cuenta con un Libro de Reclamaciones Virtual a su disposición.
         </Typography>
         <Box sx={{ mt: 2, textAlign: 'left', bgcolor: 'white', p: 2, border: '1px solid #eee', borderRadius: 1 }}>
-          <Typography variant="caption" display="block"><strong>PROVEEDOR:</strong> NOMBRE DE TU EMPRESA</Typography>
-          <Typography variant="caption" display="block"><strong>RUC:</strong> 20600000000 </Typography>
-          <Typography variant="caption" display="block"><strong>DOMICILIO:</strong> [DIRECCIÓN]</Typography>
+          <Typography variant="caption" display="block"><strong>PROVEEDOR:</strong> {empresaNombre}</Typography>
+          <Typography variant="caption" display="block"><strong>RUC:</strong> {empresaRuc}</Typography>
+          <Typography variant="caption" display="block"><strong>DOMICILIO:</strong> {empresaDireccion}</Typography>
         </Box>
       </Box>
 

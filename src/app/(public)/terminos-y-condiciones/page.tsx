@@ -13,13 +13,14 @@ export default function TerminosYCondicionesPage() {
           Términos y Condiciones
         </h1>
         <p className="text-center text-gray-500 mb-12">
-          Última actualización: Noviembre de 2024
+          Última actualización: 15 de agosto de 2026
         </p>
 
         <div className="space-y-8 leading-relaxed">
           <p>
-            Bienvenido a <strong>IFSEC Group</strong> (&quot;Nosotros&quot;).
-            Al acceder a nuestro sitio web y utilizar nuestros servicios,
+            Bienvenido a <strong>IFSEC Group</strong>, marca comercial de <strong>Ifsec Perú S.A.C.</strong>,
+            identificada con RUC <strong>20514508179</strong> y domicilio en Callao, Callao, Bellavista
+            (&quot;Nosotros&quot;). Al acceder a nuestro sitio web y utilizar nuestros servicios,
             usted (&quot;el Usuario&quot;) acepta estar sujeto a los presentes Términos y Condiciones.
             Le sugerimos leer esta página cuidadosamente antes de proceder con cualquier compra o inscripción.
           </p>
@@ -86,7 +87,8 @@ export default function TerminosYCondicionesPage() {
           <div>
             <h2 className="text-2xl font-bold text-[var(--web-dark)] mb-4 mt-8">7. Contacto y Libro de Reclamaciones</h2>
             <p>
-              Para consultas de soporte, envíe sus requerimientos a <strong>comercial@ifsec.pe</strong>.
+              Para consultas de soporte, envíe sus requerimientos a <strong>comercial@ifsec.pe</strong> o
+              comuníquese al <strong>965 052 858</strong>.
               De acuerdo a la legislación vigente de protección al consumidor peruano, mantenemos un{' '}
               <a href="/libro-de-reclamaciones" className="text-[var(--web-primary)] underline hover:text-[#1f7d6d] transition-colors">Libro de Reclamaciones a disposición pública</a>{' '}
               en nuestra plataforma web.

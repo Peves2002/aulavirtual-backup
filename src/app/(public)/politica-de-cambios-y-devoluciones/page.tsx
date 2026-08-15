@@ -13,14 +13,15 @@ export default function PoliticaCambiosYDevolucionesPage() {
           Política de Cambios y Devoluciones
         </h1>
         <p className="text-center text-gray-500 mb-12">
-          Última actualización: Noviembre de 2024
+          Última actualización: 15 de agosto de 2026
         </p>
 
         <div className="space-y-8 leading-relaxed">
           <p>
             La presente política regula las condiciones de reembolso y cambios aplicables a los
-            servicios educativos ofrecidos por <strong>IFSEC Group</strong> a través de su plataforma. Al adquirir cualquier curso o servicio,
-            el usuario declara haber leído y aceptado los términos aquí descritos.
+            servicios educativos ofrecidos por <strong>IFSEC Group</strong>, marca comercial de <strong>Ifsec Perú S.A.C.</strong>,
+            con RUC <strong>20514508179</strong> y domicilio en Callao, Callao, Bellavista, a través de su plataforma.
+            Al adquirir cualquier curso o servicio, el usuario declara haber leído y aceptado los términos aquí descritos.
           </p>
 
           <hr className="border-gray-200" />
@@ -78,7 +79,7 @@ export default function PoliticaCambiosYDevolucionesPage() {
             </p>
             <ol className="list-decimal pl-6 mt-4 space-y-2">
               <li>
-                Enviar un correo a <strong>comercial@ifsec.pe</strong> con el asunto:{' '}
+                Enviar un correo a <strong>comercial@ifsec.pe</strong> (o comunicarse al <strong>965 052 858</strong>) con el asunto:{' '}
                 <em>&quot;Solicitud de Reembolso — [Nombre del Curso/Servicio]&quot;</em>.
               </li>
               <li>Adjuntar el comprobante de pago y número de pedido correspondiente.</li>
@@ -97,7 +98,7 @@ export default function PoliticaCambiosYDevolucionesPage() {
               entre <strong>15 y 30 días hábiles</strong>.
             </p>
             <p className="mt-4">
-              IFSEC Group se reserva el derecho de descontar las comisiones operativas
+              Ifsec Perú S.A.C. se reserva el derecho de descontar las comisiones operativas
               cobradas por la pasarela de pago que no sean reembolsables por la misma.
             </p>
           </div>
@@ -106,7 +107,7 @@ export default function PoliticaCambiosYDevolucionesPage() {
             <h2 className="text-2xl font-bold text-[var(--web-dark)] mb-4 mt-8">6. Contacto y Atención al Cliente</h2>
             <p>
               Para consultas relacionadas con esta política, comuníquese con nosotros a través de{' '}
-              <strong>comercial@ifsec.pe</strong>. De acuerdo con la legislación de protección
+              <strong>comercial@ifsec.pe</strong> o al <strong>965 052 858</strong>. De acuerdo con la legislación de protección
               al consumidor vigente, también ponemos a su disposición nuestro{' '}
               <a href="/libro-de-reclamaciones" className="text-[var(--web-primary)] underline hover:text-[#1f7d6d] transition-colors">
                 Libro de Reclamaciones

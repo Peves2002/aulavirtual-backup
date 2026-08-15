@@ -2,6 +2,7 @@ import prisma from '@/utils/libs/prisma'
 import { ReclamacionSchema } from '@/schemas/reclamacion.schema'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { sendMail } from '@/utils/libs/mailer'
+import { getConfigs } from '@/utils/libs/config'
 
 export async function POST(request: Request) {
   try {
@@ -46,6 +47,10 @@ export async function POST(request: Request) {
     const codigoReclamo = `REC-${currentYear}-${String(nuevaReclamacion.numero_correlativo).padStart(6, '0')}`
     const simboloMoneda = data.moneda === 'USD' ? '$' : 'S/'
 
+    const config = await getConfigs()
+    const empresaNombre = config.EMPRESA_RAZON_SOCIAL || 'NOMBRE DE TU EMPRESA'
+    const empresaRuc = config.EMPRESA_RUC || '20600000000'
+
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
         <div style="background-color: #02115C; padding: 15px; border-radius: 6px 6px 0 0; text-align: center;">
@@ -85,7 +90,7 @@ export async function POST(request: Request) {
           </p>
         </div>
         <div style="background-color: #f3f4f6; padding: 15px; text-align: center; border-radius: 0 0 6px 6px; font-size: 12px; color: #888;">
-          NOMBRE DE TU EMPRESA - RUC: 20600000000
+          ${empresaNombre} - RUC: ${empresaRuc}
         </div>
       </div>
     `

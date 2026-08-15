@@ -1,5 +1,5 @@
 // Next Imports
-import { Plus_Jakarta_Sans } from 'next/font/google'
+import localFont from 'next/font/local'
 
 // MUI Imports
 import type { Theme } from '@mui/material/styles'
@@ -16,9 +16,15 @@ import shadows from './shadows'
 import customShadows from './customShadows'
 import typography from './typography'
 
-export const plus_jakarta_sans = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800'],
+export const plus_jakarta_sans = localFont({
+  src: [
+    { path: '../../assets/fonts/plus-jakarta-sans/plus-jakarta-sans-300.woff2', weight: '300', style: 'normal' },
+    { path: '../../assets/fonts/plus-jakarta-sans/plus-jakarta-sans-400.woff2', weight: '400', style: 'normal' },
+    { path: '../../assets/fonts/plus-jakarta-sans/plus-jakarta-sans-500.woff2', weight: '500', style: 'normal' },
+    { path: '../../assets/fonts/plus-jakarta-sans/plus-jakarta-sans-600.woff2', weight: '600', style: 'normal' },
+    { path: '../../assets/fonts/plus-jakarta-sans/plus-jakarta-sans-700.woff2', weight: '700', style: 'normal' },
+    { path: '../../assets/fonts/plus-jakarta-sans/plus-jakarta-sans-800.woff2', weight: '800', style: 'normal' }
+  ],
   variable: '--font-plus-jakarta-sans'
 })
 

@@ -8,7 +8,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 
 // Third-party Imports
-import { Montserrat } from 'next/font/google'
+import localFont from 'next/font/local'
 
 import styled from '@emotion/styled'
 
@@ -26,7 +26,12 @@ import useVerticalNav from '@menu/hooks/useVerticalNav'
 import { useSettings } from '@core/hooks/useSettings'
 import { useConfig } from '@/contexts/ConfigContext'
 
-const montserrat = Montserrat({ subsets: ['latin'], weight: ['400', '700'] })
+const montserrat = localFont({
+  src: [
+    { path: '../../../../assets/fonts/montserrat/montserrat-400.woff2', weight: '400', style: 'normal' },
+    { path: '../../../../assets/fonts/montserrat/montserrat-700.woff2', weight: '700', style: 'normal' }
+  ]
+})
 
 type LogoTextProps = {
   isHovered?: VerticalNavContextProps['isHovered']
