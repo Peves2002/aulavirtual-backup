@@ -133,6 +133,15 @@ return { buffer, filename }
 
   certData.gerenteGeneral = gerenteGeneral
 
+  const { firmante1, firmante2 } = await resolverFirmantes({
+    cursoFirmante1: certificado.curso.firmante_1,
+    cursoFirmante2: certificado.curso.firmante_2,
+    configs
+  })
+
+  certData.firmante1 = firmante1
+  certData.firmante2 = firmante2
+
   // ── Plantilla y firmantes: congelados al emitirse ─────────────────
   // Si el certificado tiene `datos.plantilla_id` significa que se emitió
   // después de que se empezó a congelar esta info (ver resolverPlantilla.ts /
