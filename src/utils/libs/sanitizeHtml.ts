@@ -1,4 +1,4 @@
-import sanitizeHtml from 'sanitize-html'
+import sanitizeHtml, { simpleTransform } from 'sanitize-html'
 
 const ALLOWED_TAGS = [
   'p', 'br', 'strong', 'em', 'u', 's',
@@ -16,7 +16,7 @@ export function sanitizeArticuloHtml(html: string): string {
     allowedTags: ALLOWED_TAGS,
     allowedAttributes: { a: ['href'] },
     transformTags: {
-      a: sanitizeHtml.simpleTransform('a', { target: '_blank', rel: 'noopener noreferrer nofollow' })
+      a: simpleTransform('a', { target: '_blank', rel: 'noopener noreferrer nofollow' })
     }
   })
 }

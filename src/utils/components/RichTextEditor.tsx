@@ -5,10 +5,10 @@ import { useEffect } from 'react'
 import { Box, Divider, Stack, ToggleButton } from '@mui/material'
 
 import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Underline from '@tiptap/extension-underline'
-import Link from '@tiptap/extension-link'
-import Placeholder from '@tiptap/extension-placeholder'
+import { StarterKit } from '@tiptap/starter-kit'
+import { Underline } from '@tiptap/extension-underline'
+import { Link } from '@tiptap/extension-link'
+import { Placeholder } from '@tiptap/extension-placeholder'
 
 interface RichTextEditorProps {
   value: string

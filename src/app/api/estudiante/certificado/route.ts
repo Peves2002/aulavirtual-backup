@@ -238,18 +238,6 @@ export async function POST(request: Request) {
       configs
     })
 
-    // Se congela la plantilla y los firmantes vigentes al momento de emitirse,
-    // para que cambios futuros en el curso (cambiar de plantilla, reasignar
-    // firmantes) no alteren certificados ya emitidos. Ver resolverPlantilla.ts
-    // y resolverFirmantes.ts.
-    const plantillaId = resolverPlantillaId(cursoData.certificado_plantilla, configs)
-
-    const { firmante1, firmante2 } = await resolverFirmantes({
-      cursoFirmante1: cursoData.firmante_1,
-      cursoFirmante2: cursoData.firmante_2,
-      configs
-    })
-
     // 5. Generar código de verificación único: {CODIGO_CURSO}-{YYMMDD}-{NNNNNN}
     const ahora = new Date()
 
