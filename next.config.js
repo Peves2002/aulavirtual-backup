@@ -47,20 +47,17 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
-  // sanitize-html depende de htmlparser2 (paquete ESM); si webpack intenta
-  // bundlearlo falla con "ESM packages need to be imported". Se deja fuera
-  // del bundle y se resuelve con require() nativo de Node en runtime.
-  experimental: {
-    serverComponentsExternalPackages: ['sanitize-html']
-  },
   // NOTA: sin output: 'standalone'. La app usa un server.js personalizado (Socket.IO)
   // que requiere el árbol completo de node_modules en runtime; el output "standalone"
   // solo incluye lo que Next traza de las rutas/páginas y descarta server.js.
   experimental: {
-    // 'sharp' es un módulo nativo (bindings .node); si webpack lo empaqueta en vez de
-    // dejarlo como require() nativo, los route handlers que lo usan (generación de PDF
-    // de certificados) pueden fallar o tumbar el proceso de Node a mitad de la respuesta.
-    serverComponentsExternalPackages: ['sharp']
+    // sanitize-html depende de htmlparser2 (paquete ESM); si webpack intenta
+    // bundlearlo falla con "ESM packages need to be imported". 'sharp' es un módulo
+    // nativo (bindings .node); si webpack lo empaqueta en vez de dejarlo como require()
+    // nativo, los route handlers que lo usan (generación de PDF de certificados) pueden
+    // fallar o tumbar el proceso de Node a mitad de la respuesta. Ambos se dejan fuera
+    // del bundle y se resuelven con require() nativo de Node en runtime.
+    serverComponentsExternalPackages: ['sanitize-html', 'sharp']
   },
   webpack: (config) => {
     config.resolve.alias.canvas = false
