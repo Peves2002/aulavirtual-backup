@@ -6,6 +6,7 @@ export interface CertificadoCurso {
   duracion: number | null
   nivel: string | null
   modo_certificado: 'AUTOMATICO' | 'MANUAL'
+  certificacion_habilitada: boolean
   profesor: {
     nombre: string
     apellido: string

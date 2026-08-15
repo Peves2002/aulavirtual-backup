@@ -26,21 +26,17 @@ import { crearPedidoManualSchema, type CrearPedidoManualDto } from '@/schemas/pe
 import { useCreatePedidoManual } from '../hooks/usePedidos'
 import { useUsuarios } from '@/features/admin/usuarios/hooks/useUsuarios'
 import { useCursos } from '@/features/admin/cursos/hooks/useCursos'
-import { useAdminEbooks } from '@/features/admin/ebooks/hooks/useEbooks'
 
 export function ManualPedidoForm() {
     const router = useRouter()
     const { enqueueSnackbar } = useSnackbar()
     const [selectedCoursePrice, setSelectedCoursePrice] = useState<number>(0)
-    const [selectedEbookPrice, setSelectedEbookPrice] = useState<number>(0)
 
     const { data: usuariosData, isLoading: isLoadingUsuarios } = useUsuarios({ limit: '1000' })
     const { data: cursosData, isLoading: isLoadingCursos } = useCursos()
-    const { data: ebooksData, isLoading: isLoadingEbooks } = useAdminEbooks({ estado: 'PUBLICADO' })
 
     const usuarios = (usuariosData?.usuarios || []).filter(u => u.rol === 'ESTUDIANTE')
     const cursos = (cursosData?.cursos || []).filter(c => c.estado === 'PUBLICADO')
-    const ebooks = ebooksData || []
 
     const {
         control,
@@ -133,7 +129,7 @@ export function ManualPedidoForm() {
 
                                             const totalPrice = newValue.reduce((acc, curr) => acc + Number(curr.precio), 0)
 
-                                            setValue('precio', totalPrice + selectedEbookPrice)
+                                            setValue('precio', totalPrice)
                                             setSelectedCoursePrice(totalPrice)
                                         }}
                                         renderInput={(params) => (
@@ -159,7 +155,7 @@ export function ManualPedidoForm() {
                             />
                         </Grid>
 
-                        <Grid item xs={12} md={6}>
+                        {/* <Grid item xs={12} md={6}>
                             <Controller
                                 name='ebooks_ids'
                                 control={control}
@@ -200,7 +196,7 @@ export function ManualPedidoForm() {
                                     />
                                 )}
                             />
-                        </Grid>
+                        </Grid> */}
 
                         <Grid item xs={12} md={4}>
                             <Controller
@@ -214,7 +210,7 @@ export function ManualPedidoForm() {
                                         label='Precio del Pedido'
                                         placeholder='0.00'
                                         error={!!errors.precio}
-                                        helperText={errors.precio ? errors.precio.message : `Precio total sugerido: ${selectedCoursePrice + selectedEbookPrice}`}
+                                        helperText={errors.precio ? errors.precio.message : `Precio total sugerido: ${selectedCoursePrice}`}
                                         InputProps={{
                                             startAdornment: <Typography sx={{ mr: 2, color: 'text.secondary' }}>PEN</Typography>
                                         }}

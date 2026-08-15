@@ -60,7 +60,9 @@ function CertificadoCard({ cert }: { cert: MiCertificado }) {
     year: 'numeric'
   })
 
-  const puedeDescargar = !!cert.datos?.archivo_pdf || cert.curso.modo_certificado === 'AUTOMATICO'
+  const puedeDescargar =
+    cert.curso.certificacion_habilitada &&
+    (!!cert.datos?.archivo_pdf || cert.curso.modo_certificado === 'AUTOMATICO')
 
   return (
     <Card sx={{
@@ -180,7 +182,13 @@ function CertificadoCard({ cert }: { cert: MiCertificado }) {
 
           {/* Acciones */}
           <Box sx={{ display: 'flex', gap: 1 }}>
-            <Tooltip title={!puedeDescargar ? 'Tu certificado está en trámite, comunícate con el asesor.' : ''}>
+            <Tooltip title={
+              !cert.curso.certificacion_habilitada
+                ? 'La certificación de este curso está temporalmente deshabilitada.'
+                : !puedeDescargar
+                    ? 'Tu certificado está en trámite, comunícate con el asesor.'
+                    : ''
+            }>
               <span style={{ display: 'flex', flex: 1 }}>
                 <Button
                   fullWidth
@@ -191,7 +199,13 @@ function CertificadoCard({ cert }: { cert: MiCertificado }) {
                   disabled={downloading || !puedeDescargar}
                   sx={{ borderRadius: 2, fontWeight: 600, fontSize: '0.78rem' }}
                 >
-                  {downloading ? 'Descargando...' : !puedeDescargar ? 'En trámite' : 'Descargar PDF'}
+                  {downloading
+                    ? 'Descargando...'
+                    : !cert.curso.certificacion_habilitada
+                        ? 'Deshabilitado'
+                        : !puedeDescargar
+                            ? 'En trámite'
+                            : 'Descargar PDF'}
                 </Button>
               </span>
             </Tooltip>

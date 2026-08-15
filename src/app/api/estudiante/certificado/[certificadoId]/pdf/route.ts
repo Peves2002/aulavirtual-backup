@@ -26,7 +26,10 @@ export async function GET(request: Request, { params }: { params: { certificadoI
     // Verificar ownership
     const certificado = await prisma.certificado.findUnique({
       where: { id: certificadoId },
-      select: { usuario_id: true }
+      select: {
+        usuario_id: true,
+        curso: { select: { certificacion_habilitada: true } }
+      }
     })
 
     if (!certificado) {
@@ -35,6 +38,16 @@ export async function GET(request: Request, { params }: { params: { certificadoI
 
     if (certificado.usuario_id !== auth.user.id && auth.user.rol !== 'ADMIN') {
       return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
+    }
+
+    // La certificación puede deshabilitarse para un curso incluso después de emitido el
+    // certificado (ej. cursos síncronos donde se retiene hasta que terminen las clases en vivo).
+    // El admin siempre puede descargar/previsualizar sin importar este flag.
+    if (auth.user.rol !== 'ADMIN' && !certificado.curso.certificacion_habilitada) {
+      return NextResponse.json(
+        { error: 'La certificación de este curso aún no está habilitada' },
+        { status: 403 }
+      )
     }
 
     const { buffer, filename } = await getPdfBuffer(certificadoId, reqUrl, previewFlag)

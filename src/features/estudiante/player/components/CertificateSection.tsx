@@ -374,7 +374,13 @@ const CertificateSection = ({ cursoId, completarAutomatico, onAllLessonsComplete
                             </Typography>
                         </Box>
                         
-                        {(certificado.archivoPdf || modoCertificado === 'AUTOMATICO') ? (
+                        {!certificacionHabilitada ? (
+                            <Box sx={{ mt: 2, p: 2.5, borderRadius: '12px', bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider' }}>
+                                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
+                                    La certificación de este curso está temporalmente deshabilitada. Tu certificado ya fue emitido y podrás descargarlo apenas se habilite.
+                                </Typography>
+                            </Box>
+                        ) : (certificado.archivoPdf || modoCertificado === 'AUTOMATICO') ? (
                             <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
                                 <Button
                                     variant="contained"
