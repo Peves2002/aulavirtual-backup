@@ -1,4 +1,17 @@
 export type EstadoSuscripcion = 'ACTIVA' | 'CANCELADA' | 'VENCIDA' | 'PENDIENTE' | 'EN_PRUEBA'
+export type EstadoPagoSuscripcion = 'PENDIENTE' | 'COMPLETADO' | 'FALLIDO' | 'REEMBOLSADO'
+
+export interface PagoSuscripcionAdmin {
+  id: string
+  monto: number
+  moneda: string
+  estado: EstadoPagoSuscripcion
+  culqi_cargo_id: string | null
+  periodo_inicio: string | null
+  periodo_fin: string | null
+  intentos: number
+  creado_en: string
+}
 
 export interface SuscripcionAdmin {
   id: string

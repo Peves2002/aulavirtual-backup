@@ -28,12 +28,12 @@ export async function puedeAccederCurso(
     if (expira > new Date()) return { acceso: true, razon: 'INSCRIPCION' }
   }
 
-  // Verificar suscripción activa que incluya el curso
+  // Verificar suscripción activa: da acceso a todos los cursos excepto los excluidos del plan
   const suscripcion = await prisma.suscripcion.findFirst({
     where: {
       usuario_id: usuarioId,
       estado: { in: ['ACTIVA', 'EN_PRUEBA'] },
-      plan: { cursos: { some: { curso_id: cursoId } } }
+      plan: { cursos: { none: { curso_id: cursoId } } }
     }
   })
 

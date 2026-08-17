@@ -39,7 +39,7 @@ export function Hero() {
     <>
       <section
         id="inicio"
-        className="relative overflow-hidden w-full -mt-[5rem] min-h-[100vh] flex flex-col lg:flex-row lg:items-center bg-black lg:bg-transparent"
+        className="relative overflow-hidden w-full -mt-[5rem] min-h-[100vh] flex flex-col lg:flex-row lg:items-center bg-white lg:bg-transparent"
       >
         {/* Desktop: Carousel Background */}
         <div className="hidden lg:block absolute inset-0">
@@ -56,13 +56,13 @@ export function Hero() {
         </div>
 
         {/* Mobile Carousel Image Container */}
-        <div className="lg:hidden relative w-full bg-black">
+        <div className="lg:hidden relative w-full bg-white">
           <div className="relative w-full">
             {mobileImages.map((src, idx) => (
-              <img 
+              <img
                 key={src}
-                src={src} 
-                alt={`Hero Mobile ${idx + 1}`} 
+                src={src}
+                alt={`Hero Mobile ${idx + 1}`}
                 className={`w-full h-auto object-contain transition-opacity duration-1000 ${
                   idx === 0 ? "relative" : "absolute top-0 left-0"
                 } ${
@@ -70,8 +70,8 @@ export function Hero() {
                 }`}
               />
             ))}
-            {/* Smooth gradient fade to black at the bottom to blend with content */}
-            <div className="absolute bottom-0 left-0 w-full h-[250px] bg-gradient-to-t from-black via-black/80 to-transparent z-20 pointer-events-none" />
+            {/* Smooth gradient fade to white at the bottom to blend with content */}
+            <div className="absolute bottom-0 left-0 w-full h-[250px] bg-gradient-to-t from-white via-white/80 to-transparent z-20 pointer-events-none" />
             {/* Subtle gradient at top to ensure navbar visibility */}
             <div className="absolute top-0 left-0 w-full h-[100px] bg-gradient-to-b from-black/60 to-transparent z-20 pointer-events-none" />
           </div>
@@ -97,13 +97,13 @@ export function Hero() {
         {/* CONTENT */}
         <div className="relative lg:absolute lg:inset-0 z-20 w-full max-w-7xl mx-auto px-6 lg:px-10 flex flex-col justify-center flex-1 py-8 lg:py-0 bg-transparent -mt-[6rem] lg:mt-0 pt-0 lg:pt-[5rem]">
           <div className="max-w-2xl animate-fade-up">
-            <h1 className="font-display font-bold leading-[1.05] lg:leading-[1.15] mb-1 lg:mb-2 text-white lg:text-[#1A3A0A]"
+            <h1 className="font-display font-bold leading-[1.05] lg:leading-[1.15] mb-1 lg:mb-2 text-[#1A3A0A]"
                 style={{ fontSize: "clamp(48px, 8vw, 96px)" }}>
               Aprende a <br className="hidden lg:block"/>
               <span style={{ color: "#5A9020" }}>Cocinar</span>
             </h1>
 
-            <p className="text-white lg:text-[#1A3A0A] font-bold whitespace-nowrap leading-snug lg:leading-relaxed mb-8 lg:mb-12"
+            <p className="text-[#1A3A0A] font-bold whitespace-nowrap leading-snug lg:leading-relaxed mb-8 lg:mb-12"
                style={{ fontSize: "clamp(13px, 3.5vw, 28px)" }}>
               Deja de improvisar y <span style={{ color: "#5A9020" }}>empieza a ganar dinero.</span>
             </p>
@@ -123,7 +123,7 @@ export function Hero() {
 
               <Link 
                 href="/cursos"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 font-bold text-[14px] rounded-full px-8 py-4 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1 lg:bg-transparent bg-black"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 font-bold text-[14px] rounded-full px-8 py-4 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1 bg-transparent"
                 style={{ 
                   border: "2px solid #5A9020"
                 }}
@@ -168,25 +168,25 @@ export function Hero() {
                 <div className="w-11 h-11 rounded-full border border-[#5A9020] flex items-center justify-center mb-2">
                   <ChefHat size={22} className="text-[#5A9020]" strokeWidth={1.5} />
                 </div>
-                <span className="text-[9px] text-white/90 font-bold text-center leading-tight">CURSOS<br/>100% PRÁCTICOS</span>
+                <span className="text-[9px] text-[#1A3A0A]/80 font-bold text-center leading-tight">CURSOS<br/>100% PRÁCTICOS</span>
               </div>
               <div className="flex flex-col items-center">
                 <div className="w-11 h-11 rounded-full border border-[#5A9020] flex items-center justify-center mb-2">
                   <Coins size={22} className="text-[#5A9020]" strokeWidth={1.5} />
                 </div>
-                <span className="text-[9px] text-white/90 font-bold text-center leading-tight">NEGOCIOS<br/>RENTABLES</span>
+                <span className="text-[9px] text-[#1A3A0A]/80 font-bold text-center leading-tight">NEGOCIOS<br/>RENTABLES</span>
               </div>
               <div className="flex flex-col items-center">
                 <div className="w-11 h-11 rounded-full border border-[#5A9020] flex items-center justify-center mb-2">
                   <BookOpen size={22} className="text-[#5A9020]" strokeWidth={1.5} />
                 </div>
-                <span className="text-[9px] text-white/90 font-bold text-center leading-tight">RECETAS<br/>PROBADAS</span>
+                <span className="text-[9px] text-[#1A3A0A]/80 font-bold text-center leading-tight">RECETAS<br/>PROBADAS</span>
               </div>
               <div className="flex flex-col items-center">
                 <div className="w-11 h-11 rounded-full border border-[#5A9020] flex items-center justify-center mb-2">
                   <Users size={22} className="text-[#5A9020]" strokeWidth={1.5} />
                 </div>
-                <span className="text-[9px] text-white/90 font-bold text-center leading-tight">MENTORÍA<br/>PERSONALIZADA</span>
+                <span className="text-[9px] text-[#1A3A0A]/80 font-bold text-center leading-tight">MENTORÍA<br/>PERSONALIZADA</span>
               </div>
             </div>
           </div>

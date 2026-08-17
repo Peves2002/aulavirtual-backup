@@ -52,7 +52,6 @@ const initialForm = {
   precio: '',
   moneda: 'PEN',
   intervalo: 'MENSUAL' as IntervaloSuscripcion,
-  dias_prueba: '0',
   esta_activo: true
 }
 
@@ -71,7 +70,6 @@ const PlanSuscripcionForm = ({ open, handleClose, planToEdit, cursosDisponibles 
         precio: String(planToEdit.precio),
         moneda: planToEdit.moneda,
         intervalo: planToEdit.intervalo,
-        dias_prueba: String(planToEdit.dias_prueba),
         esta_activo: planToEdit.esta_activo
       })
       setCursosSeleccionados(planToEdit.cursos?.map(c => c.curso) ?? [])
@@ -110,19 +108,12 @@ const PlanSuscripcionForm = ({ open, handleClose, planToEdit, cursosDisponibles 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
 
-    if (cursosSeleccionados.length === 0) {
-      toast.error('Debes seleccionar al menos un curso')
-
-      return
-    }
-
     const payload = {
       nombre: formData.nombre,
       descripcion: formData.descripcion || null,
       precio: Number(formData.precio),
       moneda: formData.moneda,
       intervalo: formData.intervalo,
-      dias_prueba: Number(formData.dias_prueba),
       esta_activo: formData.esta_activo,
       beneficios,
       cursoIds: cursosSeleccionados.map(c => c.id)
@@ -201,7 +192,7 @@ const PlanSuscripcionForm = ({ open, handleClose, planToEdit, cursosDisponibles 
               <MenuItem value='USD'>USD (Dólares)</MenuItem>
             </CustomTextField>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
             <CustomTextField
               select
               fullWidth
@@ -217,46 +208,28 @@ const PlanSuscripcionForm = ({ open, handleClose, planToEdit, cursosDisponibles 
               ))}
             </CustomTextField>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <CustomTextField
-              fullWidth
-              label='Días de Prueba'
-              type='number'
-              placeholder='0'
-              inputProps={{ min: 0 }}
-              value={formData.dias_prueba}
-              onChange={e => setFormData({ ...formData, dias_prueba: e.target.value })}
-            />
-          </Grid>
 
-          {/* ── CURSOS INCLUIDOS ──────────────────────────── */}
+          {/* ── CURSOS EXCLUIDOS ──────────────────────────── */}
           <Grid item xs={12}>
             <Divider sx={{ mb: 1 }} />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
               <Typography variant='body2' color='text.secondary'>
-                Cursos incluidos en el plan *
+                Cursos excluidos del plan (opcional)
               </Typography>
-              <Box sx={{ display: 'flex', gap: 1 }}>
+              {cursosSeleccionados.length > 0 && (
                 <Button
                   size='small'
                   variant='tonal'
-                  onClick={() => setCursosSeleccionados([...cursosDisponibles])}
-                  disabled={cursosDisponibles.length === 0 || cursosSeleccionados.length === cursosDisponibles.length}
+                  color='secondary'
+                  onClick={() => setCursosSeleccionados([])}
                 >
-                  Seleccionar todos ({cursosDisponibles.length})
+                  Quitar exclusiones
                 </Button>
-                {cursosSeleccionados.length > 0 && (
-                  <Button
-                    size='small'
-                    variant='tonal'
-                    color='secondary'
-                    onClick={() => setCursosSeleccionados([])}
-                  >
-                    Limpiar
-                  </Button>
-                )}
-              </Box>
+              )}
             </Box>
+            <Typography variant='caption' color='text.secondary' sx={{ display: 'block', mb: 2 }}>
+              La suscripción da acceso a todos los cursos de la plataforma. Selecciona aquí los cursos que quieres excluir de este plan.
+            </Typography>
             <Autocomplete
               multiple
               options={cursosDisponibles}
@@ -266,13 +239,13 @@ const PlanSuscripcionForm = ({ open, handleClose, planToEdit, cursosDisponibles 
               onChange={(_, newValue) => setCursosSeleccionados(newValue)}
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
-                  <Chip label={option.titulo} size='small' {...getTagProps({ index })} key={option.id} />
+                  <Chip label={option.titulo} size='small' color='error' variant='tonal' {...getTagProps({ index })} key={option.id} />
                 ))
               }
               renderInput={params => (
                 <TextField
                   {...params}
-                  placeholder={cursosSeleccionados.length === 0 ? 'Selecciona cursos o usa "Seleccionar todos"' : ''}
+                  placeholder={cursosSeleccionados.length === 0 ? 'Sin exclusiones: acceso a todos los cursos' : ''}
                 />
               )}
               noOptionsText='No hay cursos disponibles'

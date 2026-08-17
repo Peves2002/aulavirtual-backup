@@ -80,88 +80,56 @@ const PlanCard = ({ plan, onSuscribirse, suscritoActualmente = false }: PlanCard
           </Typography>
         </Box>
 
-        {plan.dias_prueba > 0 && (
-          <Chip
-            label={`${plan.dias_prueba} días gratis`}
-            color='info'
-            size='small'
-            variant='tonal'
-            sx={{
-              fontWeight: 700,
-              fontSize: '0.7rem',
-              borderRadius: '8px',
-              mb: 2.5
-            }}
-          />
-        )}
 
         <Divider sx={{ my: 2.5, borderColor: '#f1f5f9' }} />
 
         {(() => {
           const beneficios: string[] = Array.isArray(plan.beneficios) ? plan.beneficios : []
           const tieneBeneficios = beneficios.length > 0
-
-          if (tieneBeneficios) {
-            return (
-              <>
-                <Typography variant='subtitle2' sx={{ fontWeight: 700, color: '#475569', mb: 1.5, textTransform: 'uppercase', fontSize: '0.725rem', letterSpacing: '0.05em' }}>
-                  ¿Qué incluye?
-                </Typography>
-                <List dense disablePadding sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  {beneficios.map((beneficio, idx) => (
-                    <ListItem key={idx} disablePadding disableGutters sx={{ alignItems: 'flex-start' }}>
-                      <ListItemIcon sx={{ minWidth: 22, mt: 0.2 }}>
-                        <i className='tabler-check' style={{ color: 'var(--web-primary,#25927F)', fontSize: 14, fontWeight: 900 }} />
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={beneficio}
-                        primaryTypographyProps={{ variant: 'body2', sx: { lineHeight: 1.4, color: '#475569', fontWeight: 500 } }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-                {plan.cursos.length > 0 && (
-                  <Box sx={{
-                    mt: 2.5, display: 'flex', alignItems: 'center', gap: 1,
-                    bgcolor: '#f8fafc', border: '1px solid #f1f5f9',
-                    p: 1.25, borderRadius: '12px'
-                  }}>
-                    <i className='tabler-book-2' style={{ color: '#64748b', fontSize: 16 }} />
-                    <Typography variant='caption' fontWeight={700} color='text.secondary'>
-                      {plan.cursos.length} curso{plan.cursos.length !== 1 ? 's' : ''} incluido{plan.cursos.length !== 1 ? 's' : ''}
-                    </Typography>
-                  </Box>
-                )}
-              </>
-            )
-          }
+          const tieneExclusiones = plan.cursos.length > 0
 
           return (
             <>
-              <Typography variant='subtitle2' sx={{ fontWeight: 700, color: '#475569', mb: 1.5, textTransform: 'uppercase', fontSize: '0.725rem', letterSpacing: '0.05em' }}>
-                Cursos incluidos ({plan.cursos.length}):
-              </Typography>
-              <List dense disablePadding sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                {plan.cursos.slice(0, 5).map(c => (
-                  <ListItem key={c.curso_id} disablePadding disableGutters sx={{ alignItems: 'flex-start' }}>
-                    <ListItemIcon sx={{ minWidth: 22, mt: 0.2 }}>
-                      <i className='tabler-check' style={{ color: 'var(--web-primary,#25927F)', fontSize: 14, fontWeight: 900 }} />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={c.curso.titulo}
-                      primaryTypographyProps={{ variant: 'body2', sx: { lineHeight: 1.4, color: '#475569', fontWeight: 500 } }}
-                    />
-                  </ListItem>
-                ))}
-                {plan.cursos.length > 5 && (
-                  <ListItem disablePadding disableGutters>
-                    <ListItemText
-                      primary={`+${plan.cursos.length - 5} cursos más`}
-                      primaryTypographyProps={{ variant: 'caption', color: 'text.secondary', sx: { fontWeight: 600, pl: '22px' } }}
-                    />
-                  </ListItem>
-                )}
-              </List>
+              {tieneBeneficios && (
+                <>
+                  <Typography variant='subtitle2' sx={{ fontWeight: 700, color: '#475569', mb: 1.5, textTransform: 'uppercase', fontSize: '0.725rem', letterSpacing: '0.05em' }}>
+                    ¿Qué incluye?
+                  </Typography>
+                  <List dense disablePadding sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    {beneficios.map((beneficio, idx) => (
+                      <ListItem key={idx} disablePadding disableGutters sx={{ alignItems: 'flex-start' }}>
+                        <ListItemIcon sx={{ minWidth: 22, mt: 0.2 }}>
+                          <i className='tabler-check' style={{ color: 'var(--web-primary,#25927F)', fontSize: 14, fontWeight: 900 }} />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={beneficio}
+                          primaryTypographyProps={{ variant: 'body2', sx: { lineHeight: 1.4, color: '#475569', fontWeight: 500 } }}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </>
+              )}
+
+              <Box sx={{
+                mt: tieneBeneficios ? 2.5 : 0, display: 'flex', alignItems: 'center', gap: 1,
+                bgcolor: '#f8fafc', border: '1px solid #f1f5f9',
+                p: 1.25, borderRadius: '12px'
+              }}>
+                <i className='tabler-book-2' style={{ color: '#64748b', fontSize: 16 }} />
+                <Typography variant='caption' fontWeight={700} color='text.secondary'>
+                  {tieneExclusiones
+                    ? `Acceso a todos los cursos, excepto ${plan.cursos.length}`
+                    : 'Acceso a todos los cursos de la plataforma'}
+                </Typography>
+              </Box>
+
+              {tieneExclusiones && (
+                <Typography variant='caption' color='text.secondary' sx={{ display: 'block', mt: 1, lineHeight: 1.4 }}>
+                  No incluye: {plan.cursos.slice(0, 3).map(c => c.curso.titulo).join(', ')}
+                  {plan.cursos.length > 3 && ` y ${plan.cursos.length - 3} más`}
+                </Typography>
+              )}
             </>
           )
         })()}

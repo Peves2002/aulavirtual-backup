@@ -52,3 +52,12 @@ export function useSyncSuscripciones() {
     onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY })
   })
 }
+
+export function usePagosSuscripcionAdmin(id: string | null) {
+  return useQuery({
+    queryKey: ['admin-suscripcion-pagos', id],
+    queryFn: () => factory().getPagos(id as string),
+    enabled: !!id,
+    staleTime: 15_000
+  })
+}

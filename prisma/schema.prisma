@@ -866,6 +866,8 @@ model PlanSuscripcion {
   culqi_short_name     String?              @unique
   creado_en            DateTime             @default(now())
   actualizado_en       DateTime             @updatedAt
+  // Cursos EXCLUIDOS del plan: toda suscripción activa da acceso a todos los cursos
+  // publicados por defecto, salvo los listados aquí.
   cursos               CursoEnPlan[]
   suscripciones        Suscripcion[]
 
@@ -873,6 +875,7 @@ model PlanSuscripcion {
   @@map("planes_suscripcion")
 }
 
+// Relación plan-curso usada como lista de EXCLUSIÓN (ver PlanSuscripcion.cursos)
 model CursoEnPlan {
   plan_id  String
   curso_id String

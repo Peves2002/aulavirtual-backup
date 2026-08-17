@@ -122,12 +122,16 @@ export function PlanesSuscripcionPage({ initialData, cursosInitialData }: Planes
     }),
     columnHelper.display({
       id: 'cursos',
-      header: 'Cursos',
-      cell: ({ row }) => (
-        <Typography color='text.secondary'>
-          {row.original._count?.cursos ?? row.original.cursos?.length ?? 0} curso(s)
-        </Typography>
-      )
+      header: 'Cursos excluidos',
+      cell: ({ row }) => {
+        const excluidos = row.original._count?.cursos ?? row.original.cursos?.length ?? 0
+
+        return (
+          <Typography color='text.secondary'>
+            {excluidos > 0 ? `${excluidos} curso(s)` : 'Ninguno (todos incluidos)'}
+          </Typography>
+        )
+      }
     }),
     columnHelper.display({
       id: 'suscriptores',

@@ -72,7 +72,6 @@ const PlanCheckoutModal = ({ open, handleClose, plan, onSuccess }: PlanCheckoutM
       </Typography>
       <Typography variant='body2' color='text.secondary' mb={3}>
         {plan.moneda === 'PEN' ? 'S/' : '$'} {Number(plan.precio).toFixed(2)} / {INTERVALO_LABELS[plan.intervalo]?.toLowerCase()}
-        {plan.dias_prueba > 0 && ` · ${plan.dias_prueba} días de prueba gratis`}
       </Typography>
 
       {error && (

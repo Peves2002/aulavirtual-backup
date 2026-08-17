@@ -28,6 +28,13 @@ const ESTADO_CONFIG: Record<string, { label: string; color: 'success' | 'error' 
   CANCELADA: { label: 'Cancelada', color: 'secondary' }
 }
 
+const ESTADO_PAGO_CONFIG: Record<string, { label: string; color: 'success' | 'error' | 'warning' | 'secondary' }> = {
+  COMPLETADO: { label: 'Completado', color: 'success' },
+  PENDIENTE:  { label: 'Pendiente', color: 'warning' },
+  FALLIDO:    { label: 'Fallido', color: 'error' },
+  REEMBOLSADO: { label: 'Reembolsado', color: 'secondary' }
+}
+
 interface SuscripcionCardProps {
   suscripcion: Suscripcion
 }
@@ -281,76 +288,109 @@ const SuscripcionCard = ({ suscripcion }: SuscripcionCardProps) => {
           {(() => {
             const beneficios: string[] = Array.isArray(suscripcion.plan.beneficios) ? suscripcion.plan.beneficios : []
             const tieneBeneficios = beneficios.length > 0
-
-            if (tieneBeneficios) {
-              return (
-                <>
-                  <Typography variant='subtitle2' sx={{ fontWeight: 700, color: '#475569', mb: 2, textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
-                    Beneficios de tu membresía:
-                  </Typography>
-                  <Grid container spacing={1.5}>
-                    {beneficios.map((beneficio, idx) => (
-                      <Grid item xs={12} sm={6} key={idx}>
-                        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
-                          <Box sx={{
-                            width: 18, height: 18, borderRadius: '50%',
-                            bgcolor: 'rgba(37,146,127,0.08)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            flexShrink: 0, mt: 0.2
-                          }}>
-                            <i className='tabler-check' style={{ color: 'var(--web-primary,#25927F)', fontSize: 12, fontWeight: 900 }} />
-                          </Box>
-                          <Typography variant='body2' color='text.secondary' sx={{ lineHeight: 1.4, fontWeight: 500 }}>
-                            {beneficio}
-                          </Typography>
-                        </Box>
-                      </Grid>
-                    ))}
-                  </Grid>
-                  {suscripcion.plan.cursos.length > 0 && (
-                    <Box sx={{
-                      mt: 3, display: 'inline-flex', alignItems: 'center', gap: 1,
-                      bgcolor: '#f8fafc', border: '1px solid #e2e8f0',
-                      px: 2, py: 1, borderRadius: '12px'
-                    }}>
-                      <i className='tabler-book-2' style={{ color: '#64748b', fontSize: 16 }} />
-                      <Typography variant='caption' fontWeight={700} color='text.secondary'>
-                        {suscripcion.plan.cursos.length} curso{suscripcion.plan.cursos.length !== 1 ? 's' : ''} incluido{suscripcion.plan.cursos.length !== 1 ? 's' : ''} en tu suscripción
-                      </Typography>
-                    </Box>
-                  )}
-                </>
-              )
-            }
+            const tieneExclusiones = suscripcion.plan.cursos.length > 0
 
             return (
               <>
-                <Typography variant='subtitle2' sx={{ fontWeight: 700, color: '#475569', mb: 2, textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
-                  Cursos incluidos:
-                </Typography>
-                <Grid container spacing={1.5}>
-                  {suscripcion.plan.cursos.map(c => (
-                    <Grid item xs={12} sm={6} key={c.curso_id}>
-                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
-                        <Box sx={{
-                          width: 18, height: 18, borderRadius: '50%',
-                          bgcolor: 'rgba(37,146,127,0.08)',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          flexShrink: 0, mt: 0.2
-                        }}>
-                          <i className='tabler-check' style={{ color: 'var(--web-primary,#25927F)', fontSize: 12, fontWeight: 900 }} />
-                        </Box>
-                        <Typography variant='body2' color='text.secondary' sx={{ lineHeight: 1.4, fontWeight: 500 }}>
-                          {c.curso.titulo}
-                        </Typography>
-                      </Box>
+                {tieneBeneficios && (
+                  <>
+                    <Typography variant='subtitle2' sx={{ fontWeight: 700, color: '#475569', mb: 2, textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
+                      Beneficios de tu membresía:
+                    </Typography>
+                    <Grid container spacing={1.5}>
+                      {beneficios.map((beneficio, idx) => (
+                        <Grid item xs={12} sm={6} key={idx}>
+                          <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                            <Box sx={{
+                              width: 18, height: 18, borderRadius: '50%',
+                              bgcolor: 'rgba(37,146,127,0.08)',
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              flexShrink: 0, mt: 0.2
+                            }}>
+                              <i className='tabler-check' style={{ color: 'var(--web-primary,#25927F)', fontSize: 12, fontWeight: 900 }} />
+                            </Box>
+                            <Typography variant='body2' color='text.secondary' sx={{ lineHeight: 1.4, fontWeight: 500 }}>
+                              {beneficio}
+                            </Typography>
+                          </Box>
+                        </Grid>
+                      ))}
                     </Grid>
-                  ))}
-                </Grid>
+                  </>
+                )}
+
+                <Box sx={{
+                  mt: tieneBeneficios ? 3 : 0, display: 'inline-flex', alignItems: 'center', gap: 1,
+                  bgcolor: '#f8fafc', border: '1px solid #e2e8f0',
+                  px: 2, py: 1, borderRadius: '12px'
+                }}>
+                  <i className='tabler-book-2' style={{ color: '#64748b', fontSize: 16 }} />
+                  <Typography variant='caption' fontWeight={700} color='text.secondary'>
+                    {tieneExclusiones
+                      ? `Acceso a todos los cursos, excepto ${suscripcion.plan.cursos.length}`
+                      : 'Acceso a todos los cursos de la plataforma'}
+                  </Typography>
+                </Box>
+
+                {tieneExclusiones && (
+                  <Typography variant='caption' color='text.secondary' sx={{ display: 'block', mt: 1, lineHeight: 1.4 }}>
+                    No incluye: {suscripcion.plan.cursos.slice(0, 3).map(c => c.curso.titulo).join(', ')}
+                    {suscripcion.plan.cursos.length > 3 && ` y ${suscripcion.plan.cursos.length - 3} más`}
+                  </Typography>
+                )}
               </>
             )
           })()}
         </Box>
+
+        {suscripcion.pagos.length > 0 && (
+          <>
+            <Divider sx={{ my: 3, borderColor: '#f1f5f9' }} />
+
+            <Box>
+              <Typography variant='subtitle2' sx={{ fontWeight: 700, color: '#475569', mb: 2, textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
+                Últimos pagos
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
+                {suscripcion.pagos.map(pago => {
+                  const cfgPago = ESTADO_PAGO_CONFIG[pago.estado] ?? { label: pago.estado, color: 'secondary' as const }
+
+                  return (
+                    <Box
+                      key={pago.id}
+                      sx={{
+                        p: 1.75,
+                        borderRadius: '14px',
+                        border: '1px solid #f1f5f9',
+                        bgcolor: '#f8fafc',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: 1.5,
+                        flexWrap: 'wrap'
+                      }}
+                    >
+                      <Box>
+                        <Typography variant='body2' sx={{ fontWeight: 700, color: '#334155' }}>
+                          {pago.moneda === 'PEN' ? 'S/' : '$'} {Number(pago.monto).toFixed(2)}
+                        </Typography>
+                        <Typography variant='caption' color='text.secondary'>
+                          <HydratedDate date={pago.creado_en} format='date' />
+                        </Typography>
+                      </Box>
+                      <Chip
+                        label={cfgPago.label}
+                        color={cfgPago.color}
+                        size='small'
+                        sx={{ fontWeight: 700, fontSize: '0.7rem' }}
+                      />
+                    </Box>
+                  )
+                })}
+              </Box>
+            </Box>
+          </>
+        )}
 
         {suscripcion.estado === 'ACTIVA' && (
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>

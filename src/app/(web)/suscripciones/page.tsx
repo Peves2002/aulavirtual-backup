@@ -71,7 +71,6 @@ export default async function SuscripcionesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               { q: '¿Puedo cancelar mi suscripción en cualquier momento?', r: 'Sí, por supuesto. Puedes cancelar tu suscripción de manera inmediata desde tu panel de estudiante. Mantendrás el acceso hasta el final de tu periodo de facturación actual.' },
-              { q: '¿Cómo funciona el periodo de prueba gratis?', r: 'Si eliges un plan con días de prueba, tu tarjeta no recibirá ningún cargo hasta que finalice dicho periodo. Puedes cancelar antes del cobro sin costo alguno.' },
               { q: '¿Tengo acceso a todos los cursos y recetarios?', r: 'Sí. Todos los planes activos te dan un pase de acceso total a nuestra biblioteca de cursos, recetarios completos y mentoría grupal.' },
               { q: '¿Ofrecen certificados al finalizar?', r: '¡Sí! Al completar el 100% de cualquier curso en vivo o grabado, recibirás automáticamente tu certificado digital firmado a tu nombre.' }
             ].map(({ q, r }, idx) => (

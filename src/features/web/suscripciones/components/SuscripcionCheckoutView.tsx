@@ -290,11 +290,7 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
               }}>
                 <Typography sx={{ fontFamily: FONT, fontSize: '0.8125rem', color: '#475569', lineHeight: 1.6 }}>
                   Al hacer click en <strong>Activar suscripción</strong> se abrirá la ventana segura de Culqi para ingresar los datos de tu tarjeta.
-                  {plan.dias_prueba > 0 ? (
-                    <> Los primeros <strong>{plan.dias_prueba} días son gratis</strong>, luego se cobrará automáticamente cada <strong>{INTERVALO_LABELS[plan.intervalo]?.toLowerCase()}</strong>.</>
-                  ) : (
-                    <> El primer cobro se realizará hoy y luego de forma automática cada <strong>{INTERVALO_LABELS[plan.intervalo]?.toLowerCase()}</strong>.</>
-                  )}
+                  {' '}El primer cobro se realizará hoy y luego de forma automática cada <strong>{INTERVALO_LABELS[plan.intervalo]?.toLowerCase()}</strong>.
                 </Typography>
               </Box>
 
@@ -453,18 +449,10 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
                     /{INTERVALO_LABELS[plan.intervalo]?.toLowerCase()}
                   </Typography>
                 </Box>
-                {plan.dias_prueba > 0 && (
-                  <Box sx={{ mt: 1.5, display: 'inline-flex', alignItems: 'center', gap: '6px', bgcolor: '#f0fdf4', borderRadius: '20px', px: 1.5, py: 0.5, border: '1px solid #bbf7d0' }}>
-                    <Check size={12} color="#16a34a" strokeWidth={3} />
-                    <Typography sx={{ fontFamily: FONT, fontSize: '0.75rem', fontWeight: 700, color: '#16a34a' }}>
-                      {plan.dias_prueba} días gratis incluidos
-                    </Typography>
-                  </Box>
-                )}
               </Box>
 
               <Box sx={{ p: 3.5 }}>
-                {tieneBeneficios ? (
+                {tieneBeneficios && (
                   <>
                     <Typography sx={{ fontFamily: FONT, fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 2 }}>
                       ¿Qué incluye?
@@ -486,42 +474,26 @@ export function SuscripcionCheckoutView({ plan, culqiPublicKey }: SuscripcionChe
                         </Box>
                       ))}
                     </Box>
-                    {plan.cursos.length > 0 && (
-                      <Box sx={{
-                        display: 'flex', alignItems: 'center', gap: 1,
-                        mt: 2.5, p: 1.5, borderRadius: '12px',
-                        bgcolor: '#f8fafc', border: '1px solid #f1f5f9'
-                      }}>
-                        <BookOpen size={15} color="#64748b" />
-                        <Typography sx={{ fontFamily: FONT, fontSize: '0.8125rem', color: '#475569', fontWeight: 600 }}>
-                          {plan.cursos.length} curso{plan.cursos.length !== 1 ? 's' : ''} incluido{plan.cursos.length !== 1 ? 's' : ''}
-                        </Typography>
-                      </Box>
-                    )}
                   </>
-                ) : (
-                  <>
-                    <Typography sx={{ fontFamily: FONT, fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 2 }}>
-                      Incluye {plan.cursos.length} curso{plan.cursos.length !== 1 ? 's' : ''}
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                      {plan.cursos.map(c => (
-                        <Box key={c.curso_id} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
-                          <Box sx={{
-                            width: 18, height: 18, borderRadius: '50%',
-                            bgcolor: 'rgba(90,144,32,0.1)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            flexShrink: 0, mt: 0.15
-                          }}>
-                            <Check size={11} color="#5A9020" strokeWidth={3} />
-                          </Box>
-                          <Typography sx={{ fontFamily: FONT, fontSize: '0.875rem', color: '#334155', lineHeight: 1.4 }}>
-                            {c.curso.titulo}
-                          </Typography>
-                        </Box>
-                      ))}
-                    </Box>
-                  </>
+                )}
+
+                <Box sx={{
+                  display: 'flex', alignItems: 'center', gap: 1,
+                  mt: tieneBeneficios ? 2.5 : 0, p: 1.5, borderRadius: '12px',
+                  bgcolor: '#f8fafc', border: '1px solid #f1f5f9'
+                }}>
+                  <BookOpen size={15} color="#64748b" />
+                  <Typography sx={{ fontFamily: FONT, fontSize: '0.8125rem', color: '#475569', fontWeight: 600 }}>
+                    {plan.cursos.length > 0
+                      ? `Acceso a todos los cursos, excepto ${plan.cursos.length}`
+                      : 'Acceso a todos los cursos de la plataforma'}
+                  </Typography>
+                </Box>
+
+                {plan.cursos.length > 0 && (
+                  <Typography sx={{ fontFamily: FONT, fontSize: '0.75rem', color: '#94a3b8', mt: 1.25, lineHeight: 1.4 }}>
+                    No incluye: {plan.cursos.map(c => c.curso.titulo).join(', ')}
+                  </Typography>
                 )}
               </Box>
             </Box>

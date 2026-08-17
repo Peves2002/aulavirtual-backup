@@ -34,6 +34,7 @@ import { useSuscripcionesAdmin, useCancelarSuscripcionAdmin, useSyncSuscripcione
 import type { SuscripcionAdmin, EstadoSuscripcion } from '../entity/Suscripcion'
 import { INTERVALO_LABELS } from '@/features/admin/planes-suscripcion/entity/PlanSuscripcion'
 import { EditarSuscripcionModal } from '../components/EditarSuscripcionModal'
+import { HistorialPagosModal } from '../components/HistorialPagosModal'
 
 const columnHelper = createColumnHelper<SuscripcionAdmin>()
 
@@ -48,6 +49,7 @@ const ESTADO_CONFIG: Record<EstadoSuscripcion, { label: string; color: 'success'
 export function SuscripcionesAdminPage() {
   const [estadoFiltro, setEstadoFiltro] = useState('')
   const [editando, setEditando] = useState<SuscripcionAdmin | null>(null)
+  const [verHistorial, setVerHistorial] = useState<SuscripcionAdmin | null>(null)
   const { data, isLoading, isError, error } = useSuscripcionesAdmin(estadoFiltro ? { estado: estadoFiltro } : {})
   const cancelar = useCancelarSuscripcionAdmin()
   const sync = useSyncSuscripciones()
@@ -123,7 +125,14 @@ export function SuscripcionesAdminPage() {
     columnHelper.accessor('_count', {
       header: 'Pagos',
       cell: ({ row }) => (
-        <Typography variant='body2'>{row.original._count.pagos}</Typography>
+        <Button
+          size='small'
+          variant='text'
+          onClick={() => setVerHistorial(row.original)}
+          sx={{ minWidth: 0, p: 0.5, textTransform: 'none', fontWeight: 600 }}
+        >
+          {row.original._count.pagos}
+        </Button>
       )
     }),
     columnHelper.accessor('creado_en', {
@@ -269,6 +278,12 @@ export function SuscripcionesAdminPage() {
         open={!!editando}
         suscripcion={editando}
         handleClose={() => setEditando(null)}
+      />
+
+      <HistorialPagosModal
+        open={!!verHistorial}
+        suscripcion={verHistorial}
+        handleClose={() => setVerHistorial(null)}
       />
     </Card>
   )

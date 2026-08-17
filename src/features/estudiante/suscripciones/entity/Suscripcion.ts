@@ -9,11 +9,14 @@ export interface PlanResumen {
   intervalo: 'MENSUAL' | 'TRIMESTRAL' | 'SEMESTRAL' | 'ANUAL'
   dias_prueba: number
   beneficios: string[]
+
+  // Cursos EXCLUIDOS del plan (el plan da acceso a todos los demás)
   cursos: {
     plan_id: string
     curso_id: string
     curso: { id: string; titulo: string; miniatura: string | null }
   }[]
+  cursosIncluidosCount: number
 }
 
 export interface PagoSuscripcion {
@@ -52,11 +55,14 @@ export interface PlanPublico {
   dias_prueba: number
   esta_activo: boolean
   beneficios: string[]
+
+  // Cursos EXCLUIDOS del plan (el plan da acceso a todos los demás)
   cursos: {
     plan_id: string
     curso_id: string
     curso: { id: string; titulo: string; miniatura: string | null; estado: string }
   }[]
+  cursosIncluidosCount: number
   _count: { suscripciones: number }
 }
 

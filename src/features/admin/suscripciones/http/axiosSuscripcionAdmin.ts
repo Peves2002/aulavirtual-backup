@@ -3,7 +3,7 @@ import type { AxiosStatic } from 'axios'
 
 import { getBaseURL } from '@/utils/env'
 import { AxiosInternalHttpClient } from '@/features/shared/http/httpClient'
-import type { SuscripcionAdmin } from '../entity/Suscripcion'
+import type { SuscripcionAdmin, PagoSuscripcionAdmin } from '../entity/Suscripcion'
 
 type Params = {
   axiosLib?: AxiosStatic
@@ -51,6 +51,16 @@ export class AxiosSuscripcionAdmin extends AxiosInternalHttpClient {
   async sync(): Promise<{ revisadas: number; pagosNuevos: number; estadosActualizados: number; errores: number }> {
     try {
       return await this.iPost('/sync')
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
+  async getPagos(id: string): Promise<{ pagos: PagoSuscripcionAdmin[] }> {
+    try {
+      const res = await this.iGet<{ pagos: PagoSuscripcionAdmin[] }>(`/${id}/pagos`)
+
+      return res ?? { pagos: [] }
     } catch (err: any) {
       throw err?.response?.data ?? err
     }

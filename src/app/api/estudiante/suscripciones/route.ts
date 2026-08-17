@@ -37,7 +37,20 @@ export async function GET(request: Request) {
       }
     })
 
-    return ApiResponse.success(request, { suscripcion })
+    if (!suscripcion) return ApiResponse.success(request, { suscripcion: null })
+
+    // cursos = lista de EXCLUSIÓN del plan; se da acceso a todos los cursos publicados salvo esos
+    const totalCursosPublicados = await prisma.curso.count({ where: { estado: 'PUBLICADO' } })
+
+    const suscripcionConAcceso = {
+      ...suscripcion,
+      plan: {
+        ...suscripcion.plan,
+        cursosIncluidosCount: Math.max(totalCursosPublicados - suscripcion.plan.cursos.length, 0)
+      }
+    }
+
+    return ApiResponse.success(request, { suscripcion: suscripcionConAcceso })
   } catch (error) {
     return handleApiError(error, request)
   }

@@ -21,9 +21,12 @@ export const crearPlanSchema = z.object({
     .array(z.string().trim().min(1, 'El beneficio no puede estar vacío'))
     .optional()
     .default([]),
+
+  // IDs de cursos EXCLUIDOS del plan. Vacío (default) = acceso a todos los cursos.
   cursoIds: z
     .array(z.string().uuid('ID de curso inválido'))
-    .min(1, 'Se requiere al menos un curso')
+    .optional()
+    .default([])
 })
 
 export type CrearPlanDto = z.infer<typeof crearPlanSchema>

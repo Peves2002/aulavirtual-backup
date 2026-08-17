@@ -94,17 +94,12 @@ export function PlanesPublicos({ planes }: PlanesPublicosProps) {
                 </span>
               </div>
 
-              {plan.dias_prueba > 0 && (
-                <span className="inline-block mb-6 bg-[#EAF7D0] text-[#2D5010] text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                  {plan.dias_prueba} días de prueba gratis
-                </span>
-              )}
 
               <div className="h-px w-full bg-gray-100 mb-6"></div>
 
               {/* Beneficios */}
               <div className="mb-8">
-                {tieneBeneficios ? (
+                {tieneBeneficios && (
                   <>
                     <p className="font-display text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">
                       ¿Qué incluye este plan?
@@ -121,39 +116,23 @@ export function PlanesPublicos({ planes }: PlanesPublicosProps) {
                         </li>
                       ))}
                     </ul>
+                  </>
+                )}
 
-                    {plan.cursos.length > 0 && (
-                      <div className="flex items-center gap-2 mt-6 p-3 bg-[#F7FBF0] border border-[#EAF7D0] rounded-2xl">
-                        <BookOpen size={16} className="text-[#5A9020]" />
-                        <span className="font-display text-[12px] text-[#2D5010] font-semibold">
-                          {plan.cursos.length} curso{plan.cursos.length !== 1 ? 's' : ''} incluido{plan.cursos.length !== 1 ? 's' : ''}
-                        </span>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <p className="font-display text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">
-                      Incluye {plan.cursos.length} curso{plan.cursos.length !== 1 ? 's' : ''}
-                    </p>
-                    <ul className="space-y-3">
-                      {plan.cursos.slice(0, 5).map(c => (
-                        <li key={c.curso_id} className="flex items-start gap-3">
-                          <div className="mt-0.5 w-5 h-5 rounded-full bg-[#EAF7D0] flex items-center justify-center flex-shrink-0">
-                            <Check size={12} className="text-[#5A9020]" strokeWidth={3} />
-                          </div>
-                          <span className="text-[#1A3A0A] text-[14px] leading-snug">
-                            {c.curso.titulo}
-                          </span>
-                        </li>
-                      ))}
-                      {plan.cursos.length > 5 && (
-                        <li className="pl-8 text-[12px] text-gray-400 font-medium">
-                          +{plan.cursos.length - 5} cursos más en el catálogo
-                        </li>
-                      )}
-                    </ul>
-                  </>
+                <div className={`flex items-center gap-2 p-3 bg-[#F7FBF0] border border-[#EAF7D0] rounded-2xl ${tieneBeneficios ? 'mt-6' : ''}`}>
+                  <BookOpen size={16} className="text-[#5A9020]" />
+                  <span className="font-display text-[12px] text-[#2D5010] font-semibold">
+                    {plan.cursos.length > 0
+                      ? `Acceso a todos los cursos, excepto ${plan.cursos.length}`
+                      : 'Acceso a todos los cursos de la plataforma'}
+                  </span>
+                </div>
+
+                {plan.cursos.length > 0 && (
+                  <p className="text-[12px] text-gray-400 font-medium mt-2 leading-snug">
+                    No incluye: {plan.cursos.slice(0, 3).map(c => c.curso.titulo).join(', ')}
+                    {plan.cursos.length > 3 && ` y ${plan.cursos.length - 3} más`}
+                  </p>
                 )}
               </div>
             </div>
