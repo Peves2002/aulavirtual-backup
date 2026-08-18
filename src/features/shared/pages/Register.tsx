@@ -46,16 +46,8 @@ import Link from '@components/Link'
 // Styled Custom Components
 const RegisterIllustration = styled('img')(({ theme }) => ({
   zIndex: 2,
-  blockSize: 'auto',
-  maxBlockSize: 600,
-  maxInlineSize: '100%',
-  margin: theme.spacing(12),
-  [theme.breakpoints.down(1536)]: {
-    maxBlockSize: 550
-  },
-  [theme.breakpoints.down('lg')]: {
-    maxBlockSize: 450
-  }
+  width: '100%',
+  height: 'auto',
 }))
 
 const MaskImg = styled('img')({
@@ -87,8 +79,7 @@ const Register = ({ mode }: { mode: SystemMode }) => {
   // Hooks
   const router = useRouter()
   const { settings } = useSettings()
-  const theme = useTheme()
-  const hidden = useMediaQuery(theme.breakpoints.down('md'))
+  const hidden = useMediaQuery((useTheme()).breakpoints.down('md'))
   const authBackground = useImageVariant(mode, lightImg, darkImg)
 
   useEffect(() => {
@@ -184,7 +175,7 @@ const Register = ({ mode }: { mode: SystemMode }) => {
     <div className='flex justify-center min-bs-[100dvh]'>
       <div
         className={classnames(
-          'flex items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden bg-white',
+          'flex items-center justify-center flex-1 min-bs-[100dvh] relative max-md:hidden bg-white',
           {
             'border-ie': settings.skin === 'bordered'
           }

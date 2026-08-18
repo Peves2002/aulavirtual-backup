@@ -96,11 +96,11 @@ const Logo = () => {
   }, [isHovered, layout])
 
   return (
-    <Link href='/' className='flex items-center'>
+    <Link href='/' className='flex items-center shrink min-w-0'>
       <img
         src={templateLogo}
         alt={`${templateName} Logo`}
-        className='bs-[65px]'
+        className='h-[35px] sm:h-[45px] md:h-[65px] w-auto max-w-[150px] sm:max-w-[200px] md:max-w-none object-contain'
         onError={e => {
           const img = e.currentTarget
 

@@ -45,7 +45,7 @@ async function getHomeData() {
 
       // Profesores
       prisma.usuario.findMany({
-        where: { rol: 'PROFESOR' },
+        where: { rol: 'PROFESOR', esta_activo: true },
         select: {
           id: true,
           nombre: true,
@@ -56,7 +56,7 @@ async function getHomeData() {
           biografia: true,
           _count: { select: { cursos_dictados: true } },
         },
-        orderBy: { cursos_dictados: { _count: 'desc' } },
+        orderBy: [{ orden: 'asc' }, { cursos_dictados: { _count: 'desc' } }],
         take: 8,
       }),
 
@@ -103,8 +103,10 @@ async function getHomeData() {
       teachers: JSON.parse(JSON.stringify(teachersRaw)),
       categorias: JSON.parse(JSON.stringify(categorias)),
     }
-  } catch {
-    return {
+  } catch (error) {
+    console.error('Error fetching home data:', error)
+    
+return {
       courses: [],
       diplomados: [],
       teachers: [],

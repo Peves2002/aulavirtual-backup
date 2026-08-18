@@ -112,4 +112,14 @@ export class AxiosCategoria extends AxiosInternalHttpClient {
       throw err?.response?.data ?? err
     }
   }
+
+  async reorderPrincipales(items: { id: string; orden: number }[]): Promise<{ categorias: Categoria[] }> {
+    try {
+      const payload = await this.iPatch<{ categorias: Categoria[] }>(`/reordenar`, { items })
+
+      return payload
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
 }

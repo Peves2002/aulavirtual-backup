@@ -8,32 +8,32 @@ import { Briefcase } from 'lucide-react'
 
 const FOTOS = [
   {
-    src: '/images/equipo/Administración.png',
+    src: '/images/equipo/administracion.png',
     area: 'Administración',
     descripcion: 'Equipo comprometido con la excelencia y el desarrollo estratégico de nuestra institución.',
   },
   {
-    src: '/images/equipo/Contabilidad.png',
+    src: '/images/equipo/contabilidad.png',
     area: 'Contabilidad',
     descripcion: 'Profesionales dedicados a brindar soluciones educativas de alto impacto para nuestros estudiantes.',
   },
   {
-    src: '/images/equipo/Dirección Comercial.png',
+    src: '/images/equipo/direccion_comercial.png',
     area: 'Dirección Comercial',
     descripcion: 'Talento humano que impulsa cada día la visión y misión de nuestra organización educativa.',
   },
   {
-    src: '/images/equipo/Marketing.png',
+    src: '/images/equipo/marketing.png',
     area: 'Marketing',
     descripcion: 'Colaboradores que hacen posible la transformación educativa y el crecimiento de nuestra comunidad.',
   },
   {
-    src: '/images/equipo/Recursos Humanos.png',
+    src: '/images/equipo/recursos_humanos.png',
     area: 'Recursos Humanos',
     descripcion: 'Líderes comprometidos con la calidad, la innovación y el futuro de la educación en el país.',
   },
   {
-    src: '/images/equipo/Área Legal.png',
+    src: '/images/equipo/area_legal.png',
     area: 'Área Legal',
     descripcion: 'Profesionales que fortalecen nuestra cultura organizacional y el bienestar de nuestra comunidad.',
   },

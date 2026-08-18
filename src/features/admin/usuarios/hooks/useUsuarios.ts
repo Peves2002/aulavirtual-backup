@@ -133,3 +133,16 @@ export function useToggleUsuarioStatus() {
     onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY.USUARIOS })
   })
 }
+
+/**
+ * Hook para reordenar usuarios
+ */
+export function useReordenarUsuarios() {
+  const qc = useQueryClient()
+  const axiosUsuario = axiosUsuarioFactory()
+
+  return useMutation<{ message: string }, any, { items: { id: string; orden: number }[] }>({
+    mutationFn: async ({ items }) => await axiosUsuario.reorderUsuarios(items),
+    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY.USUARIOS })
+  })
+}

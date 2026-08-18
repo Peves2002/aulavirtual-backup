@@ -23,9 +23,32 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent
+} from '@dnd-kit/core'
+
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable'
+
+import { CSS } from '@dnd-kit/utilities'
+import { useSnackbar } from 'notistack'
+
 import classnames from 'classnames'
 
-import type { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef ,
+  Row
+} from '@tanstack/react-table'
 
 import tableStyles from '@core/styles/table.module.css'
 
@@ -35,7 +58,7 @@ import CustomTextField from '@/@core/components/mui/TextField'
 import type { ThemeColor } from '@/@core/types'
 
 import type { Categoria } from '../entity/Categoria'
-import { useCategorias } from '../hooks/useCategorias'
+import { useCategorias, useReordenarCategoriasPrincipales } from '../hooks/useCategorias'
 import { CategoriasActions } from '../components/CategoriasActions'
 import { DebouncedInput } from '@/utils/components/others/DebouncedInput'
 import { fuzzyFilter } from '@/utils/components/others/FuzzyFilter'
@@ -52,6 +75,47 @@ const statusObj: StatusType = {
 
 const columnHelper = createColumnHelper<Categoria>()
 
+const DragHandleCell = ({ rowId, orden }: { rowId: string, orden: number }) => {
+  const { attributes, listeners } = useSortable({ id: rowId })
+  
+  return (
+    <div className='flex items-center gap-2'>
+      <Box {...attributes} {...listeners} sx={{ cursor: 'grab', '&:active': { cursor: 'grabbing' }, display: 'flex', alignItems: 'center' }}>
+        <i className='tabler-grip-vertical text-xl text-textDisabled' />
+      </Box>
+      <Typography color='text.secondary' variant='body2'>
+        {orden}
+      </Typography>
+    </div>
+  )
+}
+
+const DraggableRow = ({ row }: { row: Row<Categoria> }) => {
+  const { transform, transition, setNodeRef, isDragging } = useSortable({
+    id: row.original.id
+  })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.8 : 1,
+    zIndex: isDragging ? 1 : 0,
+    position: 'relative' as const
+  }
+
+  return (
+    <tr
+      ref={setNodeRef}
+      style={style}
+      className={classnames({ selected: row.getIsSelected(), 'bg-actionHover': isDragging })}
+    >
+      {row.getVisibleCells().map(cell => (
+        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+      ))}
+    </tr>
+  )
+}
+
 interface CategoriasPageProps {
   initialDataCategorias?: Categoria[]
   initialTotal?: number
@@ -62,7 +126,12 @@ export function CategoriasPage({ initialDataCategorias, initialTotal = 0 }: Cate
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [openCreateModal, setOpenCreateModal] = useState<boolean>(false)
   const [openUpdateModal, setOpenUpdateModal] = useState<boolean>(false)
+  const [openReorderModal, setOpenReorderModal] = useState<boolean>(false)
   const [categoriaToEdit, setCategoriaToEdit] = useState<Categoria | null>(null)
+
+  const { enqueueSnackbar } = useSnackbar()
+  const reordenarMutation = useReordenarCategoriasPrincipales()
+  const [localCategorias, setLocalCategorias] = useState<Categoria[]>([])
 
   const [rowSelection, setRowSelection] = useState({})
   const [globalFilter, setGlobalFilter] = useState('')
@@ -88,6 +157,11 @@ export function CategoriasPage({ initialDataCategorias, initialTotal = 0 }: Cate
     return []
   }, [categoriasData, initialDataCategorias, pagination.pageIndex])
 
+  // Sincronizar categorias locales para dnd
+  useMemo(() => {
+    setLocalCategorias(categorias)
+  }, [categorias])
+
   const totalCategorias = useMemo(() => {
     if (categoriasData?.paginacion?.total !== undefined) return categoriasData.paginacion.total
 
@@ -95,6 +169,39 @@ export function CategoriasPage({ initialDataCategorias, initialTotal = 0 }: Cate
 
     return 0
   }, [categoriasData, initialTotal, pagination.pageIndex])
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  )
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (over && active.id !== over.id) {
+      const oldIndex = localCategorias.findIndex(i => i.id === active.id)
+      const newIndex = localCategorias.findIndex(i => i.id === over.id)
+
+      const newItems = arrayMove(localCategorias, oldIndex, newIndex)
+
+      setLocalCategorias(newItems)
+
+      try {
+        const reorderedItems = newItems.map((cat, index) => ({
+          id: cat.id,
+
+          // Calculamos el orden global basado en la paginación actual
+          orden: index + 1 + (pagination.pageIndex * pagination.pageSize)
+        }))
+
+        await reordenarMutation.mutateAsync({ items: reorderedItems })
+        enqueueSnackbar('Orden de categorías guardado exitosamente', { variant: 'success' })
+      } catch (error) {
+        enqueueSnackbar('Error al guardar el nuevo orden', { variant: 'error' })
+        setLocalCategorias(categorias) // revertir cambios
+      }
+    }
+  }
 
   const handleDeleteClick = (categoria: Categoria) => {
     setCategoriaToDelete(categoria)
@@ -110,12 +217,8 @@ export function CategoriasPage({ initialDataCategorias, initialTotal = 0 }: Cate
     () => [
       columnHelper.display({
         id: 'numero',
-        header: '#',
-        cell: ({ row }) => (
-          <Typography color='text.secondary' variant='body2'>
-            {pagination.pageIndex * pagination.pageSize + row.index + 1}
-          </Typography>
-        )
+        header: '# Orden',
+        cell: ({ row }) => <DragHandleCell rowId={row.original.id} orden={row.original.orden} />
       }),
       columnHelper.accessor('nombre', {
         header: 'Categoría',
@@ -205,7 +308,7 @@ export function CategoriasPage({ initialDataCategorias, initialTotal = 0 }: Cate
   )
 
   const table = useReactTable({
-    data: categorias,
+    data: localCategorias,
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -288,61 +391,56 @@ export function CategoriasPage({ initialDataCategorias, initialTotal = 0 }: Cate
               <CircularProgress />
             </Box>
           )}
-          <table className={tableStyles.table} style={{ opacity: isFetching ? 0.6 : 1, transition: 'opacity 0.2s' }}>
-            <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <>
-                          <div
-                            className={classnames({
-                              'flex items-center': header.column.getIsSorted(),
-                              'cursor-pointer select-none': header.column.getCanSort()
-                            })}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                            {
-                              {
-                                asc: <i className='tabler-chevron-up text-xl' />,
-                                desc: <i className='tabler-chevron-down text-xl' />
-                              }[header.column.getIsSorted() as 'asc' | 'desc']
-                            }
-                          </div>
-                        </>
-                      )}
-                    </th>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={localCategorias.map(c => c.id)} strategy={verticalListSortingStrategy}>
+              <table className={tableStyles.table} style={{ opacity: isFetching ? 0.6 : 1, transition: 'opacity 0.2s' }}>
+                <thead>
+                  {table.getHeaderGroups().map(headerGroup => (
+                    <tr key={headerGroup.id}>
+                      {headerGroup.headers.map(header => (
+                        <th key={header.id}>
+                          {header.isPlaceholder ? null : (
+                            <>
+                              <div
+                                className={classnames({
+                                  'flex items-center': header.column.getIsSorted(),
+                                  'cursor-pointer select-none': header.column.getCanSort()
+                                })}
+                                onClick={header.column.getToggleSortingHandler()}
+                              >
+                                {flexRender(header.column.columnDef.header, header.getContext())}
+                                {
+                                  {
+                                    asc: <i className='tabler-chevron-up text-xl' />,
+                                    desc: <i className='tabler-chevron-down text-xl' />
+                                  }[header.column.getIsSorted() as 'asc' | 'desc']
+                                }
+                              </div>
+                            </>
+                          )}
+                        </th>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </thead>
-            {table.getFilteredRowModel().rows.length === 0 ? (
-              <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    No hay datos disponibles
-                  </td>
-                </tr>
-              </tbody>
-            ) : (
-              <tbody>
-                {table
-                  .getCoreRowModel()
-                  .rows
-                  .map(row => {
-                    return (
-                      <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                        {row.getVisibleCells().map(cell => (
-                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                        ))}
-                      </tr>
-                    )
-                  })}
-              </tbody>
-            )}
-          </table>
+                </thead>
+                {table.getFilteredRowModel().rows.length === 0 ? (
+                  <tbody>
+                    <tr>
+                      <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                        No hay datos disponibles
+                      </td>
+                    </tr>
+                  </tbody>
+                ) : (
+                  <tbody>
+                    {table.getRowModel().rows.map(row => (
+                      <DraggableRow key={row.id} row={row} />
+                    ))}
+                  </tbody>
+                )}
+              </table>
+            </SortableContext>
+          </DndContext>
         </div>
         <TablePagination
           component={() => <TablePaginationComponent table={table as any} />}
@@ -373,6 +471,10 @@ export function CategoriasPage({ initialDataCategorias, initialTotal = 0 }: Cate
             setOpenDeleteModal(false)
             setCategoriaToDelete(null)
           }
+        }}
+        reorderCategoria={{
+          isOpen: openReorderModal,
+          closeHandler: () => setOpenReorderModal(false)
         }}
         onSuccess={() => refetchCategorias()}
       />

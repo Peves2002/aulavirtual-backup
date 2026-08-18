@@ -65,13 +65,22 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
               paddingTop: '1rem',
               paddingBottom: '2rem', // espacio para sombras
             }}
-            className="hidden-scroll pb-4" // Asumiendo que usamos alguna clase o el style de arriba
+            className="hidden-scroll pb-4"
           >
             <style dangerouslySetInnerHTML={{
               __html: `
               #categories-scroll-container::-webkit-scrollbar { display: none; }
               @media (max-width: 768px) {
-                #categories-scroll-container { justify-content: flex-start !important; }
+                #categories-scroll-container { 
+                  justify-content: center !important;
+                  gap: 1rem !important;
+                }
+                .cat-card-wrapper {
+                  width: calc(50% - 0.5rem) !important;
+                }
+                .cat-card-inner {
+                  padding: 1.5rem 1rem !important;
+                }
               }
             `}} />
 
@@ -81,6 +90,7 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
               return (
                 <div
                   key={cat.id}
+                  className="cat-card-wrapper"
                   style={{
                     width: '320px',
                     maxWidth: '100%',
@@ -89,6 +99,7 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
                   }}
                 >
                   <div
+                    className="cat-card-inner"
                     style={{
                       display: 'flex',
                       flexDirection: 'column',
@@ -169,7 +180,7 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
                         alignItems: 'center',
                         justifyContent: 'center',
                         color: '#ffffff',
-                        marginBottom: '1.5rem',
+                        margin: '0 auto 1.5rem',
                         boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
                         transition: 'transform 0.3s ease'
                       }}
@@ -185,6 +196,7 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
                         color: '#0A0A0A',
                         lineHeight: 1.3,
                         marginBottom: '0.75rem',
+                        textAlign: 'center',
                       }}
                     >
                       {cat.nombre}

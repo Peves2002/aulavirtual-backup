@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, type RefObject } from 'react'
+import { useRef, useState, useEffect, type RefObject } from 'react'
 
 import Link from 'next/link'
 import Image from 'next/image'
@@ -39,6 +39,7 @@ export default function LeftSidebar({
   const pathname = usePathname()
   const router = useRouter()
   const [expanded, setExpanded] = useState(false)
+  const [fullyExpanded, setFullyExpanded] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [menuPos, setMenuPos] = useState({ bottom: 0, left: 0 })
   const [openPanel, setOpenPanel] = useState<'cursos' | 'diplomados' | 'programas' | null>(null)
@@ -48,6 +49,18 @@ export default function LeftSidebar({
   const cursosButtonRef = useRef<HTMLButtonElement>(null)
   const diplomadosButtonRef = useRef<HTMLButtonElement>(null)
   const programasButtonRef = useRef<HTMLButtonElement>(null)
+
+  // Wait for sidebar expansion transition (300ms) before allowing flyouts
+  useEffect(() => {
+    if (expanded) {
+      const timer = setTimeout(() => setFullyExpanded(true), 300)
+
+      
+return () => clearTimeout(timer)
+    } else {
+      setFullyExpanded(false)
+    }
+  }, [expanded])
 
   const navItems = ALL_NAV_ITEMS.filter(item => {
     if (item.key === 'empresas' && !empresasHabilitado) return false
@@ -66,16 +79,11 @@ export default function LeftSidebar({
     setUserMenuOpen(o => !o)
   }
 
-  const handleNavWithCategories = (
+  const handleDropdownHover = (
     key: 'cursos' | 'diplomados' | 'programas',
-    fallbackUrl: string,
     ref: RefObject<HTMLButtonElement | null>
   ) => {
-    if (categories.length === 0) {
-      router.push(fallbackUrl)
-
-      return
-    }
+    if (categories.length === 0) return
 
     if (ref.current) {
       const rect = ref.current.getBoundingClientRect()
@@ -83,7 +91,7 @@ export default function LeftSidebar({
       setCategMenuPos({ top: rect.top, left: rect.right })
     }
 
-    setOpenPanel(p => (p === key ? null : key))
+    setOpenPanel(key)
   }
 
   const handleLogout = async () => {
@@ -156,14 +164,14 @@ export default function LeftSidebar({
         onMouseLeave={() => { setExpanded(false); setOpenPanel(null) }}
       >
         {/* Categories flyout panel */}
-        {openPanel && (
+        {openPanel && fullyExpanded && (
           <>
-            <div style={{ position: 'fixed', inset: 0, zIndex: 49 }} onClick={() => setOpenPanel(null)} />
+
             <div
               style={{
                 position: 'fixed',
                 top: categMenuPos.top,
-                left: categMenuPos.left,
+                left: 'var(--sidebar-width-expanded)',
                 width: '180px',
                 backgroundColor: 'var(--web-dark, #025E44)',
                 borderRadius: '0 12px 12px 0',
@@ -219,7 +227,7 @@ export default function LeftSidebar({
               <button
                 key={item.key}
                 ref={ref}
-                onClick={() => handleNavWithCategories(item.key as 'cursos' | 'diplomados' | 'programas', item.url, ref)}
+                onClick={() => router.push(item.url)}
                 className="flex items-center w-full px-4 transition-colors duration-200 relative"
                 style={{
                   border: 'none',
@@ -228,6 +236,7 @@ export default function LeftSidebar({
                 }}
                 onMouseEnter={e => {
                   if (!active) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.05)'
+                  handleDropdownHover(item.key as 'cursos' | 'diplomados' | 'programas', ref)
                 }}
                 onMouseLeave={e => {
                   if (!active && !isOpen) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'
@@ -246,6 +255,7 @@ export default function LeftSidebar({
               style={navItemStyle(active)}
               onMouseEnter={e => {
                 if (!active) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.05)'
+                setOpenPanel(null)
               }}
               onMouseLeave={e => {
                 if (!active) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'

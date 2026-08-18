@@ -137,3 +137,16 @@ export function useReordenarCategorias() {
     onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY.CATEGORIAS })
   })
 }
+
+/**
+ * Hook para reordenar categorías principales
+ */
+export function useReordenarCategoriasPrincipales() {
+  const qc = useQueryClient()
+  const axiosCategoria = axiosCategoriaFactory()
+
+  return useMutation<{ categorias: Categoria[] }, any, { items: { id: string; orden: number }[] }>({
+    mutationFn: async ({ items }) => await axiosCategoria.reorderPrincipales(items),
+    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY.CATEGORIAS })
+  })
+}

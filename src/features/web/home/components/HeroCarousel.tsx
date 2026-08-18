@@ -71,9 +71,9 @@ function VisualCamaras() {
 
 function VisualIsos() {
   return (
-    <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center', width: '100%', flexWrap: 'wrap' }}>
       {['/images/isos/iso9001.webp', '/images/isos/iso21001.webp'].map((src, i) => (
-        <div key={i} style={{ position: 'relative', width: '180px', height: '180px', filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.4))' }}>
+        <div key={i} className="w-[140px] h-[140px] sm:w-[180px] sm:h-[180px]" style={{ position: 'relative', filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.4))' }}>
           <Image src={src} alt={`ISO ${i === 0 ? '9001' : '21001'}`} fill style={{ objectFit: 'contain' }} />
         </div>
       ))}
@@ -111,11 +111,12 @@ export default function HeroCarousel() {
   const slide = SLIDES[current]
 
   return (
-    <section style={{
+    <section 
+      className="h-auto md:h-[560px] py-10 md:py-0"
+      style={{
       background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
       position: 'relative',
       overflow: 'hidden',
-      height: '560px',
       display: 'flex',
       alignItems: 'center',
     }}>
@@ -123,8 +124,8 @@ export default function HeroCarousel() {
       <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)', backgroundSize: '48px 48px' }} />
       <div aria-hidden style={{ position: 'absolute', top: '-20%', right: '-10%', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(var(--web-primary-rgb,37,146,127),0.25) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '3rem 1.5rem', width: '100%', position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', alignItems: 'center' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.5rem', width: '100%', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', alignItems: 'center' }}>
 
           {/* Izquierda: texto (igual para todos) */}
           <div
@@ -148,7 +149,7 @@ export default function HeroCarousel() {
             </h1>
 
             {/* Descripción */}
-            <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.75, maxWidth: '480px', marginBottom: '2rem' }}>
+            <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.75, maxWidth: '480px', marginBottom: '1.5rem' }}>
               {slide.description}
             </p>
 
@@ -179,23 +180,34 @@ export default function HeroCarousel() {
             </div>
           </div>
 
-          {/* Derecha: visual del slide (solo camaras e isos en el grid) */}
-          {(slide.visual === 'camaras' || slide.visual === 'isos') && (
-            <div
-              key={`right-${current}`}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: slide.visual === 'isos' ? 'flex-start' : 'center', animation: 'heroFadeIn 0.5s ease' }}
-            >
-              {slide.visual === 'camaras' && <VisualCamaras />}
-              {slide.visual === 'isos' && <VisualIsos />}
-            </div>
-          )}
+          {/* Derecha: visual del slide (grid para todos en mobile, pero solo camaras e isos en desktop) */}
+          <div
+            key={`right-${current}`}
+            className={`${slide.visual === 'portada3' || slide.visual === 'portada4' ? "md:hidden" : ""} flex items-center w-full pb-8 md:pb-0`}
+            style={{ justifyContent: slide.visual === 'isos' ? 'flex-start' : 'center', animation: 'heroFadeIn 0.5s ease' }}
+          >
+            {slide.visual === 'camaras' && <VisualCamaras />}
+            {slide.visual === 'isos' && <VisualIsos />}
+            {(slide.visual === 'portada3') && (
+              <div className="md:hidden relative w-full h-[280px]">
+                <Image src="/images/3.png" alt="Grupo Ollarves equipo" fill style={{ objectFit: 'contain', objectPosition: 'center' }} priority />
+              </div>
+            )}
+            {(slide.visual === 'portada4') && (
+              <div className="md:hidden relative w-full h-[240px] px-6">
+                <div className="relative w-full h-full">
+                  <Image src="/images/4.png" alt="Presencia nacional" fill style={{ objectFit: 'contain', objectPosition: 'center' }} priority />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
       </div>
 
-      {/* Imágenes absolutas relativas a la section (ignoran el padding) */}
+      {/* Imágenes absolutas relativas a la section (ignoran el padding) - Solo Desktop */}
       {slide.visual === 'portada3' && (
-        <div key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div className="hidden md:block" key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
           <VisualImage
             src="/images/3.png"
             alt="Grupo Ollarves equipo"
@@ -204,7 +216,7 @@ export default function HeroCarousel() {
         </div>
       )}
       {slide.visual === 'portada4' && (
-        <div key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div className="hidden md:block" key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
           <VisualImage
             src="/images/4.png"
             alt="Presencia nacional"

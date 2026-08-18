@@ -100,4 +100,12 @@ export class AxiosUsuario extends AxiosInternalHttpClient {
       throw err?.response?.data ?? err
     }
   }
+
+  async reorderUsuarios(items: { id: string; orden: number }[]): Promise<{ message: string }> {
+    try {
+      return await this.iPut<{ message: string }>('/reordenar', { items })
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
 }

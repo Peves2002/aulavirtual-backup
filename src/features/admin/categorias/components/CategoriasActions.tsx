@@ -4,6 +4,7 @@ import type { Categoria } from '../entity/Categoria'
 import { CreateCategoriaModal } from './CreateCategoriaModal'
 import { EditCategoriaModal } from './EditCategoriaModal'
 import { DeleteCategoriaModal } from './DeleteCategoriaModal'
+import { ReorderCategoriasModal } from './ReorderCategoriasModal'
 
 type ModalConfig = {
   isOpen: boolean
@@ -15,6 +16,7 @@ interface CategoriasActionsProps {
   addCategoria: ModalConfig
   editCategoria: ModalConfig
   deleteCategoria: ModalConfig
+  reorderCategoria: ModalConfig
   onSuccess?: () => void
 }
 
@@ -23,6 +25,7 @@ export const CategoriasActions = ({
   addCategoria,
   editCategoria,
   deleteCategoria,
+  reorderCategoria,
   onSuccess
 }: CategoriasActionsProps) => {
   return (
@@ -55,6 +58,13 @@ export const CategoriasActions = ({
             }
             : null
         }
+        onSuccess={onSuccess}
+      />
+
+      {/* Modal Reordenar Categorías Principales */}
+      <ReorderCategoriasModal
+        open={reorderCategoria.isOpen}
+        handleClose={reorderCategoria.closeHandler}
         onSuccess={onSuccess}
       />
     </>

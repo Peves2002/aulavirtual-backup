@@ -43,16 +43,8 @@ import Link from '@components/Link'
 // Styled Custom Components
 const LoginIllustration = styled('img')(({ theme }) => ({
   zIndex: 2,
-  blockSize: 'auto',
-  maxBlockSize: 680,
-  maxInlineSize: '100%',
-  margin: theme.spacing(12),
-  [theme.breakpoints.down(1536)]: {
-    maxBlockSize: 550
-  },
-  [theme.breakpoints.down('lg')]: {
-    maxBlockSize: 450
-  }
+  width: '100%',
+  height: 'auto',
 }))
 
 const MaskImg = styled('img')({
@@ -81,6 +73,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
 
   // Hooks
   const { settings } = useSettings()
+  const router = useRouter()
   const theme = useTheme()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
   const authBackground = useImageVariant(mode, lightImg, darkImg)
@@ -191,7 +184,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
     <div className='flex justify-center min-bs-[100dvh]'>
       <div
         className={classnames(
-          'flex items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden bg-white',
+          'flex items-center justify-center flex-1 min-bs-[100dvh] relative max-md:hidden bg-white',
           {
             'border-ie': settings.skin === 'bordered'
           }

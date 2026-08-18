@@ -24,7 +24,30 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef ,
+  Row
+} from '@tanstack/react-table'
+
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent
+} from '@dnd-kit/core'
+
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable'
+
+import { CSS } from '@dnd-kit/utilities'
+import { useSnackbar } from 'notistack'
 
 import classnames from 'classnames'
 import { Rol } from '@prisma/client'
@@ -39,7 +62,7 @@ import TablePaginationComponent from '@/utils/components/others/TablePaginationC
 
 // Feature Imports
 import type { Usuario } from '../entity/Usuario'
-import { useUsuarios } from '../hooks/useUsuarios'
+import { useUsuarios, useReordenarUsuarios } from '../hooks/useUsuarios'
 import { UsuariosActions } from '../components/UsuariosActions'
 import ImportarUsuariosModal from '../components/ImportarUsuariosModal'
 
@@ -66,6 +89,47 @@ const rolLabels: { [key in Rol]: string } = {
 
 const columnHelper = createColumnHelper<Usuario>()
 
+const DragHandleCell = ({ rowId, orden }: { rowId: string, orden: number }) => {
+  const { attributes, listeners } = useSortable({ id: rowId })
+  
+  return (
+    <div className='flex items-center gap-2'>
+      <Box {...attributes} {...listeners} sx={{ cursor: 'grab', '&:active': { cursor: 'grabbing' }, display: 'flex', alignItems: 'center' }}>
+        <i className='tabler-grip-vertical text-xl text-textDisabled' />
+      </Box>
+      <Typography color='text.secondary' variant='body2'>
+        {orden}
+      </Typography>
+    </div>
+  )
+}
+
+const DraggableRow = ({ row }: { row: Row<Usuario> }) => {
+  const { transform, transition, setNodeRef, isDragging } = useSortable({
+    id: row.original.id
+  })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.8 : 1,
+    zIndex: isDragging ? 1 : 0,
+    position: 'relative' as const
+  }
+
+  return (
+    <tr
+      ref={setNodeRef}
+      style={style}
+      className={classnames({ selected: row.getIsSelected(), 'bg-actionHover': isDragging })}
+    >
+      {row.getVisibleCells().map(cell => (
+        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+      ))}
+    </tr>
+  )
+}
+
 interface UsuariosPageProps {
   initialDataUsuarios?: Usuario[]
   initialTotal?: number
@@ -78,6 +142,10 @@ export function UsuariosPage({ initialDataUsuarios, initialTotal = 0 }: Usuarios
   const [openViewModal, setOpenViewModal] = useState<boolean>(false)
   const [openImportModal, setOpenImportModal] = useState<boolean>(false)
   const [usuarioToEdit, setUsuarioToEdit] = useState<Usuario | null>(null)
+
+  const { enqueueSnackbar } = useSnackbar()
+  const reordenarMutation = useReordenarUsuarios()
+  const [localUsuarios, setLocalUsuarios] = useState<Usuario[]>([])
 
   const [rowSelection, setRowSelection] = useState({})
   const [globalFilter, setGlobalFilter] = useState('')
@@ -104,6 +172,11 @@ export function UsuariosPage({ initialDataUsuarios, initialTotal = 0 }: Usuarios
     return []
   }, [usuariosData, initialDataUsuarios, pagination.pageIndex])
 
+  // Sincronizar locales para dnd
+  useMemo(() => {
+    setLocalUsuarios(usuarios)
+  }, [usuarios])
+
   const totalUsuarios = useMemo(() => {
     if (usuariosData?.paginacion?.total !== undefined) return usuariosData.paginacion.total
 
@@ -127,16 +200,43 @@ export function UsuariosPage({ initialDataUsuarios, initialTotal = 0 }: Usuarios
     setOpenViewModal(true)
   }
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  )
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (over && active.id !== over.id) {
+      const oldIndex = localUsuarios.findIndex(i => i.id === active.id)
+      const newIndex = localUsuarios.findIndex(i => i.id === over.id)
+
+      const newItems = arrayMove(localUsuarios, oldIndex, newIndex)
+
+      setLocalUsuarios(newItems)
+
+      try {
+        const reorderedItems = newItems.map((u, index) => ({
+          id: u.id,
+          orden: index + 1 + (pagination.pageIndex * pagination.pageSize)
+        }))
+
+        await reordenarMutation.mutateAsync({ items: reorderedItems })
+        enqueueSnackbar('Orden guardado exitosamente', { variant: 'success' })
+      } catch (error) {
+        enqueueSnackbar('Error al guardar el nuevo orden', { variant: 'error' })
+        setLocalUsuarios(usuarios) // revertir cambios
+      }
+    }
+  }
+
   const columns = useMemo<ColumnDef<Usuario, any>[]>(
     () => [
       columnHelper.display({
         id: 'numero',
-        header: '#',
-        cell: ({ row }) => (
-          <Typography color='text.secondary' variant='body2'>
-            {pagination.pageIndex * pagination.pageSize + row.index + 1}
-          </Typography>
-        )
+        header: '# Orden',
+        cell: ({ row }) => <DragHandleCell rowId={row.original.id} orden={row.original.orden || 0} />
       }),
       columnHelper.accessor('nombre', {
         header: 'Usuario',
@@ -228,7 +328,7 @@ export function UsuariosPage({ initialDataUsuarios, initialTotal = 0 }: Usuarios
   )
 
   const table = useReactTable({
-    data: usuarios,
+    data: localUsuarios,
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -248,8 +348,6 @@ export function UsuariosPage({ initialDataUsuarios, initialTotal = 0 }: Usuarios
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel()
   })
-
-
 
   return (
     <>
@@ -329,67 +427,62 @@ export function UsuariosPage({ initialDataUsuarios, initialTotal = 0 }: Usuarios
               <CircularProgress />
             </Box>
           )}
-          <table className={tableStyles.table}>
-            <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <>
-                          <div
-                            className={classnames({
-                              'flex items-center': header.column.getIsSorted(),
-                              'cursor-pointer select-none': header.column.getCanSort()
-                            })}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                            {
-                              {
-                                asc: <i className='tabler-chevron-up text-xl' />,
-                                desc: <i className='tabler-chevron-down text-xl' />
-                              }[header.column.getIsSorted() as 'asc' | 'desc']
-                            }
-                          </div>
-                        </>
-                      )}
-                    </th>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={localUsuarios.map(u => u.id)} strategy={verticalListSortingStrategy}>
+              <table className={tableStyles.table} style={{ opacity: isFetching ? 0.6 : 1, transition: 'opacity 0.2s' }}>
+                <thead>
+                  {table.getHeaderGroups().map(headerGroup => (
+                    <tr key={headerGroup.id}>
+                      {headerGroup.headers.map(header => (
+                        <th key={header.id}>
+                          {header.isPlaceholder ? null : (
+                            <>
+                              <div
+                                className={classnames({
+                                  'flex items-center': header.column.getIsSorted(),
+                                  'cursor-pointer select-none': header.column.getCanSort()
+                                })}
+                                onClick={header.column.getToggleSortingHandler()}
+                              >
+                                {flexRender(header.column.columnDef.header, header.getContext())}
+                                {
+                                  {
+                                    asc: <i className='tabler-chevron-up text-xl' />,
+                                    desc: <i className='tabler-chevron-down text-xl' />
+                                  }[header.column.getIsSorted() as 'asc' | 'desc']
+                                }
+                              </div>
+                            </>
+                          )}
+                        </th>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </thead>
-            {usuarios.length === 0 ? (
-              <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center py-10'>
-                    {isFetching ? (
-                      <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-                        <CircularProgress />
-                      </Box>
-                    ) : (
-                      'No hay datos disponibles'
-                    )}
-                  </td>
-                </tr>
-              </tbody>
-            ) : (
-              <tbody>
-                {table
-                  .getCoreRowModel()
-                  .rows
-                  .map(row => {
-                    return (
-                      <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                        {row.getVisibleCells().map(cell => (
-                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                        ))}
-                      </tr>
-                    )
-                  })}
-              </tbody>
-            )}
-          </table>
+                </thead>
+                {table.getFilteredRowModel().rows.length === 0 ? (
+                  <tbody>
+                    <tr>
+                      <td colSpan={table.getVisibleFlatColumns().length} className='text-center py-10'>
+                        {isFetching ? (
+                          <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                            <CircularProgress />
+                          </Box>
+                        ) : (
+                          'No hay datos disponibles'
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                ) : (
+                  <tbody>
+                    {table.getRowModel().rows.map(row => (
+                      <DraggableRow key={row.id} row={row} />
+                    ))}
+                  </tbody>
+                )}
+              </table>
+            </SortableContext>
+          </DndContext>
         </div>
         <TablePagination
           component={() => <TablePaginationComponent table={table as any} />}

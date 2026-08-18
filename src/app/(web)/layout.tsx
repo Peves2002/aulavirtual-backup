@@ -8,7 +8,7 @@ import prisma from '@/utils/libs/prisma'
 import WebFooter from '@/utils/components/layout/web/WebFooter'
 import WebHeader from '@/utils/components/layout/web/WebHeader'
 import LeftSidebar from '@/utils/components/layout/web/LeftSidebar'
-import MobileBottomNav from '@/utils/components/layout/web/MobileBottomNav'
+
 
 const getCategorias = unstable_cache(
   () =>
@@ -39,7 +39,7 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
             <LeftSidebar rutasHabilitado={rutasHabilitado} empresasHabilitado={empresasHabilitado} categories={categories} />
           </div>
           <main
-            className="flex-1 flex flex-col min-w-0 pb-16 sm:pb-0"
+            className="flex-1 flex flex-col min-w-0 pb-0"
             style={{ paddingLeft: 'var(--sidebar-width)' }}
           >
             <div className="flex-1">
@@ -48,8 +48,6 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
             <WebFooter />
           </main>
         </div>
-        {/* Bottom nav: visible solo en mobile */}
-        <MobileBottomNav rutasHabilitado={rutasHabilitado} categories={categories} />
       </div>
     </AuthModalProvider>
   )

@@ -137,7 +137,7 @@ export async function POST(request: Request) {
 
     if (!validation.success) return validation.error
 
-    const { nombre, descripcion, icono } = validation.data
+    const { nombre, descripcion, icono, orden: ordenProvisto } = validation.data
 
     // Verificar nombre único
     const nombreExistente = await prisma.categoria.findUnique({
@@ -151,13 +151,17 @@ export async function POST(request: Request) {
     // Generar slug único
     const slug = await generateUniqueSlug(nombre)
 
-    // Calcular orden: al final de las categorías padre
-    const maxOrden = await prisma.categoria.aggregate({
-      where: { categoria_padre_id: null },
-      _max: { orden: true }
-    })
+    // Calcular orden si no fue provisto
+    let orden = ordenProvisto
 
-    const orden = (maxOrden._max.orden ?? -1) + 1
+    if (orden === undefined) {
+      const maxOrden = await prisma.categoria.aggregate({
+        where: { categoria_padre_id: null },
+        _max: { orden: true }
+      })
+
+      orden = (maxOrden._max.orden ?? -1) + 1
+    }
 
     const nuevaCategoria = await prisma.categoria.create({
       data: {

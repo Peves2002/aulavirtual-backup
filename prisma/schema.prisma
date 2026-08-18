@@ -43,6 +43,7 @@ model Usuario {
   ebook_annotaciones      EbookAnnotacion[]
   participaciones_chat    ParticipanteConversacion[]
   mensajes_enviados       MensajeChat[]              @relation("MensajesEnviados")
+  orden                   Int                        @default(0)
 
   @@index([rol])
   @@map("usuarios")

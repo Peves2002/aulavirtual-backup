@@ -65,7 +65,7 @@ export async function GET(request: Request) {
         where,
         skip,
         take: limit,
-        orderBy: { creado_en: 'desc' },
+        orderBy: [{ orden: 'asc' }, { creado_en: 'desc' }],
         select: {
           id: true,
           correo: true,

@@ -194,7 +194,8 @@ export const EditCategoriaModal = ({ open, handleClose, categoriaId, onSuccess }
     nombre: categoria.nombre,
     descripcion: categoria.descripcion || '',
     icono: (categoria as any).icono || '',
-    esta_activo: categoria.esta_activo
+    esta_activo: categoria.esta_activo,
+    orden: categoria.orden
   }
 
   return (
@@ -241,6 +242,29 @@ export const EditCategoriaModal = ({ open, handleClose, categoriaId, onSuccess }
                       startAdornment: (
                         <InputAdornment position='start'>
                           <i className='tabler-category text-xl text-textSecondary' />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <CustomTextField
+                    fullWidth
+                    label='Orden (Posición)'
+                    name='orden'
+                    type='number'
+                    placeholder='Ej: 1'
+                    value={values.orden ?? ''}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.orden && Boolean(errors.orden)}
+                    helperText={touched.orden && errors.orden}
+                    disabled={isSubmitting}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position='start'>
+                          <i className='tabler-sort-ascending-numbers text-xl text-textSecondary' />
                         </InputAdornment>
                       )
                     }}

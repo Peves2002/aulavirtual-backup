@@ -187,7 +187,6 @@ export default function EnterpriseCTASection() {
                   fontWeight: 700,
                   fontSize: '0.9375rem',
                   textDecoration: 'none',
-                  marginBottom: '0.75rem',
                   transition: 'all 0.2s ease',
                   boxShadow: '0 4px 15px rgba(var(--web-dark-rgb, 2, 94, 68),0.25)',
                 }}
@@ -206,45 +205,6 @@ export default function EnterpriseCTASection() {
               >
                 <Calendar size={18} />
                 Agendar reunión gratuita
-              </a>
-
-              {/* Botón secundario WhatsApp */}
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.625rem',
-                  width: '100%',
-                  padding: '1rem',
-                  borderRadius: '14px',
-                  backgroundColor: 'transparent',
-                  color: '#25D366',
-                  fontFamily: 'Poppins, sans-serif',
-                  fontWeight: 600,
-                  fontSize: '0.9375rem',
-                  textDecoration: 'none',
-                  border: '2px solid #25D366',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseEnter={e => {
-                  const el = e.currentTarget as HTMLAnchorElement
-
-                  el.style.backgroundColor = '#25D366'
-                  el.style.color = '#ffffff'
-                }}
-                onMouseLeave={e => {
-                  const el = e.currentTarget as HTMLAnchorElement
-
-                  el.style.backgroundColor = 'transparent'
-                  el.style.color = '#25D366'
-                }}
-              >
-                <WhatsAppIcon size={18} />
-                Hablar por WhatsApp
               </a>
 
               {/* Nota */}
