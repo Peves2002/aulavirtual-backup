@@ -32,7 +32,36 @@ const ALLOWED_MIMES: Record<string, string> = {
   'application/msword': 'doc',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
   'application/vnd.ms-excel': 'xls',
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx'
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
+  'application/vnd.ms-powerpoint': 'ppt',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'pptx',
+  'application/vnd.oasis.opendocument.text': 'odt',
+  'application/vnd.oasis.opendocument.spreadsheet': 'ods',
+  'application/rtf': 'rtf',
+  'text/rtf': 'rtf',
+
+  // Archivos de texto / código / notebooks / datos
+  'text/plain': 'txt',
+  'text/x-python': 'py',
+  'text/x-python-script': 'py',
+  'application/xml': 'xml',
+  'text/xml': 'xml',
+  'application/x-ipynb+json': 'ipynb',
+  'application/json': 'json',
+  'text/csv': 'csv',
+  'text/markdown': 'md',
+  'application/sql': 'sql',
+  'text/x-java-source': 'java',
+  'text/x-csrc': 'c',
+  'text/x-c++src': 'cpp',
+  'text/x-csharp': 'cs',
+
+  // Comprimidos
+  'application/zip': 'zip',
+  'application/x-zip-compressed': 'zip',
+  'application/vnd.rar': 'rar',
+  'application/x-rar-compressed': 'rar',
+  'application/x-7z-compressed': '7z'
 }
 
 /** Tamaño máximo: 50 MB */
@@ -61,8 +90,30 @@ function verifyMagicBytes(buffer: Buffer, mimeType: string): boolean {
 
     // Office moderno (OpenXML / ZIP based)
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [[0x50, 0x4b, 0x03, 0x04]], // PK..
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [[0x50, 0x4b, 0x03, 0x04]] // PK..
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [[0x50, 0x4b, 0x03, 0x04]], // PK..
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation': [[0x50, 0x4b, 0x03, 0x04]], // PK..
+    'application/vnd.oasis.opendocument.text': [[0x50, 0x4b, 0x03, 0x04]], // PK..
+    'application/vnd.oasis.opendocument.spreadsheet': [[0x50, 0x4b, 0x03, 0x04]], // PK..
+    'application/vnd.ms-powerpoint': [[0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]],
+
+    // Comprimidos
+    'application/zip': [[0x50, 0x4b, 0x03, 0x04]],
+    'application/x-zip-compressed': [[0x50, 0x4b, 0x03, 0x04]],
+    'application/vnd.rar': [[0x52, 0x61, 0x72, 0x21, 0x1a, 0x07]], // Rar!
+    'application/x-rar-compressed': [[0x52, 0x61, 0x72, 0x21, 0x1a, 0x07]],
+    'application/x-7z-compressed': [[0x37, 0x7a, 0xbc, 0xaf, 0x27, 0x1c]]
   }
+
+  // Archivos de texto plano (código, notebooks, xml, txt, csv, json, md, sql) tienen contenido
+  // variable: no hay magic bytes fiables, se confía en la extensión + mimetype detectado
+  const textLikeMimes = [
+    'text/plain', 'text/x-python', 'text/x-python-script', 'application/xml', 'text/xml',
+    'application/x-ipynb+json', 'application/json', 'text/csv', 'text/markdown', 'application/sql',
+    'text/x-java-source', 'text/x-csrc', 'text/x-c++src', 'text/x-csharp',
+    'application/rtf', 'text/rtf'
+  ]
+
+  if (textLikeMimes.includes(mimeType)) return true
 
   const mimeSignatures = signatures[mimeType]
 
@@ -157,7 +208,27 @@ export async function POST(request: Request) {
         'ogg': { ext: 'ogg', mime: 'audio/ogg' },
         'oga': { ext: 'ogg', mime: 'audio/ogg' },
         'm4a': { ext: 'mp4', mime: 'audio/mp4' },
-        'weba': { ext: 'webm', mime: 'audio/webm' }
+        'weba': { ext: 'webm', mime: 'audio/webm' },
+        'txt': { ext: 'txt', mime: 'text/plain' },
+        'py': { ext: 'py', mime: 'text/x-python' },
+        'xml': { ext: 'xml', mime: 'application/xml' },
+        'ipynb': { ext: 'ipynb', mime: 'application/x-ipynb+json' },
+        'json': { ext: 'json', mime: 'application/json' },
+        'csv': { ext: 'csv', mime: 'text/csv' },
+        'md': { ext: 'md', mime: 'text/markdown' },
+        'sql': { ext: 'sql', mime: 'application/sql' },
+        'java': { ext: 'java', mime: 'text/x-java-source' },
+        'c': { ext: 'c', mime: 'text/x-csrc' },
+        'cpp': { ext: 'cpp', mime: 'text/x-c++src' },
+        'cs': { ext: 'cs', mime: 'text/x-csharp' },
+        'rtf': { ext: 'rtf', mime: 'application/rtf' },
+        'ppt': { ext: 'ppt', mime: 'application/vnd.ms-powerpoint' },
+        'pptx': { ext: 'pptx', mime: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' },
+        'odt': { ext: 'odt', mime: 'application/vnd.oasis.opendocument.text' },
+        'ods': { ext: 'ods', mime: 'application/vnd.oasis.opendocument.spreadsheet' },
+        'zip': { ext: 'zip', mime: 'application/zip' },
+        'rar': { ext: 'rar', mime: 'application/vnd.rar' },
+        '7z': { ext: '7z', mime: 'application/x-7z-compressed' }
       }
 
       const matched = extToMime[extension]
@@ -171,7 +242,7 @@ export async function POST(request: Request) {
     if (!safeExtension) {
       return ApiResponse.error(
         request,
-        `Tipo de archivo no permitido. Tipos aceptados: imágenes (jpg, png, webp, gif), PDF, video (mp4, webm, mkv), audio (mp3, wav, ogg, m4a)`,
+        `Tipo de archivo no permitido. Tipos aceptados: imágenes (jpg, png, webp, gif), PDF, Office/OpenDocument (doc, docx, xls, xlsx, ppt, pptx, odt, ods, rtf), video (mp4, webm, mkv), audio (mp3, wav, ogg, m4a), texto/código/datos (txt, py, xml, ipynb, json, csv, md, sql, java, c, cpp, cs) y comprimidos (zip, rar, 7z)`,
         400
       )
     }

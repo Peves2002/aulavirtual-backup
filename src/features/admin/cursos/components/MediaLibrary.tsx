@@ -48,17 +48,44 @@ const ALLOWED_OTHER_TYPES = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'application/vnd.ms-excel',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.ms-powerpoint',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'application/vnd.oasis.opendocument.text',
+  'application/vnd.oasis.opendocument.spreadsheet',
+  'application/rtf',
+  'text/rtf',
   ...ALLOWED_IMAGE_TYPES,
   'video/mp4',
   'video/webm',
   'video/x-matroska',
-  'video/mkv'
+  'video/mkv',
+  'text/plain',
+  'text/x-python',
+  'application/xml',
+  'text/xml',
+  'application/x-ipynb+json',
+  'application/json',
+  'text/csv',
+  'text/markdown',
+  'application/sql',
+  'text/x-java-source',
+  'text/x-csrc',
+  'text/x-c++src',
+  'text/x-csharp',
+  'application/zip',
+  'application/x-zip-compressed',
+  'application/vnd.rar',
+  'application/x-rar-compressed',
+  'application/x-7z-compressed'
 ]
 
 const ALLOWED_OTHER_EXT = [
-  '.pdf', '.doc', '.docx', '.xls', '.xlsx',
+  '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.odt', '.ods', '.rtf',
   ...ALLOWED_IMAGE_EXT,
-  '.mp4', '.webm', '.mkv'
+  '.mp4', '.webm', '.mkv',
+  '.py', '.txt', '.zip', '.ipynb', '.xml',
+  '.json', '.csv', '.md', '.sql', '.java', '.c', '.cpp', '.cs',
+  '.rar', '.7z'
 ]
 
 
@@ -109,7 +136,7 @@ const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios',
       const isValid = ALLOWED_OTHER_TYPES.includes(file.type) || ALLOWED_OTHER_EXT.includes(extension)
 
       if (!isValid) {
-        enqueueSnackbar('Formato de archivo no permitido. Solo se aceptan PDF, Word, Excel, imágenes y videos (.mp4, .webm, .mkv)', { variant: 'error' })
+        enqueueSnackbar('Formato de archivo no permitido. Solo se aceptan Office/OpenDocument (Word, Excel, PowerPoint, RTF), imágenes, videos (.mp4, .webm, .mkv), texto/código/datos (.py, .txt, .zip, .ipynb, .xml, .json, .csv, .md, .sql, .java, .c, .cpp, .cs) y comprimidos (.zip, .rar, .7z)', { variant: 'error' })
 
         return
       }
@@ -209,7 +236,7 @@ const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios',
             <input
               type="file"
               hidden
-              accept={acceptType === 'IMAGEN' ? 'image/*' : acceptType === 'VIDEO' ? 'video/*' : acceptType === 'PDF' ? '.pdf' : '.pdf,.doc,.docx,.xls,.xlsx,image/*'}
+              accept={acceptType === 'IMAGEN' ? 'image/*' : acceptType === 'VIDEO' ? 'video/*' : acceptType === 'PDF' ? '.pdf' : '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.odt,.ods,.rtf,.py,.txt,.zip,.rar,.7z,.ipynb,.xml,.json,.csv,.md,.sql,.java,.c,.cpp,.cs,image/*'}
               onChange={handleFileUpload}
             />
           </Button>
@@ -257,7 +284,7 @@ const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios',
                     <input
                       type="file"
                       hidden
-                      accept={acceptType === 'IMAGEN' ? 'image/*' : acceptType === 'VIDEO' ? 'video/*' : acceptType === 'PDF' ? '.pdf' : '.pdf,.doc,.docx,.xls,.xlsx,image/*'}
+                      accept={acceptType === 'IMAGEN' ? 'image/*' : acceptType === 'VIDEO' ? 'video/*' : acceptType === 'PDF' ? '.pdf' : '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.odt,.ods,.rtf,.py,.txt,.zip,.rar,.7z,.ipynb,.xml,.json,.csv,.md,.sql,.java,.c,.cpp,.cs,image/*'}
                       onChange={handleFileUpload}
                     />
                   </CardActionArea>

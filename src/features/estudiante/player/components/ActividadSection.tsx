@@ -32,10 +32,14 @@ function getFileIcon(nombre: string) {
   const ext = nombre.split('.').pop()?.toLowerCase() ?? ''
 
   if (ext === 'pdf') return 'tabler-file-type-pdf text-red-600'
-  if (['doc', 'docx'].includes(ext)) return 'tabler-file-type-docx text-blue-600'
-  if (['xls', 'xlsx'].includes(ext)) return 'tabler-file-type-xlsx text-green-600'
-  if (['zip', 'rar'].includes(ext)) return 'tabler-file-zip text-amber-600'
+  if (['doc', 'docx', 'odt', 'rtf'].includes(ext)) return 'tabler-file-type-docx text-blue-600'
+  if (['xls', 'xlsx', 'ods', 'csv'].includes(ext)) return 'tabler-file-type-xlsx text-green-600'
+  if (['ppt', 'pptx'].includes(ext)) return 'tabler-file-type-ppt text-orange-600'
+  if (['zip', 'rar', '7z'].includes(ext)) return 'tabler-file-zip text-amber-600'
   if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) return 'tabler-photo text-purple-600'
+  if (['py', 'ipynb', 'java', 'c', 'cpp', 'cs', 'json', 'sql'].includes(ext)) return 'tabler-file-code text-cyan-600'
+  if (ext === 'xml') return 'tabler-file-code text-orange-600'
+  if (['txt', 'md'].includes(ext)) return 'tabler-file-text text-slate-600'
 
   return 'tabler-file text-slate-500'
 }
