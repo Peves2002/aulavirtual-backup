@@ -236,7 +236,7 @@ export function UsuariosPage({ initialDataUsuarios, initialTotal = 0 }: Usuarios
       columnHelper.display({
         id: 'numero',
         header: '# Orden',
-        cell: ({ row }) => <DragHandleCell rowId={row.original.id} orden={row.original.orden || 0} />
+        cell: ({ row }) => <DragHandleCell rowId={row.original.id} orden={(row.original as any).orden || 0} />
       }),
       columnHelper.accessor('nombre', {
         header: 'Usuario',

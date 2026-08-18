@@ -41,7 +41,7 @@ import Logo from '@components/layout/shared/Logo'
 import Link from '@components/Link'
 
 // Styled Custom Components
-const LoginIllustration = styled('img')(({ theme }) => ({
+const LoginIllustration = styled('img')(() => ({
   zIndex: 2,
   width: '100%',
   height: 'auto',
@@ -73,7 +73,6 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
 
   // Hooks
   const { settings } = useSettings()
-  const router = useRouter()
   const theme = useTheme()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
   const authBackground = useImageVariant(mode, lightImg, darkImg)

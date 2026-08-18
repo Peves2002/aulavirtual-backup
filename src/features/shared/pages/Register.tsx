@@ -44,10 +44,11 @@ import Logo from '@components/layout/shared/Logo'
 import Link from '@components/Link'
 
 // Styled Custom Components
-const RegisterIllustration = styled('img')(({ theme }) => ({
+const RegisterIllustration = styled('img')(() => ({
   zIndex: 2,
-  width: '100%',
-  height: 'auto',
+  maxBlockSize: 740,
+  marginTop: 20,
+  marginBottom: 20
 }))
 
 const MaskImg = styled('img')({
@@ -79,7 +80,8 @@ const Register = ({ mode }: { mode: SystemMode }) => {
   // Hooks
   const router = useRouter()
   const { settings } = useSettings()
-  const hidden = useMediaQuery((useTheme()).breakpoints.down('md'))
+  const theme = useTheme()
+  const hidden = useMediaQuery(theme.breakpoints.down('md'))
   const authBackground = useImageVariant(mode, lightImg, darkImg)
 
   useEffect(() => {
