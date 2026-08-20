@@ -17,6 +17,7 @@
     "db:migration:dev": "prisma migrate dev",
     "db:migration:deploy": "prisma migrate deploy",
     "db:seed": "dotenv -- tsx ./prisma/seed/main",
+    "db:seed:admin": "dotenv -- tsx ./prisma/seed/admin",
     "db:seed:chat": "dotenv -- tsx ./prisma/seed/chat-demo",
     "db:seed:pagos": "dotenv -- tsx ./prisma/seed/pagos-demo",
     "db:reset": "dotenv -e .env -- pnpm prisma migrate reset"
