@@ -51,7 +51,6 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
   const loginForm = useForm<LoginDto>({
     resolver: zodResolver(loginSchema),
     defaultValues: { correo: '', contrasena: '' }
-    defaultValues: { correo: '', contrasena: '' }
   })
 
   const registerForm = useForm<RegisterDto>({
