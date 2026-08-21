@@ -25,9 +25,9 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           
           {/* Brand Column */}
           <div className="md:col-span-4 lg:col-span-4">
-            <Link href="/" className="inline-block mb-6 bg-white p-3 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+            <div className="inline-block mb-6 bg-white p-3 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
               <Logo />
-            </Link>
+            </div>
             <p className="text-sm text-gray-400 mb-8 leading-relaxed max-w-sm">
               Desde 2006, brindamos soluciones integrales en Prevención de Riesgos, Control de Operaciones y Respuesta a Emergencias.
             </p>

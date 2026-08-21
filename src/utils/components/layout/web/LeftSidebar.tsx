@@ -9,7 +9,7 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { signOut, useSession } from 'next-auth/react'
 
-import { Home, BookOpen, Users, Award, Map, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut } from 'lucide-react'
+import { Home, BookOpen, Users, Award, Map, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, MonitorSmartphone } from 'lucide-react'
 
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import { usePWAInstall } from '@/utils/hooks/usePWAInstall'
@@ -19,7 +19,7 @@ import PWAInstallTip from '@/utils/components/shared/PWAInstallTip'
 const ALL_NAV_ITEMS = [
   { title: 'Inicio', url: '/plataforma', icon: Home, key: 'inicio' },
   { title: 'Cursos', url: '/plataforma/cursos', icon: BookOpen, key: 'cursos' },
-  { title: 'Rutas', url: '/plataforma/rutas', icon: Map, key: 'rutas' },
+  ...(isFeatureEnabled('rutas') ? [{ title: 'Rutas', url: '/plataforma/rutas', icon: Map, key: 'rutas' as const }] : []),
   { title: 'Empresas', url: '/plataforma/empresas', icon: Building2, key: 'empresas' },
   { title: 'Nosotros', url: '/plataforma/nosotros', icon: Users, key: 'nosotros' },
   { title: 'Certificado', url: '/plataforma/verificar-certificado', icon: Award, key: 'certificado' },

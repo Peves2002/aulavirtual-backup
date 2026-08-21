@@ -13,14 +13,14 @@ export default function PoliticaCambiosYDevolucionesPage() {
           Política de Cambios y Devoluciones
         </h1>
         <p className="text-center text-gray-500 mb-12">
-          Última actualización: 15 de agosto de 2026
+          Última actualización: 20 de agosto de 2026
         </p>
 
         <div className="space-y-8 leading-relaxed">
           <p>
             La presente política regula las condiciones de reembolso y cambios aplicables a los
-            servicios educativos ofrecidos por <strong>IFSEC Group</strong>, marca comercial de <strong>Ifsec Perú S.A.C.</strong>,
-            con RUC <strong>20514508179</strong> y domicilio en Callao, Callao, Bellavista, a través de su plataforma.
+            servicios educativos ofrecidos por <strong>IFSEC Group</strong>, marca comercial de <strong>IFSEC PERÚ S.A.C.</strong>,
+            con RUC <strong>20514508179</strong> y domicilio en Francisco Pizarro 312, Bellavista, Callao, a través de su plataforma.
             Al adquirir cualquier curso o servicio, el usuario declara haber leído y aceptado los términos aquí descritos.
           </p>
 
@@ -45,7 +45,7 @@ export default function PoliticaCambiosYDevolucionesPage() {
             <p className="mt-4">
               El usuario reconoce expresamente que, al realizar el primer inicio de sesión, visualizar la primera
               lección o descargar cualquier material del curso, otorga su <strong>consentimiento expreso para el inicio
-              inmediato de la prestación del servicio</strong>, renunciando con ello a su derecho de arrepentimiento
+                inmediato de la prestación del servicio</strong>, renunciando con ello a su derecho de arrepentimiento
               o solicitud de reembolso, dado que el servicio se considera consumido desde el inicio de su ejecución.
             </p>
             <p className="mt-4">
@@ -79,7 +79,7 @@ export default function PoliticaCambiosYDevolucionesPage() {
             </p>
             <ol className="list-decimal pl-6 mt-4 space-y-2">
               <li>
-                Enviar un correo a <strong>comercial@ifsec.pe</strong> (o comunicarse al <strong>965 052 858</strong>) con el asunto:{' '}
+                Enviar un correo a <strong>comercial@ifsec.pe</strong> (o comunicarse al <strong>993 492 895</strong>) con el asunto:{' '}
                 <em>&quot;Solicitud de Reembolso — [Nombre del Curso/Servicio]&quot;</em>.
               </li>
               <li>Adjuntar el comprobante de pago y número de pedido correspondiente.</li>
@@ -107,7 +107,7 @@ export default function PoliticaCambiosYDevolucionesPage() {
             <h2 className="text-2xl font-bold text-[var(--web-dark)] mb-4 mt-8">6. Contacto y Atención al Cliente</h2>
             <p>
               Para consultas relacionadas con esta política, comuníquese con nosotros a través de{' '}
-              <strong>comercial@ifsec.pe</strong> o al <strong>965 052 858</strong>. De acuerdo con la legislación de protección
+              <strong>comercial@ifsec.pe</strong> o al <strong>993 492 895</strong>. De acuerdo con la legislación de protección
               al consumidor vigente, también ponemos a su disposición nuestro{' '}
               <a href="/libro-de-reclamaciones" className="text-[var(--web-primary)] underline hover:text-[#1f7d6d] transition-colors">
                 Libro de Reclamaciones

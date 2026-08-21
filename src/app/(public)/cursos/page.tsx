@@ -10,7 +10,7 @@ export const metadata = {
 export default async function CursosPage() {
   const [cursos, categorias] = await Promise.all([
     prisma.curso.findMany({
-      where: { estado: 'PUBLICADO' },
+      where: { estado: 'PUBLICADO', tipo: 'CURSO' },
       include: {
         categoria: true,
         profesor: { select: { nombre: true, apellido: true, avatar: true } },
@@ -28,12 +28,12 @@ export default async function CursosPage() {
   return (
     <div className="bg-[#f8fafc] min-h-screen">
       {/* ── ENCABEZADO ── */}
-      <section className="bg-[#020817] mt-20 min-h-[calc(100vh-5rem)] px-6 relative overflow-hidden flex items-center">
+      <section className="bg-[#020817] mt-20 px-6 relative overflow-hidden flex items-center">
         {/* Glow */}
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[var(--web-primary)]/15 blur-[150px] rounded-full mix-blend-screen pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#1f7d6d]/20 blur-[120px] rounded-full mix-blend-screen pointer-events-none translate-y-1/2 -translate-x-1/3"></div>
 
-        <div className="max-w-7xl mx-auto w-full relative z-10 grid lg:grid-cols-12 gap-12 items-center py-16">
+        <div className="max-w-7xl mx-auto w-full relative z-10 grid lg:grid-cols-12 gap-12 items-center py-14 lg:py-20">
           <div className="lg:col-span-7">
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-white mb-6 tracking-tight leading-[1.1]" style={{ fontFamily: 'Inter, sans-serif' }}>
               Formación de <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--web-light)] to-[var(--web-primary)]">Alto Nivel</span>
@@ -45,7 +45,7 @@ export default async function CursosPage() {
 
           <div className="lg:col-span-5 hidden lg:block">
             <div className="relative w-full aspect-square bg-gradient-to-tr from-white/5 to-white/10 rounded-[3rem] border border-white/10 backdrop-blur-sm p-6 flex flex-col justify-end shadow-2xl">
-              <div className="absolute inset-0 bg-[url('/images/servicios/entrenamientos-vivenciales/lucha-contra-incendios/whatsapp-image-2025-05-25-at-3.26.04-pm-1.jpeg')] bg-cover bg-center opacity-40 rounded-[3rem] mix-blend-overlay"></div>
+              <div className="absolute inset-0 bg-[url('/images/servicios/entrenamientos-vivenciales/1.png')] bg-cover bg-center opacity-40 rounded-[3rem] mix-blend-overlay"></div>
               <div className="relative z-10 bg-black/40 backdrop-blur-md p-6 rounded-3xl border border-white/10">
                 <div className="text-[var(--web-light)] text-xs font-bold uppercase tracking-wider mb-2">Estadísticas</div>
                 <div className="flex justify-between items-end">

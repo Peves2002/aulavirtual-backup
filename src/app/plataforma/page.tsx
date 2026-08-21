@@ -1,7 +1,6 @@
 import Link from 'next/link'
 
 import { ArrowRight, CheckCircle } from 'lucide-react'
-import { ArrowRight, CheckCircle } from 'lucide-react'
 
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
@@ -20,6 +19,8 @@ export const metadata = {
   title: 'Aula Virtual - Aprende sin límites',
   description: 'Plataforma de aprendizaje online con cursos especializados y certificados.',
 }
+
+const cursosConfig = getTipoProgramaConfig('CURSO')
 
 async function getHomeData() {
   try {

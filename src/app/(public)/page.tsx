@@ -93,7 +93,7 @@ return {
     <div className="flex flex-col relative bg-[#f8fafc] overflow-hidden">
       
       {/* ── HERO SECTION (DARK PREMIUM) ── */}
-      <section className="relative mt-20 h-[calc(100vh-5rem)] flex items-center overflow-hidden bg-[#020817]">
+      <section className="relative mt-20 min-h-[calc(100vh-5rem)] py-12 lg:py-0 flex items-center overflow-hidden bg-[#020817]">
         {/* Background Gradients */}
         <div className="absolute inset-0 z-0">
           <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-[var(--web-primary)]/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none -translate-y-1/2"></div>
