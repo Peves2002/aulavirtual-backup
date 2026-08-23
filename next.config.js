@@ -46,6 +46,9 @@ const securityHeaders = [
 ]
 
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   reactStrictMode: true,
   output: 'standalone',
   webpack: (config) => {

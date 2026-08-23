@@ -18,7 +18,7 @@ const PhoneIcon = () => (
 
 const tooltipStyle: React.CSSProperties = {
   position: 'absolute',
-  left: '64px',
+  right: '64px',
   top: '50%',
   transform: 'translateY(-50%)',
   backgroundColor: 'rgba(15, 23, 42, 0.85)',
@@ -37,14 +37,15 @@ export default function FloatingContactButtons() {
   const [hoveredPhone, setHoveredPhone] = useState(false)
   const configs = useConfig()
   const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
+  const waMessage = configs.WHATSAPP_MENSAJE || 'Hola, me gustaría obtener más información sobre sus programas.'
   const phoneNumber = waNumber.startsWith('+') ? waNumber : `+${waNumber}`
 
   return (
     <div
       style={{
         position: 'fixed',
-        left: '20px',
-        bottom: '40px',
+        right: '24px',
+        bottom: '24px',
         zIndex: 9999,
         display: 'flex',
         flexDirection: 'column',
@@ -54,7 +55,7 @@ export default function FloatingContactButtons() {
       {/* WhatsApp */}
       <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
         <a
-          href={`https://wa.me/${waNumber}`}
+          href={`https://wa.me/${waNumber}?text=${encodeURIComponent(waMessage)}`}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Contactar por WhatsApp"
@@ -80,32 +81,6 @@ export default function FloatingContactButtons() {
         {hoveredWa && <span style={tooltipStyle}>Escríbenos al WhatsApp</span>}
       </div>
 
-      {/* Llamada */}
-      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-        <a
-          href={`tel:${phoneNumber}`}
-          aria-label="Llamar al negocio"
-          style={{
-            width: '52px',
-            height: '52px',
-            borderRadius: '50%',
-            backgroundColor: '#02115C',
-            color: '#ffffff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: hoveredPhone ? '0 6px 20px rgba(2, 17, 92, 0.55)' : '0 4px 16px rgba(2, 17, 92, 0.4)',
-            transform: hoveredPhone ? 'scale(1.1)' : 'scale(1)',
-            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-            textDecoration: 'none',
-          }}
-          onMouseEnter={() => setHoveredPhone(true)}
-          onMouseLeave={() => setHoveredPhone(false)}
-        >
-          <PhoneIcon />
-        </a>
-        {hoveredPhone && <span style={tooltipStyle}>Llámanos</span>}
-      </div>
     </div>
   )
 }

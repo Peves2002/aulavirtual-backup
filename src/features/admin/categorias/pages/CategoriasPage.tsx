@@ -12,7 +12,8 @@ import {
   TablePagination,
   Typography,
   Box,
-  CircularProgress
+  CircularProgress,
+  Switch
 } from '@mui/material'
 
 
@@ -58,7 +59,7 @@ import CustomTextField from '@/@core/components/mui/TextField'
 import type { ThemeColor } from '@/@core/types'
 
 import type { Categoria } from '../entity/Categoria'
-import { useCategorias, useReordenarCategoriasPrincipales } from '../hooks/useCategorias'
+import { useCategorias, useReordenarCategoriasPrincipales, useToggleCategoriaStatus } from '../hooks/useCategorias'
 import { CategoriasActions } from '../components/CategoriasActions'
 import { DebouncedInput } from '@/utils/components/others/DebouncedInput'
 import { fuzzyFilter } from '@/utils/components/others/FuzzyFilter'
@@ -68,9 +69,49 @@ type StatusType = {
   [key: string]: ThemeColor
 }
 
+// Vars
 const statusObj: StatusType = {
   activo: 'success',
   inactivo: 'secondary'
+}
+
+const CategoriaStatusSwitch = ({ row }: { row: Row<Categoria> }) => {
+  const toggleMutation = useToggleCategoriaStatus()
+  const [checked, setChecked] = useState(row.original.esta_activo)
+  const { enqueueSnackbar } = useSnackbar()
+
+  const handleToggle = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.checked
+
+    setChecked(newValue) // Optimistic update
+
+    try {
+      await toggleMutation.mutateAsync({ id: row.original.id, esta_activo: newValue })
+      enqueueSnackbar(`Categoría ${newValue ? 'activada' : 'desactivada'}`, { variant: 'success' })
+    } catch (error) {
+      setChecked(!newValue) // Revert on error
+      enqueueSnackbar('Error al cambiar el estado', { variant: 'error' })
+    }
+  }
+
+  return (
+    <div className='flex items-center gap-2'>
+      <Switch
+        size='small'
+        checked={checked}
+        onChange={handleToggle}
+        color={checked ? 'success' : 'secondary'}
+        disabled={toggleMutation.isPending}
+      />
+      <Chip
+        variant='tonal'
+        className='capitalize'
+        label={checked ? 'Activo' : 'Inactivo'}
+        color={statusObj[checked ? 'activo' : 'inactivo']}
+        size='small'
+      />
+    </div>
+  )
 }
 
 const columnHelper = createColumnHelper<Categoria>()
@@ -279,15 +320,7 @@ export function CategoriasPage({ initialDataCategorias, initialTotal = 0 }: Cate
       }),
       columnHelper.accessor('esta_activo', {
         header: 'Estado',
-        cell: ({ row }) => (
-          <Chip
-            variant='tonal'
-            className='capitalize'
-            label={row.original.esta_activo ? 'Activo' : 'Inactivo'}
-            color={statusObj[row.original.esta_activo ? 'activo' : 'inactivo']}
-            size='small'
-          />
-        )
+        cell: ({ row }) => <CategoriaStatusSwitch row={row} />
       }),
       columnHelper.display({
         id: 'acciones',

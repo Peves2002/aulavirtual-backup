@@ -92,9 +92,13 @@ export async function GET(request: Request, { params }: { params: { id: string }
  * Actualizar un usuario (ADMIN)
  */
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+  console.log('[DEBUG PATCH USUARIO] HIT ROUTE!', params.id)
+
   try {
     // Verificar que sea admin
     const auth = await requireAdmin(request)
+
+    console.log('[DEBUG PATCH USUARIO] Auth status:', auth.authorized)
 
     if (!auth.authorized) {
       return auth.error
@@ -103,14 +107,20 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     const { id } = params
     const body = await request.json()
 
+    console.log('[DEBUG PATCH USUARIO] Body:', body)
+
     // Validar datos
     const validation = validateRequest(actualizarUsuarioSchema, body, request)
 
     if (!validation.success) {
-      return validation.error
+      console.log('[DEBUG PATCH USUARIO] Validation error:', validation.error)
+      
+return validation.error
     }
 
     const data = validation.data
+
+    console.log('[DEBUG PATCH USUARIO] Data after validation:', data)
 
     // Verificar que el usuario existe
     const usuario = await prisma.usuario.findUnique({
@@ -168,6 +178,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
         actualizado_en: true
       }
     })
+
+    console.log('[DEBUG PATCH USUARIO] Successfully updated in DB')
 
     return ApiResponse.success(request, { usuario: usuarioActualizado })
   } catch (error) {

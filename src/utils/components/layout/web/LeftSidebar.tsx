@@ -189,7 +189,7 @@ return () => clearTimeout(timer)
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.08)' }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent' }}
                 >
-                  Todas las categorías
+                  Todas las áreas
                 </Link>
                 <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.1)', margin: '4px 8px' }} />
                 {categories.map(cat => (

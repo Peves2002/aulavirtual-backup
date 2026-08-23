@@ -35,10 +35,11 @@ interface UsuarioDetallesModalProps {
   usuarioId: string | null
 }
 
-const rolLabels: { [key in Rol]: string } = {
+const rolLabels: Record<string, string> = {
   ADMIN: 'Administrador',
   PROFESOR: 'Profesor',
-  ESTUDIANTE: 'Estudiante'
+  ESTUDIANTE: 'Estudiante',
+  ASESOR: 'Asesor'
 }
 
 interface CertConfirm {

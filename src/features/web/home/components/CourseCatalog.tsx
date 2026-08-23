@@ -52,9 +52,6 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
   const [selectedAreas, setSelectedAreas] = useState<string[]>([])
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [selectedModalities, setSelectedModalities] = useState<string[]>([])
-  
-  // Mantenemos filtros de nivel y precio, pero podemos ocultarlos de la sidebar si no fueron solicitados explícitamente, 
-  // aunque es buena práctica mantenerlos si existían. Por ahora los dejamos en estado por si se necesitan.
   const [sortBy, setSortBy] = useState('recent')
   
   const { itemCount, setIsCartDrawerOpen } = useCart()
@@ -64,9 +61,9 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
     const catId = searchParams.get('categoria')
 
     if (catId) {
-      setSelectedCategories([catId])
+      setSelectedAreas([catId])
     } else {
-      setSelectedCategories([])
+      setSelectedAreas([])
     }
   }, [searchParams])
 
@@ -76,9 +73,9 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
     )
   }
 
-  const handleToggleCategory = (slug: string) => {
+  const handleToggleCategory = (cat: string) => {
     setSelectedCategories(prev => 
-      prev.includes(slug) ? prev.filter(c => c !== slug) : [...prev, slug]
+      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
     )
   }
 
@@ -94,16 +91,15 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
         (course.descripcion && course.descripcion.toLowerCase().includes(searchTerm.toLowerCase()))
 
       const matchesCategory = selectedCategories.length === 0 || 
-        (course.categoria?.slug && selectedCategories.includes(course.categoria.slug))
+        (course.tipo && selectedCategories.map(c => c.toUpperCase()).includes(course.tipo.toUpperCase() === 'PROGRAMA' ? 'PROGRAMAS' : course.tipo.toUpperCase()))
+
+      const matchesArea = selectedAreas.length === 0 || 
+        (course.categoria?.nombre && selectedAreas.includes(course.categoria.nombre))
 
       const matchesModality = selectedModalities.length === 0 || 
-        selectedModalities.includes(course.tipo_emision)
-        
-      // El filtro de área es dummy por ahora, pero lo aplicamos lógicamente si tuvieramos la data
-      // const matchesArea = selectedAreas.length === 0 || selectedAreas.includes(course.area)
-      const matchesArea = true // Bypass temporal
+        (course.tipo_emision && selectedModalities.includes(course.tipo_emision))
 
-      return matchesSearch && matchesCategory && matchesModality && matchesArea
+      return matchesSearch && matchesCategory && matchesArea && matchesModality
     })
 
     return [...filtered].sort((a, b) => {
@@ -113,10 +109,9 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
         return a.titulo.localeCompare(b.titulo)
       }
 
-      
-return 0
+      return 0
     })
-  }, [courses, searchTerm, selectedCategories, selectedModalities, sortBy])
+  }, [courses, searchTerm, selectedCategories, selectedAreas, selectedModalities, sortBy])
 
   const clearFilters = () => {
     setSearchTerm('')
@@ -131,6 +126,9 @@ return 0
     selectedCategories.length > 0 ||
     selectedModalities.length > 0 ||
     sortBy !== 'recent'
+
+  const AREAS_LIST = ['Docencia', 'Ingeniería', 'Gestión Pública', 'Educación', 'Psicología']
+  const CATEGORIAS_LIST = ['Curso', 'Diplomado', 'Programas']
 
   return (
     <Box sx={{ bgcolor: '#f8fafc', minHeight: '100vh', pb: 10 }}>
@@ -150,7 +148,7 @@ return 0
           <Stack spacing={2} sx={{ width: { xs: '100%', md: 280 }, flexShrink: 0 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, px: 1 }}>
               <Typography variant="h6" sx={{ fontWeight: 800, display: 'flex', alignItems: 'center', gap: 1, color: '#1e293b' }}>
-                Filters <i className="tabler-filter" style={{ fontSize: '1.2rem' }} />
+                Filtros <i className="tabler-filter" style={{ fontSize: '1.2rem' }} />
               </Typography>
               {hasFilters && (
                 <Button size="small" onClick={clearFilters} sx={{ textTransform: 'none', fontWeight: 600 }}>
@@ -159,48 +157,7 @@ return 0
               )}
             </Box>
 
-            {/* 1. Área */}
-            <Accordion 
-              defaultExpanded 
-              disableGutters 
-              elevation={0} 
-              sx={{ 
-                bgcolor: 'white', 
-                borderRadius: '12px !important', 
-                border: '1px solid #f1f5f9',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.02)',
-                '&:before': { display: 'none' },
-                overflow: 'hidden'
-              }}
-            >
-              <AccordionSummary 
-                expandIcon={<i className="tabler-chevron-left" style={{ fontSize: '1.2rem', color: '#475569' }} />} 
-                sx={{ px: 2.5, minHeight: 56, '& .MuiAccordionSummary-content': { my: 1.5 } }}
-              >
-                <Typography sx={{ fontWeight: 500, fontSize: '1.05rem', color: '#1e293b' }}>Área</Typography>
-              </AccordionSummary>
-              <AccordionDetails sx={{ px: 2.5, pt: 0, pb: 2.5 }}>
-                <FormGroup>
-                  {DUMMY_AREAS.map(area => (
-                    <FormControlLabel 
-                      key={area}
-                      control={
-                        <Checkbox 
-                          size="small" 
-                          checked={selectedAreas.includes(area)}
-                          onChange={() => handleToggleArea(area)}
-                          sx={{ color: '#cbd5e1', '&.Mui-checked': { color: 'var(--mui-palette-primary-main)' }, p: 0.5, mr: 1 }}
-                        />
-                      } 
-                      label={<Typography variant="body2" sx={{ color: '#475569', fontSize: '0.95rem' }}>{area}</Typography>} 
-                      sx={{ mb: 1, ml: 0 }}
-                    />
-                  ))}
-                </FormGroup>
-              </AccordionDetails>
-            </Accordion>
-
-            {/* 2. Categoría */}
+            {/* 1. Categoría */}
             <Accordion 
               defaultExpanded 
               disableGutters 
@@ -222,18 +179,59 @@ return 0
               </AccordionSummary>
               <AccordionDetails sx={{ px: 2.5, pt: 0, pb: 2.5 }}>
                 <FormGroup>
-                  {categories.map(cat => (
+                  {CATEGORIAS_LIST.map(cat => (
                     <FormControlLabel 
-                      key={cat.id}
+                      key={cat}
                       control={
                         <Checkbox 
                           size="small" 
-                          checked={selectedCategories.includes(cat.slug)}
-                          onChange={() => handleToggleCategory(cat.slug)}
+                          checked={selectedCategories.includes(cat)}
+                          onChange={() => handleToggleCategory(cat)}
                           sx={{ color: '#cbd5e1', '&.Mui-checked': { color: 'var(--mui-palette-primary-main)' }, p: 0.5, mr: 1 }}
                         />
                       } 
-                      label={<Typography variant="body2" sx={{ color: '#475569', fontSize: '0.95rem' }}>{cat.nombre}</Typography>} 
+                      label={<Typography variant="body2" sx={{ color: '#475569', fontSize: '0.95rem' }}>{cat}</Typography>} 
+                      sx={{ mb: 1, ml: 0 }}
+                    />
+                  ))}
+                </FormGroup>
+              </AccordionDetails>
+            </Accordion>
+
+            {/* 2. Área */}
+            <Accordion 
+              defaultExpanded 
+              disableGutters 
+              elevation={0} 
+              sx={{ 
+                bgcolor: 'white', 
+                borderRadius: '12px !important', 
+                border: '1px solid #f1f5f9',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.02)',
+                '&:before': { display: 'none' },
+                overflow: 'hidden'
+              }}
+            >
+              <AccordionSummary 
+                expandIcon={<i className="tabler-chevron-left" style={{ fontSize: '1.2rem', color: '#475569' }} />} 
+                sx={{ px: 2.5, minHeight: 56, '& .MuiAccordionSummary-content': { my: 1.5 } }}
+              >
+                <Typography sx={{ fontWeight: 500, fontSize: '1.05rem', color: '#1e293b' }}>Área</Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ px: 2.5, pt: 0, pb: 2.5 }}>
+                <FormGroup>
+                  {AREAS_LIST.map(area => (
+                    <FormControlLabel 
+                      key={area}
+                      control={
+                        <Checkbox 
+                          size="small" 
+                          checked={selectedAreas.includes(area)}
+                          onChange={() => handleToggleArea(area)}
+                          sx={{ color: '#cbd5e1', '&.Mui-checked': { color: 'var(--mui-palette-primary-main)' }, p: 0.5, mr: 1 }}
+                        />
+                      } 
+                      label={<Typography variant="body2" sx={{ color: '#475569', fontSize: '0.95rem' }}>{area}</Typography>} 
                       sx={{ mb: 1, ml: 0 }}
                     />
                   ))}

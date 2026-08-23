@@ -11,28 +11,97 @@ import { AxiosWebCursos } from '@/features/web/cursos/http/axiosWebCursos'
 // Component Imports
 import CourseDetail from '@/features/web/courses/components/CourseDetail'
 
+import prisma from '@/utils/libs/prisma'
+
 // Server Action / Data Fetching
-async function getCourseData(slug: string, token: string | null) {
+async function getCourseData(slug: string, userId: string | null) {
+    console.log("getCourseData CALLED WITH SLUG:", slug);
+
     try {
-        const axiosWebCursos = new AxiosWebCursos({
-            getAuthToken: () => token
+        const course = await prisma.curso.findUnique({
+            where: {
+                slug,
+                estado: 'PUBLICADO',
+                es_privado: false
+            },
+            include: {
+                profesor: {
+                    select: { id: true, slug: true, nombre: true, apellido: true, avatar: true, biografia: true, cargo: true }
+                },
+                categoria: {
+                    select: { id: true, nombre: true }
+                },
+                modulos: {
+                    include: {
+                        lecciones: {
+                            where: { estado: 'PUBLICADO' },
+                            orderBy: { orden: 'asc' }
+                        }
+                    },
+                    orderBy: { orden: 'asc' }
+                }
+            }
         })
 
-        const data = await axiosWebCursos.getCourseBySlug(slug)
+        if (!course) return null;
 
-        return data
+        let es_comprado = false
+
+        if (userId) {
+            const inscripcion = await prisma.inscripcion.findFirst({
+                where: {
+                    usuario_id: userId,
+                    curso_id: course.id,
+                    estado: 'ACTIVO'
+                }
+            })
+
+            if (inscripcion) {
+                es_comprado = true
+            }
+        }
+
+        const safeParseJson = (data: any) => {
+            if (typeof data === 'string') {
+                try {
+                    return JSON.parse(data)
+                } catch {
+                    return []
+                }
+            }
+
+            
+return Array.isArray(data) ? data : []
+        }
+
+        const safeDecimal = (val: any) => val ? Number(val.toString()) : null
+
+        const sanitizedCourse = {
+            ...course,
+            es_comprado,
+            precio: safeDecimal(course.precio),
+            precio_falso: safeDecimal(course.precio_falso),
+            precio_certificado: safeDecimal(course.precio_certificado),
+            precio_oferta: safeDecimal(course.precio_oferta),
+            beneficios: safeParseJson(course.beneficios),
+            incluye: safeParseJson(course.incluye),
+            metodologia: safeParseJson(course.metodologia),
+            objetivos: safeParseJson(course.objetivos)
+        }
+
+        return sanitizedCourse
     } catch (error) {
-        console.error('Error fetching course data via API:', error)
-
-        return null
+        console.error('Error fetching course data via DB:', error)
+        
+return null
     }
 }
 
 export default async function CourseDetailPage({ params }: { params: { slug: string } }) {
     const session = await getAuthSession()
-    const token = session?.user?.accessToken ?? null
+    const userId = session?.user?.id ?? null
     
-    const course = await getCourseData(params.slug, token)
+    const course = await getCourseData(params.slug, userId)
 
     if (!course) {
         notFound()
@@ -40,7 +109,7 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
 
     return (
         <Box sx={{ flexGrow: 1, bgcolor: 'background.default' }}>
-            <CourseDetail course={course} />
+            <CourseDetail course={course as any} />
         </Box>
     )
 }

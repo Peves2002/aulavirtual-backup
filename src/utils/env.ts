@@ -9,6 +9,10 @@ export const getBaseURL = () => {
   const localhostFallback =
     port && port !== '3000' ? `http://localhost:${port}` : 'http://localhost:3000'
 
+  if (process.env.NODE_ENV === 'development') {
+    return process.env.INTERNAL_API_URL || localhostFallback
+  }
+
   // En el servidor: evita llamadas al puerto incorrecto cuando Next usa 3001, 3002, etc.
   return (
     process.env.INTERNAL_API_URL ||

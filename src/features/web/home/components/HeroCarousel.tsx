@@ -71,7 +71,7 @@ function VisualCamaras() {
 
 function VisualIsos() {
   return (
-    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center', width: '100%', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'flex-end', width: '100%', flexWrap: 'wrap' }}>
       {['/images/isos/iso9001.webp', '/images/isos/iso21001.webp'].map((src, i) => (
         <div key={i} className="w-[140px] h-[140px] sm:w-[180px] sm:h-[180px]" style={{ position: 'relative', filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.4))' }}>
           <Image src={src} alt={`ISO ${i === 0 ? '9001' : '21001'}`} fill style={{ objectFit: 'contain' }} />
@@ -84,7 +84,7 @@ function VisualIsos() {
 function VisualImage({ src, alt, style }: { src: string; alt: string; style?: React.CSSProperties }) {
   return (
     <div style={{ position: 'absolute', bottom: 0, ...style }}>
-      <Image src={src} alt={alt} fill style={{ objectFit: 'contain', objectPosition: 'bottom center' }} sizes="580px" priority />
+      <Image src={src} alt={alt} fill style={{ objectFit: 'contain', objectPosition: (style as any)?.objectPosition || 'bottom center' }} sizes="580px" priority />
     </div>
   )
 }
@@ -125,12 +125,12 @@ export default function HeroCarousel() {
       <div aria-hidden style={{ position: 'absolute', top: '-20%', right: '-10%', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(var(--web-primary-rgb,37,146,127),0.25) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.5rem', width: '100%', position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', alignItems: 'center', justifyContent: 'space-between' }}>
 
           {/* Izquierda: texto (igual para todos) */}
           <div
             key={`left-${current}`}
-            style={{ position: 'relative', zIndex: 2, animation: 'heroFadeIn 0.5s ease', maxWidth: '560px' }}
+            style={{ position: 'relative', zIndex: 2, animation: 'heroFadeIn 0.5s ease', width: '100%', maxWidth: '560px' }}
           >
 
             {/* Eyebrow */}
@@ -180,50 +180,41 @@ export default function HeroCarousel() {
             </div>
           </div>
 
-          {/* Derecha: visual del slide (grid para todos en mobile, pero solo camaras e isos en desktop) */}
           <div
             key={`right-${current}`}
-            className={`${slide.visual === 'portada3' || slide.visual === 'portada4' ? "md:hidden" : ""} flex items-center w-full pb-8 md:pb-0`}
-            style={{ justifyContent: slide.visual === 'isos' ? 'flex-start' : 'center', animation: 'heroFadeIn 0.5s ease' }}
+            className={`${slide.visual === 'portada3' || slide.visual === 'portada4' ? "md:hidden" : ""} flex flex-1 items-center w-full pb-8 md:pb-0`}
+            style={{ justifyContent: 'flex-end', animation: 'heroFadeIn 0.5s ease', minWidth: '300px' }}
           >
             {slide.visual === 'camaras' && <VisualCamaras />}
             {slide.visual === 'isos' && <VisualIsos />}
-            {(slide.visual === 'portada3') && (
-              <div className="md:hidden relative w-full h-[280px]">
-                <Image src="/images/3.png" alt="Grupo Ollarves equipo" fill style={{ objectFit: 'contain', objectPosition: 'center' }} priority />
-              </div>
-            )}
-            {(slide.visual === 'portada4') && (
-              <div className="md:hidden relative w-full h-[240px] px-6">
-                <div className="relative w-full h-full">
-                  <Image src="/images/4.png" alt="Presencia nacional" fill style={{ objectFit: 'contain', objectPosition: 'center' }} priority />
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
       </div>
 
       {/* Imágenes absolutas relativas a la section (ignoran el padding) - Solo Desktop */}
-      {slide.visual === 'portada3' && (
-        <div className="hidden md:block" key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-          <VisualImage
-            src="/images/3.png"
-            alt="Grupo Ollarves equipo"
-            style={{ right: '16%', width: '44%', height: '100%' }}
-          />
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, display: 'flex', justifyContent: 'center' }}>
+        <div style={{ width: '100%', maxWidth: '1280px', position: 'relative' }}>
+          {slide.visual === 'portada3' && (
+            <div className="hidden md:block" key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease' }}>
+              <VisualImage
+                src="/images/3.png"
+                alt="Grupo Ollarves equipo"
+                style={{ right: '1.5rem', width: '50%', height: '100%', objectPosition: 'bottom right' } as any}
+              />
+            </div>
+          )}
+          {slide.visual === 'portada4' && (
+            <div className="hidden md:block" key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease' }}>
+              <VisualImage
+                src="/images/4.png"
+                alt="Presencia nacional"
+                style={{ right: '1.5rem', width: '50%', top: '3rem', bottom: 0, objectPosition: 'bottom right' } as any}
+              />
+            </div>
+          )}
         </div>
-      )}
-      {slide.visual === 'portada4' && (
-        <div className="hidden md:block" key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-          <VisualImage
-            src="/images/4.png"
-            alt="Presencia nacional"
-            style={{ left: '50%', transform: 'translateX(-18%)', width: '52%', top: '3rem' }}
-          />
-        </div>
-      )}
+      </div>
 
       {/* Indicadores de portada */}
       <div style={{ position: 'absolute', left: 0, right: 0, bottom: '2rem', display: 'flex', justifyContent: 'center', gap: '0.625rem', zIndex: 2 }}>

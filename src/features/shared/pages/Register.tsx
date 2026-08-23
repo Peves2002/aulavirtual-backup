@@ -46,9 +46,9 @@ import Link from '@components/Link'
 // Styled Custom Components
 const RegisterIllustration = styled('img')(() => ({
   zIndex: 2,
-  maxBlockSize: 740,
-  marginTop: 20,
-  marginBottom: 20
+  maxWidth: '100%',
+  maxHeight: 'calc(100vh - 150px)', // leave ample space at top/bottom for the logo
+  objectFit: 'contain'
 }))
 
 const MaskImg = styled('img')({
@@ -72,10 +72,10 @@ const Register = ({ mode }: { mode: SystemMode }) => {
   // Vars
   const darkImg = '/images/pages/auth-mask-dark.png'
   const lightImg = '/images/pages/auth-mask-light.png'
-  const darkIllustration = '/images/equipo/middle.webp'
-  const lightIllustration = '/images/equipo/middle.webp'
-  const borderedDarkIllustration = '/images/equipo/middle.webp'
-  const borderedLightIllustration = '/images/equipo/middle.webp'
+  const darkIllustration = '/images/portada-general.webp'
+  const lightIllustration = '/images/portada-general.webp'
+  const borderedDarkIllustration = '/images/portada-general.webp'
+  const borderedLightIllustration = '/images/portada-general.webp'
 
   // Hooks
   const router = useRouter()
