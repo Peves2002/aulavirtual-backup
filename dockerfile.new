@@ -96,16 +96,11 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 # Crear el directorio uploads y private/videos y asignar permisos para subir imgs, pdfs y videos
 RUN mkdir -p /app/public/uploads /app/private/videos && chown -R nextjs:nodejs /app/public/uploads /app/private
 
-# -- SERVIDOR PERSONALIZADO (Socket.IO) --
-# La app NO usa output: 'standalone': server.js crea su propio httpServer y le
-# adjunta Socket.IO en el mismo proceso. El "standalone" de Next genera su propio
-# server.js autogenerado (sin Socket.IO) y descarta el de la raíz, por eso se copia
-# el build completo (.next) + node_modules completo + server.js explícitamente.
-COPY --from=builder --chown=nextjs:nodejs /app/next.config.js ./next.config.js
-COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
-COPY --from=builder --chown=nextjs:nodejs /app/server.js ./server.js
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+# -- SERVIDOR STANDALONE --
+# La app usa output: 'standalone', por lo que Next.js genera su propio
+# server.js autogenerado en .next/standalone.
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Copiar la carpeta Prisma por si se necesitan ejecutar comandos como migeraciones desde bash en el VPS
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
