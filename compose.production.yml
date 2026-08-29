@@ -20,7 +20,7 @@ services:
       - ./data/database:/var/lib/postgresql/data
     command: postgres -c config_file=/etc/postgresql/postgresql.conf -p ${DB_PORT}
   web:
-    image: peves/aula-virtual:v1.0.3
+    image: josehuerta23/aulavirtual:latest
     restart: always
     container_name: aula-virtual-web
     ports:
