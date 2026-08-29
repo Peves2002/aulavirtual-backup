@@ -42,3 +42,5 @@ Dockerfile
 .dockerignore
 docker-compose*
 
+
+_soutrainingcenter_temp

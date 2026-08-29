@@ -44,7 +44,7 @@ const socialLinks = [
 ];
 
 export const Footer = () => (
-  <footer className="bg-gradient-to-b from-[#111625] via-[#0b0e1a] to-[#04060b] text-white pt-24 pb-12 border-t border-[#cca353]/15 relative overflow-hidden">
+  <footer className="bg-gradient-to-b from-[#111625] via-[#0b0e1a] to-[#04060b] text-white pt-12 pb-12 border-t border-[#cca353]/15 relative overflow-hidden">
     {/* Decorative background ambient lights */}
     <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#cca353]/5 blur-[140px] -z-10 rounded-full translate-x-1/3 -translate-y-1/3" />
     <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gc-blue-corp/10 blur-[120px] -z-10 rounded-full -translate-x-1/3 translate-y-1/3" />
@@ -89,69 +89,80 @@ export const Footer = () => (
           </div>
         </div>
 
-        {/* Programas Column */}
-        <div className="col-span-6 md:col-span-3 lg:col-span-2">
+        {/* Enlaces Column */}
+        <div className="col-span-6 md:col-span-6 lg:col-span-2 lg:pt-12">
           <h4 className="font-gc-sans font-bold text-base text-white mb-6 tracking-wider uppercase text-xs text-[#cca353] border-b border-white/5 pb-2">
-            Programas
+            Enlaces
           </h4>
           <ul className="space-y-4 text-sm text-gray-400">
             <li>
-              <Link href="/cursos" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
+              <Link href="/" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
                 <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-                <span>AutoCAD Electrical</span>
+                <span>Inicio</span>
               </Link>
-            </li>
-            <li>
-              <Link href="/cursos" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
-                <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-                <span>DIALux Iluminación</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/cursos" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
-                <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-                <span>Paquete Integral</span>
-              </Link>
-            </li>
-
-          </ul>
-        </div>
-
-        {/* Empresa Column */}
-        <div className="col-span-6 md:col-span-3 lg:col-span-2">
-          <h4 className="font-gc-sans font-bold text-base text-white mb-6 tracking-wider uppercase text-xs text-[#cca353] border-b border-white/5 pb-2">
-            Empresa
-          </h4>
-          <ul className="space-y-4 text-sm text-gray-400">
-            <li>
-              <Link href="/nosotros" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
-                <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-                <span>Sobre Nosotros</span>
-              </Link>
-            </li>
-            <li>
-              <a href="/#metodologia" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
-                <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-                <span>Metodología</span>
-              </a>
-            </li>
-            <li>
-              <a href="/#certificacion" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
-                <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-                <span>Certificación</span>
-              </a>
             </li>
             <li>
               <Link href="/recursos" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
                 <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-                <span>Blog y Recursos</span>
+                <span>Artículos</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/cursos-en-vivo" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
+                <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+                <span>Cursos en Vivo</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/cursos" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
+                <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+                <span>Cursos offline</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/campus-virtual" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
+                <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+                <span>Campus Virtual</span>
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Legales Column */}
+        <div className="col-span-6 md:col-span-6 lg:col-span-2 lg:pt-12">
+          <h4 className="font-gc-sans font-bold text-base text-white mb-6 tracking-wider uppercase text-xs text-[#cca353] border-b border-white/5 pb-2">
+            Legales
+          </h4>
+          <ul className="space-y-4 text-sm text-gray-400">
+            <li>
+              <Link href="/terminos-y-condiciones" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
+                <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+                <span>Términos y Condiciones</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/politicas-de-privacidad" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
+                <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+                <span>Políticas de Privacidad</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/politicas-de-reembolso" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
+                <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+                <span>Políticas de Reembolso</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/libro-de-reclamaciones" className="hover:text-[#cca353] transition-colors flex items-center gap-1.5 group">
+                <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+                <span>Libro de Reclamaciones</span>
               </Link>
             </li>
           </ul>
         </div>
 
         {/* Contacto Column */}
-        <div className="col-span-12 md:col-span-6 lg:col-span-4 space-y-6">
+        <div className="col-span-12 md:col-span-6 lg:col-span-4 space-y-6 lg:pt-12">
           <h4 className="font-gc-sans font-bold text-base text-white mb-6 tracking-wider uppercase text-xs text-[#cca353] border-b border-white/5 pb-2">
             Contacto Directo
           </h4>
@@ -203,22 +214,12 @@ export const Footer = () => (
         <div className="text-center md:text-left">
           © 2026 <span className="text-gray-300 font-bold">Grupo Corpus</span>. Todos los derechos reservados.
         </div>
-        
-        <div className="flex justify-center gap-6 font-medium">
-          <Link href="/terminos-y-condiciones" className="hover:text-white transition-colors">Términos</Link>
-          <Link href="/politicas-de-privacidad" className="hover:text-white transition-colors">Privacidad</Link>
-        </div>
 
         <div className="flex justify-center md:justify-end">
-          <Link 
-            href="/libro-de-reclamaciones" 
-            className="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-[#cca353]/10 hover:border-[#cca353]/30 transition-all duration-300 group"
-          >
-            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 group-hover:text-white">
-              Libro de Reclamaciones
-            </span>
-            <span className="text-base group-hover:scale-110 transition-transform duration-300">📑</span>
-          </Link>
+          <a href="https://fly-software.lovable.app/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 group hover:text-white transition-colors">
+            <span>Desarrollado por: </span>
+            <img src="/images/logo.svg" alt="Fly" className="h-5 w-auto opacity-70 group-hover:opacity-100 transition-opacity" />
+          </a>
         </div>
       </div>
     </div>
