@@ -160,8 +160,8 @@ export const Footer = () => (
               <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#cca353] flex-shrink-0 group-hover:bg-[#cca353] group-hover:text-gc-black transition-colors duration-300">
                 <MapPin size={16} />
               </div>
-              <p className="text-gray-400 group-hover:text-white transition-colors duration-300 pt-1.5">
-                Lima, Perú (Atención Virtual)
+              <p className="text-gray-400 group-hover:text-white transition-colors duration-300 pt-1.5 max-w-[200px]">
+                LIMA-LIMA-LOS OLIVOS - AV. ZARAGOZA MZ B LT.22
               </p>
             </div>
             <div className="flex items-start gap-3 group">
@@ -180,7 +180,7 @@ export const Footer = () => (
                 <Phone size={16} />
               </div>
               <p className="text-gray-400 group-hover:text-white transition-colors duration-300 pt-1.5 font-medium">
-                +51 956 266 147
+                +51 953 255 751
               </p>
             </div>
           </div>
@@ -205,20 +205,20 @@ export const Footer = () => (
         </div>
         
         <div className="flex justify-center gap-6 font-medium">
-          <a href="#" className="hover:text-white transition-colors">Términos</a>
-          <a href="#" className="hover:text-white transition-colors">Privacidad</a>
+          <Link href="/terminos-y-condiciones" className="hover:text-white transition-colors">Términos</Link>
+          <Link href="/politicas-de-privacidad" className="hover:text-white transition-colors">Privacidad</Link>
         </div>
 
         <div className="flex justify-center md:justify-end">
-          <a 
-            href="#" 
+          <Link 
+            href="/libro-de-reclamaciones" 
             className="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-[#cca353]/10 hover:border-[#cca353]/30 transition-all duration-300 group"
           >
             <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 group-hover:text-white">
               Libro de Reclamaciones
             </span>
             <span className="text-base group-hover:scale-110 transition-transform duration-300">📑</span>
-          </a>
+          </Link>
         </div>
       </div>
     </div>

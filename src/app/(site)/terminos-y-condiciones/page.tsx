@@ -77,11 +77,16 @@ export default function TerminosYCondicionesPage() {
               nunca serán cedidos a bases de datos de terceros.
             </Typography>
 
-            <Typography variant="h4">7. Contacto</Typography>
+            <Typography variant="h4">7. Datos de Contacto</Typography>
             <Typography paragraph>
-              Para consultas de soporte, escríbenos a través de los canales de contacto de nuestra plataforma.
+              Para consultas de soporte, reclamos o dudas sobre estos términos, contáctanos a: <br />
+              <strong>Razón Social:</strong> GRUPO CORPUS <br />
+              <strong>RUC:</strong> 80338132 <br />
+              <strong>Correo Electrónico:</strong> grupocorpuscapacitaciones@gmail.com <br />
+              <strong>Teléfono:</strong> +51 953 255 751 <br />
+              <strong>Dirección:</strong> LIMA-LIMA-LOS OLIVOS - AV. ZARAGOZA MZ B LT.22 <br />
               De acuerdo a la legislación vigente de protección al consumidor peruano, mantenemos un Libro de
-              Reclamaciones a disposición de nuestros clientes.
+              Reclamaciones a disposición de nuestros clientes en el pie de página de nuestro sitio web.
             </Typography>
 
           </Box>

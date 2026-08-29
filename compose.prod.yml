@@ -1,6 +1,6 @@
 services:
   app:
-    image: patrickrios/aulavirtual:latest
+    image: josehuerta23/aulavirtual:v1.0.6  
     build:
       context: .
       dockerfile: dockerfile.new
