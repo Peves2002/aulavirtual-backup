@@ -1219,6 +1219,16 @@ async function main() {
       descripcion: 'Título de la sección "Logos de empresas clientes" en la página principal'
     },
     {
+      clave: 'HOME_DOCENTES_HABILITADO',
+      valor: 'true',
+      descripcion: 'Habilitar o deshabilitar la sección "Nuestros docentes" en la página principal'
+    },
+    {
+      clave: 'HOME_EXPERIENCIA_HABILITADO',
+      valor: 'true',
+      descripcion: 'Habilitar o deshabilitar la sección "Experiencia de aprendizaje" (Todo lo que necesitas) en la página principal'
+    },
+    {
       clave: 'HOME_DOCENTES_TITLE',
       valor: 'Nuestros docentes',
       descripcion: 'Título de la sección "Nuestros docentes" en la página principal'

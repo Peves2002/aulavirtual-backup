@@ -101,6 +101,7 @@ function parsearExcel(rows: any[]): PreguntaParseada[] {
 
 async function descargarPlantillaExcel() {
   const XLSX = await import('xlsx')
+
   const datos = [
     COLUMNAS_EXCEL,
     ['¿Cuál es la capital de Perú?', 'Geografía', 'Lima es la capital desde la fundación virreinal.', 'Lima', 'Cusco', 'Arequipa', 'Trujillo', '', '', 'A'],

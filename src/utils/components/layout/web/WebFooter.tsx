@@ -11,6 +11,8 @@ import HydratedDate from '@/utils/components/HydratedDate'
 import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 import { buildWhatsAppUrl } from '@/utils/functions/whatsapp'
 
+import themeConfig from '@/utils/configs/themeConfig'
+
 // Simple TikTok SVG icon (not in lucide-react)
 const TikTokIcon = ({ size = 16 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -31,6 +33,7 @@ interface WebFooterProps {
 
 const WebFooter = async ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
   const configs = await getConfigs()
+  const templateLogo = configs.TEMPLATE_LOGO || themeConfig.templateLogo
   const waHref = buildWhatsAppUrl(configs.WHATSAPP_NUMERO)
   const telefono = configs.CONTACTO_TELEFONO || '+51 928 510 125'
   const email = configs.CONTACTO_EMAIL || 'flyup.sale@gmail.com'
@@ -51,6 +54,36 @@ const WebFooter = async ({ platformName = 'Aula Virtual' }: WebFooterProps) => {
 
           {/* Contact */}
           <div>
+            {templateLogo && (
+              <div className="mb-6">
+                <Link href="/" className="inline-block no-underline">
+                  <div
+                    style={{
+                      backgroundColor: '#ffffff',
+                      borderRadius: '12px',
+                      padding: '8px 16px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+                    }}
+                  >
+                    <img
+                      src={templateLogo}
+                      alt={`${platformName} Logo`}
+                      style={{
+                        maxHeight: '46px',
+                        maxWidth: '200px',
+                        width: 'auto',
+                        height: 'auto',
+                        objectFit: 'contain',
+                        display: 'block',
+                      }}
+                    />
+                  </div>
+                </Link>
+              </div>
+            )}
             <h4
               className="mb-4"
               style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '1.0625rem', color: '#ffffff' }}

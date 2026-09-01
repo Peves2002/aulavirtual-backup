@@ -291,12 +291,10 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
 
       <DialogContent sx={{ overflowX: 'hidden', overflowY: 'auto' }}>
         <Box sx={{ textAlign: 'center', mb: 2 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
-            <Box sx={{ transform: 'scale(1.2)', transformOrigin: 'center', display: 'inline-block' }}>
-              <Logo />
-            </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <Logo enlargeSquare compactHeight={70} squareHeight={80} />
           </Box>
-          <Typography variant="h5" sx={{ mt: 5, fontWeight: 800 }}>
+          <Typography variant="h5" sx={{ mt: 1.5, fontWeight: 800 }}>
             {mode === 'login' ? 'Iniciar Sesión' : mode === 'register' ? 'Crear Cuenta' : '¿Olvidaste tu contraseña?'}
           </Typography>
           <Typography variant="body2" color="text.secondary">

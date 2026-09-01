@@ -17,20 +17,26 @@ import { useConfig } from '@/contexts/ConfigContext'
 interface LogoProps {
 
   // Cuando el logo subido es casi cuadrado (o vertical) se ve muy pequeño a la
-  // altura fija de 46px. Con esto activado, se mide el aspect ratio real de la
-  // imagen y se le da más alto a los logos cuadrados; los horizontales/anchos
-  // se quedan tal cual (46px), que es como ya se ven bien.
-
+  // altura fija. Con esto activado, se mide el aspect ratio real de la
+  // imagen y se le da más alto a los logos cuadrados y un tamaño generoso a los horizontales.
   enlargeSquare?: boolean
+  className?: string
+  compactHeight?: number
+  squareHeight?: number
 }
 
-const COMPACT_HEIGHT = 46
-const SQUARE_HEIGHT = 68
+const DEFAULT_COMPACT_HEIGHT = 64
+const DEFAULT_SQUARE_HEIGHT = 74
 
-const Logo = ({ enlargeSquare = false }: LogoProps = {}) => {
+const Logo = ({
+  enlargeSquare = false,
+  className,
+  compactHeight = DEFAULT_COMPACT_HEIGHT,
+  squareHeight = DEFAULT_SQUARE_HEIGHT,
+}: LogoProps = {}) => {
   // Hooks
   const configs = useConfig()
-  const [imgHeight, setImgHeight] = useState(COMPACT_HEIGHT)
+  const [imgHeight, setImgHeight] = useState(compactHeight)
 
   // Vars
   const templateLogo = configs.TEMPLATE_LOGO || themeConfig.templateLogo
@@ -45,17 +51,17 @@ const Logo = ({ enlargeSquare = false }: LogoProps = {}) => {
 
     const ratio = naturalWidth / naturalHeight
 
-    setImgHeight(ratio < 1.6 ? SQUARE_HEIGHT : COMPACT_HEIGHT)
+    setImgHeight(ratio < 1.6 ? squareHeight : compactHeight)
   }
 
   return (
-    <Link href='/' className='flex items-center'>
+    <Link href='/' className={`flex items-center ${className || ''}`}>
       <img
         src={templateLogo}
         alt={`${templateName} Logo`}
         onLoad={handleImgLoad}
-        className={enlargeSquare ? undefined : 'bs-[46px]'}
-        style={enlargeSquare ? { height: imgHeight, width: 'auto' } : undefined}
+        className={enlargeSquare ? 'max-h-[74px] max-w-full object-contain' : 'bs-[46px]'}
+        style={enlargeSquare ? { height: `${imgHeight}px`, width: 'auto' } : undefined}
       />
     </Link>
   )

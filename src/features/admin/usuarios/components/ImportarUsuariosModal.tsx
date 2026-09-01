@@ -7,6 +7,7 @@ import {
   Stack, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Tooltip, Typography
 } from '@mui/material'
+
 import AppModal from '@/utils/components/AppModal'
 import { useImportarUsuarios } from '../hooks/useUsuarios'
 
@@ -61,6 +62,7 @@ function validarFila(row: any, fila: number): FilaPreview {
 
 async function descargarPlantilla() {
   const XLSX = await import('xlsx')
+
   const datos = [
     COLUMNAS_PLANTILLA,
     ['Juan', 'Pérez', 'juan.perez@ejemplo.com', 'clave1234', '12345678', '987654321', ''],
@@ -75,6 +77,7 @@ async function descargarPlantilla() {
 
 async function descargarReporteErrores(errores: { fila: number; correo: string; mensaje: string }[]) {
   const XLSX = await import('xlsx')
+
   const datos = [
     ['Fila', 'Correo', 'Motivo del error'],
     ...errores.map(e => [e.fila, e.correo, e.mensaje])

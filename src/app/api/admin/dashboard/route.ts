@@ -39,6 +39,7 @@ export async function GET(request: Request) {
       prisma.curso.count({ where: { estado: 'PUBLICADO' } }),
       prisma.pedido.count({ where: { estado: 'PENDIENTE' } }),
       prisma.certificado.count(),
+
       // ✅ Aggregate: no carga filas a memoria, una sola query SQL
       prisma.pedido.aggregate({
         where: { estado: 'COMPLETADO' },

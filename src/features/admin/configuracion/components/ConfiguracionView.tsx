@@ -614,8 +614,10 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     HOME_CONVENIOS_LOGOS: '[]',
     HOME_POR_QUE_ELEGIRNOS_HABILITADO: 'true',
     HOME_POR_QUE_ELEGIRNOS: '[]',
+    HOME_DOCENTES_HABILITADO: 'true',
     HOME_DOCENTES_TITLE: 'Nuestros Profesores',
     HOME_DOCENTES_SUBTITLE: 'Aprende de profesionales con amplia experiencia en el sector industrial y académico.',
+    HOME_EXPERIENCIA_HABILITADO: 'true',
     WEB_MULTIMONEDA_HABILITADO: 'false',
     NOSOTROS_HERO_TITLE: 'Somos calidad y responsabilidad a tu servicio',
     NOSOTROS_HERO_DESCRIPTION: '',
@@ -1187,6 +1189,17 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
           <ConfigAccordion
             title='Sección &quot;Nuestros Docentes&quot;'
             description='El contenido (fotos, nombre, cargo) se toma automáticamente de los usuarios con rol Profesor. Aquí solo se edita el encabezado.'
+            action={
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={config.HOME_DOCENTES_HABILITADO !== 'false'}
+                    onChange={(e) => handleInputChange('HOME_DOCENTES_HABILITADO', e.target.checked ? 'true' : 'false')}
+                  />
+                }
+                label='Mostrar sección'
+              />
+            }
           >
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
@@ -1206,6 +1219,29 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
                 />
               </Grid>
             </Grid>
+          </ConfigAccordion>
+
+          {/* Experiencia de Aprendizaje (Todo lo que necesitas) */}
+          <ConfigAccordion
+            title='Sección "Todo lo que necesitas" (Experiencia de Aprendizaje)'
+            description='Muestra los beneficios interactivos clave (clases en vivo, material descargable, evaluaciones, etc.) junto a la maqueta interactiva y el logo de la plataforma.'
+            action={
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={config.HOME_EXPERIENCIA_HABILITADO !== 'false'}
+                    onChange={(e) => handleInputChange('HOME_EXPERIENCIA_HABILITADO', e.target.checked ? 'true' : 'false')}
+                  />
+                }
+                label='Mostrar sección'
+              />
+            }
+          >
+            <Paper variant='outlined' sx={{ p: 2, bgcolor: 'background.default' }}>
+              <Typography variant='body2' color='text.secondary'>
+                Esta sección resalta las características de la plataforma en la página de inicio. El logotipo y los recursos interactivos se sincronizan automáticamente.
+              </Typography>
+            </Paper>
           </ConfigAccordion>
 
           {/* Moneda del sitio */}

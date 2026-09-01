@@ -169,6 +169,7 @@ export async function POST(request: Request, { params }: { params: { examenId: s
 
       if (examenesCurso.length > 0) {
         const examIds = examenesCurso.map(ex => ex.id)
+
         const todosLosIntentos = await tx.intentoExamen.findMany({
           where: {
             usuario_id: auth.user.id,

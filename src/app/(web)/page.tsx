@@ -185,6 +185,8 @@ async function getHomeData() {
       logosEmpresasTitle: configs.HOME_LOGOS_TITLE || '',
       porQueElegirnos,
       porQueElegirnosHabilitado: configs.HOME_POR_QUE_ELEGIRNOS_HABILITADO !== 'false',
+      experienciaHabilitado: configs.HOME_EXPERIENCIA_HABILITADO !== 'false',
+      docentesHabilitado: configs.HOME_DOCENTES_HABILITADO !== 'false',
       docentesTitle: configs.HOME_DOCENTES_TITLE || '',
       docentesSubtitle: configs.HOME_DOCENTES_SUBTITLE || '',
     }
@@ -206,6 +208,8 @@ async function getHomeData() {
       logosEmpresasTitle: '',
       porQueElegirnos: [],
       porQueElegirnosHabilitado: true,
+      experienciaHabilitado: true,
+      docentesHabilitado: true,
       docentesTitle: '',
       docentesSubtitle: '',
     }
@@ -220,7 +224,8 @@ export default async function HomePage() {
     convenios, conveniosHabilitado, conveniosTitle, conveniosDescription,
     logosEmpresas, logosEmpresasHabilitado, logosEmpresasDescription, logosEmpresasTitle,
     porQueElegirnos, porQueElegirnosHabilitado,
-    docentesTitle, docentesSubtitle,
+    experienciaHabilitado,
+    docentesHabilitado, docentesTitle, docentesSubtitle,
   } = await getHomeData()
 
   const cursosConfig = getTipoProgramaConfig('CURSO')
@@ -434,10 +439,12 @@ export default async function HomePage() {
       {porQueElegirnosHabilitado && <WhyChooseUsSection items={porQueElegirnos} />}
 
       {/* ── 5. CARACTERÍSTICAS DE CLASES ────────────── */}
-      <ClassFeaturesSection />
+      {experienciaHabilitado && <ClassFeaturesSection />}
 
       {/* ── 6. PROFESORES ───────────────────────────── */}
-      <ProfessorsCarousel teachers={teachers} title={docentesTitle} subtitle={docentesSubtitle} />
+      {docentesHabilitado && (
+        <ProfessorsCarousel teachers={teachers} title={docentesTitle} subtitle={docentesSubtitle} />
+      )}
 
       {/* ── 7. EMPRESAS (B2B informativo) ───────────── */}
       {/* <CompaniesSection /> */}

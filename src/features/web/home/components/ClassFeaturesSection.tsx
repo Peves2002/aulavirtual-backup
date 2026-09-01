@@ -13,6 +13,8 @@ import { Video, Download, Award, ClipboardList, MessageSquare, CheckCircle } fro
 
 import ScrollReveal from './ScrollReveal'
 import { eyebrowDark, sectionH2Dark, sectionDescDark, cardTitle, cardBody } from './typography'
+import { useConfig } from '@/contexts/ConfigContext'
+import themeConfig from '@/utils/configs/themeConfig'
 
 const features = [
   {
@@ -272,6 +274,10 @@ function PhoneMockup() {
 
 // ── Componente principal ─────────────────────────────────
 export default function ClassFeaturesSection() {
+  const configs = useConfig()
+  const templateLogo = configs.TEMPLATE_LOGO || themeConfig.templateLogo
+  const templateName = themeConfig.templateName
+
   return (
     <section
       style={{
@@ -333,9 +339,40 @@ export default function ClassFeaturesSection() {
             </div>
           </div>
 
-          {/* ── Derecha: phone mockup ── */}
+          {/* ── Derecha: logo + phone mockup ── */}
           <ScrollReveal direction="right" delay={0.2}>
-            <PhoneMockup />
+            <div className="flex flex-col items-center">
+              {templateLogo && (
+                <div
+                  style={{
+                    marginBottom: '2rem',
+                    backgroundColor: '#ffffff',
+                    borderRadius: '16px',
+                    padding: '12px 28px',
+                    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    maxWidth: '280px',
+                  }}
+                >
+                  <img
+                    src={templateLogo}
+                    alt={`${templateName} Logo`}
+                    style={{
+                      maxHeight: '52px',
+                      maxWidth: '100%',
+                      width: 'auto',
+                      height: 'auto',
+                      objectFit: 'contain',
+                      display: 'block',
+                    }}
+                  />
+                </div>
+              )}
+              <PhoneMockup />
+            </div>
           </ScrollReveal>
         </div>
       </div>

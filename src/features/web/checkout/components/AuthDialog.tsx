@@ -152,8 +152,10 @@ const AuthDialog = ({ open, onClose, initialMode = 'login' }: AuthDialogProps) =
 
             <DialogContent>
                 <Box sx={{ textAlign: 'center', mb: 4 }}>
-                    <Logo />
-                    <Typography variant="h5" sx={{ mt: 3, fontWeight: 800 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+                        <Logo enlargeSquare compactHeight={70} squareHeight={80} />
+                    </Box>
+                    <Typography variant="h5" sx={{ mt: 1.5, fontWeight: 800 }}>
                         {mode === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
