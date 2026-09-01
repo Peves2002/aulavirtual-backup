@@ -17,6 +17,7 @@ const HEX_REGEX = /^#[0-9A-Fa-f]{6}$/
 
 function normalizeHex(value: string) {
   const trimmed = value.trim()
+
   if (!trimmed) return null
 
   const withHash = trimmed.startsWith('#') ? trimmed : `#${trimmed}`
@@ -52,6 +53,7 @@ function BrandingColorFieldComponent({ label, value, onChange }: BrandingColorFi
 
   const commitColor = useCallback((nextValue: string) => {
     const normalized = normalizeHex(nextValue)
+
     if (!normalized) return
 
     setDraftColor(normalized)
@@ -64,6 +66,7 @@ function BrandingColorFieldComponent({ label, value, onChange }: BrandingColorFi
 
   useEffect(() => {
     const input = nativeInputRef.current
+
     if (!input) return
 
     input.value = displayColor
@@ -90,6 +93,7 @@ function BrandingColorFieldComponent({ label, value, onChange }: BrandingColorFi
 
   const handleTextCommit = () => {
     const normalized = normalizeHex(textValue)
+
     if (normalized) {
       commitColor(normalized)
     } else {
@@ -99,6 +103,7 @@ function BrandingColorFieldComponent({ label, value, onChange }: BrandingColorFi
 
   const openNativeColorPicker = () => {
     const input = nativeInputRef.current
+
     if (!input) return
 
     input.value = displayColor
@@ -118,7 +123,9 @@ function BrandingColorFieldComponent({ label, value, onChange }: BrandingColorFi
       } catch {
         // Usuario canceló el cuenta gotas
       }
-      return
+
+      
+return
     }
 
     openNativeColorPicker()

@@ -1,88 +1,102 @@
 import { daColors } from './homeTheme'
 
 /** Página de inicio Digital Azul — contenido v1.0 */
-export const homeHero = {
-  title: 'Transformamos conocimiento en capacidades aplicables',
-  subtitle:
-    'Soluciones de aprendizaje para personas y organizaciones que buscan avanzar al siguiente nivel.',
-  cta: { label: 'Explorar programas', href: '/cursos' },
-  images: ['/images/1.jpg', '/images/2.jpg', '/images/3.jpg'],
-}
+export const homeHero = [
+  {
+    title: 'Transformamos conocimiento en capacidades aplicables.',
+    subtitle: 'Capacitación especializada para entidades públicas, empresas y profesionales que buscan fortalecer sus competencias y afrontar con éxito los desafíos de un entorno en constante evolución.',
+    cta: { label: 'Explorar programas', href: '/cursos' },
+    image: '/fondos/fondo1.webp',
+  },
+  {
+    title: 'Aprende desde cualquier lugar.',
+    subtitle: 'Accede a una experiencia de aprendizaje flexible con el Campus Digital Azul. Estudia a tu ritmo, desde cualquier dispositivo y con acceso permanente a contenidos, evaluaciones y certificaciones.',
+    cta: { label: 'Conocer el Campus', href: '/campus' },
+    image: '/fondos/fondo2.webp',
+  },
+  {
+    title: 'Más de una década impulsando el desarrollo de personas y organizaciones.',
+    subtitle: 'Nuestra experiencia respaldada por la confianza de instituciones públicas y privadas nos permite ofrecer programas de capacitación diseñados para generar resultados reales y un aprendizaje de alto impacto.',
+    cta: { label: 'Conoce más sobre nosotros', href: '/nosotros' },
+    image: '/fondos/fondo3.webp',
+  }
+]
 
 /** Bloque 2 — orden spec: Especialistas, Tecnología educativa, Experiencia */
 export const homeWhy = {
   eyebrow: '¿POR QUÉ DIGITAL AZUL?',
   items: [
     {
-      title: 'Especialistas',
+      title: 'Experiencia',
       description:
-        'Profesionales con experiencia real en sus campos, orientados a generar capacidades aplicables en el entorno laboral e institucional.',
-      color: daColors.purple,
-      icon: 'users',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
+        'Más de una década acompañando a entidades públicas y privadas en el diseño e implementación de programas formativos de alto impacto.',
+      color: daColors.blue,
+      icon: 'shield',
+      image: '/images/porque-digital-azul-experiencia.webp',
     },
     {
       title: 'Tecnología educativa',
       description:
-        'Plataforma moderna, intuitiva y accesible que integra formación, evaluación, certificación y reportes en un solo ecosistema.',
+        'Plataforma moderna, intuitiva y accesible que integra formación, evaluación, certificación y seguimiento del aprendizaje en un solo ecosistema.',
       color: daColors.teal,
       icon: 'monitor',
-      image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80',
+      image: '/images/porque-digital-azul-tecnologia.webp',
     },
     {
-      title: 'Experiencia',
+      title: 'Especialistas',
       description:
-        'Años acompañando a entidades públicas y privadas en el diseño e implementación de programas formativos de alto impacto.',
-      color: daColors.blue,
-      icon: 'shield',
-      image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=600&q=80',
+        'Profesionales con amplia experiencia en sus áreas, orientados a desarrollar competencias aplicables al entorno laboral e institucional.',
+      color: daColors.purple,
+      icon: 'users',
+      image: '/images/porque-digital-azul-especialistas.webp',
     },
   ],
+  cta: { label: 'Conoce más sobre Digital Azul', href: '/nosotros' }
 }
 
 export const homeSoluciones = {
   title: 'NUESTRAS SOLUCIONES',
-  subtitle: 'Programas diseñados para las necesidades de cada tipo de organización y participante.',
+  subtitle: 'Programas diseñados para responder a las necesidades de cada tipo de organización y participante.',
   cards: [
     {
-      title: 'ENTIDADES PÚBLICAS',
+      title: 'Entidades Públicas',
       description:
-        'Fortalecimiento institucional con programas en régimen disciplinario, control interno, ética e integridad.',
+        'Programas especializados para fortalecer capacidades en entidades públicas mediante capacitación, consultoría y acompañamiento institucional.',
       color: daColors.blue,
       icon: 'landmark',
-      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80',
-      href: '/cursos',
+      image: '/images/solucion-entidades-publicas.webp',
+      href: '/entidades-publicas',
       ctaLabel: 'Ver programas',
     },
     {
-      title: 'ENTIDADES PRIVADAS',
+      title: 'Entidades Privadas',
       description:
-        'Soluciones corporativas a medida: inducción, prevención de riesgos psicosociales y desarrollo de competencias.',
+        'Soluciones corporativas diseñadas para desarrollar competencias, fortalecer equipos de trabajo y mejorar el desempeño organizacional.',
       color: daColors.teal,
       icon: 'building',
-      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80',
-      href: '/cursos',
+      image: '/images/solucion-entidades-privadas.webp',
+      href: '/entidades-privadas',
       ctaLabel: 'Ver programas',
     },
     {
-      title: 'CURSOS ABIERTOS',
+      title: 'Cursos Abiertos',
       description:
-        'Capacitaciones disponibles para participantes individuales en competencias digitales y profesionales.',
+        'Cursos disponibles para profesionales y público en general que buscan fortalecer sus conocimientos y desarrollar nuevas competencias mediante una oferta flexible de aprendizaje.',
       color: daColors.purple,
       icon: 'shopping',
-      image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80',
+      image: '/images/solucion-cursos-abiertos.webp',
       href: '/cursos',
       ctaLabel: 'Ver catálogo',
     },
     {
-      title: 'RECURSOS',
+      title: 'Recursos',
       description:
-        'Manuales, guías, plantillas y artículos para reforzar tu aprendizaje antes y después de la formación.',
+        'Manuales, guías, plantillas y artículos especializados para apoyar el aprendizaje y fortalecer el desarrollo profesional.',
       color: daColors.blueDark,
       icon: 'book',
-      image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=600&q=80',
-      href: '/cursos',
-      ctaLabel: 'Ver catálogo',
+      image: '/images/solucion-recursos.webp',
+      href: '/recursos',
+      ctaLabel: 'Ver recursos',
     },
   ],
 }

@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { Phone, Mail, MapPin, Facebook, Youtube, Instagram, Linkedin } from 'lucide-react'
 
 import WebBrandLogo from '@/features/web/digital-azul/components/WebBrandLogo'
-import { daColors, daType } from '@/features/web/digital-azul/home/homeTheme'
+import { daType } from '@/features/web/digital-azul/home/homeTheme'
 import { MAIN_NAV_ITEMS, SOLUCIONES_NAV_ITEMS } from '@/features/web/digital-azul/navigation/webNav'
 import { getConfigs } from '@/utils/libs/config'
 import HydratedDate from '@/utils/components/HydratedDate'
@@ -37,7 +37,7 @@ const WebFooter = async ({ platformName = 'Digital Azul', rutasHabilitado = true
   const quickLinks = MAIN_NAV_ITEMS.filter(item => !['inicio', 'contacto'].includes(item.key))
 
   return (
-    <footer style={{ backgroundColor: daColors.blueDark, color: '#ffffff' }}>
+    <footer style={{ backgroundColor: 'var(--color-primary-dark)', color: '#ffffff' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 2rem' }}>
         <div
           style={{

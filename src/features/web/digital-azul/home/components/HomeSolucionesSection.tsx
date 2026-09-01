@@ -6,8 +6,6 @@ import { ArrowRight } from 'lucide-react'
 import { homeSoluciones } from '../homeContent'
 import { daCardPadding, daType, sectionPadding, sectionWrap } from '../homeTheme'
 
-const CURSOS_URL = '/cursos'
-
 export default function HomeSolucionesSection() {
   return (
     <section id="soluciones" style={{ backgroundColor: '#F4F7FB', padding: sectionPadding }}>
@@ -28,7 +26,7 @@ export default function HomeSolucionesSection() {
           {homeSoluciones.cards.map(card => (
             <Link
               key={card.title}
-              href={CURSOS_URL}
+              href={card.href}
               className="no-underline group"
               style={{
                 backgroundColor: '#ffffff',

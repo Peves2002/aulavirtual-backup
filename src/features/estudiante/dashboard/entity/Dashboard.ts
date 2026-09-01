@@ -3,8 +3,10 @@ export interface DashboardKpis {
   cursosEnProgreso: number
   cursosCompletados: number
   totalCertificados: number
+
   /** Promedio de avance en programas activos (0–100) */
   avanceGeneral: number
+
   /** Programas con progreso < 100% */
   programasActivos: number
 }
@@ -20,6 +22,7 @@ export interface DashboardCurso {
   }
   categoria?: string
   progreso: number
+
   /** Sin iniciar | En progreso | Completado */
   estado: 'sin_iniciar' | 'en_progreso' | 'completado'
 }
@@ -58,6 +61,7 @@ export interface DashboardCertificado {
 
 export interface DashboardData {
   kpis: DashboardKpis
+
   /** Todos los programas inscritos activos (< 100%) */
   misProgramas: DashboardCurso[]
   cursosRecientes: DashboardCurso[]

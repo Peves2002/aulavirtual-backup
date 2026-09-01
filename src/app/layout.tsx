@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth'
 import { Providers } from '@/components/Providers'
 import { getConfigs } from '@/utils/libs/config'
 import { getAuthOptions } from '@/utils/configs/auth'
-import { plus_jakarta_sans } from '@core/theme'
+import { inter } from '@core/theme'
 
 import './globals.css'
 import '@assets/iconify-icons/generated-icons.css'
@@ -54,14 +54,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const primaryDark = configs.PRIMARY_COLOR_DARK || '#9196F2'
 
   // Colores web — identidad Digital Azul (azul profesional)
-  const webPrimary  = configs.PRIMARY_COLOR_MAIN  || '#2563EB'
-  const webLight    = configs.PRIMARY_COLOR_LIGHT || '#38BDF8'
-  const webDark     = configs.PRIMARY_COLOR_DARK  || '#1E40AF'
-  const webDarkDeep = darkenHex(webDark, 0.45)  // muy oscuro → reemplaza #012d22
-  const webDarkMid  = darkenHex(webDark, 0.72)  // oscuro medio → reemplaza #0f4438
+  const webPrimary  = configs.PRIMARY_COLOR_MAIN  || '#123D7A' // Primary
+  const webLight    = configs.PRIMARY_COLOR_LIGHT || '#2F80ED' // Primary Light
+  const webDark     = configs.PRIMARY_COLOR_DARK  || '#0B2C5F' // Primary Dark
+  const webDarkDeep = darkenHex(webDark, 0.45)
+  const webDarkMid  = darkenHex(webDark, 0.72)
 
   return (
-    <html lang='es' suppressHydrationWarning className={`${plus_jakarta_sans.variable} ${plus_jakarta_sans.className}`}>
+    <html lang='es' suppressHydrationWarning className={`${inter.variable} ${inter.className}`}>
       <body className='flex is-full min-bs-full flex-col' id="__next">
         <style dangerouslySetInnerHTML={{
           __html: `

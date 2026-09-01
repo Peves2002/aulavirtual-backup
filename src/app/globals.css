@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -18,18 +18,20 @@
   --drawer-z-index: var(--mui-zIndex-drawer);
   --backdrop-color: rgb(var(--mui-mainColorChannels-light) / 0.5);
 
-  /* IPG Design System */
-  --color-1: 170 60% 36%;   /* Primary Teal #25927F */
-  --color-2: 75 63% 62%;    /* Lime Green #BDD962 */
-  --color-3: 167 96% 19%;   /* Deep Teal #025E44 */
-  --color-4: 152 50% 46%;   /* Sage Green #3AB079 */
-  --color-5: 0 0% 4%;       /* Almost Black #0A0A0A */
+  /* Digital Azul Design System */
+  --color-primary: #123D7A;
+  --color-primary-dark: #0B2C5F;
+  --color-primary-light: #2F80ED;
+  --color-background: #FFFFFF;
+  --color-surface: #F5F7FA;
+  --color-border: #D9E2EC;
+  --color-text-primary: #1F2937;
+  --color-text-secondary: #4A5568;
 
-  --ipg-primary: var(--web-primary, #25927F);
-  --ipg-primary-dark: var(--web-dark, #025E44);
-  --ipg-primary-light: var(--web-light, #BDD962);
-  --ipg-black: #0A0A0A;
-  --ipg-muted: #f1f5f4;
+  --color-success: #27AE60;
+  --color-warning: #F2C94C;
+  --color-error: #EB5757;
+  --color-info: #2D9CDB;
 
   --navbar-height: 88px;
   --sidebar-width: 80px;
@@ -174,52 +176,53 @@ code {
 /* Layout */
 .section-container {
   max-width: 1280px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
-  padding: 4rem 1rem;
+  padding: 4rem 16px;
 }
 
-@media (min-width: 640px) {
-  .section-container { padding-left: 1.5rem; padding-right: 1.5rem; }
+@media (min-width: 768px) {
+  .section-container { padding-left: 24px; padding-right: 24px; }
 }
-@media (min-width: 1024px) {
-  .section-container { padding: 5rem 2.5rem; }
+@media (min-width: 1200px) {
+  .section-container { padding-left: 32px; padding-right: 32px; padding-top: 5rem; padding-bottom: 5rem; }
 }
 
 /* Eyebrow (label sobre el título) */
 .t-eyebrow {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--web-primary, #25927F);
+  color: var(--color-primary, #123D7A);
   display: block;
   margin-bottom: 0.75rem;
 }
-.t-eyebrow-dark { color: var(--web-light, #BDD962); }
+.t-eyebrow-dark { color: var(--color-primary-light, #2F80ED); }
 
 /* H2 de sección */
 .t-section-h2 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.75rem;
   font-weight: 800;
-  color: #0A0A0A;
+  color: var(--color-text-primary, #1F2937);
   letter-spacing: -0.02em;
   line-height: 1.2;
   margin-bottom: 0.75rem;
 }
 @media (min-width: 768px) {
-  .t-section-h2 { font-size: 2rem; }
+  .t-section-h2 { font-size: 2.25rem; } /* 36px in H2 */
 }
 .t-section-h2-dark { color: #ffffff; }
 
 /* Descripción / subtítulo de sección */
 .t-section-desc {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 400;
-  color: #64748b;
+  color: var(--color-text-secondary, #4A5568);
   line-height: 1.7;
   margin-bottom: 0;
 }
@@ -227,10 +230,10 @@ code {
 
 /* Título de card */
 .t-card-title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 700;
-  color: #0A0A0A;
+  color: var(--color-text-primary, #1F2937);
   letter-spacing: -0.01em;
   margin-bottom: 0.25rem;
 }
@@ -238,17 +241,17 @@ code {
 
 /* Cuerpo de card */
 .t-card-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
-  color: #64748b;
+  color: var(--color-text-secondary, #4A5568);
   line-height: 1.6;
 }
 .t-card-body-dark { color: rgba(255, 255, 255, 0.4); }
 
 /* Texto pequeño / meta */
 .t-small {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.8125rem;
   font-weight: 400;
   color: #94a3b8;
@@ -257,34 +260,34 @@ code {
 
 /* Aliases de compatibilidad */
 .section-title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.75rem;
   font-weight: 800;
-  color: #0A0A0A;
+  color: var(--color-text-primary, #1F2937);
   margin-bottom: 0.5rem;
   letter-spacing: -0.02em;
   line-height: 1.2;
 }
 @media (min-width: 768px) {
-  .section-title { font-size: 2rem; }
+  .section-title { font-size: 2.25rem; }
 }
 
 .section-subtitle {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
-  color: #64748b;
+  color: var(--color-text-secondary, #4A5568);
   margin-bottom: 2rem;
   line-height: 1.7;
 }
 
-/* Apply Plus Jakarta Sans to web public pages */
+/* Apply Inter to web public pages */
 .web-layout,
 .web-layout * {
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-family: 'Inter', sans-serif !important;
 }
 
 /* SweetAlert2 — match system typography */
 .swal2-popup,
 .swal2-popup * {
-  font-family: var(--font-plus-jakarta-sans, 'Plus Jakarta Sans'), sans-serif !important;
+  font-family: var(--font-inter, 'Inter'), sans-serif !important;
 }

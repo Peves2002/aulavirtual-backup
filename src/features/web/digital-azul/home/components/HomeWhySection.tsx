@@ -27,6 +27,7 @@ export default function HomeWhySection() {
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap: '1.5rem',
             alignItems: 'stretch',
+            marginBottom: '3rem',
           }}
           className="home-why-grid"
         >
@@ -89,6 +90,27 @@ export default function HomeWhySection() {
             )
           })}
         </div>
+
+        {homeWhy.cta && (
+          <div style={{ textAlign: 'center' }}>
+            <a
+              href={homeWhy.cta.href}
+              className="no-underline inline-flex items-center gap-2 transition-opacity hover:opacity-90"
+              style={{
+                ...daType.link,
+                fontSize: '1rem',
+                color: '#ffffff',
+                backgroundColor: 'var(--color-primary, #092e67)',
+                padding: '0.875rem 1.5rem',
+                borderRadius: '8px',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+              }}
+            >
+              {homeWhy.cta.label}
+            </a>
+          </div>
+        )}
+
         <style>{`
           @media (max-width: 768px) {
             .home-why-grid {

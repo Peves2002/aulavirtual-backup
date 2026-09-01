@@ -18,6 +18,7 @@ export type WebNavItem = {
   url: string
   icon: LucideIcon
   key: string
+
   /** Rutas adicionales que marcan este ítem como activo */
   matchPaths?: string[]
 }

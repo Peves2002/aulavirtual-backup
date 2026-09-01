@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react'
 import UserDropdown from '@components/layout/shared/UserDropdown'
 import CartIcon from '@/features/web/cart/components/CartIcon'
 import WebBrandLogo from '@/features/web/digital-azul/components/WebBrandLogo'
-import { daColors, daType } from '@/features/web/digital-azul/home/homeTheme'
+
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import { useWebNavMenu } from '@/contexts/WebNavMenuContext'
 import {
@@ -45,9 +45,10 @@ export default function WebHeader({
   const { toggleMenu } = useWebNavMenu()
 
   const navLinkStyle = (active: boolean) => ({
-    ...daType.nav,
-    fontWeight: active ? 700 : 500,
-    color: active ? daColors.blue : '#334155',
+    fontFamily: 'var(--font-inter), sans-serif',
+    fontSize: '16px',
+    fontWeight: 500,
+    color: active ? 'var(--color-primary)' : 'var(--color-text-secondary)',
   })
 
   return (
@@ -84,51 +85,53 @@ export default function WebHeader({
         <div className="flex items-center justify-end gap-2 sm:gap-2.5 flex-shrink-0">
           <Link
             href={HIGHLIGHTED_CTAS.contact.url}
-            className="no-underline hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg font-semibold transition-all hover:opacity-90"
+            className="no-underline hidden md:inline-flex items-center gap-1.5 px-[14px] py-[8px] rounded-[10px] font-medium transition-all hover:bg-slate-50"
             style={{
-              ...daType.navSm,
-              fontWeight: 600,
-              color: daColors.blue,
-              border: `1.5px solid ${daColors.blue}`,
-              backgroundColor: pathname.startsWith('/contacto') ? 'rgba(11,58,130,0.06)' : 'transparent',
+              fontFamily: 'var(--font-inter), sans-serif',
+              fontSize: '16px',
+              color: 'var(--color-primary)',
+              border: `1px solid var(--color-primary)`,
+              backgroundColor: '#ffffff',
             }}
           >
-            <Mail size={14} />
+            <Mail size={16} />
             {HIGHLIGHTED_CTAS.contact.label}
           </Link>
 
           <Link
             href={session ? '/campus' : HIGHLIGHTED_CTAS.campus.url}
-            className="no-underline inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg font-bold text-white"
+            className="no-underline hidden sm:inline-flex items-center justify-center gap-1.5 p-[8px] sm:px-[14px] sm:py-[8px] rounded-[10px] font-medium text-white shadow-sm transition-all hover:opacity-90"
             style={{
-              ...daType.navSm,
-              fontWeight: 700,
-              backgroundColor: daColors.blueDark,
+              fontFamily: 'var(--font-inter), sans-serif',
+              fontSize: '16px',
+              backgroundColor: 'var(--color-primary)',
+              border: 'none',
             }}
           >
-            <User size={14} />
+            <User size={18} />
             <span className="hidden xl:inline">{HIGHLIGHTED_CTAS.campus.label}</span>
             <span className="xl:hidden hidden sm:inline">Campus</span>
-            <span className="sm:hidden">Campus</span>
           </Link>
 
           <CartIcon />
 
           {session ? (
-            <UserDropdown />
+            <div className="hidden sm:block">
+              <UserDropdown />
+            </div>
           ) : (
             <button
               type="button"
               onClick={() => openLogin()}
               aria-label="Iniciar sesión"
-              className="flex items-center justify-center rounded-full transition-colors hover:bg-slate-100"
+              className="hidden sm:flex items-center justify-center rounded-full transition-colors hover:bg-slate-100"
               style={{
                 width: '36px',
                 height: '36px',
-                border: `1px solid ${daColors.blue}`,
+                border: `1px solid var(--color-primary)`,
                 backgroundColor: '#ffffff',
                 cursor: 'pointer',
-                color: daColors.blue,
+                color: 'var(--color-primary)',
               }}
             >
               <User size={18} strokeWidth={2} />

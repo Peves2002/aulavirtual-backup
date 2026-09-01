@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+
 import { redirect } from 'next/navigation'
 
 import { getAuthSession } from '@/utils/libs/auth-helpers'

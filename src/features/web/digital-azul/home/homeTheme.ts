@@ -1,19 +1,19 @@
 /** Tokens visuales — landing Digital Azul v1 */
 export const daColors = {
-  blue: '#0B3A82',
-  blueDark: '#062654',
-  blueLight: '#1E56A0',
+  blue: 'var(--color-primary)',
+  blueDark: 'var(--color-primary-dark)',
+  blueLight: 'var(--color-primary-light)',
   teal: '#0D9488',
   purple: '#7C3AED',
   orange: '#EA580C',
   sky: '#0284C7',
-  grayBg: '#F4F7FB',
-  white: '#FFFFFF',
-  text: '#1E293B',
-  textMuted: '#64748B',
+  grayBg: 'var(--color-surface)',
+  white: 'var(--color-background)',
+  text: 'var(--color-text-primary)',
+  textMuted: 'var(--color-text-secondary)',
 } as const
 
-export const daFont = 'Inter, Poppins, sans-serif'
+export const daFont = 'var(--font-inter), sans-serif'
 
 export const sectionWrap = {
   maxWidth: '1200px',

@@ -94,7 +94,8 @@ export default function CampusClient() {
 
     if (redirectTo) {
       router.push(redirectTo)
-      return
+      
+return
     }
 
     router.refresh()

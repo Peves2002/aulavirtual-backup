@@ -3,10 +3,12 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { ChevronRight, Mail, X } from 'lucide-react'
+import { ChevronRight, Mail, X, User } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 
-import { daColors, daType } from '@/features/web/digital-azul/home/homeTheme'
 import { useWebNavMenu } from '@/contexts/WebNavMenuContext'
+import { useAuthModal } from '@/contexts/AuthModalContext'
+import { daColors, daType } from '@/features/web/digital-azul/home/homeTheme'
 import {
   HIGHLIGHTED_CTAS,
   HEADER_NAV_ITEMS,
@@ -16,18 +18,20 @@ import {
 export default function WebMobileMenu() {
   const pathname = usePathname()
   const { isOpen, closeMenu } = useWebNavMenu()
+  const { data: session } = useSession()
+  const { openLogin } = useAuthModal()
 
   if (!isOpen) return null
 
   return (
     <>
       <div
-        className="fixed inset-0 z-[60] bg-black/40 sm:hidden"
+        className="fixed inset-0 z-[60] bg-black/40 lg:hidden"
         onClick={closeMenu}
         aria-hidden
       />
       <aside
-        className="fixed top-0 right-0 bottom-0 z-[70] flex flex-col sm:hidden"
+        className="fixed top-0 right-0 bottom-0 z-[70] flex flex-col lg:hidden"
         style={{
           width: 'min(320px, 88vw)',
           backgroundColor: '#ffffff',
@@ -111,6 +115,23 @@ export default function WebMobileMenu() {
             {HIGHLIGHTED_CTAS.campus.label}
             <ChevronRight size={16} />
           </Link>
+          {!session && (
+            <button
+              onClick={() => { closeMenu(); openLogin(); }}
+              className="text-center rounded-xl py-3 font-semibold inline-flex items-center justify-center gap-2 mt-1"
+              style={{
+                ...daType.navSm,
+                fontWeight: 600,
+                color: '#334155',
+                border: '1.5px solid #E2E8F0',
+                backgroundColor: '#ffffff',
+                cursor: 'pointer',
+              }}
+            >
+              <User size={16} />
+              Iniciar sesión
+            </button>
+          )}
         </div>
       </aside>
     </>

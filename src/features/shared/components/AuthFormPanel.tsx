@@ -62,6 +62,7 @@ const AuthFormPanel = ({
       ? { correo: 'alumno@gmail.com', contrasena: 'Alumno123@' }
       : { correo: '', contrasena: '' },
   })
+
   const registerForm = useForm<RegisterDto>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -113,6 +114,7 @@ const AuthFormPanel = ({
       router.refresh()
     }
   }
+
   const onLoginSubmit = async (data: LoginDto) => {
     try {
       setIsLoading(true)
