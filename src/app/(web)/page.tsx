@@ -6,18 +6,15 @@ import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
 import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
 import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
-import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
-import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
-import HeroInstallButton from '@/features/web/home/components/HeroInstallButton'
-import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
-import ScrollReveal from '@/features/web/home/components/ScrollReveal'
-import HeroVisual from '@/features/web/home/components/HeroVisual'
-import HeroImageCarousel from '@/features/web/home/components/HeroImageCarousel'
-import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
-import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
-import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
-import ConveniosSection from '@/features/web/home/components/ConveniosSection'
-import WhyChooseUsSection from '@/features/web/home/components/WhyChooseUsSection'
+
+// Imports nuevos para el rediseño
+import HomeHeroRedesign from '@/features/web/home/components/HomeHeroRedesign'
+import HomeCoursesSectionRed from '@/features/web/home/components/HomeCoursesSectionRed'
+import CertificateBanner from '@/features/web/home/components/CertificateBanner'
+import SpecializationAreas from '@/features/web/home/components/SpecializationAreas'
+import ProgramCategories from '@/features/web/home/components/ProgramCategories'
+import LatestPublications from '@/features/web/home/components/LatestPublications'
+import TrustBanner from '@/features/web/home/components/TrustBanner'
 
 export const metadata = {
   description: 'Plataforma de aprendizaje online con cursos especializados y certificados.',
@@ -213,237 +210,42 @@ async function getHomeData() {
 }
 
 export default async function HomePage() {
-  const {
-    courses, diplomados, especializaciones, teachers, ebooks,
-    heroTitle, heroDescription, heroImages,
-    cursosTitle, cursosSubtitle,
-    convenios, conveniosHabilitado, conveniosTitle, conveniosDescription,
-    logosEmpresas, logosEmpresasHabilitado, logosEmpresasDescription, logosEmpresasTitle,
-    porQueElegirnos, porQueElegirnosHabilitado,
-    docentesTitle, docentesSubtitle,
-  } = await getHomeData()
+  const { diplomados } = await getHomeData()
 
-  const cursosConfig = getTipoProgramaConfig('CURSO')
-  const diplomadosConfig = getTipoProgramaConfig('DIPLOMADO')
-  const especializacionesConfig = getTipoProgramaConfig('ESPECIALIZACION')
+  // Limit to 4 for the design grid
+  const destacados = diplomados.slice(0, 4)
 
   return (
-    <>
-      {/* ── 1. HERO ─────────────────────────────────── */}
-      {heroImages.length > 0 ? (
-        <HeroImageCarousel images={heroImages} />
-      ) : (
-      <section
-        style={{
-          background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Patrón de grid decorativo */}
-        <div
-          aria-hidden
-          style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
-        />
-        {/* Glow derecho */}
-        <div aria-hidden style={{ position: 'absolute', top: '-20%', right: '-10%', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(var(--web-primary-rgb, 37, 146, 127),0.25) 0%, transparent 65%)', pointerEvents: 'none' }} />
+    <div className="bg-white min-h-screen">
+      {/* 1. HERO SECTION */}
+      <HomeHeroRedesign />
 
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '5rem 1.5rem' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', alignItems: 'center' }}>
-
-            {/* ── Izquierda: texto ── */}
-            <div style={{ position: 'relative', zIndex: 2 }}>
-              {/* Eyebrow */}
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-5"
-                style={{ backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.15)', border: '1px solid rgba(var(--web-light-rgb, 189, 217, 98),0.3)' }}
-              >
-                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--web-light, #BDD962)' }} />
-                <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>
-                  Plataforma educativa online
-                </span>
-              </div>
-
-              {/* H1 */}
-              <h1
-                style={{
-                  fontFamily: 'Poppins, sans-serif',
-                  fontSize: 'clamp(2rem, 5vw, 3.25rem)',
-                  fontWeight: 800,
-                  color: '#ffffff',
-                  letterSpacing: '-0.025em',
-                  lineHeight: 1.15,
-                  marginBottom: '1.25rem',
-                }}
-              >
-                {heroTitle.split('\n')[0]}
-                {heroTitle.split('\n')[1] && (
-                  <>
-                    <br />
-                    <span style={{ color: 'var(--web-light, #BDD962)' }}>{heroTitle.split('\n')[1]}</span>
-                  </>
-                )}
-              </h1>
-
-              {/* Descripción */}
-              <p
-                style={{
-                  fontFamily: 'Poppins, sans-serif',
-                  fontSize: '1rem',
-                  color: 'rgba(255,255,255,0.7)',
-                  lineHeight: 1.75,
-                  maxWidth: '480px',
-                  marginBottom: '2.5rem',
-                }}
-              >
-                {heroDescription}
-              </p>
-
-              {/* Botones */}
-              <div className="flex flex-wrap gap-4" style={{ marginBottom: '2.5rem' }}>
-                <HeroInstallButton />
-                <Link
-                  href="/cursos"
-                  className="inline-flex items-center gap-2 no-underline rounded-xl font-semibold transition-all duration-200"
-                  style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'rgba(255,255,255,0.08)', color: '#ffffff', fontSize: '0.9375rem', padding: '0.875rem 1.75rem', border: '1.5px solid rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)' }}
-                >
-                  Ver Cursos <ArrowRight size={18} />
-                </Link>
-              </div>
-
-              {/* Mini stats */}
-              <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-                {[
-                  { value: '+1,200', label: 'Estudiantes' },
-                  { value: '+80', label: 'Cursos' },
-                  { value: '98%', label: 'Satisfacción' },
-                ].map(stat => (
-                  <div key={stat.label}>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.375rem', fontWeight: 800, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>{stat.value}</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '3px' }}>{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* ── Derecha: visual interactivo ── */}
-            <HeroVisual />
-          </div>
+      {/* 2. DIPLOMADOS DESTACADOS */}
+      <section className="w-full max-w-[1280px] mx-auto px-6 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            Diplomados Destacados
+          </h2>
+          <div className="w-16 h-1 bg-[#e60000] mx-auto" />
         </div>
-      </section>
-      )}
-
-      {/* ── 1b. LOGOS EMPRESAS CLIENTES ──────────────── */}
-      {logosEmpresasHabilitado && (
-        <ClientLogosMarquee
-          logos={logosEmpresas}
-          description={logosEmpresasDescription || undefined}
-          title={logosEmpresasTitle || undefined}
-        />
-      )}
-
-      {/* ── 2. CURSOS DESTACADOS ────────────────────── */}
-      <section className="section-container" style={{ maxWidth: '1440px' }}>
-        <ScrollReveal>
-          <SectionHeader title={cursosTitle} subtitle={cursosSubtitle} />
-        </ScrollReveal>
-        <ScrollReveal delay={0.1}>
-          <HomeCoursesSection
-            courses={courses}
-            catalogHref={cursosConfig.webPath}
-            emptyMessage={cursosConfig.emptyMessage}
-            viewLabel="Ir a matricularse"
-          />
-          <div className="flex justify-center mt-10">
-            <Link
-              href="/cursos"
-              className="no-underline inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm"
-              style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', color: '#ffffff' }}
-            >
-              Ver todos los cursos <ArrowRight size={16} />
-            </Link>
-          </div>
-        </ScrollReveal>
+        
+        <HomeCoursesSectionRed courses={destacados} />
       </section>
 
-      {/* ── 2b. NUESTROS CONVENIOS ──────────────────── */}
-      {conveniosHabilitado && (
-        <ConveniosSection title={conveniosTitle} description={conveniosDescription} logos={convenios} />
-      )}
+      {/* 3. CERTIFICATE BANNER */}
+      <CertificateBanner />
 
-      {/* ── 3b. DIPLOMADOS DESTACADOS ───────────────── */}
-      {diplomados.length > 0 && (
-        <section className="section-container" style={{ borderTop: '1px solid hsl(214, 20%, 92%)' }}>
-          <ScrollReveal>
-            <SectionHeader title={diplomadosConfig.homeTitle} subtitle={diplomadosConfig.homeSubtitle} />
-          </ScrollReveal>
-          <ScrollReveal delay={0.1}>
-            <HomeCoursesSection
-              courses={diplomados}
-              catalogHref={diplomadosConfig.webPath}
-              emptyMessage={diplomadosConfig.emptyMessage}
-              viewLabel="Ir a matricularse"
-            />
-            <div className="flex justify-center mt-10">
-              <Link
-                href={diplomadosConfig.webPath}
-                className="no-underline inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm"
-                style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', color: '#ffffff' }}
-              >
-                Ver todos los diplomados <ArrowRight size={16} />
-              </Link>
-            </div>
-          </ScrollReveal>
-        </section>
-      )}
+      {/* 4. ÁREAS DE ESPECIALIZACIÓN */}
+      <SpecializationAreas />
 
-      {/* ── 3c. ESPECIALIZACIONES DESTACADAS ────────── */}
-      {especializaciones.length > 0 && (
-        <section className="section-container" style={{ borderTop: '1px solid hsl(214, 20%, 92%)' }}>
-          <ScrollReveal>
-            <SectionHeader title={especializacionesConfig.homeTitle} subtitle={especializacionesConfig.homeSubtitle} />
-          </ScrollReveal>
-          <ScrollReveal delay={0.1}>
-            <HomeCoursesSection
-              courses={especializaciones}
-              catalogHref={especializacionesConfig.webPath}
-              emptyMessage={especializacionesConfig.emptyMessage}
-              viewLabel="Ir a matricularse"
-            />
-            <div className="flex justify-center mt-10">
-              <Link
-                href={especializacionesConfig.webPath}
-                className="no-underline inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm"
-                style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', color: '#ffffff' }}
-              >
-                Ver todas las especializaciones <ArrowRight size={16} />
-              </Link>
-            </div>
-          </ScrollReveal>
-        </section>
-      )}
+      {/* 5. PROGRAM CATEGORIES */}
+      <ProgramCategories />
 
-      {/* ── 4. EBOOKS DESTACADOS ────────────────────── */}
-      {isFeatureEnabled('ebooks') && <HomeEbooksSection ebooks={ebooks} />}
+      {/* 6. ÚLTIMAS PUBLICACIONES */}
+      <LatestPublications />
 
-      {/* ── 4c. ¿POR QUÉ ELEGIRNOS? ─────────────────── */}
-      {porQueElegirnosHabilitado && <WhyChooseUsSection items={porQueElegirnos} />}
-
-      {/* ── 5. CARACTERÍSTICAS DE CLASES ────────────── */}
-      <ClassFeaturesSection />
-
-      {/* ── 6. PROFESORES ───────────────────────────── */}
-      <ProfessorsCarousel teachers={teachers} title={docentesTitle} subtitle={docentesSubtitle} />
-
-      {/* ── 7. EMPRESAS (B2B informativo) ───────────── */}
-      {/* <CompaniesSection /> */}
-
-      {/* ── 8. VERIFICAR CERTIFICADO ────────────────── */}
-      <SearchCertificateSection />
-    </>
+      {/* 7. TRUST BANNER */}
+      <TrustBanner />
+    </div>
   )
 }

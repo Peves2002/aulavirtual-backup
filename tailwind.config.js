@@ -10,14 +10,14 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#25927F',
+          DEFAULT: '#2B2B2B', // Dark gray from the logo text and shapes
           foreground: '#ffffff',
-          dark: '#025E44',
-          light: '#BDD962',
+          dark: '#1A1A1A',
+          light: '#404040',
         },
         secondary: {
-          DEFAULT: '#BDD962',
-          foreground: '#0A0A0A',
+          DEFAULT: '#FFC107', // Yellow/Gold from the sun and anchors
+          foreground: '#2B2B2B',
         },
         muted: {
           DEFAULT: 'hsl(210, 15%, 93%)',

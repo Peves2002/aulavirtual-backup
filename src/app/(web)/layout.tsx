@@ -7,7 +7,6 @@ import { getConfigs } from '@/utils/libs/config'
 import prisma from '@/utils/libs/prisma'
 import WebFooter from '@/utils/components/layout/web/WebFooter'
 import WebHeader from '@/utils/components/layout/web/WebHeader'
-import LeftSidebar from '@/utils/components/layout/web/LeftSidebar'
 import FloatingContactButtons from '@/utils/components/layout/web/FloatingContactButtons'
 import PWAInstalledToast from '@/features/web/home/components/PWAInstalledToast'
 
@@ -38,15 +37,8 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
           platformSlogan={platformSlogan}
           empresasHabilitado={empresasHabilitado}
         />
-        <div className="flex flex-1" style={{ paddingTop: 'var(--navbar-height)' }}>
-          {/* Sidebar: visible solo en sm+ */}
-          <div className="hidden sm:block">
-            <LeftSidebar empresasHabilitado={empresasHabilitado} />
-          </div>
-          <main
-            className="flex-1 flex flex-col min-w-0"
-            style={{ paddingLeft: 'var(--sidebar-width)' }}
-          >
+        <div className="flex flex-1" style={{ paddingTop: '80px' }}>
+          <main className="flex-1 flex flex-col min-w-0">
             <div className="flex-1">
               {children}
             </div>

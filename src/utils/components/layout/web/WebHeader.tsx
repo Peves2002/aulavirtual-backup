@@ -1,20 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-
+import { useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-
+import { Menu, X, ChevronDown, ShoppingCart } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 
-import { Menu, X, Home, BookOpen, Users, Award, Building2, LogIn, UserPlus } from 'lucide-react'
-
 import Logo from '@components/layout/shared/Logo'
-import UserDropdown from '@components/layout/shared/UserDropdown'
-import CartIcon from '@/features/web/cart/components/CartIcon'
-import CurrencyToggle from '@components/layout/shared/CurrencyToggle'
 import { useAuthModal } from '@/contexts/AuthModalContext'
-import { useConfig } from '@/contexts/ConfigContext'
+import { useCart } from '@/features/web/cart/context/CartContext'
 
 export interface Category {
   id: string
@@ -29,201 +22,136 @@ interface WebHeaderProps {
   empresasHabilitado?: boolean
 }
 
-const MOBILE_NAV_ITEMS = [
-  { title: 'Inicio', url: '/', icon: Home, key: 'inicio' },
-  { title: 'Cursos', url: '/cursos', icon: BookOpen, key: 'cursos' },
-  { title: 'Nosotros', url: '/nosotros', icon: Users, key: 'nosotros' },
-  { title: 'Certificado', url: '/verificar-certificado', icon: Award, key: 'certificado' },
-  { title: 'Empresas', url: '/empresas', icon: Building2, key: 'empresas' },
-]
-
 export default function WebHeader({
   initialCategories = [],
-  platformName = 'Aula Virtual',
-  platformSlogan = 'Aprende sin límites',
-  empresasHabilitado = true,
 }: WebHeaderProps) {
-  void initialCategories
-  void platformName
-  void platformSlogan
-  const { openLogin, openRegister } = useAuthModal()
+  const { openLogin } = useAuthModal()
   const { data: session } = useSession()
-  const configs = useConfig()
-  const multiMonedaHabilitado = configs.WEB_MULTIMONEDA_HABILITADO === 'true'
-  const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { itemCount, setIsCartDrawerOpen } = useCart()
+  
+  // Dummy total for demonstration (can be connected to CartContext if needed)
+  const cartTotal = 0
 
-  useEffect(() => {
-    setMobileMenuOpen(false)
-  }, [pathname])
-
-  const navItems = MOBILE_NAV_ITEMS.filter(item => item.key !== 'empresas' || empresasHabilitado)
-
-  const isActive = (url: string) => {
-    if (url === '/') return pathname === '/'
-
-    return pathname.startsWith(url)
+  const handleAulaVirtualClick = () => {
+    if (session) {
+      // Redirect based on role if needed, or simply go to dashboard
+      window.location.href = '/dashboard'
+    } else {
+      openLogin()
+    }
   }
 
   return (
-    <header
-      className="fixed top-0 left-0 right-0 shadow-sm z-50 flex items-center justify-between px-6 md:px-10"
-      style={{
-        height: 'var(--navbar-height)',
-        backgroundColor: 'var(--web-dark, #025E44)',
-        borderBottom: '1px solid rgba(255,255,255,0.1)',
-      }}
-    >
-      {/* Left side: hamburger (mobile only) + Logo */}
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          aria-label="Abrir menú"
-          onClick={() => setMobileMenuOpen(true)}
-          className="sm:hidden flex items-center justify-center"
-          style={{ width: '36px', height: '36px', background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer' }}
-        >
-          <Menu size={24} />
-        </button>
-        <Logo enlargeSquare />
-      </div>
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm h-[80px]">
+      <div className="max-w-[1440px] mx-auto h-full px-4 md:px-8 flex items-center justify-between">
+        
+        {/* Left: Logo */}
+        <div className="flex items-center">
+          <Link href="/" className="block">
+            <Logo enlargeSquare />
+          </Link>
+        </div>
 
-      {/* Right side */}
-      <div className="flex items-center gap-3">
-        {multiMonedaHabilitado && (
-          <div className="hidden sm:flex">
-            <CurrencyToggle />
-          </div>
-        )}
-        <CartIcon />
-        <UserDropdown
-          dark
-          showCurrencyToggle={multiMonedaHabilitado}
-          onLoginClick={() => openLogin()}
-          onRegisterClick={() => openRegister()}
-        />
-      </div>
-
-      {/* Mobile menu: backdrop + slide-in panel */}
-      {mobileMenuOpen && (
-        <div className="sm:hidden">
-          <div
-            style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 60 }}
-            onClick={() => setMobileMenuOpen(false)}
-          />
-          <div
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              bottom: 0,
-              width: '78%',
-              maxWidth: '300px',
-              backgroundColor: 'var(--web-dark, #025E44)',
-              zIndex: 61,
-              display: 'flex',
-              flexDirection: 'column',
-              boxShadow: '4px 0 24px rgba(0,0,0,0.25)',
-            }}
-          >
-            <div
-              className="flex items-center justify-between px-4"
-              style={{ height: 'var(--navbar-height)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}
-            >
-              <Logo enlargeSquare />
-              <button
-                type="button"
-                aria-label="Cerrar menú"
-                onClick={() => setMobileMenuOpen(false)}
-                style={{ width: '36px', height: '36px', background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              >
-                <X size={22} />
-              </button>
+        {/* Center: Desktop Navigation */}
+        <nav className="hidden lg:flex items-center gap-8">
+          {/* Item 1: Programas Académicos */}
+          <div className="relative group">
+            <button className="flex items-center gap-1.5 text-[13px] font-bold text-gray-800 hover:text-secondary tracking-wide uppercase transition-colors py-8">
+              PROGRAMAS ACADÉMICOS
+              <ChevronDown size={14} className="text-gray-500 group-hover:text-secondary" />
+            </button>
+            {/* Simple Dropdown Menu */}
+            <div className="absolute top-full left-0 bg-white shadow-xl border border-gray-100 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
+              <Link href="/cursos" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary border-b border-gray-50">
+                Todos los Programas
+              </Link>
+              <Link href="/cursos" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary border-b border-gray-50">
+                Diplomados
+              </Link>
+              <Link href="/cursos" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">
+                Cursos
+              </Link>
             </div>
+          </div>
 
-            <nav className="flex flex-col py-3">
-              {navItems.map(item => {
-                const active = isActive(item.url)
+          {/* Item 2: Novedades */}
+          <div className="relative group">
+            <button className="flex items-center gap-1.5 text-[13px] font-bold text-gray-800 hover:text-secondary tracking-wide uppercase transition-colors py-8">
+              NOVEDADES
+              <ChevronDown size={14} className="text-gray-500 group-hover:text-secondary" />
+            </button>
+            <div className="absolute top-full left-0 bg-white shadow-xl border border-gray-100 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
+              <Link href="/blog" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">
+                Blog / Noticias
+              </Link>
+            </div>
+          </div>
 
-                return (
-                  <Link
-                    key={item.key}
-                    href={item.url}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="no-underline flex items-center gap-3 px-4"
-                    style={{
-                      height: '52px',
-                      color: active ? 'var(--web-light, #BDD962)' : '#ffffff',
-                      fontWeight: active ? 700 : 500,
-                      backgroundColor: active ? 'rgba(255,255,255,0.05)' : 'transparent',
-                    }}
-                  >
-                    <item.icon size={20} />
-                    <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9rem' }}>{item.title}</span>
-                  </Link>
-                )
-              })}
-            </nav>
+          {/* Item 3: Somos EGEC */}
+          <div className="relative group">
+            <button className="flex items-center gap-1.5 text-[13px] font-bold text-gray-800 hover:text-secondary tracking-wide uppercase transition-colors py-8">
+              SOMOS EGEC
+              <ChevronDown size={14} className="text-gray-500 group-hover:text-secondary" />
+            </button>
+            <div className="absolute top-full left-0 bg-white shadow-xl border border-gray-100 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
+              <Link href="/nosotros" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary border-b border-gray-50">
+                Sobre Nosotros
+              </Link>
+              <Link href="/verificar-certificado" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">
+                Verificar Certificado
+              </Link>
+            </div>
+          </div>
+        </nav>
 
-            {/* Cuenta: login/registro o dropdown de usuario */}
-            <div
-              style={{
-                marginTop: 'auto',
-                padding: '16px',
-                borderTop: '1px solid rgba(255,255,255,0.1)',
-              }}
-            >
-              {session ? (
-                <div className="flex items-center justify-center">
-                  <UserDropdown dark />
-                </div>
-              ) : (
-                <div className="flex flex-col" style={{ gap: '10px' }}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMobileMenuOpen(false)
-                      openLogin()
-                    }}
-                    className="flex items-center justify-center gap-2 cursor-pointer bg-transparent"
-                    style={{
-                      height: '48px',
-                      borderRadius: '999px',
-                      border: '1.5px solid rgba(255,255,255,0.4)',
-                      color: '#ffffff',
-                      fontFamily: 'Poppins, sans-serif',
-                      fontWeight: 700,
-                      fontSize: '0.9rem',
-                    }}
-                  >
-                    <LogIn size={17} />
-                    Iniciar Sesión
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMobileMenuOpen(false)
-                      openRegister()
-                    }}
-                    className="flex items-center justify-center gap-2 cursor-pointer"
-                    style={{
-                      height: '48px',
-                      borderRadius: '999px',
-                      border: 'none',
-                      backgroundColor: 'var(--web-light, #BDD962)',
-                      color: '#0A0A0A',
-                      fontFamily: 'Poppins, sans-serif',
-                      fontWeight: 700,
-                      fontSize: '0.9rem',
-                    }}
-                  >
-                    <UserPlus size={17} />
-                    Registrarse
-                  </button>
-                </div>
+        {/* Right: Aula Virtual + Cart + Mobile Menu Toggle */}
+        <div className="flex items-center gap-4 md:gap-6">
+          <button 
+            onClick={handleAulaVirtualClick}
+            className="hidden sm:block text-[13px] font-medium text-gray-800 hover:text-secondary tracking-wide uppercase transition-colors"
+          >
+            AULA VIRTUAL
+          </button>
+          
+          {/* Cart Icon Redesign */}
+          <button 
+            onClick={() => setIsCartDrawerOpen(true)}
+            className="flex items-center gap-2 group cursor-pointer"
+          >
+            <span className="text-secondary font-bold text-[15px]">
+              S/ {cartTotal}
+            </span>
+            <div className="relative flex items-center justify-center w-10 h-10">
+              <ShoppingCart size={22} className="text-secondary" strokeWidth={2.5} />
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-secondary text-primary text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">
+                  {itemCount}
+                </span>
               )}
             </div>
-          </div>
+          </button>
+
+          {/* Mobile Menu Button */}
+          <button 
+            className="lg:hidden text-gray-800 p-2 -mr-2"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Slide-out */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden absolute top-[80px] left-0 w-full bg-white shadow-xl border-t border-gray-100 flex flex-col py-4 px-6 z-40 max-h-[calc(100vh-80px)] overflow-y-auto">
+          <Link href="/cursos" className="py-3 font-bold text-sm border-b border-gray-100 uppercase" onClick={() => setMobileMenuOpen(false)}>Programas Académicos</Link>
+          <Link href="/blog" className="py-3 font-bold text-sm border-b border-gray-100 uppercase" onClick={() => setMobileMenuOpen(false)}>Novedades</Link>
+          <Link href="/nosotros" className="py-3 font-bold text-sm border-b border-gray-100 uppercase" onClick={() => setMobileMenuOpen(false)}>Somos EGEC</Link>
+          <Link href="/verificar-certificado" className="py-3 font-bold text-sm border-b border-gray-100 uppercase" onClick={() => setMobileMenuOpen(false)}>Certificado</Link>
+          <button onClick={() => { setMobileMenuOpen(false); handleAulaVirtualClick(); }} className="py-3 font-bold text-secondary text-sm text-left uppercase">
+            AULA VIRTUAL
+          </button>
         </div>
       )}
     </header>
