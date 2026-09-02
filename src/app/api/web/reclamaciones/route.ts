@@ -48,8 +48,8 @@ export async function POST(request: Request) {
     const simboloMoneda = data.moneda === 'USD' ? '$' : 'S/'
 
     const config = await getConfigs()
-    const empresaNombre = config.EMPRESA_RAZON_SOCIAL || 'NOMBRE DE TU EMPRESA'
-    const empresaRuc = config.EMPRESA_RUC || '20600000000'
+    const empresaNombre = config.EMPRESA_RAZON_SOCIAL || 'IFSEC PERÚ S.A.C.'
+    const empresaRuc = config.EMPRESA_RUC || '20514508179'
 
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">

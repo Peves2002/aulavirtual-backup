@@ -18,7 +18,7 @@ const CONTENT_TYPES: Record<string, string> = {
 }
 
 async function readPublicFile(relativePath: string): Promise<{ buffer: Buffer; contentType: string } | null> {
-  const clean = relativePath.replace(/^\//, '')
+  const clean = relativePath.replace(/^\//, '').split('?')[0]
   const ext = clean.split('.').pop()?.toLowerCase() || 'png'
   const filePath = join(process.cwd(), 'public', clean)
 
@@ -32,22 +32,33 @@ async function readPublicFile(relativePath: string): Promise<{ buffer: Buffer; c
 }
 
 export async function GET() {
-  const configs = await getConfigs()
-  const faviconUrl = resolveFaviconUrl(configs)
-  const candidates = [faviconUrl, '/favicon.ico'].filter(Boolean)
+  try {
+    const configs = await getConfigs()
+    const faviconUrl = resolveFaviconUrl(configs)
+    const candidates = Array.from(new Set([faviconUrl, '/uploads/branding/site-favicon.png', '/favicon.ico', '/images/icono.png'])).filter(Boolean)
 
-  for (const path of candidates) {
-    const file = await readPublicFile(path)
+    for (const path of candidates) {
+      if (path.startsWith('http://') || path.startsWith('https://')) {
+        return NextResponse.redirect(path)
+      }
 
-    if (file) {
-      return new NextResponse(file.buffer, {
-        headers: {
-          'Content-Type': file.contentType,
-          'Cache-Control': 'public, max-age=3600, must-revalidate',
-        },
-      })
+      const file = await readPublicFile(path)
+
+      if (file) {
+        return new NextResponse(file.buffer, {
+          headers: {
+            'Content-Type': file.contentType,
+            'Cache-Control': 'public, max-age=3600, must-revalidate',
+          },
+        })
+      }
     }
-  }
 
-  return new NextResponse('Favicon no encontrado', { status: 404 })
+    return new NextResponse('Favicon no encontrado', { status: 404 })
+  } catch (error) {
+    console.error('[FAVICON_ROUTE_ERROR]', error)
+    
+    return new NextResponse('Error al cargar favicon', { status: 500 })
+  }
 }
+

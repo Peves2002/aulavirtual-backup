@@ -39,13 +39,27 @@ export default function ContactoPage() {
       </section>
 
       {/* Cards + CTA */}
-      <section style={{ backgroundColor: '#f8fafc', padding: '5rem 1.5rem' }}>
+      <section style={{ backgroundColor: '#f8fafc', padding: '5rem 1.5rem 3rem' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
 
           <ContactList />
 
           <ContactActions />
         </div>
+      </section>
+
+      {/* Mapa de Ubicación */}
+      <section style={{ width: '100%', height: '450px', backgroundColor: '#ffffff' }}>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.7346473026973!2d-77.13512390789616!3d-12.061769625260231!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105cb9137d697bb%3A0x31f3897fd77458d1!2sFrancisco%20Pizarro%20312%2C%20Bellavista%2007016!5e0!3m2!1ses-419!2spe!4v1788296548615!5m2!1ses-419!2spe"
+          width="100%"
+          height="100%"
+          style={{ border: 0, width: '100%', height: '100%', display: 'block' }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="strict-origin-when-cross-origin"
+          title="Ubicación IFSEC PERÚ S.A.C."
+        />
       </section>
     </>
   )

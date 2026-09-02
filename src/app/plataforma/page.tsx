@@ -299,7 +299,29 @@ export default async function HomePage() {
 
 
       {/* ── 9. VERIFICAR CERTIFICADO ────────────────── */}
-      <SearchCertificateSection />
+      <section style={{ backgroundColor: 'var(--web-dark, #025E44)', padding: '5rem 1rem' }}>
+        <div style={{ maxWidth: '56rem', margin: '0 auto' }}>
+          <div
+            className="rounded-3xl relative overflow-hidden"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              padding: '3rem 2rem',
+              backdropFilter: 'blur(10px)',
+            }}
+          >
+            <div className="relative z-10 text-center mb-8">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3 tracking-tight">
+                Verificar Certificado
+              </h2>
+              <p className="text-white/60 max-w-md mx-auto text-sm">
+                Ingresa el código único de tu certificado para comprobar su validez y autenticidad.
+              </p>
+            </div>
+            <SearchCertificateSection />
+          </div>
+        </div>
+      </section>
 
       {/* ── 10. CTA INSCRIPCIÓN ─────────────────────── */}
       <section className="bg-white py-16 text-center" style={{ borderTop: '1px solid hsl(214, 20%, 88%)' }}>

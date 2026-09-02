@@ -13,9 +13,9 @@ import PublicMobileNavDrawer from './PublicMobileNavDrawer'
 
 const NAV_ITEMS = [
   { href: '/', label: 'Inicio' },
-  { href: '/nosotros', label: 'Nosotros' },
   { href: '/servicios', label: 'Servicios' },
   { href: '/cursos', label: 'Cursos' },
+  { href: '/nosotros', label: 'Nosotros' },
   { href: '/contacto', label: 'Contacto' },
 ]
 

@@ -10,7 +10,7 @@ const ALL_NAV_ITEMS = [
   { title: 'Cursos', url: '/plataforma/cursos', icon: BookOpen, key: 'cursos' },
   { title: 'Rutas', url: '/plataforma/rutas', icon: Map, key: 'rutas' },
   { title: 'Nosotros', url: '/plataforma/nosotros', icon: Users, key: 'nosotros' },
-  { title: 'Certificado', url: '/plataforma/verificar-certificado', icon: Award, key: 'certificado' },
+  { title: 'Certificado', url: '/verificar-certificado', icon: Award, key: 'certificado' },
 ]
 
 export default function MobileBottomNav({

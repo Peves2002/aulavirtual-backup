@@ -9,6 +9,7 @@ import WebFooter from '@/utils/components/layout/web/WebFooter'
 import WebHeader from '@/utils/components/layout/web/WebHeader'
 import LeftSidebar from '@/utils/components/layout/web/LeftSidebar'
 import PWAInstalledToast from '@/features/web/home/components/PWAInstalledToast'
+import WhatsAppFloatingChat from '@/utils/components/layout/web/WhatsAppFloatingChat'
 
 const getCategorias = unstable_cache(
   () =>
@@ -48,6 +49,7 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
           </main>
         </div>
         <PWAInstalledToast />
+        <WhatsAppFloatingChat />
       </div>
     </AuthModalProvider>
   )

@@ -6,6 +6,7 @@ import { Facebook, Instagram, Linkedin, MapPin, Phone, Mail, ShieldCheck } from 
 
 import Logo from '@components/layout/shared/Logo'
 import { AuthModalProvider } from '@/contexts/AuthModalContext'
+import WhatsAppFloatingChat from '@/utils/components/layout/web/WhatsAppFloatingChat'
 import PublicHeader from './PublicHeader'
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
@@ -16,6 +17,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       <main className="flex-1">
         {children}
       </main>
+      <WhatsAppFloatingChat />
       <footer className="bg-[#0f172a] pt-20 pb-8 text-gray-400 relative overflow-hidden" style={{ fontFamily: 'Inter, sans-serif' }}>
         {/* Subtle decorative background elements */}
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[var(--web-primary)] to-transparent opacity-30"></div>
@@ -32,13 +34,13 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               Desde 2006, brindamos soluciones integrales en Prevención de Riesgos, Control de Operaciones y Respuesta a Emergencias.
             </p>
             <div className="flex items-center gap-4">
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[var(--web-primary)] hover:border-[var(--web-primary)] hover:text-white transition-all text-gray-400">
+              <a href="https://www.facebook.com/experienciaifsec" target="_blank" rel="noreferrer" aria-label="Facebook IFSEC" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[var(--web-primary)] hover:border-[var(--web-primary)] hover:text-white transition-all text-gray-400">
                 <Facebook size={18} />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[var(--web-primary)] hover:border-[var(--web-primary)] hover:text-white transition-all text-gray-400">
+              <a href="https://www.instagram.com/ifsec.group/" target="_blank" rel="noreferrer" aria-label="Instagram IFSEC" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[var(--web-primary)] hover:border-[var(--web-primary)] hover:text-white transition-all text-gray-400">
                 <Instagram size={18} />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[var(--web-primary)] hover:border-[var(--web-primary)] hover:text-white transition-all text-gray-400">
+              <a href="https://www.linkedin.com/company/ifsecgroup/" target="_blank" rel="noreferrer" aria-label="LinkedIn IFSEC" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[var(--web-primary)] hover:border-[var(--web-primary)] hover:text-white transition-all text-gray-400">
                 <Linkedin size={18} />
               </a>
             </div>
@@ -94,8 +96,14 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         {/* Bottom Bar */}
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
           <p>&copy; {new Date().getFullYear()} IFSEC Group. Todos los derechos reservados.</p>
-          <div className="flex flex-wrap gap-4 md:gap-6 justify-center md:justify-end mt-4 md:mt-0">
-            <Link href="/libro-de-reclamaciones" className="hover:text-white transition-colors no-underline whitespace-nowrap">Libro de Reclamaciones</Link>
+          <div className="flex flex-wrap items-center gap-4 md:gap-6 justify-center md:justify-end mt-4 md:mt-0">
+            <Link href="/libro-de-reclamaciones" className="hover:opacity-80 transition-opacity no-underline flex-shrink-0" title="Libro de Reclamaciones">
+              <img
+                src="/images/libro-reclamaciones.jpg"
+                alt="Libro de Reclamaciones"
+                style={{ height: '52px', width: 'auto', borderRadius: '6px', display: 'block' }}
+              />
+            </Link>
             <Link href="/politica-de-cambios-y-devoluciones" className="hover:text-white transition-colors no-underline whitespace-nowrap">Política de Cambios y Devoluciones</Link>
             <Link href="/politica-de-privacidad" className="hover:text-white transition-colors no-underline whitespace-nowrap">Política de Privacidad</Link>
             <Link href="/terminos-y-condiciones" className="hover:text-white transition-colors no-underline whitespace-nowrap">Términos y Condiciones</Link>

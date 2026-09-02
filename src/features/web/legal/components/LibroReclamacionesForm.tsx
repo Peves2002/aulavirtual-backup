@@ -35,9 +35,9 @@ interface LibroReclamacionesFormProps {
 }
 
 export default function LibroReclamacionesForm({
-  empresaNombre = 'NOMBRE DE TU EMPRESA',
-  empresaRuc = '20600000000',
-  empresaDireccion = '[DIRECCIÓN]'
+  empresaNombre = 'IFSEC PERÚ S.A.C.',
+  empresaRuc = '20514508179',
+  empresaDireccion = 'Francisco Pizarro 312, Bellavista, Callao'
 }: LibroReclamacionesFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [successCode, setSuccessCode] = useState<string | null>(null)

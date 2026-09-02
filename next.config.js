@@ -80,6 +80,9 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      { source: '/inicio', destination: '/', permanent: true },
+      { source: '/plataforma/verificar-certificado', destination: '/verificar-certificado', permanent: true },
+      { source: '/plataforma/verificar-certificado/:codigo', destination: '/verificar-certificado/:codigo', permanent: true },
       { source: '/rutas/:path*', destination: '/', permanent: false },
     ]
   },

@@ -22,7 +22,7 @@ const ALL_NAV_ITEMS = [
   ...(isFeatureEnabled('rutas') ? [{ title: 'Rutas', url: '/plataforma/rutas', icon: Map, key: 'rutas' as const }] : []),
   { title: 'Empresas', url: '/plataforma/empresas', icon: Building2, key: 'empresas' },
   { title: 'Nosotros', url: '/plataforma/nosotros', icon: Users, key: 'nosotros' },
-  { title: 'Certificado', url: '/plataforma/verificar-certificado', icon: Award, key: 'certificado' },
+  { title: 'Certificado', url: '/verificar-certificado', icon: Award, key: 'certificado' },
 ]
 
 export default function LeftSidebar({
