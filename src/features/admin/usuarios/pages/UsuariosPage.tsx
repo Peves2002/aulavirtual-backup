@@ -61,7 +61,8 @@ const rolStatusObj: UsuarioStatusType = {
 const rolLabels: { [key in Rol]: string } = {
   ADMIN: 'Administrador',
   PROFESOR: 'Profesor',
-  ESTUDIANTE: 'Estudiante'
+  ESTUDIANTE: 'Estudiante',
+  SUPERVISOR: 'Supervisor'
 }
 
 const columnHelper = createColumnHelper<Usuario>()

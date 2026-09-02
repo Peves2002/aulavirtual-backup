@@ -88,7 +88,7 @@ export async function GET(request: Request) {
             id: certificado.id,
             codigoVerificacion: certificado.codigo_verificacion,
             emitidoEn: certificado.emitido_en,
-            cursoTitulo: certificado.curso.titulo,
+            cursoTitulo: certificado.curso!.titulo,
             nombreCompleto: `${certificado.usuario.nombre} ${certificado.usuario.apellido}`
           }
         : null,
@@ -249,7 +249,7 @@ export async function POST(request: Request) {
           id: certificado.id,
           codigoVerificacion: certificado.codigo_verificacion,
           emitidoEn: certificado.emitido_en,
-          cursoTitulo: certificado.curso.titulo,
+          cursoTitulo: certificado.curso!.titulo,
           nombreCompleto: `${certificado.usuario.nombre} ${certificado.usuario.apellido}`
         }
       },

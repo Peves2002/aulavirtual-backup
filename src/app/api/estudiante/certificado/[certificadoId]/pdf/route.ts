@@ -63,7 +63,7 @@ export async function GET(request: Request, { params }: { params: { certificadoI
         where: {
           usuario_id_curso_id: {
             usuario_id: certificado.usuario_id,
-            curso_id: certificado.curso_id
+            curso_id: certificado.curso_id as string
           }
         },
         select: { completado_en: true, inscrito_en: true, nota_final: true }
@@ -76,13 +76,13 @@ export async function GET(request: Request, { params }: { params: { certificadoI
         where: {
           usuario_id: certificado.usuario_id,
           esta_aprobado: true,
-          examen: { curso_id: certificado.curso_id, modulo_id: { not: null } }
+          examen: { curso_id: certificado.curso_id as string, modulo_id: { not: null } }
         },
         select: { puntaje: true, examen: { select: { modulo_id: true, peso: true } } },
         orderBy: { enviado_en: 'desc' }
       }),
       prisma.modulo.findMany({
-        where: { curso_id: certificado.curso_id },
+        where: { curso_id: certificado.curso_id as string },
         orderBy: { orden: 'asc' },
         select: {
           id: true,

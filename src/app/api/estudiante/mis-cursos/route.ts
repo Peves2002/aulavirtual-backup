@@ -64,9 +64,9 @@ export async function GET(request: Request) {
     })
 
     // Incluir cursos de suscripción activa (si el cliente Prisma tiene el modelo)
-    let cursosSuscripcion: Array<(typeof cursosInscritos)[number]> = []
+    let cursosSuscripcion: any[] = []
 
-    if (typeof (prisma as { suscripcion?: { findFirst: typeof prisma.inscripcion.findFirst } }).suscripcion?.findFirst === 'function') {
+    if (typeof (prisma as any).suscripcion?.findFirst === 'function') {
       const suscripcionActiva = await prisma.suscripcion.findFirst({
         where: {
           usuario_id: user.id,

@@ -35,7 +35,7 @@ export default function WhatsAppFloat() {
         justifyContent: 'center',
         boxShadow: '0 4px 20px rgba(37,211,102,0.45)',
         transition: 'transform 0.2s',
-      }}
+      } as React.CSSProperties}
       className="hover:scale-105"
     >
       <WhatsAppIcon />

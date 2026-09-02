@@ -115,8 +115,8 @@ function BrandingColorFieldComponent({ label, value, onChange }: BrandingColorFi
 
     if (supportsEyeDropper) {
       try {
-        type EyeDropperConstructor = new () => { open: () => Promise<{ sRGBHex: string }> }
-        const EyeDropperCtor = (window as Window & { EyeDropper: EyeDropperConstructor }).EyeDropper
+
+        const EyeDropperCtor = (window as any).EyeDropper
         const result = await new EyeDropperCtor().open()
 
         commitColor(result.sRGBHex)

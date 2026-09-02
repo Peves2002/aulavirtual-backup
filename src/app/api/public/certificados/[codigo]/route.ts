@@ -47,9 +47,9 @@ export async function GET(request: Request, { params }: { params: { codigo: stri
         codigo_verificacion: certificado.codigo_verificacion,
         emitido_en: certificado.emitido_en,
         estudiante: `${certificado.usuario.nombre} ${certificado.usuario.apellido}`,
-        curso: certificado.curso.titulo,
-        duracion: certificado.curso.duracion,
-        nivel: certificado.curso.nivel,
+        curso: certificado.curso!.titulo,
+        duracion: certificado.curso!.duracion,
+        nivel: certificado.curso!.nivel,
         valido: true
       }
     })
