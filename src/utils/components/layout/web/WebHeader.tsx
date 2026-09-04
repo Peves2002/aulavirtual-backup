@@ -10,7 +10,6 @@ import { Menu, X } from 'lucide-react'
 
 import UserDropdown from '@components/layout/shared/UserDropdown'
 import CartIcon from '@/features/web/cart/components/CartIcon'
-import MobileNavDrawer from '@/utils/components/layout/web/MobileNavDrawer'
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import { useConfig } from '@/contexts/ConfigContext'
 

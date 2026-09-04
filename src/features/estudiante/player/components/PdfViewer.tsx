@@ -56,26 +56,46 @@ const PdfViewer = ({ url, embedded = false }: PdfViewerProps) => {
 
         setLoading(true)
 
-        fetch(url, { signal: controller.signal })
-            .then(res => {
+        const isPrivado = url.includes('/api/videos/stream/')
+
+        const fetchPdf = async () => {
+            try {
+                let targetUrl = url
+
+                if (isPrivado) {
+                    const filename = url.split('/').pop() || ''
+                    const resUrl = await fetch(`/api/videos/url/${filename}`, { signal: controller.signal })
+
+                    if (!resUrl.ok) throw new Error('Error al obtener URL del PDF privado')
+
+                    const data = await resUrl.json()
+
+                    if (data?.url) {
+                        targetUrl = data.url
+                    }
+                }
+
+                const res = await fetch(targetUrl, { signal: controller.signal })
+
                 if (!res.ok) throw new Error('No se pudo cargar el PDF')
 
-                return res.arrayBuffer()
-            })
-            .then(buf => {
+                const buf = await res.arrayBuffer()
+
                 if (!controller.signal.aborted) {
                     setPdfData({ data: buf })
                 }
-            })
-            .catch(err => {
+            } catch (err: any) {
                 if (controller.signal.aborted || err?.name === 'AbortError') return
+
                 setError(true)
-            })
-            .finally(() => {
+            } finally {
                 if (!controller.signal.aborted) {
                     setLoading(false)
                 }
-            })
+            }
+        }
+
+        fetchPdf()
 
         return () => controller.abort()
     }, [url])

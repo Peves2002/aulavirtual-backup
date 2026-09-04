@@ -40,7 +40,6 @@ import { getDetalleInfo } from '../entity/Pedido'
 
 import { usePedidosAgrupados } from '../hooks/usePedidos'
 import { AxiosPedido } from '../http/axiosPedido'
-import { useCursosLista } from '@/features/admin/cursos/hooks/useCursos'
 import TablePaginationComponent from '@/utils/components/others/TablePaginationComponent'
 import { ubigeoPeru, departamentos } from '@/utils/constants/ubigeo'
 
@@ -65,6 +64,7 @@ interface PedidosPageProps {
 
 export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps) {
   const router = useRouter()
+
   // Filtros aplicados a la consulta
   const [nombre, setNombre] = useState('')
   const [departamentoFiltro, setDepartamentoFiltro] = useState('')
@@ -91,6 +91,7 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
     setProvinciaFiltro('')
     table.setPageIndex(0)
   }
+
   const [isExporting, setIsExporting] = useState(false)
 
   const handleExportarExcel = async () => {
@@ -100,6 +101,7 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
       const session = await getSession()
       const token = session?.user?.accessToken ?? null
       const axiosPedido = new AxiosPedido({ getAuthToken: () => token })
+
       // Para exportar más detallado, traemos los pedidos individuales que coincidan con estos filtros
       const res = await axiosPedido.getAll({ 
         nombre, 
