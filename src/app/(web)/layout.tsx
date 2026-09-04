@@ -7,7 +7,6 @@ import { getConfigs } from '@/utils/libs/config'
 import prisma from '@/utils/libs/prisma'
 import WebFooter from '@/utils/components/layout/web/WebFooter'
 import WebHeader from '@/utils/components/layout/web/WebHeader'
-import LeftSidebar from '@/utils/components/layout/web/LeftSidebar'
 import PWAInstalledToast from '@/features/web/home/components/PWAInstalledToast'
 
 const getCategorias = unstable_cache(
@@ -24,8 +23,8 @@ const getCategorias = unstable_cache(
 const WebLayout = async ({ children }: { children: React.ReactNode }) => {
   const [categories, configs] = await Promise.all([getCategorias(), getConfigs()])
 
-  const platformName = configs.TEMPLATE_NAME || 'Aula Virtual'
-  const platformSlogan = configs.TEMPLATE_SLOGAN || 'Aprende sin límites'
+  const platformName = configs.TEMPLATE_NAME || 'MS&M CONSULTING'
+  const platformSlogan = configs.TEMPLATE_SLOGAN || ''
   const empresasHabilitado = configs.WEB_EMPRESAS_HABILITADO !== 'false'
 
   return (
@@ -33,14 +32,7 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
       <div className="web-layout min-h-screen bg-background flex flex-col">
         <WebHeader initialCategories={categories} platformName={platformName} platformSlogan={platformSlogan} empresasHabilitado={empresasHabilitado} />
         <div className="flex flex-1" style={{ paddingTop: 'var(--navbar-height)' }}>
-          {/* Sidebar: visible solo en sm+ */}
-          <div className="hidden sm:block">
-            <LeftSidebar empresasHabilitado={empresasHabilitado} />
-          </div>
-          <main
-            className="flex-1 flex flex-col min-w-0"
-            style={{ paddingLeft: 'var(--sidebar-width)' }}
-          >
+          <main className="flex-1 flex flex-col min-w-0">
             <div className="flex-1">
               {children}
             </div>

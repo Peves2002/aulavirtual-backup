@@ -7,16 +7,19 @@ import { Phone, Mail, MapPin } from 'lucide-react'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import { useConfig } from '@/contexts/ConfigContext'
 
+import { Globe } from 'lucide-react'
+
 export function ContactList() {
   const configs = useConfig()
-  const waNumber = configs.WHATSAPP_NUMERO || '51959436827'
+  const waNumber = configs.WHATSAPP_NUMERO || '51900281578'
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>
       {[
-        { icon: MapPin, title: 'Ubicación', info: 'Arequipa, Perú' },
-        { icon: Phone, title: 'WhatsApp', info: `+${waNumber}`, href: `https://wa.me/${waNumber}` },
-        { icon: Mail, title: 'Email', info: 'arm.confiabilidad@gmail.com', href: 'mailto:arm.confiabilidad@gmail.com' },
+        { icon: MapPin, title: 'Ubicación', info: 'Lima-San Martin de Porres-Lima - Residencial Montecarlo Mz N Lt 42 - I Etapa' },
+        { icon: Phone, title: 'WhatsApp / Teléfono 1', info: '+51 900 281 578', href: 'https://wa.me/51900281578' },
+        { icon: Phone, title: 'WhatsApp / Teléfono 2', info: '+51 997 407 026', href: 'https://wa.me/51997407026' },
+        { icon: Globe, title: 'Sitio Web', info: 'msymconsulting.com', href: 'https://msymconsulting.com/' },
       ].map((item, i) => (
         <ScrollReveal key={i} delay={i * 0.1}>
           <div
@@ -28,6 +31,11 @@ export function ContactList() {
               border: '1.5px solid hsl(214,20%,91%)',
               boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
               transition: 'transform 0.3s, box-shadow 0.3s',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
             onMouseEnter={e => {
               const el = e.currentTarget
@@ -53,7 +61,7 @@ export function ContactList() {
                 {item.info}
               </a>
             ) : (
-              <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', fontWeight: 600, color: '#1e293b' }}>
+              <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', fontWeight: 600, color: '#1e293b', margin: 0 }}>
                 {item.info}
               </p>
             )}

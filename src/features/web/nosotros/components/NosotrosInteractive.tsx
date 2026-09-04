@@ -33,6 +33,51 @@ const valores = [
   },
 ]
 
+/* ── Sobre Nosotros Presentación ─────────────────────────── */
+export function SobreNosotrosIntroSection() {
+  return (
+    <section style={{ backgroundColor: '#ffffff', padding: '5rem 1.5rem', borderBottom: '1px solid hsl(214,20%,92%)' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+        <ScrollReveal>
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <p style={{ ...eyebrow, display: 'block', textAlign: 'center' }}>Conoce más sobre la empresa</p>
+            <h2 style={{ ...sectionH2, textAlign: 'center' }}>Sobre Nosotros</h2>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.1}>
+          <div
+            style={{
+              backgroundColor: '#f8fafc',
+              borderRadius: '24px',
+              padding: '3rem 2.5rem',
+              border: '1.5px solid hsl(214,20%,91%)',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+              maxWidth: '1000px',
+              margin: '0 auto',
+            }}
+          >
+            <p
+              style={{
+                fontFamily: 'Poppins, sans-serif',
+                fontSize: '1.0625rem',
+                color: '#334155',
+                lineHeight: 1.85,
+                margin: 0,
+                textAlign: 'center',
+              }}
+            >
+              <em>
+                &quot;Desde el año 2021, MS & M CONSULTING viene brindando servicios con profesionales innovadores, calificados con años de experiencia. Liderando proyectos en diferentes sectores, tanto privados como públicos. Nuestros servicios destacados, como Seguridad y Salud en el Trabajo, Medio Ambiente, Calidad, Seguridad en Alimentos, Inspecciones Técnicas de Seguridad en Edificaciones, Monitoreos Ocupacionales, Formalización Laboral, entre otros, permiten lograr sus objetivos organizacionales. Nuestro compromiso con los clientes es muy importante; por ello, nos esforzamos por brindar soluciones integrales a sus necesidades. Nuestra experiencia te permitirá lograr tus metas empresariales.&quot;
+              </em>
+            </p>
+          </div>
+        </ScrollReveal>
+      </div>
+    </section>
+  )
+}
+
 /* ── Misión / Visión ────────────────────────────────────── */
 export function MisionVisionSection() {
   return (
@@ -121,9 +166,7 @@ function MisionCard() {
           Nuestra Misión
         </h3>
         <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Brindar formación profesional de alta calidad, accesible y orientada al sector industrial,
-          impulsando el desarrollo de competencias que generan valor real en las organizaciones y en
-          la carrera de nuestros estudiantes.&quot;
+          &quot;Impulsar el crecimiento sostenible de nuestros clientes mediante soluciones especializadas en consultoría, gestión empresarial y cumplimiento legal, brindando un acompañamiento cercano, técnico y orientado a resultados.&quot;
         </p>
       </div>
     </div>
@@ -184,19 +227,149 @@ function VisionCard() {
           Nuestra Visión
         </h3>
         <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#334155', lineHeight: 1.75, fontStyle: 'italic' }}>
-          &quot;Ser la plataforma de referencia en formación profesional especializada en Latinoamérica,
-          reconocida por la excelencia de sus contenidos, la solidez de sus certificaciones y su
-          compromiso con la transformación del sector industrial.&quot;
+          &quot;Ser una consultora referente en el Perú, reconocida por la calidad de nuestros servicios, la innovación en nuestras soluciones y la confianza que construimos con empresas, PYMES y organizaciones que buscan crecer de manera ordenada, segura y sostenible.&quot;
         </p>
       </div>
     </div>
   )
 }
 
+/* ── Historia de la Empresa ──────────────────────────────── */
+const hitosHistoriaNarrativa = [
+  {
+    year: '2020',
+    title: 'Fundación e Inicios SST',
+    text: 'Damos nuestros inicios empresariales como empresa de Gestión en Seguridad y Salud en el Trabajo, implementando sistemas frente a la prevención de la COVID-19 y brindando implementaciones a clientes importantes.',
+  },
+  {
+    year: '2021',
+    title: 'Crecimiento y Consolidación en ONGs',
+    text: 'Experimentamos un crecimiento significativo, superando los obstáculos del primer año de la pandemia y expandiendo nuestro alcance de manera notable. Nos consolidamos como líderes en el sector ONG, brindando soluciones efectivas y ganando la confianza de muchas organizaciones.',
+  },
+  {
+    year: '2022 - 2023',
+    title: 'Diversificación de Servicios y Cobertura',
+    text: 'Nos permitió llegar a clientes de sectores económicos importantes, brindando una variedad de servicios adicionales a la implementación de Seguridad y Salud en el Trabajo, como optimización de Sistemas Operativos y aceleración al cliente.',
+  },
+  {
+    year: '2024',
+    title: 'Expansión a Salud Ocupacional',
+    text: 'Nos consolidamos con clientes del sector ONG e incorporamos de manera integral el servicio de implementación y seguimiento en Salud Ocupacional.',
+  },
+  {
+    year: '2025',
+    title: 'Premio PRO INNOVATE & Plataforma PASS',
+    text: 'Nos hicimos acreedores de un Premio de Tecnología Ágil por PRO INNOVATE, el cual nos permitió obtener la plataforma PASS para el beneficio de nuestros clientes y la optimización de su gestión documentaria.',
+  },
+  {
+    year: '2026',
+    title: 'Ecosistema Digital y Consolidación',
+    text: 'Buscamos consolidarnos en clientes de diversos sectores económicos, brindando capacitaciones con un alto profesionalismo a través de herramientas y plataformas de tecnología digital de última generación.',
+  },
+]
+
+export function HistoriaSection() {
+  return (
+    <section style={{ backgroundColor: '#ffffff', padding: '5rem 1.5rem' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <ScrollReveal>
+          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <p style={{ ...eyebrow, display: 'block', textAlign: 'center' }}>Trayectoria y Evolución</p>
+            <h2 style={{ ...sectionH2, textAlign: 'center' }}>Nuestra Historia</h2>
+          </div>
+        </ScrollReveal>
+
+        {/* Línea temporal vertical con viñetas animadas por scroll */}
+        <div style={{ position: 'relative', paddingLeft: '2.5rem' }}>
+          {/* Línea guía vertical continua */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '12px',
+              bottom: '12px',
+              left: '9px',
+              width: '2px',
+              backgroundColor: 'var(--web-primary, #25927F)',
+              opacity: 0.3,
+            }}
+          />
+
+          {hitosHistoriaNarrativa.map((hito, index) => (
+            <ScrollReveal key={hito.year} delay={index * 0.08} direction="up">
+              <div
+                style={{
+                  position: 'relative',
+                  marginBottom: index === hitosHistoriaNarrativa.length - 1 ? 0 : '3rem',
+                }}
+              >
+                {/* Viñeta / Nodo en la línea temporal */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: '-2.5rem',
+                    top: '4px',
+                    width: '20px',
+                    height: '20px',
+                    borderRadius: '50%',
+                    backgroundColor: '#ffffff',
+                    border: '3.5px solid var(--web-primary, #25927F)',
+                    boxShadow: '0 0 0 4px rgba(37, 146, 127, 0.15)',
+                    zIndex: 2,
+                  }}
+                />
+
+                {/* Texto del hito */}
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.375rem', flexWrap: 'wrap' }}>
+                    <span
+                      style={{
+                        fontFamily: 'Poppins, sans-serif',
+                        fontSize: '1.125rem',
+                        fontWeight: 800,
+                        color: 'var(--web-primary, #25927F)',
+                      }}
+                    >
+                      {hito.year}
+                    </span>
+                    <span style={{ color: '#cbd5e1', fontWeight: 300 }}>—</span>
+                    <h3
+                      style={{
+                        fontFamily: 'Poppins, sans-serif',
+                        fontSize: '1.0625rem',
+                        fontWeight: 700,
+                        color: '#0A0A0A',
+                        margin: 0,
+                      }}
+                    >
+                      {hito.title}
+                    </h3>
+                  </div>
+
+                  <p
+                    style={{
+                      fontFamily: 'Poppins, sans-serif',
+                      fontSize: '0.9375rem',
+                      color: '#475569',
+                      lineHeight: 1.75,
+                      margin: 0,
+                    }}
+                  >
+                    {hito.text}
+                  </p>
+                </div>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 /* ── Valores ─────────────────────────────────────────────── */
 export function ValoresSection() {
   return (
-    <section style={{ backgroundColor: '#ffffff', padding: '5rem 1.5rem', borderTop: '1px solid hsl(214,20%,92%)' }}>
+    <section style={{ backgroundColor: '#f8fafc', padding: '5rem 1.5rem', borderTop: '1px solid hsl(214,20%,92%)' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         <ScrollReveal>
           <div style={{ textAlign: 'center', maxWidth: '560px', margin: '0 auto 3.5rem' }}>
@@ -230,7 +403,7 @@ function ValorCard({ v }: { v: typeof valores[number] }) {
   return (
     <div
       style={{
-        backgroundColor: '#f8fafc',
+        backgroundColor: '#ffffff',
         borderRadius: '20px',
         padding: '2rem 1.5rem',
         border: '1.5px solid hsl(214,20%,92%)',
@@ -252,7 +425,7 @@ function ValorCard({ v }: { v: typeof valores[number] }) {
         el.style.transform = 'translateY(0)'
         el.style.boxShadow = 'none'
         el.style.borderColor = 'hsl(214,20%,92%)'
-        el.style.backgroundColor = '#f8fafc'
+        el.style.backgroundColor = '#ffffff'
       }}
     >
       <div
@@ -273,3 +446,4 @@ function ValorCard({ v }: { v: typeof valores[number] }) {
     </div>
   )
 }
+

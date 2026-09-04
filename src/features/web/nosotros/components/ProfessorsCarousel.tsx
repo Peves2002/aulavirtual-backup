@@ -1,12 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-
 import Link from 'next/link'
 import Image from 'next/image'
-
-import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
-
+import { ArrowRight, BookOpen } from 'lucide-react'
 import { eyebrow, sectionH2, sectionDesc } from '@/features/web/home/components/typography'
 
 type Teacher = {
@@ -29,49 +25,14 @@ const AVATAR_COLORS = [
   '#1a73e8', '#d93025', '#e37400', '#6d4c41', '#4527a0', '#00838f',
 ]
 
-function useVisible() {
-  const [visible, setVisible] = useState(4)
-
-  useEffect(() => {
-    const update = () => {
-      const w = window.innerWidth
-
-      setVisible(w < 640 ? 1 : w < 900 ? 2 : w < 1200 ? 3 : 4)
-    }
-
-    update()
-    window.addEventListener('resize', update)
-
-    return () => window.removeEventListener('resize', update)
-  }, [])
-
-  return visible
-}
-
 export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }) {
-  const [current, setCurrent] = useState(0)
-  const visible = useVisible()
-  const total = teachers.length
-  const maxStart = Math.max(0, total - visible)
-
-  useEffect(() => {
-    setCurrent(c => Math.min(c, maxStart))
-  }, [maxStart])
-
-  const prev = () => setCurrent(c => Math.max(0, c - 1))
-  const next = () => setCurrent(c => Math.min(maxStart, c + 1))
-
-  const dots = Math.ceil(total / visible)
-  const activeDot = Math.floor(current / visible)
-
-  if (total === 0) return null
+  if (!teachers || teachers.length === 0) return null
 
   return (
-    <section style={{ backgroundColor: '#f8fafc', padding: '5rem 1.5rem', borderTop: '1px solid hsl(214,20%,92%)' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-
+    <section className="bg-slate-50 py-20 px-6 border-t border-slate-200">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        <div className="text-center mb-12">
           <p style={{ ...eyebrow, display: 'block', textAlign: 'center' }}>
             Nuestro equipo docente
           </p>
@@ -83,247 +44,102 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
           </p>
         </div>
 
-        {/* Carousel */}
-        <div style={{ position: 'relative', padding: '0 3rem' }}>
-          {/* Cards */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: `repeat(${Math.min(visible, total)}, 1fr)`,
-              gap: '1.25rem',
-            }}
-          >
-            {teachers.slice(current, current + visible).map((teacher, i) => {
-              const initials = `${teacher.nombre[0]}${teacher.apellido[0]}`
-              const color = AVATAR_COLORS[(current + i) % AVATAR_COLORS.length]
+        {/* Grid de Profesores en filas de 3 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {teachers.map((teacher, index) => {
+            const initials = `${teacher.nombre[0]}${teacher.apellido[0]}`
+            const color = AVATAR_COLORS[index % AVATAR_COLORS.length]
+            const href = teacherHref(teacher)
 
-              const href = teacherHref(teacher)
-
-              return (
-                <Link
-                  key={teacher.id}
-                  href={href}
-                  style={{
-                    backgroundColor: '#ffffff',
-                    borderRadius: '16px',
-                    overflow: 'hidden',
-                    border: '1.5px solid hsl(214,20%,91%)',
-                    boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
-                    transition: 'transform 0.3s, box-shadow 0.3s, border-color 0.3s',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    textDecoration: 'none',
-                    cursor: 'pointer',
-                  }}
-                  onMouseEnter={e => {
-                    const el = e.currentTarget as HTMLAnchorElement
-
-                    el.style.transform = 'translateY(-6px)'
-                    el.style.boxShadow = '0 12px 36px rgba(var(--web-primary-rgb, 37, 146, 127),0.13)'
-                    el.style.borderColor = 'var(--web-primary, #25927F)'
-                  }}
-                  onMouseLeave={e => {
-                    const el = e.currentTarget as HTMLAnchorElement
-
-                    el.style.transform = 'translateY(0)'
-                    el.style.boxShadow = '0 2px 12px rgba(0,0,0,0.05)'
-                    el.style.borderColor = 'hsl(214,20%,91%)'
-                  }}
-                >
-                  {/* Photo — cuadrado perfecto con padding-top hack */}
-                  <div style={{ position: 'relative', width: '100%', paddingTop: '100%', backgroundColor: `${color}14`, overflow: 'hidden' }}>
+            return (
+              <div
+                key={teacher.id}
+                className="bg-white rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl flex flex-col justify-between"
+                style={{ border: '1px solid hsl(214, 20%, 88%)', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
+              >
+                <div>
+                  {/* Photo container - Aspect-video 16:9 idéntico a la tarjeta de curso */}
+                  <div className="relative overflow-hidden w-full" style={{ paddingTop: '56.25%', backgroundColor: `${color}14` }}>
                     {teacher.avatar ? (
                       <Image
                         src={teacher.avatar}
                         alt={`${teacher.nombre} ${teacher.apellido}`}
                         fill
-                        style={{ objectFit: 'cover', objectPosition: 'center top' }}
+                        className="object-cover object-top"
                       />
                     ) : (
-                      <div
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
+                      <div className="absolute inset-0 flex items-center justify-center">
                         <div
+                          className="w-14 h-14 rounded-full flex items-center justify-center font-bold text-white shadow-md text-lg"
                           style={{
-                            width: '80px',
-                            height: '80px',
-                            borderRadius: '50%',
                             backgroundColor: color,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontFamily: 'Poppins, sans-serif',
-                            fontSize: '1.75rem',
-                            fontWeight: 800,
-                            color: '#ffffff',
-                            border: '3px solid rgba(255,255,255,0.5)',
-                            boxShadow: `0 4px 20px ${color}44`,
+                            border: '2px solid rgba(255,255,255,0.7)',
+                            fontFamily: 'Poppins, sans-serif'
                           }}
                         >
                           {initials}
                         </div>
                       </div>
                     )}
+                    {/* Badge tipo curso */}
+                    <div className="absolute top-3 right-3">
+                      <span
+                        className="px-2.5 py-1 rounded-full text-xs font-bold text-white shadow-sm"
+                        style={{ backgroundColor: 'var(--web-primary, #25927F)', fontFamily: 'Poppins, sans-serif' }}
+                      >
+                        Docente
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Info */}
-                  <div style={{ padding: '1.25rem 1.25rem 1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    <h3
-                      style={{
-                        fontFamily: 'Poppins, sans-serif',
-                        fontSize: '0.9375rem',
-                        fontWeight: 700,
-                        color: '#0A0A0A',
-                        lineHeight: 1.35,
-                        marginBottom: '0.375rem',
-                      }}
-                    >
-                      {teacher.nombre} {teacher.apellido}
-                    </h3>
-
-                    {teacher.cargo && (
-                      <p
-                        style={{
-                          fontFamily: 'Poppins, sans-serif',
-                          fontSize: '0.8rem',
-                          color: '#64748b',
-                          lineHeight: 1.45,
-                          marginBottom: '1rem',
-                          flex: 1,
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                        } as React.CSSProperties}
-                      >
-                        {teacher.cargo}
-                      </p>
-                    )}
+                  {/* Body Content */}
+                  <div className="p-5 flex flex-col gap-2">
                     <Link
                       href={href}
+                      className="no-underline font-bold text-base text-[#0A0A0A] hover:text-[#25927F] transition-colors leading-tight"
+                      style={{ fontFamily: 'Poppins, sans-serif' }}
+                    >
+                      {teacher.nombre} {teacher.apellido}
+                    </Link>
+
+                    <p
+                      className="text-xs text-slate-500 leading-relaxed min-h-[36px]"
                       style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '0.375rem',
-                        padding: '0.625rem 1rem',
-                        borderRadius: '999px',
-                        backgroundColor: 'transparent',
-                        color: '#0A0A0A',
                         fontFamily: 'Poppins, sans-serif',
-                        fontSize: '0.8125rem',
-                        fontWeight: 600,
-                        textDecoration: 'none',
-                        border: '1.5px solid #d1d5db',
-                        transition: 'all 0.2s',
-                        marginTop: 'auto',
-                      }}
-                      onMouseEnter={e => {
-                        const el = e.currentTarget as HTMLAnchorElement
-
-                        el.style.borderColor = 'var(--web-primary, #25927F)'
-                        el.style.color = 'var(--web-primary, #25927F)'
-                        el.style.backgroundColor = 'rgba(var(--web-primary-rgb, 37, 146, 127),0.05)'
-                      }}
-                      onMouseLeave={e => {
-                        const el = e.currentTarget as HTMLAnchorElement
-
-                        el.style.borderColor = '#d1d5db'
-                        el.style.color = '#0A0A0A'
-                        el.style.backgroundColor = 'transparent'
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
                       }}
                     >
-                      <ChevronDown size={14} />
-                      Ver más
-                    </Link>
+                      {teacher.cargo || teacher.biografia || 'Especialista en Seguridad y Salud en el Trabajo'}
+                    </p>
                   </div>
-                </Link>
-              )
-            })}
-          </div>
+                </div>
 
-          {/* Arrows */}
-          {total > visible && (
-            <>
-              <button
-                onClick={prev}
-                disabled={current === 0}
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: '45%',
-                  transform: 'translateY(-50%)',
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  backgroundColor: '#ffffff',
-                  border: `1.5px solid ${current === 0 ? '#e2e8f0' : 'var(--web-primary, #25927F)'}`,
-                  cursor: current === 0 ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                  transition: 'all 0.2s',
-                  zIndex: 2,
-                }}
-              >
-                <ChevronLeft size={18} color={current === 0 ? '#cbd5e1' : 'var(--web-primary, #25927F)'} />
-              </button>
-              <button
-                onClick={next}
-                disabled={current >= maxStart}
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  top: '45%',
-                  transform: 'translateY(-50%)',
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  backgroundColor: '#ffffff',
-                  border: `1.5px solid ${current >= maxStart ? '#e2e8f0' : 'var(--web-primary, #25927F)'}`,
-                  cursor: current >= maxStart ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                  transition: 'all 0.2s',
-                  zIndex: 2,
-                }}
-              >
-                <ChevronRight size={18} color={current >= maxStart ? '#cbd5e1' : 'var(--web-primary, #25927F)'} />
-              </button>
-            </>
-          )}
+                {/* Footer bar idéntica a CourseCard */}
+                <div className="p-5 pt-3 flex items-center justify-between" style={{ borderTop: '1px solid hsl(214, 20%, 92%)' }}>
+                  <span className="flex items-center gap-1.5 text-xs font-semibold text-slate-500" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    <BookOpen size={14} className="text-[#25927F]" />
+                    {teacher._count?.cursos_dictados ?? 0} {teacher._count?.cursos_dictados === 1 ? 'curso' : 'cursos'}
+                  </span>
+
+                  <Link
+                    href={href}
+                    className="no-underline inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-lg transition-all"
+                    style={{
+                      fontFamily: 'Poppins, sans-serif',
+                      backgroundColor: 'var(--web-primary, #25927F)',
+                      color: '#ffffff',
+                    }}
+                  >
+                    Ver perfil <ArrowRight size={13} />
+                  </Link>
+                </div>
+              </div>
+            )
+          })}
         </div>
-
-        {/* Dots */}
-        {dots > 1 && (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginTop: '2rem' }}>
-            {Array.from({ length: dots }).map((_, di) => (
-              <button
-                key={di}
-                onClick={() => setCurrent(di * visible)}
-                style={{
-                  width: di === activeDot ? '28px' : '8px',
-                  height: '8px',
-                  borderRadius: '999px',
-                  backgroundColor: di === activeDot ? 'var(--web-primary, #25927F)' : '#cbd5e1',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: 0,
-                  transition: 'all 0.3s',
-                }}
-              />
-            ))}
-          </div>
-        )}
       </div>
     </section>
   )

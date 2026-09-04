@@ -1156,17 +1156,24 @@ async function main() {
 
   // ─── CONFIGURACIONES DEL SISTEMA ────────────────────────────────────────────
 
-  await prisma.configuracion.upsert({
-    where: { clave: 'chat_entre_alumnos' },
-    update: {},
-    create: {
-      clave: 'chat_entre_alumnos',
-      valor: 'false',
-      descripcion: 'Permitir mensajes directos entre alumnos'
-    }
-  })
+  const initialConfigs = [
+    { clave: 'chat_entre_alumnos', valor: 'false', descripcion: 'Permitir mensajes directos entre alumnos' },
+    { clave: 'TEMPLATE_NAME', valor: 'MS&M CONSULTING', descripcion: 'Nombre de la marca' },
+    { clave: 'TEMPLATE_SLOGAN', valor: 'NO SOLO BRINDAMOS SERVICIOS, CONSTRUIMOS CONFIANZA', descripcion: 'Slogan de la marca' },
+    { clave: 'WHATSAPP_NUMERO', valor: '51900281578', descripcion: 'Número principal de WhatsApp' },
+    { clave: 'EMPRESA_RUC', valor: '20606078499', descripcion: 'RUC de la empresa' },
+    { clave: 'EMPRESA_DIRECCION', valor: 'Lima-San Martin de Porres-Lima - Residencial Montecarlo Mz N Lt 42 - I Etapa', descripcion: 'Dirección oficial' },
+  ]
 
-  console.log('✅ Configuración de chat creada')
+  for (const cfg of initialConfigs) {
+    await prisma.configuracion.upsert({
+      where: { clave: cfg.clave },
+      update: { valor: cfg.valor },
+      create: cfg
+    })
+  }
+
+  console.log('✅ Configuraciones del sistema creadas')
 
   // ─── RESUMEN ─────────────────────────────────────────────────────────────────
 

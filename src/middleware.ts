@@ -90,6 +90,9 @@ export default withAuth(
           path.startsWith('/mantenimiento') ||
           path.startsWith('/consultoria') ||
           path.startsWith('/capacitacion') ||
+          path.startsWith('/servicios') ||
+          path.startsWith('/simulacros') ||
+          path.startsWith('/soluciones') ||
           path.startsWith('/contacto') ||
           path.startsWith('/nosotros') ||
           path.startsWith('/docentes') ||

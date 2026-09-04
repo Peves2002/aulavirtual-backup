@@ -4,12 +4,13 @@ import { ArrowRight } from 'lucide-react'
 
 import prisma from '@/utils/libs/prisma'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
+import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
 import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
-import { MisionVisionSection, ValoresSection } from '@/features/web/nosotros/components/NosotrosInteractive'
+import { SobreNosotrosIntroSection, MisionVisionSection, HistoriaSection, ValoresSection } from '@/features/web/nosotros/components/NosotrosInteractive'
 
 export const metadata = {
-  title: 'Nosotros - Aula Virtual',
-  description: 'Conoce quiénes somos, nuestra misión, visión y los valores que guían nuestra plataforma educativa.',
+  title: 'Nosotros - MS&M CONSULTING',
+  description: 'Conoce quiénes somos, nuestra misión, visión, historia y los valores que guían MS&M CONSULTING.',
 }
 
 async function getTeachers() {
@@ -87,22 +88,22 @@ export default async function NosotrosPage() {
                   }}
                 >
                   <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'linear-gradient(135deg,var(--web-dark, #025E44),var(--web-primary, #25927F))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '1.75rem' }}>
-                    🎓
+                    🏢
                   </div>
                   <div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.6875rem', color: 'rgba(255,255,255,0.4)', fontWeight: 500, marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Plataforma educativa</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', fontWeight: 800, color: '#ffffff', lineHeight: 1.2 }}>Formación profesional</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>especializada y certificada</div>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.6875rem', color: 'rgba(255,255,255,0.4)', fontWeight: 500, marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>MS&M CONSULTING</div>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', fontWeight: 800, color: '#ffffff', lineHeight: 1.2 }}>Consultoría y Gestión</div>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>Construimos confianza</div>
                   </div>
                 </div>
 
                 {/* Stats 2×2 */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                   {[
-                    { emoji: '👩‍🎓', value: '+1,200', label: 'Estudiantes formados' },
-                    { emoji: '📚', value: '+80', label: 'Cursos disponibles' },
-                    { emoji: '👨‍🏫', value: '+30', label: 'Docentes expertos' },
-                    { emoji: '🏆', value: '98%', label: 'Tasa de satisfacción' },
+                    { emoji: '👨‍💼', value: '+6 Años', label: 'De trayectoria' },
+                    { emoji: '🏢', value: '+100', label: 'Empresas y ONGs atendidas' },
+                    { emoji: '🏆', value: 'ProInnovate', label: 'Premio Tecnología Ágil' },
+                    { emoji: '✨', value: '100%', label: 'Compromiso y calidad' },
                   ].map((s, i) => (
                     <div
                       key={i}
@@ -115,7 +116,7 @@ export default async function NosotrosPage() {
                       }}
                     >
                       <span style={{ fontSize: '1.375rem' }}>{s.emoji}</span>
-                      <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.375rem', fontWeight: 800, color: 'var(--web-light, #BDD962)', lineHeight: 1, marginTop: '0.5rem' }}>{s.value}</div>
+                      <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.25rem', fontWeight: 800, color: 'var(--web-light, #BDD962)', lineHeight: 1, marginTop: '0.5rem' }}>{s.value}</div>
                       <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '3px', lineHeight: 1.3 }}>{s.label}</div>
                     </div>
                   ))}
@@ -133,10 +134,10 @@ export default async function NosotrosPage() {
                     gap: '0.875rem',
                   }}
                 >
-                  <div style={{ fontSize: '1.75rem', flexShrink: 0 }}>📜</div>
+                  <div style={{ fontSize: '1.75rem', flexShrink: 0 }}>💻</div>
                   <div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', fontWeight: 700, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>Certificados con validez empresarial</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '4px' }}>Reconocidos por las principales empresas del sector</div>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', fontWeight: 700, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>Plataforma PASS & Capacitación Digital</div>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '4px' }}>Gestión documental ordenada y formación profesional</div>
                   </div>
                 </div>
 
@@ -160,7 +161,7 @@ export default async function NosotrosPage() {
                 >
                   <div style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: 'var(--web-light, #BDD962)', boxShadow: '0 0 6px var(--web-light, #BDD962)' }} />
                   <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>
-                    Sobre nosotros
+                    MS&M CONSULTING
                   </span>
                 </div>
 
@@ -175,9 +176,8 @@ export default async function NosotrosPage() {
                     marginBottom: '1.25rem',
                   }}
                 >
-                  Somos calidad y{' '}
-                  <span style={{ color: 'var(--web-light, #BDD962)' }}>responsabilidad</span>{' '}
-                  a tu servicio
+                  NO SOLO BRINDAMOS SERVICIOS,{' '}
+                  <span style={{ color: 'var(--web-light, #BDD962)' }}>CONSTRUIMOS CONFIANZA</span>
                 </h1>
 
                 <p
@@ -190,9 +190,7 @@ export default async function NosotrosPage() {
                     marginBottom: '2.5rem',
                   }}
                 >
-                  Somos una plataforma educativa especializada en la formación profesional de alto impacto.
-                  Ofrecemos cursos diseñados por expertos del sector, con certificaciones reconocidas
-                  que impulsan tu desarrollo profesional y el de tu equipo.
+                  Impulsamos el crecimiento sostenible de nuestros clientes mediante soluciones especializadas en consultoría, gestión empresarial y cumplimiento legal con un acompañamiento técnico y cercano.
                 </p>
 
                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -233,7 +231,7 @@ export default async function NosotrosPage() {
                       backdropFilter: 'blur(8px)',
                     }}
                   >
-                    Trabaja con nosotros
+                    Contáctanos
                   </Link>
                 </div>
               </div>
@@ -242,58 +240,23 @@ export default async function NosotrosPage() {
         </div>
       </section>
 
-      {/* ── 2. BANNER ISO ─────────────────────────────── */}
-      {/* <section
-        style={{
-          backgroundColor: '#0A0A0A',
-          padding: '2.5rem 1.5rem',
-          borderTop: '1px solid rgba(var(--web-primary-rgb, 37, 146, 127),0.2)',
-          borderBottom: '1px solid rgba(var(--web-primary-rgb, 37, 146, 127),0.2)',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1280px',
-            margin: '0 auto',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '1.25rem',
-            textAlign: 'center',
-          }}
-        >
-          <div
-            style={{
-              width: '52px', height: '52px', borderRadius: '14px',
-              backgroundColor: 'rgba(var(--web-primary-rgb, 37, 146, 127),0.15)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              border: '1.5px solid rgba(var(--web-primary-rgb, 37, 146, 127),0.3)', flexShrink: 0,
-            }}
-          >
-            <Award size={28} color="var(--web-primary, #25927F)" />
-          </div>
-          <div>
-            <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: 'clamp(1rem, 2vw, 1.25rem)', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.01em' }}>
-              Calidad certificada:{' '}
-              <span style={{ color: 'var(--web-light, #BDD962)' }}>ISO 9001:2015</span> e{' '}
-              <span style={{ color: 'var(--web-light, #BDD962)' }}>ISO 21001:2018</span>
-            </div>
-            <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>
-              Comprometidos con los más altos estándares de calidad educativa y de gestión
-            </div>
-          </div>
-        </div>
-      </section> */}
+      {/* ── 2. SOBRE NOSOTROS PRESENTACIÓN ─────────────── */}
+      <SobreNosotrosIntroSection />
 
-      {/* ── 3. MISIÓN / VISIÓN (client component) ─────── */}
+      {/* ── 3. MISIÓN / VISIÓN ─────────────────────────── */}
       <MisionVisionSection />
 
-      {/* ── 4. VALORES (client component) ─────────────── */}
+      {/* ── 3. HISTORIA DE LA EMPRESA ────────────────── */}
+      <HistoriaSection />
+
+      {/* ── 4. VALORES ─────────────────────────────────── */}
       <ValoresSection />
 
-      {/* ── 5. PROFESORES ─────────────────────────────── */}
+      {/* ── 5. PROFESORES / DOCENTES ───────────────────── */}
       <ProfessorsCarousel teachers={JSON.parse(JSON.stringify(teachers))} />
+
+      {/* ── 6. EMPRESAS Y CLIENTES ─────────────────────── */}
+      <ClientLogosMarquee />
     </>
   )
 }

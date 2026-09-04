@@ -4,8 +4,8 @@ import { eyebrow, sectionDesc } from '@/features/web/home/components/typography'
 import { ContactList, ContactActions } from './components/ContactoClient'
 
 export const metadata = {
-  title: 'Contacto - ARM',
-  description: 'Ponte en contacto con nosotros',
+  title: 'Contacto - MS&M CONSULTING',
+  description: 'Ponte en contacto con MS&M CONSULTING',
 }
 
 export default function ContactoPage() {

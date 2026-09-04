@@ -2,21 +2,23 @@
 
 import React, { useRef } from 'react'
 
-type HardcodedLogo = { label: string; initials: string; color: string; light: string }
 type DynamicLogo = { label: string; url: string }
-type LogoItem = HardcodedLogo | DynamicLogo
 
-const DEFAULT_LOGOS: HardcodedLogo[] = [
-  { label: 'TechCorp', initials: 'TC', color: '#1a73e8', light: '#e8f0fe' },
-  { label: 'Minera Sur', initials: 'MS', color: '#d93025', light: '#fce8e6' },
-  { label: 'Grupo Alfa', initials: 'GA', color: '#e37400', light: '#fef3e2' },
-  { label: 'Innovatech', initials: 'IT', color: '#6d4c41', light: '#efebe9' },
-  { label: 'Petrol SA', initials: 'PS', color: '#1e7e34', light: '#d4edda' },
-  { label: 'Construmax', initials: 'CM', color: '#4527a0', light: '#ede7f6' },
-  { label: 'AgroPerú', initials: 'AP', color: '#00838f', light: '#e0f7fa' },
-  { label: 'Energía+', initials: 'E+', color: '#c62828', light: '#ffebee' },
-  { label: 'Mantención', initials: 'MN', color: '#2e7d32', light: '#e8f5e9' },
-  { label: 'HidroCorp', initials: 'HC', color: '#01579b', light: '#e3f2fd' },
+const REAL_CLIENT_LOGOS: DynamicLogo[] = [
+  { label: 'Anddes Perú', url: '/clientes/anddes-peru.png' },
+  { label: 'Cámara de Comercio de Lima', url: '/clientes/camara-de-comercio-de-lima.jpg' },
+  { label: 'Conde Consulting', url: '/clientes/conde-consulting.png' },
+  { label: 'Consorcio e Inversiones Generales', url: '/clientes/consorcio-e-inversiones-generales-sac.png' },
+  { label: 'Equilux', url: '/clientes/equilux.png' },
+  { label: 'I.E. Viterbo', url: '/clientes/i-e-viterbo.png' },
+  { label: 'Instituto de Ingenieros de Minas del Perú', url: '/clientes/instituto-de-ingenieros-de-minas-del-peru.png' },
+  { label: 'JOR S.A.C.', url: '/clientes/logo-jorsac-2000x991-1-1024x507.webp' },
+  { label: 'UNFV', url: '/clientes/logo-unfv.jpg' },
+  { label: 'Naltech', url: '/clientes/logotipo-naltech-01.png' },
+  { label: 'Mac Pres Digital', url: '/clientes/new-logo-mac-press.png' },
+  { label: 'Save the Children Perú', url: '/clientes/save-the-children-peru-coeeci.png' },
+  { label: 'Trattoria Pizzeria', url: '/clientes/tratoria-pizzeria.png' },
+  { label: 'World Vision Perú', url: '/clientes/world-vision-peru.png' },
 ]
 
 interface Props {
@@ -24,8 +26,8 @@ interface Props {
 }
 
 export default function ClientLogosMarquee({ logos: logosFromProps }: Props) {
-  const activeLogos: LogoItem[] =
-    logosFromProps && logosFromProps.length > 0 ? logosFromProps : DEFAULT_LOGOS
+  const activeLogos: DynamicLogo[] =
+    logosFromProps && logosFromProps.length > 0 ? logosFromProps : REAL_CLIENT_LOGOS
 
   const track = [...activeLogos, ...activeLogos, ...activeLogos]
   const rowRef = useRef<HTMLDivElement>(null)
@@ -112,9 +114,7 @@ export default function ClientLogosMarquee({ logos: logosFromProps }: Props) {
           }}
         >
           {track.map((logo, i) => (
-            'url' in logo
-              ? <DynamicLogoCard key={i} label={logo.label} url={logo.url} />
-              : <LogoCard key={i} {...logo} />
+            <DynamicLogoCard key={i} label={logo.label} url={logo.url} />
           ))}
         </div>
       </div>
@@ -175,94 +175,6 @@ function DynamicLogoCard({ label, url }: { label: string; url: string }) {
         alt={label}
         style={{ width: '100%', height: '100%', objectFit: 'contain' }}
       />
-    </div>
-  )
-}
-
-function LogoCard({ label, initials, color, light }: HardcodedLogo) {
-  const ref = useRef<HTMLDivElement>(null)
-
-  const handleEnter = () => {
-    if (!ref.current) return
-    ref.current.style.filter = 'grayscale(0) opacity(1)'
-    ref.current.style.transform = 'scale(1.05)'
-    ref.current.style.borderColor = color
-    ref.current.style.boxShadow = `0 6px 24px ${color}22`
-    const badge = ref.current.querySelector('.logo-badge') as HTMLElement | null
-
-    if (badge) {
-      badge.style.backgroundColor = light
-      badge.style.color = color
-    }
-  }
-
-  const handleLeave = () => {
-    if (!ref.current) return
-    ref.current.style.filter = 'grayscale(1) opacity(0.55)'
-    ref.current.style.transform = 'scale(1)'
-    ref.current.style.borderColor = 'hsl(214,20%,90%)'
-    ref.current.style.boxShadow = 'none'
-    const badge = ref.current.querySelector('.logo-badge') as HTMLElement | null
-
-    if (badge) {
-      badge.style.backgroundColor = '#f1f5f9'
-      badge.style.color = '#64748b'
-    }
-  }
-
-  return (
-    <div
-      ref={ref}
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-      style={{
-        flexShrink: 0,
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.875rem',
-        padding: '0.875rem 1.5rem',
-        borderRadius: '16px',
-        border: '1.5px solid hsl(214,20%,90%)',
-        backgroundColor: '#ffffff',
-        cursor: 'default',
-        filter: 'grayscale(1) opacity(0.55)',
-        transition: 'filter 0.3s ease, transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
-        userSelect: 'none',
-        minWidth: '180px',
-      }}
-    >
-      <div
-        className="logo-badge"
-        style={{
-          width: '46px',
-          height: '46px',
-          borderRadius: '12px',
-          backgroundColor: '#f1f5f9',
-          color: '#64748b',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-          fontFamily: 'Poppins, sans-serif',
-          fontSize: '0.8125rem',
-          fontWeight: 800,
-          letterSpacing: '0.04em',
-          transition: 'background-color 0.3s, color 0.3s',
-        }}
-      >
-        {initials}
-      </div>
-      <span
-        style={{
-          fontFamily: 'Poppins, sans-serif',
-          fontSize: '0.9375rem',
-          fontWeight: 700,
-          color: '#1e293b',
-          whiteSpace: 'nowrap',
-        }}
-      >
-        {label}
-      </span>
     </div>
   )
 }

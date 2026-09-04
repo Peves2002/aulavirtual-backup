@@ -16,10 +16,11 @@ import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSe
 import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
 import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
 import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
+import HeroCarouselSection from '@/features/web/home/components/HeroCarouselSection'
 
 export const metadata = {
-  title: 'Aula Virtual - Aprende sin límites',
-  description: 'Plataforma de aprendizaje online con cursos especializados y certificados.',
+  title: 'Aula Virtual - MS&M CONSULTING',
+  description: 'Plataforma de consultoría especializada en SST, Salud Ocupacional, ITSE, Capacitaciones y Sistemas Integrados de Gestión.',
 }
 
 async function getHomeData() {
@@ -148,7 +149,10 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* ── 1. HERO ─────────────────────────────────── */}
+      {/* ── 1. HERO CARRUSEL DE IMÁGENES (MS&M CONSULTING) ── */}
+      <HeroCarouselSection />
+
+      {/* ── 2. HERO PRINCIPAL ─────────────────────────── */}
       <section
         style={{
           background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',

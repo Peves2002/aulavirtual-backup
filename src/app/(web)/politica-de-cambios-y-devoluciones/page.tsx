@@ -3,7 +3,7 @@ import React from 'react'
 import { Box, Container, Typography, Divider } from '@mui/material'
 
 export const metadata = {
-  title: 'Política de Cambios y Devoluciones | ARM Asset Reliability Management',
+  title: 'Política de Cambios y Devoluciones | MS&M CONSULTING',
 }
 
 export default function PoliticaCambiosYDevolucionesPage() {
@@ -14,15 +14,15 @@ export default function PoliticaCambiosYDevolucionesPage() {
           Política de Cambios y Devoluciones
         </Typography>
         <Typography variant="body1" color="text.secondary" textAlign="center" mb={6}>
-          Última actualización: Marzo de 2026
+          Última actualización: Septiembre de 2026
         </Typography>
 
         <Box sx={{ '& h4': { color: 'var(--web-dark, #025E44)', fontWeight: 800, mt: 5, mb: 2 }, '& p': { mb: 2, lineHeight: 1.8 } }}>
 
           <Typography paragraph>
             La presente política regula las condiciones de reembolso y cambios aplicables a los
-            servicios educativos ofrecidos por <strong>[NOMBRE DE EMPRESA]</strong>,
-            con RUC <strong>[RUC]</strong>, con domicilio en [DIRECCIÓN] — a través de su Aula Virtual. Al adquirir cualquier curso,
+            servicios educativos y consultorías ofrecidos por <strong>MS&M CONSULTING</strong>,
+            con RUC <strong>20606078499</strong>, con domicilio en Lima-San Martin de Porres-Lima - Residencial Montecarlo Mz N Lt 42 - I Etapa — a través de su Aula Virtual. Al adquirir cualquier curso o servicio,
             el usuario declara haber leído y aceptado los términos aquí descritos.
           </Typography>
 
@@ -72,7 +72,7 @@ export default function PoliticaCambiosYDevolucionesPage() {
             Para iniciar un proceso de devolución (si aplica), el usuario debe:
           </Typography>
           <Typography paragraph>
-            1. Enviar un correo a <strong>correo@gmail.com</strong> con el asunto:{' '}
+            1. Comunicarse a través de nuestros canales oficiales de WhatsApp (+51 900 281 578 / +51 997 407 026) o página de <a href="/contacto" style={{ color: 'var(--web-dark, #025E44)', textDecoration: 'underline' }}>Contacto</a> con el asunto:{' '}
             <em>&quot;Solicitud de Reembolso — [Nombre del Curso]&quot;</em>.
           </Typography>
           <Typography paragraph>
@@ -85,19 +85,19 @@ export default function PoliticaCambiosYDevolucionesPage() {
 
           <Typography variant="h4">5. Modalidad de Reembolso</Typography>
           <Typography paragraph>
-            Si la solicitud es aprobada, el reembolso se gestionará a través de la pasarela de pago <strong>Culqi</strong>.
+            Si la solicitud es aprobada, el reembolso se gestionará a través de la pasarela de pago correspondiente.
             El tiempo de acreditación en la cuenta del cliente dependerá de su entidad bancaria, generalmente
             entre <strong>15 y 30 días hábiles</strong>.
           </Typography>
           <Typography paragraph>
-            Visiona Perú Safety Solutions S.A.C se reserva el derecho de descontar las comisiones operativas
+            MS&M CONSULTING se reserva el derecho de descontar las comisiones operativas
             cobradas por la pasarela de pago que no sean reembolsables por la misma.
           </Typography>
 
           <Typography variant="h4">6. Contacto y Atención al Cliente</Typography>
           <Typography paragraph>
-            Para consultas relacionadas con esta política, comuníquese con nosotros a través de{' '}
-            <strong>correo@gmail.com</strong>. De acuerdo con la legislación de protección
+            Para consultas relacionadas con esta política, comuníquese con nosotros a través de nuestra página de{' '}
+            <a href="/contacto" style={{ color: 'var(--web-dark, #025E44)', textDecoration: 'underline' }}>Contacto</a> o vía WhatsApp (+51 900 281 578 / +51 997 407 026). De acuerdo con la legislación de protección
             al consumidor vigente, también ponemos a su disposición nuestro{' '}
             <a href="/libro-de-reclamaciones" style={{ color: 'var(--web-dark, #025E44)', textDecoration: 'underline' }}>
               Libro de Reclamaciones
