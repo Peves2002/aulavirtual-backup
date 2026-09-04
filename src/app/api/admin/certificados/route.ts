@@ -5,6 +5,7 @@ import prisma from '@/utils/libs/prisma'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { requireAdmin } from '@/utils/libs/auth-helpers'
 import { handleApiError } from '@/utils/libs/validation'
+import { contarCertificadosCurso, formatearCodigoCertificado } from '@/app/api/_shared/certificados/generarCodigoCertificado'
 
 /**
  * GET /api/admin/certificados
@@ -22,29 +23,23 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
-    const codigo = searchParams.get('codigo') || ''
-    const nombre = searchParams.get('nombre') || ''
+    const fechaInicio = searchParams.get('fechaInicio') || ''
+    const fechaFin = searchParams.get('fechaFin') || ''
 
     const skip = (page - 1) * limit
 
     // Filtros
     const conditions: any[] = []
 
-
-    if (codigo) {
+    if (fechaInicio) {
       conditions.push({
-        codigo_verificacion: { contains: codigo, mode: 'insensitive' }
+        emitido_en: { gte: new Date(`${fechaInicio}T00:00:00.000Z`) }
       })
     }
 
-    if (nombre) {
+    if (fechaFin) {
       conditions.push({
-        usuario: {
-          OR: [
-            { nombre: { contains: nombre, mode: 'insensitive' } },
-            { apellido: { contains: nombre, mode: 'insensitive' } }
-          ]
-        }
+        emitido_en: { lte: new Date(`${fechaFin}T23:59:59.999Z`) }
       })
     }
 
@@ -127,7 +122,7 @@ export async function POST(request: Request) {
     // Verificar que el usuario existe
     const usuario = await prisma.usuario.findUnique({
       where: { id: usuario_id },
-      select: { id: true, nombre: true, apellido: true, correo: true, numero_documento: true }
+      select: { id: true, nombre: true, apellido: true, correo: true }
     })
 
     if (!usuario) {
@@ -213,25 +208,38 @@ export async function POST(request: Request) {
         }
       })
     } else {
-      // Generar código de verificación: {CODIGO_CURSO}-{YYYYMMDD}-{DNI}-{NN}
-      const fechaStr = fechaEmision.toISOString().slice(0, 10).replace(/-/g, '')
-      const dni = usuario.numero_documento?.replace(/\D/g, '') || 'SINDNI'
+      // Generar código de verificación: {CODIGO_CURSO}-{YYMMDD}-{NNNNNN}
       const codigoCurso = curso.codigo || curso.slug.slice(0, 12).toUpperCase()
-      const codigoVerificacion = `${codigoCurso}-${fechaStr}-${dni}-01`
 
-      certificado = await prisma.certificado.create({
-        data: {
-          usuario_id,
-          curso_id,
-          codigo_verificacion: codigoVerificacion,
-          emitido_en: fechaEmision,
-          datos: snapshot
-        },
-        include: {
-          usuario: { select: { id: true, nombre: true, apellido: true, correo: true, avatar: true } },
-          curso: { select: { id: true, titulo: true } }
+      let numeroSecuencial = (await contarCertificadosCurso(curso_id)) + 1
+      let codigoVerificacion = formatearCodigoCertificado(codigoCurso, fechaEmision, numeroSecuencial)
+
+      for (let intento = 0; intento < 3; intento++) {
+        try {
+          certificado = await prisma.certificado.create({
+            data: {
+              usuario_id,
+              curso_id,
+              codigo_verificacion: codigoVerificacion,
+              emitido_en: fechaEmision,
+              datos: snapshot
+            },
+            include: {
+              usuario: { select: { id: true, nombre: true, apellido: true, correo: true, avatar: true } },
+              curso: { select: { id: true, titulo: true } }
+            }
+          })
+          break
+        } catch (error: any) {
+          if (error?.code === 'P2002' && intento < 2) {
+            numeroSecuencial += 1
+            codigoVerificacion = formatearCodigoCertificado(codigoCurso, fechaEmision, numeroSecuencial)
+            continue
+          }
+          
+          throw error
         }
-      })
+      }
     }
 
     return ApiResponse.success(request, { certificado }, existente && reemplazar ? 200 : 201)

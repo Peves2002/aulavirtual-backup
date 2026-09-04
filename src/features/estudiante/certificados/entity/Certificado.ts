@@ -5,6 +5,7 @@ export interface CertificadoCurso {
   miniatura: string | null
   duracion: number | null
   nivel: string | null
+  modo_certificado: 'AUTOMATICO' | 'MANUAL'
   profesor: {
     nombre: string
     apellido: string
@@ -15,6 +16,7 @@ export interface MiCertificado {
   id: string
   codigo_verificacion: string
   emitido_en: string
+  datos?: any
   curso: CertificadoCurso
   habilitado: boolean
 }

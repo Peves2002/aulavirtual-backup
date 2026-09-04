@@ -66,7 +66,7 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
             where: { id: { in: rutaIds } },
             include: { cursos: true }
           })
-          
+
           for (const ruta of rutasConCursos) {
             for (const cr of ruta.cursos) {
               cursosRuta.push(cr.curso_id)
@@ -74,10 +74,9 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
           }
         }
 
-
-        // a) Actualizar pedido
-        const pedidoActualizado = await tx.pedido.update({
-          where: { id: pedidoId },
+        // a) Actualizar pedido solo si sigue sin completar (evita condiciones de carrera)
+        const updateResult = await tx.pedido.updateMany({
+          where: { id: pedidoId, estado: { not: 'COMPLETADO' } },
           data: {
             estado: 'COMPLETADO',
             pagado_en: new Date(),
@@ -86,6 +85,12 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
             respuesta_izipay: data.respuesta_pago || null
           }
         })
+
+        if (updateResult.count === 0) {
+          return null
+        }
+
+        const pedidoActualizado = await tx.pedido.findUniqueOrThrow({ where: { id: pedidoId } })
 
         // b) Incrementar uso de cupón si aplica
         if (pedidoInit.cupon_id) {
@@ -169,6 +174,15 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
       },
       { timeout: 30000 }
     )
+
+    if (result === null) {
+      console.log(`[Order-Service] El pedido ${pedidoId} fue completado por otro proceso concurrente.`)
+
+      const pedidoActual = await prisma.pedido.findUniqueOrThrow({ where: { id: pedidoId } })
+      const inscripciones = await prisma.inscripcion.findMany({ where: { pedido_id: pedidoId } })
+
+      return { pedido: pedidoActual, inscripciones, yaCompletado: true }
+    }
 
     // e) Notificar a Admins (fuera de la transacción)
     try {

@@ -10,6 +10,7 @@ import { Menu, X } from 'lucide-react'
 
 import UserDropdown from '@components/layout/shared/UserDropdown'
 import CartIcon from '@/features/web/cart/components/CartIcon'
+import MobileNavDrawer from '@/utils/components/layout/web/MobileNavDrawer'
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import { useConfig } from '@/contexts/ConfigContext'
 
@@ -23,6 +24,7 @@ interface WebHeaderProps {
   initialCategories?: Category[]
   platformName?: string
   platformSlogan?: string
+  empresasHabilitado?: boolean
 }
 
 const links = [
@@ -43,6 +45,7 @@ export default function WebHeader({ initialCategories = [], platformName = 'Aula
   const name = configs.TEMPLATE_NAME || platformName
   const { data: session } = useSession()
   const { openLogin, openRegister } = useAuthModal()
+
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur-md">

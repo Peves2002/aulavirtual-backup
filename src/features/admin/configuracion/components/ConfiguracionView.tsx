@@ -25,7 +25,8 @@ import {
   Chip,
   Link,
   CardHeader,
-  FormControlLabel
+  FormControlLabel,
+  Alert
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { getSession } from 'next-auth/react'
@@ -35,6 +36,9 @@ import { AxiosConfiguracion } from '../http/axiosConfiguracion'
 import type { Configuracion } from '../entity/Configuracion'
 import MediaLibrary from '../../cursos/components/MediaLibrary'
 import { useUsuarios } from '../../usuarios/hooks/useUsuarios'
+import { usePlantillasCertificado } from '../../plantillas-certificado/hooks/usePlantillasCertificado'
+import { PLANTILLAS_CERTIFICADO_FIJAS } from '../../plantillas-certificado/entity/plantillasFijas'
+import { useFirmantes } from '../../firmantes/hooks/useFirmantes'
 
 interface ConfiguracionViewProps {
   initialData?: Configuracion[]
@@ -78,56 +82,51 @@ function SectionLabel({ children }: { children: string }) {
   )
 }
 
-const PLANTILLAS_CERTIFICADO = [
-  {
-    id: 'clasico',
-    nombre: 'Clásico',
-    descripcion: 'Panel lateral con gradiente. Ideal para institutos y academias.',
-    thumbnail: '/images/plantillas-certificado/clasico.png',
-  },
-  {
-    id: 'clasico_resumido',
-    nombre: 'Clásico (Resumido)',
-    descripcion: 'Temario a dos columnas sin cuadro de notas para ahorrar espacio.',
-    thumbnail: '/images/plantillas-certificado/clasico_resumido.png',
-  },
-  {
-    id: 'corporativo',
-    nombre: 'Corporativo',
-    descripcion: 'Diseño formal con borde y detalles dorados. Empresas B2B.',
-    thumbnail: '/images/plantillas-certificado/corporativo.png',
-  },
-  {
-    id: 'moderno',
-    nombre: 'Moderno',
-    descripcion: 'Fondo oscuro con acentos de color. Academias tech y startups.',
-    thumbnail: '/images/plantillas-certificado/moderno.png',
-  },
-  {
-    id: 'elegante',
-    nombre: 'Elegante',
-    descripcion: 'Fondo crema con bordes ornamentales. Estilo universitario.',
-    thumbnail: '/images/plantillas-certificado/elegante.png',
-  },
-]
-
 function CertificadosSettings({ config, onInputChange }: { config: any; onInputChange: (clave: string, valor: string) => void }) {
   const { data: usuariosData, isLoading } = useUsuarios({ limit: '1000' })
   const candidatos = (usuariosData?.usuarios || []).filter(u => u.rol === Rol.ADMIN || u.rol === Rol.PROFESOR)
   const plantillaActiva = config.CERTIFICADO_PLANTILLA || 'clasico'
+
+  const { data: plantillasPersonalizadas = [] } = usePlantillasCertificado()
+  const { data: firmantes = [] } = useFirmantes()
+  const firmantesActivos = firmantes.filter(f => f.activo)
+
+  const opcionesPlantilla = [
+    ...PLANTILLAS_CERTIFICADO_FIJAS,
+    ...plantillasPersonalizadas
+      .filter(p => p.activo && p.cara_frente_url)
+      .map(p => ({
+        id: p.id,
+        nombre: p.nombre,
+        descripcion: 'Diseño personalizado (subido por ti)',
+        thumbnail: p.cara_frente_url
+      }))
+  ]
 
   return (
     <Stack spacing={4}>
 
       {/* ── SELECTOR DE PLANTILLA ─────────────────────────────── */}
       <Box>
-        <SectionLabel>Plantilla de Certificado</SectionLabel>
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 2, mb: 1 }}>
+          <SectionLabel>Plantilla de Certificado</SectionLabel>
+          <Button
+            variant='outlined'
+            size='small'
+            href='/admin/plantillas-certificado'
+            component={Link}
+            endIcon={<i className='tabler-arrow-right' style={{ fontSize: 16 }} />}
+          >
+            Gestionar plantillas personalizadas
+          </Button>
+        </Box>
         <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
           Selecciona el diseño que se usará para todos los certificados generados en la plataforma.
-          Los colores y el logo se aplican automáticamente según el branding configurado.
+          Los colores y el logo se aplican automáticamente según el branding configurado. También puedes
+          subir tu propio diseño (cara 1 y cara 2) desde &quot;Gestionar plantillas personalizadas&quot;.
         </Typography>
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(4, 1fr)' }, gap: 2 }}>
-          {PLANTILLAS_CERTIFICADO.map((p) => {
+          {opcionesPlantilla.map((p) => {
             const isSelected = plantillaActiva === p.id
 
 
@@ -294,6 +293,86 @@ function CertificadosSettings({ config, onInputChange }: { config: any; onInputC
           })()}
         </Paper>
       )}
+
+      <Divider />
+
+      <Box>
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 2, mb: 1 }}>
+          <SectionLabel>Firmante 1 / Firmante 2 (plantilla personalizada)</SectionLabel>
+          <Button
+            variant='outlined'
+            size='small'
+            href='/admin/firmantes'
+            component={Link}
+            endIcon={<i className='tabler-arrow-right' style={{ fontSize: 16 }} />}
+          >
+            Gestionar firmantes
+          </Button>
+        </Box>
+        <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
+          Catálogo independiente de firmantes (nombre, cargo, firma y sello) que solo aplica a las plantillas
+          de certificado <strong>personalizadas</strong>. Los valores de aquí son el firmante por defecto; cada
+          curso puede elegir su propio Firmante 1 / Firmante 2 desde su configuración, sin afectar a este valor global.
+        </Typography>
+        <Paper variant='outlined' sx={{ p: 2, mb: 3 }}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={config.CERTIFICADO_MOSTRAR_FIRMANTES !== 'false'}
+                onChange={(e) => onInputChange('CERTIFICADO_MOSTRAR_FIRMANTES', e.target.checked ? 'true' : 'false')}
+                color='primary'
+              />
+            }
+            label={
+              <Box>
+                <Typography variant='body2' fontWeight={600}>Mostrar Firmante 1 / Firmante 2</Typography>
+                <Typography variant='caption' color='text.secondary'>
+                  Si está desactivado, ningún certificado con plantilla personalizada mostrará Firmante 1/2,
+                  aunque el curso o la configuración global tengan uno seleccionado.
+                </Typography>
+              </Box>
+            }
+          />
+        </Paper>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <TextField
+              select
+              fullWidth
+              label='Firmante 1 por defecto'
+              value={config.CERTIFICADO_FIRMANTE_1_ID || ''}
+              onChange={(e) => onInputChange('CERTIFICADO_FIRMANTE_1_ID', e.target.value)}
+            >
+              <MenuItem value=''>
+                <em>Ninguno seleccionado</em>
+              </MenuItem>
+              {firmantesActivos.map((f) => (
+                <MenuItem key={f.id} value={f.id}>
+                  {f.nombre}{f.cargo ? ` (${f.cargo})` : ''}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField
+              select
+              fullWidth
+              label='Firmante 2 por defecto'
+              value={config.CERTIFICADO_FIRMANTE_2_ID || ''}
+              onChange={(e) => onInputChange('CERTIFICADO_FIRMANTE_2_ID', e.target.value)}
+            >
+              <MenuItem value=''>
+                <em>Ninguno seleccionado</em>
+              </MenuItem>
+              {firmantesActivos.map((f) => (
+                <MenuItem key={f.id} value={f.id}>
+                  {f.nombre}{f.cargo ? ` (${f.cargo})` : ''}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+        </Grid>
+      </Box>
     </Stack>
   )
 }
@@ -397,16 +476,13 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
     GOOGLE_CLIENT_ID: '',
     GOOGLE_CLIENT_SECRET: '',
     IZIPAY_ENABLED: 'true',
-    IZIPAY_MERCHANT_CODE: '',
-    IZIPAY_RSA_KEY: '',
-    IZIPAY_ENDPOINT: 'https://sandbox-api-pw.izipay.pe',
-    IZIPAY_SDK_URL: 'https://sandbox-checkout.izipay.pe/payments/v1/js/index.js',
     CULQI_ENABLED: 'true',
     CULQI_PUBLIC_KEY: '',
     CULQI_RSA_ID: '',
     CULQI_RSA_PUBLIC_KEY: '',
     CERTIFICADO_GERENTE_GENERAL_ID: '',
     CERTIFICADO_PLANTILLA: 'clasico',
+    CERTIFICADO_MOSTRAR_FIRMANTES: 'true',
     PAGO_MANUAL_ENABLED: 'false',
     PAGO_MANUAL_WHATSAPP_NUMERO: '',
     PAGO_MANUAL_WHATSAPP_MENSAJE: '',
@@ -989,41 +1065,12 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
             onInputChange={handleInputChange}
           >
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label='Merchant Code'
-                  value={config.IZIPAY_MERCHANT_CODE}
-                  onChange={(e) => handleInputChange('IZIPAY_MERCHANT_CODE', e.target.value)}
-                />
-              </Grid>
-
               <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label='RSA Key'
-                  multiline
-                  rows={2}
-                  value={config.IZIPAY_RSA_KEY}
-                  onChange={(e) => handleInputChange('IZIPAY_RSA_KEY', e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label='Endpoint API'
-                  value={config.IZIPAY_ENDPOINT}
-                  onChange={(e) => handleInputChange('IZIPAY_ENDPOINT', e.target.value)}
-                  helperText='Ej: https://sandbox-api-pw.izipay.pe'
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label='SDK JS URL'
-                  value={config.IZIPAY_SDK_URL}
-                  onChange={(e) => handleInputChange('IZIPAY_SDK_URL', e.target.value)}
-                />
+                <Alert severity='info' sx={{ borderRadius: 2 }}>
+                  Las credenciales de Izipay (Usuario, Contraseña, Clave HMAC-SHA-256 y Endpoint API) se configuran
+                  por variables de entorno (IZIPAY_REST_USER, IZIPAY_REST_PASSWORD, IZIPAY_HASH_KEY, IZIPAY_ENDPOINT),
+                  no desde este panel. Aquí solo puedes activar/desactivar la pasarela.
+                </Alert>
               </Grid>
             </Grid>
           </GatewayAccordion>

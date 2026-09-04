@@ -37,7 +37,10 @@ export const listarPedidosQuerySchema = z.object({
   provincia: z.string().trim().optional(),
   mes: z.string().trim().optional(),
   anio: z.string().trim().optional(),
-  usuario_id: z.string().uuid().optional()
+  usuario_id: z.string().uuid().optional(),
+  curso_id: z.string().uuid().optional(),
+  fecha_inicio: z.string().trim().optional(),
+  fecha_fin: z.string().trim().optional()
 })
 
 export type ListarPedidosQuery = z.infer<typeof listarPedidosQuerySchema>

@@ -304,7 +304,7 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
               style={{ height: '52px', width: 'auto', objectFit: 'contain', maxWidth: '180px' }}
             />
           </Box>
-          <Typography variant="h5" sx={{ mt: 4, fontWeight: 800 }}>
+          <Typography variant="h5" sx={{ mt: 5, fontWeight: 800 }}>
             {mode === 'login' ? 'Iniciar Sesión' : mode === 'register' ? 'Crear Cuenta' : '¿Olvidaste tu contraseña?'}
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -321,11 +321,11 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         {registerSuccess && <Alert severity="success" sx={{ mb: 2 }}>¡Registro exitoso! Iniciando sesión...</Alert>}
 
-        {mode === 'login' && (
+        {/* {mode === 'login' && (
           <Alert severity="info" sx={{ mb: 2, fontSize: '0.8rem' }}>
             <strong>Cuenta de prueba:</strong> 12345678 &nbsp;|&nbsp; <strong>Contraseña:</strong> Alumno123@
           </Alert>
-        )}
+        )} */}
 
         {mode === 'login' ? (
           <form key="login-form" onSubmit={loginForm.handleSubmit(onLoginSubmit)}>

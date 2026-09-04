@@ -39,10 +39,10 @@ function CertificadoCard({ cert }: { cert: MiCertificado }) {
       const a = document.createElement('a')
 
       a.href = url
-      a.setAttribute('download', `certificado-${cert.codigo_verificacion}.pdf`)
+      a.download = `certificado-${cert.codigo_verificacion}.pdf`
       document.body.appendChild(a)
       a.click()
-      a.remove()
+      document.body.removeChild(a)
       window.URL.revokeObjectURL(url)
     } catch {
       enqueueSnackbar('Error al descargar el certificado', { variant: 'error' })
@@ -61,6 +61,8 @@ function CertificadoCard({ cert }: { cert: MiCertificado }) {
     month: 'long',
     year: 'numeric'
   })
+
+  const puedeDescargar = !!cert.datos?.archivo_pdf || cert.curso.modo_certificado === 'AUTOMATICO'
 
   return (
     <Card sx={{
@@ -109,6 +111,23 @@ function CertificadoCard({ cert }: { cert: MiCertificado }) {
               fontWeight: 600, fontSize: '0.7rem'
             }}
           />
+        )}
+
+        {/* Badge emisión manual */}
+        {cert.datos?.emision_manual && (
+          <Tooltip title="Este certificado fue emitido manualmente por un administrador">
+            <Chip
+              icon={<i className="tabler-hand-stop" style={{ fontSize: '0.8rem' }} />}
+              label="Emitido manualmente"
+              size="small"
+              sx={{
+                position: 'absolute', top: 10, left: 10,
+                bgcolor: 'rgba(0,0,0,0.55)', color: '#fff',
+                fontWeight: 600, fontSize: '0.7rem',
+                '& .MuiChip-icon': { color: '#fff' }
+              }}
+            />
+          </Tooltip>
         )}
       </Box>
 
@@ -163,17 +182,21 @@ function CertificadoCard({ cert }: { cert: MiCertificado }) {
 
           {/* Acciones */}
           <Box sx={{ display: 'flex', gap: 1 }}>
-            <Button
-              fullWidth
-              variant="contained"
-              size="small"
-              startIcon={<i className="tabler-download" />}
-              onClick={handleDownload}
-              disabled={downloading || cert.habilitado === false}
-              sx={{ borderRadius: 2, fontWeight: 600, fontSize: '0.78rem' }}
-            >
-              {downloading ? 'Descargando...' : cert.habilitado === false ? 'Inhabilitado' : 'Descargar PDF'}
-            </Button>
+            <Tooltip title={cert.habilitado === false ? 'Tu certificado se encuentra inhabilitado.' : !puedeDescargar ? 'Tu certificado está en trámite, comunícate con el asesor.' : ''}>
+              <span style={{ display: 'flex', flex: 1 }}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  size="small"
+                  startIcon={<i className={cert.habilitado === false ? 'tabler-x' : !puedeDescargar ? 'tabler-clock' : 'tabler-download'} />}
+                  onClick={handleDownload}
+                  disabled={downloading || cert.habilitado === false || !puedeDescargar}
+                  sx={{ borderRadius: 2, fontWeight: 600, fontSize: '0.78rem' }}
+                >
+                  {downloading ? 'Descargando...' : cert.habilitado === false ? 'Inhabilitado' : !puedeDescargar ? 'En trámite' : 'Descargar PDF'}
+                </Button>
+              </span>
+            </Tooltip>
             <Tooltip title="Verificar certificado">
               <Button
                 variant="outlined"

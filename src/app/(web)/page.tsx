@@ -12,6 +12,8 @@ import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
+import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
+import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
 import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
 import RutasSection from '@/features/web/home/components/RutasSection'
@@ -94,7 +96,7 @@ async function getHomeData() {
           take: 5,
         })
         : Promise.resolve([]),
-        
+
       // Rutas (Paquetes) destacados
       isFeatureEnabled('rutas')
         ? prisma.rutaAprendizaje.findMany({
@@ -180,7 +182,7 @@ async function getHomeData() {
 }
 
 export default async function HomePage() {
-  const { courses, ebooks, rutas, heroImg, waLink, logos } = await getHomeData()
+  const { courses, ebooks, rutas, heroImg, waLink, logos, teachers } = await getHomeData()
 
   return (
     <>
@@ -480,6 +482,11 @@ export default async function HomePage() {
       {/* ── 5. CARACTERÍSTICAS DE CLASES ────────────── */}
       <ClassFeaturesSection />
 
+      {/* ── 6. PROFESORES ───────────────────────────── */}
+      <ProfessorsCarousel teachers={teachers} />
+
+      {/* ── 8. CTA AGENDAR REUNIÓN ──────────────────── */}
+      <EnterpriseCTASection />
       {/* ── 9. VERIFICAR CERTIFICADO ────────────────── */}
       <SearchCertificateSection />
 

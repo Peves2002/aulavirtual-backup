@@ -27,7 +27,7 @@ export async function GET(request: Request) {
       return validation.error
     }
 
-    const { page, limit, estado, buscar, nro_pedido, nombre, departamento, provincia, mes, anio, usuario_id } = validation.data
+    const { page, limit, estado, buscar, nro_pedido, nombre, departamento, provincia, mes, anio, usuario_id, curso_id, fecha_inicio, fecha_fin } = validation.data
 
     const where: any = {}
     
@@ -76,7 +76,15 @@ export async function GET(request: Request) {
       where.usuario = { ...where.usuario, provincia }
     }
 
-    if (anio) {
+    if (curso_id) {
+      where.detalles = { some: { curso_id } }
+    }
+
+    if (fecha_inicio || fecha_fin) {
+      where.creado_en = {}
+      if (fecha_inicio) where.creado_en.gte = new Date(`${fecha_inicio}T00:00:00`)
+      if (fecha_fin) where.creado_en.lte = new Date(`${fecha_fin}T23:59:59.999`)
+    } else if (anio) {
       const yearInt = parseInt(anio)
 
       if (!isNaN(yearInt)) {
