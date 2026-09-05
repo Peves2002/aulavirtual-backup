@@ -102,5 +102,31 @@ export const usePagosMutations = (cursoId?: string) => {
     onSuccess: invalidate
   })
 
-  return { crearTabla, actualizarRegistro, eliminarTabla, guardarAccesos }
+  const crearCuotaIndividual = useMutation({
+    mutationFn: ({ usuarioId, cursoId, moduloIds }: { usuarioId: string, cursoId: string, moduloIds?: string[] }) =>
+      factory().crearCuotaIndividual(usuarioId, cursoId, moduloIds),
+    onSuccess: invalidate
+  })
+
+  const editarCuotaIndividual = useMutation({
+    mutationFn: ({ usuarioId, cuotaId, data }: { usuarioId: string, cuotaId: string, data: any }) =>
+      factory().editarCuotaIndividual(usuarioId, cuotaId, data),
+    onSuccess: invalidate
+  })
+
+  const eliminarCuotaIndividual = useMutation({
+    mutationFn: ({ usuarioId, cuotaId }: { usuarioId: string, cuotaId: string }) =>
+      factory().eliminarCuotaIndividual(usuarioId, cuotaId),
+    onSuccess: invalidate
+  })
+
+  return { crearTabla, actualizarRegistro, eliminarTabla, guardarAccesos, crearCuotaIndividual, editarCuotaIndividual, eliminarCuotaIndividual }
+}
+
+export const useCursosInscritosAlumno = (usuarioId?: string) => {
+  return useQuery({
+    queryKey: ['admin', 'pagos', 'alumno', usuarioId, 'cursos'],
+    queryFn: () => factory().getCursosInscritosAlumno(usuarioId!),
+    enabled: Boolean(usuarioId)
+  })
 }

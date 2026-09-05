@@ -1260,6 +1260,7 @@ model RegistroCuotaManual {
   confirmacion   ConfirmacionCuota @default(NO_ENVIADO)
   observaciones  String?
   fecha_envio    DateTime          @default(now())
+  modulo_ids     Json?
   creado_en      DateTime          @default(now())
   actualizado_en DateTime          @updatedAt
   curso          Curso             @relation(fields: [curso_id], references: [id], onDelete: Cascade)

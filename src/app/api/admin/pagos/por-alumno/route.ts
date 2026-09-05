@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     const usuarios = await prisma.usuario.findMany({
       where: {
         rol: 'ESTUDIANTE',
-        registros_cuota_manual: { some: {} },
+        inscripciones: { some: {} },
         AND: tokens.map(token => ({
           OR: [
             { nombre: { contains: token, mode: 'insensitive' } },

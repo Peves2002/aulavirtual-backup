@@ -10,7 +10,6 @@ import {
   FormControlLabel,
   InputAdornment,
   Paper,
-  Switch,
   Table,
   TableBody,
   TableCell,
@@ -18,7 +17,8 @@ import {
   TableHead,
   TableRow,
   TextField,
-  Typography
+  Typography,
+  Switch
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 

@@ -312,10 +312,20 @@ export default function PagosPage() {
     }
   }
 
-  const toggleModulo = (moduloId: string) => {
+  const toggleModulo = (moduloId: string, index: number) => {
     if (modulosBloqueados.has(moduloId)) return
 
-    setModuloDraft(prev => (prev.includes(moduloId) ? prev.filter(id => id !== moduloId) : [...prev, moduloId]))
+    setModuloDraft(prev => {
+      if (prev.includes(moduloId)) {
+        // Uncheck this and ALL subsequent modules
+        const modulosAQuitar = (cursoData?.modulos ?? []).slice(index).map(m => m.id)
+
+        
+return prev.filter(id => !modulosAQuitar.includes(id))
+      } else {
+        return [...prev, moduloId]
+      }
+    })
   }
 
   const handleGuardarCambios = async () => {
@@ -858,8 +868,19 @@ export default function PagosPage() {
                 <strong>Enviado</strong> ({enviadosCount}).
               </Typography>
               <Stack>
-                {(cursoData?.modulos ?? []).map(mod => {
+                {(cursoData?.modulos ?? []).map((mod, index) => {
                   const bloqueado = modulosBloqueados.has(mod.id)
+                  
+                  let prevPermitted = true
+
+                  if (index > 0) {
+                    const prevMod = cursoData!.modulos[index - 1]
+                    const prevBloqueado = modulosBloqueados.has(prevMod.id)
+
+                    prevPermitted = moduloDraft.includes(prevMod.id) || prevBloqueado
+                  }
+                  
+                  const disabled = bloqueado || !prevPermitted
 
                   return (
                     <FormControlLabel
@@ -867,8 +888,8 @@ export default function PagosPage() {
                       control={
                         <Checkbox
                           checked={moduloDraft.includes(mod.id)}
-                          disabled={bloqueado}
-                          onChange={() => toggleModulo(mod.id)}
+                          disabled={disabled}
+                          onChange={() => toggleModulo(mod.id, index)}
                         />
                       }
                       label={

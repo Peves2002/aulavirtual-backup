@@ -95,6 +95,7 @@ export async function GET(request: Request, { params }: { params: { usuarioId: s
       },
       registros: registros.map(r => {
         const modulosCuota = modulosPorCursoCuota.get(`${r.curso_id}:${r.numero_cuota}`) ?? []
+        const modulosPropios = (r as any).modulo_ids && Array.isArray((r as any).modulo_ids) ? ((r as any).modulo_ids as string[]) : null
 
         return {
           id: r.id,
@@ -111,8 +112,8 @@ export async function GET(request: Request, { params }: { params: { usuarioId: s
           fecha_envio: r.fecha_envio.toISOString(),
           creado_en: r.creado_en,
           actualizado_en: r.actualizado_en,
-          modulos_cuota: modulosCuota,
-          modulos_enviados: r.confirmacion === 'ENVIADO' ? modulosCuota : []
+          modulos_cuota: modulosPropios ?? modulosCuota,
+          modulos_enviados: r.confirmacion === 'ENVIADO' ? (modulosPropios ?? modulosCuota) : []
         }
       })
     })

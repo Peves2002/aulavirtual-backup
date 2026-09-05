@@ -130,22 +130,16 @@ export async function GET(request: Request, { params }: { params: { slug: string
     let usaControlCuotas = false
 
     if (inscription && !isAdmin && !isCourseProfessor) {
-      const countRegistros = await prisma.registroCuotaManual.count({
-        where: { inscripcion_id: inscription.id }
+      usaControlCuotas = true
+      
+      const accesos = await prisma.accesoModuloInscripcion.findMany({
+        where: { inscripcion_id: inscription.id },
+        select: { modulo_id: true }
       })
 
-      if (countRegistros > 0) {
-        usaControlCuotas = true
+      const permitidos = new Set(accesos.map(a => a.modulo_id))
 
-        const accesos = await prisma.accesoModuloInscripcion.findMany({
-          where: { inscripcion_id: inscription.id },
-          select: { modulo_id: true }
-        })
-
-        const permitidos = new Set(accesos.map(a => a.modulo_id))
-
-        modulosVisibles = course.modulos.filter(m => permitidos.has(m.id))
-      }
+      modulosVisibles = course.modulos.filter(m => permitidos.has(m.id))
     }
 
     // Obtener intentos del usuario para todos los exámenes del curso (una sola query)

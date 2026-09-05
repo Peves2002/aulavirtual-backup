@@ -42,6 +42,7 @@ import { usePedidosAgrupados } from '../hooks/usePedidos'
 import { AxiosPedido } from '../http/axiosPedido'
 import TablePaginationComponent from '@/utils/components/others/TablePaginationComponent'
 import { ubigeoPeru, departamentos } from '@/utils/constants/ubigeo'
+import ModalImportarPedidos from '../components/ModalImportarPedidos'
 
 interface UsuarioAgrupado {
   usuario_id: string
@@ -74,6 +75,8 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
   const [nombreInput, setNombreInput] = useState('')
   const [departamentoInput, setDepartamentoInput] = useState('')
   const [provinciaInput, setProvinciaInput] = useState('')
+  
+  const [openImportModal, setOpenImportModal] = useState(false)
 
   const handleBuscar = () => {
     setNombre(nombreInput)
@@ -140,6 +143,11 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
     } finally {
       setIsExporting(false)
     }
+  }
+
+  const handleImportSuccess = () => {
+    setOpenImportModal(false)
+    table.setPageIndex(0)
   }
 
   const [pagination, setPagination] = useState({
@@ -287,7 +295,40 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
           </CustomTextField>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={2}>
+        {/* Botones de acción a la derecha */}
+        <Grid item xs={12} md={7}>
+          <Typography variant='body2' sx={{ mb: 1, visibility: 'hidden' }}>Acciones</Typography>
+          <Box display="flex" justifyContent={{ xs: 'center', md: 'flex-end' }} gap={2}>
+            <Button
+              variant='contained'
+              color='success'
+              startIcon={<i className='tabler-upload' />}
+              onClick={() => setOpenImportModal(true)}
+            >
+              Importar pedidos
+            </Button>
+            <Button
+              variant='outlined'
+              startIcon={
+                isExporting ? <CircularProgress size={20} color='inherit' /> : <i className='tabler-download' />
+              }
+              onClick={handleExportarExcel}
+              disabled={isExporting}
+            >
+              Descargar registros
+            </Button>
+            <Button
+              variant='contained'
+              startIcon={<i className='tabler-plus' />}
+              onClick={() => router.push('/admin/pedidos/nuevo')}
+            >
+              Nuevo Pedido
+            </Button>
+          </Box>
+        </Grid>
+
+        {/* Fila 2 */}
+        <Grid item xs={12} sm={6} md={3}>
           <CustomTextField
             select
             fullWidth
@@ -303,10 +344,8 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
           </CustomTextField>
         </Grid>
 
-        <Grid item xs={12} md={5}>
-          <Typography variant='body2' sx={{ mb: 1, visibility: 'hidden' }}>
-            Acciones
-          </Typography>
+        <Grid item xs={12} md={9}>
+          <Typography variant='body2' sx={{ mb: 1, visibility: 'hidden' }}>Acciones</Typography>
           <Box display="flex" gap={2}>
             <Button
               variant='contained'
@@ -325,25 +364,6 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
               Limpiar
             </Button>
           </Box>
-        </Grid>
-
-        <Grid item xs={12} display="flex" justifyContent={{ xs: 'center', sm: 'flex-end' }} gap={2} flexWrap="wrap">
-          <Button
-            variant='contained'
-            color='success'
-            startIcon={isExporting ? <CircularProgress size={16} color='inherit' /> : <i className='tabler-file-spreadsheet' />}
-            onClick={handleExportarExcel}
-            disabled={isExporting}
-          >
-            {isExporting ? 'Exportando...' : 'Exportar Excel'}
-          </Button>
-          <Button
-            variant='contained'
-            startIcon={<i className='tabler-plus' />}
-            onClick={() => router.push('/admin/pedidos/nuevo')}
-          >
-            Nuevo Pedido
-          </Button>
         </Grid>
       </Grid>
 
@@ -416,6 +436,12 @@ export function PedidosPage({ initialData, initialTotal = 0 }: PedidosPageProps)
         rowsPerPage={table.getState().pagination.pageSize}
         page={table.getState().pagination.pageIndex}
         onPageChange={(_, page) => table.setPageIndex(page)}
+      />
+      
+      <ModalImportarPedidos 
+        open={openImportModal}
+        onClose={() => setOpenImportModal(false)}
+        onSuccess={handleImportSuccess}
       />
     </Card>
   )

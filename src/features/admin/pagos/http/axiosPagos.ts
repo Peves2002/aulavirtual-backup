@@ -108,4 +108,26 @@ export class AxiosPagos extends AxiosInternalHttpClient {
       moduloIds
     })
   }
+
+  async getCursosInscritosAlumno(usuarioId: string): Promise<{ id: string, titulo: string, siguienteCuota: number }[]> {
+    const res = await this.iGet<{ cursos: { id: string, titulo: string, siguienteCuota: number }[] }>(`/por-alumno/${encodeURIComponent(usuarioId)}/cursos-inscritos`)
+
+    
+return res?.cursos ?? []
+  }
+
+  async crearCuotaIndividual(usuarioId: string, cursoId: string, moduloIds?: string[]) {
+    return this.iPost<{ success: boolean; numeroCuota: number }>(`/por-alumno/${encodeURIComponent(usuarioId)}/crear-cuota`, {
+      cursoId,
+      moduloIds
+    })
+  }
+
+  async editarCuotaIndividual(usuarioId: string, cuotaId: string, data: { monto_pago?: number, confirmacion?: string, fecha_envio?: string, observaciones?: string, moduloIds?: string[] }) {
+    return this.iPut<{ success: boolean }>(`/por-alumno/${encodeURIComponent(usuarioId)}/cuotas/${encodeURIComponent(cuotaId)}`, data)
+  }
+
+  async eliminarCuotaIndividual(usuarioId: string, cuotaId: string) {
+    return this.iDelete<{ success: boolean }>(`/por-alumno/${encodeURIComponent(usuarioId)}/cuotas/${encodeURIComponent(cuotaId)}`)
+  }
 }

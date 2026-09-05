@@ -71,6 +71,16 @@ export class AxiosPedido extends AxiosInternalHttpClient {
     }
   }
 
+  async importarPedidos(registros: any[]): Promise<any> {
+    try {
+      const payload = await this.iPost<any>('/importar', { registros })
+
+      return payload
+    } catch (err: any) {
+      throw err?.response?.data ?? err
+    }
+  }
+
   async getById(id: string): Promise<{ data: Pedido }> {
     try {
       const payload = await this.iGet<{ data: Pedido }>(`/${id}`)
