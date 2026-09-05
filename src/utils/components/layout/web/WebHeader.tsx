@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation'
 
 import { useSession } from 'next-auth/react'
 
-import { Menu, X, Home, BookOpen, Users, Award, Building2, LogIn, UserPlus } from 'lucide-react'
+import { Menu, X, Home, BookOpen, Users, Award, Building2, Phone, LogIn, UserPlus } from 'lucide-react'
 
 import Logo from '@components/layout/shared/Logo'
 import UserDropdown from '@components/layout/shared/UserDropdown'
@@ -34,6 +34,7 @@ const MOBILE_NAV_ITEMS = [
   { title: 'Cursos', url: '/cursos', icon: BookOpen, key: 'cursos' },
   { title: 'Nosotros', url: '/nosotros', icon: Users, key: 'nosotros' },
   { title: 'Certificado', url: '/verificar-certificado', icon: Award, key: 'certificado' },
+  { title: 'Contacto', url: '/contacto', icon: Phone, key: 'contacto' },
   { title: 'Empresas', url: '/empresas', icon: Building2, key: 'empresas' },
 ]
 
@@ -85,7 +86,7 @@ export default function WebHeader({
         >
           <Menu size={24} />
         </button>
-        <Logo enlargeSquare />
+        <Logo enlargeSquare whiteBg />
       </div>
 
       {/* Right side */}
@@ -130,7 +131,7 @@ export default function WebHeader({
               className="flex items-center justify-between px-4"
               style={{ height: 'var(--navbar-height)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}
             >
-              <Logo enlargeSquare />
+              <Logo enlargeSquare whiteBg />
               <button
                 type="button"
                 aria-label="Cerrar menú"

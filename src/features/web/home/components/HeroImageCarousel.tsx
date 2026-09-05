@@ -46,14 +46,13 @@ export default function HeroImageCarousel({ images }: HeroImageCarouselProps) {
   if (images.length === 0) return null
 
   return (
-    <section style={{ backgroundColor: '#ffffff', padding: '1.5rem' }}>
-      <div style={{ maxWidth: '1600px', margin: '0 auto', position: 'relative' }}>
+    <section style={{ backgroundColor: '#ffffff' }}>
+      <div style={{ position: 'relative' }}>
         <div
           style={{
             position: 'relative',
             width: '100%',
-            height: 'clamp(220px, 32vw, 520px)',
-            borderRadius: '16px',
+            height: 'clamp(200px, 26vw, 420px)',
             overflow: 'hidden',
           }}
         >
@@ -69,11 +68,24 @@ export default function HeroImageCarousel({ images }: HeroImageCarouselProps) {
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                objectPosition: 'center',
+                objectPosition: 'center 30%',
                 display: i === index ? 'block' : 'none',
               }}
             />
           ))}
+
+          {/* Degradado inferior para que los controles/puntos resalten sobre cualquier foto */}
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: '35%',
+              background: 'linear-gradient(to top, rgba(0,0,0,0.45), rgba(0,0,0,0))',
+              pointerEvents: 'none',
+            }}
+          />
 
           {images.length > 1 && (
             <>
@@ -95,30 +107,41 @@ export default function HeroImageCarousel({ images }: HeroImageCarouselProps) {
               </button>
             </>
           )}
-        </div>
 
-        {images.length > 1 && (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1rem' }}>
-            {images.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                aria-label={`Ir a la imagen ${i + 1}`}
-                onClick={() => setIndex(i)}
-                style={{
-                  width: i === index ? '24px' : '8px',
-                  height: '8px',
-                  borderRadius: '999px',
-                  border: 'none',
-                  backgroundColor: i === index ? 'var(--web-primary, #25927F)' : 'rgba(0,0,0,0.15)',
-                  cursor: 'pointer',
-                  transition: 'width 0.2s, background-color 0.2s',
-                  padding: 0,
-                }}
-              />
-            ))}
-          </div>
-        )}
+          {images.length > 1 && (
+            <div
+              style={{
+                position: 'absolute',
+                bottom: '1.25rem',
+                left: 0,
+                right: 0,
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                zIndex: 2,
+              }}
+            >
+              {images.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  aria-label={`Ir a la imagen ${i + 1}`}
+                  onClick={() => setIndex(i)}
+                  style={{
+                    width: i === index ? '24px' : '8px',
+                    height: '8px',
+                    borderRadius: '999px',
+                    border: 'none',
+                    backgroundColor: i === index ? '#ffffff' : 'rgba(255,255,255,0.5)',
+                    cursor: 'pointer',
+                    transition: 'width 0.2s, background-color 0.2s',
+                    padding: 0,
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </section>
   )

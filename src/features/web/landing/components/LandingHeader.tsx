@@ -92,12 +92,24 @@ export default function LandingHeader({ logo, targetDate }: Props) {
 
              {/* Logo */}
              <Link href='/'>
-               <Box 
-                 component='img' 
-                 src={logo} 
-                 alt='Logo' 
-                 sx={{ height: { xs: 45, sm: 55, md: 65 }, objectFit: 'contain', cursor: 'pointer' }}
-               />
+               <Box
+                 sx={{
+                   backgroundColor: '#ffffff',
+                   borderRadius: '10px',
+                   px: 2,
+                   py: 0.75,
+                   display: 'inline-flex',
+                   alignItems: 'center',
+                   cursor: 'pointer'
+                 }}
+               >
+                 <Box
+                   component='img'
+                   src={logo}
+                   alt='Logo'
+                   sx={{ height: { xs: 35, sm: 42, md: 50 }, objectFit: 'contain' }}
+                 />
+               </Box>
              </Link>
           </Box>
 

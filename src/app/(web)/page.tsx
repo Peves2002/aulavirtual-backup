@@ -19,6 +19,8 @@ import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
 import ConveniosSection from '@/features/web/home/components/ConveniosSection'
 import WhyChooseUsSection from '@/features/web/home/components/WhyChooseUsSection'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   description: 'Plataforma de aprendizaje online con cursos especializados y certificados.',
 }

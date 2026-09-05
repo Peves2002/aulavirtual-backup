@@ -23,6 +23,10 @@ interface LogoProps {
   className?: string
   compactHeight?: number
   squareHeight?: number
+
+  // Envuelve el logo en un contenedor blanco redondeado, para headers con
+  // fondo oscuro donde el logo (a menudo con texto/íconos oscuros) pierde contraste.
+  whiteBg?: boolean
 }
 
 const DEFAULT_COMPACT_HEIGHT = 64
@@ -33,6 +37,7 @@ const Logo = ({
   className,
   compactHeight = DEFAULT_COMPACT_HEIGHT,
   squareHeight = DEFAULT_SQUARE_HEIGHT,
+  whiteBg = false,
 }: LogoProps = {}) => {
   // Hooks
   const configs = useConfig()
@@ -54,15 +59,34 @@ const Logo = ({
     setImgHeight(ratio < 1.6 ? squareHeight : compactHeight)
   }
 
+  const img = (
+    <img
+      src={templateLogo}
+      alt={`${templateName} Logo`}
+      onLoad={handleImgLoad}
+      className={enlargeSquare ? 'max-h-[74px] max-w-full object-contain' : 'bs-[46px]'}
+      style={enlargeSquare ? { height: `${imgHeight}px`, width: 'auto' } : undefined}
+    />
+  )
+
   return (
     <Link href='/' className={`flex items-center ${className || ''}`}>
-      <img
-        src={templateLogo}
-        alt={`${templateName} Logo`}
-        onLoad={handleImgLoad}
-        className={enlargeSquare ? 'max-h-[74px] max-w-full object-contain' : 'bs-[46px]'}
-        style={enlargeSquare ? { height: `${imgHeight}px`, width: 'auto' } : undefined}
-      />
+      {whiteBg ? (
+        <div
+          style={{
+            backgroundColor: '#ffffff',
+            borderRadius: '10px',
+            padding: '6px 12px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {img}
+        </div>
+      ) : (
+        img
+      )}
     </Link>
   )
 }

@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation'
 
 import { signOut, useSession } from 'next-auth/react'
 
-import { Home, BookOpen, Users, Award, Map, Building2, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, BookText, ClipboardList, Repeat2 } from 'lucide-react'
+import { Home, BookOpen, Users, Award, Map, Building2, Phone, LogIn, UserPlus, User, LayoutDashboard, BookMarked, LogOut, BookText, ClipboardList, Repeat2 } from 'lucide-react'
 
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
@@ -37,6 +37,7 @@ const ALL_NAV_ITEMS = [
   // { title: 'Suscripciones', url: '/suscripciones', icon: Repeat2, key: 'suscripciones' },
   { title: 'Nosotros', url: '/nosotros', icon: Users, key: 'nosotros' },
   { title: 'Certificado', url: '/verificar-certificado', icon: Award, key: 'certificado' },
+  { title: 'Contacto', url: '/contacto', icon: Phone, key: 'contacto' },
 ]
 
 export default function LeftSidebar({
