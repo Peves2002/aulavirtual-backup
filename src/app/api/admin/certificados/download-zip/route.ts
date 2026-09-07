@@ -2,7 +2,6 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 
-// eslint-disable-next-line import/no-unresolved
 import JSZip from 'jszip'
 
 import prisma from '@/utils/libs/prisma'

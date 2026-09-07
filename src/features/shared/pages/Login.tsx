@@ -89,23 +89,13 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const callbackUrl = params.get('callbackUrl')
-    const expired = params.get('expired')
-    const deactivated = params.get('deactivated')
 
     if (callbackUrl) {
       setRegisterUrl(`/register?callbackUrl=${callbackUrl}`)
     }
 
-    if (expired === '1') {
-      setSessionMessage({
-        type: 'warning',
-        text: 'Tu sesión ha expirado. Por favor inicia sesión nuevamente.'
-      })
-    } else if (deactivated === '1') {
-      setSessionMessage({
-        type: 'error',
-        text: 'Tu cuenta ha sido desactivada. Contacta al administrador.'
-      })
+    if (params.get('sessionExpired') === '1') {
+      setError('Tu sesión expiró. Vuelve a iniciar sesión.')
     }
   }, [])
 

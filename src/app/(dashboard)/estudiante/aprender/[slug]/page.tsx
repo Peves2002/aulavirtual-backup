@@ -32,13 +32,25 @@ export default async function LearningPage({ params, searchParams }: { params: {
     phoneNumberProfesor = profesorByCurso.profesor.celular
   }
 
+  const token = session.user?.accessToken ?? null
+
+  const axiosPlayer = new AxiosPlayer({
+    getAuthToken: () => token
+  })
+
   try {
-    const data = await getPlayerCourseData({ id: session.user!.id, rol: session.user!.rol }, params.slug)
+    const data = await axiosPlayer.getPlayerData(params.slug)
 
     return <CoursePlayerView course={data.course} initialLessonId={searchParams.leccion} initialExamenId={searchParams.examen} phoneNumberProfesor={phoneNumberProfesor} />
   } catch (err) {
     if (err instanceof UnenrolledError) {
       redirect(`/cursos/${params.slug}`)
+    }
+
+    const status = err?.statusCode ?? err?.response?.status
+
+    if (status === 401) {
+      redirect(`/login?sessionExpired=1&callbackUrl=${encodeURIComponent(`/estudiante/aprender/${params.slug}`)}`)
     }
 
     notFound()
