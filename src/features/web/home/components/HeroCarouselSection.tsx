@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import Link from 'next/link'
 import Image from 'next/image'
+
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, ArrowRight, ShieldCheck } from 'lucide-react'
 
@@ -43,6 +45,7 @@ export default function HeroCarouselSection({ waNumber = '51900281578' }: { waNu
 
   useEffect(() => {
     if (isPaused) return
+
     const interval = setInterval(() => {
       setCurrentIndex(prev => (prev + 1) % SLIDES.length)
     }, 6000)

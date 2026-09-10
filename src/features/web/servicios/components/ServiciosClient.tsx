@@ -1,8 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+
 import Link from 'next/link'
 import Image from 'next/image'
+
 import {
   ShieldCheck,
   ArrowRight,
@@ -10,6 +12,7 @@ import {
   Search,
   CheckCircle2,
 } from 'lucide-react'
+
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import { SERVICES_DATA } from '../data/servicesData'
 
@@ -116,7 +119,7 @@ export default function ServiciosClient({ waNumero }: ServiciosClientProps) {
                         </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none" />
-                      
+
                       {/* Badge superior */}
                       <div className="absolute top-3 left-3 z-10">
                         <span

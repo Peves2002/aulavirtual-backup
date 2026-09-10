@@ -2,12 +2,12 @@
 
 import Link from 'next/link'
 
-import { Phone, Mail, MapPin } from 'lucide-react'
+import { MapPin, Phone, Globe } from 'lucide-react'
 
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import { useConfig } from '@/contexts/ConfigContext'
 
-import { Globe } from 'lucide-react'
+
 
 export function ContactList() {
   const configs = useConfig()

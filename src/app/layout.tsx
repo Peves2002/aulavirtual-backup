@@ -58,16 +58,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const session = await getServerSession(authOptions)
 
   // Colores MUI admin
-  const primaryMain = configs.PRIMARY_COLOR_MAIN || '#131FF2'
-  const primaryLight = configs.PRIMARY_COLOR_LIGHT || '#242CBF'
-  const primaryDark = configs.PRIMARY_COLOR_DARK || '#9196F2'
+  const primaryMain = '#FFB600'
+  const primaryLight = '#FFC833'
+  const primaryDark = '#CC9200'
 
-  // Colores web (con fallback al design system teal)
-  const webPrimary = configs.PRIMARY_COLOR_MAIN || '#25927F'
-  const webLight = configs.PRIMARY_COLOR_LIGHT || '#BDD962'
-  const webDark = configs.PRIMARY_COLOR_DARK || '#025E44'
-  const webDarkDeep = darkenHex(webDark, 0.45)  // muy oscuro → reemplaza #012d22
-  const webDarkMid = darkenHex(webDark, 0.72)  // oscuro medio → reemplaza #0f4438
+  // Colores web (Nueva Paleta MS&M)
+  const webPrimary = '#FFB600' // Amarillo MS&M
+  const webLight = '#F2F2F2'   // Gris claro
+  const webDark = '#000000'    // Negro
+  const webDarkDeep = '#000000'
+  const webDarkMid = '#4D4D4D' // Gris oscuro
 
   return (
     <html lang='es' suppressHydrationWarning className={`${plus_jakarta_sans.variable} ${plus_jakarta_sans.className}`}>

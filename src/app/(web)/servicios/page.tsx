@@ -1,5 +1,7 @@
 import React from 'react'
+
 import type { Metadata } from 'next'
+
 import { getConfigs } from '@/utils/libs/config'
 import ServiciosClient from '@/features/web/servicios/components/ServiciosClient'
 

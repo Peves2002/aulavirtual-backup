@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+
 import { useSession } from 'next-auth/react'
 import { Menu } from 'lucide-react'
 import { Button, IconButton } from '@mui/material'
@@ -39,7 +40,7 @@ const ALL_NAV_ITEMS = [
   { title: 'Empresas', url: '/empresas', key: 'empresas' },
   ...(isFeatureEnabled('suscripciones') ? [{ title: 'Suscripciones', url: '/suscripciones', key: 'suscripciones' as const }] : []),
   { title: 'Nosotros', url: '/nosotros', key: 'nosotros' },
-  { title: 'Certificado', url: '/verificar-certificado', key: 'certificado' },
+  { title: 'Blog', url: '/blogs', key: 'blogs' },
 ]
 
 export default function WebHeader({ initialCategories = [], platformName = 'MS&M CONSULTING', platformSlogan = '', empresasHabilitado = true }: WebHeaderProps) {
@@ -57,14 +58,42 @@ export default function WebHeader({ initialCategories = [], platformName = 'MS&M
 
   const isActive = (url: string) => {
     if (url === '/') return pathname === '/'
-    return pathname.startsWith(url)
+
+return pathname.startsWith(url)
   }
 
   return (
-    <header
-      className="fixed top-0 left-0 right-0 bg-white border-b border-border shadow-sm z-50 flex items-center justify-between px-4 md:px-8 lg:px-10"
-      style={{ height: 'var(--navbar-height)' }}
-    >
+    <>
+      <div
+        className="fixed top-0 left-0 right-0 z-[51] flex justify-end items-center px-4 md:px-8 lg:px-10 gap-3 text-xs sm:text-sm font-medium transition-all"
+        style={{ height: 'var(--topbar-height)', backgroundColor: '#000000', color: '#ffffff' }}
+      >
+        <Link
+          href="/verificar-certificado"
+          className="px-3 py-1 rounded-md text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-1"
+        >
+          Verificar Certificado
+        </Link>
+        <Link
+          href="https://plataformamsymconsulting.com/auth/sign-in"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-3 py-1 rounded-md text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-1"
+        >
+          Intranet
+        </Link>
+        <button
+          onClick={() => openLogin()}
+          className="ml-2 px-4 py-1.5 rounded-full bg-white/10 text-white hover:bg-white hover:text-black transition-all font-semibold shadow-sm"
+        >
+          Aula Virtual
+        </button>
+      </div>
+
+      <header
+        className="fixed left-0 right-0 bg-white border-b border-border shadow-sm z-50 flex items-center justify-between px-4 md:px-8 lg:px-10"
+        style={{ top: 'var(--topbar-height)', height: 'var(--header-height-web)' }}
+      >
       {/* Left: Logo */}
       <div className="flex items-center gap-4">
         <Logo />
@@ -145,5 +174,6 @@ export default function WebHeader({ initialCategories = [], platformName = 'MS&M
 
       <MobileNavDrawer open={navOpen} onClose={() => setNavOpen(false)} empresasHabilitado={empresasHabilitado} />
     </header>
+    </>
   )
 }

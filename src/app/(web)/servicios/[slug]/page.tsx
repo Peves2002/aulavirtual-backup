@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation'
+
 import type { Metadata } from 'next'
+
 import { getConfigs } from '@/utils/libs/config'
 import { SERVICES_DATA } from '@/features/web/servicios/data/servicesData'
 import ServiceDetailClient from '@/features/web/servicios/components/ServiceDetailClient'

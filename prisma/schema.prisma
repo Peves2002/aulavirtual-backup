@@ -76,6 +76,7 @@ model Categoria {
   hijos              Categoria[] @relation("JerarquiaCategoria")
   cursos             Curso[]
   ebooks             Ebook[]
+  blogs              Blog[]
 
   @@index([categoria_padre_id])
   @@map("categorias")
@@ -765,6 +766,11 @@ enum EstadoEbook {
   ARCHIVADO
 }
 
+enum EstadoBlog {
+  BORRADOR
+  PUBLICADO
+}
+
 enum EstadoInscripcion {
   PENDIENTE
   ACTIVO
@@ -798,6 +804,27 @@ enum TipoPregunta {
   VERDADERO_FALSO
   RESPUESTA_ABIERTA
 }
+
+model Blog {
+  id                String      @id @default(uuid())
+  titulo            String
+  slug              String      @unique
+  extracto          String?
+  contenido         String      @db.Text
+  miniatura         String?
+  estado            EstadoBlog  @default(BORRADOR)
+  fecha_publicacion DateTime?
+  creado_en         DateTime    @default(now())
+  actualizado_en    DateTime    @updatedAt
+  autor             String
+  categoria_id      String?
+  categoria         Categoria?  @relation(fields: [categoria_id], references: [id])
+
+  @@index([categoria_id])
+  @@index([estado])
+  @@map("blogs")
+}
+
 
 enum TipoContenido {
   VIDEO

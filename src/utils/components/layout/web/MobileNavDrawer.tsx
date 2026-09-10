@@ -25,6 +25,7 @@ const ALL_NAV_ITEMS = [
   ...(isFeatureEnabled('rutas') ? [{ title: 'Rutas', url: '/rutas', key: 'rutas' as const }] : []),
   { title: 'Empresas', url: '/empresas', key: 'empresas' },
   ...(isFeatureEnabled('suscripciones') ? [{ title: 'Suscripciones', url: '/suscripciones', key: 'suscripciones' as const }] : []),
+  { title: 'Blog', url: '/blogs', key: 'blogs' },
   { title: 'Nosotros', url: '/nosotros', key: 'nosotros' },
   { title: 'Certificado', url: '/verificar-certificado', key: 'certificado' },
 ]

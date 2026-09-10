@@ -89,7 +89,7 @@ export default async function EmpresasPage() {
                 marginBottom: '1rem',
               }}
             >
-              Descubre nuestras soluciones corporativas diseñadas para potenciar las habilidades de tus colaboradores y aumentar la competitividad técnica de tu empresa en el mercado actual.
+              Nuestros cursos no solo están diseñados para el aprendizaje individual, sino que son la <strong>solución perfecta para que las empresas capaciten a su personal</strong>. Potencia las habilidades de tus colaboradores y aumenta la competitividad de tu organización.
             </p>
           </div>
         </div>

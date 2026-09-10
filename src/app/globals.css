@@ -31,7 +31,9 @@
   --ipg-black: #0A0A0A;
   --ipg-muted: #f1f5f4;
 
-  --navbar-height: 88px;
+  --topbar-height: 40px;
+  --header-height-web: 88px;
+  --navbar-height: calc(var(--topbar-height) + var(--header-height-web));
   --sidebar-width: 0px;
   --sidebar-width-expanded: 0px;
 }

@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import Link from 'next/link'
 import Image from 'next/image'
+
 import {
   ShieldCheck,
   CheckCircle2,
@@ -17,8 +19,9 @@ import {
   Maximize2,
   X,
 } from 'lucide-react'
+
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
-import { ServiceItem } from '../data/servicesData'
+import type { ServiceItem } from '../data/servicesData'
 
 interface ServiceDetailClientProps {
   service: ServiceItem
@@ -32,8 +35,10 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setActiveImage(null)
     }
+
     window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+
+return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
   const waUrl = `https://wa.me/${waNumero}?text=${encodeURIComponent(
@@ -54,7 +59,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
           >
             <X size={22} />
           </button>
-          
+
           <div
             className="relative max-w-4xl w-full bg-slate-900 border border-white/15 rounded-2xl overflow-hidden shadow-2xl cursor-default flex flex-col"
             onClick={e => e.stopPropagation()}
@@ -144,9 +149,9 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
               </div>
 
               <div className="lg:col-span-5">
-                <div 
+                <div
                   onClick={() => service.image && setActiveImage({ src: service.image, title: service.title })}
-                  className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-gradient-to-br from-[#02115C] via-[#25927F] to-slate-900 cursor-pointer group/hero" 
+                  className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-gradient-to-br from-[#02115C] via-[#25927F] to-slate-900 cursor-pointer group/hero"
                   style={{ paddingTop: '65%' }}
                 >
                   {service.image ? (
@@ -200,7 +205,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                       >
                         {/* Imagen del sub-servicio */}
                         {sub.image ? (
-                          <div 
+                          <div
                             onClick={() => setActiveImage({ src: sub.image!, title: sub.title })}
                             className="relative w-full sm:w-44 h-36 sm:h-28 rounded-xl overflow-hidden shrink-0 bg-slate-900 border border-slate-200 cursor-pointer group/img"
                           >

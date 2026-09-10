@@ -85,6 +85,7 @@ export default withAuth(
           path.startsWith('/diplomados') ||
           path.startsWith('/especializaciones') ||
           path.startsWith('/ebooks') ||
+          path === '/blogs' || path.startsWith('/blogs/') ||
           path.startsWith('/rutas') ||
           path.startsWith('/proyectos') ||
           path.startsWith('/mantenimiento') ||
