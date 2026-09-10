@@ -32,7 +32,7 @@
   --ipg-muted: #f1f5f4;
 
   --topbar-height: 40px;
-  --header-height-web: 88px;
+  --header-height-web: 142px;
   --navbar-height: calc(var(--topbar-height) + var(--header-height-web));
   --sidebar-width: 0px;
   --sidebar-width-expanded: 0px;

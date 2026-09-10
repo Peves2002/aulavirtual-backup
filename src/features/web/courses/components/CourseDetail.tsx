@@ -31,6 +31,7 @@ import {
   Typography
 } from '@mui/material'
 import { CheckCircle, ChevronRight, Download, Play, XCircle } from 'lucide-react'
+import { normalizeMediaUrl } from '@/utils/functions/normalizeMediaUrl'
 
 import { useSession } from 'next-auth/react'
 
@@ -217,7 +218,7 @@ const CourseDetail = ({ course }: CourseDetailProps) => {
         {/* Blurred miniatura */}
         <Box sx={{
           position: 'absolute', inset: 0,
-          backgroundImage: course.miniatura ? `url(${course.miniatura})` : 'none',
+          backgroundImage: `url(${course.miniatura ? normalizeMediaUrl(course.miniatura) : '/curso/curso-defecto.jpg'})`,
           backgroundColor: 'var(--web-dark-deep, #012d22)',
           backgroundSize: 'cover', backgroundPosition: 'center',
           filter: 'blur(60px)', opacity: 0.25, transform: 'scale(1.2)', zIndex: 0,

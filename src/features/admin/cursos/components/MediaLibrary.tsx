@@ -27,6 +27,7 @@ import { useSnackbar } from 'notistack'
 import { useMedia, useUploadMedia, useDeleteMedia, useUploadPrivateVideo } from '../hooks/useMedia'
 import CustomAlertDialog from '../../../../components/CustomAlertDialog'
 import { blockDialogCloseWhile } from '@/utils/functions/dialogClose'
+import { normalizeMediaUrl } from '@/utils/functions/normalizeMediaUrl'
 
 const ALLOWED_VIDEO_TYPES = [
   'video/mp4',
@@ -147,7 +148,7 @@ const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios',
       }
 
       setUploadProgress(null)
-      onSelect(result.url, result.nombre)
+      onSelect(normalizeMediaUrl(result.url), result.nombre)
       onClose()
     } catch (error) {
       setUploadProgress(null)
@@ -288,7 +289,7 @@ const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios',
                   >
                     <CardActionArea onClick={() => {
                       if (deleteMutation.isPending) return
-                      onSelect(item.url, item.nombre)
+                      onSelect(normalizeMediaUrl(item.url), item.nombre)
                       onClose()
                     }}>
                       <IconButton
@@ -314,7 +315,7 @@ const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios',
                           <CardMedia
                             component="img"
                             height="120"
-                            image={item.url}
+                            image={normalizeMediaUrl(item.url)}
                             alt={item.nombre}
                             sx={{ objectFit: 'cover' }}
                             onError={(e: any) => {

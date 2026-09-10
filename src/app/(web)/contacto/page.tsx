@@ -1,7 +1,7 @@
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import { eyebrow, sectionDesc } from '@/features/web/home/components/typography'
 
-import { ContactList, ContactActions } from './components/ContactoClient'
+import { ContactActions, ContactList, ContactMap, ContactSocials } from './components/ContactoClient'
 
 export const metadata = {
   title: 'Contacto - MS&M CONSULTING',
@@ -43,6 +43,10 @@ export default function ContactoPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
 
           <ContactList />
+
+          <ContactSocials />
+
+          <ContactMap />
 
           <ContactActions />
         </div>

@@ -7,7 +7,8 @@ import ServiciosClient from '@/features/web/servicios/components/ServiciosClient
 
 export const metadata: Metadata = {
   title: 'Servicios Especializados | MS&M CONSULTING',
-  description: 'Implementación de SG-SST, Monitoreos Ocupacionales, Soporte Mensual en SST y Vigilancia de Salud Ocupacional en Perú.',
+  description:
+    'SST, salud y monitoreos ocupacionales, capacitación, ITSE, prevención del hostigamiento, homologaciones SIG y Recursos Humanos en Perú.'
 }
 
 export default async function ServiciosPage() {

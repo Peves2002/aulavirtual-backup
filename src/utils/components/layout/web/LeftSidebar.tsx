@@ -170,7 +170,7 @@ export default function LeftSidebar({
                 onClick={() => hasNativePrompt ? install() : setShowInstallTip(t => !t)}
                 title="Instalar aplicación"
                 className="flex items-center w-full rounded-xl transition-all"
-                style={{ height: '44px', gap: '12px', backgroundColor: 'var(--web-light, #BDD962)', border: '1px solid transparent', cursor: 'pointer' }}
+                style={{ height: '44px', gap: '12px', backgroundColor: '#FFB600', border: '1px solid transparent', cursor: 'pointer' }}
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = '0.85' }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = '1' }}
               >

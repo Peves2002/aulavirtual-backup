@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import React, { type FC } from 'react'
 
 import { Backdrop, Box, type BoxProps, Fade, IconButton, Modal, styled } from '@mui/material'
 

@@ -4,6 +4,9 @@ import React, { useState, useMemo, useEffect } from 'react'
 
 import { Box, Typography } from '@mui/material'
 import type { SxProps, Theme } from '@mui/material'
+import { normalizeMediaUrl } from '@/utils/functions/normalizeMediaUrl'
+
+const DEFAULT_COURSE_IMAGE = '/curso/curso-defecto.jpg'
 
 interface CourseThumbnailProps {
   src?: string | null
@@ -29,19 +32,23 @@ const CourseThumbnail = ({
 }: CourseThumbnailProps) => {
   const [imgError, setImgError] = useState(false)
   const [retryCount, setRetryCount] = useState(0)
+  const [useDefaultImage, setUseDefaultImage] = useState(false)
 
   // Reiniciar el error si el src cambia
   useEffect(() => {
     setImgError(false)
     setRetryCount(0)
+    setUseDefaultImage(false)
   }, [src])
 
   const computedThumbnail = useMemo(() => {
     let finalUrl: string | null = null
 
+    if (useDefaultImage) return DEFAULT_COURSE_IMAGE
+
     // 1. Si hay src, lo normalizamos
     if (src && typeof src === 'string' && src.trim() !== '' && src !== 'null' && src !== 'undefined') {
-      finalUrl = src.trim()
+      finalUrl = normalizeMediaUrl(src)
 
       // Asegurar prefijo / para rutas locales
       if (!finalUrl.startsWith('http') && !finalUrl.startsWith('/')) {
@@ -58,17 +65,17 @@ const CourseThumbnail = ({
       }
     }
 
-    if (!finalUrl) return null
+    if (!finalUrl) return DEFAULT_COURSE_IMAGE
 
     // 🚀 CACHE BUSTING: Solo en reintento
     if (retryCount > 0 && (finalUrl.startsWith('/') || finalUrl.includes('uploads'))) {
       const separator = finalUrl.includes('?') ? '&' : '?'
-      
+
       return `${finalUrl}${separator}v=${retryCount}_${Date.now()}`
     }
 
     return finalUrl
-  }, [src, videoUrl, retryCount])
+  }, [src, videoUrl, retryCount, useDefaultImage])
 
   const handleImageError = () => {
     if (retryCount < 2) {
@@ -76,7 +83,8 @@ const CourseThumbnail = ({
         setRetryCount(prev => prev + 1)
       }, 1000)
     } else {
-      setImgError(true)
+      setUseDefaultImage(true)
+      setRetryCount(0)
     }
   }
 

@@ -20,13 +20,13 @@ export default function HeroInstallButton() {
         className="inline-flex items-center gap-2 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
         style={{
           fontFamily: 'Poppins, sans-serif',
-          backgroundColor: 'var(--web-light, #BDD962)',
+          backgroundColor: '#FFB600',
           color: '#0A0A0A',
           fontSize: '0.9375rem',
           padding: '0.875rem 1.75rem',
           border: 'none',
           cursor: 'pointer',
-          boxShadow: '0 4px 20px rgba(189,217,98,0.45)',
+          boxShadow: '0 4px 20px rgba(255,182,0,0.35)',
         }}
       >
         <MonitorSmartphone size={18} />

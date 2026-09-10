@@ -7,6 +7,7 @@ import { getConfigs } from '@/utils/libs/config'
 import prisma from '@/utils/libs/prisma'
 import WebFooter from '@/utils/components/layout/web/WebFooter'
 import WebHeader from '@/utils/components/layout/web/WebHeader'
+import FloatingContactButtons from '@/utils/components/layout/web/FloatingContactButtons'
 import PWAInstalledToast from '@/features/web/home/components/PWAInstalledToast'
 
 const getCategorias = unstable_cache(
@@ -31,6 +32,7 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
     <AuthModalProvider>
       <div className="web-layout min-h-screen bg-background flex flex-col">
         <WebHeader initialCategories={categories} platformName={platformName} platformSlogan={platformSlogan} empresasHabilitado={empresasHabilitado} />
+        <FloatingContactButtons />
         <div className="flex flex-1" style={{ paddingTop: 'var(--navbar-height)' }}>
           <main className="flex-1 flex flex-col min-w-0">
             <div className="flex-1">

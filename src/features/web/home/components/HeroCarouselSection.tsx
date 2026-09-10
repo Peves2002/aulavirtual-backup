@@ -82,6 +82,7 @@ export default function HeroCarouselSection({ waNumber = '51900281578' }: { waNu
             priority
             unoptimized
             className="object-cover"
+            style={{ objectPosition: 'center top' }}
           />
           {/* Gradient overlay */}
           <div
@@ -120,9 +121,8 @@ export default function HeroCarouselSection({ waNumber = '51900281578' }: { waNu
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.4 }}
-              className={`p-6 md:p-8 rounded-2xl backdrop-blur-md bg-slate-950/45 border border-white/10 shadow-2xl ${
-                currentIndex === 0 ? 'flex flex-col items-center' : ''
-              }`}
+              className={`p-6 md:p-8 rounded-2xl backdrop-blur-md bg-slate-950/45 border border-white/10 shadow-2xl ${currentIndex === 0 ? 'flex flex-col items-center' : ''
+                }`}
             >
               {/* Tag / Eyebrow */}
               <div

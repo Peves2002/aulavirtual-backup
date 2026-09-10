@@ -142,7 +142,7 @@ export default function MobileNavDrawer({ open, onClose, empresasHabilitado = tr
                   height: '52px',
                   borderRadius: '999px',
                   border: 'none',
-                  backgroundColor: 'var(--web-light, #BDD962)',
+                  backgroundColor: '#FFB600',
                   color: '#0A0A0A',
                   fontFamily: 'Poppins, sans-serif',
                   fontWeight: 700,

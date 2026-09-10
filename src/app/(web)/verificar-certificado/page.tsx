@@ -2,17 +2,21 @@ import React from 'react'
 
 import type { Metadata } from 'next'
 
-import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
+import CertificateLookup from '@/features/web/certificados/CertificateLookup'
+import { getConfigs } from '@/utils/libs/config'
 
 export const metadata: Metadata = {
   title: 'Verificar Certificado | MS&M CONSULTING',
-  description: 'Verifique la autenticidad de su certificado emitido por MS&M CONSULTING ingresando su código único.',
+  description: 'Consulta por DNI los cursos certificados y descarga tus certificados de MS&M CONSULTING.',
 }
 
-export default function VerificarCertificadoPage() {
+export default async function VerificarCertificadoPage() {
+  const configs = await getConfigs()
+
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--web-dark, #025E44)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-      <SearchCertificateSection />
-    </div>
+    <CertificateLookup
+      brandName={configs.TEMPLATE_NAME || 'MS&M CONSULTING'}
+      logoUrl={configs.TEMPLATE_LOGO || configs.WEB_LOGO_URL}
+    />
   )
 }

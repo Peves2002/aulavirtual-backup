@@ -155,7 +155,7 @@ export default async function HomePage() {
       {/* ── 2. HERO PRINCIPAL ─────────────────────────── */}
       <section
         style={{
-          background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 45%, var(--web-dark-mid, #0f4438) 100%)',
+          background: '#102747',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -204,7 +204,7 @@ export default async function HomePage() {
                 {heroTitle.split('\n')[1] && (
                   <>
                     <br />
-                    <span style={{ color: 'var(--web-light, #BDD962)' }}>{heroTitle.split('\n')[1]}</span>
+                    <span style={{ color: '#FFB600' }}>{heroTitle.split('\n')[1]}</span>
                   </>
                 )}
               </h1>

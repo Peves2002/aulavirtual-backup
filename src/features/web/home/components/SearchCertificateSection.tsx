@@ -4,149 +4,132 @@ import React, { useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { Search, Award, ShieldCheck } from 'lucide-react'
+import { Search, Fingerprint, ShieldCheck, UserRound } from 'lucide-react'
 
 import ScrollReveal from './ScrollReveal'
-import { sectionH2Dark, sectionDescDark, smallText } from './typography'
 
 export default function SearchCertificateSection() {
   const router = useRouter()
-  const [codigo, setCodigo] = useState('')
+  const [dni, setDni] = useState('')
   const [error, setError] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    const trimmedCodigo = codigo.trim()
+    const trimmedDni = dni.trim()
 
-    if (!trimmedCodigo) {
-      setError('Por favor, ingresa un código de certificado')
-
-      return
-    }
-
-    if (trimmedCodigo.length < 5) {
-      setError('El código parece ser demasiado corto')
+    if (!/^\d{8}$/.test(trimmedDni)) {
+      setError('Ingresa los 8 dígitos de tu DNI, sin espacios ni guiones.')
 
       return
     }
 
-    router.push(`/verificar-certificado/${encodeURIComponent(trimmedCodigo)}`)
+    router.push(`/verificar-certificado?dni=${encodeURIComponent(trimmedDni)}`)
   }
 
   return (
-    <section style={{ backgroundColor: 'var(--web-dark, #000000)', padding: '5rem 1rem' }}>
-      <div style={{ maxWidth: '56rem', margin: '0 auto' }}>
+    <section style={{ backgroundColor: '#f6f8f7', padding: '3.5rem 1rem' }}>
+      <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
         <ScrollReveal>
           <div
-            className="rounded-3xl relative overflow-hidden"
+            className="relative overflow-hidden rounded-[24px]"
             style={{
-              backgroundColor: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              padding: '3rem 2rem',
-              backdropFilter: 'blur(10px)',
+              backgroundColor: '#ffffff',
+              border: '1px solid #e2ebe6',
+              padding: '2.5rem 3rem',
+              boxShadow: '0 16px 48px rgba(6,61,36,0.08)',
             }}
           >
-            {/* Decorative background icon */}
-            <div
-              className="absolute top-0 right-0 pointer-events-none"
-              style={{ opacity: 0.04, padding: '2rem' }}
-            >
-              <Award style={{ width: '16rem', height: '16rem', color: 'var(--web-primary, #FFB600)', marginTop: '-3rem', marginRight: '-3rem' }} />
-            </div>
-
-            {/* Header */}
-            <div className="relative z-10 text-center mb-10">
-              <div
-                className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6"
-                style={{ backgroundColor: 'rgba(var(--web-primary-rgb, 255, 182, 0),0.15)', border: '1px solid rgba(var(--web-primary-rgb, 255, 182, 0),0.2)' }}
-              >
-                <ShieldCheck style={{ width: '2rem', height: '2rem', color: 'var(--web-primary, #FFB600)' }} />
+            <div className="mb-8 flex items-center gap-4">
+              <div className="flex h-[68px] w-[68px] shrink-0 items-center justify-center rounded-2xl" style={{ backgroundColor: '#edf5f1', color: '#173d32' }}>
+                <Fingerprint size={34} strokeWidth={1.8} />
               </div>
-              <h2 className="mb-4" style={sectionH2Dark}>
-                Verificar Certificado
-              </h2>
-              <p style={{ ...sectionDescDark, maxWidth: '36rem', margin: '0 auto' }}>
-                Ingresa el código único ubicado en la parte inferior de tu certificado
-                para comprobar su validez y autenticidad.
-              </p>
+              <div>
+                <h2 className="m-0 text-[25px] font-semibold leading-tight text-[#173d32]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  Encuentra tus certificados
+                </h2>
+                <p className="mt-1 text-[15px] text-[#63746c]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  Ingresa el DNI de la persona que realizó el curso.
+                </p>
+              </div>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="max-w-2xl mx-auto relative z-10">
-              <div className="flex flex-col sm:flex-row gap-3">
+            <form onSubmit={handleSubmit}>
+              <label htmlFor="home-certificate-dni" className="mb-2 block text-sm font-semibold text-[#173d32]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                Documento Nacional de Identidad (DNI)
+              </label>
+              <div className="flex flex-col gap-4 sm:flex-row">
                 <div className="relative flex-1">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Search style={{ width: '1.25rem', height: '1.25rem', color: 'rgba(255,255,255,0.4)' }} />
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-5 text-[#71847a]">
+                    <UserRound size={21} />
                   </div>
                   <input
+                    id="home-certificate-dni"
                     type="text"
-                    value={codigo}
+                    value={dni}
                     onChange={e => {
-                      setCodigo(e.target.value.toUpperCase())
+                      setDni(e.target.value.replace(/\D/g, '').slice(0, 8))
                       setError('')
                     }}
-                    placeholder="Ej. CER-2026-X8F9A"
+                    placeholder="Ingresa 8 dígitos"
+                    inputMode='numeric'
+                    maxLength={8}
+                    aria-label='DNI del titular del certificado'
+                    aria-invalid={Boolean(error)}
                     style={{
                       fontFamily: 'Poppins, sans-serif',
                       display: 'block',
                       width: '100%',
-                      paddingLeft: '3rem',
+                      paddingLeft: '3.75rem',
                       paddingRight: '1rem',
-                      paddingTop: '1rem',
-                      paddingBottom: '1rem',
-                      backgroundColor: 'rgba(255,255,255,0.08)',
-                      border: '1.5px solid rgba(255,255,255,0.15)',
+                      paddingTop: '1.125rem',
+                      paddingBottom: '1.125rem',
+                      backgroundColor: '#fcfdfc',
+                      border: '1px solid #cbd8d1',
                       borderRadius: '0.75rem',
-                      color: '#ffffff',
-                      fontSize: '1rem',
+                      color: '#173d32',
+                      fontSize: '0.9375rem',
                       letterSpacing: '0.05em',
                       outline: 'none',
                       transition: 'border-color 0.2s',
                     }}
-                    onFocus={e => { e.currentTarget.style.borderColor = 'var(--web-primary, #FFB600)' }}
-                    onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = '#25927f' }}
+                    onBlur={e => { e.currentTarget.style.borderColor = '#cbd8d1' }}
                   />
                 </div>
                 <button
                   type="submit"
-                  disabled={!codigo.trim()}
-                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap transition-all duration-200"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl transition-all duration-200 sm:min-w-[250px]"
                   style={{
                     fontFamily: 'Poppins, sans-serif',
-                    padding: '1rem 2rem',
-                    borderRadius: '0.75rem',
-                    backgroundColor: 'var(--web-primary, #FFB600)',
-                    color: '#000000',
+                    padding: '1rem 1.75rem',
+                    backgroundColor: '#000000',
+                    color: '#ffffff',
                     fontWeight: 700,
-                    fontSize: '0.9375rem',
+                    fontSize: '0.875rem',
                     border: 'none',
                     cursor: 'pointer',
-                    boxShadow: '0 4px 15px rgba(255, 182, 0, 0.3)',
-                    opacity: !codigo.trim() ? 0.5 : 1,
+                    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.12)',
                   }}
-                  onMouseEnter={e => { if (codigo.trim()) (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#FFC833' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--web-primary, #FFB600)' }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#173d32' }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#000000' }}
                 >
                   <Search size={18} />
-                  Buscar
+                  Buscar certificados
                 </button>
               </div>
 
               {error && (
                 <p
                   className="mt-3 text-center text-sm"
-                  style={{ fontFamily: 'Poppins, sans-serif', color: 'var(--web-primary, #FFB600)' }}
+                  style={{ fontFamily: 'Poppins, sans-serif', color: '#a32a2a' }}
                 >
                   {error}
                 </p>
               )}
 
-              <p
-                className="mt-5 text-center text-sm"
-                style={{ ...smallText, color: 'rgba(255,255,255,0.4)', textAlign: 'center' }}
-              >
-                Nuestro sistema garantiza la autenticidad de todos los certificados emitidos.
+              <p className="mt-4 flex items-center gap-2 text-xs text-[#63746c]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                <ShieldCheck size={16} /> Consulta los certificados emitidos en nuestra plataforma.
               </p>
             </form>
           </div>
