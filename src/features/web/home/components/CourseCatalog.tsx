@@ -42,7 +42,7 @@ interface CourseCatalogProps {
 }
 
 // Para el filtro de Área (mockeado hasta que exista data real en el backend)
-const DUMMY_AREAS = ['Ingeniería', 'Arquitectura', 'Gestión', 'Tecnología', 'Diseño']
+
 
 const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogProps) => {
   const label = type === 'diplomado' ? 'diplomados' : type === 'programa' ? 'programas' : type === 'especializacion' ? 'especializaciones' : 'cursos'
@@ -58,14 +58,16 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
   const searchParams = useSearchParams()
 
   useEffect(() => {
-    const catId = searchParams.get('categoria')
+    const catSlug = searchParams.get('categoria')
 
-    if (catId) {
-      setSelectedAreas([catId])
+    if (catSlug) {
+      const foundCat = categories.find(c => c.slug === catSlug)
+
+      setSelectedAreas(foundCat ? [foundCat.nombre] : [catSlug])
     } else {
       setSelectedAreas([])
     }
-  }, [searchParams])
+  }, [searchParams, categories])
 
   const handleToggleArea = (area: string) => {
     setSelectedAreas(prev => 
@@ -127,7 +129,7 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
     selectedModalities.length > 0 ||
     sortBy !== 'recent'
 
-  const AREAS_LIST = ['Docencia', 'Ingeniería', 'Gestión Pública', 'Educación', 'Psicología']
+  const AREAS_LIST = useMemo(() => categories.map(c => c.nombre), [categories])
   const CATEGORIAS_LIST = ['Curso', 'Diplomado', 'Programas']
 
   return (
@@ -263,8 +265,8 @@ const CourseCatalog = ({ courses, categories, type = 'curso' }: CourseCatalogPro
                 <FormGroup>
                   {[
                     { value: 'ASINCRONO', label: 'Asincrónico' },
-                    { value: 'SINCRONO', label: 'En Vivo' },
-                    { value: 'MIXTO', label: 'Mixto' }
+                    { value: 'SINCRONO', label: 'Sincrónico' },
+                    { value: 'MIXTO', label: 'Híbrido' }
                   ].map(mod => (
                     <FormControlLabel 
                       key={mod.value}

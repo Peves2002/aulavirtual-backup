@@ -27,8 +27,12 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-
 import type { ColumnDef } from '@tanstack/react-table'
+
+import type { DragEndEvent } from '@dnd-kit/core';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 import classnames from 'classnames'
 
@@ -95,9 +99,48 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
   const cursos = useMemo(() => data?.cursos ?? (pagination.pageIndex === 0 ? initialDataCursos : []), [data, initialDataCursos, pagination.pageIndex])
   const totalCursos = useMemo(() => data?.paginacion?.total ?? initialDataCursos.length, [data, initialDataCursos.length])
 
+  // Sort orderedCursos correctly when fetched to reflect db order initially
   useEffect(() => {
-    setOrderedCursos([...cursos])
+    const sorted = [...cursos].sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0))
+
+    setOrderedCursos(sorted)
   }, [cursos])
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  )
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event
+    
+    if (over && active.id !== over.id) {
+      const oldIndex = orderedCursos.findIndex((item) => item.id === active.id)
+      const newIndex = orderedCursos.findIndex((item) => item.id === over.id)
+      
+      const newOrderedCursos = arrayMove(orderedCursos, oldIndex, newIndex)
+
+      setOrderedCursos(newOrderedCursos)
+
+      const payload = newOrderedCursos.map((curso, index) => ({
+        id: curso.id,
+        orden: pagination.pageIndex * pagination.pageSize + index
+      }))
+
+      try {
+        await fetch('/api/admin/cursos/reorder', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cursos: payload })
+        })
+        refetch()
+      } catch (error) {
+        console.error('Failed to save order', error)
+      }
+    }
+  }
 
   const handleDeleteClick = (curso: Curso) => {
     setCursoToDelete(curso)
@@ -449,20 +492,25 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
                 </tr>
               </tbody>
             ) : (
-              <tbody>
-                {table
-                  .getRowModel()
-                  .rows
-                  .map(row => (
-                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                      {row.getVisibleCells().map(cell => (
-                        <td key={cell.id}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </td>
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={orderedCursos.map(c => c.id)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  <tbody>
+                    {table
+                      .getRowModel()
+                      .rows
+                      .map(row => (
+                        <SortableRow key={row.id} row={row} />
                       ))}
-                    </tr>
-                  ))}
-              </tbody>
+                  </tbody>
+                </SortableContext>
+              </DndContext>
             )}
           </table>
         </div>
@@ -495,5 +543,31 @@ export function CursosPage({ initialDataCursos, tipo }: CursosPageProps) {
         onSuccess={() => refetch()}
       />
     </>
+  )
+}
+
+function SortableRow({ row }: { row: any }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: row.original.id })
+  
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    ...(isDragging ? { position: 'relative', zIndex: 10, backgroundColor: 'var(--mui-palette-action-hover)', display: 'table-row' } as any : {}),
+  }
+
+  return (
+    <tr ref={setNodeRef} style={style} className={classnames({ selected: row.getIsSelected() })}>
+      {row.getVisibleCells().map((cell: any) => (
+        <td key={cell.id}>
+          {cell.column.id === 'drag-handle' ? (
+            <div {...attributes} {...listeners} style={{ cursor: 'grab', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <i className="tabler-grid-dots text-xl text-textSecondary" />
+            </div>
+          ) : (
+            flexRender(cell.column.columnDef.cell, cell.getContext())
+          )}
+        </td>
+      ))}
+    </tr>
   )
 }

@@ -6,7 +6,6 @@ import { notFound } from 'next/navigation'
 import { Box } from '@mui/material'
 
 import { getAuthSession } from '@/utils/libs/auth-helpers'
-import { AxiosWebCursos } from '@/features/web/cursos/http/axiosWebCursos'
 
 // Component Imports
 import CourseDetail from '@/features/web/courses/components/CourseDetail'

@@ -13,7 +13,7 @@ if [ -z "$VERSION" ]; then
     exit 1
 fi
 
-IMAGE_NAME="peves/legalizaya:v${VERSION}"
+IMAGE_NAME="josehuerta23/aulavirtual:v${VERSION}"
 
 echo ""
 echo "🏷️  Versión: $VERSION"
@@ -27,8 +27,8 @@ echo ""
 docker build \
   --no-cache \
   -f dockerfile.new \
-  --build-arg NEXT_PUBLIC_APP_URL=$(grep NEXT_PUBLIC_APP_URL .env | cut -d '=' -f2) \
-  --build-arg APP_URL=$(grep '^APP_URL=' .env | cut -d '=' -f2) \
+  --build-arg NEXT_PUBLIC_APP_URL=$(grep NEXT_PUBLIC_APP_URL .env.production | cut -d '=' -f2) \
+  --build-arg APP_URL=$(grep '^APP_URL=' .env.production | cut -d '=' -f2) \
   -t $IMAGE_NAME \
   .
 

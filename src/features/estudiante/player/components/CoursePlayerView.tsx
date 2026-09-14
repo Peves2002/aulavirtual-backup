@@ -42,6 +42,7 @@ interface CoursePlayerViewProps {
         titulo: string
         modulos: any[]
         examenes?: any[]
+        numero_asesor?: string
     }
     phoneNumberProfesor: string
     initialLessonId?: string
@@ -848,7 +849,7 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                         </Button>
                         <Button
                             variant="contained"
-                            href={`https://wa.me/${phoneNumberProfesor}?text=${encodeURIComponent('Hola, necesito ayuda académica con el curso: ' + storeCourse.titulo)}`}
+                            href={`https://wa.me/${storeCourse.numero_asesor || phoneNumberProfesor}?text=${encodeURIComponent('Hola, necesito ayuda académica con el curso: ' + storeCourse.titulo)}`}
                             target="_blank"
                             sx={{
                                 borderRadius: '20px',

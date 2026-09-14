@@ -62,6 +62,7 @@ export interface Course {
     titulo: string
     modulos: Module[]
     examenes?: CourseExamen[]
+    numero_asesor?: string
 }
 
 type ExamStatus = 'locked' | 'available' | 'in_progress' | 'passed' | 'failed'

@@ -22,7 +22,6 @@ export default async function LearningPage({ params, searchParams }: { params: {
   try {
     const data = await axiosPlayer.getPlayerData(params.slug)
 
-    console.log(data)
 
     return <CoursePlayerView course={data.course} initialLessonId={searchParams.leccion} initialExamenId={searchParams.examen} phoneNumberProfesor={phoneNumberProfesor} />
   } catch (err: any) {

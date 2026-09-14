@@ -73,6 +73,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
     tipo_emision: curso.tipo_emision,
     duracion: curso.duracion || '',
     codigo: curso.codigo || '',
+    numero_asesor: curso.numero_asesor || '',
     miniatura: curso.miniatura || '',
     video_presentacion: curso.video_presentacion || '',
     brochure: curso.brochure || '',
@@ -100,6 +101,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
           tipo_emision: form.tipo_emision as 'SINCRONO' | 'ASINCRONO' | 'MIXTO',
           duracion: form.duracion || null,
           codigo: form.codigo?.trim().toUpperCase() || null,
+          numero_asesor: form.numero_asesor?.trim() || null,
           miniatura: form.miniatura || null,
           video_presentacion: form.video_presentacion || null,
           brochure: form.brochure || null,
@@ -212,7 +214,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
             onClick={() => setForm(prev => ({ ...prev, tipo_emision: 'ASINCRONO' }))}
             startIcon={<i className='tabler-player-play' />}
           >
-            Asíncrono
+            Asincrónico
           </Button>
           <Button
             variant={form.tipo_emision === 'SINCRONO' ? 'contained' : 'outlined'}
@@ -220,7 +222,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
             onClick={() => setForm(prev => ({ ...prev, tipo_emision: 'SINCRONO' }))}
             startIcon={<i className='tabler-live-photo' />}
           >
-            Síncrono
+            Sincrónico
           </Button>
           <Button
             variant={form.tipo_emision === 'MIXTO' ? 'contained' : 'outlined'}
@@ -228,7 +230,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
             onClick={() => setForm(prev => ({ ...prev, tipo_emision: 'MIXTO' }))}
             startIcon={<i className='tabler-arrows-split' />}
           >
-            Mixto
+            Híbrido
           </Button>
         </Box>
       </Grid>
@@ -274,6 +276,21 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
           onChange={handleChange}
           InputProps={{
             startAdornment: <InputAdornment position='start'><i className='tabler-clock text-xl text-textSecondary' /></InputAdornment>
+          }}
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <CustomTextField
+          fullWidth
+          label='Número Asesor WhatsApp'
+          name='numero_asesor'
+          placeholder='Ej: 51999999999'
+          value={form.numero_asesor}
+          onChange={handleChange}
+          inputProps={{ maxLength: 20 }}
+          helperText='Número para el botón "Contactar al asesor académico". Deja en blanco para usar el del docente.'
+          InputProps={{
+            startAdornment: <InputAdornment position='start'><i className='tabler-brand-whatsapp text-xl text-textSecondary' /></InputAdornment>
           }}
         />
       </Grid>

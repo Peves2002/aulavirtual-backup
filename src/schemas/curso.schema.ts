@@ -61,6 +61,7 @@ export const actualizarCursoSchema = z.object({
   moneda: z.string().max(3).optional(),
   duracion: z.string().max(50).optional().nullable(),
   codigo: z.string().max(20).optional().nullable(),
+  numero_asesor: z.string().max(20).optional().nullable(),
   miniatura: z.string().optional().nullable(),
   video_presentacion: z.string().optional().nullable(),
   brochure: z.string().optional().nullable(),

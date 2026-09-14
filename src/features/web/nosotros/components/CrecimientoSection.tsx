@@ -84,9 +84,9 @@ export default function CrecimientoSection() {
             letterSpacing: '-0.02em',
           }}>
             Crecemos cada año junto a{' '}
-            <span style={{ color: 'var(--web-dark, #025E44)' }}>nuestros estudiantes</span>{' '}
+            <span style={{ color: 'var(--web-primary, #25927F)' }}>nuestros estudiantes</span>{' '}
             y estos son los resultados que hemos{' '}
-            <span style={{ color: 'var(--web-dark, #025E44)' }}>logrado juntos</span>
+            <span style={{ color: 'var(--web-primary, #25927F)' }}>logrado juntos</span>
           </h2>
         </motion.div>
 

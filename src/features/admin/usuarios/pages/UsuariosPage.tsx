@@ -14,8 +14,7 @@ import {
   Typography,
   Box,
   Avatar,
-  CircularProgress,
-  Switch
+  CircularProgress
 } from '@mui/material'
 
 // Table & Utils Imports

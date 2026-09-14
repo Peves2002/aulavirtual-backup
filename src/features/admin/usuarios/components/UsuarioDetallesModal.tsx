@@ -21,7 +21,7 @@ import {
   IconButton,
   Tooltip
 } from '@mui/material'
-import type { Rol } from '@prisma/client'
+import type { } from '@prisma/client'
 
 import AppModal from '@/utils/components/AppModal'
 import UserAvatar from '@/utils/components/UserAvatar'

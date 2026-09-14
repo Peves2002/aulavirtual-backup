@@ -52,7 +52,7 @@ export default function EquipoSection() {
             <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'var(--web-dark, #025E44)', fontWeight: 600 }}>Galería</span>
           </div>
           <h2 style={{ fontFamily: 'Poppins, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em', lineHeight: 1.25, margin: 0 }}>
-            Nuestro <span style={{ color: 'var(--web-dark, #025E44)' }}>Equipo</span>
+            Nuestro <span style={{ color: 'var(--web-primary, #25927F)' }}>Equipo</span>
           </h2>
           <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9375rem', color: '#64748b', lineHeight: 1.7, marginTop: '0.75rem', maxWidth: '520px' }}>
             Conoce a las personas que trabajan cada día para hacer posible nuestra misión educativa.

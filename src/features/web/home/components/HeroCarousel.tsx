@@ -71,7 +71,7 @@ function VisualCamaras() {
 
 function VisualIsos() {
   return (
-    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'flex-end', width: '100%', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', justifyContent: 'center', width: '100%', flexWrap: 'wrap' }}>
       {['/images/isos/iso9001.webp', '/images/isos/iso21001.webp'].map((src, i) => (
         <div key={i} className="w-[140px] h-[140px] sm:w-[180px] sm:h-[180px]" style={{ position: 'relative', filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.4))' }}>
           <Image src={src} alt={`ISO ${i === 0 ? '9001' : '21001'}`} fill style={{ objectFit: 'contain' }} />
@@ -124,13 +124,13 @@ export default function HeroCarousel() {
       <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)', backgroundSize: '48px 48px' }} />
       <div aria-hidden style={{ position: 'absolute', top: '-20%', right: '-10%', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(var(--web-primary-rgb,37,146,127),0.25) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.5rem', width: '100%', position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '0 1.5rem', width: '100%', position: 'relative', zIndex: 1, height: '100%' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center h-full">
 
           {/* Izquierda: texto (igual para todos) */}
           <div
             key={`left-${current}`}
-            style={{ position: 'relative', zIndex: 2, animation: 'heroFadeIn 0.5s ease', width: '100%', maxWidth: '560px' }}
+            style={{ position: 'relative', zIndex: 2, animation: 'heroFadeIn 0.5s ease', width: '100%' }}
           >
 
             {/* Eyebrow */}
@@ -182,8 +182,8 @@ export default function HeroCarousel() {
 
           <div
             key={`right-${current}`}
-            className={`${slide.visual === 'portada3' || slide.visual === 'portada4' ? "md:hidden" : ""} flex flex-1 items-center w-full pb-8 md:pb-0`}
-            style={{ justifyContent: 'flex-end', animation: 'heroFadeIn 0.5s ease', minWidth: '300px' }}
+            className="flex flex-1 items-center w-full pb-8 md:pb-0 justify-center md:justify-start"
+            style={{ animation: 'heroFadeIn 0.5s ease', minWidth: '300px', justifySelf: 'start' }}
           >
             {slide.visual === 'camaras' && <VisualCamaras />}
             {slide.visual === 'isos' && <VisualIsos />}
@@ -194,25 +194,28 @@ export default function HeroCarousel() {
 
       {/* Imágenes absolutas relativas a la section (ignoran el padding) - Solo Desktop */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, display: 'flex', justifyContent: 'center' }}>
-        <div style={{ width: '100%', maxWidth: '1280px', position: 'relative' }}>
-          {slide.visual === 'portada3' && (
-            <div className="hidden md:block" key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease' }}>
-              <VisualImage
-                src="/images/3.png"
-                alt="Grupo Ollarves equipo"
-                style={{ right: '1.5rem', width: '50%', height: '100%', objectPosition: 'bottom right' } as any}
-              />
-            </div>
-          )}
-          {slide.visual === 'portada4' && (
-            <div className="hidden md:block" key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease' }}>
-              <VisualImage
-                src="/images/4.png"
-                alt="Presencia nacional"
-                style={{ right: '1.5rem', width: '50%', top: '3rem', bottom: 0, objectPosition: 'bottom right' } as any}
-              />
-            </div>
-          )}
+        <div style={{ width: '100%', maxWidth: '1120px', position: 'relative', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+          <div /> {/* Left empty space for the grid */}
+          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            {slide.visual === 'portada3' && (
+              <div className="hidden md:block" key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', height: '100%' }}>
+                <VisualImage
+                  src="/images/3.png"
+                  alt="Grupo Ollarves equipo"
+                  style={{ left: 0, width: '100%', height: '100%', objectPosition: 'bottom center' } as any}
+                />
+              </div>
+            )}
+            {slide.visual === 'portada4' && (
+              <div className="hidden md:block" key={`img-${current}`} style={{ animation: 'heroFadeIn 0.5s ease', height: '100%' }}>
+                <VisualImage
+                  src="/images/4.png"
+                  alt="Presencia nacional"
+                  style={{ left: 0, width: '100%', top: '3rem', bottom: 0, objectPosition: 'bottom center' } as any}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

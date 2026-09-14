@@ -113,6 +113,7 @@ export interface Curso {
   brochure: string | null
   documento_adicional: string | null
   documento_adicional_titulo: string | null
+  numero_asesor: string | null
   objetivos: string[]
   metodologia: any[]
   beneficios: any[]

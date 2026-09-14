@@ -107,6 +107,9 @@ export async function GET(request: Request, { params }: { params: { slug: string
     const course = await prisma.curso.findUnique({
       where: { slug },
       include: {
+        profesor: {
+          select: { celular: true }
+        },
         modulos: {
           include: {
             lecciones: {
@@ -220,6 +223,7 @@ export async function GET(request: Request, { params }: { params: { slug: string
       id: course.id,
       slug: course.slug,
       titulo: course.titulo,
+      numero_asesor: course.numero_asesor || course.profesor?.celular || "51944270957",
       descripcion: (course as any).descripcion || null,
       que_aprenderas: (course as any).que_aprenderas || null,
       a_quien_va_dirigido: (course as any).a_quien_va_dirigido || null,

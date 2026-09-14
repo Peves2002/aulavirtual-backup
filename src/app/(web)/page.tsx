@@ -31,7 +31,7 @@ async function getHomeData() {
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO', tipo: 'CURSO' },
         include: courseInclude,
-        orderBy: { creado_en: 'desc' },
+        orderBy: [{ orden: 'asc' }, { creado_en: 'desc' }],
         take: 6,
       }),
 
@@ -39,7 +39,7 @@ async function getHomeData() {
       prisma.curso.findMany({
         where: { estado: 'PUBLICADO', tipo: 'DIPLOMADO' },
         include: courseInclude,
-        orderBy: { creado_en: 'desc' },
+        orderBy: [{ orden: 'asc' }, { creado_en: 'desc' }],
         take: 6,
       }),
 
