@@ -79,10 +79,10 @@ const Register = ({ mode }: { mode: SystemMode }) => {
   // Vars
   const darkImg = '/images/pages/auth-mask-dark.png'
   const lightImg = '/images/pages/auth-mask-light.png'
-  const darkIllustration = '/images/illustrations/auth/v2-login-dark.png'
-  const lightIllustration = '/images/illustrations/auth/v2-login-light.png'
-  const borderedDarkIllustration = '/images/illustrations/auth/v2-login-dark-border.png'
-  const borderedLightIllustration = '/images/illustrations/auth/v2-login-light-border.png'
+  const darkIllustration = '/images/contenido/registro.jpg'
+  const lightIllustration = '/images/contenido/registro.jpg'
+  const borderedDarkIllustration = '/images/contenido/registro.jpg'
+  const borderedLightIllustration = '/images/contenido/registro.jpg'
 
   // Hooks
   const router = useRouter()

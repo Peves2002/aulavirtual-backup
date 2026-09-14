@@ -1,0 +1,50 @@
+{
+  "method": "built-in image_gen",
+  "assets": [
+    {
+      "key": "costos",
+      "prompt": "Overhead view of construction cost planning desk, architectural blueprints, calculator, laptop with abstract spreadsheet, scale ruler and yellow helmet. No people.",
+      "file": "costos.jpg"
+    },
+    {
+      "key": "valorizacion",
+      "prompt": "Civil engineer wearing white hardhat and reflective vest inspecting reinforced concrete building under construction, holding clipboard, structural columns and crane in background.",
+      "file": "valorizacion.jpg"
+    },
+    {
+      "key": "lean",
+      "prompt": "Three construction managers in safety helmets collaboratively planning around a wall with colored sticky notes and a building schedule in a bright site meeting room, candid editorial composition.",
+      "file": "lean.jpg"
+    },
+    {
+      "key": "carreteras",
+      "prompt": "Aerial oblique view of road construction in Andean landscape, asphalt roller and paving machine on freshly laid winding highway, mountains behind, no closeup people.",
+      "file": "carreteras.jpg"
+    },
+    {
+      "key": "seguridad",
+      "prompt": "Closeup still life of construction safety equipment: yellow hardhat, clear safety goggles, work gloves, ear defenders and safety harness, construction site softly blurred behind.",
+      "file": "seguridad.jpg"
+    },
+    {
+      "key": "diplomados-hero",
+      "prompt": "Professional adult education seminar in modern auditorium, audience seen from back, instructor at front with abstract presentation, no readable text.",
+      "file": "diplomados-hero.jpg"
+    },
+    {
+      "key": "especializaciones-hero",
+      "prompt": "Close view of modern engineering workstation with architectural scale model and computer displaying an abstract 3D building model, no readable text.",
+      "file": "especializaciones-hero.jpg"
+    },
+    {
+      "key": "registro",
+      "prompt": "Young adult student setting up a study desk with notebooks and laptop, welcoming bright home learning space.",
+      "file": "registro.jpg"
+    },
+    {
+      "key": "recuperar-acceso",
+      "prompt": "Minimal editorial still life of laptop beside a physical brass key and a notebook, calm light blue desk, symbolizing recovering access to online education.",
+      "file": "recuperar-acceso.jpg"
+    }
+  ]
+}
