@@ -10,6 +10,7 @@ import { getPdfBuffer } from '@/app/api/_shared/certificados/getPdfBuffer'
 /**
  * GET /api/estudiante/certificado/[certificadoId]/pdf
  * Descarga el PDF del certificado (Estudiante).
+ * La plantilla se resuelve: override del curso > configuración global CERTIFICADO_PLANTILLA > 'clasico'.
  * Si tiene un PDF estático importado, lo sirve; si no, lo genera dinámicamente.
  */
 export async function GET(request: Request, { params }: { params: { certificadoId: string } }) {

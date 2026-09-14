@@ -89,7 +89,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const callbackUrl = params.get('callbackUrl')
-    const expired = params.get('expired')
+    const expired = params.get('expired') || params.get('sessionExpired')
     const deactivated = params.get('deactivated')
 
     if (callbackUrl) {

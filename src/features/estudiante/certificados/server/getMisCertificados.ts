@@ -14,6 +14,7 @@ export async function getMisCertificados(usuarioId: string): Promise<MiCertifica
           miniatura: true,
           duracion: true,
           nivel: true,
+          modo_certificado: true,
           profesor: {
             select: { nombre: true, apellido: true }
           }

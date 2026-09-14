@@ -72,6 +72,5 @@ export function resolveFaviconUrl(configs: Record<string, string>): string {
     return FAVICON_PUBLIC_PATH
   }
 
-  // Por defecto usar el favicon.ico de public/
   return '/favicon.ico'
 }
