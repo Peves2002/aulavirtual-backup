@@ -33,6 +33,7 @@ const staticSocialLinks = [
 
 interface WebFooterProps {
   platformName?: string
+  rutasHabilitado?: boolean
 }
 
 const WebFooter = async ({ platformName = 'CEGAE RIBEYRO', rutasHabilitado = true }: WebFooterProps) => {

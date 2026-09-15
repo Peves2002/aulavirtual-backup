@@ -39,13 +39,13 @@ function CertificadoCard({ cert }: { cert: MiCertificado }) {
       const a = document.createElement('a')
 
       a.href = url
-      a.download = `certificado-${cert.codigo_verificacion}.pdf`
+      a.download = `constancia-${cert.codigo_verificacion}.pdf`
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
     } catch {
-      enqueueSnackbar('Error al descargar el certificado', { variant: 'error' })
+      enqueueSnackbar('Error al descargar la constancia', { variant: 'error' })
     } finally {
       setDownloading(false)
     }
@@ -179,7 +179,7 @@ function CertificadoCard({ cert }: { cert: MiCertificado }) {
                 </Button>
               </span>
             </Tooltip>
-            <Tooltip title="Verificar certificado">
+            <Tooltip title="Verificar constancia">
               <Button
                 variant="outlined"
                 size="small"
@@ -243,7 +243,7 @@ export default function MisCertificadosPage({ initialCertificados }: MisCertific
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 5 }}>
           <Box>
             <Typography variant="h4" sx={{ fontWeight: 900, mb: 1, color: 'text.primary' }}>
-              Mis <span style={{ color: 'var(--mui-palette-primary-main)' }}>Certificados</span>
+              Mis <span style={{ color: 'var(--mui-palette-primary-main)' }}>Constancias</span>
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ fontWeight: 500 }}>
               Descarga y comparte tus logros académicos.
@@ -253,7 +253,7 @@ export default function MisCertificadosPage({ initialCertificados }: MisCertific
           {certificados.length > 0 && (
             <Chip
               icon={<i className="tabler-certificate" style={{ fontSize: '1rem' }} />}
-              label={`${certificados.length} certificado${certificados.length !== 1 ? 's' : ''}`}
+              label={`${certificados.length} constancia${certificados.length !== 1 ? 's' : ''}`}
               color="primary"
               sx={{ fontWeight: 700, fontSize: '0.85rem', px: 1 }}
             />
@@ -306,10 +306,10 @@ export default function MisCertificadosPage({ initialCertificados }: MisCertific
               <i className="tabler-certificate" style={{ fontSize: 40, color: 'var(--mui-palette-text-secondary)' }} />
             </Box>
             <Typography variant="h5" color="text.secondary" sx={{ fontWeight: 700 }}>
-              Aún no tienes certificados
+              Aún no tienes constancias
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              Completa un curso y aprueba el examen final para obtener tu primer certificado.
+              Completa un curso y aprueba el examen final para obtener tu primera constancia.
             </Typography>
             <Button
               variant="contained"

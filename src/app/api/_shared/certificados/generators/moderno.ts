@@ -171,13 +171,13 @@ export const generarModerno: GeneratorFn = async data => {
 
   let y = 16
 
-  // Badge "CERTIFICADO"
+  // Badge "CONSTANCIA"
   doc.setFillColor(pr, pg, pb)
   doc.roundedRect(ccx - 28, y, 56, 7, 3, 3, 'F')
   doc.setFontSize(7)
   doc.setFont('helvetica', 'bold')
   doc.setTextColor(255, 255, 255)
-  doc.text('CERTIFICADO DE FINALIZACIÓN', ccx, y + 5, { align: 'center' })
+  doc.text('CONSTANCIA DE FINALIZACIÓN', ccx, y + 5, { align: 'center' })
   y += 13
 
   // Nombre del alumno — muy grande

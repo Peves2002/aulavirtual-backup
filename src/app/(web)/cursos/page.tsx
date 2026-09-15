@@ -1,7 +1,7 @@
-import ProgramCatalogLayout from '@/features/web/home/components/ProgramCatalogLayout'
+import { Box } from '@mui/material'
+import CourseCatalog from '@/features/web/home/components/CourseCatalog'
 import { getProgramCatalogData } from '@/features/web/cursos/getProgramCatalogData'
 import { getAuthSession } from '@/utils/libs/auth-helpers'
-import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
 
 export default async function CursosPage() {
   const session = await getAuthSession()

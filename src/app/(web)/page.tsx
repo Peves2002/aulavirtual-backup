@@ -193,7 +193,7 @@ export default function HomePage() {
               <div className="absolute -top-4 -left-4 w-full h-full border-2 border-dashed border-teal-500/30 rounded-[32px] pointer-events-none" />
               <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-white relative z-10 transform -rotate-1 hover:rotate-0 transition-transform duration-500">
                 <img
-                  src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80"
+                  src="images/nosotros.jpg"
                   alt="Historia de CEGAE Ribeyro"
                   className="w-full h-[440px] object-cover"
                 />
@@ -380,7 +380,7 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-gradient-to-tr from-teal-500 to-lime-300 rounded-[40px] rotate-3 blur-sm scale-95 opacity-30 pointer-events-none" />
               <div className="rounded-[40px] overflow-hidden shadow-2xl border-8 border-white relative z-10">
                 <img
-                  src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80"
+                  src="images/rutas.jpg"
                   alt="Rutas de Aprendizaje CEGAE Ribeyro"
                   className="w-full h-[450px] object-cover"
                 />
@@ -401,7 +401,7 @@ export default function HomePage() {
               <div className="absolute -bottom-4 -left-4 w-full h-full border-2 border-emerald-500/20 rounded-[32px] pointer-events-none" />
               <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-[#071613] relative z-10">
                 <img
-                  src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80"
+                  src="/images/university.jpg"
                   alt="CEGAE Ribeyro para Empresas"
                   className="w-full h-[400px] object-cover filter brightness-90 hover:brightness-100 transition-all duration-300"
                 />
@@ -494,8 +494,8 @@ export default function HomePage() {
                 </div>
                 {certResult && (
                   <div className={`text-xs p-4 rounded-xl border font-semibold leading-relaxed animate-fade-in ${certResult.startsWith('VALIDO')
-                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                      : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                    ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                    : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
                     }`}>
                     {certResult}
                   </div>
@@ -514,14 +514,11 @@ export default function HomePage() {
 
             {/* Right Mockup Graphic */}
             <div className="lg:col-span-5 relative flex justify-center">
-              <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/10 to-lime-500/10 rounded-[32px] blur-3xl pointer-events-none" />
-              <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-white/15 relative z-10 w-full max-w-[420px] transform rotate-1 hover:rotate-0 transition-transform duration-500">
-                <img
-                  src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=800&q=80"
-                  alt="Certificado Oficial de CEGAE"
-                  className="w-full h-80 object-cover"
-                />
-              </div>
+              <img
+                src="/images/constancia.jpg"
+                alt="Constancia"
+                className="w-full max-w-[420px] h-auto object-contain rounded-[28px] shadow-2xl border border-white/10"
+              />
             </div>
 
           </div>

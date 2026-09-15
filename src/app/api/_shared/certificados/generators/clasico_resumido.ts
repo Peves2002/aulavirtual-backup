@@ -162,11 +162,11 @@ export const generarClasicoResumido: GeneratorFn = async data => {
   doc.setFillColor(255, 255, 255)
   doc.rect(0, 0, contentW, pageHeight, 'F')
 
-  // "CERTIFICADO" vertical
+  // "CONSTANCIA" vertical
   doc.setFontSize(55)
   doc.setTextColor(Math.round(pr * 0.55), Math.round(pg * 0.55), Math.round(pb * 0.55))
   doc.setFont('helvetica', 'bold')
-  doc.text('CERTIFICADO', contentW + panelW / 2 + 8, 148, { angle: 90 })
+  doc.text('CONSTANCIA', contentW + panelW / 2 + 8, 148, { angle: 90 })
 
   // ── Logo ──
   let y = 10
@@ -208,7 +208,7 @@ export const generarClasicoResumido: GeneratorFn = async data => {
   doc.setFontSize(20)
   doc.setTextColor(18, 18, 18)
   doc.setFont('helvetica', 'bold')
-  doc.text('CERTIFICADO', cx, y, { align: 'center' })
+  doc.text('CONSTANCIA', cx, y, { align: 'center' })
   y += 11
 
   doc.setFontSize(12)
@@ -247,7 +247,7 @@ export const generarClasicoResumido: GeneratorFn = async data => {
   y += descripcionLines.length * 6 + 4
 
   const porcuantoLines = doc.splitTextToSize(
-    'Por cuanto: Para que conste y sea reconocido, se otorga el presente certificado en calidad de:',
+    'Por cuanto: Para que conste y sea reconocido, se otorga la presente constancia en calidad de:',
     contentW - 40
   )
 

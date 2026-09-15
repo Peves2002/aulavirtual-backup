@@ -154,7 +154,7 @@ export function CreateCertificadoModal({ open, onClose }: Props) {
         reemplazar
       })
 
-      toast.success(reemplazar ? 'Certificado reemplazado exitosamente.' : 'Certificado creado exitosamente.')
+      toast.success(reemplazar ? 'Constancia reemplazada exitosamente.' : 'Constancia creada exitosamente.')
       handleClose()
     } catch (err: any) {
       const msg: string = err?.error || err?.message || ''
@@ -174,9 +174,9 @@ export function CreateCertificadoModal({ open, onClose }: Props) {
       PaperProps={{ sx: { borderRadius: 3 } }}>
       <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pb: 1 }}>
         <Box>
-          <Typography variant='h6' fontWeight={700}>Crear Certificado Manual</Typography>
+          <Typography variant='h6' fontWeight={700}>Crear Constancia Manual</Typography>
           <Typography variant='caption' color='text.secondary'>
-            Completa los datos para emitir un certificado de forma manual
+            Completa los datos para emitir una constancia de forma manual
           </Typography>
         </Box>
         <IconButton size='small' onClick={handleClose}>
@@ -202,7 +202,7 @@ export function CreateCertificadoModal({ open, onClose }: Props) {
               </Box>
             }
           >
-            <Typography variant='body2' fontWeight={600}>Ya existe un certificado para este estudiante y curso.</Typography>
+            <Typography variant='body2' fontWeight={600}>Ya existe una constancia para este estudiante y curso.</Typography>
             <Typography variant='caption'>Código actual: <strong>{duplicado.codigo}</strong>. ¿Deseas reemplazarlo? Se conservará el mismo código de verificación.</Typography>
           </Alert>
         )}
@@ -414,7 +414,7 @@ export function CreateCertificadoModal({ open, onClose }: Props) {
           variant='contained'
           startIcon={isPending ? <CircularProgress size={16} color='inherit' /> : <i className='tabler-certificate text-[18px]' />}
         >
-          {isPending ? 'Creando...' : 'Crear Certificado'}
+          {isPending ? 'Creando...' : 'Crear Constancia'}
         </Button>
       </DialogActions>
     </Dialog>

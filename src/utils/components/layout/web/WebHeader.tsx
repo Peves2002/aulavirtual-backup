@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import Link from 'next/link'
 
-import { Button } from '@mui/material'
+import { Button, IconButton } from '@mui/material'
 import { useSession } from 'next-auth/react'
 import { Menu } from 'lucide-react'
 
@@ -32,47 +32,24 @@ export default function WebHeader({
   initialCategories = [],
   platformName = 'CEGAE RIBEYRO',
   platformSlogan = 'Te acompañamos en tu perfeccionamiento profesional',
+  empresasHabilitado,
 }: WebHeaderProps) {
   void initialCategories
   void platformName
   void platformSlogan
 
   const { data: session } = useSession()
+  const [navOpen, setNavOpen] = useState(false)
   const { openLogin, openRegister } = useAuthModal()
   const configs = useConfig()
 
   void (configs.COLOR_PRIMARIO || '#02115C') // primaryColor reserved
-
-  // ── Scroll-reveal: oculto en el top, visible al primer scroll ──
-  const [visible, setVisible] = useState(false)
-  const [hasScrolled, setHasScrolled] = useState(false)
-
-  useEffect(() => {
-    // Si la página ya no está en el top al montar (ej. reload con scroll), mostrar inmediatamente
-    if (window.scrollY > 10) {
-      setHasScrolled(true)
-      setVisible(true)
-    }
-
-    const onScroll = () => {
-      if (window.scrollY > 10 && !hasScrolled) {
-        setHasScrolled(true)
-        setVisible(true)
-      }
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true })
-
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [hasScrolled])
 
   return (
     <header
       className="fixed top-0 left-0 right-0 bg-white border-b border-border shadow-sm z-50 flex items-center justify-between px-6 md:px-10"
       style={{
         height: 'var(--navbar-height)',
-        transform: visible ? 'translateY(0)' : 'translateY(-100%)',
-        transition: 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
       }}
     >
       {/* Logo */}
@@ -95,6 +72,13 @@ export default function WebHeader({
           style={{ fontFamily: 'Montserrat, sans-serif' }}
         >
           Cursos
+        </Link>
+        <Link
+          href="/rutas"
+          className="no-underline text-sm font-bold text-slate-600 hover:text-primary transition-all duration-200"
+          style={{ fontFamily: 'Montserrat, sans-serif' }}
+        >
+          Rutas
         </Link>
         <Link
           href="/nosotros"

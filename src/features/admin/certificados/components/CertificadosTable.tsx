@@ -318,7 +318,7 @@ export function CertificadosTable({ initialData }: CertificadosTableProps) {
     <>
       <Card>
         <CardHeader
-          title='Certificados Emitidos'
+          title='Constancias Emitidas'
         />
         <Box className='flex justify-between flex-col items-start lg:flex-row lg:items-center p-6 border-bs gap-4'>
           <CustomTextField
@@ -377,7 +377,7 @@ export function CertificadosTable({ initialData }: CertificadosTableProps) {
               startIcon={<i className='tabler-plus text-[16px]' />}
               onClick={() => setModalOpen(true)}
             >
-              Crear Certificado
+              Crear Constancia
             </Button>
           </Box>
         </Box>
@@ -399,13 +399,13 @@ export function CertificadosTable({ initialData }: CertificadosTableProps) {
               {isLoading ? (
                 <tr>
                   <td colSpan={columns.length} className='text-center p-10'>
-                    Cargando certificados...
+                    Cargando constancias...
                   </td>
                 </tr>
               ) : certificados.length === 0 ? (
                 <tr>
                   <td colSpan={columns.length} className='text-center p-10'>
-                    No se encontraron certificados
+                    No se encontraron constancias
                   </td>
                 </tr>
               ) : (

@@ -146,11 +146,11 @@ export const generarCorporativo: GeneratorFn = async data => {
   doc.text('✦', cx, y + 1, { align: 'center' })
   y += 6
 
-  // "CERTIFICADO DE FINALIZACIÓN"
+  // "CONSTANCIA DE FINALIZACIÓN"
   doc.setFontSize(9)
   doc.setFont('helvetica', 'normal')
   doc.setTextColor(100, 100, 100)
-  doc.text('CERTIFICADO DE FINALIZACIÓN', cx, y, { align: 'center' })
+  doc.text('CONSTANCIA DE FINALIZACIÓN', cx, y, { align: 'center' })
   y += 8
 
   // Nombre del alumno — grande y prominente
