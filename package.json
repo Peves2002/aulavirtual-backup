@@ -17,6 +17,7 @@
     "db:migration:dev": "prisma migrate dev",
     "db:migration:deploy": "prisma migrate deploy",
     "db:seed": "dotenv -- tsx ./prisma/seed/main",
+    "db:seed:admin": "dotenv -- tsx ./prisma/seed/seed_create_admin",
     "db:seed:chat": "dotenv -- tsx ./prisma/seed/chat-demo",
     "db:seed:pedidos": "dotenv -- tsx ./prisma/seed/pedidos-demo",
     "db:seed:diplomados": "dotenv -- tsx ./prisma/seed/diplomados-inpe",
