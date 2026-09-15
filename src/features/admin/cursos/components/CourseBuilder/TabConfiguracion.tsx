@@ -211,7 +211,7 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
             enqueueSnackbar(
                 valor
                     ? 'Certificación habilitada: los alumnos que cumplan los requisitos ya pueden certificarse'
-                    : 'Certificación deshabilitada: ningún alumno podrá obtener el certificado hasta que la vuelvas a habilitar',
+                    : 'Certificación general deshabilitada: se mantienen las autorizaciones individuales',
                 { variant: 'success' }
             )
             onSuccess()
@@ -590,11 +590,12 @@ export function TabConfiguracion({ curso, onSuccess }: TabConfiguracionProps) {
                     Emisión&quot; (que solo define cómo se entrega el PDF): úsala para cursos síncronos donde
                     no quieres que se certifiquen hasta que las clases en vivo realmente hayan terminado, o para
                     retener la certificación de cualquier curso hasta el momento que decidas.
+                    {' '}Las autorizaciones individuales de Alumnos Inscritos tienen prioridad sobre esta opción.
                 </Typography>
                 <Typography variant='caption' color='text.secondary' sx={{ display: 'block', mt: 1 }}>
                     {certificacionHabilitada
                         ? 'Los alumnos que completen el curso pueden obtener su certificado normalmente.'
-                        : 'Ningún alumno podrá obtener el certificado, aunque haya completado el curso, hasta que la habilites.'}
+                        : 'Solo podrán certificarse los alumnos habilitados individualmente desde Alumnos Inscritos.'}
                 </Typography>
                 </SettingsAccordion>
             </Grid>

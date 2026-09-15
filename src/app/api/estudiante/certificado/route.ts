@@ -75,7 +75,7 @@ export async function GET(request: Request) {
       calcularElegibilidad(auth.user.id, cursoId),
       prisma.inscripcion.findUnique({
         where: { usuario_id_curso_id: { usuario_id: auth.user.id, curso_id: cursoId } },
-        select: { certificado_habilitado: true }
+        select: { certificado_habilitado: true, certificacion_habilitada: true }
       }),
       prisma.curso.findUnique({
         where: { id: cursoId },
@@ -106,7 +106,7 @@ export async function GET(request: Request) {
       cursoTitulo: curso?.titulo ?? null,
       numeroAsesor: curso?.numero_asesor ?? null,
       modoCertificado: curso?.modo_certificado ?? 'AUTOMATICO',
-      certificacionHabilitada: curso?.certificacion_habilitada ?? true,
+      certificacionHabilitada: inscripcion?.certificacion_habilitada ?? curso?.certificacion_habilitada ?? true,
       elegibilidad,
       pagoPendiente: pagoPendiente || false,
       precioCertificado: precioCert
@@ -149,7 +149,7 @@ export async function POST(request: Request) {
     }
 
     // 1a. Verificar que la certificación esté habilitada para este curso
-    if (curso && !curso.certificacion_habilitada) {
+    if (!(inscripcion.certificacion_habilitada ?? curso?.certificacion_habilitada ?? true)) {
       return ApiResponse.error(
         request,
         'La certificación de este curso aún no está habilitada. Contacta al administrador.',

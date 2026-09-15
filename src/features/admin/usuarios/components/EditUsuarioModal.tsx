@@ -60,9 +60,19 @@ const EditUsuarioModal = ({ open, handleClose, usuarioId, onSuccess }: EditUsuar
         delete dataToSend.contrasena
       }
 
-      await editUsuarioMutation.mutateAsync({ id: usuarioId, data: dataToSend })
+      const resultado = await editUsuarioMutation.mutateAsync({ id: usuarioId, data: dataToSend })
 
-      enqueueSnackbar('Usuario actualizado exitosamente', { variant: 'success' })
+      if (resultado.notificacionCorreo === 'fallida') {
+        enqueueSnackbar('Usuario actualizado, pero no se pudo enviar la notificación por correo.', { variant: 'warning' })
+      } else {
+        enqueueSnackbar(
+          resultado.notificacionCorreo === 'enviada'
+            ? 'Usuario actualizado y notificado por correo'
+            : 'Usuario actualizado exitosamente',
+          { variant: 'success' }
+        )
+      }
+
       handleClose()
       onSuccess?.()
     } catch (error: any) {

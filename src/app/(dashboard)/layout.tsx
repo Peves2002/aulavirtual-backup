@@ -13,6 +13,7 @@ import HorizontalLayout from '@layouts/HorizontalLayout'
 
 // Component Imports
 import Providers from '@/utils/components/providers/Providers'
+import SessionGuard from '@/components/SessionGuard'
 import Navigation from '@components/layout/vertical/Navigation'
 import Header from '@components/layout/horizontal/Header'
 import Navbar from '@components/layout/vertical/Navbar'
@@ -35,6 +36,7 @@ const Layout = async ({ children }: ChildrenType) => {
   const systemMode = getSystemMode()
 
   return (
+    <SessionGuard>
     <Providers direction={direction}>
       <LayoutWrapper
         systemMode={systemMode}
@@ -60,6 +62,7 @@ const Layout = async ({ children }: ChildrenType) => {
       </ScrollToTop>
       <ChatWidget />
     </Providers>
+    </SessionGuard>
   )
 }
 

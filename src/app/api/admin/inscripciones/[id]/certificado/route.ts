@@ -7,8 +7,8 @@ import { handleApiError } from '@/utils/libs/validation'
 
 /**
  * PATCH /api/admin/inscripciones/[id]/certificado
- * Habilita o deshabilita la descarga del certificado de una inscripción.
- * Usado para cursos gratuitos con certificado de pago.
+ * Actualiza la autorización individual de certificación o la habilitación por pago.
+ * Sin tipo conserva el comportamiento de pago de los clientes existentes.
  */
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {
@@ -16,7 +16,11 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
     if (!auth.authorized) return auth.error
 
-    const { habilitado } = await request.json()
+    const { habilitado, tipo = 'pago' } = await request.json()
+
+    if (tipo !== 'pago' && tipo !== 'certificacion') {
+      return ApiResponse.error(request, 'Tipo de habilitación inválido', 400)
+    }
 
     if (typeof habilitado !== 'boolean') {
       return ApiResponse.error(request, 'El campo habilitado debe ser un booleano', 400)
@@ -30,8 +34,10 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
     const actualizada = await prisma.inscripcion.update({
       where: { id: params.id },
-      data: { certificado_habilitado: habilitado },
-      select: { id: true, certificado_habilitado: true, usuario_id: true, curso_id: true }
+      data: tipo === 'certificacion'
+        ? { certificacion_habilitada: habilitado }
+        : { certificado_habilitado: habilitado },
+      select: { id: true, certificado_habilitado: true, certificacion_habilitada: true, usuario_id: true, curso_id: true }
     })
 
     return ApiResponse.success(request, { inscripcion: actualizada })

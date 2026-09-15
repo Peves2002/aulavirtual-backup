@@ -73,7 +73,7 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
     moneda: 'PEN',
     nivel: 'BASICO',
     duracion: '',
-    miniatura: null,
+    miniatura: '',
     video_presentacion: null,
     brochure: null,
     fecha_inicio: null,
@@ -391,6 +391,7 @@ export const CourseCreatePage = ({ profesores }: CourseCreatePageProps) => {
                               <IconButton
                                 size='small'
                                 sx={{ bgcolor: 'background.paper', '&:hover': { bgcolor: 'background.paper' } }}
+                                aria-label='Quitar imagen de portada'
                                 onClick={() => setFieldValue('miniatura', '')}
                               >
                                 <i className='tabler-trash text-error' />

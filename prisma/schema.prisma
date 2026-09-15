@@ -366,6 +366,7 @@ model Inscripcion {
   nota_final             Float?
   estado_nota            EstadoNota?
   certificado_habilitado Boolean           @default(false)
+  certificacion_habilitada Boolean?
   usuario_id             String
   curso_id               String
   pedido_id              String?
@@ -414,6 +415,7 @@ model Examen {
   id                 String          @id @default(uuid())
   titulo             String
   descripcion        String?
+  adjuntos           Json            @default("[]")
   tipo               TipoExamen      @default(FINAL)
   peso               Int             @default(100)
   progreso_minimo    Int             @default(0)
@@ -440,6 +442,7 @@ model Examen {
 }
 
 model Pregunta {
+  adjuntos       Json               @default("[]")
   id             String             @id @default(uuid())
   texto          String
   tipo           TipoPregunta

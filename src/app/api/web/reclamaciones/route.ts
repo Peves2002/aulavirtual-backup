@@ -2,6 +2,7 @@ import prisma from '@/utils/libs/prisma'
 import { ReclamacionSchema } from '@/schemas/reclamacion.schema'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { sendMail } from '@/utils/libs/mailer'
+import { verifyReclamacionCaptcha } from '@/utils/libs/verify-reclamacion-captcha'
 
 export async function POST(request: Request) {
   try {
@@ -19,6 +20,18 @@ export async function POST(request: Request) {
 
     if (isNaN(montoReclamadoDecimal) || montoReclamadoDecimal < 0) {
       return ApiResponse.error(request, 'El monto reclamado no es válido', 400)
+    }
+
+    const captcha = await verifyReclamacionCaptcha(body.captchaToken)
+
+    if (captcha !== 'valid') {
+      return ApiResponse.error(
+        request,
+        captcha === 'unavailable'
+          ? 'La verificación de seguridad no está disponible. Intenta nuevamente en unos minutos.'
+          : 'Completa nuevamente la verificación de seguridad antes de enviar tu reclamo o queja.',
+        captcha === 'unavailable' ? 503 : 400
+      )
     }
 
     // 1. Guardar en Base de Datos (Genera automáticamente código correlativo)

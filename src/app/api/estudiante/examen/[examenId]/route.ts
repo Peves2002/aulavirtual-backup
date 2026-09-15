@@ -183,12 +183,14 @@ export async function GET(request: Request, { params }: { params: { examenId: st
         id: examen.id,
         titulo: examen.titulo,
         descripcion: examen.descripcion,
+        adjuntos: examen.adjuntos,
         fecha_fin: (examen as any).fecha_fin ?? null,
         puntaje_aprobacion: examen.puntaje_aprobacion,
         mezclar_preguntas: examen.mezclar_preguntas,
         preguntas: examen.preguntas.map(p => ({
           id: p.id,
           texto: p.texto,
+          adjuntos: p.adjuntos,
           tipo: p.tipo,
           puntos: p.puntos,
           opciones: p.opciones.map(o => ({

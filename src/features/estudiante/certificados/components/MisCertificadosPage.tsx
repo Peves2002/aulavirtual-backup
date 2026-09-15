@@ -4,11 +4,13 @@ import { useState } from 'react'
 
 import { useSession } from 'next-auth/react'
 import {
-  Box, Grid, Typography, Card, CardContent, CardMedia,
+  Box, Grid, Typography, Card, CardContent,
   Chip, Button, Tooltip, IconButton, Skeleton, InputAdornment
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useQuery } from '@tanstack/react-query'
+
+import CertificateThumbnail from '@/utils/components/CertificateThumbnail'
 
 import CustomTextField from '@core/components/mui/TextField'
 import { AxiosMisCertificados } from '../http/axiosMisCertificados'
@@ -78,25 +80,7 @@ function CertificadoCard({ cert }: { cert: MiCertificado }) {
     }}>
       {/* Miniatura / Banner */}
       <Box sx={{ position: 'relative' }}>
-        {cert.curso.miniatura ? (
-          <CardMedia
-            component="img"
-            height={140}
-            image={cert.curso.miniatura}
-            alt={cert.curso.titulo}
-            sx={{ objectFit: 'cover' }}
-          />
-        ) : (
-          <Box sx={{
-            height: 140,
-            background: 'linear-gradient(135deg, var(--mui-palette-primary-main) 0%, var(--mui-palette-primary-dark) 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <i className="tabler-certificate" style={{ fontSize: 56, color: 'rgba(255,255,255,0.7)' }} />
-          </Box>
-        )}
+        <CertificateThumbnail src={cert.curso.miniatura} title={cert.curso.titulo} />
 
         {/* Badge nivel */}
         {cert.curso.nivel && (

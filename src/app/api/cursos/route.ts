@@ -178,6 +178,7 @@ export async function POST(request: Request) {
     const nuevoCurso = await prisma.curso.create({
       data: {
         ...validation.data,
+        miniatura: validation.data.miniatura?.trim() || null,
         slug,
         fecha_inicio: fechaInicio ? new Date(fechaInicio) : null,
         estado: 'BORRADOR'

@@ -1,5 +1,7 @@
 export const dynamic = 'force-dynamic'
 
+import { evaluacionAdjuntosSchema } from '@/schemas/evaluacion-adjuntos.schema'
+
 import prisma from '@/utils/libs/prisma'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { requireProfesorOrAdmin } from '@/utils/libs/auth-helpers'
@@ -55,6 +57,9 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
     const { id: cursoId } = params
     const body = await request.json()
+    const adjuntos = evaluacionAdjuntosSchema.safeParse(body.adjuntos ?? [])
+
+    if (!adjuntos.success) return ApiResponse.error(request, 'Adjuntos inválidos (máximo 20)', 400)
     
     const {
       titulo,
@@ -108,6 +113,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       data: {
         titulo,
         descripcion,
+        adjuntos: adjuntos.data,
         tipo,
         peso: Number(peso),
         progreso_minimo: Number(progreso_minimo),

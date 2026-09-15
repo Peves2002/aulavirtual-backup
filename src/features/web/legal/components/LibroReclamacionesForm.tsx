@@ -27,10 +27,13 @@ import Swal from 'sweetalert2'
 
 import type { ReclamacionInput } from '@/schemas/reclamacion.schema'
 import { ReclamacionSchema } from '@/schemas/reclamacion.schema'
+import ReclamacionCaptcha from './ReclamacionCaptcha'
 
 export default function LibroReclamacionesForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [successCode, setSuccessCode] = useState<string | null>(null)
+  const [captchaToken, setCaptchaToken] = useState('')
+  const [captchaAttempt, setCaptchaAttempt] = useState(0)
 
   const {
     control,
@@ -59,6 +62,8 @@ export default function LibroReclamacionesForm() {
 
   // Para lógica condicional de edad
   const onSubmit = async (data: ReclamacionInput) => {
+    if (!captchaToken || isSubmitting) return
+
     try {
       setIsSubmitting(true)
 
@@ -67,6 +72,7 @@ export default function LibroReclamacionesForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...data,
+          captchaToken,
           monto_reclamado: parseFloat(String(data.monto_reclamado))
         })
       })
@@ -92,6 +98,8 @@ export default function LibroReclamacionesForm() {
         text: error.message || 'No se pudo enviar tu solicitud. Intenta nuevamente.'
       })
     } finally {
+      setCaptchaToken('')
+      setCaptchaAttempt(attempt => attempt + 1)
       setIsSubmitting(false)
     }
   }
@@ -351,11 +359,13 @@ export default function LibroReclamacionesForm() {
             </Typography>
           </Box>
 
+          <ReclamacionCaptcha key={captchaAttempt} onToken={setCaptchaToken} />
+
           <Button
             type="submit"
             variant="contained"
             size="large"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !captchaToken}
             sx={{
               bgcolor: 'var(--web-primary, #25927F)',
               color: 'white',

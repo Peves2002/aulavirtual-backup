@@ -24,6 +24,11 @@ import {
 import { useSnackbar } from 'notistack'
 import { toast } from 'react-toastify'
 
+import MediaLibrary from '../MediaLibrary'
+import EvaluacionAdjuntos from '@/components/EvaluacionAdjuntos'
+import type { EvaluacionAdjunto } from '@/schemas/evaluacion-adjuntos.schema'
+import { normalizeMediaUrl } from '@/utils/functions/normalizeMediaUrl'
+
 import AppModal from '@/utils/components/AppModal'
 import CustomTextField from '@core/components/mui/TextField'
 import {
@@ -45,6 +50,8 @@ interface QuestionFormProps {
 }
 
 function QuestionForm({ initial, onSave, onCancel, isSaving }: QuestionFormProps) {
+  const [adjuntos, setAdjuntos] = useState<EvaluacionAdjunto[]>(initial?.adjuntos || [])
+  const [mediaOpen, setMediaOpen] = useState(false)
   const [texto, setTexto] = useState(initial?.texto || '')
   const [puntos, setPuntos] = useState(initial?.puntos || 1)
 
@@ -71,7 +78,7 @@ function QuestionForm({ initial, onSave, onCancel, isSaving }: QuestionFormProps
     if (!texto.trim()) return toast.error('El enunciado es requerido')
     if (!opciones.some(o => o.es_correcta)) return toast.error('Marca al menos una respuesta correcta')
     if (opciones.some(o => !o.texto.trim())) return toast.error('Todas las opciones deben tener texto')
-    onSave({ texto, tipo: 'OPCION_MULTIPLE', puntos, opciones })
+    onSave({ texto, tipo: 'OPCION_MULTIPLE', puntos, opciones, adjuntos })
   }
 
   return (
@@ -82,6 +89,17 @@ function QuestionForm({ initial, onSave, onCancel, isSaving }: QuestionFormProps
       p: 2.5,
       bgcolor: theme => alpha(theme.palette.primary.main, 0.04)
     }}>
+      {mediaOpen && (
+        <MediaLibrary open onClose={() => setMediaOpen(false)} acceptType='ADJUNTO' title='Adjuntar a la pregunta'
+          onSelect={(url, nombre) => {
+            const normalizedUrl = normalizeMediaUrl(url)
+
+            setAdjuntos(prev => prev.some(a => a.url === normalizedUrl) || prev.length >= 20
+              ? prev
+              : [...prev, { url: normalizedUrl, nombre: nombre || 'Archivo adjunto' }])
+            setMediaOpen(false)
+          }} />
+      )}
       <Stack spacing={2}>
         <CustomTextField
           fullWidth
@@ -91,6 +109,15 @@ function QuestionForm({ initial, onSave, onCancel, isSaving }: QuestionFormProps
           value={texto}
           onChange={e => setTexto(e.target.value)}
         />
+
+        <Box>
+          <Typography variant='subtitle2'>Adjuntos de esta pregunta</Typography>
+          <Typography variant='caption' color='text.secondary'>Imágenes o documentos para responder esta pregunta. Máximo 20 archivos.</Typography>
+          <EvaluacionAdjuntos adjuntos={adjuntos} titulo='' disabled={isSaving}
+            onRemove={url => setAdjuntos(prev => prev.filter(a => a.url !== url))} />
+          <Button variant='outlined' onClick={() => setMediaOpen(true)} disabled={isSaving || adjuntos.length >= 20}
+            startIcon={<i className='tabler-paperclip' />}>Adjuntar imagen o archivo</Button>
+        </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <CustomTextField
@@ -230,6 +257,7 @@ export function EvaluacionDialog({
 
   useEffect(() => {
     if (open) {
+      setConfig({ ...defaultConfig })
       setActiveExamenId(examenIdProp || null)
       setPhase(examenIdProp ? 'questions' : 'config')
       setEditingQuestion(null)
@@ -670,6 +698,7 @@ export function EvaluacionDialog({
                                     <Typography variant='body2' fontWeight={700} sx={{ lineHeight: 1.4 }}>
                                       {p.texto}
                                     </Typography>
+                                    <EvaluacionAdjuntos adjuntos={p.adjuntos} titulo='Archivos de la pregunta' />
                                     <Chip
                                       label={`${p.puntos} pto${p.puntos !== 1 ? 's' : ''}`}
                                       size='small'

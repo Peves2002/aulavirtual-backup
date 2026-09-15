@@ -1,3 +1,5 @@
+import { evaluacionAdjuntosSchema } from '@/schemas/evaluacion-adjuntos.schema'
+
 import prisma from '@/utils/libs/prisma'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { requireProfesorOrAdmin } from '@/utils/libs/auth-helpers'
@@ -32,16 +34,25 @@ export async function PATCH(
     if (!access.authorized) return access.error
 
     const body = await request.json()
+    const adjuntos = evaluacionAdjuntosSchema.optional().safeParse(body.adjuntos)
+
+    if (!adjuntos.success) return ApiResponse.error(request, 'Adjuntos inválidos (máximo 20 por pregunta)', 400)
     const { texto, tipo, puntos, opciones } = body
 
     if (!texto || !tipo || !opciones || !Array.isArray(opciones) || opciones.length === 0) {
       return ApiResponse.error(request, 'Faltan datos requeridos', 400)
     }
 
+    const pregunta = await prisma.pregunta.findFirst({
+      where: { id: params.preguntaId, examen_id: params.examenId, examen: { curso_id: params.id } }
+    })
+
+    if (!pregunta) return ApiResponse.error(request, 'Pregunta no encontrada', 404)
+
     const updatedPregunta = await prisma.$transaction(async tx => {
       await tx.pregunta.update({
         where: { id: params.preguntaId },
-        data: { texto, tipo, puntos: Number(puntos || 1) }
+        data: { texto, tipo, puntos: Number(puntos || 1), ...(adjuntos.data !== undefined && { adjuntos: adjuntos.data }) }
       })
 
       await tx.opcionPregunta.deleteMany({ where: { pregunta_id: params.preguntaId } })

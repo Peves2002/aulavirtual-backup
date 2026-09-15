@@ -17,8 +17,10 @@
     "db:migration:dev": "prisma migrate dev",
     "db:migration:deploy": "prisma migrate deploy",
     "db:seed": "dotenv -- tsx ./prisma/seed/main",
+    "db:seed:admin": "dotenv -- tsx ./prisma/seed/seed_create_admin",
     "db:seed:chat": "dotenv -- tsx ./prisma/seed/chat-demo",
     "db:seed:pedidos": "dotenv -- tsx ./prisma/seed/pedidos-demo",
+    "db:seed:diplomados": "dotenv -- tsx ./prisma/seed/diplomados-inpe",
     "db:reset": "dotenv -e .env -- pnpm prisma migrate reset"
   },
   "prisma": {
@@ -56,7 +58,6 @@
     "axios": "^1.13.5",
     "bcryptjs": "^3.0.3",
     "classnames": "2.5.1",
-    "cloudflared": "^0.7.1",
     "formik": "^2.4.9",
     "framer-motion": "^12.38.0",
     "iconify": "^1.4.0",

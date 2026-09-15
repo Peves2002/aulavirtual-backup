@@ -22,6 +22,7 @@ const StyledNavHeader = styled.div<StyledNavHeaderProps>`
   padding: 15px;
   padding-inline-start: 20px;
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   transition: ${({ transitionDuration }) => `padding-inline ${transitionDuration}ms ease-in-out`};

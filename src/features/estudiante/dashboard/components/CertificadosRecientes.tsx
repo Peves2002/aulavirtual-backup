@@ -8,7 +8,6 @@ import {
   Button,
   Card,
   CardContent,
-  CardMedia,
   Chip,
   Grid,
   IconButton,
@@ -18,6 +17,8 @@ import {
   Typography
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
+
+import CertificateThumbnail from '@/utils/components/CertificateThumbnail'
 
 import { AxiosMisCertificados } from '@/features/estudiante/certificados/http/axiosMisCertificados'
 import type { DashboardCertificado } from '../entity/Dashboard'
@@ -85,43 +86,13 @@ function CertCard({ cert }: { cert: DashboardCertificado }) {
         }
       }}
     >
-      {cert.curso.miniatura ? (
-        <CardMedia
-          component='img'
-          height={110}
-          image={cert.curso.miniatura}
-          alt={cert.curso.titulo}
-          sx={{ objectFit: 'cover' }}
-        />
-      ) : (
-        <Box
-          sx={{
-            height: 110,
-            background: 'linear-gradient(135deg, var(--mui-palette-primary-main) 0%, var(--mui-palette-primary-dark) 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative'
-          }}
-        >
-          <i className='tabler-certificate' style={{ fontSize: 44, color: 'rgba(255,255,255,0.7)' }} />
-          {cert.curso.nivel && (
-            <Chip
-              label={NIVEL_LABELS[cert.curso.nivel] ?? cert.curso.nivel}
-              size='small'
-              sx={{
-                position: 'absolute',
-                top: 8,
-                right: 8,
-                bgcolor: 'rgba(0,0,0,0.45)',
-                color: '#fff',
-                fontWeight: 600,
-                fontSize: '0.65rem'
-              }}
-            />
-          )}
-        </Box>
-      )}
+      <Box sx={{ position: 'relative' }}>
+        <CertificateThumbnail src={cert.curso.miniatura} title={cert.curso.titulo} />
+        {cert.curso.nivel && (
+          <Chip label={NIVEL_LABELS[cert.curso.nivel] ?? cert.curso.nivel} size='small'
+            sx={{ position: 'absolute', top: 8, right: 8, bgcolor: 'rgba(0,0,0,0.45)', color: '#fff', fontWeight: 600, fontSize: '0.65rem' }} />
+        )}
+      </Box>
 
       <CardContent sx={{ flex: 1, p: '14px 16px', display: 'flex', flexDirection: 'column', gap: 0.75 }}>
         <Typography

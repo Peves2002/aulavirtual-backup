@@ -68,7 +68,7 @@ interface MediaLibraryProps {
   onClose: () => void
   onSelect: (url: string, nombre?: string) => void
   title?: string
-  acceptType?: 'IMAGEN' | 'VIDEO' | 'OTRO' | 'PDF'
+  acceptType?: 'IMAGEN' | 'VIDEO' | 'OTRO' | 'PDF' | 'ADJUNTO'
 }
 
 const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios', acceptType = 'IMAGEN' }: MediaLibraryProps) => {
@@ -160,6 +160,7 @@ const MediaLibrary = ({ open, onClose, onSelect, title = 'Biblioteca de Medios',
     if (!m.nombre.toLowerCase().includes(search.toLowerCase())) return false
 
     if (acceptType === 'PDF') return m.mimetype === 'application/pdf'
+    if (acceptType === 'ADJUNTO') return m.tipo === 'IMAGEN' || m.tipo === 'OTRO'
 
     return acceptType ? m.tipo === acceptType : true
   })

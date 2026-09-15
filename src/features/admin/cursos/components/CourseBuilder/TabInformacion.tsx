@@ -24,6 +24,7 @@ import { useEditCurso } from '../../hooks/useCursos'
 import { useCategorias } from '@/features/admin/categorias/hooks/useCategorias'
 import type { Categoria } from '@/features/admin/categorias/entity/Categoria'
 import CourseThumbnail from '@/utils/components/CourseThumbnail'
+import { DEFAULT_COURSE_COVER } from '@/utils/configs/courseCover'
 import { CategoriaSubcategoriaSelect } from '../CategoriaSubcategoriaSelect'
 import { TipoProgramaSelect } from '../TipoProgramaSelect'
 import type { TipoPrograma } from '@/utils/configs/tipoPrograma'
@@ -77,7 +78,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
     tipo_emision: curso.tipo_emision,
     duracion: curso.duracion || '',
     codigo: curso.codigo || '',
-    miniatura: curso.miniatura || '',
+    miniatura: curso.miniatura === DEFAULT_COURSE_COVER ? '' : curso.miniatura || '',
     video_presentacion: curso.video_presentacion || '',
     brochure: curso.brochure || '',
     fecha_inicio: curso.fecha_inicio ? toLocalDateInputValue(curso.fecha_inicio) : '',
@@ -315,6 +316,7 @@ export function TabInformacion({ curso, profesores, onSuccess }: TabInformacionP
               <IconButton
                 size='small'
                 sx={{ bgcolor: 'background.paper', boxShadow: 1, '&:hover': { bgcolor: 'error.main', color: 'common.white' } }}
+                aria-label='Quitar imagen de portada'
                 onClick={() => setForm(prev => ({ ...prev, miniatura: '' }))}
               >
                 <i className='tabler-trash text-sm' />

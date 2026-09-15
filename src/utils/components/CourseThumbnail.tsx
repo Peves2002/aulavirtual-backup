@@ -2,8 +2,10 @@
 
 import React, { useState, useMemo, useEffect } from 'react'
 
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import type { SxProps, Theme } from '@mui/material'
+
+import { DEFAULT_COURSE_COVER } from '@/utils/configs/courseCover'
 
 interface CourseThumbnailProps {
   src?: string | null
@@ -29,12 +31,14 @@ const CourseThumbnail = ({
 }: CourseThumbnailProps) => {
   const [imgError, setImgError] = useState(false)
   const [retryCount, setRetryCount] = useState(0)
+  const [loadedImage, setLoadedImage] = useState<string | null>(null)
 
   // Reiniciar el error si el src cambia
   useEffect(() => {
     setImgError(false)
     setRetryCount(0)
-  }, [src])
+    setLoadedImage(null)
+  }, [src, videoUrl])
 
   const computedThumbnail = useMemo(() => {
     let finalUrl: string | null = null
@@ -71,6 +75,8 @@ const CourseThumbnail = ({
   }, [src, videoUrl, retryCount])
 
   const handleImageError = () => {
+    setLoadedImage(null)
+
     if (retryCount < 2) {
       setTimeout(() => {
         setRetryCount(prev => prev + 1)
@@ -108,15 +114,18 @@ const CourseThumbnail = ({
           gap: 1,
           p: 2,
           textAlign: 'center',
+          backgroundImage: `url(${DEFAULT_COURSE_COVER})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           zIndex: 0
         }}
       >
-        <Box
+        {variant === 'simple' && <Box
           sx={{
             width: variant === 'simple' ? '40px' : { xs: 40, md: 50 },
             height: variant === 'simple' ? '40px' : { xs: 40, md: 50 },
             borderRadius: '12px',
-            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            bgcolor: '#124B65',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -127,18 +136,10 @@ const CourseThumbnail = ({
             className={icon}
             style={{
               fontSize: variant === 'simple' ? '1.2rem' : '1.5rem',
-              color: 'rgba(255, 255, 255, 0.3)'
+              color: '#B4FFF0'
             }}
           />
-        </Box>
-
-        {variant === 'landscape' && (
-          <Box>
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.4)', fontWeight: 600, fontSize: '0.75rem' }}>
-              Sin Vista Previa
-            </Typography>
-          </Box>
-        )}
+        </Box>}
       </Box>
 
       {/* Capa de Imagen (Encima) */}
@@ -148,6 +149,7 @@ const CourseThumbnail = ({
           key={`${computedThumbnail}_${retryCount}`}
           src={computedThumbnail}
           alt={title}
+          onLoad={() => setLoadedImage(`${computedThumbnail}_${retryCount}`)}
           onError={handleImageError}
           sx={{
             position: 'absolute',
@@ -155,6 +157,7 @@ const CourseThumbnail = ({
             width: '100%',
             height: '100%',
             objectFit: 'cover',
+            opacity: loadedImage === `${computedThumbnail}_${retryCount}` ? 1 : 0,
             zIndex: 1,
             transition: 'transform 0.5s ease',
             '&:hover': { transform: variant === 'landscape' ? 'scale(1.05)' : 'none' }

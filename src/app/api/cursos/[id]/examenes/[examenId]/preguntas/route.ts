@@ -1,3 +1,5 @@
+import { evaluacionAdjuntosSchema } from '@/schemas/evaluacion-adjuntos.schema'
+
 import prisma from '@/utils/libs/prisma'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { requireProfesorOrAdmin } from '@/utils/libs/auth-helpers'
@@ -15,6 +17,9 @@ export async function POST(request: Request, { params }: { params: { id: string;
 
     const { id: cursoId, examenId } = params
     const body = await request.json()
+    const adjuntos = evaluacionAdjuntosSchema.safeParse(body.adjuntos ?? [])
+
+    if (!adjuntos.success) return ApiResponse.error(request, 'Adjuntos inválidos (máximo 20 por pregunta)', 400)
     const { texto, tipo, puntos, opciones } = body
 
     if (!texto || !tipo || !opciones || !Array.isArray(opciones) || opciones.length === 0) {
@@ -45,6 +50,7 @@ export async function POST(request: Request, { params }: { params: { id: string;
     const nuevaPregunta = await prisma.pregunta.create({
       data: {
         texto,
+        adjuntos: adjuntos.data,
         tipo,
         puntos: Number(puntos || 1),
         orden: nextOrden,
