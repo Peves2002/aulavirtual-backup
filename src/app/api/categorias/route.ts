@@ -137,7 +137,7 @@ export async function POST(request: Request) {
 
     if (!validation.success) return validation.error
 
-    const { nombre, descripcion, icono, orden: ordenProvisto } = validation.data
+    const { nombre, descripcion, icono, imagen_fondo, orden: ordenProvisto } = validation.data
 
     // Verificar nombre único
     const nombreExistente = await prisma.categoria.findUnique({
@@ -169,6 +169,7 @@ export async function POST(request: Request) {
         slug,
         descripcion: descripcion || null,
         icono: icono || null,
+        imagen_fondo: imagen_fondo || null,
         categoria_padre_id: null,
         orden
       },

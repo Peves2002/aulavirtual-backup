@@ -15,6 +15,7 @@ export const crearCategoriaSchema = z.object({
     .max(500, 'La descripción no puede exceder 500 caracteres')
     .optional(),
   icono: z.string().optional().nullable(),
+  imagen_fondo: z.string().optional().nullable(),
   orden: z.coerce.number().int().min(0).optional()
 })
 
@@ -56,6 +57,7 @@ export const actualizarCategoriaSchema = z.object({
     .optional()
     .nullable(),
   icono: z.string().optional().nullable(),
+  imagen_fondo: z.string().optional().nullable(),
   esta_activo: z.boolean().optional(),
   orden: z.coerce.number().int().min(0).optional()
 })

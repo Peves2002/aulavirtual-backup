@@ -92,6 +92,7 @@ async function getHomeData() {
       nombre: c.nombre,
       slug: c.slug,
       icono: c.icono,
+      imagen_fondo: (c as any).imagen_fondo || null,
       cursosCount: c.cursos.filter(cc => cc.tipo === 'CURSO').length,
       diplomadosCount: c.cursos.filter(cc => cc.tipo === 'DIPLOMADO').length,
       total: c.cursos.length,

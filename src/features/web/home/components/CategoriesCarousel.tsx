@@ -12,6 +12,7 @@ type CategoryData = {
   nombre: string
   slug: string
   icono?: string | null
+  imagen_fondo?: string | null
   cursosCount: number
   diplomadosCount: number
   total: number
@@ -123,18 +124,18 @@ export default function CategoriesCarousel({ categorias }: { categorias: Categor
             <div style={{ display: 'flex', gap: '1.5rem' }}>
               {categorias.map(cat => {
                 const { img, bgImage } = getStylesForId(cat.slug)
-
+                const finalBgImage = cat.imagen_fondo || bgImage
                 
-return <CategoryCard key={`cat-1-${cat.id}`} cat={cat} img={img} bgImage={bgImage} />
+return <CategoryCard key={`cat-1-${cat.id}`} cat={cat} img={img} bgImage={finalBgImage} />
               })}
             </div>
             {/* Segundo set de categorías para el loop */}
             <div aria-hidden="true" style={{ display: 'flex', gap: '1.5rem' }}>
               {categorias.map(cat => {
                 const { img, bgImage } = getStylesForId(cat.slug)
-
+                const finalBgImage = cat.imagen_fondo || bgImage
                 
-return <CategoryCard key={`cat-2-${cat.id}`} cat={cat} img={img} bgImage={bgImage} />
+return <CategoryCard key={`cat-2-${cat.id}`} cat={cat} img={img} bgImage={finalBgImage} />
               })}
             </div>
           </div>

@@ -57,7 +57,7 @@ export const EditCategoriaModal = ({ open, handleClose, categoriaId, onSuccess }
   const [nuevoHijoNombre, setNuevoHijoNombre] = useState('')
   const [localHijos, setLocalHijos] = useState<CategoriaHijo[] | null>(null)
   const [ordenModificado, setOrdenModificado] = useState(false)
-  const [openMedia, setOpenMedia] = useState(false)
+  const [openMedia, setOpenMedia] = useState<'icono' | 'imagen_fondo' | null>(null)
 
   // Hijos a mostrar: locales (si se reordenaron) o los del servidor
   const hijosActuales = localHijos ?? categoria?.hijos ?? []
@@ -194,6 +194,7 @@ export const EditCategoriaModal = ({ open, handleClose, categoriaId, onSuccess }
     nombre: categoria.nombre,
     descripcion: categoria.descripcion || '',
     icono: (categoria as any).icono || '',
+    imagen_fondo: (categoria as any).imagen_fondo || '',
     esta_activo: categoria.esta_activo,
     orden: categoria.orden
   }
@@ -297,6 +298,67 @@ export const EditCategoriaModal = ({ open, handleClose, categoriaId, onSuccess }
 
                 <Grid item xs={12}>
                   <Typography variant='overline' color='text.disabled' sx={{ mb: 1, display: 'block' }}>
+                    Imagen de Fondo
+                  </Typography>
+                  {values.imagen_fondo ? (
+                    <Box sx={{ position: 'relative', width: '100%', borderRadius: 2, overflow: 'hidden', mb: 2, bgcolor: '#f4f4f4', border: '1px solid', borderColor: 'divider', aspectRatio: '16/9' }}>
+                      <CourseThumbnail
+                        src={values.imagen_fondo}
+                        title='Imagen de Fondo'
+                        variant='landscape'
+                      />
+                      <Box sx={{ position: 'absolute', top: 4, right: 4, zIndex: 2 }}>
+                        <IconButton
+                          size='small'
+                          sx={{ bgcolor: 'background.paper', boxShadow: 1, '&:hover': { bgcolor: 'error.main', color: 'common.white' } }}
+                          onClick={() => handleChange({ target: { name: 'imagen_fondo', value: '' } })}
+                        >
+                          <i className='tabler-trash text-sm' />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                  ) : (
+                    <Box
+                      onClick={() => setOpenMedia('imagen_fondo')}
+                      sx={{
+                        width: '100%',
+                        height: 120,
+                        borderRadius: 2,
+                        border: '1px dashed',
+                        borderColor: 'divider',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        bgcolor: 'action.hover',
+                        mb: 2,
+                        '&:hover': { borderColor: 'primary.main', bgcolor: 'primary.lightOpacity' }
+                      }}
+                    >
+                      <i className='tabler-photo-plus text-2xl text-textDisabled' />
+                      <Typography variant='caption' color='text.secondary' sx={{ mt: 1 }}>Click para seleccionar imagen de fondo</Typography>
+                    </Box>
+                  )}
+
+                  <Button
+                    variant='outlined'
+                    size='small'
+                    fullWidth
+                    startIcon={<i className='tabler-photo' />}
+                    onClick={() => setOpenMedia('imagen_fondo')}
+                  >
+                    {values.imagen_fondo ? 'Cambiar Imagen' : 'Seleccionar Imagen'}
+                  </Button>
+                  {touched.imagen_fondo && errors.imagen_fondo && (
+                    <Typography color='error' variant='caption' sx={{ mt: 1, display: 'block' }}>
+                      {errors.imagen_fondo}
+                    </Typography>
+                  )}
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography variant='overline' color='text.disabled' sx={{ mb: 1, display: 'block' }}>
                     Icono de la Categoría
                   </Typography>
                   {values.icono ? (
@@ -318,7 +380,7 @@ export const EditCategoriaModal = ({ open, handleClose, categoriaId, onSuccess }
                     </Box>
                   ) : (
                     <Box
-                      onClick={() => setOpenMedia(true)}
+                      onClick={() => setOpenMedia('icono')}
                       sx={{
                         width: '100%',
                         height: 120,
@@ -345,16 +407,18 @@ export const EditCategoriaModal = ({ open, handleClose, categoriaId, onSuccess }
                     size='small'
                     fullWidth
                     startIcon={<i className='tabler-photo' />}
-                    onClick={() => setOpenMedia(true)}
+                    onClick={() => setOpenMedia('icono')}
                   >
                     {values.icono ? 'Cambiar Icono' : 'Seleccionar Icono'}
                   </Button>
 
                   <MediaLibrary
-                    open={openMedia}
-                    onClose={() => setOpenMedia(false)}
+                    open={!!openMedia}
+                    onClose={() => setOpenMedia(null)}
                     onSelect={(url) => {
-                      handleChange({ target: { name: 'icono', value: url } })
+                      if (openMedia) {
+                        handleChange({ target: { name: openMedia, value: url } })
+                      }
                     }}
                   />
                   {touched.icono && errors.icono && (
