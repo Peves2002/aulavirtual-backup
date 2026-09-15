@@ -23,6 +23,9 @@ import {
     Divider
 } from '@mui/material'
 
+import EvaluacionAdjuntos from '@/components/EvaluacionAdjuntos'
+import type { EvaluacionAdjunto } from '@/schemas/evaluacion-adjuntos.schema'
+
 interface Opcion {
     id: string
     texto: string
@@ -30,6 +33,7 @@ interface Opcion {
 }
 
 interface Pregunta {
+    adjuntos?: EvaluacionAdjunto[]
     id: string
     texto: string
     tipo: string
@@ -40,6 +44,7 @@ interface Pregunta {
 interface ExamenData {
     id: string
     titulo: string
+    adjuntos?: EvaluacionAdjunto[]
     descripcion?: string
     fecha_fin?: string | null
     puntaje_aprobacion: number
@@ -457,6 +462,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
 
         return (
             <Card variant="outlined" sx={{ borderRadius: '16px', overflow: 'hidden', borderColor }}>
+                <Box sx={{ px: 4 }}><EvaluacionAdjuntos adjuntos={examen.adjuntos} /></Box>
                 {/* Header resultado */}
                 <Box sx={{ p: 4, pb: 3, bgcolor: bgColor, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <Chip
@@ -611,6 +617,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                                                 </Typography>
                                             </Stack>
 
+                                            <EvaluacionAdjuntos adjuntos={pregunta.adjuntos} titulo="Archivos de la pregunta" />
                                             <Stack spacing={1} sx={{ pl: 4 }}>
                                                 <Box sx={{
                                                     px: 2, py: 1, borderRadius: '8px',
@@ -692,6 +699,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
 
                 <CardContent sx={{ p: 4 }}>
                     <Stack spacing={3}>
+                        <EvaluacionAdjuntos adjuntos={examen.adjuntos} />
                         {/* Info chips */}
                         <Stack direction="row" spacing={1.5} justifyContent="center" flexWrap="wrap" useFlexGap>
                             <Chip
@@ -806,6 +814,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                 </CardContent>
             </Card>
 
+            <EvaluacionAdjuntos adjuntos={examen.adjuntos} />
             {/* Questions */}
             <Stack spacing={2.5}>
                 {examen.preguntas.map((pregunta, index) => {
@@ -841,6 +850,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                                             </Box>
                                         </Stack>
                                     </FormLabel>
+                                    <EvaluacionAdjuntos adjuntos={pregunta.adjuntos} titulo="Archivos de la pregunta" />
                                     <RadioGroup
                                         value={respuestas[pregunta.id] || ''}
                                         onChange={(e) => handleRespuesta(pregunta.id, e.target.value)}

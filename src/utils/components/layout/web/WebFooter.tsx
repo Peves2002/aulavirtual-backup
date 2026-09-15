@@ -8,6 +8,7 @@ import { Phone, Mail, MapPin, Facebook, Youtube, Instagram } from 'lucide-react'
 
 import { getConfigs } from '@/utils/libs/config'
 import HydratedDate from '@/utils/components/HydratedDate'
+import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 
 // Simple TikTok SVG icon (not in lucide-react)
 const TikTokIcon = ({ size = 16 }: { size?: number }) => (
@@ -32,7 +33,6 @@ const staticSocialLinks = [
 
 interface WebFooterProps {
   platformName?: string
-  rutasHabilitado?: boolean
 }
 
 const WebFooter = async ({ platformName = 'CEGAE RIBEYRO', rutasHabilitado = true }: WebFooterProps) => {
@@ -84,7 +84,9 @@ const WebFooter = async ({ platformName = 'CEGAE RIBEYRO', rutasHabilitado = tru
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
               {([
                 { label: 'Cursos', href: '/cursos' },
-                ...(rutasHabilitado ? [{ label: 'Rutas', href: '/rutas' }] : []),
+                { label: 'Diplomados', href: '/diplomados' },
+                { label: 'Especializaciones', href: '/especializaciones' },
+                ...(isFeatureEnabled('rutas') ? [{ label: 'Rutas', href: '/rutas' }] : []),
               ] as { label: string; href: string }[]).map(link => (
                 <li key={link.label}>
                   <Link

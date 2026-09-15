@@ -26,7 +26,7 @@ export async function GET(
     // Validar existencia del curso
     const curso = await prisma.curso.findUnique({
       where: { id: cursoId },
-      select: { id: true, precio_certificado: true }
+      select: { id: true, precio_certificado: true, certificacion_habilitada: true }
     })
 
     if (!curso) {
@@ -131,6 +131,8 @@ export async function GET(
         id: i.usuario.id,
         inscripcion_id: i.id,
         certificado_habilitado: i.certificado_habilitado,
+        certificacion_habilitada: i.usuario.certificados.length > 0 ||
+          (i.certificacion_habilitada ?? curso.certificacion_habilitada),
         nombre: i.usuario.nombre,
         apellido: i.usuario.apellido,
         correo: i.usuario.correo,

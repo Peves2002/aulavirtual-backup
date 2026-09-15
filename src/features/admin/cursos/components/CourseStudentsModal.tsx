@@ -36,6 +36,7 @@ interface CourseStudentsModalProps {
 }
 
 interface CertConfirm {
+  tipo: 'pago' | 'certificacion'
   inscripcionId: string
   alumnoNombre: string
   habilitadoActual: boolean
@@ -88,9 +89,10 @@ export default function CourseStudentsModal({
 
     try {
       await axios.patch(`/api/admin/inscripciones/${certConfirm.inscripcionId}/certificado`, {
-        habilitado: !certConfirm.habilitadoActual
+        habilitado: !certConfirm.habilitadoActual,
+        tipo: certConfirm.tipo
       })
-      queryClient.invalidateQueries({ queryKey: CURSO_ALUMNOS_QUERY_KEY(cursoId, searchTerm) })
+      await queryClient.invalidateQueries({ queryKey: ['curso-alumnos', cursoId] })
       toast.success(certConfirm.habilitadoActual ? 'Certificado deshabilitado' : 'Certificado habilitado')
       setCertConfirm(null)
     } catch {
@@ -302,6 +304,7 @@ export default function CourseStudentsModal({
                               <IconButton
                                 size='small'
                                 onClick={() => setCertConfirm({
+                                  tipo: 'pago',
                                   inscripcionId: alumno.inscripcion_id,
                                   alumnoNombre: `${alumno.nombre} ${alumno.apellido}`,
                                   habilitadoActual: alumno.certificado_habilitado
@@ -336,6 +339,33 @@ export default function CourseStudentsModal({
                         />
                       </TableCell>
                       <TableCell>
+                        <Tooltip title={alumno.tiene_certificado
+                          ? 'Certificado habilitado: ya emitido'
+                          : alumno.certificacion_habilitada
+                            ? 'Certificado habilitado — Deshabilitar certificado'
+                            : 'Certificado deshabilitado — Habilitar certificado'}>
+                          <span>
+                            <IconButton
+                              size='small'
+                              aria-label={alumno.certificacion_habilitada ? 'Certificado habilitado' : 'Habilitar certificado'}
+                              disabled={alumno.tiene_certificado || certLoading}
+                              onClick={() => setCertConfirm({
+                                tipo: 'certificacion',
+                                inscripcionId: alumno.inscripcion_id,
+                                alumnoNombre: `${alumno.nombre} ${alumno.apellido}`,
+                                habilitadoActual: alumno.certificacion_habilitada
+                              })}
+                              sx={{
+                                mr: 1,
+                                color: alumno.certificacion_habilitada ? 'success.main' : 'error.main',
+                                bgcolor: alumno.certificacion_habilitada ? 'rgba(22,163,74,0.08)' : 'rgba(220,38,38,0.08)',
+                                '&.Mui-disabled': { color: alumno.certificacion_habilitada ? 'success.main' : 'error.main' }
+                              }}
+                            >
+                              <i className='tabler-certificate text-[16px]' />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
                         <Tooltip title='Completar todas las lecciones'>
                           <IconButton
                             size='small'
@@ -418,7 +448,7 @@ export default function CourseStudentsModal({
               bgcolor: certConfirm.habilitadoActual ? 'rgba(220,38,38,0.1)' : 'rgba(22,163,74,0.1)'
             }}>
               <i
-                className={certConfirm.habilitadoActual ? 'tabler-lock text-4xl' : 'tabler-certificate text-4xl'}
+                className='tabler-certificate text-4xl'
                 style={{ color: certConfirm.habilitadoActual ? '#dc2626' : '#16a34a' }}
               />
             </Box>
@@ -426,7 +456,11 @@ export default function CourseStudentsModal({
               {certConfirm.habilitadoActual ? 'Deshabilitar certificado' : 'Habilitar certificado'}
             </Typography>
             <Typography variant='body2' color='text.secondary' sx={{ mb: 0.5 }}>
-              {certConfirm.habilitadoActual
+              {certConfirm.tipo === 'certificacion'
+                ? certConfirm.habilitadoActual
+                  ? 'Se bloqueará la generación del certificado para este alumno, aunque esté habilitada en el curso.'
+                  : 'Se permitirá generar el certificado aunque esté deshabilitado en el curso. El alumno debe cumplir el progreso, las evaluaciones y el pago, si corresponde.'
+                : certConfirm.habilitadoActual
                 ? 'El estudiante ya no podrá descargar el certificado de este curso.'
                 : 'El estudiante podrá descargar el certificado de este curso.'}
             </Typography>
@@ -449,7 +483,7 @@ export default function CourseStudentsModal({
                 disabled={certLoading}
                 startIcon={certLoading
                   ? <CircularProgress size={16} color='inherit' />
-                  : <i className={certConfirm.habilitadoActual ? 'tabler-lock' : 'tabler-circle-check'} />
+                  : <i className='tabler-certificate' />
                 }
               >
                 {certLoading

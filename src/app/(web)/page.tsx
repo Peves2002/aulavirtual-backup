@@ -58,23 +58,23 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans selection:bg-teal-500 selection:text-white relative" style={{ marginTop: 'calc(-1 * var(--navbar-height))', overflowX: 'hidden' }}>
-      
+
       {/* ─── FLOATING BACKGROUND DECORATIONS ─── */}
-      <div 
+      <div
         className="absolute top-[-100px] right-[-100px] w-[700px] h-[700px] rounded-full blur-[140px] pointer-events-none opacity-30 animate-pulse"
         style={{ background: 'radial-gradient(circle, var(--web-primary, #25927F) 0%, transparent 70%)', animationDuration: '8s' }}
       />
-      <div 
+      <div
         className="absolute top-[40%] left-[-200px] w-[600px] h-[600px] rounded-full blur-[120px] pointer-events-none opacity-20"
         style={{ background: 'radial-gradient(circle, var(--web-light, #BDD962) 0%, transparent 70%)' }}
       />
-      <div 
+      <div
         className="absolute bottom-[10%] right-[-100px] w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none opacity-15"
         style={{ background: 'radial-gradient(circle, var(--web-primary, #25927F) 0%, transparent 70%)' }}
       />
 
       <main className="flex-1">
-        
+
         {/* ─── HERO SECTION (GRADIENT & DIAGONALS) ─── */}
         <section
           className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-[#0a1e1b] to-slate-950 text-white border-b border-teal-950/40 flex items-center"
@@ -86,12 +86,12 @@ export default function HomePage() {
         >
           {/* Grid pattern overlay */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:30px_30px] opacity-20" />
-          
+
           <div className="max-w-7xl w-full mx-auto px-6 py-12 lg:py-16 grid lg:grid-cols-12 gap-16 items-center relative z-10">
-            
+
             {/* Left Content */}
             <div className="lg:col-span-7 flex flex-col gap-6 text-center lg:text-left">
-              
+
               {/* Badge */}
               <div className="inline-flex self-center lg:self-start items-center gap-2.5 px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/30 shadow-inner backdrop-blur-md">
                 <Sparkles size={14} className="text-teal-300 animate-spin" style={{ animationDuration: '3s' }} />
@@ -113,15 +113,15 @@ export default function HomePage() {
 
               {/* Action Buttons */}
               <div className="flex flex-wrap justify-center lg:justify-start gap-4 mt-4">
-                <Link 
+                <Link
                   href="/cursos"
                   className="no-underline inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-sm text-slate-950 shadow-xl shadow-teal-400/10 transition-all hover:scale-105 hover:shadow-teal-400/20 active:scale-95"
                   style={{ backgroundColor: 'var(--web-light, #BDD962)' }}
                 >
                   Ver Cursos Disponibles <ArrowRight size={18} />
                 </Link>
-                
-                <a 
+
+                <a
                   href="https://wa.me/51943570195"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -153,9 +153,9 @@ export default function HomePage() {
             <div className="lg:col-span-5 relative flex justify-center">
               <div className="w-full max-w-[420px] rounded-[32px] bg-slate-900/90 border border-teal-500/20 shadow-2xl overflow-hidden relative z-10 hover:border-teal-500/40 transition-all duration-300">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-teal-500/10 to-transparent rounded-bl-full pointer-events-none" />
-                <img 
-                  src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80" 
-                  alt="Clase Virtual CEGAE Ribeyro" 
+                <img
+                  src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80"
+                  alt="Clase Virtual CEGAE Ribeyro"
                   className="w-full h-52 object-cover border-b border-teal-500/15 filter brightness-95 hover:brightness-100 transition-all duration-300"
                 />
                 <div className="p-8 flex flex-col gap-5">
@@ -187,19 +187,19 @@ export default function HomePage() {
         {/* ─── SECCIÓN 1: NOSOTROS (DISEÑO ASIMÉTRICO Y COLORIDO) ─── */}
         <section className="py-24 bg-gradient-to-b from-white to-slate-50 relative">
           <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-16 items-center">
-            
+
             {/* Left Image with double border frame */}
             <div className="lg:col-span-5 relative">
               <div className="absolute -top-4 -left-4 w-full h-full border-2 border-dashed border-teal-500/30 rounded-[32px] pointer-events-none" />
               <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-white relative z-10 transform -rotate-1 hover:rotate-0 transition-transform duration-500">
-                <img 
-                  src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80" 
-                  alt="Historia de CEGAE Ribeyro" 
+                <img
+                  src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80"
+                  alt="Historia de CEGAE Ribeyro"
                   className="w-full h-[440px] object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-teal-950/40 to-transparent" />
               </div>
-              <div 
+              <div
                 className="absolute -bottom-6 -right-6 w-36 h-36 rounded-full blur-2xl pointer-events-none opacity-40"
                 style={{ backgroundColor: 'var(--web-light, #BDD962)' }}
               />
@@ -237,9 +237,9 @@ export default function HomePage() {
         {/* ─── SECCIÓN 2: CURSOS (TARJETAS DINÁMICAS CON GRADIENTES) ─── */}
         <section className="py-24 bg-slate-900 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-teal-950 via-slate-950 to-slate-950 opacity-80" />
-          
+
           <div className="max-w-7xl mx-auto px-6 relative z-10">
-            
+
             {/* Header */}
             <div className="text-center max-w-3xl mx-auto mb-20 flex flex-col gap-4">
               <div className="inline-flex self-center items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-bold text-emerald-300">
@@ -286,23 +286,23 @@ export default function HomePage() {
                 }
               ].map((area, i) => (
                 <div key={i} className="group rounded-[28px] border border-slate-800 overflow-hidden bg-slate-950/80 hover:border-teal-500/40 hover:shadow-2xl hover:shadow-teal-950/50 transition-all duration-300 flex flex-col relative">
-                  
+
                   {/* Decorative Gradient Background Glow on Card hover */}
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
                   <div className="h-44 overflow-hidden relative">
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent z-10" />
-                    <img 
-                      src={area.img} 
-                      alt={area.title} 
+                    <img
+                      src={area.img}
+                      alt={area.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 filter brightness-90"
                     />
                   </div>
-                  
+
                   <div className="p-6 flex flex-col gap-3 flex-1 relative z-20">
                     {/* Badge Indicator */}
-                    <div 
-                      className="w-8 h-1 rounded-full mb-1" 
+                    <div
+                      className="w-8 h-1 rounded-full mb-1"
                       style={{ backgroundColor: area.accent }}
                     />
                     <h3 className="font-extrabold text-lg text-white font-display">
@@ -330,7 +330,7 @@ export default function HomePage() {
         {/* ─── SECCIÓN 3: RUTAS (DISEÑO ILUSTRATIVO DE LÍNEA DE TIEMPO) ─── */}
         <section className="py-24 bg-gradient-to-b from-slate-50 to-white relative">
           <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-16 items-center">
-            
+
             {/* Left Content */}
             <div className="lg:col-span-6 flex flex-col gap-6">
               <div className="inline-flex self-start items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-xs font-bold text-teal-800">
@@ -379,9 +379,9 @@ export default function HomePage() {
             <div className="lg:col-span-6 relative">
               <div className="absolute inset-0 bg-gradient-to-tr from-teal-500 to-lime-300 rounded-[40px] rotate-3 blur-sm scale-95 opacity-30 pointer-events-none" />
               <div className="rounded-[40px] overflow-hidden shadow-2xl border-8 border-white relative z-10">
-                <img 
-                  src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80" 
-                  alt="Rutas de Aprendizaje CEGAE Ribeyro" 
+                <img
+                  src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80"
+                  alt="Rutas de Aprendizaje CEGAE Ribeyro"
                   className="w-full h-[450px] object-cover"
                 />
               </div>
@@ -393,16 +393,16 @@ export default function HomePage() {
         {/* ─── SECCIÓN 4: EMPRESAS (DISEÑO CONTRASTANTE Y ELEGANTE) ─── */}
         <section className="py-24 bg-[#071613] text-white relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-teal-950/20 via-transparent to-transparent pointer-events-none" />
-          
+
           <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-16 items-center relative z-10">
-            
+
             {/* Left Image */}
             <div className="lg:col-span-6 relative order-2 lg:order-1">
               <div className="absolute -bottom-4 -left-4 w-full h-full border-2 border-emerald-500/20 rounded-[32px] pointer-events-none" />
               <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-[#071613] relative z-10">
-                <img 
-                  src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80" 
-                  alt="CEGAE Ribeyro para Empresas" 
+                <img
+                  src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80"
+                  alt="CEGAE Ribeyro para Empresas"
                   className="w-full h-[400px] object-cover filter brightness-90 hover:brightness-100 transition-all duration-300"
                 />
               </div>
@@ -420,7 +420,7 @@ export default function HomePage() {
               <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-medium">
                 Ofrecemos programas de actualización pedagógica y administración pública adaptados a los requerimientos de UGELs, Municipalidades y Colegios a nivel nacional.
               </p>
-              
+
               {/* Check features list */}
               <div className="grid sm:grid-cols-2 gap-4 mt-2">
                 {[
@@ -451,13 +451,13 @@ export default function HomePage() {
 
         {/* ─── SECCIÓN 5: CERTIFICADOS (DISEÑO FUTURISTA / GLASS) ─── */}
         <section className="py-24 bg-gradient-to-br from-slate-950 via-[#0b1f1a] to-slate-900 text-white relative overflow-hidden">
-          
+
           {/* Neon blobs */}
           <div className="absolute top-1/2 left-[-100px] w-96 h-96 bg-teal-500/10 rounded-full blur-[120px] pointer-events-none" />
           <div className="absolute bottom-[-100px] right-[-100px] w-96 h-96 bg-lime-500/10 rounded-full blur-[120px] pointer-events-none" />
 
           <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-16 items-center relative z-10">
-            
+
             {/* Left Form Box and Text */}
             <div className="lg:col-span-7 flex flex-col gap-6">
               <div className="inline-flex self-start items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-teal-300 backdrop-blur-md">
@@ -478,14 +478,14 @@ export default function HomePage() {
                   Código de certificado de prueba: <span className="text-lime-300">CEGAE-2026</span>
                 </label>
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <input 
-                    type="text" 
-                    placeholder="Ej. CEGAE-2026" 
+                  <input
+                    type="text"
+                    placeholder="Ej. CEGAE-2026"
                     value={certCode}
                     onChange={(e) => setCertCode(e.target.value)}
                     className="flex-1 bg-white/10 border border-white/20 rounded-xl px-5 py-3.5 text-sm text-white focus:outline-none focus:border-teal-400 transition-colors placeholder-slate-500 font-bold"
                   />
-                  <button 
+                  <button
                     type="submit"
                     className="bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white font-bold text-xs px-8 py-3.5 rounded-xl transition-all hover:shadow-lg hover:shadow-teal-500/20 active:scale-95"
                   >
@@ -493,11 +493,10 @@ export default function HomePage() {
                   </button>
                 </div>
                 {certResult && (
-                  <div className={`text-xs p-4 rounded-xl border font-semibold leading-relaxed animate-fade-in ${
-                    certResult.startsWith('VALIDO') 
-                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' 
+                  <div className={`text-xs p-4 rounded-xl border font-semibold leading-relaxed animate-fade-in ${certResult.startsWith('VALIDO')
+                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
                       : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
-                  }`}>
+                    }`}>
                     {certResult}
                   </div>
                 )}
@@ -517,9 +516,9 @@ export default function HomePage() {
             <div className="lg:col-span-5 relative flex justify-center">
               <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/10 to-lime-500/10 rounded-[32px] blur-3xl pointer-events-none" />
               <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-white/15 relative z-10 w-full max-w-[420px] transform rotate-1 hover:rotate-0 transition-transform duration-500">
-                <img 
-                  src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=800&q=80" 
-                  alt="Certificado Oficial de CEGAE" 
+                <img
+                  src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=800&q=80"
+                  alt="Certificado Oficial de CEGAE"
                   className="w-full h-80 object-cover"
                 />
               </div>
@@ -531,7 +530,7 @@ export default function HomePage() {
         {/* ─── SECCIÓN 6: CONTACTO (DISEÑO MODERNO CON GRADIENTES SUAVES) ─── */}
         <section className="py-24 bg-slate-50 relative">
           <div className="max-w-7xl mx-auto px-6">
-            
+
             {/* Header */}
             <div className="text-center max-w-2xl mx-auto mb-20 flex flex-col gap-4">
               <div className="inline-flex self-center items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-xs font-bold text-teal-800">
@@ -547,7 +546,7 @@ export default function HomePage() {
 
             {/* Grid of Contact Info */}
             <div className="grid md:grid-cols-3 gap-8">
-              
+
               {/* WhatsApp Card */}
               <div className="bg-white rounded-[28px] border border-slate-200/80 p-8 flex flex-col gap-5 text-center items-center shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all duration-300 transform hover:-translate-y-1">
                 <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-sm">
@@ -557,9 +556,9 @@ export default function HomePage() {
                 <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-medium flex-1">
                   Escríbenos en vivo para absolver tus dudas e inscribirte rápidamente.
                 </p>
-                <a 
-                  href="https://wa.me/51943570195" 
-                  target="_blank" 
+                <a
+                  href="https://wa.me/51943570195"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="no-underline text-xs font-extrabold text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-4 py-2 rounded-lg transition-colors"
                 >
@@ -576,8 +575,8 @@ export default function HomePage() {
                 <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-medium flex-1">
                   Envíanos solicitudes formales, corporativas o empresariales directamente a nuestra bandeja.
                 </p>
-                <a 
-                  href="mailto:cegae.ribeyro@gmail.com" 
+                <a
+                  href="mailto:cegae.ribeyro@gmail.com"
                   className="no-underline text-xs font-extrabold text-teal-600 hover:text-teal-700 bg-teal-50 px-4 py-2 rounded-lg transition-colors"
                 >
                   cegae.ribeyro@gmail.com
@@ -593,8 +592,8 @@ export default function HomePage() {
                 <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-medium flex-1">
                   Manuel Segura 206 - Dep. 1201, Lince, Lima
                 </p>
-                <Link 
-                  href="/contacto" 
+                <Link
+                  href="/contacto"
                   className="no-underline text-xs font-extrabold text-teal-600 hover:text-teal-700 bg-teal-50 px-4 py-2 rounded-lg transition-colors"
                 >
                   Ver Mapa de Google

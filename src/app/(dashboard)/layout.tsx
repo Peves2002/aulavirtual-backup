@@ -1,3 +1,5 @@
+import dynamic from 'next/dynamic'
+
 // MUI Imports
 import Button from '@mui/material/Button'
 
@@ -11,6 +13,7 @@ import HorizontalLayout from '@layouts/HorizontalLayout'
 
 // Component Imports
 import Providers from '@/utils/components/providers/Providers'
+import SessionGuard from '@/components/SessionGuard'
 import Navigation from '@components/layout/vertical/Navigation'
 import Header from '@components/layout/horizontal/Header'
 import Navbar from '@components/layout/vertical/Navbar'
@@ -21,6 +24,11 @@ import ScrollToTop from '@core/components/scroll-to-top'
 // Util Imports
 import { getMode, getSystemMode } from '@core/utils/serverHelpers'
 
+const ChatWidget = dynamic(
+  () => import('@/features/shared/chat/components/ChatWidget'),
+  { ssr: false }
+)
+
 const Layout = async ({ children }: ChildrenType) => {
   // Vars
   const direction = 'ltr'
@@ -28,6 +36,7 @@ const Layout = async ({ children }: ChildrenType) => {
   const systemMode = getSystemMode()
 
   return (
+    <SessionGuard>
     <Providers direction={direction}>
       <LayoutWrapper
         systemMode={systemMode}
@@ -51,7 +60,9 @@ const Layout = async ({ children }: ChildrenType) => {
           <i className='tabler-arrow-up' />
         </Button>
       </ScrollToTop>
+      <ChatWidget />
     </Providers>
+    </SessionGuard>
   )
 }
 

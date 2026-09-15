@@ -1,0 +1,1 @@
+ALTER TABLE "preguntas" ADD COLUMN "adjuntos" JSONB NOT NULL DEFAULT '[]';

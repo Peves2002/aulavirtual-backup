@@ -28,6 +28,12 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
       }
     })
 
+    // Fetch raw detalles to get simulacro_id (Prisma client may not know about this column yet)
+    const detallesRaw: any[] = await prisma.$queryRaw`
+      SELECT id, curso_id, simulacro_id FROM detalles_pedido WHERE pedido_id = ${pedidoId}`
+
+    const simulacroDetallesMap = new Map(detallesRaw.map(d => [d.id, d.simulacro_id]))
+
     if (!pedidoInit) throw new Error(`Pedido ${pedidoId} no encontrado.`)
 
     if (pedidoInit.estado === 'COMPLETADO') {
@@ -51,9 +57,12 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
     // 2. Transacción de Base de Datos
     const result = await prisma.$transaction(
       async tx => {
-        // a) Actualizar pedido
-        const pedidoActualizado = await tx.pedido.update({
-          where: { id: pedidoId },
+        // a) Actualizar pedido solo si sigue sin completar. Esto cierra la ventana de
+        //    carrera entre el check del paso 1 y esta transacción: si dos confirmaciones
+        //    (ej. /confirm y el webhook) llegan casi simultáneamente, solo una gana aquí
+        //    y la otra aborta sin duplicar cupones, inscripciones o correos.
+        const updateResult = await tx.pedido.updateMany({
+          where: { id: pedidoId, estado: { not: 'COMPLETADO' } },
           data: {
             estado: 'COMPLETADO',
             pagado_en: new Date(),
@@ -63,6 +72,12 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
           }
         })
 
+        if (updateResult.count === 0) {
+          return null
+        }
+
+        const pedidoActualizado = await tx.pedido.findUniqueOrThrow({ where: { id: pedidoId } })
+
         // b) Incrementar uso de cupón si aplica
         if (pedidoInit.cupon_id) {
           await tx.cupon.update({
@@ -71,30 +86,53 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
           })
         }
 
-        // c) Crear inscripciones activas para cursos
+        // c) Crear inscripciones activas (cursos y simulacros)
         const inscripciones = []
 
         for (const detalle of pedidoInit.detalles) {
-          if (!detalle.curso_id) continue
-
-          const ins = await tx.inscripcion.upsert({
-            where: {
-              usuario_id_curso_id: {
+          if (detalle.curso_id) {
+            const ins = await tx.inscripcion.upsert({
+              where: {
+                usuario_id_curso_id: {
+                  usuario_id: pedidoInit.usuario_id,
+                  curso_id: detalle.curso_id
+                }
+              },
+              update: { estado: 'ACTIVO', pedido_id: pedidoId },
+              create: {
                 usuario_id: pedidoInit.usuario_id,
-                curso_id: detalle.curso_id
+                curso_id: detalle.curso_id,
+                pedido_id: pedidoId,
+                estado: 'ACTIVO'
               }
-            },
-            update: { estado: 'ACTIVO', pedido_id: pedidoId },
-            create: {
-              usuario_id: pedidoInit.usuario_id,
-              curso_id: detalle.curso_id,
-              pedido_id: pedidoId,
-              estado: 'ACTIVO',
-              inscrito_en: new Date()
-            }
-          })
+            })
 
-          inscripciones.push(ins)
+            inscripciones.push(ins)
+          }
+
+          const simulacroIdFromMap = simulacroDetallesMap.get(detalle.id)
+
+          if (simulacroIdFromMap) {
+            const simulacroId = simulacroIdFromMap
+
+            const existing = await tx.$queryRaw<any[]>`
+              SELECT id FROM inscripciones_simulacro
+              WHERE usuario_id = ${pedidoInit.usuario_id} AND simulacro_id = ${simulacroId} LIMIT 1`
+
+            if (existing.length > 0) {
+              await tx.$executeRaw`
+                UPDATE inscripciones_simulacro SET estado = 'ACTIVO'
+                WHERE usuario_id = ${pedidoInit.usuario_id} AND simulacro_id = ${simulacroId}`
+            } else {
+              const { randomUUID } = await import('crypto')
+
+              await tx.$executeRaw`
+                INSERT INTO inscripciones_simulacro (id, usuario_id, simulacro_id, estado, inscrito_en)
+                VALUES (${randomUUID()}, ${pedidoInit.usuario_id}, ${simulacroId}, 'ACTIVO', NOW())`
+            }
+
+            inscripciones.push({ simulacro_id: simulacroId })
+          }
         }
 
         // d) Crear EbookAcceso para ebooks del pedido
@@ -110,6 +148,15 @@ export async function completeOrder(pedidoId: string, data: OrderCompletionData)
       },
       { timeout: 30000 }
     )
+
+    if (result === null) {
+      console.log(`[Order-Service] El pedido ${pedidoId} fue completado por otro proceso concurrente.`)
+
+      const pedidoActual = await prisma.pedido.findUniqueOrThrow({ where: { id: pedidoId } })
+      const inscripciones = await prisma.inscripcion.findMany({ where: { pedido_id: pedidoId } })
+
+      return { pedido: pedidoActual, inscripciones, yaCompletado: true }
+    }
 
     // e) Notificar a Admins (fuera de la transacción)
     try {

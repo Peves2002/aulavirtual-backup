@@ -8,6 +8,8 @@ import { actualizarUsuarioSchema } from '@/schemas/usuario.schema'
 import { validateRequest, handleApiError } from '@/utils/libs/validation'
 import { requireAdmin, requireAuth } from '@/utils/libs/auth-helpers'
 import { ApiResponse } from '@/utils/libs/apiResponse'
+import { sendMail } from '@/utils/libs/mailer'
+import { getChangedUserFields, getUserUpdatedTemplate } from '@/utils/libs/user-update-email'
 
 /**
  * GET /api/usuarios/[id]
@@ -169,7 +171,30 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       }
     })
 
-    return ApiResponse.success(request, { usuario: usuarioActualizado })
+    const camposModificados = getChangedUserFields(usuario, {
+      ...usuarioActualizado,
+      ...(data.contrasena ? { contrasena: data.contrasena } : {})
+    })
+
+    let notificacionCorreo: 'sin_cambios' | 'enviada' | 'fallida' = 'sin_cambios'
+
+    if (camposModificados.length > 0) {
+      notificacionCorreo = 'fallida'
+
+      try {
+        const enviado = await sendMail({
+          to: usuarioActualizado.correo,
+          subject: 'Tu información de usuario ha sido actualizada',
+          html: getUserUpdatedTemplate(usuarioActualizado.nombre, camposModificados)
+        })
+
+        if (enviado) notificacionCorreo = 'enviada'
+      } catch (error) {
+        console.error('[Admin-UserUpdate] Error al enviar la notificación:', error)
+      }
+    }
+
+    return ApiResponse.success(request, { usuario: usuarioActualizado, notificacionCorreo })
   } catch (error) {
     return handleApiError(error, request)
   }

@@ -7,7 +7,7 @@ import { getConfigs } from '@/utils/libs/config'
 import prisma from '@/utils/libs/prisma'
 import WebFooter from '@/utils/components/layout/web/WebFooter'
 import WebHeader from '@/utils/components/layout/web/WebHeader'
-import MobileBottomNav from '@/utils/components/layout/web/MobileBottomNav'
+import PWAInstalledToast from '@/features/web/home/components/PWAInstalledToast'
 
 const getCategorias = unstable_cache(
   () =>
@@ -25,7 +25,6 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
 
   const platformName = configs.TEMPLATE_NAME || 'CEGAE RIBEYRO'
   const platformSlogan = configs.TEMPLATE_SLOGAN || 'Te acompañamos en tu perfeccionamiento profesional'
-  const rutasHabilitado = configs.WEB_RUTAS_HABILITADO !== 'false'
 
   return (
     <AuthModalProvider>
@@ -39,11 +38,10 @@ const WebLayout = async ({ children }: { children: React.ReactNode }) => {
               <div className="web-nav-spacer" style={{ height: 'var(--navbar-height)' }} />
               {children}
             </div>
-            <WebFooter platformName={platformName} rutasHabilitado={rutasHabilitado} />
+            <WebFooter platformName={platformName} />
           </main>
         </div>
-        {/* Bottom nav: visible solo en mobile */}
-        <MobileBottomNav rutasHabilitado={rutasHabilitado} />
+        <PWAInstalledToast />
       </div>
     </AuthModalProvider>
   )

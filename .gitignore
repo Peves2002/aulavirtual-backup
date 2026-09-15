@@ -49,3 +49,4 @@ src/assets/iconify-icons/generated-icons.css
 # videos
 /private/*
 !/private/**/.gitkeep
+

@@ -6,10 +6,12 @@ import Link from 'next/link'
 
 import { Button } from '@mui/material'
 import { useSession } from 'next-auth/react'
+import { Menu } from 'lucide-react'
 
 import Logo from '@components/layout/shared/Logo'
 import UserDropdown from '@components/layout/shared/UserDropdown'
 import CartIcon from '@/features/web/cart/components/CartIcon'
+import MobileNavDrawer from '@/utils/components/layout/web/MobileNavDrawer'
 import { useAuthModal } from '@/contexts/AuthModalContext'
 import { useConfig } from '@/contexts/ConfigContext'
 
@@ -23,6 +25,7 @@ interface WebHeaderProps {
   initialCategories?: Category[]
   platformName?: string
   platformSlogan?: string
+  empresasHabilitado?: boolean
 }
 
 export default function WebHeader({
@@ -118,6 +121,7 @@ export default function WebHeader({
 
       {/* Auth Buttons */}
       <div className="flex items-center gap-3">
+
         <CartIcon />
         {session ? (
           <UserDropdown />
@@ -137,7 +141,7 @@ export default function WebHeader({
               sx={{
                 fontFamily: 'Montserrat, sans-serif',
                 fontWeight: 700,
-                fontSize: '0.7rem',
+                fontSize: '0.9rem',
                 borderRadius: '8px',
                 backgroundColor: '#1D71CA',
                 color: '#FFFFFF',
@@ -150,7 +154,20 @@ export default function WebHeader({
             </Button>
           </>
         )}
+
+        <IconButton
+          onClick={() => setNavOpen(true)}
+          aria-label="Abrir menú"
+          sx={{
+            display: { xs: 'inline-flex', sm: 'none' },
+            color: '#02115C',
+          }}
+        >
+          <Menu size={26} />
+        </IconButton>
       </div>
+
+      <MobileNavDrawer open={navOpen} onClose={() => setNavOpen(false)} empresasHabilitado={empresasHabilitado} />
     </header>
   )
 }

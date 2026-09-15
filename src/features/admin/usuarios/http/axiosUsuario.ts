@@ -13,6 +13,11 @@ type Params = {
   getAuthToken?: () => Promise<string | null> | string | null
 }
 
+export type UpdateUsuarioResult = {
+  usuario: Usuario
+  notificacionCorreo: 'sin_cambios' | 'enviada' | 'fallida'
+}
+
 export class AxiosUsuario extends AxiosInternalHttpClient {
   constructor(params: Params = {}) {
     const baseURL = getBaseURL()
@@ -63,9 +68,9 @@ export class AxiosUsuario extends AxiosInternalHttpClient {
     }
   }
 
-  async update(id: string, usuario: ActualizarUsuarioDto): Promise<{ usuario: Usuario }> {
+  async update(id: string, usuario: ActualizarUsuarioDto): Promise<UpdateUsuarioResult> {
     try {
-      const payload = await this.iPatch<{ usuario: Usuario }>(`/${id}`, usuario)
+      const payload = await this.iPatch<UpdateUsuarioResult>(`/${id}`, usuario)
 
       return payload
     } catch (err: any) {

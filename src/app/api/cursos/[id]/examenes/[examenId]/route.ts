@@ -1,5 +1,7 @@
 export const dynamic = 'force-dynamic'
 
+import { evaluacionAdjuntosSchema } from '@/schemas/evaluacion-adjuntos.schema'
+
 import prisma from '@/utils/libs/prisma'
 import { ApiResponse } from '@/utils/libs/apiResponse'
 import { requireProfesorOrAdmin } from '@/utils/libs/auth-helpers'
@@ -69,6 +71,9 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     }
 
     const body = await request.json()
+    const adjuntos = evaluacionAdjuntosSchema.optional().safeParse(body.adjuntos)
+
+    if (!adjuntos.success) return ApiResponse.error(request, 'Adjuntos inválidos (máximo 20)', 400)
 
     const {
       titulo,
@@ -88,6 +93,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     const updated = await prisma.examen.update({
       where: { id: params.examenId },
       data: {
+        ...(adjuntos.data !== undefined && { adjuntos: adjuntos.data }),
         ...(titulo !== undefined && { titulo }),
         ...(descripcion !== undefined && { descripcion }),
         ...(peso !== undefined && { peso: Number(peso) }),

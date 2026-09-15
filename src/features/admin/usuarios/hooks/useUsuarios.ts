@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/react'
 
 import type { Usuario } from '../entity/Usuario'
 import type { CrearUsuarioDto, ActualizarUsuarioDto } from '@/schemas/usuario.schema'
-import { AxiosUsuario } from '../http/axiosUsuario'
+import { AxiosUsuario, type UpdateUsuarioResult } from '../http/axiosUsuario'
 
 const QUERY_KEY = { USUARIOS: ['usuarios'] }
 
@@ -81,7 +81,7 @@ export function useEditUsuario() {
   const qc = useQueryClient()
   const axiosUsuario = axiosUsuarioFactory()
 
-  return useMutation<{ usuario: Usuario }, any, { id: string; data: ActualizarUsuarioDto }>({
+  return useMutation<UpdateUsuarioResult, any, { id: string; data: ActualizarUsuarioDto }>({
     mutationFn: async ({ id, data }) => await axiosUsuario.update(id, data),
     onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY.USUARIOS })
   })
@@ -109,7 +109,15 @@ export function useImportarUsuarios() {
 
   return useMutation<{ exitosos: number; errores: any[] }, any, any[]>({
     mutationFn: async (usuarios: any[]) => await axiosUsuario.bulkCreate(usuarios),
-    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY.USUARIOS })
+    onSuccess: (_, variables) => {
+      qc.invalidateQueries({ queryKey: QUERY_KEY.USUARIOS })
+      const tieneCursos = variables.some((u: any) => u.curso_id && String(u.curso_id).trim())
+
+      if (tieneCursos) {
+        qc.invalidateQueries({ queryKey: ['cursos'] })
+        qc.invalidateQueries({ queryKey: ['curso-alumnos'] })
+      }
+    }
   })
 }
 
