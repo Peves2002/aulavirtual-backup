@@ -171,7 +171,7 @@ const WebFooter = async ({ platformName = 'CEGAE RIBEYRO', rutasHabilitado = tru
               ))}
             </div>
 
-            {/* Validar Certificado button */}
+            {/* Validar Constancia button */}
             <Link
               href="/verificar-certificado"
               className="no-underline inline-block text-center transition-opacity hover:opacity-90"
@@ -185,7 +185,7 @@ const WebFooter = async ({ platformName = 'CEGAE RIBEYRO', rutasHabilitado = tru
                 padding: '0.5rem 1.25rem',
               }}
             >
-              Validar Certificado
+              Validar Constancia
             </Link>
           </div>
         </div>

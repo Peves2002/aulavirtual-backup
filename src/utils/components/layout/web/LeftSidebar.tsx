@@ -38,7 +38,7 @@ const ALL_NAV_ITEMS = [
 
   // { title: 'Suscripciones', url: '/suscripciones', icon: Repeat2, key: 'suscripciones' },
   { title: 'Nosotros', url: '/nosotros', icon: Users, key: 'nosotros' },
-  { title: 'Certificado', url: '/verificar-certificado', icon: Award, key: 'certificado' },
+  { title: 'Constancia', url: '/verificar-certificado', icon: Award, key: 'certificado' },
 ]
 
 export default function LeftSidebar({

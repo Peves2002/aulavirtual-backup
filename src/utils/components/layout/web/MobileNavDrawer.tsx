@@ -25,7 +25,7 @@ const ALL_NAV_ITEMS = [
   { title: 'Empresas', url: '/empresas', key: 'empresas' },
   ...(isFeatureEnabled('suscripciones') ? [{ title: 'Suscripciones', url: '/suscripciones', key: 'suscripciones' as const }] : []),
   { title: 'Nosotros', url: '/nosotros', key: 'nosotros' },
-  { title: 'Certificado', url: '/verificar-certificado', key: 'certificado' },
+  { title: 'Constancia', url: '/verificar-certificado', key: 'certificado' },
 ]
 
 interface MobileNavDrawerProps {
@@ -37,7 +37,7 @@ interface MobileNavDrawerProps {
 export default function MobileNavDrawer({ open, onClose, empresasHabilitado = true }: MobileNavDrawerProps) {
   const pathname = usePathname()
   const { data: session } = useSession()
-  const { openLogin } = useAuthModal()
+  const { openLogin, openRegister } = useAuthModal()
   const { canInstall, hasNativePrompt, install } = usePWAInstall()
   const [showInstallTip, setShowInstallTip] = useState(false)
 
@@ -110,25 +110,47 @@ export default function MobileNavDrawer({ open, onClose, empresasHabilitado = tr
               Mi Cuenta
             </Link>
           ) : (
-            <button
-              onClick={() => {
-                onClose()
-                openLogin()
-              }}
-              className="flex items-center justify-center gap-2 cursor-pointer bg-transparent"
-              style={{
-                height: '52px',
-                borderRadius: '999px',
-                border: '2px solid var(--web-primary, #25927F)',
-                color: 'var(--web-primary, #25927F)',
-                fontFamily: 'Poppins, sans-serif',
-                fontWeight: 700,
-                fontSize: '1rem',
-              }}
-            >
-              <LogIn size={18} />
-              Iniciar Sesión
-            </button>
+            <>
+              <button
+                onClick={() => {
+                  onClose()
+                  openLogin()
+                }}
+                className="flex items-center justify-center gap-2 cursor-pointer bg-transparent"
+                style={{
+                  height: '52px',
+                  borderRadius: '999px',
+                  border: '2px solid var(--web-primary, #25927F)',
+                  color: 'var(--web-primary, #25927F)',
+                  fontFamily: 'Poppins, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '1rem',
+                }}
+              >
+                <LogIn size={18} />
+                Iniciar Sesión
+              </button>
+
+              <button
+                onClick={() => {
+                  onClose()
+                  openRegister()
+                }}
+                className="flex items-center justify-center gap-2 cursor-pointer"
+                style={{
+                  height: '52px',
+                  borderRadius: '999px',
+                  border: 'none',
+                  backgroundColor: '#1D71CA',
+                  color: '#FFFFFF',
+                  fontFamily: 'Poppins, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '1rem',
+                }}
+              >
+                Registrarse
+              </button>
+            </>
           )}
 
           {canInstall && (

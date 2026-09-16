@@ -92,7 +92,7 @@ export default function WebHeader({
           className="no-underline text-sm font-bold text-slate-600 hover:text-primary transition-all duration-200"
           style={{ fontFamily: 'Montserrat, sans-serif' }}
         >
-          Certificados
+          Constancia
         </Link>
         <Link
           href="/contacto"
