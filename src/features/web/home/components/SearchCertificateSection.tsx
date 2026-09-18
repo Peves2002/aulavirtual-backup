@@ -67,7 +67,7 @@ export default function SearchCertificateSection() {
                 Verificar Certificado
               </h2>
               <p style={{ ...sectionDesc, color: '#475569', maxWidth: '36rem', margin: '0 auto' }}>
-                Ingresa el código único ubicado en la parte inferior de tu certificado
+                Ingresa el código único ubicado en la parte inferior de tu constancia
                 para comprobar su validez y autenticidad.
               </p>
             </div>

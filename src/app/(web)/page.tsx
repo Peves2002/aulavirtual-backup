@@ -349,7 +349,7 @@ export default function HomePage() {
                 {[
                   { num: '1', title: 'Planificación de la Ruta', desc: 'Identificas tu objetivo y te inscribes en el itinerario sugerido.', color: 'bg-teal-500' },
                   { num: '2', title: 'Ejecución y Talleres', desc: 'Clases participativas con análisis de casos y foros permanentes.', color: 'bg-emerald-500' },
-                  { num: '3', title: 'Certificación e Inscripción', desc: 'Recibes tu certificado oficial válido para concursos públicos.', color: 'bg-lime-500' },
+                  { num: '3', title: 'Certificación e Inscripción', desc: 'Recibes tu constancia oficial válido para concursos públicos.', color: 'bg-lime-500' },
                 ].map((step, idx) => (
                   <div key={idx} className="relative flex gap-4 items-start">
                     {/* Circle timeline bullet */}

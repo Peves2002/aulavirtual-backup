@@ -428,7 +428,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                 borderColor="rgba(22,163,74,0.3)"
                 title="¡Evaluación aprobada!"
                 subtitle={isFinalExam
-                    ? 'Has superado este examen. Ya puedes obtener tu certificado.'
+                    ? 'Has superado este examen. Ya puedes obtener tu constancia.'
                     : 'Completaste esta evaluación. Continúa avanzando en el curso.'}
             >
                 {!isFinalExam && onContinue && (
@@ -514,7 +514,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                                         ¡Excelente trabajo!
                                     </Typography>
                                     <Typography variant="caption" color="text.secondary">
-                                        Ya puedes descargar tu certificado de aprobación.
+                                        Ya puedes descargar tu constancia de aprobación.
                                     </Typography>
                                 </Box>
                             </Stack>

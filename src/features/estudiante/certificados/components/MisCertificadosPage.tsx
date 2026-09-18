@@ -164,7 +164,7 @@ function CertificadoCard({ cert }: { cert: MiCertificado }) {
 
           {/* Acciones */}
           <Box sx={{ display: 'flex', gap: 1 }}>
-            <Tooltip title={!puedeDescargar ? 'Tu certificado está en trámite, comunícate con el asesor.' : ''}>
+            <Tooltip title={!puedeDescargar ? 'Tu constancia está en trámite, comunícate con el asesor.' : ''}>
               <span style={{ display: 'flex', flex: 1 }}>
                 <Button
                   fullWidth

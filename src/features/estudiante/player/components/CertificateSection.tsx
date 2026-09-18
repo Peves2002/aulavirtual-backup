@@ -148,7 +148,7 @@ const CertificateSection = ({ cursoId, completarAutomatico, onAllLessonsComplete
                 .then(res => {
                     if (res.data.status) setCertificado(res.data.result.certificado)
                 })
-                .catch(() => {})
+                .catch(() => { })
                 .finally(() => setGenerating(false))
         }
     }, [loading, certificado, pagoPendiente, certificacionHabilitada, elegibilidad, cursoId])
@@ -256,7 +256,7 @@ const CertificateSection = ({ cursoId, completarAutomatico, onAllLessonsComplete
                 : pendienteHabilitacion
                     ? 'Curso completado — certificación pendiente de habilitación'
                     : puedeObtener
-                        ? '¡Puedes obtener tu certificado!'
+                        ? '¡Puedes obtener tu constancia!'
                         : 'Completa el curso para obtenerlo'
 
         return (
@@ -284,7 +284,7 @@ const CertificateSection = ({ cursoId, completarAutomatico, onAllLessonsComplete
                     </Box>
                     <Box>
                         <Typography variant="subtitle2" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
-                            Tu Certificado
+                            Tu Constancia
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
                             {subtitle}
@@ -323,7 +323,7 @@ const CertificateSection = ({ cursoId, completarAutomatico, onAllLessonsComplete
         return (
             <Box sx={{ mt: 3, borderRadius: '16px', border: '1.5px solid', borderColor: 'divider', p: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
                 <CircularProgress size={20} />
-                <Typography variant="body2" color="text.secondary">Verificando certificado...</Typography>
+                <Typography variant="body2" color="text.secondary">Verificando constancia...</Typography>
             </Box>
         )
     }
@@ -336,7 +336,7 @@ const CertificateSection = ({ cursoId, completarAutomatico, onAllLessonsComplete
                     <i className="tabler-certificate" style={{ fontSize: '1.1rem', color: '#94a3b8' }} />
                 </Box>
                 <Box>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Tu Certificado</Typography>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Tu Constancia</Typography>
                     <Typography variant="caption" color="text.secondary">
                         No se pudo verificar el estado. <span style={{ cursor: 'pointer', textDecoration: 'underline', color: 'var(--mui-palette-primary-main)' }} onClick={() => window.location.reload()}>Recargar</span>
                     </Typography>
@@ -373,7 +373,7 @@ const CertificateSection = ({ cursoId, completarAutomatico, onAllLessonsComplete
                                 {certificado.codigoVerificacion}
                             </Typography>
                         </Box>
-                        
+
                         {(certificado.archivoPdf || modoCertificado === 'AUTOMATICO') ? (
                             <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
                                 <Button
@@ -400,7 +400,7 @@ const CertificateSection = ({ cursoId, completarAutomatico, onAllLessonsComplete
                         ) : (
                             <Box sx={{ mt: 2, p: 2.5, borderRadius: '12px', bgcolor: 'rgba(217,119,6,0.06)', border: '1px solid rgba(217,119,6,0.1)' }}>
                                 <Typography variant="body2" sx={{ color: '#d97706', mb: 2, fontWeight: 500 }}>
-                                    Tu certificado está en trámite. Por favor, comunícate con el asesor del curso para solicitar la descarga de tu certificado.
+                                    Tu constancia está en trámite. Por favor, comunícate con el asesor del curso para solicitar la descarga de tu constancia.
                                 </Typography>
                                 <Button
                                     component="a"
@@ -463,7 +463,7 @@ const CertificateSection = ({ cursoId, completarAutomatico, onAllLessonsComplete
                             )}
                         </Box>
                         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                            Has completado el curso. Para obtener tu certificado, realiza el pago
+                            Has completado el curso. Para obtener tu constancia, realiza el pago
                             {precioFmt ? ` de ${precioFmt}` : ''} y comunícate con nosotros para que habilitemos tu descarga.
                         </Typography>
                         {waUrl && (
@@ -504,7 +504,7 @@ const CertificateSection = ({ cursoId, completarAutomatico, onAllLessonsComplete
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <i className="tabler-certificate" style={{ fontSize: '1.5rem', color: '#94a3b8' }} />
                     <Typography variant="body2" color="text.secondary">
-                        Completa todas las lecciones y evaluaciones del curso para obtener tu certificado.
+                        Completa todas las lecciones y evaluaciones del curso para obtener tu constancia.
                     </Typography>
                 </Box>
             </Wrapper>
@@ -548,11 +548,11 @@ const CertificateSection = ({ cursoId, completarAutomatico, onAllLessonsComplete
                         }
                     </Box>
                     <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.5 }}>
-                        {generating ? 'Preparando tu certificado...' : '¡Lo lograste! Obtén tu certificado'}
+                        {generating ? 'Preparando tu constancia...' : '¡Lo lograste! Obtén tu constancia'}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
                         {generating
-                            ? 'Estamos generando tu certificado automáticamente.'
+                            ? 'Estamos generando tu constancia automáticamente.'
                             : 'Has completado todas las lecciones y alcanzado el promedio requerido.'
                         }
                     </Typography>

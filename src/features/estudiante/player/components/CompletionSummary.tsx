@@ -118,7 +118,7 @@ export default function CompletionSummary({ cursoId }: CompletionSummaryProps) {
 
                     <Typography variant='body2' sx={{ mt: 3, opacity: 0.9 }}>
                         {esAprobado
-                            ? 'Felicidades por completar este curso. Ahora puedes solicitar tu certificado.'
+                            ? 'Felicidades por completar este curso. Ahora puedes solicitar tu constancia.'
                             : 'Necesitas una nota mínima de 60/100 para aprobar. Intenta nuevamente.'}
                     </Typography>
                 </CardContent>
