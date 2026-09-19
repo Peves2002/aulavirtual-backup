@@ -44,8 +44,8 @@ export default function HeroSlider() {
                     transition={{ delay: 0.2, duration: 0.6 }}
                     className="flex items-center gap-4 mb-8"
                   >
-                    <span className="w-12 h-[2px] bg-[#E2231A]" />
-                    <span className="text-[#02115C] text-[10px] lg:text-xs font-sans font-extrabold uppercase tracking-[0.4em]">
+                    <span className="w-12 h-[2px] bg-[#FFB600]" />
+                    <span className="text-[#000000] text-[10px] lg:text-xs font-sans font-extrabold uppercase tracking-[0.4em]">
                       {content.tag}
                     </span>
                   </motion.div>
@@ -78,7 +78,7 @@ export default function HeroSlider() {
                   >
                     <Link
                       href={content.href}
-                      className="inline-flex items-center justify-center px-8 py-4 bg-[#02115C] text-white font-sans font-bold uppercase tracking-wider hover:bg-[#0A50A1] transition-all duration-300 text-sm shadow-xl min-w-[220px] group"
+                      className="inline-flex items-center justify-center px-8 py-4 bg-[#FFB600] text-[#000000] font-sans font-bold uppercase tracking-wider hover:bg-[#E5A300] transition-all duration-300 text-sm shadow-xl min-w-[220px] group"
                     >
                       {content.cta}
                       <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -114,14 +114,14 @@ export default function HeroSlider() {
                     className="absolute inset-0 w-full h-full object-cover z-0"
                   />
                   {/* Gradient to darken/tint the video slightly */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#02115C]/30 via-white/40 to-[#E2231A]/30 backdrop-blur-[2px] z-10 pointer-events-none mix-blend-overlay" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#000000]/40 via-white/40 to-[#FFB600]/30 backdrop-blur-[2px] z-10 pointer-events-none mix-blend-overlay" />
                   
                   {/* Original Text content centered over the video */}
                   <div className="relative z-20 text-center p-12">
-                    <div className="text-7xl font-display font-black text-[#02115C] uppercase tracking-tighter leading-none mb-4 shadow-sm mix-blend-multiply drop-shadow-lg">
+                    <div className="text-7xl font-display font-black text-[#000000] uppercase tracking-tighter leading-none mb-4 shadow-sm mix-blend-multiply drop-shadow-lg">
                       ARM
                     </div>
-                    <div className="text-xs text-[#02115C] font-black uppercase tracking-[0.4em] drop-shadow-md">
+                    <div className="text-xs text-[#000000] font-black uppercase tracking-[0.4em] drop-shadow-md">
                       Asset Reliability Management
                     </div>
                   </div>
@@ -138,8 +138,8 @@ export default function HeroSlider() {
       </div>
 
       {/* Decorative Blur */}
-      <div className="absolute -top-[10%] -right-[5%] w-[40%] h-[40%] bg-[#02115C]/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute -bottom-[10%] -left-[5%] w-[30%] h-[30%] bg-[#E2231A]/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute -top-[10%] -right-[5%] w-[40%] h-[40%] bg-[#FFB600]/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute -bottom-[10%] -left-[5%] w-[30%] h-[30%] bg-[#000000]/5 rounded-full blur-[100px] pointer-events-none" />
     </section>
   );
 }

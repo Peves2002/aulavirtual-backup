@@ -10,32 +10,32 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#25927F',
-          foreground: '#ffffff',
-          dark: '#025E44',
-          light: '#BDD962',
+          DEFAULT: '#FFB600', // Amarillo MS&M
+          foreground: '#000000', // Negro
+          dark: '#E5A300', // Slightly darker yellow for hover
+          light: '#FFC433', // Slightly lighter yellow
         },
         secondary: {
-          DEFAULT: '#BDD962',
-          foreground: '#0A0A0A',
+          DEFAULT: '#4D4D4D', // Gris oscuro
+          foreground: '#FFFFFF', // Blanco
         },
         muted: {
-          DEFAULT: 'hsl(210, 15%, 93%)',
-          foreground: 'hsl(215, 16%, 47%)',
+          DEFAULT: '#F2F2F2', // Gris claro
+          foreground: '#4D4D4D', // Gris oscuro
         },
-        border: 'hsl(214, 20%, 88%)',
-        foreground: '#0A0A0A',
-        background: 'hsl(0, 0%, 100%)',
-        'color-1': 'hsl(170, 60%, 36%)',
-        'color-2': 'hsl(75, 63%, 62%)',
-        'color-3': 'hsl(167, 96%, 19%)',
-        'color-4': 'hsl(152, 50%, 46%)',
-        'color-5': 'hsl(0, 0%, 4%)',
+        border: '#F2F2F2', // Gris claro
+        foreground: '#000000', // Negro
+        background: '#FFFFFF', // Blanco
+        'color-1': 'hsl(43, 100%, 50%)', // Amarillo MS&M
+        'color-2': 'hsl(0, 0%, 0%)', // Negro
+        'color-3': 'hsl(0, 0%, 100%)', // Blanco
+        'color-4': 'hsl(0, 0%, 30%)', // Gris oscuro
+        'color-5': 'hsl(0, 0%, 95%)', // Gris claro
         sidebar: {
-          DEFAULT: 'hsl(167, 96%, 19%)',
-          foreground: '#ffffff',
-          accent: 'hsl(170, 60%, 36%)',
-          border: 'hsl(167, 96%, 25%)',
+          DEFAULT: '#000000', // Negro
+          foreground: '#FFFFFF', // Blanco
+          accent: '#FFB600', // Amarillo MS&M
+          border: '#4D4D4D', // Gris oscuro
         },
       },
       fontFamily: {

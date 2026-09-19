@@ -52,4 +52,19 @@ app.prepare().then(() => {
   httpServer.listen(port, () => {
     console.log(`> Ready on http://${hostname}:${port}`)
   })
+
+  // Manejo de señales para un cierre limpio (evita que la terminal se buguee)
+  process.on('SIGINT', () => {
+    console.log('\nCerrando servidor (SIGINT)...')
+    httpServer.close(() => {
+      process.exit(0)
+    })
+  })
+
+  process.on('SIGTERM', () => {
+    console.log('\nCerrando servidor (SIGTERM)...')
+    httpServer.close(() => {
+      process.exit(0)
+    })
+  })
 })

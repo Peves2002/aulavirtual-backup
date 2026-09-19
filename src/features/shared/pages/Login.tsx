@@ -83,7 +83,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
   const { settings } = useSettings()
   const theme = useTheme()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
-  const authBackground = useImageVariant(mode, lightImg, darkImg)
+  const authBackground = '/images/fondo-login-register.png'
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -98,13 +98,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
     }
   }, [])
 
-  const characterIllustration = useImageVariant(
-    mode,
-    lightIllustration,
-    darkIllustration,
-    borderedLightIllustration,
-    borderedDarkIllustration
-  )
+  const characterIllustration = '/images/fondo-login-register.png'
 
   const {
     control,
@@ -217,23 +211,31 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
     <div className='flex justify-center min-bs-[100dvh]'>
       <div
         className={classnames(
-          'flex items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden',
+          'flex items-center justify-center flex-1 min-bs-[100dvh] relative max-md:hidden overflow-hidden bg-slate-100',
           {
             'border-ie': settings.skin === 'bordered'
           }
         )}
       >
-        <LoginIllustration src={characterIllustration} alt='character-illustration' />
-        {!hidden && (
-          <MaskImg
-            alt='mask'
-            src={authBackground}
-            className={classnames({ 'scale-x-[-1]': theme.direction === 'rtl' })}
-          />
-        )}
+        <img
+          src="/images/fondo-login-register.png"
+          alt="Background Blur"
+          className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 opacity-50"
+        />
+        <img
+          src="/images/fondo-login-register.png"
+          alt="Fondo MS&M"
+          className="relative z-10 w-full h-full max-h-[90vh] object-contain p-8 drop-shadow-2xl"
+          style={{
+            maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%), linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
+            maskComposite: 'intersect',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%), linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
+            WebkitMaskComposite: 'source-in'
+          }}
+        />
       </div>
       <div className='flex justify-center items-center bg-backgroundPaper !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[480px]'>
-        <div className='absolute block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]'>
+        <div className='absolute block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px] z-50'>
           <Logo />
         </div>
         <div className='flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0'>

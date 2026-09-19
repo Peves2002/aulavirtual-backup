@@ -78,8 +78,8 @@ export default async function ProyectosPage() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-[#02115C]/88" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#02115C] via-[#02115C]/70 to-transparent" />
+          <div className="absolute inset-0 bg-[#000000]/88" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#000000] via-[#000000]/70 to-transparent" />
         </div>
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
@@ -156,11 +156,11 @@ export default async function ProyectosPage() {
                 href={`https://wa.me/${waNumero}?text=Estoy%20interesado%20en%20el%20servicio%20de%20Gerencia%20y%20Supervisi%C3%B3n%20de%20Proyectos%20Industriales%20de%20MS%26M%20CONSULTING`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-8 py-4 bg-[#02115C] text-white font-sans font-bold uppercase tracking-wider hover:bg-[#0A50A1] transition-all duration-300 text-sm"
+                className="inline-flex items-center justify-center px-8 py-4 bg-[#FFB600] text-[#000000] font-sans font-bold uppercase tracking-wider hover:bg-[#E5A300] transition-all duration-300 text-sm"
               >
                 Solicitar Asesoría
               </a>
-              <Link href="/" className="inline-flex items-center justify-center px-8 py-4 border-2 border-[#02115C] text-[#02115C] font-sans font-bold uppercase tracking-wider hover:bg-[#02115C] hover:text-white transition-all duration-300 text-sm">
+              <Link href="/" className="inline-flex items-center justify-center px-8 py-4 border-2 border-[#000000] text-[#000000] font-sans font-bold uppercase tracking-wider hover:bg-[#000000] hover:text-[#FFFFFF] transition-all duration-300 text-sm">
                 Volver al inicio
               </Link>
             </div>

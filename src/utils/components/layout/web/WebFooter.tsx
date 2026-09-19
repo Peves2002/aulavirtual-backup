@@ -77,7 +77,7 @@ const WebFooter = async ({ platformName = 'MS&M CONSULTING' }: WebFooterProps) =
             </h4>
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
               {([
-                { label: 'Cursos', href: '/cursos' },
+                { label: 'Nuestros programas', href: '/cursos' },
                 { label: 'Diplomados', href: '/diplomados' },
                 { label: 'Especializaciones', href: '/especializaciones' },
                 ...(isFeatureEnabled('rutas') ? [{ label: 'Rutas', href: '/rutas' }] : []),
@@ -105,14 +105,18 @@ const WebFooter = async ({ platformName = 'MS&M CONSULTING' }: WebFooterProps) =
             </h4>
             <ul className="space-y-2 list-none pl-0 m-0" style={{ opacity: 0.8 }}>
               {[
-                { label: 'Nosotros', href: '/nosotros' },
+                { label: 'Conócenos', href: '/nosotros' },
                 { label: 'Términos y condiciones', href: '/terminos-y-condiciones' },
                 { label: 'Política de Devoluciones', href: '/politica-de-cambios-y-devoluciones' },
                 { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
-              ].map(link => (
+                { label: 'Política de Seguridad y Salud en el Trabajo (SG-SST)', href: '/politica-de-seguridad-y-salud' },
+                { label: 'Política de Calidad (SGC)', href: '/politica-de-calidad' },
+              ].map((link: any) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
+                    target={link.target || undefined}
+                    rel={link.target ? "noopener noreferrer" : undefined}
                     className="no-underline transition-opacity hover:opacity-100 inline-flex items-center gap-1.5"
                     style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)' }}
                   >

@@ -292,7 +292,7 @@ const AuthModal = ({ open, mode, callbackUrl, onSuccess, onClose, onSwitchMode }
       <DialogContent sx={{ overflowX: 'hidden', overflowY: 'auto' }}>
         <Box sx={{ textAlign: 'center', mb: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
-            <Box sx={{ transform: 'scale(1.2)', transformOrigin: 'center', display: 'inline-block' }}>
+            <Box sx={{ transform: 'scale(1.2)', transformOrigin: 'center', display: 'inline-block', position: 'relative', zIndex: 50 }}>
               <Logo />
             </Box>
           </Box>

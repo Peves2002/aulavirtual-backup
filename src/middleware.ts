@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server'
 
 import { withAuth } from 'next-auth/middleware'
-import { Rol } from '@prisma/client'
+
+enum Rol {
+  ADMIN = 'ADMIN',
+  PROFESOR = 'PROFESOR',
+  ESTUDIANTE = 'ESTUDIANTE'
+}
 
 export default withAuth(
   function middleware(req) {
@@ -101,6 +106,8 @@ export default withAuth(
           path.startsWith('/terminos-y-condiciones') ||
           path.startsWith('/politica-de-cambios-y-devoluciones') ||
           path.startsWith('/politica-de-privacidad') ||
+          path.startsWith('/politica-de-calidad') ||
+          path.startsWith('/politica-de-seguridad-y-salud') ||
           path.startsWith('/forgot-password') ||
           path.startsWith('/reset-password') ||
           path.startsWith('/verificar-certificado') ||

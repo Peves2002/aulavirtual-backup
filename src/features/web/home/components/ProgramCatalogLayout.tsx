@@ -19,8 +19,8 @@ export default function ProgramCatalogLayout({ tipo, courses, categories }: Prog
     <Box sx={{ flexGrow: 1, bgcolor: 'background.default' }}>
       <Box
         sx={{
-          background: 'linear-gradient(135deg, var(--web-dark-deep, #012d22) 0%, var(--web-dark, #025E44) 100%)',
-          py: { xs: 5, md: 7 },
+          background: 'linear-gradient(135deg, rgba(1,45,34,0.85) 0%, rgba(2,94,68,0.95) 100%), url(https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1920&q=80) center/cover no-repeat',
+          py: { xs: 10, md: 14 }, // Aumentado en ~50% a 100% (antes era 5 y 7)
           px: { xs: 3, md: 6 },
           position: 'relative',
           overflow: 'hidden'

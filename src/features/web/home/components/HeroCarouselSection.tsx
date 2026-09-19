@@ -218,7 +218,7 @@ export default function HeroCarouselSection({ waNumber = '51900281578' }: { waNu
                     border: '1px solid rgba(255,255,255,0.2)',
                   }}
                 >
-                  Ver Cursos
+                  Ver programas
                 </Link>
               </div>
             </motion.div>

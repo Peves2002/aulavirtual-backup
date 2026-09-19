@@ -85,7 +85,7 @@ const CourseContentSidebar = ({ onLessonSelect }: CourseContentSidebarProps) => 
                         <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
                             Tu progreso
                         </Typography>
-                        <Typography variant="caption" sx={{ fontWeight: 800, color: '#025E44' }}>
+                        <Typography variant="caption" sx={{ fontWeight: 800, color: '#000000' }}>
                             {progressPercentage}%
                         </Typography>
                     </Box>
@@ -95,10 +95,10 @@ const CourseContentSidebar = ({ onLessonSelect }: CourseContentSidebarProps) => 
                         sx={{
                             height: 7,
                             borderRadius: 4,
-                            bgcolor: 'rgba(2,94,68,0.1)',
+                            bgcolor: 'rgba(0,0,0,0.1)',
                             '& .MuiLinearProgress-bar': {
                                 borderRadius: 4,
-                                background: 'linear-gradient(90deg, #025E44 0%, #BDD962 100%)',
+                                background: 'linear-gradient(90deg, #FFB600 0%, #E5A300 100%)',
                             }
                         }}
                     />
@@ -154,11 +154,11 @@ const CourseContentSidebar = ({ onLessonSelect }: CourseContentSidebarProps) => 
                                     px: 3,
                                     py: 1.25,
                                     minHeight: 'auto',
-                                    bgcolor: 'rgba(2,94,68,0.035)',
+                                    bgcolor: '#F2F2F2',
                                     '& .MuiAccordionSummary-content': { my: 0 }
                                 }}
                             >
-                                <Typography sx={{ fontWeight: 700, fontSize: '0.82rem', color: '#025E44', letterSpacing: '0.01em' }}>
+                                <Typography sx={{ fontWeight: 700, fontSize: '0.82rem', color: '#000000', letterSpacing: '0.01em' }}>
                                     {module.titulo}
                                 </Typography>
                             </AccordionSummary>
@@ -197,7 +197,7 @@ const CourseContentSidebar = ({ onLessonSelect }: CourseContentSidebarProps) => 
                                                     }
 
                                                     return (
-                                                        <i className="tabler-clipboard-list" style={{ fontSize: '1rem', color: isSelected ? '#7c3aed' : '#9ca3af' }} />
+                                                        <i className="tabler-clipboard-list" style={{ fontSize: '1rem', color: isSelected ? '#FFB600' : '#9ca3af' }} />
                                                     )
                                                 }
 
@@ -226,7 +226,7 @@ const CourseContentSidebar = ({ onLessonSelect }: CourseContentSidebarProps) => 
                                                 }
 
                                                 return (
-                                                    <i className="tabler-player-play" style={{ fontSize: '1rem', color: isSelected ? '#025E44' : '#9ca3af' }} />
+                                                    <i className="tabler-player-play" style={{ fontSize: '1rem', color: isSelected ? '#FFB600' : '#9ca3af' }} />
                                                 )
                                             }
 
@@ -256,10 +256,10 @@ const CourseContentSidebar = ({ onLessonSelect }: CourseContentSidebarProps) => 
                                                                 gap: 1.5,
                                                                 opacity: (isLocked || isLockedLesson || isLockedActividad) ? 0.55 : 1,
                                                                 cursor: (isLockedLesson || isLockedActividad) ? 'not-allowed' : 'pointer',
-                                                                borderLeft: isSelected ? '3px solid #025E44' : '3px solid transparent',
+                                                                borderLeft: isSelected ? '3px solid #FFB600' : '3px solid transparent',
                                                                 '&.Mui-selected': {
-                                                                    bgcolor: 'rgba(2,94,68,0.06)',
-                                                                    '&:hover': { bgcolor: 'rgba(2,94,68,0.09)' }
+                                                                    bgcolor: 'rgba(255,182,0,0.06)',
+                                                                    '&:hover': { bgcolor: 'rgba(255,182,0,0.09)' }
                                                                 },
                                                                 '&:hover': { bgcolor: 'rgba(0,0,0,0.03)' },
                                                                 '&.Mui-disabled': { opacity: 0.45 },
@@ -273,7 +273,7 @@ const CourseContentSidebar = ({ onLessonSelect }: CourseContentSidebarProps) => 
                                                                     variant="body2"
                                                                     sx={{
                                                                         fontWeight: isSelected ? 700 : 500,
-                                                                        color: isSelected ? '#025E44' : 'text.primary',
+                                                                        color: isSelected ? '#000000' : 'text.primary',
                                                                         fontSize: '0.82rem',
                                                                         lineHeight: 1.35,
                                                                         overflow: 'hidden',
@@ -295,7 +295,7 @@ const CourseContentSidebar = ({ onLessonSelect }: CourseContentSidebarProps) => 
                                                                 <Box sx={{ flexShrink: 0, textAlign: 'right', ml: 1 }}>
                                                                     {item.fecha_inicio && (
                                                                         <Typography variant="caption" sx={{
-                                                                            fontSize: '0.65rem', color: '#2563eb', fontWeight: 600,
+                                                                            fontSize: '0.65rem', color: '#4D4D4D', fontWeight: 600,
                                                                             display: 'flex', alignItems: 'center', gap: 0.4,
                                                                             justifyContent: 'flex-end', whiteSpace: 'nowrap'
                                                                         }}>
@@ -319,7 +319,7 @@ const CourseContentSidebar = ({ onLessonSelect }: CourseContentSidebarProps) => 
                                                                 <Box sx={{ flexShrink: 0, textAlign: 'right', ml: 1 }}>
                                                                     {item.fecha_fin && (
                                                                         <Typography variant="caption" sx={{
-                                                                            fontSize: '0.65rem', color: '#7c3aed', fontWeight: 600,
+                                                                            fontSize: '0.65rem', color: '#4D4D4D', fontWeight: 600,
                                                                             display: 'flex', alignItems: 'center', gap: 0.4,
                                                                             justifyContent: 'flex-end', whiteSpace: 'nowrap'
                                                                         }}>
@@ -332,7 +332,7 @@ const CourseContentSidebar = ({ onLessonSelect }: CourseContentSidebarProps) => 
                                                             {item.tipo === 'leccion' && item.es_en_vivo && item.fecha_programada && (
                                                                 <Box sx={{ flexShrink: 0, textAlign: 'right', ml: 1 }}>
                                                                     <Typography variant="caption" sx={{
-                                                                        fontSize: '0.65rem', color: '#7c3aed', fontWeight: 600,
+                                                                        fontSize: '0.65rem', color: '#4D4D4D', fontWeight: 600,
                                                                         display: 'flex', alignItems: 'center', gap: 0.4,
                                                                         justifyContent: 'flex-end', whiteSpace: 'nowrap'
                                                                     }}>
@@ -398,8 +398,8 @@ const CourseContentSidebar = ({ onLessonSelect }: CourseContentSidebarProps) => 
                                 textTransform: 'none',
                                 fontSize: '0.875rem',
                                 ...(currentView === 'certificate'
-                                    ? { bgcolor: '#025E44', '&:hover': { bgcolor: '#014d36' }, boxShadow: 'none' }
-                                    : { borderColor: '#025E44', color: '#025E44', '&:hover': { bgcolor: 'rgba(2,94,68,0.05)' } }
+                                    ? { bgcolor: '#000000', '&:hover': { bgcolor: '#4D4D4D' }, boxShadow: 'none' }
+                                    : { borderColor: '#000000', color: '#000000', '&:hover': { bgcolor: '#F2F2F2' } }
                                 )
                             }}
                         >

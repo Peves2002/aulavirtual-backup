@@ -1,22 +1,21 @@
 import Link from 'next/link'
 
-import { ArrowRight, CheckCircle } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 import prisma from '@/utils/libs/prisma'
 import { getConfigs } from '@/utils/libs/config'
 import { getTipoProgramaConfig } from '@/utils/configs/tipoPrograma'
 import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 import HomeCoursesSection from '@/features/web/home/components/HomeCoursesSection'
-import HeroInstallButton from '@/features/web/home/components/HeroInstallButton'
-import SearchCertificateSection from '@/features/web/home/components/SearchCertificateSection'
+
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
-import HeroVisual from '@/features/web/home/components/HeroVisual'
+import HomeVideoHero from '@/features/web/home/components/HomeVideoHero'
 import ClassFeaturesSection from '@/features/web/home/components/ClassFeaturesSection'
 import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
-import EnterpriseCTASection from '@/features/web/home/components/EnterpriseCTASection'
+
 import HomeEbooksSection from '@/features/web/home/components/HomeEbooksSection'
-import HeroCarouselSection from '@/features/web/home/components/HeroCarouselSection'
+
 
 export const metadata = {
   title: 'Aula Virtual - MS&M CONSULTING',
@@ -142,119 +141,18 @@ async function getHomeData() {
 }
 
 export default async function HomePage() {
-  const { courses, diplomados, especializaciones, teachers, ebooks, heroTitle, heroDescription, logos } = await getHomeData()
+  const { courses, diplomados, especializaciones, teachers, ebooks, logos } = await getHomeData()
   const cursosConfig = getTipoProgramaConfig('CURSO')
   const diplomadosConfig = getTipoProgramaConfig('DIPLOMADO')
   const especializacionesConfig = getTipoProgramaConfig('ESPECIALIZACION')
 
   return (
     <>
-      {/* ── 1. HERO CARRUSEL DE IMÁGENES (MS&M CONSULTING) ── */}
-      <HeroCarouselSection />
+
 
       {/* ── 2. HERO PRINCIPAL ─────────────────────────── */}
-      <section
-        style={{
-          background: '#102747',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Patrón de grid decorativo */}
-        <div
-          aria-hidden
-          style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
-        />
-        {/* Glow derecho */}
-        <div aria-hidden style={{ position: 'absolute', top: '-20%', right: '-10%', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(var(--web-primary-rgb, 37, 146, 127),0.25) 0%, transparent 65%)', pointerEvents: 'none' }} />
-
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '5rem 1.5rem' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', alignItems: 'center' }}>
-
-            {/* ── Izquierda: texto ── */}
-            <div style={{ position: 'relative', zIndex: 2 }}>
-              {/* Eyebrow */}
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-5"
-                style={{ backgroundColor: 'rgba(var(--web-light-rgb, 189, 217, 98),0.15)', border: '1px solid rgba(var(--web-light-rgb, 189, 217, 98),0.3)' }}
-              >
-                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--web-light, #BDD962)' }} />
-                <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'var(--web-light, #BDD962)', fontWeight: 600 }}>
-                  Plataforma educativa online
-                </span>
-              </div>
-
-              {/* H1 */}
-              <h1
-                style={{
-                  fontFamily: 'Poppins, sans-serif',
-                  fontSize: 'clamp(2rem, 5vw, 3.25rem)',
-                  fontWeight: 800,
-                  color: '#ffffff',
-                  letterSpacing: '-0.025em',
-                  lineHeight: 1.15,
-                  marginBottom: '1.25rem',
-                }}
-              >
-                {heroTitle.split('\n')[0]}
-                {heroTitle.split('\n')[1] && (
-                  <>
-                    <br />
-                    <span style={{ color: '#FFB600' }}>{heroTitle.split('\n')[1]}</span>
-                  </>
-                )}
-              </h1>
-
-              {/* Descripción */}
-              <p
-                style={{
-                  fontFamily: 'Poppins, sans-serif',
-                  fontSize: '1rem',
-                  color: 'rgba(255,255,255,0.7)',
-                  lineHeight: 1.75,
-                  maxWidth: '480px',
-                  marginBottom: '2.5rem',
-                }}
-              >
-                {heroDescription}
-              </p>
-
-              {/* Botones */}
-              <div className="flex flex-wrap gap-4" style={{ marginBottom: '2.5rem' }}>
-                <HeroInstallButton />
-                <Link
-                  href="/cursos"
-                  className="inline-flex items-center gap-2 no-underline rounded-xl font-semibold transition-all duration-200"
-                  style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'rgba(255,255,255,0.08)', color: '#ffffff', fontSize: '0.9375rem', padding: '0.875rem 1.75rem', border: '1.5px solid rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)' }}
-                >
-                  Ver Cursos <ArrowRight size={18} />
-                </Link>
-              </div>
-
-              {/* Mini stats */}
-              <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-                {[
-                  { value: '+1,200', label: 'Estudiantes' },
-                  { value: '+80', label: 'Cursos' },
-                  { value: '98%', label: 'Satisfacción' },
-                ].map(stat => (
-                  <div key={stat.label}>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.375rem', fontWeight: 800, color: 'var(--web-light, #BDD962)', lineHeight: 1 }}>{stat.value}</div>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: '3px' }}>{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* ── Derecha: visual interactivo ── */}
-            <HeroVisual />
-          </div>
-        </div>
-      </section>
+      {/* ── 2. HERO PRINCIPAL ─────────────────────────── */}
+      <HomeVideoHero />
 
       {/* ── 2. LOGO MARQUEE ─────────────────────────── */}
       <ClientLogosMarquee logos={logos} />
@@ -289,7 +187,7 @@ export default async function HomePage() {
               className="no-underline inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm"
               style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', color: '#ffffff' }}
             >
-              Ver todos los cursos <ArrowRight size={16} />
+              Ver todos los programas <ArrowRight size={16} />
             </Link>
           </div>
         </ScrollReveal>
@@ -324,34 +222,54 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── 3c. ESPECIALIZACIONES DESTACADAS ────────── */}
-      {especializaciones.length > 0 && (
-        <section className="section-container" style={{ borderTop: '1px solid hsl(214, 20%, 92%)' }}>
-          <ScrollReveal>
-            <div className="flex items-end justify-between mb-8">
-              <div>
-                <h2 className="section-title">{especializacionesConfig.homeTitle}</h2>
-                <p className="section-subtitle">{especializacionesConfig.homeSubtitle}</p>
+      {/* ── 3c. CONVENIOS, RESPALDOS Y RECONOCIMIENTOS ────────── */}
+      <section className="section-container" style={{ borderTop: '1px solid hsl(214, 20%, 92%)' }}>
+        <ScrollReveal>
+          <div className="flex justify-center mb-10 text-center">
+            <h2 className="section-title">Convenios, respaldos y reconocimientos</h2>
+          </div>
+        </ScrollReveal>
+        <ScrollReveal delay={0.1}>
+          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 lg:gap-24 max-w-5xl mx-auto px-4 opacity-90 pb-10">
+            
+            <div className="relative group cursor-pointer">
+              <img src="/images/convenios/convenios/camara-de-comercio.jpg" alt="Cámara de Comercio de Lima" className="max-h-24 md:max-h-28 w-auto object-contain transition-transform group-hover:scale-105" />
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-[11px] px-2.5 py-1 rounded-md whitespace-nowrap pointer-events-none z-10 shadow-lg font-medium">
+                convenios - cámara de comercio
               </div>
-              <Link
-                href={especializacionesConfig.webPath}
-                className="no-underline hidden sm:inline-flex items-center gap-2 text-sm font-semibold"
-                style={{ fontFamily: 'Poppins, sans-serif', color: 'var(--web-primary, #25927F)' }}
-              >
-                Ver todas <ArrowRight size={16} />
-              </Link>
             </div>
-          </ScrollReveal>
-          <ScrollReveal delay={0.1}>
-            <HomeCoursesSection
-              courses={especializaciones}
-              catalogHref={especializacionesConfig.webPath}
-              emptyMessage={especializacionesConfig.emptyMessage}
-              viewLabel="Ver especialización"
-            />
-          </ScrollReveal>
-        </section>
-      )}
+
+            <div className="relative group cursor-pointer">
+              <img src="/images/convenios/respaldos/cipm.jpg" alt="CIPM" className="max-h-24 md:max-h-28 w-auto object-contain transition-transform group-hover:scale-105" />
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-[11px] px-2.5 py-1 rounded-md whitespace-nowrap pointer-events-none z-10 shadow-lg font-medium">
+                respaldos - cipm
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer">
+              <img src="/images/convenios/respaldos/laboratorio-labihsi.jpg" alt="LABIHSI" className="max-h-24 md:max-h-28 w-auto object-contain transition-transform group-hover:scale-105" />
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-[11px] px-2.5 py-1 rounded-md whitespace-nowrap pointer-events-none z-10 shadow-lg font-medium">
+                respaldos - laboratorio labihsi
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer">
+              <img src="/images/convenios/reconocimientos/proinnovate.png" alt="Proinnovate" className="max-h-20 md:max-h-24 w-auto object-contain transition-transform group-hover:scale-105" />
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-[11px] px-2.5 py-1 rounded-md whitespace-nowrap pointer-events-none z-10 shadow-lg font-medium">
+                reconocimientos - proinnovate
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer">
+              <img src="/images/convenios/reconocimientos/produce.png" alt="Produce" className="max-h-20 md:max-h-24 w-auto object-contain transition-transform group-hover:scale-105" />
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-[11px] px-2.5 py-1 rounded-md whitespace-nowrap pointer-events-none z-10 shadow-lg font-medium">
+                reconocimientos - produce
+              </div>
+            </div>
+
+          </div>
+        </ScrollReveal>
+      </section>
 
       {/* ── 4. EBOOKS DESTACADOS ────────────────────── */}
       {isFeatureEnabled('ebooks') && <HomeEbooksSection ebooks={ebooks} />}
@@ -365,47 +283,7 @@ export default async function HomePage() {
       {/* ── 7. EMPRESAS (B2B informativo) ───────────── */}
       {/* <CompaniesSection /> */}
 
-      {/* ── 8. CTA AGENDAR REUNIÓN ──────────────────── */}
-      <EnterpriseCTASection />
 
-      {/* ── 9. VERIFICAR CERTIFICADO ────────────────── */}
-      <SearchCertificateSection />
-
-      {/* ── 10. CTA INSCRIPCIÓN ─────────────────────── */}
-      <section className="bg-white py-16 text-center" style={{ borderTop: '1px solid hsl(214, 20%, 88%)' }}>
-        <div className="max-w-3xl mx-auto px-4">
-          <ScrollReveal>
-            <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6"
-              style={{ backgroundColor: 'rgba(var(--web-primary-rgb, 37, 146, 127),0.08)', color: 'var(--web-dark, #025E44)' }}
-            >
-              <CheckCircle size={16} />
-              <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.75rem', fontWeight: 600 }}>
-                Únete a miles de estudiantes
-              </span>
-            </div>
-            <h2
-              className="mb-4"
-              style={{ fontFamily: 'Poppins, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', fontWeight: 700, color: '#0A0A0A', letterSpacing: '-0.02em' }}
-            >
-              ¿Listo para transformar tu carrera?
-            </h2>
-            <p
-              className="mb-8 max-w-xl mx-auto"
-              style={{ fontFamily: 'Poppins, sans-serif', color: 'hsl(215, 16%, 47%)', lineHeight: 1.7 }}
-            >
-              Inscríbete hoy y comienza a aprender con los mejores profesionales del sector.
-            </p>
-            <Link
-              href="/cursos"
-              className="no-underline inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-white transition-all duration-300 hover:scale-105"
-              style={{ fontFamily: 'Poppins, sans-serif', backgroundColor: 'var(--web-primary, #25927F)', boxShadow: '0 6px 20px rgba(var(--web-primary-rgb, 37, 146, 127),0.35)' }}
-            >
-              Inscribirse ahora <ArrowRight size={18} />
-            </Link>
-          </ScrollReveal>
-        </div>
-      </section>
     </>
   )
 }

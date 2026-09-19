@@ -284,7 +284,7 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                                         label={`Lección ${currentLesson.orden || 1}`}
                                         sx={{
                                             bgcolor: 'rgba(2,94,68,0.08)',
-                                            color: '#025E44',
+                                            color: '#000000',
                                             fontWeight: 700,
                                             fontSize: '0.7rem',
                                             height: '22px',
@@ -425,7 +425,7 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                                     py: 0.75,
                                     ...(currentLesson.completada
                                         ? { borderColor: 'success.main', color: 'success.main', '&:hover': { bgcolor: 'rgba(46,125,50,0.05)' } }
-                                        : { bgcolor: '#025E44', '&:hover': { bgcolor: '#014d36' }, boxShadow: 'none' }
+                                        : { bgcolor: '#FFB600', color: '#000000', '&:hover': { bgcolor: '#E5A300' }, boxShadow: 'none' }
                                     )
                                 }}
                             >
@@ -478,9 +478,9 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                                 minHeight: '48px',
                                 px: { xs: 2, sm: 3 },
                                 color: 'text.secondary',
-                                '&.Mui-selected': { color: '#025E44', fontWeight: 700 }
+                                '&.Mui-selected': { color: '#000000', fontWeight: 700 }
                             },
-                            '& .MuiTabs-indicator': { bgcolor: '#025E44', height: '2.5px', borderRadius: '2px 2px 0 0' }
+                            '& .MuiTabs-indicator': { bgcolor: '#000000', height: '2.5px', borderRadius: '2px 2px 0 0' }
                         }}
                     >
                         {TABS.map((label) => <Tab key={label} label={label} />)}
@@ -507,7 +507,7 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                                     <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 1 }}>
                                         {(course as any).que_aprenderas.split('\n').filter(Boolean).map((item: string, i: number) => (
                                             <Box key={i} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                                                <i className="tabler-circle-check-filled" style={{ color: '#025E44', fontSize: '1rem', marginTop: '2px', flexShrink: 0 }} />
+                                                <i className="tabler-circle-check-filled" style={{ color: '#000000', fontSize: '1rem', marginTop: '2px', flexShrink: 0 }} />
                                                 <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>{item.trim()}</Typography>
                                             </Box>
                                         ))}
@@ -525,7 +525,7 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                             {currentLesson?.contenido && (
                                 <Box>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                                        <Box sx={{ width: 3, height: 18, bgcolor: '#025E44', borderRadius: 2 }} />
+                                        <Box sx={{ width: 3, height: 18, bgcolor: '#000000', borderRadius: 2 }} />
                                         <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Contenido de esta lección</Typography>
                                     </Box>
                                     <LessonContent titulo="" descripcion={currentLesson.contenido} recursos={[]} />
@@ -596,19 +596,19 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                                 if (exhausted) return { label: 'Ver resultado', bg: '#ea580c' }
                                 if (isActive) return { label: 'En curso', bg: '#d97706' }
                                 if (expiredWithAttempts) return { label: 'Ver resultado', bg: '#64748b' }
-                                if (lockedFuture) return { label: 'Próximamente', bg: '#3b82f6' }
+                                if (lockedFuture) return { label: 'Próximamente', bg: '#000000' }
                                 if (lockedExpired) return { label: 'Expirado', bg: '#dc2626' }
                                 if (lockedProgress) return { label: 'Bloqueado', bg: '#94a3b8' }
 
-                                return { label: failed ? 'Reintentar' : 'Iniciar', bg: failed ? '#dc2626' : '#025E44' }
+                                return { label: failed ? 'Reintentar' : 'Iniciar', bg: failed ? '#dc2626' : '#000000' }
                             })()
 
                             // Colores según resultado
-                            const cardBorderColor = approved ? '#16a34a40' : failed ? '#dc262640' : isActive ? '#025E44' : 'divider'
+                            const cardBorderColor = approved ? '#16a34a40' : failed ? '#dc262640' : isActive ? '#000000' : 'divider'
                             const cardBg = approved ? 'rgba(22,163,74,0.04)' : failed ? 'rgba(220,38,38,0.03)' : isActive ? 'rgba(2,94,68,0.04)' : 'background.paper'
                             const iconBg = approved ? 'rgba(22,163,74,0.12)' : failed ? 'rgba(220,38,38,0.1)' : ex.tipo === 'FINAL' ? 'rgba(2,94,68,0.1)' : 'rgba(217,119,6,0.1)'
                             const iconClass = approved ? 'tabler-circle-check-filled' : failed ? 'tabler-circle-x-filled' : ex.tipo === 'FINAL' ? 'tabler-trophy' : 'tabler-clipboard-check'
-                            const iconColor = approved ? '#16a34a' : failed ? '#dc2626' : ex.tipo === 'FINAL' ? '#025E44' : '#d97706'
+                            const iconColor = approved ? '#16a34a' : failed ? '#dc2626' : ex.tipo === 'FINAL' ? '#000000' : '#d97706'
 
                             return (
                                 <Box sx={{
@@ -640,7 +640,7 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.25 }}>
                                             <Typography variant="body2" sx={{ fontWeight: 700 }}>{ex.titulo}</Typography>
                                             <Chip size="small" label={ex.tipo === 'FINAL' ? 'Examen Final' : 'Evaluación'}
-                                                sx={{ height: 18, fontSize: '0.65rem', fontWeight: 700, bgcolor: ex.tipo === 'FINAL' ? 'rgba(2,94,68,0.1)' : 'rgba(217,119,6,0.1)', color: ex.tipo === 'FINAL' ? '#025E44' : '#d97706' }} />
+                                                sx={{ height: 18, fontSize: '0.65rem', fontWeight: 700, bgcolor: ex.tipo === 'FINAL' ? 'rgba(2,94,68,0.1)' : 'rgba(217,119,6,0.1)', color: ex.tipo === 'FINAL' ? '#000000' : '#d97706' }} />
                                             {approved && (
                                                 <Chip size="small" label="Aprobado" icon={<i className="tabler-check" style={{ fontSize: '0.65rem' }} />}
                                                     sx={{ height: 18, fontSize: '0.65rem', fontWeight: 700, bgcolor: 'rgba(22,163,74,0.12)', color: '#16a34a' }} />
@@ -700,14 +700,14 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
 
                                     return (
                                         <Box key={mod.id}>
-                                            <Typography variant="caption" sx={{ fontWeight: 700, color: '#025E44', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', mb: 1 }}>{mod.titulo}</Typography>
+                                            <Typography variant="caption" sx={{ fontWeight: 700, color: '#000000', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', mb: 1 }}>{mod.titulo}</Typography>
                                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>{exams.map((ex: any) => <ExamCard key={ex.id} ex={ex} />)}</Box>
                                         </Box>
                                     )
                                 })}
                                 {finals.length > 0 && (
                                     <Box>
-                                        <Typography variant="caption" sx={{ fontWeight: 700, color: '#025E44', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', mb: 1 }}>Examen Final</Typography>
+                                        <Typography variant="caption" sx={{ fontWeight: 700, color: '#000000', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', mb: 1 }}>Examen Final</Typography>
                                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>{finals.map((ex: any) => <ExamCard key={ex.id} ex={ex} />)}</Box>
                                     </Box>
                                 )}
@@ -741,8 +741,8 @@ const CoursePlayerView = ({ course, phoneNumberProfesor, initialLessonId, initia
                                     <Box key={mod.id}>
                                         {/* Cabecera de módulo */}
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                                            <Box sx={{ width: 3, height: 16, bgcolor: '#025E44', borderRadius: 2, flexShrink: 0 }} />
-                                            <Typography variant="caption" sx={{ fontWeight: 700, color: '#025E44', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                            <Box sx={{ width: 3, height: 16, bgcolor: '#000000', borderRadius: 2, flexShrink: 0 }} />
+                                            <Typography variant="caption" sx={{ fontWeight: 700, color: '#000000', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                                 {mod.titulo}
                                             </Typography>
                                         </Box>

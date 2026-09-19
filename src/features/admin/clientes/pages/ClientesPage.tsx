@@ -132,7 +132,7 @@ export function ClientesPage() {
 
             <Box className='grid grid-cols-1 gap-4 sm:grid-cols-3'>
                 {[
-                    { label: 'Total de clientes', value: '128', icon: 'tabler-building-community', color: '#2563eb' },
+                    { label: 'Total de clientes', value: '128', icon: 'tabler-building-community', color: '#000000' },
                     { label: 'Clientes activos', value: '96', icon: 'tabler-building-check', color: '#16a34a' },
                     { label: 'Por atender', value: '12', icon: 'tabler-clock-hour-4', color: '#d97706' }
                 ].map(stat => (

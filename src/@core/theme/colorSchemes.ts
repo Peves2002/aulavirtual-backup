@@ -9,9 +9,9 @@ const colorSchemes = (skin: Skin): Theme['colorSchemes'] => {
     light: {
       palette: {
         primary: {
-          main: '#25927F',
-          light: '#BDD962',
-          dark: '#025E44',
+          main: '#FFB600',
+          light: '#FFC433',
+          dark: '#E5A300',
           lighterOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.08)',
           lightOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.16)',
           mainOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.24)',
@@ -19,9 +19,9 @@ const colorSchemes = (skin: Skin): Theme['colorSchemes'] => {
           darkerOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.38)'
         },
         secondary: {
-          main: '#808390',
-          light: '#999CA6',
-          dark: '#737682',
+          main: '#4D4D4D',
+          light: '#6B6B6B',
+          dark: '#262626',
           contrastText: '#FFF',
           lighterOpacity: 'rgb(var(--mui-palette-secondary-mainChannel) / 0.08)',
           lightOpacity: 'rgb(var(--mui-palette-secondary-mainChannel) / 0.16)',
@@ -83,7 +83,7 @@ const colorSchemes = (skin: Skin): Theme['colorSchemes'] => {
         divider: `rgb(var(--mui-mainColorChannels-light) / 0.12)`,
         dividerChannel: 'var(--mui-mainColorChannels-light)',
         background: {
-          default: skin === 'bordered' ? '#FFFFFF' : '#F8F7FA',
+          default: skin === 'bordered' ? '#FFFFFF' : '#F2F2F2',
           paper: '#FFFFFF',
           paperChannel: '255 255 255'
         },
@@ -148,8 +148,8 @@ const colorSchemes = (skin: Skin): Theme['colorSchemes'] => {
           border: 'var(--mui-palette-divider)'
         },
         customColors: {
-          bodyBg: '#F8F7FA',
-          chatBg: '#F3F2F5',
+          bodyBg: '#F2F2F2',
+          chatBg: '#F8F8F8',
           greyLightBg: '#FAFAFA',
           inputBorder: `rgb(var(--mui-mainColorChannels-light) / 0.22)`,
           tableHeaderBg: '#FFFFFF',
@@ -161,9 +161,9 @@ const colorSchemes = (skin: Skin): Theme['colorSchemes'] => {
     dark: {
       palette: {
         primary: {
-          main: '#25927F',
-          light: '#BDD962',
-          dark: '#025E44',
+          main: '#FFB600',
+          light: '#FFC433',
+          dark: '#E5A300',
           lighterOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.08)',
           lightOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.16)',
           mainOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.24)',
@@ -171,9 +171,9 @@ const colorSchemes = (skin: Skin): Theme['colorSchemes'] => {
           darkerOpacity: 'rgb(var(--mui-palette-primary-mainChannel) / 0.38)'
         },
         secondary: {
-          main: '#808390',
-          light: '#999CA6',
-          dark: '#737682',
+          main: '#4D4D4D',
+          light: '#6B6B6B',
+          dark: '#262626',
           contrastText: '#FFF',
           lighterOpacity: 'rgb(var(--mui-palette-secondary-mainChannel) / 0.08)',
           lightOpacity: 'rgb(var(--mui-palette-secondary-mainChannel) / 0.16)',
@@ -235,9 +235,9 @@ const colorSchemes = (skin: Skin): Theme['colorSchemes'] => {
         divider: `rgb(var(--mui-mainColorChannels-dark) / 0.12)`,
         dividerChannel: 'var(--mui-mainColorChannels-dark)',
         background: {
-          default: skin === 'bordered' ? '#2F3349' : '#25293C',
-          paper: '#2F3349',
-          paperChannel: '47 51 73'
+          default: skin === 'bordered' ? '#1A1A1A' : '#000000',
+          paper: '#1A1A1A',
+          paperChannel: '26 26 26'
         },
         action: {
           active: `rgb(var(--mui-mainColorChannels-dark) / 0.6)`,
@@ -300,9 +300,9 @@ const colorSchemes = (skin: Skin): Theme['colorSchemes'] => {
           border: 'var(--mui-palette-divider)'
         },
         customColors: {
-          bodyBg: '#25293C',
-          chatBg: '#202534',
-          greyLightBg: '#353A52',
+          bodyBg: '#000000',
+          chatBg: '#111111',
+          greyLightBg: '#1A1A1A',
           inputBorder: `rgb(var(--mui-mainColorChannels-dark) / 0.22)`,
           tableHeaderBg: '#2F3349',
           tooltipText: '#2F3349',

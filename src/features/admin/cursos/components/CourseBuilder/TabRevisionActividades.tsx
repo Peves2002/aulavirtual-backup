@@ -351,7 +351,7 @@ function GradeModal({
       )}
 
       {entrega?.comentario_estudiante && (
-        <Box sx={{ mb: 2.5, p: 1.5, borderRadius: 2, bgcolor: alpha('#3b82f6', 0.06), border: '1px solid', borderColor: alpha('#3b82f6', 0.2) }}>
+        <Box sx={{ mb: 2.5, p: 1.5, borderRadius: 2, bgcolor: alpha('#000000', 0.06), border: '1px solid', borderColor: alpha('#000000', 0.2) }}>
           <Typography variant="caption" color="primary.main" fontWeight={600} sx={{ display: 'block', mb: 0.5 }}>
             COMENTARIO DEL ESTUDIANTE
           </Typography>

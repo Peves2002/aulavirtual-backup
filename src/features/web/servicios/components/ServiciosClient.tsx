@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { ShieldCheck, ArrowRight, PhoneCall, Search, ChevronsRight } from 'lucide-react'
 
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
+import HeroCarouselSection from '@/features/web/home/components/HeroCarouselSection'
 import { SERVICES_DATA } from '../data/servicesData'
 
 interface ServiciosClientProps {
@@ -45,57 +46,8 @@ export default function ServiciosClient({ waNumero }: ServiciosClientProps) {
 
   return (
     <div className='bg-slate-50 min-h-screen pb-24'>
-      {/* ── HERO DE SERVICIOS ────────────────────────────────────────── */}
-      <section className='relative pt-32 pb-20 bg-slate-950 overflow-hidden text-white'>
-        <div
-          aria-hidden
-          className='absolute inset-0 pointer-events-none opacity-20'
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
-            backgroundSize: '48px 48px'
-          }}
-        />
-        <div className='absolute top-0 right-0 w-96 h-96 bg-[#25927F]/20 rounded-full filter blur-3xl pointer-events-none' />
-
-        <div className='relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <ScrollReveal>
-            <div className='max-w-3xl mx-auto'>
-              <div className='inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#BDD962]/15 border border-[#BDD962]/30 text-[#BDD962] text-xs font-bold uppercase tracking-wider mb-6'>
-                <ShieldCheck size={16} />
-                MS&M CONSULTING — Soluciones Especializadas
-              </div>
-              <h1
-                className='text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight'
-                style={{ fontFamily: 'Poppins, sans-serif' }}
-              >
-                Nuestros <span className='text-[#BDD962]'>Servicios</span>
-              </h1>
-              <p
-                className='text-base sm:text-lg text-slate-300 leading-relaxed font-normal mb-8 max-w-2xl mx-auto'
-                style={{ fontFamily: 'Poppins, sans-serif' }}
-              >
-                {SERVICES_DATA.length} líneas de servicios para cuidar a tu equipo y fortalecer tu empresa. Seguridad,
-                salud ocupacional, formación, ITSE, homologaciones y gestión del talento humano.
-              </p>
-
-              {/* Buscador */}
-              <div className='relative max-w-md mx-auto'>
-                <Search className='absolute left-4 top-1/2 -translate-y-1/2 text-slate-400' size={18} />
-                <input
-                  type='text'
-                  aria-label='Buscar servicios y especialidades'
-                  placeholder='Busca SST, químicos, ISO, recursos humanos...'
-                  value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
-                  className='w-full pl-11 pr-4 py-3.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-[#BDD962] transition-colors'
-                  style={{ fontFamily: 'Poppins, sans-serif' }}
-                />
-              </div>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
+      {/* ── HERO DE SERVICIOS (Carrusel trasladado) ───────────────────────── */}
+      <HeroCarouselSection waNumber={waNumero} />
 
       {/* ── RETÍCULA DE TARJETAS DE SERVICIO ──────────────────────── */}
       <section
@@ -108,19 +60,34 @@ export default function ServiciosClient({ waNumero }: ServiciosClientProps) {
           backgroundSize: '24px 24px'
         }}
       >
-        <div className='flex items-center justify-between gap-4 mb-6'>
-          <p role='status' aria-live='polite' className='text-sm text-slate-600'>
-            {filteredServices.length} de {SERVICES_DATA.length} servicios
-          </p>
+        <div className='flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8'>
+          <div className='relative w-full max-w-md'>
+            <Search className='absolute left-4 top-1/2 -translate-y-1/2 text-slate-400' size={18} />
+            <input
+              type='text'
+              aria-label='Buscar servicios'
+              placeholder='Busca SST, químicos, ISO, recursos humanos...'
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              className='w-full pl-11 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-[#FFB600] focus:ring-1 focus:ring-[#FFB600] transition-all shadow-sm'
+              style={{ fontFamily: 'Poppins, sans-serif' }}
+            />
+          </div>
+          
+          <div className='flex items-center gap-4'>
+            <p role='status' aria-live='polite' className='text-sm text-slate-600 whitespace-nowrap'>
+              {filteredServices.length} de {SERVICES_DATA.length} servicios
+            </p>
           {searchTerm && (
             <button
               type='button'
               onClick={() => setSearchTerm('')}
-              className='text-sm font-semibold text-[#BDD962] underline underline-offset-4'
+              className='text-sm font-semibold text-[#FFB600] underline underline-offset-4'
             >
               Limpiar búsqueda
             </button>
           )}
+          </div>
         </div>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
           {filteredServices.map(service => {
@@ -135,7 +102,7 @@ export default function ServiciosClient({ waNumero }: ServiciosClientProps) {
                     {/* Imagen de referencia o Placeholder como enlace a ver más */}
                     <Link
                       href={`/servicios/${service.slug}`}
-                      className='relative block w-full overflow-hidden bg-gradient-to-br from-[#02115C] via-[#25927F] to-slate-900 cursor-pointer group'
+                      className='relative block w-full overflow-hidden bg-gradient-to-br from-black via-[#4D4D4D] to-black cursor-pointer group'
                       style={{ paddingTop: '56.25%' }}
                     >
                       {service.image ? (
@@ -150,7 +117,7 @@ export default function ServiciosClient({ waNumero }: ServiciosClientProps) {
                         <div className='absolute inset-0 flex flex-col items-center justify-center p-4 text-center text-white/90'>
                           <ShieldCheck
                             size={40}
-                            className='text-[#BDD962] mb-2 opacity-80 transition-transform duration-300 group-hover:scale-110'
+                            className='text-[#FFB600] mb-2 opacity-80 transition-transform duration-300 group-hover:scale-110'
                           />
                           <span
                             className='text-xs font-semibold tracking-wide uppercase text-slate-200'
@@ -167,7 +134,7 @@ export default function ServiciosClient({ waNumero }: ServiciosClientProps) {
                     <div className='px-6 pt-5 pb-4 flex flex-col'>
                       <Link
                         href={`/servicios/${service.slug}`}
-                        className='no-underline text-slate-900 hover:text-[#176958] transition-colors'
+                        className='no-underline text-slate-900 hover:text-[#FFB600] transition-colors'
                       >
                         <h2
                           className='text-xl font-extrabold text-center leading-tight line-clamp-2 min-h-[50px]'
@@ -184,7 +151,7 @@ export default function ServiciosClient({ waNumero }: ServiciosClientProps) {
                               key={idx}
                               className='flex items-start gap-1 text-sm leading-snug text-slate-700'
                             >
-                              <ChevronsRight size={19} strokeWidth={3} className='text-[#176958] shrink-0 -ml-1' />
+                              <ChevronsRight size={19} strokeWidth={3} className='text-[#FFB600] shrink-0 -ml-1' />
                               {sub.title}
                             </li>
                           ))}
@@ -196,7 +163,7 @@ export default function ServiciosClient({ waNumero }: ServiciosClientProps) {
                   <div className='mt-auto px-6 pb-6 pt-2 flex flex-col items-center gap-3'>
                     <Link
                       href={`/servicios/${service.slug}`}
-                      className='no-underline inline-flex items-center justify-center gap-2 min-w-[80%] px-4 py-3 rounded-sm font-bold text-sm bg-[#176958] text-white hover:bg-[#125445] transition-all shadow-sm'
+                      className='no-underline inline-flex items-center justify-center gap-2 min-w-[80%] px-4 py-3 rounded-sm font-bold text-sm bg-[#FFB600] text-black hover:bg-black hover:text-[#FFB600] transition-all shadow-sm'
                       style={{ fontFamily: 'Poppins, sans-serif' }}
                     >
                       Ver servicio <ArrowRight size={15} />
@@ -206,7 +173,7 @@ export default function ServiciosClient({ waNumero }: ServiciosClientProps) {
                       href={waUrl}
                       target='_blank'
                       rel='noopener noreferrer'
-                      className='no-underline inline-flex items-center gap-1.5 text-sm font-semibold text-[#0d9fc7] hover:text-[#176958] transition-colors'
+                      className='no-underline inline-flex items-center gap-1.5 text-sm font-semibold text-black hover:text-[#FFB600] transition-colors'
                       style={{ fontFamily: 'Poppins, sans-serif' }}
                     >
                       <PhoneCall size={15} />

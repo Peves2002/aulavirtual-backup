@@ -118,7 +118,7 @@ function CursoCard({ curso }: { curso: DashboardCurso }) {
               bgcolor: 'action.hover',
               '& .MuiLinearProgress-bar': {
                 borderRadius: 3,
-                background: 'linear-gradient(90deg, #10b981 0%, #3b82f6 100%)'
+                background: 'linear-gradient(90deg, #10b981 0%, #000000 100%)'
               }
             }}
           />

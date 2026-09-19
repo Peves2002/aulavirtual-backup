@@ -101,7 +101,7 @@ export default function EbookCard({
           <Box sx={{ position: 'absolute', top: 12, left: 12, zIndex: 2 }}>
             <Chip
               label={genero}
-              sx={{ bgcolor: '#3b82f6', color: 'white', fontWeight: 700, borderRadius: '12px', height: '28px', px: 1 }}
+              sx={{ bgcolor: '#4D4D4D', color: 'white', fontWeight: 700, borderRadius: '12px', height: '28px', px: 1 }}
             />
           </Box>
         )}
@@ -122,7 +122,7 @@ export default function EbookCard({
           ) : (
             <Chip
               label='PDF'
-              sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 700, borderRadius: '12px', height: '28px', px: 1, boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}
+              sx={{ bgcolor: '#000000', color: 'white', fontWeight: 700, borderRadius: '12px', height: '28px', px: 1, boxShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
             />
           )}
         </Box>
@@ -135,7 +135,7 @@ export default function EbookCard({
             <Chip
               label={categoria.nombre}
               size='small'
-              sx={{ bgcolor: 'primary.50', color: 'primary.main', fontWeight: 700, mb: 1, borderRadius: '6px', fontSize: '0.65rem', textTransform: 'uppercase' }}
+              sx={{ bgcolor: '#F2F2F2', color: '#4D4D4D', fontWeight: 700, mb: 1, borderRadius: '6px', fontSize: '0.65rem', textTransform: 'uppercase' }}
             />
           )}
 
@@ -178,7 +178,7 @@ export default function EbookCard({
           )}
 
           {/* Precio */}
-          <Typography variant='h5' sx={{ fontWeight: 800, color: adquirido ? '#10b981' : 'primary.main' }}>
+          <Typography variant='h5' sx={{ fontWeight: 800, color: adquirido ? '#10b981' : '#000000' }}>
             {adquirido ? 'Adquirido' : es_gratis ? 'Gratis' : `${moneda} ${precio.toFixed(2)}`}
           </Typography>
           {!adquirido && !es_gratis && precio_falso > 0 && (
@@ -197,11 +197,12 @@ export default function EbookCard({
             variant='contained'
             sx={{
               borderRadius: '12px', textTransform: 'none', fontWeight: 700, px: 3, py: 1.5, height: 50,
-              bgcolor: adquirido ? '#10b981' : 'primary.main',
+              bgcolor: adquirido ? '#10b981' : '#000000',
+              color: '#FFFFFF',
               boxShadow: adquirido
                 ? '0 4px 14px rgba(16,185,129,0.39)'
-                : '0 4px 14px 0 rgba(var(--mui-palette-primary-mainChannel) / 0.39)',
-              '&:hover': { bgcolor: adquirido ? '#059669' : 'primary.dark' },
+                : '0 4px 14px 0 rgba(0,0,0,0.2)',
+              '&:hover': { bgcolor: adquirido ? '#059669' : '#FFB600', color: adquirido ? '#FFFFFF' : '#000000' },
               flexGrow: 1,
             }}
           >
@@ -214,13 +215,13 @@ export default function EbookCard({
                 onClick={handleComprar}
                 sx={{
                   borderRadius: '12px',
-                  bgcolor: 'rgba(var(--mui-palette-primary-mainChannel) / 0.08)',
-                  color: 'primary.main',
+                  bgcolor: '#FFFFFF',
+                  color: '#000000',
                   width: 50, height: 50,
                   border: '1px solid',
-                  borderColor: 'rgba(var(--mui-palette-primary-mainChannel) / 0.12)',
+                  borderColor: '#000000',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  '&:hover': { bgcolor: 'rgba(var(--mui-palette-primary-mainChannel) / 0.15)', transform: 'translateY(-2px)', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' },
+                  '&:hover': { bgcolor: '#F2F2F2', transform: 'translateY(-2px)', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' },
                 }}
               >
                 <i className='tabler-credit-card' style={{ fontSize: '1.4rem' }} />

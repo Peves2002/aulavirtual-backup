@@ -63,14 +63,14 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
             backgroundSize: '48px 48px'
           }}
         />
-        <div className='absolute top-0 right-0 w-96 h-96 bg-[#25927F]/20 rounded-full filter blur-3xl pointer-events-none' />
+        <div className='absolute top-0 right-0 w-96 h-96 bg-[#FFB600]/20 rounded-full filter blur-3xl pointer-events-none' />
 
         <div className='relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <ScrollReveal>
             {/* Volver a servicios */}
             <Link
               href='/servicios'
-              className='no-underline inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-[#BDD962] transition-colors mb-6'
+              className='no-underline inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-[#FFB600] transition-colors mb-6'
               style={{ fontFamily: 'Poppins, sans-serif' }}
             >
               <ArrowLeft size={16} /> Volver a todos los servicios
@@ -78,7 +78,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
 
             <div className='grid grid-cols-1 lg:grid-cols-12 gap-10 items-center'>
               <div className='lg:col-span-7'>
-                <div className='inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#BDD962]/15 border border-[#BDD962]/30 text-[#BDD962] text-xs font-bold uppercase tracking-wider mb-4'>
+                <div className='inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFB600]/15 border border-[#FFB600]/30 text-[#FFB600] text-xs font-bold uppercase tracking-wider mb-4'>
                   <ShieldCheck size={15} />
                   {service.category}
                 </div>
@@ -99,7 +99,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                     href={waUrl}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='no-underline inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold bg-[#BDD962] text-slate-950 hover:bg-[#a8c74b] transition-all shadow-lg text-sm'
+                    className='no-underline inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold bg-[#FFB600] text-slate-950 hover:bg-[#e6a300] transition-all shadow-lg text-sm'
                     style={{ fontFamily: 'Poppins, sans-serif' }}
                   >
                     <PhoneCall size={18} />
@@ -118,7 +118,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
               <div className='lg:col-span-5'>
                 <div
                   onClick={() => service.image && setActiveImage({ src: service.image, title: service.title })}
-                  className='relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-gradient-to-br from-[#02115C] via-[#25927F] to-slate-900 cursor-pointer group/hero'
+                  className='relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-gradient-to-br from-[#000000] via-[#FFB600] to-slate-900 cursor-pointer group/hero'
                   style={{ paddingTop: '65%' }}
                 >
                   {service.image ? (
@@ -139,7 +139,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                     </>
                   ) : (
                     <div className='absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-white/90'>
-                      <ShieldCheck size={56} className='text-[#BDD962] mb-3 opacity-90' />
+                      <ShieldCheck size={56} className='text-[#FFB600] mb-3 opacity-90' />
                       <span
                         className='text-sm font-bold tracking-wider uppercase text-slate-200'
                         style={{ fontFamily: 'Poppins, sans-serif' }}
@@ -169,14 +169,14 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                     className='text-xl font-extrabold text-slate-900 mb-6 flex items-center gap-2'
                     style={{ fontFamily: 'Poppins, sans-serif' }}
                   >
-                    <Layers size={22} className='text-[#25927F]' />
+                    <Layers size={22} className='text-[#FFB600]' />
                     Especialidades y alcance del servicio
                   </h2>
                   <div className='grid grid-cols-1 gap-5'>
                     {service.subServicios.map((sub, idx) => (
                       <div
                         key={idx}
-                        className='group p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-[#25927F]/40 hover:bg-white hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row items-stretch sm:items-center gap-4'
+                        className='group p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-[#FFB600]/40 hover:bg-white hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row items-stretch sm:items-center gap-4'
                       >
                         {/* Imagen del sub-servicio */}
                         {sub.image ? (
@@ -198,7 +198,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                             </div>
                           </div>
                         ) : (
-                          <div className='p-2.5 rounded-lg bg-[#25927F]/10 text-[#25927F] shrink-0 self-start mt-0.5'>
+                          <div className='p-2.5 rounded-lg bg-[#FFB600]/10 text-[#FFB600] shrink-0 self-start mt-0.5'>
                             <CheckCircle2 size={20} />
                           </div>
                         )}
@@ -206,7 +206,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                         {/* Contenido textual del sub-servicio */}
                         <div className='flex-1 flex flex-col justify-center gap-1'>
                           <div className='flex items-center gap-2'>
-                            <CheckCircle2 size={16} className='text-[#25927F] shrink-0' />
+                            <CheckCircle2 size={16} className='text-[#FFB600] shrink-0' />
                             <h3
                               className='font-bold text-base text-slate-900 leading-snug'
                               style={{ fontFamily: 'Poppins, sans-serif' }}
@@ -237,7 +237,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                     className='text-xl font-extrabold text-slate-900 mb-4 flex items-center gap-2'
                     style={{ fontFamily: 'Poppins, sans-serif' }}
                   >
-                    <BookOpen size={22} className='text-[#25927F]' />
+                    <BookOpen size={22} className='text-[#FFB600]' />
                     Marco Legal & Normativas Aplicables
                   </h2>
                   <div className='flex flex-col gap-3'>
@@ -246,7 +246,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                         key={idx}
                         className='p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3'
                       >
-                        <Award size={20} className='text-[#25927F] shrink-0 mt-0.5' />
+                        <Award size={20} className='text-[#FFB600] shrink-0 mt-0.5' />
                         <div>
                           <span
                             className='font-bold text-sm text-slate-900 block'
@@ -273,14 +273,14 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                     className='text-xl font-extrabold text-slate-900 mb-6 flex items-center gap-2'
                     style={{ fontFamily: 'Poppins, sans-serif' }}
                   >
-                    <ShieldCheck size={22} className='text-[#25927F]' />
+                    <ShieldCheck size={22} className='text-[#FFB600]' />
                     Ejes Principales de Acción
                   </h2>
                   <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                     {service.ejes.map((eje, idx) => (
-                      <div key={idx} className='p-5 rounded-xl bg-emerald-50/60 border border-emerald-100 text-center'>
+                      <div key={idx} className='p-5 rounded-xl bg-[#FFB600]/5 border border-[#FFB600]/20 text-center'>
                         <span
-                          className='font-extrabold text-[#25927F] text-base block mb-2'
+                          className='font-extrabold text-[#FFB600] text-base block mb-2'
                           style={{ fontFamily: 'Poppins, sans-serif' }}
                         >
                           {eje.title}
@@ -305,7 +305,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                   className='text-xl font-extrabold text-slate-900 mb-6 flex items-center gap-2'
                   style={{ fontFamily: 'Poppins, sans-serif' }}
                 >
-                  <CheckCircle2 size={22} className='text-[#25927F]' />
+                  <CheckCircle2 size={22} className='text-[#FFB600]' />
                   Entregables y Alcance Operativo
                 </h2>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
@@ -314,7 +314,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                       key={idx}
                       className='p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3'
                     >
-                      <CheckCircle2 size={18} className='text-[#25927F] shrink-0 mt-0.5' />
+                      <CheckCircle2 size={18} className='text-[#FFB600] shrink-0 mt-0.5' />
                       <span
                         className='text-xs font-semibold text-slate-800 leading-relaxed'
                         style={{ fontFamily: 'Poppins, sans-serif' }}
@@ -335,7 +335,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                     className='text-xl font-extrabold text-slate-900 mb-6 flex items-center gap-2'
                     style={{ fontFamily: 'Poppins, sans-serif' }}
                   >
-                    <Clock size={22} className='text-[#25927F]' />
+                    <Clock size={22} className='text-[#FFB600]' />
                     Planes & Módulos Disponibles
                   </h2>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
@@ -352,7 +352,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                             >
                               {plan.name}
                             </span>
-                            <span className='text-[11px] font-bold text-[#25927F] bg-[#25927F]/10 px-2.5 py-1 rounded-md'>
+                            <span className='text-[11px] font-bold text-[#FFB600] bg-[#FFB600]/10 px-2.5 py-1 rounded-md'>
                               {plan.time}
                             </span>
                           </div>
@@ -362,7 +362,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                           <ul className='space-y-2 mb-4 text-xs text-slate-700'>
                             {plan.features.map((f, fi) => (
                               <li key={fi} className='flex items-center gap-2'>
-                                <Check size={14} className='text-[#25927F]' /> {f}
+                                <Check size={14} className='text-[#FFB600]' /> {f}
                               </li>
                             ))}
                           </ul>
@@ -379,7 +379,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
               <ScrollReveal>
                 <div className='bg-slate-900 text-white p-8 rounded-2xl border border-slate-800'>
                   <h2
-                    className='text-xl font-extrabold text-[#BDD962] mb-6 flex items-center gap-2'
+                    className='text-xl font-extrabold text-[#FFB600] mb-6 flex items-center gap-2'
                     style={{ fontFamily: 'Poppins, sans-serif' }}
                   >
                     <Building2 size={22} />
@@ -389,7 +389,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                     {service.casos.map((caso, idx) => (
                       <div key={idx} className='p-5 rounded-xl bg-slate-950 border border-slate-800'>
                         <span
-                          className='text-xs font-bold uppercase tracking-wider text-[#BDD962] block mb-2'
+                          className='text-xs font-bold uppercase tracking-wider text-[#FFB600] block mb-2'
                           style={{ fontFamily: 'Poppins, sans-serif' }}
                         >
                           {caso.client}
@@ -413,7 +413,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
             <div className='sticky top-28 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-6'>
               <div>
                 <span
-                  className='text-xs font-bold uppercase tracking-wider text-[#25927F] block mb-1'
+                  className='text-xs font-bold uppercase tracking-wider text-[#FFB600] block mb-1'
                   style={{ fontFamily: 'Poppins, sans-serif' }}
                 >
                   Cotización Rápida
@@ -432,7 +432,7 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
                 href={waUrl}
                 target='_blank'
                 rel='noopener noreferrer'
-                className='no-underline w-full py-3.5 px-4 rounded-xl font-bold bg-[#BDD962] text-slate-950 hover:bg-[#a8c74b] transition-all text-xs text-center flex items-center justify-center gap-2 shadow-sm'
+                className='no-underline w-full py-3.5 px-4 rounded-xl font-bold bg-[#FFB600] text-slate-950 hover:bg-[#e6a300] transition-all text-xs text-center flex items-center justify-center gap-2 shadow-sm'
                 style={{ fontFamily: 'Poppins, sans-serif' }}
               >
                 <PhoneCall size={16} /> Cotizar por WhatsApp
@@ -440,13 +440,13 @@ export default function ServiceDetailClient({ service, waNumero }: ServiceDetail
 
               <div className='pt-4 border-t border-slate-100 flex flex-col gap-3 text-xs text-slate-600'>
                 <div className='flex items-center gap-2'>
-                  <CheckCircle2 size={16} className='text-[#25927F]' /> Atendemos en Lima y todo el Perú
+                  <CheckCircle2 size={16} className='text-[#FFB600]' /> Atendemos en Lima y todo el Perú
                 </div>
                 <div className='flex items-center gap-2'>
-                  <CheckCircle2 size={16} className='text-[#25927F]' /> Acompañamiento técnico especializado
+                  <CheckCircle2 size={16} className='text-[#FFB600]' /> Acompañamiento técnico especializado
                 </div>
                 <div className='flex items-center gap-2'>
-                  <CheckCircle2 size={16} className='text-[#25927F]' /> Equipo técnico experimentado
+                  <CheckCircle2 size={16} className='text-[#FFB600]' /> Equipo técnico experimentado
                 </div>
               </div>
             </div>

@@ -28,27 +28,27 @@ function isLink(r: Resource) {
 type ServiceInfo = { name: string; icon: string; color: string; bg: string }
 
 function detectService(url: string): ServiceInfo {
-    if (/youtube\.com|youtu\.be/.test(url)) return { name: 'YouTube', icon: 'tabler-brand-youtube', color: '#ff0000', bg: '#fff1f1' }
+    if (/youtube\.com|youtu\.be/.test(url)) return { name: 'YouTube', icon: 'tabler-brand-youtube', color: '#000000', bg: '#F2F2F2' }
 
-    if (/drive\.google\.com/.test(url)) return { name: 'Google Drive', icon: 'tabler-brand-google-drive', color: '#34a853', bg: '#f0fdf4' }
+    if (/drive\.google\.com/.test(url)) return { name: 'Google Drive', icon: 'tabler-brand-google-drive', color: '#000000', bg: '#F2F2F2' }
 
-    if (/docs\.google\.com/.test(url)) return { name: 'Google Docs', icon: 'tabler-file-text', color: '#4285f4', bg: '#eff6ff' }
+    if (/docs\.google\.com/.test(url)) return { name: 'Google Docs', icon: 'tabler-file-text', color: '#000000', bg: '#F2F2F2' }
 
-    if (/vimeo\.com/.test(url)) return { name: 'Vimeo', icon: 'tabler-brand-vimeo', color: '#1ab7ea', bg: '#f0faff' }
+    if (/vimeo\.com/.test(url)) return { name: 'Vimeo', icon: 'tabler-brand-vimeo', color: '#000000', bg: '#F2F2F2' }
 
-    if (/dropbox\.com/.test(url)) return { name: 'Dropbox', icon: 'tabler-brand-dropbox', color: '#0061ff', bg: '#eff6ff' }
+    if (/dropbox\.com/.test(url)) return { name: 'Dropbox', icon: 'tabler-brand-dropbox', color: '#000000', bg: '#F2F2F2' }
 
-    if (/onedrive|sharepoint/.test(url)) return { name: 'OneDrive', icon: 'tabler-brand-onedrive', color: '#0078d4', bg: '#eff6ff' }
+    if (/onedrive|sharepoint/.test(url)) return { name: 'OneDrive', icon: 'tabler-brand-onedrive', color: '#000000', bg: '#F2F2F2' }
 
-    if (/zoom\.us/.test(url)) return { name: 'Zoom', icon: 'tabler-video', color: '#2d8cff', bg: '#eff6ff' }
+    if (/zoom\.us/.test(url)) return { name: 'Zoom', icon: 'tabler-video', color: '#000000', bg: '#F2F2F2' }
 
-    if (/meet\.google\.com/.test(url)) return { name: 'Google Meet', icon: 'tabler-video', color: '#00832d', bg: '#f0fdf4' }
+    if (/meet\.google\.com/.test(url)) return { name: 'Google Meet', icon: 'tabler-video', color: '#000000', bg: '#F2F2F2' }
 
-    if (/figma\.com/.test(url)) return { name: 'Figma', icon: 'tabler-brand-figma', color: '#f24e1e', bg: '#fff7f5' }
+    if (/figma\.com/.test(url)) return { name: 'Figma', icon: 'tabler-brand-figma', color: '#000000', bg: '#F2F2F2' }
 
-    if (/github\.com/.test(url)) return { name: 'GitHub', icon: 'tabler-brand-github', color: '#24292f', bg: '#f6f8fa' }
+    if (/github\.com/.test(url)) return { name: 'GitHub', icon: 'tabler-brand-github', color: '#000000', bg: '#F2F2F2' }
 
-    return { name: 'Enlace externo', icon: 'tabler-link', color: '#6366f1', bg: '#f5f3ff' }
+    return { name: 'Enlace externo', icon: 'tabler-link', color: '#000000', bg: '#F2F2F2' }
 }
 
 type FileInfo = { ext: string; icon: string; color: string; bg: string; label: string }
@@ -57,27 +57,27 @@ function detectFile(url: string, nombre: string): FileInfo {
     const ext = (url.split('.').pop() || nombre.split('.').pop() || '').toLowerCase()
 
     const map: Record<string, Omit<FileInfo, 'ext'>> = {
-        pdf:  { icon: 'tabler-file-type-pdf',  color: '#dc2626', bg: '#fef2f2', label: 'PDF' },
-        doc:  { icon: 'tabler-file-type-doc',  color: '#2563eb', bg: '#eff6ff', label: 'Word' },
-        docx: { icon: 'tabler-file-type-docx', color: '#2563eb', bg: '#eff6ff', label: 'Word' },
-        xls:  { icon: 'tabler-file-type-xls',  color: '#16a34a', bg: '#f0fdf4', label: 'Excel' },
-        xlsx: { icon: 'tabler-file-type-xlsx', color: '#16a34a', bg: '#f0fdf4', label: 'Excel' },
-        ppt:  { icon: 'tabler-file-type-ppt',  color: '#ea580c', bg: '#fff7ed', label: 'PowerPoint' },
-        pptx: { icon: 'tabler-file-type-ppt',  color: '#ea580c', bg: '#fff7ed', label: 'PowerPoint' },
-        jpg:  { icon: 'tabler-photo',           color: '#9333ea', bg: '#faf5ff', label: 'Imagen' },
-        jpeg: { icon: 'tabler-photo',           color: '#9333ea', bg: '#faf5ff', label: 'Imagen' },
-        png:  { icon: 'tabler-photo',           color: '#9333ea', bg: '#faf5ff', label: 'Imagen' },
-        gif:  { icon: 'tabler-gif',             color: '#9333ea', bg: '#faf5ff', label: 'GIF' },
-        webp: { icon: 'tabler-photo',           color: '#9333ea', bg: '#faf5ff', label: 'Imagen' },
-        mp4:  { icon: 'tabler-video',           color: '#0891b2', bg: '#ecfeff', label: 'Video' },
-        mp3:  { icon: 'tabler-music',           color: '#db2777', bg: '#fdf2f8', label: 'Audio' },
-        zip:  { icon: 'tabler-file-zip',        color: '#d97706', bg: '#fffbeb', label: 'ZIP' },
-        rar:  { icon: 'tabler-file-zip',        color: '#d97706', bg: '#fffbeb', label: 'RAR' },
-        txt:  { icon: 'tabler-file-text',       color: '#64748b', bg: '#f8fafc', label: 'Texto' },
-        csv:  { icon: 'tabler-table',           color: '#16a34a', bg: '#f0fdf4', label: 'CSV' },
+        pdf:  { icon: 'tabler-file-type-pdf',  color: '#000000', bg: '#F2F2F2', label: 'PDF' },
+        doc:  { icon: 'tabler-file-type-doc',  color: '#000000', bg: '#F2F2F2', label: 'Word' },
+        docx: { icon: 'tabler-file-type-docx', color: '#000000', bg: '#F2F2F2', label: 'Word' },
+        xls:  { icon: 'tabler-file-type-xls',  color: '#000000', bg: '#F2F2F2', label: 'Excel' },
+        xlsx: { icon: 'tabler-file-type-xlsx', color: '#000000', bg: '#F2F2F2', label: 'Excel' },
+        ppt:  { icon: 'tabler-file-type-ppt',  color: '#000000', bg: '#F2F2F2', label: 'PowerPoint' },
+        pptx: { icon: 'tabler-file-type-ppt',  color: '#000000', bg: '#F2F2F2', label: 'PowerPoint' },
+        jpg:  { icon: 'tabler-photo',           color: '#000000', bg: '#F2F2F2', label: 'Imagen' },
+        jpeg: { icon: 'tabler-photo',           color: '#000000', bg: '#F2F2F2', label: 'Imagen' },
+        png:  { icon: 'tabler-photo',           color: '#000000', bg: '#F2F2F2', label: 'Imagen' },
+        gif:  { icon: 'tabler-gif',             color: '#000000', bg: '#F2F2F2', label: 'GIF' },
+        webp: { icon: 'tabler-photo',           color: '#000000', bg: '#F2F2F2', label: 'Imagen' },
+        mp4:  { icon: 'tabler-video',           color: '#000000', bg: '#F2F2F2', label: 'Video' },
+        mp3:  { icon: 'tabler-music',           color: '#000000', bg: '#F2F2F2', label: 'Audio' },
+        zip:  { icon: 'tabler-file-zip',        color: '#000000', bg: '#F2F2F2', label: 'ZIP' },
+        rar:  { icon: 'tabler-file-zip',        color: '#000000', bg: '#F2F2F2', label: 'RAR' },
+        txt:  { icon: 'tabler-file-text',       color: '#000000', bg: '#F2F2F2', label: 'Texto' },
+        csv:  { icon: 'tabler-table',           color: '#000000', bg: '#F2F2F2', label: 'CSV' },
     }
 
-    return { ext, ...(map[ext] ?? { icon: 'tabler-file', color: '#64748b', bg: '#f8fafc', label: ext.toUpperCase() || 'Archivo' }) }
+    return { ext, ...(map[ext] ?? { icon: 'tabler-file', color: '#000000', bg: '#F2F2F2', label: ext.toUpperCase() || 'Archivo' }) }
 }
 
 // ── Sub-components ────────────────────────────────────────────────
@@ -183,7 +183,7 @@ const LessonContent = ({ titulo, descripcion, recursos = [] }: LessonContentProp
                 <Box sx={{ mb: 3, p: 3, borderRadius: '12px', border: '1px dashed', borderColor: 'divider', bgcolor: 'rgba(0,0,0,0.01)' }}>
                     <Typography
                         variant="body1"
-                        sx={{ color: '#334155', lineHeight: 1.75 }}
+                        sx={{ color: '#000000', lineHeight: 1.75 }}
                         dangerouslySetInnerHTML={{ __html: descripcion }}
                     />
                 </Box>
@@ -195,7 +195,7 @@ const LessonContent = ({ titulo, descripcion, recursos = [] }: LessonContentProp
                     {links.length > 0 && (
                         <Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                                <i className="tabler-link" style={{ fontSize: '1rem', color: '#6366f1' }} />
+                                <i className="tabler-link" style={{ fontSize: '1rem', color: '#000000' }} />
                                 <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                     Enlaces y recursos en línea
                                 </Typography>
@@ -210,7 +210,7 @@ const LessonContent = ({ titulo, descripcion, recursos = [] }: LessonContentProp
                     {files.length > 0 && (
                         <Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                                <i className="tabler-paperclip" style={{ fontSize: '1rem', color: '#64748b' }} />
+                                <i className="tabler-paperclip" style={{ fontSize: '1rem', color: '#000000' }} />
                                 <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                     Archivos descargables
                                 </Typography>

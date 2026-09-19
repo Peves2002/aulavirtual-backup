@@ -31,11 +31,11 @@ interface ActividadSectionProps {
 function getFileIcon(nombre: string) {
   const ext = nombre.split('.').pop()?.toLowerCase() ?? ''
 
-  if (ext === 'pdf') return 'tabler-file-type-pdf text-red-600'
-  if (['doc', 'docx'].includes(ext)) return 'tabler-file-type-docx text-blue-600'
-  if (['xls', 'xlsx'].includes(ext)) return 'tabler-file-type-xlsx text-green-600'
-  if (['zip', 'rar'].includes(ext)) return 'tabler-file-zip text-amber-600'
-  if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) return 'tabler-photo text-purple-600'
+  if (ext === 'pdf') return 'tabler-file-type-pdf text-slate-800'
+  if (['doc', 'docx'].includes(ext)) return 'tabler-file-type-docx text-slate-800'
+  if (['xls', 'xlsx'].includes(ext)) return 'tabler-file-type-xlsx text-slate-800'
+  if (['zip', 'rar'].includes(ext)) return 'tabler-file-zip text-slate-800'
+  if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) return 'tabler-photo text-slate-800'
 
   return 'tabler-file text-slate-500'
 }
@@ -210,10 +210,10 @@ export default function ActividadSection({ actividadId, onEntregaSuccess }: Acti
 
   return (
     <Card sx={{ border: '1px solid', borderColor: 'divider', borderRadius: '16px', overflow: 'hidden' }}>
-      <Box sx={{ p: 4, bgcolor: 'rgba(124,58,237,0.06)', borderBottom: '1px solid', borderColor: 'divider' }}>
+      <Box sx={{ p: 4, bgcolor: 'rgba(0,0,0,0.06)', borderBottom: '1px solid', borderColor: 'divider' }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2}>
           <Box>
-            <Typography variant="h6" sx={{ fontWeight: 800, color: '#7c3aed' }}>
+            <Typography variant="h6" sx={{ fontWeight: 800, color: '#000000' }}>
               {data.titulo}
             </Typography>
             <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.5 }}>
@@ -375,7 +375,7 @@ export default function ActividadSection({ actividadId, onEntregaSuccess }: Acti
                 onClick={handleSubmit}
                 disabled={saving || uploading}
                 startIcon={saving ? <CircularProgress size={16} color="inherit" /> : <i className="tabler-send" />}
-                sx={{ textTransform: 'none', fontWeight: 700, bgcolor: '#7c3aed', '&:hover': { bgcolor: '#6d28d9' } }}
+                sx={{ textTransform: 'none', fontWeight: 700, bgcolor: '#FFB600', color: '#000000', '&:hover': { bgcolor: '#E5A300' } }}
               >
                 {saving ? 'Enviando...' : entrega ? 'Actualizar entrega' : 'Enviar actividad'}
               </Button>

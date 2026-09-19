@@ -92,122 +92,38 @@ export const generarClasico: GeneratorFn = async data => {
 
   // ── PÁGINA 1 ─────────────────────────────────────────────────────────
   const panelW = 72
-  const contentW = pageWidth - panelW
-  const cx = contentW / 2
+  const contentW = pageWidth
+  const cx = pageWidth / 2
 
   doc.setFillColor(255, 255, 255)
   doc.rect(0, 0, pageWidth, pageHeight, 'F')
 
-  // Gradiente del panel lateral
-  const gradStrips = 70
+  let bgBufferData: { buffer: Buffer; jsPdfFormat: string } | null = null
 
-  for (let i = 0; i < gradStrips; i++) {
-    const t = i / (gradStrips - 1)
-    const r = Math.round(pr + (255 - pr) * 0.12 - (pr + (255 - pr) * 0.12 - dpR) * t)
-    const g = Math.round(pg + (255 - pg) * 0.12 - (pg + (255 - pg) * 0.12 - dpG) * t)
-    const b = Math.round(pb + (255 - pb) * 0.12 - (pb + (255 - pb) * 0.12 - dpB) * t)
-
-    doc.setFillColor(Math.max(0, Math.min(255, r)), Math.max(0, Math.min(255, g)), Math.max(0, Math.min(255, b)))
-    doc.rect(contentW, (i / gradStrips) * pageHeight, panelW, pageHeight / gradStrips + 0.5, 'F')
+  try {
+    const bgBuffer = await fetchImageBuffer('/images/certificado.png')
+    if (bgBuffer) {
+      bgBufferData = await compressImageForPdf(bgBuffer, { maxWidth: 2400, format: 'jpeg', quality: 82 })
+      doc.addImage(bgBufferData.buffer, bgBufferData.jsPdfFormat, 0, 0, pageWidth, pageHeight)
+    }
+  } catch (err) {
+    // Fallback silencioso si no se encuentra la imagen
   }
-
-  // Ribbons diagonales
-  const ribR1 = Math.round(pr + (255 - pr) * 0.28)
-  const ribG1 = Math.round(pg + (255 - pg) * 0.28)
-  const ribB1 = Math.round(pb + (255 - pb) * 0.28)
-
-  doc.setFillColor(ribR1, ribG1, ribB1)
-  doc.lines(
-    [
-      [21, 22, 41, 68, 60, 96],
-      [0, 24],
-      [-19, -12, -39, -48, -60, -96],
-      [0, -24]
-    ],
-    237,
-    0,
-    [1, 1],
-    'F',
-    true
-  )
-
-  const ribR2 = Math.round(pr + (255 - pr) * 0.14)
-  const ribG2 = Math.round(pg + (255 - pg) * 0.14)
-  const ribB2 = Math.round(pb + (255 - pb) * 0.14)
-
-  doc.setFillColor(ribR2, ribG2, ribB2)
-  doc.lines(
-    [
-      [20, 18, 41, 62, 60, 88],
-      [0, 32],
-      [-19, -4, -39, -42, -60, -98],
-      [0, -22]
-    ],
-    237,
-    90,
-    [1, 1],
-    'F',
-    true
-  )
 
   // QR
-  const qrSz = 30
-  const qrX0 = contentW + (panelW - qrSz) / 2
-  const qrY0 = pageHeight - qrSz - 24
+  const qrSz = 26
+  const qrX0 = pageWidth - qrSz - 16
+  const qrY0 = pageHeight - qrSz - 16
 
   doc.setFillColor(255, 255, 255)
-  doc.roundedRect(qrX0 - 3, qrY0 - 3, qrSz + 6, qrSz + 6, 2, 2, 'F')
+  doc.roundedRect(qrX0 - 2, qrY0 - 2, qrSz + 4, qrSz + 4, 2, 2, 'F')
   doc.addImage(qrDataUrl, 'PNG', qrX0, qrY0, qrSz, qrSz)
-  doc.setFontSize(12)
-  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(9)
+  doc.setTextColor(80, 80, 80)
   doc.setFont('helvetica', 'normal')
-  doc.text('Escanea para verificar', contentW + panelW / 2, pageHeight - 16, { align: 'center' })
+  doc.text('Verificar', qrX0 + qrSz / 2, qrY0 + qrSz + 4, { align: 'center' })
 
-  // Área de contenido izquierda (blanco encima)
-  doc.setFillColor(255, 255, 255)
-  doc.rect(0, 0, contentW, pageHeight, 'F')
-
-  // "CERTIFICADO" vertical
-  doc.setFontSize(55)
-  doc.setTextColor(Math.round(pr * 0.55), Math.round(pg * 0.55), Math.round(pb * 0.55))
-  doc.setFont('helvetica', 'bold')
-  doc.text('CERTIFICADO', contentW + panelW / 2 + 8, 148, { angle: 90 })
-
-  // ── Logo ──
-  let y = 10
-  const maxLogoH = 22
-  const maxLogoW = 60
-  let logoDisplayW = maxLogoH
-  let logoDisplayH = maxLogoH
-
-  if (logoBuffer) {
-    try {
-      const { default: sharp } = await import('sharp')
-      const meta = await sharp(logoBuffer).metadata()
-
-      if (meta.width && meta.height) {
-        const ratio = meta.width / meta.height
-
-        logoDisplayH = maxLogoH
-        logoDisplayW = Math.min(logoDisplayH * ratio, maxLogoW)
-        if (logoDisplayW === maxLogoW) logoDisplayH = maxLogoW / ratio
-      }
-    } catch {
-      /* default */
-    }
-  }
-
-  if (base64Logo) {
-    try {
-      const ext = logoUrl.split('.').pop()?.split('?')[0]?.toUpperCase() ?? 'PNG'
-
-      doc.addImage(base64Logo, ext, cx - logoDisplayW / 2, y, logoDisplayW, logoDisplayH, 'LOGO')
-    } catch {
-      /* skip */
-    }
-  }
-
-  y += logoDisplayH + 14
+  let y = 46
 
   // Título, nombre, curso, descripción
   doc.setFontSize(20)
@@ -309,62 +225,16 @@ export const generarClasico: GeneratorFn = async data => {
   doc.setFillColor(255, 255, 255)
   doc.rect(0, 0, pageWidth, pageHeight, 'F')
 
+  if (bgBufferData) {
+    doc.addImage(bgBufferData.buffer, bgBufferData.jsPdfFormat, 0, 0, pageWidth, pageHeight)
+  }
+
   const T = { sectionTitle: 9, label: 8, body: 8, small: 7, score: 22 }
   const margin = 12
 
-  // Banda superior
-  doc.setFillColor(pr, pg, pb)
-  doc.rect(0, 0, pageWidth, 18, 'F')
-
-  const bandH = 20
-  const maxLogoHP2 = bandH - 8
-  const maxLogoWP2 = 40
-  let logoP2W = maxLogoHP2
-  let logoP2H = maxLogoHP2
-
-  if (logoBuffer) {
-    try {
-      const { default: sharp } = await import('sharp')
-      const meta = await sharp(logoBuffer).metadata()
-
-      if (meta.width && meta.height) {
-        const ratio = meta.width / meta.height
-
-        logoP2H = maxLogoHP2
-        logoP2W = Math.min(logoP2H * ratio, maxLogoWP2)
-        if (logoP2W === maxLogoWP2) logoP2H = maxLogoWP2 / ratio
-
-        if (logoP2H > maxLogoHP2) {
-          logoP2H = maxLogoHP2
-          logoP2W = logoP2H * ratio
-        }
-      }
-    } catch {
-      /* default */
-    }
-  }
-
-  if (base64Logo) {
-    try {
-      const ext = logoUrl.split('.').pop()?.split('?')[0]?.toUpperCase() ?? 'PNG'
-
-      doc.addImage(base64Logo, ext, margin, (bandH - logoP2H) / 2, logoP2W, logoP2H, 'LOGO')
-    } catch {
-      /* skip */
-    }
-  }
-
-  const logoRightEdge = margin + logoP2W + 4
-
-  doc.setFontSize(12)
-  doc.setFont('helvetica', 'bold')
-  doc.setTextColor(255, 255, 255)
-  doc.text(nombreInstitucion.toUpperCase(), logoRightEdge, 10)
-  doc.setFontSize(T.body)
-  doc.setFont('helvetica', 'normal')
-  doc.text(slogan, logoRightEdge, 16)
   doc.setFontSize(T.label)
   doc.setFont('helvetica', 'bold')
+  doc.setTextColor(80, 80, 80)
   doc.text(`Código: ${codigoVerificacion}`, pageWidth - margin, 9, { align: 'right' })
   doc.setFontSize(T.label)
   doc.setFont('helvetica', 'normal')
@@ -608,28 +478,25 @@ export const generarClasico: GeneratorFn = async data => {
       doc.addPage()
       doc.setFillColor(255, 255, 255)
       doc.rect(0, 0, pageWidth, pageHeight, 'F')
-      doc.setFillColor(pr, pg, pb)
-      doc.rect(0, 0, pageWidth, 8, 'F')
+      
+      if (bgBufferData) {
+        doc.addImage(bgBufferData.buffer, bgBufferData.jsPdfFormat, 0, 0, pageWidth, pageHeight)
+      }
+
       doc.setFontSize(T.small)
       doc.setFont('helvetica', 'bold')
-      doc.setTextColor(255, 255, 255)
-      doc.text('CONTENIDO DEL PROGRAMA ACADÉMICO (continuación)', margin, 5.5)
+      doc.setTextColor(150, 150, 150)
+      doc.text('CONTENIDO DEL PROGRAMA ACADÉMICO (continuación)', margin, 10)
     }
 
-    const y0 = pi === 0 ? contentStartY : 14
+    const y0 = pi === 0 ? contentStartY : 18
 
     renderColumnSegment(columnPages[pi].left, contentColLeft, y0)
     renderColumnSegment(columnPages[pi].right, contentColRight, y0)
   }
 
   // ── Pie de página 2 ───────────────────────────────────────────────────
-  const footerTopY = pageHeight - 20
-
-  doc.setFillColor(245, 245, 245)
-  doc.rect(0, footerTopY, pageWidth, 20, 'F')
-  doc.setDrawColor(pr, pg, pb)
-  doc.setLineWidth(0.4)
-  doc.line(0, footerTopY, pageWidth, footerTopY)
+  const footerTopY = pageHeight - 16
 
   if (disclaimer) {
     const disclaimerLines = doc.splitTextToSize(disclaimer, pageWidth - margin * 2 - 60)

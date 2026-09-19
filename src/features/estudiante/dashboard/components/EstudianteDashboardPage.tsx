@@ -15,7 +15,7 @@ const KPI_CONFIG = [
     key: 'totalInscritos' as const,
     label: 'Cursos inscritos',
     icon: 'tabler-books',
-    color: '#3b82f6',
+    color: '#000000',
     bgColor: '#eff6ff'
   },
   {

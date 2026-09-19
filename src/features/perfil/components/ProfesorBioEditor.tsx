@@ -178,7 +178,7 @@ export default function ProfesorBioEditor({ value, onChange, rol }: Props) {
       {/* Descripción Profesional */}
       <Paper variant="outlined" sx={{ p: 3, borderRadius: 3, mb: 3 }}>
         <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
-          <Box sx={{ width: 6, height: 24, bgcolor: '#3b82f6', borderRadius: 1 }} />
+          <Box sx={{ width: 6, height: 24, bgcolor: '#000000', borderRadius: 1 }} />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
             Descripción Profesional
           </Typography>

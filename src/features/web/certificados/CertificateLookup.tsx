@@ -19,14 +19,20 @@ function formatDate(value: string) {
   return Number.isNaN(date.getTime()) ? 'No registrada' : dateFormat.format(date)
 }
 
+function formatExpirationDate(value: string) {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return 'No registrada'
+  
+  date.setFullYear(date.getFullYear() + 1)
+  return dateFormat.format(date)
+}
+
 export default function CertificateLookup({ brandName = 'MS&M CONSULTING', logoUrl }: CertificateLookupProps) {
   const [dni, setDni] = useState('')
   const [searchedDni, setSearchedDni] = useState('')
   const [certificates, setCertificates] = useState<Certificate[] | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [downloading, setDownloading] = useState<string | null>(null)
-  const [downloadError, setDownloadError] = useState('')
   const resultsRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -49,7 +55,6 @@ export default function CertificateLookup({ brandName = 'MS&M CONSULTING', logoU
     setLoading(true)
 
     setError('')
-    setDownloadError('')
     setCertificates(null)
 
     try {
@@ -70,36 +75,7 @@ export default function CertificateLookup({ brandName = 'MS&M CONSULTING', logoU
     }
   }
 
-  async function download(certificate: Certificate) {
-    if (downloading) return
-    setDownloading(certificate.codigo)
 
-    setDownloadError('')
-
-    try {
-      const response = await fetch(`/api/public/certificados/${encodeURIComponent(certificate.codigo)}/download`)
-
-      if (!response.ok) {
-        const data = await response.json()
-
-        throw new Error(data.message || 'No pudimos descargar el certificado.')
-      }
-
-      const url = URL.createObjectURL(await response.blob())
-      const anchor = document.createElement('a')
-
-      anchor.href = url
-      anchor.download = `certificado-${certificate.codigo.replace(/[^a-zA-Z0-9_-]/g, '_')}.pdf`
-      document.body.appendChild(anchor)
-      anchor.click()
-      anchor.remove()
-      setTimeout(() => URL.revokeObjectURL(url), 1000)
-    } catch (err) {
-      setDownloadError(err instanceof Error ? err.message : 'Revisa tu conexión e inténtalo nuevamente.')
-    } finally {
-      setDownloading(null)
-    }
-  }
 
   return (
     <div className={styles.page}>
@@ -138,18 +114,18 @@ export default function CertificateLookup({ brandName = 'MS&M CONSULTING', logoU
           <section ref={resultsRef} tabIndex={-1} className={styles.results} aria-label="Resultados de la consulta">
             {certificates.length ? <>
               <div className={styles.person}><span className={styles.avatar}><UserRound size={28} /></span><div><span className={styles.overline}>TITULAR DE LOS CERTIFICADOS</span><h2>{certificates[0].estudiante}</h2><p>DNI {searchedDni}</p></div><span className={styles.count}>{certificates.length} {certificates.length === 1 ? 'certificado' : 'certificados'}</span></div>
-              <div className={styles.tableHeading}><h3>Cursos certificados</h3><p>Descarga el PDF de cada curso o consulta su autenticidad.</p></div>
-              {downloadError ? <p role="alert" className={styles.error}>{downloadError}</p> : null}
+              <div className={styles.tableHeading}><h3>Cursos certificados</h3><p>Consulta la autenticidad de tus certificados.</p></div>
+              
               <div className={styles.tableScroll}>
                 <table className={styles.table}>
                   <caption className={styles.srOnly}>Cursos y certificados de {certificates[0].estudiante}</caption>
-                  <thead><tr><th scope="col">Curso</th><th scope="col">Duración</th><th scope="col">Fecha de emisión</th><th scope="col">Código de certificado</th><th scope="col">Certificado</th></tr></thead>
+                  <thead><tr><th scope="col">Curso</th><th scope="col">Duración</th><th scope="col">Fecha de emisión</th><th scope="col">Fecha de expiración</th><th scope="col">Código de certificado</th></tr></thead>
                   <tbody>{certificates.map(certificate => <tr key={certificate.codigo}>
                     <td data-label="Curso"><strong>{certificate.curso}</strong><span className={styles.issued}><CheckCircle2 size={14} /> Certificado emitido</span></td>
                     <td data-label="Duración">{certificate.duracion || 'No registrada'}</td>
                     <td data-label="Emisión">{formatDate(certificate.emision)}</td>
+                    <td data-label="Expiración">{formatExpirationDate(certificate.emision)}</td>
                     <td data-label="Código"><Link className={styles.code} href={`/verificar-certificado/${encodeURIComponent(certificate.codigo)}`}>{certificate.codigo}<ArrowRight size={14} /></Link></td>
-                    <td><button type="button" className={styles.downloadButton} disabled={downloading !== null} onClick={() => download(certificate)} aria-label={`Descargar certificado de ${certificate.curso}`}>{downloading === certificate.codigo ? <Loader2 size={16} className={styles.spinner} /> : <Download size={16} />}{downloading === certificate.codigo ? 'Preparando…' : 'Descargar PDF'}</button></td>
                   </tr>)}</tbody>
                 </table>
               </div>

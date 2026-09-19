@@ -289,7 +289,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
     if (loading) {
         return (
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 10, gap: 2 }}>
-                <CircularProgress sx={{ color: '#025E44' }} />
+                <CircularProgress sx={{ color: '#000000' }} />
                 <Typography color="text.secondary" variant="body2">Cargando evaluación…</Typography>
             </Box>
         )
@@ -322,7 +322,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
             return (
                 <StateCard
                     icon="tabler-calendar-clock"
-                    iconColor="#2563eb"
+                    iconColor="#000000"
                     bgColor="rgba(37,99,235,0.06)"
                     borderColor="rgba(37,99,235,0.25)"
                     title="Aún no está disponible"
@@ -544,8 +544,8 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                                     onClick={handleStartExam}
                                     startIcon={<i className="tabler-refresh" />}
                                     sx={{
-                                        borderRadius: '10px', fontWeight: 700, bgcolor: '#025E44',
-                                        '&:hover': { bgcolor: '#014d36' }, boxShadow: 'none'
+                                        borderRadius: '10px', fontWeight: 700, bgcolor: '#000000',
+                                        '&:hover': { bgcolor: '#4D4D4D' }, boxShadow: 'none'
                                     }}
                                 >
                                     Volver a intentar
@@ -652,8 +652,8 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                                     mt: 3, p: 2.5, borderRadius: '12px', textAlign: 'center',
                                     bgcolor: 'rgba(37,99,235,0.06)', border: '1px solid rgba(37,99,235,0.2)'
                                 }}>
-                                    <i className="tabler-eye-off" style={{ fontSize: '1.4rem', color: '#2563eb', display: 'block', marginBottom: 6 }} />
-                                    <Typography variant="body2" fontWeight={700} color="#2563eb">
+                                    <i className="tabler-eye-off" style={{ fontSize: '1.4rem', color: '#000000', display: 'block', marginBottom: 6 }} />
+                                    <Typography variant="body2" fontWeight={700} color="#000000">
                                         Respuestas ocultas
                                     </Typography>
                                     <Typography variant="caption" color="text.secondary">
@@ -680,7 +680,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                         bgcolor: 'rgba(2,94,68,0.12)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center'
                     }}>
-                        <i className="tabler-clipboard-text" style={{ fontSize: '2rem', color: '#025E44' }} />
+                        <i className="tabler-clipboard-text" style={{ fontSize: '2rem', color: '#000000' }} />
                     </Box>
                     <Typography variant="h6" fontWeight={800}>{examen.titulo}</Typography>
                     {examen.descripcion && (
@@ -732,7 +732,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                                 }}>
                                     <Typography variant="body2" color="text.secondary">
                                         Tienes{' '}
-                                        <Typography component="span" fontWeight={800} color="#025E44">
+                                        <Typography component="span" fontWeight={800} color="#000000">
                                             {intentosRestantes} intento{intentosRestantes !== 1 ? 's' : ''}
                                         </Typography>
                                         {' '}disponible{intentosRestantes !== 1 ? 's' : ''}
@@ -746,7 +746,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                                     startIcon={<i className="tabler-player-play" />}
                                     sx={{
                                         borderRadius: '12px', py: 1.5, fontWeight: 800, fontSize: '1rem',
-                                        bgcolor: '#025E44', '&:hover': { bgcolor: '#014d36' }, boxShadow: 'none'
+                                        bgcolor: '#FFB600', color: '#000000', '&:hover': { bgcolor: '#E5A300' }, boxShadow: 'none'
                                     }}
                                 >
                                     Comenzar Examen
@@ -800,7 +800,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                         sx={{
                             mt: 1.5, height: 5, borderRadius: 4,
                             bgcolor: 'rgba(2,94,68,0.1)',
-                            '& .MuiLinearProgress-bar': { bgcolor: '#025E44', borderRadius: 4 }
+                            '& .MuiLinearProgress-bar': { bgcolor: '#000000', borderRadius: 4 }
                         }}
                     />
                 </CardContent>
@@ -826,7 +826,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                                                 size="small"
                                                 sx={{
                                                     fontWeight: 800, flexShrink: 0, mt: '2px',
-                                                    bgcolor: respondida ? '#025E44' : 'rgba(0,0,0,0.08)',
+                                                    bgcolor: respondida ? '#000000' : 'rgba(0,0,0,0.08)',
                                                     color: respondida ? '#fff' : 'text.secondary',
                                                     transition: 'all 0.2s'
                                                 }}
@@ -853,8 +853,8 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                                                     key={opcion.id}
                                                     value={opcion.id}
                                                     control={<Radio size="small" sx={{
-                                                        color: selected ? '#025E44' : undefined,
-                                                        '&.Mui-checked': { color: '#025E44' }
+                                                        color: selected ? '#000000' : undefined,
+                                                        '&.Mui-checked': { color: '#000000' }
                                                     }} />}
                                                     label={opcion.texto}
                                                     sx={{
@@ -886,7 +886,7 @@ const ExamSection = ({ examenId, onExamPassed, isFinalExam = true, onContinue }:
                 disabled={submitting || preguntasRespondidas < examen.preguntas.length}
                 sx={{
                     borderRadius: '12px', py: 1.75, fontWeight: 800, fontSize: '1rem',
-                    bgcolor: '#025E44', '&:hover': { bgcolor: '#014d36' }, boxShadow: 'none',
+                    bgcolor: '#FFB600', color: '#000000', '&:hover': { bgcolor: '#E5A300' }, boxShadow: 'none',
                     '&.Mui-disabled': { bgcolor: 'rgba(0,0,0,0.08)', color: 'rgba(0,0,0,0.3)' }
                 }}
             >

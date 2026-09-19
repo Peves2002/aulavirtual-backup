@@ -174,7 +174,7 @@ const MyCourseCard = ({
                 bgcolor: '#f1f5f9',
                 '& .MuiLinearProgress-bar': {
                   borderRadius: 4,
-                  background: 'linear-gradient(90deg, #10b981 0%, #3b82f6 100%)'
+                  background: 'linear-gradient(90deg, #10b981 0%, #000000 100%)'
                 }
               }}
             />

@@ -42,7 +42,7 @@ export default function CursoCard({ curso }: { curso: Curso }) {
           '&:hover': {
             boxShadow: '0 10px 25px rgba(0,0,0,0.08)',
             transform: 'translateY(-2px)',
-            borderColor: '#10b981'
+            borderColor: '#FFB600'
           }
         }}
       >
@@ -78,7 +78,7 @@ export default function CursoCard({ curso }: { curso: Curso }) {
                 {curso.categoria.nombre}
               </Box>
             )}
-            <Box component="span" sx={{ fontSize: '0.65rem', fontWeight: 700, px: 1, py: 0.25, borderRadius: 1, bgcolor: '#eff6ff', color: '#3b82f6', textTransform: 'uppercase' }}>
+            <Box component="span" sx={{ fontSize: '0.65rem', fontWeight: 700, px: 1, py: 0.25, borderRadius: 1, bgcolor: '#000000', color: '#FFFFFF', textTransform: 'uppercase' }}>
               {nivelLabel[curso.nivel] ?? curso.nivel}
             </Box>
           </Stack>
@@ -87,7 +87,7 @@ export default function CursoCard({ curso }: { curso: Curso }) {
             variant="body2"
             sx={{
               fontWeight: 800,
-              color: '#10b981',
+              color: '#000000',
               fontSize: '0.9rem'
             }}
           >

@@ -2,41 +2,17 @@ import Link from 'next/link'
 
 import { ArrowRight } from 'lucide-react'
 
-import prisma from '@/utils/libs/prisma'
 import ScrollReveal from '@/features/web/home/components/ScrollReveal'
 import ClientLogosMarquee from '@/features/web/home/components/ClientLogosMarquee'
 import ProfessorsCarousel from '@/features/web/nosotros/components/ProfessorsCarousel'
+import EquipoEspecializado from '@/features/web/nosotros/components/EquipoEspecializado'
 import { SobreNosotrosIntroSection, MisionVisionSection, HistoriaSection, ValoresSection } from '@/features/web/nosotros/components/NosotrosInteractive'
-
 export const metadata = {
-  title: 'Nosotros - MS&M CONSULTING',
+  title: 'Conócenos - MS&M CONSULTING',
   description: 'Conoce quiénes somos, nuestra misión, visión, historia y los valores que guían MS&M CONSULTING.',
 }
 
-async function getTeachers() {
-  try {
-    return await prisma.usuario.findMany({
-      where: { rol: 'PROFESOR' },
-      select: {
-        id: true,
-        nombre: true,
-        apellido: true,
-        slug: true,
-        avatar: true,
-        cargo: true,
-        biografia: true,
-        _count: { select: { cursos_dictados: true } },
-      },
-      orderBy: { cursos_dictados: { _count: 'desc' } },
-      take: 12,
-    })
-  } catch {
-    return []
-  }
-}
-
 export default async function NosotrosPage() {
-  const teachers = await getTeachers()
 
   return (
     <>
@@ -211,7 +187,7 @@ export default async function NosotrosPage() {
                       boxShadow: '0 4px 20px rgba(var(--web-light-rgb, 189, 217, 98),0.35)',
                     }}
                   >
-                    Ver cursos <ArrowRight size={18} />
+                    Ver nuestros programas <ArrowRight size={18} />
                   </Link>
                   <Link
                     href="/contacto"
@@ -240,6 +216,15 @@ export default async function NosotrosPage() {
         </div>
       </section>
 
+      {/* ── 1.5. EMPRESAS Y CLIENTES ─────────────────────── */}
+      <ClientLogosMarquee />
+
+      {/* ── 1.7. NUESTRO EQUIPO ──────────────────────────── */}
+      <ProfessorsCarousel />
+
+      {/* ── 1.8. EQUIPO ESPECIALIZADO ────────────────────── */}
+      <EquipoEspecializado />
+
       {/* ── 2. SOBRE NOSOTROS PRESENTACIÓN ─────────────── */}
       <SobreNosotrosIntroSection />
 
@@ -251,12 +236,6 @@ export default async function NosotrosPage() {
 
       {/* ── 4. VALORES ─────────────────────────────────── */}
       <ValoresSection />
-
-      {/* ── 5. PROFESORES / DOCENTES ───────────────────── */}
-      <ProfessorsCarousel teachers={JSON.parse(JSON.stringify(teachers))} />
-
-      {/* ── 6. EMPRESAS Y CLIENTES ─────────────────────── */}
-      <ClientLogosMarquee />
     </>
   )
 }

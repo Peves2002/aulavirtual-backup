@@ -918,7 +918,7 @@ export function ConfiguracionView({ initialData }: ConfiguracionViewProps) {
                   { label: 'Naranja & Negro', main: '#F97316', light: '#FFEDD5', dark: '#1C1917' },
                   { label: 'Ámbar Dorado', main: '#D97706', light: '#FDE68A', dark: '#78350F' },
                   { label: 'Azul Presidencial', main: '#1D4ED8', light: '#93C5FD', dark: '#1E3A8A' },
-                  { label: 'Azul & Oro', main: '#2563EB', light: '#FCD34D', dark: '#1E3A8A' },
+                  { label: 'Azul & Oro', main: '#000000', light: '#FCD34D', dark: '#1E3A8A' },
                   { label: 'Marino Oficial', main: '#0F4C81', light: '#BAE6FD', dark: '#0C2340' },
                 ].map((palette) => (
                   <Box

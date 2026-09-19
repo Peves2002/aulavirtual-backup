@@ -219,7 +219,7 @@ export default function MisNotasPage() {
                             <IconButton
                               size='small'
                               onClick={() => setCursoDetalleId(row.curso_id)}
-                              sx={{ bgcolor: '#2563eb', color: '#fff', borderRadius: 1, width: 32, height: 32, '&:hover': { bgcolor: '#1d4ed8' } }}
+                              sx={{ bgcolor: '#000000', color: '#fff', borderRadius: 1, width: 32, height: 32, '&:hover': { bgcolor: '#000000' } }}
                             >
                               <i className='tabler-list-details' style={{ fontSize: 16 }} />
                             </IconButton>

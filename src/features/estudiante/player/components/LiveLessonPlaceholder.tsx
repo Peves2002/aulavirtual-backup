@@ -90,14 +90,14 @@ const LiveLessonPlaceholder = ({
         textAlign: 'center',
         p: { xs: 3, sm: 4 },
         border: '1px solid',
-        borderColor: alpha(isEnded ? '#64748b' : isLive ? '#ef4444' : '#3b82f6', 0.2)
+        borderColor: alpha(isEnded ? '#64748b' : isLive ? '#ef4444' : '#000000', 0.2)
       }}
     >
       {/* Background glow */}
       <Box sx={{
         position: 'absolute', top: -100, right: -100,
         width: 300, height: 300,
-        bgcolor: alpha(isEnded ? '#64748b' : isLive ? '#ef4444' : '#3b82f6', 0.08),
+        bgcolor: alpha(isEnded ? '#64748b' : isLive ? '#ef4444' : '#000000', 0.08),
         borderRadius: '50%', filter: 'blur(80px)'
       }} />
       <Box sx={{
@@ -113,14 +113,14 @@ const LiveLessonPlaceholder = ({
         <Box sx={{
           display: 'inline-flex', alignItems: 'center', gap: 1,
           px: 2, py: 0.5, borderRadius: '100px',
-          bgcolor: isEnded ? alpha('#64748b', 0.12) : isLive ? alpha('#ef4444', 0.12) : alpha('#3b82f6', 0.12),
+          bgcolor: isEnded ? alpha('#64748b', 0.12) : isLive ? alpha('#ef4444', 0.12) : alpha('#000000', 0.12),
           border: '1px solid',
-          borderColor: isEnded ? alpha('#64748b', 0.5) : isLive ? alpha('#ef4444', 0.5) : alpha('#3b82f6', 0.5),
+          borderColor: isEnded ? alpha('#64748b', 0.5) : isLive ? alpha('#ef4444', 0.5) : alpha('#000000', 0.5),
           color: isEnded ? '#94a3b8' : isLive ? '#f87171' : '#60a5fa'
         }}>
           <Box sx={{
             width: 8, height: 8, borderRadius: '50%',
-            bgcolor: isEnded ? '#64748b' : isLive ? '#ef4444' : '#3b82f6',
+            bgcolor: isEnded ? '#64748b' : isLive ? '#ef4444' : '#000000',
             animation: isLive ? 'livePulse 2s infinite' : 'none'
           }} />
           <Typography variant="caption" sx={{ fontWeight: 800, textTransform: 'uppercase', letterSpacing: 1.5, color: 'inherit', fontSize: '0.7rem' }}>

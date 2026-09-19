@@ -107,9 +107,9 @@ const CourseCard = ({
 
   // Color para el tipo de emisión
   const getTipoColor = (t?: string) => {
-    if (t === 'SINCRONO') return '#ef4444' // Rojo para Vivo
+    if (t === 'SINCRONO') return '#4D4D4D' // Gris Oscuro para Vivo
 
-    return '#3b82f6' // Azul para otros
+    return '#000000' // Negro para Asíncrono
   }
 
   // Lógica de fecha solicitada por el usuario
@@ -186,13 +186,13 @@ const CourseCard = ({
             <Chip
               label={getNivelLabel(nivel)}
               sx={{
-                bgcolor: 'primary.main',
+                bgcolor: '#000000',
                 color: 'white',
                 fontWeight: 700,
                 borderRadius: '12px',
                 height: '28px',
                 px: 1,
-                boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+                boxShadow: '0 2px 10px rgba(0,0,0,0.2)'
               }}
             />
           )}
@@ -207,8 +207,8 @@ const CourseCard = ({
               label={categoria.nombre}
               size="small"
               sx={{
-                bgcolor: 'primary.50',
-                color: 'primary.main',
+                bgcolor: '#F2F2F2',
+                color: '#4D4D4D',
                 fontWeight: 700,
                 mb: 1,
                 borderRadius: '6px',
@@ -302,7 +302,7 @@ const CourseCard = ({
             </Stack>
           )}
 
-          <Typography variant="h5" sx={{ fontWeight: 800, color: es_comprado ? '#10b981' : 'primary.main', mb: 0 }}>
+          <Typography variant="h5" sx={{ fontWeight: 800, color: es_comprado ? '#10b981' : '#000000', mb: 0 }}>
             {es_comprado ? 'Adquirido' : (es_gratis ? 'Gratis' : `${moneda} ${precio}`)}
           </Typography>
         </Box>
@@ -319,11 +319,13 @@ const CourseCard = ({
               px: 3,
               py: 1.5,
               height: 50,
-              bgcolor: 'primary.main',
-              boxShadow: '0 4px 14px 0 rgba(var(--mui-palette-primary-mainChannel) / 0.39)',
+              bgcolor: '#FFB600',
+              color: '#000000',
+              boxShadow: '0 4px 14px 0 rgba(255, 182, 0, 0.2)',
               '&:hover': {
-                bgcolor: 'primary.dark',
-                boxShadow: '0 6px 20px rgba(var(--mui-palette-primary-mainChannel) / 0.23)'
+                bgcolor: '#000000',
+                color: '#FFFFFF',
+                boxShadow: '0 6px 20px rgba(0, 0, 0, 0.4)'
               },
               flexGrow: 1
             }}
@@ -338,15 +340,15 @@ const CourseCard = ({
                 disabled={inCart}
                 sx={{
                   borderRadius: '12px',
-                  bgcolor: inCart ? 'success.50' : 'rgba(var(--mui-palette-primary-mainChannel) / 0.08)',
-                  color: inCart ? 'success.main' : 'primary.main',
+                  bgcolor: inCart ? 'success.50' : '#FFFFFF',
+                  color: inCart ? 'success.main' : '#000000',
                   width: 50,
                   height: 50,
                   border: '1px solid',
-                  borderColor: inCart ? 'success.200' : 'rgba(var(--mui-palette-primary-mainChannel) / 0.12)',
+                  borderColor: inCart ? 'success.200' : '#000000',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   '&:hover': {
-                    bgcolor: inCart ? 'success.100' : 'rgba(var(--mui-palette-primary-mainChannel) / 0.15)',
+                    bgcolor: inCart ? 'success.100' : '#F2F2F2',
                     transform: 'translateY(-2px)',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
                   },

@@ -19,20 +19,20 @@
   --backdrop-color: rgb(var(--mui-mainColorChannels-light) / 0.5);
 
   /* IPG Design System */
-  --color-1: 170 60% 36%;   /* Primary Teal #25927F */
-  --color-2: 75 63% 62%;    /* Lime Green #BDD962 */
-  --color-3: 167 96% 19%;   /* Deep Teal #025E44 */
-  --color-4: 152 50% 46%;   /* Sage Green #3AB079 */
-  --color-5: 0 0% 4%;       /* Almost Black #0A0A0A */
+  --color-1: 43 100% 50%;   /* Amarillo MS&M #FFB600 */
+  --color-2: 0 0% 0%;       /* Negro #000000 */
+  --color-3: 0 0% 100%;     /* Blanco #FFFFFF */
+  --color-4: 0 0% 30%;      /* Gris oscuro #4D4D4D */
+  --color-5: 0 0% 95%;      /* Gris claro #F2F2F2 */
 
-  --ipg-primary: var(--web-primary, #25927F);
-  --ipg-primary-dark: var(--web-dark, #025E44);
-  --ipg-primary-light: var(--web-light, #BDD962);
-  --ipg-black: #0A0A0A;
-  --ipg-muted: #f1f5f4;
+  --ipg-primary: var(--web-primary, #FFB600);
+  --ipg-primary-dark: var(--web-dark, #E5A300);
+  --ipg-primary-light: var(--web-light, #FFC433);
+  --ipg-black: #000000;
+  --ipg-muted: #F2F2F2;
 
   --topbar-height: 40px;
-  --header-height-web: 142px;
+  --header-height-web: 88px;
   --navbar-height: calc(var(--topbar-height) + var(--header-height-web));
   --sidebar-width: 0px;
   --sidebar-width-expanded: 0px;
@@ -191,18 +191,18 @@ code {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--web-primary, #25927F);
+  color: var(--web-primary, #FFB600);
   display: block;
   margin-bottom: 0.75rem;
 }
-.t-eyebrow-dark { color: var(--web-light, #BDD962); }
+.t-eyebrow-dark { color: var(--web-light, #FFC433); }
 
 /* H2 de sección */
 .t-section-h2 {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 1.75rem;
   font-weight: 800;
-  color: #0A0A0A;
+  color: #000000;
   letter-spacing: -0.02em;
   line-height: 1.2;
   margin-bottom: 0.75rem;
@@ -210,46 +210,46 @@ code {
 @media (min-width: 768px) {
   .t-section-h2 { font-size: 2rem; }
 }
-.t-section-h2-dark { color: #ffffff; }
+.t-section-h2-dark { color: #FFFFFF; }
 
 /* Descripción / subtítulo de sección */
 .t-section-desc {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 1rem;
   font-weight: 400;
-  color: #64748b;
+  color: #4D4D4D;
   line-height: 1.7;
   margin-bottom: 0;
 }
-.t-section-desc-dark { color: rgba(255, 255, 255, 0.55); }
+.t-section-desc-dark { color: #F2F2F2; }
 
 /* Título de card */
 .t-card-title {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 1rem;
   font-weight: 700;
-  color: #0A0A0A;
+  color: #000000;
   letter-spacing: -0.01em;
   margin-bottom: 0.25rem;
 }
-.t-card-title-dark { color: #ffffff; }
+.t-card-title-dark { color: #FFFFFF; }
 
 /* Cuerpo de card */
 .t-card-body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
-  color: #64748b;
+  color: #4D4D4D;
   line-height: 1.6;
 }
-.t-card-body-dark { color: rgba(255, 255, 255, 0.4); }
+.t-card-body-dark { color: #F2F2F2; }
 
 /* Texto pequeño / meta */
 .t-small {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.8125rem;
   font-weight: 400;
-  color: #94a3b8;
+  color: #4D4D4D;
   line-height: 1.5;
 }
 
@@ -258,7 +258,7 @@ code {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 1.75rem;
   font-weight: 800;
-  color: #0A0A0A;
+  color: #000000;
   margin-bottom: 0.5rem;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -270,7 +270,7 @@ code {
 .section-subtitle {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 1rem;
-  color: #64748b;
+  color: #4D4D4D;
   margin-bottom: 2rem;
   line-height: 1.7;
 }

@@ -3,22 +3,22 @@ export type TipoPrograma = 'CURSO' | 'DIPLOMADO' | 'ESPECIALIZACION'
 export const TIPO_PROGRAMA_CONFIG = {
   CURSO: {
     label: 'Curso',
-    labelPlural: 'Cursos',
+    labelPlural: 'Nuestros programas',
     adminBasePath: '/admin/cursos',
     webPath: '/cursos',
-    catalogTitle: 'Catálogo de Cursos',
-    catalogDescription: 'Explora nuestra selección de cursos y comienza a aprender hoy.',
-    catalogSectionTitle: 'Nuestros Cursos',
+    catalogTitle: 'Catálogo de Programas',
+    catalogDescription: 'Explora nuestra selección de programas y comienza a aprender hoy.',
+    catalogSectionTitle: 'Nuestros Programas',
     catalogSectionSubtitle: 'Aprende de expertos y potencia tu carrera profesional con nuestra selección premium.',
-    catalogEmptySearch: 'No encontramos cursos que coincidan con tu búsqueda.',
+    catalogEmptySearch: 'No encontramos programas que coincidan con tu búsqueda.',
     searchPlaceholder: 'Buscar curso por título o descripción...',
-    homeTitle: 'Cursos destacados',
-    homeSubtitle: 'Descubre nuestros cursos más recientes',
-    emptyMessage: 'Próximamente habrá cursos disponibles.',
+    homeTitle: 'Programas destacados',
+    homeSubtitle: 'Descubre nuestros programas más recientes',
+    emptyMessage: 'Próximamente habrá programas disponibles.',
     nuevoLabel: 'Nuevo Curso',
-    gestionTitle: 'Gestión de Cursos',
+    gestionTitle: 'Gestión de Programas',
     buscarPlaceholder: 'Buscar curso',
-    cargandoLabel: 'Cargando cursos...'
+    cargandoLabel: 'Cargando programas...'
   },
   DIPLOMADO: {
     label: 'Diplomado',

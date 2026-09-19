@@ -1,34 +1,60 @@
 'use client'
 
-import Link from 'next/link'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
-
-import { ArrowRight, BookOpen } from 'lucide-react'
-
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { eyebrow, sectionH2, sectionDesc } from '@/features/web/home/components/typography'
 
-type Teacher = {
-  id: string
-  nombre: string
-  apellido: string
-  slug: string | null
-  avatar: string | null
-  cargo: string | null
-  biografia: string | null
-  _count: { cursos_dictados: number }
-}
-
-function teacherHref(t: Teacher) {
-  return t.slug ? `/docentes/${t.slug}` : `/docentes/${t.id}`
-}
-
-const AVATAR_COLORS = [
-  'var(--web-primary, #25927F)', 'var(--web-dark, #025E44)', '#3AB079', '#0f4438',
-  '#1a73e8', '#d93025', '#e37400', '#6d4c41', '#4527a0', '#00838f',
+const TEAM_IMAGES = [
+  '/images/equipo/img4794.webp',
+  '/images/equipo/img4828.webp',
+  '/images/equipo/img4860.webp',
+  '/images/equipo/img4873.webp',
+  '/images/equipo/img4877.webp',
+  '/images/equipo/img4881.webp',
+  '/images/equipo/img4882.webp',
+  '/images/equipo/img4887.webp',
+  '/images/equipo/img4897.webp',
+  '/images/equipo/img4899.webp',
+  '/images/equipo/img4904.webp',
+  '/images/equipo/img4906.webp',
+  '/images/equipo/img4914.webp',
+  '/images/equipo/img4918.webp',
+  '/images/equipo/img4927.webp',
+  '/images/equipo/img4933.webp',
+  '/images/equipo/img4936.webp',
+  '/images/equipo/img4937.webp',
+  '/images/equipo/img4953.webp',
+  '/images/equipo/img4957.webp'
 ]
 
-export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }) {
-  if (!teachers || teachers.length === 0) return null
+export default function ProfessorsCarousel() {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [prevIndex, setPrevIndex] = useState(0)
+
+  const carouselRef = useRef<HTMLDivElement>(null)
+
+  // Auto advance
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPrevIndex(activeIndex)
+      setActiveIndex((prev) => (prev + 1) % TEAM_IMAGES.length)
+    }, 4500)
+
+    return () => clearInterval(timer)
+  }, [activeIndex])
+
+  const handleScrollPrev = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: -300, behavior: 'smooth' })
+    }
+  }
+
+  const handleScrollNext = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: 300, behavior: 'smooth' })
+    }
+  }
 
   return (
     <section className="bg-slate-50 py-20 px-6 border-t border-slate-200">
@@ -36,113 +62,121 @@ export default function ProfessorsCarousel({ teachers }: { teachers: Teacher[] }
         {/* Header */}
         <div className="text-center mb-12">
           <p style={{ ...eyebrow, display: 'block', textAlign: 'center' }}>
-            Nuestro equipo docente
+            Nuestra Fortaleza
           </p>
           <h2 style={{ ...sectionH2, textAlign: 'center', marginBottom: '0.75rem' }}>
-            Nuestros Profesores
+            Nuestro equipo
           </h2>
           <p style={{ ...sectionDesc, textAlign: 'center', maxWidth: '520px', margin: '0 auto' }}>
             Aprende de profesionales con amplia experiencia en el sector industrial y académico.
           </p>
         </div>
 
-        {/* Grid de Profesores en filas de 3 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {teachers.map((teacher, index) => {
-            const initials = `${teacher.nombre[0]}${teacher.apellido[0]}`
-            const color = AVATAR_COLORS[index % AVATAR_COLORS.length]
-            const href = teacherHref(teacher)
+        {/* Imagen del Equipo y Texto */}
+        <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center max-w-6xl mx-auto mb-16">
+          {/* Imagen a la Izquierda */}
+          <div className="relative rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-slate-200 aspect-[4/3] bg-slate-200 w-full">
+            {TEAM_IMAGES.map((src, idx) => {
+              let zIndex = 'z-0'
+              let opacity = 'opacity-0'
+              let transition = 'transition-opacity duration-[1500ms] ease-in-out'
+              
+              if (idx === activeIndex) {
+                zIndex = 'z-20'
+                opacity = 'opacity-100'
+              } else if (idx === prevIndex) {
+                zIndex = 'z-10'
+                opacity = 'opacity-100'
+                // El previo no hace transición de opacidad, simplemente se queda atrás mientras el nuevo aparece encima
+                transition = 'transition-none'
+              }
 
-            return (
-              <div
-                key={teacher.id}
-                className="bg-white rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl flex flex-col justify-between"
-                style={{ border: '1px solid hsl(214, 20%, 88%)', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
+              return (
+                <Image
+                  key={src}
+                  src={`${src}?v=4`}
+                  alt="Nuestro Equipo MS&M Consulting"
+                  fill
+                  className={`object-cover ${transition} ${opacity} ${zIndex}`}
+                  priority={idx === 0}
+                  unoptimized
+                />
+              )
+            })}
+          </div>
+
+          {/* Texto Generado */}
+          <div className="flex flex-col gap-5">
+            <h3 className="text-2xl md:text-3xl font-extrabold text-[#000000]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              Expertos comprometidos con tu éxito
+            </h3>
+            <p className="text-slate-600 leading-relaxed text-lg">
+              En MS&M Consulting, nos enorgullece contar con un equipo multidisciplinario de profesionales altamente capacitados y con vasta experiencia en diversas industrias. Nuestro objetivo es brindar soluciones integrales adaptadas a los desafíos del mercado actual.
+            </p>
+            <p className="text-slate-600 leading-relaxed text-lg">
+              No solo somos consultores; somos aliados estratégicos que se involucran en cada proyecto con dedicación, ética y empatía. Creemos firmemente que la confianza y la innovación constante son los pilares fundamentales para impulsar el crecimiento sostenible de tu organización.
+            </p>
+          </div>
+        </div>
+
+        {/* Thumbnail Carousel */}
+        <div className="w-full relative px-10 group">
+          {/* Flechas de navegación del carrusel */}
+          <button
+            onClick={handleScrollPrev}
+            aria-label="Desplazar a la izquierda"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-white border border-slate-200 hover:border-transparent shadow-md hover:bg-[#FFB600] text-slate-700 hover:text-white p-2 rounded-full transition-all duration-300"
+          >
+            <ChevronLeft size={24} />
+          </button>
+          
+          <button
+            onClick={handleScrollNext}
+            aria-label="Desplazar a la derecha"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-white border border-slate-200 hover:border-transparent shadow-md hover:bg-[#FFB600] text-slate-700 hover:text-white p-2 rounded-full transition-all duration-300"
+          >
+            <ChevronRight size={24} />
+          </button>
+
+          <div 
+            ref={carouselRef}
+            className="flex gap-4 overflow-x-auto pt-4 pb-6 snap-x hide-scrollbar items-center" 
+            style={{ WebkitOverflowScrolling: 'touch', scrollBehavior: 'smooth' }}
+          >
+            {TEAM_IMAGES.map((src, idx) => (
+              <button
+                key={src}
+                onClick={() => {
+                  setPrevIndex(activeIndex)
+                  setActiveIndex(idx)
+                }}
+                className={`relative flex-shrink-0 w-36 h-24 sm:w-48 sm:h-32 rounded-xl overflow-hidden transition-all duration-300 snap-center
+                  ${idx === activeIndex ? 'border border-[#000000] scale-105 shadow-xl' : 'border border-transparent opacity-60 hover:opacity-100'}`}
+                aria-label={`Ver imagen ${idx + 1}`}
               >
-                <div>
-                  {/* Photo container - Aspect-video 16:9 idéntico a la tarjeta de curso */}
-                  <div className="relative overflow-hidden w-full" style={{ paddingTop: '56.25%', backgroundColor: `${color}14` }}>
-                    {teacher.avatar ? (
-                      <Image
-                        src={teacher.avatar}
-                        alt={`${teacher.nombre} ${teacher.apellido}`}
-                        fill
-                        className="object-cover object-top"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div
-                          className="w-14 h-14 rounded-full flex items-center justify-center font-bold text-white shadow-md text-lg"
-                          style={{
-                            backgroundColor: color,
-                            border: '2px solid rgba(255,255,255,0.7)',
-                            fontFamily: 'Poppins, sans-serif'
-                          }}
-                        >
-                          {initials}
-                        </div>
-                      </div>
-                    )}
-                    {/* Badge tipo curso */}
-                    <div className="absolute top-3 right-3">
-                      <span
-                        className="px-2.5 py-1 rounded-full text-xs font-bold text-white shadow-sm"
-                        style={{ backgroundColor: 'var(--web-primary, #25927F)', fontFamily: 'Poppins, sans-serif' }}
-                      >
-                        Docente
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Body Content */}
-                  <div className="p-5 flex flex-col gap-2">
-                    <Link
-                      href={href}
-                      className="no-underline font-bold text-base text-[#0A0A0A] hover:text-[#25927F] transition-colors leading-tight"
-                      style={{ fontFamily: 'Poppins, sans-serif' }}
-                    >
-                      {teacher.nombre} {teacher.apellido}
-                    </Link>
-
-                    <p
-                      className="text-xs text-slate-500 leading-relaxed min-h-[36px]"
-                      style={{
-                        fontFamily: 'Poppins, sans-serif',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      {teacher.cargo || teacher.biografia || 'Especialista en Seguridad y Salud en el Trabajo'}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Footer bar idéntica a CourseCard */}
-                <div className="p-5 pt-3 flex items-center justify-between" style={{ borderTop: '1px solid hsl(214, 20%, 92%)' }}>
-                  <span className="flex items-center gap-1.5 text-xs font-semibold text-slate-500" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                    <BookOpen size={14} className="text-[#25927F]" />
-                    {teacher._count?.cursos_dictados ?? 0} {teacher._count?.cursos_dictados === 1 ? 'curso' : 'cursos'}
-                  </span>
-
-                  <Link
-                    href={href}
-                    className="no-underline inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-lg transition-all"
-                    style={{
-                      fontFamily: 'Poppins, sans-serif',
-                      backgroundColor: 'var(--web-primary, #25927F)',
-                      color: '#ffffff',
-                    }}
-                  >
-                    Ver perfil <ArrowRight size={13} />
-                  </Link>
-                </div>
-              </div>
-            )
-          })}
+                <Image
+                  src={`${src}?v=3`}
+                  alt={`Miniatura ${idx + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 144px, 192px"
+                  unoptimized
+                />
+              </button>
+            ))}
+          </div>
         </div>
       </div>
+
+      <style dangerouslySetInnerHTML={{__html: `
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}} />
     </section>
   )
 }

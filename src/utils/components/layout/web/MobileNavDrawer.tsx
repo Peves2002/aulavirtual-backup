@@ -19,14 +19,14 @@ import { isFeatureEnabled } from '@/utils/configs/projectFeatures'
 const ALL_NAV_ITEMS = [
   { title: 'Inicio', url: '/', key: 'inicio' },
   { title: 'Servicios', url: '/servicios', key: 'servicios' },
-  { title: 'Cursos', url: '/cursos', key: 'cursos' },
+  { title: 'Nuestros programas', url: '/cursos', key: 'cursos' },
   ...(isFeatureEnabled('simulacros') ? [{ title: 'Simulacros', url: '/simulacros', key: 'simulacros' as const }] : []),
   ...(isFeatureEnabled('ebooks') ? [{ title: 'Ebooks', url: '/ebooks', key: 'ebooks' as const }] : []),
   ...(isFeatureEnabled('rutas') ? [{ title: 'Rutas', url: '/rutas', key: 'rutas' as const }] : []),
-  { title: 'Empresas', url: '/empresas', key: 'empresas' },
+  { title: 'Capacitación y entrenamiento', url: '/empresas', key: 'empresas' },
   ...(isFeatureEnabled('suscripciones') ? [{ title: 'Suscripciones', url: '/suscripciones', key: 'suscripciones' as const }] : []),
   { title: 'Blog', url: '/blogs', key: 'blogs' },
-  { title: 'Nosotros', url: '/nosotros', key: 'nosotros' },
+  { title: 'Conócenos', url: '/nosotros', key: 'nosotros' },
   { title: 'Certificado', url: '/verificar-certificado', key: 'certificado' },
 ]
 

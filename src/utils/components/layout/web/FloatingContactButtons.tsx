@@ -86,13 +86,13 @@ export default function FloatingContactButtons() {
             role={whatsappOpen ? 'dialog' : 'status'}
             aria-live={whatsappOpen ? undefined : 'polite'}
             style={{
-              width: 'min(360px, calc(100vw - 40px))',
-              padding: '1rem',
-              borderRadius: '18px 18px 5px 18px',
+              width: whatsappOpen ? 'min(360px, calc(100vw - 40px))' : 'max-content',
+              padding: whatsappOpen ? '1rem' : '0.6rem 2.2rem 0.6rem 0.8rem',
+              borderRadius: whatsappOpen ? '18px 18px 5px 18px' : '24px 24px 5px 24px',
               backgroundColor: '#ffffff',
-              color: '#02115C',
-              boxShadow: '0 14px 35px rgba(2, 17, 92, 0.2)',
-              border: '1px solid #dbe7e1',
+              color: '#000000',
+              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.15)',
+              border: '1px solid #e2e8f0',
               animation: 'mcyContactIn 0.25s ease-out',
               position: 'relative',
             }}
@@ -103,8 +103,9 @@ export default function FloatingContactButtons() {
               onClick={handlePanelClose}
               style={{
                 position: 'absolute',
-                top: 8,
-                right: 10,
+                top: whatsappOpen ? 8 : '50%',
+                right: whatsappOpen ? 10 : 8,
+                transform: whatsappOpen ? 'none' : 'translateY(-50%)',
                 border: 0,
                 background: 'transparent',
                 color: '#64748B',
@@ -113,7 +114,7 @@ export default function FloatingContactButtons() {
                 display: 'flex',
               }}
             >
-              <X size={16} />
+              <X size={14} />
             </button>
             {whatsappOpen ? (
               <>
@@ -153,13 +154,12 @@ export default function FloatingContactButtons() {
               </>
             ) : (
               <>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem' }}>
-                  <Sparkles size={18} color='#A8C74B' style={{ flexShrink: 0, marginTop: 2 }} />
-                  <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: 1.45, fontWeight: 700 }}>Bienvenido, MS&M CONSULTING. ¿Cómo le podemos ayudar?</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer' }} onClick={() => { setGreetingOpen(false); setWhatsappOpen(true) }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: '50%', backgroundColor: '#25D366', color: '#fff' }}>
+                    <MessageCircle size={18} />
+                  </div>
+                  <p style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700 }}>Contáctanos</p>
                 </div>
-                <button type='button' onClick={() => { setGreetingOpen(false); setWhatsappOpen(true) }} style={{ border: 0, background: 'none', color: '#176958', padding: '0.8rem 0 0 1.65rem', fontSize: '0.78rem', fontWeight: 800, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                  Escribir consulta <ArrowUpRight size={14} />
-                </button>
               </>
             )}
           </div>
@@ -174,7 +174,7 @@ export default function FloatingContactButtons() {
             borderRadius: '50%',
             border: 'none',
             background: 'transparent',
-            color: '#02115C',
+            color: '#000000',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
